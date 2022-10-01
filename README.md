@@ -8,7 +8,9 @@ A project repository that is a dxFeed API written in C++ and provides a C\Obj-C\
 - [ ] System proiperties processing
 - [ ] Obj-C artifacts (also for the Swift's FFI)
 - [ ] C\C++ samples
-- [ ] Tests
+- [ ] CI\CD
+  - [ ] Tests
+  - [ ] Packaging
 - [ ] Docs
 
 # License
