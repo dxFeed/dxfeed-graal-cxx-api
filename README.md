@@ -5,10 +5,11 @@ A project repository that is a dxFeed API written in C++ and provides a C\Obj-C\
 - [ ] Endpoint entity
 - [ ] Subscription entity
 - [ ] Native events mapper
-- [ ] System proiperties processing
+- [ ] System properties processing
 - [ ] Obj-C artifacts (also for the Swift's FFI)
 - [ ] C\C++ samples
 - [ ] CI\CD
+  - [ ] Build 
   - [ ] Tests
   - [ ] Packaging
 - [ ] Docs
