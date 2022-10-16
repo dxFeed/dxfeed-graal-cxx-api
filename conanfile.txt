@@ -1,0 +1,12 @@
+[requires]
+catch2/3.1.0
+
+[generators]
+cmake_find_package
+cmake_paths
+
+[imports]
+bin, *.dll -> ./bin
+lib, *.dylib* -> ./bin
+
+[options]
