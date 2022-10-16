@@ -25,7 +25,8 @@ jobs:
       with:
         packages: conan
 
-    - name: Prepare build
+    - name: Prepare build [!Win]
+      if: runner.os != 'Windows'
       run: |
         ls
         mkdir ${{github.workspace}}/build && cd ${{github.workspace}}/build
