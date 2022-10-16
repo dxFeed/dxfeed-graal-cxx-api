@@ -8,14 +8,16 @@ A project repository that is a dxFeed API written in C++ and provides a C\Obj-C\
 - [ ] Endpoint entity
 - [ ] Subscription entity
 - [ ] Native events mapper
-- [ ] System properties processing
+- [x] System properties processing
 - [ ] Obj-C artifacts (also for the Swift's FFI)
 - [ ] C\C++ samples
 - [ ] CI\CD
   - [x] Build 
   - [ ] Tests
+    - [ ] System properties processing
   - [ ] Packaging
 - [ ] Docs
+  - [ ] System properties processing
 
 # License
 MPL-2.0
