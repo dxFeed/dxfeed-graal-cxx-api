@@ -7,6 +7,8 @@ project(dxFeedNativeAPI VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
 
+option(DXFC_BUILD_UNIT_TESTS "" ON)
+
 include(FetchContent)
 
 if (DEFINED ENV{DXFEED_GRAAL_NATIVE_API_URL})
@@ -35,18 +37,28 @@ else ()
 endif ()
 
 FetchContent_MakeAvailable(DxFeedGraalNativeApi)
+# DxFeedGraalNativeApi_SOURCE_DIR
+
 
 #install(TARGETS DxFeedGraalNativeApi EXPORT dxFeedNativeAPITargets)
 
 include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 
+find_package(utf8cpp)
+
 add_library(dxFeedNativeAPI src/dxFeedNativeAPI.cpp)
 target_include_directories(dxFeedNativeAPI PUBLIC include)
-target_link_libraries(dxFeedNativeAPI PRIVATE DxFeedGraalNativeApi)
+target_link_libraries(dxFeedNativeAPI PUBLIC DxFeedGraalNativeApi utf8cpp::utf8cpp)
 
 add_library(dxFeedNativeCppAPI INTERFACE)
 target_include_directories(dxFeedNativeCppAPI INTERFACE include)
 
 add_custom_command(TARGET dxFeedNativeAPI POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeApi> $<TARGET_FILE_DIR:dxFeedNativeAPI>)
+
+if (DXFC_BUILD_UNIT_TESTS)
+    find_package(Catch2)
+    include(CTest)
+    add_subdirectory(tests)
+endif()
 
