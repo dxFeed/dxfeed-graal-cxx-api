@@ -6,9 +6,12 @@
 #include <dxf_graal_error_codes.h>
 
 #ifdef __cplusplus
+#    include <cstddef>
 #    include <cstdint>
+
 extern "C" {
 #else
+#    include <stddef.h>
 #    include <stdint.h>
 #endif
 
