@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MPL-2.0
+
 #include <catch2/catch_all.hpp>
 
 #include <dxFeedNativeAPI.h>

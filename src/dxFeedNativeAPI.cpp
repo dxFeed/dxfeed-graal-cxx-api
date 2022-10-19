@@ -3,6 +3,7 @@
 #include <dxFeedNativeAPI.h>
 #include <dxFeedNativeCppAPI.hpp>
 
+#include <cstring>
 #include <utf8cpp/utf8.h>
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
@@ -32,7 +33,6 @@ dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t
         if (found != end) {
             *found = '\0';
         }
-
     }
 
     return DXFC_EC_SUCCESS;

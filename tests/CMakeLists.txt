@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MPL-2.0
+
 project(dxFeedNativeAPITests LANGUAGES CXX)
 
 set(DXFC_INCLUDE_DIRS ../include)
