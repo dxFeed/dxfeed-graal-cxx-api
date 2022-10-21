@@ -4,14 +4,15 @@
 
 #include <dxFeedNativeAPI.h>
 #include <cstring>
+#include <vector>
 
 TEST_CASE("123", "213123") {
     REQUIRE(dxfc_system_set_property("123", "123") == DXFC_EC_SUCCESS);
 
-    char buffer[5] = {};
+    std::vector<char> buffer(5);
 
-    auto result = dxfc_system_get_property("123", buffer, 5);
+    auto result = dxfc_system_get_property("123", buffer.data(), buffer.size());
 
     REQUIRE(result == DXFC_EC_SUCCESS);
-    REQUIRE(strcmp(buffer, "123") == 0);
+    REQUIRE(strcmp(buffer.data(), "123") == 0);
 }

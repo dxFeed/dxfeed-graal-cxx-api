@@ -16,8 +16,11 @@ set(DXFC_TEST_TARGETS ${DXFC_TEST_BASENAMES})
 foreach (dxfc_test_target ${DXFC_TEST_TARGETS})
     add_executable(${dxfc_test_target} ${dxfc_test_target}.cpp)
     target_include_directories(${dxfc_test_target} PUBLIC ${DXFC_INCLUDE_DIRS})
-    target_link_libraries(${dxfc_test_target} PRIVATE dxFeedNativeAPITestsMain dxFeedNativeAPI Catch2::Catch2)
+    target_link_libraries(${dxfc_test_target} PRIVATE dxFeedNativeAPITestsMain dxFeedNativeAPI DxFeedGraalNativeApi Catch2::Catch2)
     set_property(TARGET ${dxfc_test_target} PROPERTY CXX_STANDARD 20)
     set_property(TARGET ${dxfc_test_target} PROPERTY CXX_EXTENSIONS OFF)
     add_test(NAME ${dxfc_test_target} COMMAND ${dxfc_test_target})
+
+    add_custom_command(TARGET ${dxfc_test_target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:DxFeedGraalNativeApi> $<TARGET_FILE_DIR:${dxfc_test_target}>)
 endforeach ()

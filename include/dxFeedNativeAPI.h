@@ -3,7 +3,7 @@
 #ifndef DXFEED_NATIVE_API_H_INCLUDED
 #define DXFEED_NATIVE_API_H_INCLUDED
 
-#include <dxf_graal_error_codes.h>
+#include <dxfg_error_codes.h>
 
 #ifdef __cplusplus
 #    include <cstddef>
