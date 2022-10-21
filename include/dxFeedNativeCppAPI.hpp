@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <graal_isolate.h>
 #include <dxfg_system.h>
 #include <dxfg_utils.h>
 
