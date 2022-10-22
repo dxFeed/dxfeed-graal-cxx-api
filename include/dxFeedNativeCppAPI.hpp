@@ -2,15 +2,15 @@
 
 #pragma once
 
-#include <graal_isolate.h>
 #include <dxfg_system.h>
 #include <dxfg_utils.h>
+#include <graal_isolate.h>
 
 #include <string>
 
 #include <iostream>
 #include <memory>
-#include <mutex>
+#include <shared_mutex>
 #include <type_traits>
 
 namespace dxfcpp {
@@ -19,8 +19,10 @@ using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
 
 class Isolate {
-    std::atomic<GraalIsolateHandle> graalIsolateHandle_;
-    std::atomic<GraalIsolateThreadHandle> graalIsolateThreadHandle_;
+    mutable std::shared_mutex mutex_{};
+
+    GraalIsolateHandle graalIsolateHandle_;
+    GraalIsolateThreadHandle graalIsolateThreadHandle_;
 
     Isolate(GraalIsolateHandle graalIsolateHandle, GraalIsolateThreadHandle graalIsolateThreadHandle)
         : graalIsolateHandle_{graalIsolateHandle}, graalIsolateThreadHandle_{graalIsolateThreadHandle} {}
@@ -36,29 +38,55 @@ class Isolate {
         return nullptr;
     }
 
+    GraalIsolateHandle getHandleImpl() const {
+        return graalIsolateHandle_;
+    }
+
+    GraalIsolateThreadHandle getThreadHandleImpl() const {
+        return graalIsolateThreadHandle_;
+    }
+
   public:
+    Isolate() = delete;
+    Isolate(const Isolate &) = delete;
+    Isolate &operator=(const Isolate &) = delete;
+
     static std::shared_ptr<Isolate> getInstance() {
         static std::shared_ptr<Isolate> instance = create();
 
         return instance;
     }
 
-    GraalIsolateHandle getHandle() const { return graalIsolateHandle_.load(); }
+    GraalIsolateHandle getHandle() const {
+        std::shared_lock lock(mutex_);
 
-    GraalIsolateThreadHandle getThreadHandle() const { return graalIsolateThreadHandle_.load(); }
+        return getHandleImpl();
+    }
+
+    GraalIsolateThreadHandle getThreadHandle() const {
+        std::shared_lock lock(mutex_);
+
+        return graalIsolateThreadHandle_;
+    }
 
     GraalIsolateThreadHandle attachThread() const {
+        std::unique_lock lock(mutex_);
+
         GraalIsolateThreadHandle graalIsolateThreadHandle{};
 
-        if (auto result = graal_attach_thread(getHandle(), &graalIsolateThreadHandle); result == 0) {
+        if (auto result = graal_attach_thread(getHandleImpl(), &graalIsolateThreadHandle); result == 0) {
             return graalIsolateThreadHandle;
         }
 
-        //TODO: Handle the situation where an isolated thread cannot be attached
+        // TODO: Handle the situation where an isolated thread cannot be attached
         return graalIsolateThreadHandle;
     }
 
-    ~Isolate() { graal_detach_all_threads_and_tear_down_isolate(getThreadHandle()); }
+    ~Isolate() {
+        std::unique_lock lock(mutex_);
+
+        graal_detach_all_threads_and_tear_down_isolate(getThreadHandleImpl());
+    }
 };
 
 namespace detail {
