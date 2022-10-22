@@ -11,6 +11,7 @@
 #include <iostream>
 #include <memory>
 #include <shared_mutex>
+#include <thread>
 #include <type_traits>
 
 namespace dxfcpp {
