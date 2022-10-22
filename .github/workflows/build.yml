@@ -26,19 +26,28 @@ jobs:
       with:
         packages: conan
 
-    - name: Prepare build [!Win]
-      if: runner.os != 'Windows'
+    - name: Prepare build
       run: |
         ls
-        mkdir ${{github.workspace}}/build && cd ${{github.workspace}}/build
-        conan install ..
+        mkdir ${{github.workspace}}/build    
 
-    - name: Prepare build [Win]
+    - name: Prepare conan [Linux]
+      if: runner.os == 'Linux'
+      run: |
+        cd ${{github.workspace}}/build
+        conan install -s compiler.libcxx=libstdc++11 ..
+
+    - name: Prepare conan [Win]
       if: runner.os == 'Windows'
       run: |
-        ls
-        mkdir ${{github.workspace}}/build && cd ${{github.workspace}}/build
+        cd ${{github.workspace}}/build
         conan install -s compiler.version=16 ..
+
+    - name: Prepare conan [macOS]
+      if: runner.os == 'macOS'
+      run: |
+        cd ${{github.workspace}}/build
+        conan install ..
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
