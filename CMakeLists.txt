@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
 
 option(DXFC_BUILD_UNIT_TESTS "" ON)
+option(DXFC_USE_CONAN "" ON)
 
 include(FetchContent)
 
@@ -39,10 +40,9 @@ endif ()
 FetchContent_MakeAvailable(DxFeedGraalNativeApi)
 # DxFeedGraalNativeApi_SOURCE_DIR
 
-
-#install(TARGETS DxFeedGraalNativeApi EXPORT dxFeedNativeAPITargets)
-
-include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+if (DXFC_USE_CONAN)
+    include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+endif()
 
 find_package(utf8cpp)
 

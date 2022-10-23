@@ -7,9 +7,7 @@
 #include <utf8cpp/utf8.h>
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
-    dxfcpp::System::setProperty(key, value);
-
-    return DXFC_EC_SUCCESS;
+    return dxfcpp::System::setProperty(key, value) ? DXFC_EC_SUCCESS : DXFC_EC_ERROR;
 }
 
 dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t bufferSize) {

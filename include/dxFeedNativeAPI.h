@@ -47,10 +47,31 @@ typedef enum dxfc_error_code_t {
      * @brief (dxFeed Graal Native API) An unknown descriptor was passed.
      */
     DXFC_EC_G_UNKNOWN_DESCRIPTOR,
+
+    /// The error returned if the current operation cannot be completed.
+    DXFC_EC_ERROR = 10000,
 } dxfc_error_code_t;
 
+/**
+ * Sets the system property indicated by the specified key.
+ *
+ * @param key The name of the system property.
+ * @param value The value of the system property.
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value);
 
+/**
+ * Gets the system property indicated by the specified key.
+ *
+ * The buffer must be allocated in advance. If the system property value does not fit into the buffer, it will be
+ * truncated. The buffer should be large enough to the \0 at the end.
+ *
+ * @param key The name of the system property.
+ * @param[out] buffer The buffer to store the system property.
+ * @param buffer_size The buffer's size.
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
 dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t buffer_size);
 
 #ifdef __cplusplus

@@ -10,12 +10,13 @@
 
 #include <iostream>
 #include <memory>
-#include <shared_mutex>
 #include <mutex>
+#include <shared_mutex>
 #include <type_traits>
 
 namespace dxfcpp {
 
+namespace detail {
 using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
 
@@ -39,13 +40,9 @@ class Isolate {
         return nullptr;
     }
 
-    GraalIsolateHandle getHandleImpl() const {
-        return graalIsolateHandle_;
-    }
+    GraalIsolateHandle getHandleImpl() const { return graalIsolateHandle_; }
 
-    GraalIsolateThreadHandle getThreadHandleImpl() const {
-        return graalIsolateThreadHandle_;
-    }
+    GraalIsolateThreadHandle getThreadHandleImpl() const { return graalIsolateThreadHandle_; }
 
   public:
     Isolate() = delete;
@@ -90,21 +87,34 @@ class Isolate {
     }
 };
 
-namespace detail {
 const auto I = Isolate::getInstance();
-}
+} // namespace detail
 
+/**
+ * A class that allows to set JVM system properties and get the values of JVM system properties.
+ */
 struct System {
+    /**
+     * Sets the JVM system property indicated by the specified key.
+     *
+     * @param key The name of the system property.
+     * @param value The value of the system property.
+     * @return true if the setting of the JVM system property succeeded.
+     */
     static inline bool setProperty(const std::string &key, const std::string &value) {
-        auto t = Isolate::getInstance()->attachThread();
-        //std::cerr << "Thread = " << t << std::endl;
+        auto t = detail::Isolate::getInstance()->attachThread();
 
         return dxfg_system_set_property(t, key.c_str(), value.c_str()) == DXFG_EC_SUCCESS;
     }
 
+    /**
+     * Gets the system property indicated by the specified key.
+     *
+     * @param key The name of the system property.
+     * @return The value of a JVM system property, or an empty string.
+     */
     static inline std::string getProperty(const std::string &key) {
-        auto t = Isolate::getInstance()->attachThread();
-        //std::cerr << "Thread = " << t << std::endl;
+        auto t = detail::Isolate::getInstance()->attachThread();
 
         std::string resultString{};
 
