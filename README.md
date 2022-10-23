@@ -51,7 +51,7 @@ cmake --build . --config Release
 
 ```shell
 cd build
-ctest -C Release
+ctest -C Release --extra-verbose
 ```
 
 ### Known Issues
