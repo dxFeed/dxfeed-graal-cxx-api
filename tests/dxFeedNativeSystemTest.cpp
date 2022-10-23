@@ -20,7 +20,7 @@ TEST_CASE("System properties can be set, as well as get their values", "[System]
 TEST_CASE("System properties can be set, as well as get their values (Unicode)", "[System]") {
     REQUIRE(dxfc_system_set_property("PropertyName", "Привет") == DXFC_EC_SUCCESS);
 
-    std::vector<char> buffer(5);
+    std::vector<char> buffer(1024);
 
     auto result = dxfc_system_get_property("PropertyName", buffer.data(), buffer.size());
 
