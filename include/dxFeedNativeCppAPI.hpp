@@ -64,7 +64,7 @@ class Isolate {
     GraalIsolateThreadHandle getThreadHandle() const {
         std::shared_lock lock(mutex_);
 
-        return graalIsolateThreadHandle_;
+        return getThreadHandleImpl();
     }
 
     GraalIsolateThreadHandle attachThread() const {

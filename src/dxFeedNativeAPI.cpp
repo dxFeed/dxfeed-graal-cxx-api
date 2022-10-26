@@ -26,8 +26,11 @@ dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t
 
         auto begin = buffer;
         auto end = buffer + size;
+
+        // Looks for the first invalid UTF-8 character.
         auto found = utf8::find_invalid(begin, end);
 
+        // An invalid character position was found. Trim the result string buffer to this invalid character.
         if (found != end) {
             *found = '\0';
         }
