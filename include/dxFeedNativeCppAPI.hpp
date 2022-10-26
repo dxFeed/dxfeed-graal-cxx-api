@@ -20,7 +20,7 @@ namespace detail {
 using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
 
-class Isolate {
+class Isolate final {
     mutable std::shared_mutex mutex_{};
 
     GraalIsolateHandle graalIsolateHandle_;
