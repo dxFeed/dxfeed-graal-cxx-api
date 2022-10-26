@@ -16,16 +16,16 @@ dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t
     if (buffer != nullptr && bufferSize > 0ULL) {
         auto size = std::min(value.size(), bufferSize - 1);
 
+        buffer[size] = '\0';
+
         if (size == 0ULL) {
             return DXFC_EC_SUCCESS;
         }
 
         memcpy(buffer, value.c_str(), size);
-        buffer[size] = '\0';
 
         auto begin = buffer;
         auto end = buffer + size;
-
         auto found = utf8::find_invalid(begin, end);
 
         if (found != end) {
