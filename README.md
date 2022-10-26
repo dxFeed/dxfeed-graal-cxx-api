@@ -22,10 +22,10 @@ API features via dxfeed-graal-native-api as a backend
 - [ ] CI\CD
   - [x] Build 
   - [ ] Tests
-    - [ ] System properties processing
+    - [x] System properties processing
   - [ ] Packaging
 - [ ] Docs
-  - [ ] System properties processing
+  - [x] System properties processing
 
 # How To Build
 
