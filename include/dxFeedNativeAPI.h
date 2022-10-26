@@ -55,8 +55,8 @@ typedef enum dxfc_error_code_t {
 /**
  * Sets the system property indicated by the specified key.
  *
- * @param key The name of the system property.
- * @param value The value of the system property.
+ * @param key The name of the system property (UTF-8 string).
+ * @param value The value of the system property (UTF-8 string).
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value);
@@ -66,9 +66,10 @@ dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value);
  *
  * The buffer must be allocated in advance. If the system property value does not fit into the buffer, it will be
  * truncated. The buffer should be large enough to the \0 at the end.
+ * Invalid UTF-8 characters resulting from a string that does not fit in the buffer will be discarded.
  *
- * @param key The name of the system property.
- * @param[out] buffer The buffer to store the system property.
+ * @param key The name of the system property (UTF-8 string)
+ * @param[out] buffer The buffer to store the system property (UTF-8 string)
  * @param buffer_size The buffer's size.
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
