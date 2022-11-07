@@ -104,7 +104,7 @@ struct System {
     static inline bool setProperty(const std::string &key, const std::string &value) {
         auto t = detail::Isolate::getInstance()->attachThread();
 
-        return dxfg_system_set_property(t, key.c_str(), value.c_str()) == DXFG_EC_SUCCESS;
+        return dxfg_system_set_property(t, key.c_str(), value.c_str()) == DXFC_EC_SUCCESS;
     }
 
     /**

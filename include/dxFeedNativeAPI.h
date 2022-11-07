@@ -3,8 +3,6 @@
 #ifndef DXFEED_NATIVE_API_H_INCLUDED
 #define DXFEED_NATIVE_API_H_INCLUDED
 
-#include <dxfg_error_codes.h>
-
 #ifdef __cplusplus
 #    include <cstddef>
 #    include <cstdint>
@@ -24,29 +22,9 @@ typedef enum dxfc_error_code_t {
      */
     DXFC_EC_SUCCESS = 0,
     /**
-     * @brief (dxFeed Graal Native API) Shouldn't happen.
+     * @brief dxFeed Graal Native API error.
      */
-    DXFC_EC_G_UNKNOWN_ERR,
-    /**
-     * @brief (dxFeed Graal Native API) Represents NullPointerException.
-     */
-    DXFC_EC_G_NULL_POINTER_EX,
-    /**
-     * @brief (dxFeed Graal Native API) Represents IllegalArgumentException.
-     */
-    DXFC_EC_G_ILLEGAL_ARGUMENT_EX,
-    /**
-     * @brief (dxFeed Graal Native API) Represents SecurityException.
-     */
-    DXFC_EC_G_SECURITY_EX,
-    /**
-     * @brief (dxFeed Graal Native API) Represents IllegalStateException.
-     */
-    DXFC_EC_G_ILLEGAL_STATE_EX,
-    /**
-     * @brief (dxFeed Graal Native API) An unknown descriptor was passed.
-     */
-    DXFC_EC_G_UNKNOWN_DESCRIPTOR,
+    DXFC_EC_G_ERR,
 
     /// The error returned if the current operation cannot be completed.
     DXFC_EC_ERROR = 10000,
