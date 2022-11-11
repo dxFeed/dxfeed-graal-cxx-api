@@ -127,4 +127,8 @@ struct System {
     }
 };
 
+struct Endpoint {
+
+};
+
 } // namespace dxfcpp
