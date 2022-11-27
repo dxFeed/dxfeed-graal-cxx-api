@@ -119,7 +119,7 @@ struct System {
 
         if (auto result = dxfg_system_get_property(t, key.c_str())) {
             resultString = result;
-            dxfg_system_release_property(t, result));
+            dxfg_system_release_property(t, result);
         }
 
         return resultString;
