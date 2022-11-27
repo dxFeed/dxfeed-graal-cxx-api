@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <dxfg_endpoint.h>
 #include <dxfg_system.h>
 #include <graal_isolate.h>
 
@@ -127,7 +128,32 @@ struct System {
 };
 
 struct Endpoint {
+    class Builder {
+        dxfg_endpoint_builder_t handle_;
+        std::mutex mutex_;
 
+        explicit Builder(dxfg_endpoint_builder_t handle) : handle_{handle}, mutex_{} {}
+
+      public:
+        ~Builder() {
+            std::lock_guard<std::mutex> guard{mutex_};
+
+            auto t = detail::Isolate::getInstance()->attachThread();
+
+            dxfg_endpoint_builder_release(t, &handle_);
+        }
+
+        static std::shared_ptr<Builder> create() {
+            dxfg_endpoint_builder_t builderHandle;
+            auto t = detail::Isolate::getInstance()->attachThread();
+
+            if (!dxfg_endpoint_builder_create(t, &builderHandle)) {
+                return nullptr;
+            }
+
+            return std::shared_ptr<Builder>(new Builder{builderHandle});
+        }
+    };
 };
 
 } // namespace dxfcpp
