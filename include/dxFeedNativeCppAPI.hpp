@@ -3,7 +3,6 @@
 #pragma once
 
 #include <dxfg_system.h>
-#include <dxfg_utils.h>
 #include <graal_isolate.h>
 
 #include <string>
@@ -120,7 +119,7 @@ struct System {
 
         if (auto result = dxfg_system_get_property(t, key.c_str())) {
             resultString = result;
-            dxfg_utils_free(t, static_cast<void *>(const_cast<char *>(result)));
+            dxfg_system_release_property(t, result));
         }
 
         return resultString;
