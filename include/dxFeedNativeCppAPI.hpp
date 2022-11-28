@@ -20,7 +20,23 @@ namespace detail {
 using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
 
+class CEntryPointErrors {
+    std::int32_t code_{};
+    std::string description_{};
+
+  public:
+    static CEntryPointErrors valueOf(std::int32_t code) { return {}; }
+};
+
 class Isolate final {
+    struct IsolateThread final {
+        GraalIsolateThreadHandle graalIsolateThreadHandle_;
+
+        CEntryPointErrors attach(const Isolate &isolate) {
+            return CEntryPointErrors::valueOf(graal_attach_thread(isolate.getHandleImpl(), &graalIsolateThreadHandle_));
+        }
+    };
+
     mutable std::shared_mutex mutex_{};
 
     GraalIsolateHandle graalIsolateHandle_;
@@ -70,6 +86,7 @@ class Isolate final {
     GraalIsolateThreadHandle attachThread() const {
         std::unique_lock lock(mutex_);
 
+        // TODO: detach on
         GraalIsolateThreadHandle graalIsolateThreadHandle{};
 
         if (auto result = graal_attach_thread(getHandleImpl(), &graalIsolateThreadHandle); result == 0) {
