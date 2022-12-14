@@ -4,6 +4,14 @@ cmake_minimum_required(VERSION 3.10)
 
 project(dxFeedNativeAPI VERSION 1.0.0)
 
+
+if (WIN32)
+    message(AUTHOR_WARNING "The dxFeed Graal Native API build is currently not supported for non-Windows platforms. \
+    The JFrog repository does not contain the necessary bundles. Let's skip this.")
+    return()
+endif ()
+
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
 
@@ -22,12 +30,6 @@ set(DXFEED_GRAAL_NATIVE_API_VERSION "0.0.3" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_API_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-api/" CACHE STRING "")
 
 include(FetchContent)
-
-if (!WIN32)
-    message(AUTHOR_WARNING "The dxFeed Graal Native API build is currently not supported for non-Windows platforms. \
-    The JFrog repository does not contain the necessary bundles. Let's skip this.")
-    return()
-endif ()
 
 if (DEFINED ENV{DXFEED_GRAAL_NATIVE_API_URL})
     FetchContent_Declare(DxFeedGraalNativeApi URL $ENV{DXFEED_GRAAL_NATIVE_API_URL})
