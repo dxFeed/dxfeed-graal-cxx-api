@@ -7,18 +7,30 @@ project(dxFeedNativeAPI VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
 
+cmake_policy(SET CMP0135 NEW)
+
 option(DXFC_BUILD_UNIT_TESTS "" ON)
 option(DXFC_USE_CONAN "" ON)
+
+option(DXFC_USE_DXFEED_GRAAL_NATIVE_API_GITHUB "" OFF)
+set(DXFEED_GRAAL_NATIVE_API_GITHUB_VERSION "v1.0.5" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_API_GITHUB_ARCHIVE_VERSION "1.0.0" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_API_GITHUB_BASE_URL "https://github.com/ttldtor/dxfeed-graal-native-api/releases/download/" CACHE STRING "")
+
+option(DXFC_USE_DXFEED_GRAAL_NATIVE_API_JFROG "" ON)
+set(DXFEED_GRAAL_NATIVE_API_VERSION "0.0.3" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_API_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-api/" CACHE STRING "")
 
 include(FetchContent)
 
 if (DEFINED ENV{DXFEED_GRAAL_NATIVE_API_URL})
     FetchContent_Declare(DxFeedGraalNativeApi URL $ENV{DXFEED_GRAAL_NATIVE_API_URL})
 else ()
-    set(DXFEED_GRAAL_NATIVE_API_GIT_VERSION "v1.0.5")
-    set(DXFEED_GRAAL_NATIVE_API_ARCHIVE_VERSION "1.0.0")
-    set(DXFEED_GRAAL_NATIVE_API_BASE_URL "https://github.com/ttldtor/dxfeed-graal-native-api/releases/download/")
-    set(DXFEED_GRAAL_NATIVE_API_URL "${DXFEED_GRAAL_NATIVE_API_BASE_URL}${DXFEED_GRAAL_NATIVE_API_GIT_VERSION}/dxfeed-graal-native-api-${DXFEED_GRAAL_NATIVE_API_ARCHIVE_VERSION}")
+    if (DXFC_USE_DXFEED_GRAAL_NATIVE_API_GITHUB)
+        set(DXFEED_GRAAL_NATIVE_API_URL "${DXFEED_GRAAL_NATIVE_API_GITHUB_BASE_URL}${DXFEED_GRAAL_NATIVE_API_GITHUB_VERSION}/dxfeed-graal-native-api-${DXFEED_GRAAL_NATIVE_API_GITHUB_ARCHIVE_VERSION}")
+    elseif (DXFC_USE_DXFEED_GRAAL_NATIVE_API_JFROG)
+        set(DXFEED_GRAAL_NATIVE_API_URL "${DXFEED_GRAAL_NATIVE_API_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_API_VERSION}/graal-native-api-${DXFEED_GRAAL_NATIVE_API_VERSION}")
+    endif ()
 
     if (WIN32)
         set(DXFEED_GRAAL_NATIVE_API_URL ${DXFEED_GRAAL_NATIVE_API_URL}-amd64-windows.zip)
@@ -42,7 +54,7 @@ FetchContent_MakeAvailable(DxFeedGraalNativeApi)
 
 if (DXFC_USE_CONAN)
     include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
-endif()
+endif ()
 
 find_package(utf8cpp)
 
@@ -60,5 +72,5 @@ if (DXFC_BUILD_UNIT_TESTS)
     find_package(Catch2 3 REQUIRED)
     include(CTest)
     add_subdirectory(tests)
-endif()
+endif ()
 
