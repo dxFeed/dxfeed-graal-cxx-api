@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.10)
 project(dxFeedNativeAPI VERSION 1.0.0)
 
 
-if (WIN32)
+if (!WIN32)
     message(AUTHOR_WARNING "The dxFeed Graal Native API build is currently not supported for non-Windows platforms. \
     The JFrog repository does not contain the necessary bundles. Let's skip this.")
     return()
