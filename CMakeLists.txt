@@ -23,6 +23,12 @@ set(DXFEED_GRAAL_NATIVE_API_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/
 
 include(FetchContent)
 
+if (!WIN32)
+    message(AUTHOR_WARNING "The dxFeed Graal Native API build is currently not supported for non-Windows platforms. \
+    The JFrog repository does not contain the necessary bundles. Let's skip this.")
+    return()
+endif ()
+
 if (DEFINED ENV{DXFEED_GRAAL_NATIVE_API_URL})
     FetchContent_Declare(DxFeedGraalNativeApi URL $ENV{DXFEED_GRAAL_NATIVE_API_URL})
 else ()
