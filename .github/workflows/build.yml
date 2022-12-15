@@ -22,7 +22,8 @@ jobs:
     strategy:
       matrix:
         #        os: [windows-latest, macos-latest, ubuntu-latest]
-        os: [ windows-latest, macos-latest, ubuntu-22.04 ]
+        №os: [ windows-latest, macos-latest, ubuntu-22.04 ]
+        os: [ windows-latest ]
     runs-on: ${{ matrix.os }}
 
     steps:
