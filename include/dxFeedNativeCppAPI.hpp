@@ -16,6 +16,7 @@
 #include <shared_mutex>
 #include <type_traits>
 #include <unordered_map>
+#include <variant>
 
 namespace dxfcpp {
 
@@ -29,24 +30,57 @@ class Isolate final {
         GraalIsolateThreadHandle graalIsolateThreadHandle_{};
 
       public:
-        IsolateThread() = default;
+        explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr) noexcept
+            : graalIsolateThreadHandle_{handle} {}
 
         CEntryPointErrors attach(const Isolate &isolate) {
             std::lock_guard<std::mutex> guard{mutex_};
 
-            return CEntryPointErrors::valueOf(graal_attach_thread(isolate.getHandleImpl(), &graalIsolateThreadHandle_));
+            // We will not re-attach.
+            if (!graalIsolateThreadHandle_) {
+                return CEntryPointErrors::valueOf(
+                    graal_attach_thread(isolate.getHandleImpl(), &graalIsolateThreadHandle_));
+            }
+
+            return CEntryPointErrors::NO_ERROR;
         }
 
         CEntryPointErrors detach() {
             std::lock_guard<std::mutex> guard{mutex_};
 
-            if (graalIsolateThreadHandle_) {
-                auto result = CEntryPointErrors::valueOf(graal_detach_thread(graalIsolateThreadHandle_));
-
-                if (result == CEntryPointErrors::NO_ERROR) {
-
-                }
+            // OK if nothing is attached.
+            if (!graalIsolateThreadHandle_) {
+                return CEntryPointErrors::NO_ERROR;
             }
+
+            auto result = CEntryPointErrors::valueOf(graal_detach_thread(graalIsolateThreadHandle_));
+
+            if (result == CEntryPointErrors::NO_ERROR) {
+                graalIsolateThreadHandle_ = nullptr;
+            }
+
+            return result;
+        }
+
+        CEntryPointErrors detachAllThreadsAndTearDownIsolate() {
+            if (!graalIsolateThreadHandle_) {
+                return CEntryPointErrors::NO_ERROR;
+            }
+
+            auto result =
+                CEntryPointErrors::valueOf(graal_detach_all_threads_and_tear_down_isolate(graalIsolateThreadHandle_));
+
+            if (result == CEntryPointErrors::NO_ERROR) {
+                graalIsolateThreadHandle_ = nullptr;
+            }
+
+            return result;
+        }
+
+        template <typename F> auto runIsolated(F &&f) {
+            std::unique_lock lock(mutex_);
+
+            return std::invoke(std::forward<F>(f), graalIsolateThreadHandle_);
         }
 
         ~IsolateThread() { detach(); }
@@ -55,25 +89,27 @@ class Isolate final {
     mutable std::shared_mutex mutex_{};
 
     GraalIsolateHandle graalIsolateHandle_;
-    GraalIsolateThreadHandle graalIsolateThreadHandle_;
+    IsolateThread mainIsolateThread_;
+    static thread_local IsolateThread currentIsolateThread_;
 
     Isolate(GraalIsolateHandle graalIsolateHandle, GraalIsolateThreadHandle graalIsolateThreadHandle)
-        : graalIsolateHandle_{graalIsolateHandle}, graalIsolateThreadHandle_{graalIsolateThreadHandle} {}
+        : graalIsolateHandle_{graalIsolateHandle}, mainIsolateThread_{graalIsolateThreadHandle} {}
 
     static std::shared_ptr<Isolate> create() {
         GraalIsolateHandle graalIsolateHandle{};
         GraalIsolateThreadHandle graalIsolateThreadHandle{};
 
-        if (auto result = graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle); result == 0) {
+        if (CEntryPointErrors::valueOf(graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) ==
+            CEntryPointErrors::NO_ERROR) {
             return std::shared_ptr<Isolate>{new Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
         }
 
         return nullptr;
     }
-
-    GraalIsolateHandle getHandleImpl() const { return graalIsolateHandle_; }
-
-    GraalIsolateThreadHandle getThreadHandleImpl() const { return graalIsolateThreadHandle_; }
+    //
+    //    GraalIsolateHandle getHandleImpl() const { return graalIsolateHandle_; }
+    //
+    //    GraalIsolateThreadHandle getThreadHandleImpl() const { return graalIsolateThreadHandle_; }
 
   public:
     Isolate() = delete;
@@ -86,36 +122,52 @@ class Isolate final {
         return instance;
     }
 
-    GraalIsolateHandle getHandle() const {
-        std::shared_lock lock(mutex_);
+    //    GraalIsolateHandle getHandle() const {
+    //        std::shared_lock lock(mutex_);
+    //
+    //        return getHandleImpl();
+    //    }
+    //
+    //    GraalIsolateThreadHandle getThreadHandle() const {
+    //        std::shared_lock lock(mutex_);
+    //
+    //        return getThreadHandleImpl();
+    //    }
 
-        return getHandleImpl();
-    }
+    //    GraalIsolateThreadHandle attachThread() const {
+    //        std::unique_lock lock(mutex_);
+    //
+    //        // TODO: detach on
+    //        GraalIsolateThreadHandle graalIsolateThreadHandle{};
+    //
+    //        currentIsolateThread_.attach(*this)
+    //
+    //        if (auto result = graal_attach_thread(getHandleImpl(), &graalIsolateThreadHandle); result == 0) {
+    //            return graalIsolateThreadHandle;
+    //        }
+    //
+    //        // TODO: Handle the situation where an isolated thread cannot be attached
+    //        return graalIsolateThreadHandle;
+    //    }
 
-    GraalIsolateThreadHandle getThreadHandle() const {
-        std::shared_lock lock(mutex_);
-
-        return getThreadHandleImpl();
-    }
-
-    GraalIsolateThreadHandle attachThread() const {
+    template <typename F>
+    auto runIsolated(F &&f)
+        -> std::variant<CEntryPointErrors, decltype(currentIsolateThread_.runIsolated(std::forward<F>(f)))> {
         std::unique_lock lock(mutex_);
 
-        // TODO: detach on
-        GraalIsolateThreadHandle graalIsolateThreadHandle{};
+        auto result = currentIsolateThread_.attach(*this);
 
-        if (auto result = graal_attach_thread(getHandleImpl(), &graalIsolateThreadHandle); result == 0) {
-            return graalIsolateThreadHandle;
+        if (result == CEntryPointErrors::NO_ERROR) {
+            return currentIsolateThread_.runIsolated(std::forward<F>(f));
         }
 
-        // TODO: Handle the situation where an isolated thread cannot be attached
-        return graalIsolateThreadHandle;
+        return result;
     }
 
     ~Isolate() {
         std::unique_lock lock(mutex_);
 
-        graal_detach_all_threads_and_tear_down_isolate(getThreadHandleImpl());
+        mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
     }
 };
 
@@ -146,16 +198,26 @@ struct System {
      * @return The value of a JVM system property (UTF-8 string), or an empty string.
      */
     static inline std::string getProperty(const std::string &key) {
-        auto t = detail::Isolate::getInstance()->attachThread();
+        return std::visit(
+            [](auto &&arg) {
+                using T = std::decay_t<decltype(arg)>;
 
-        std::string resultString{};
+                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                    return std::string{};
+                } else {
+                    return arg;
+                }
+            },
+            detail::Isolate::getInstance()->runIsolated([key](detail::GraalIsolateThreadHandle threadHandle) {
+                std::string resultString{};
 
-        if (auto result = dxfg_system_get_property(t, key.c_str())) {
-            resultString = result;
-            dxfg_system_release_property(t, result);
-        }
+                if (auto result = dxfg_system_get_property(threadHandle, key.c_str()); result != nullptr) {
+                    resultString = result;
+                    dxfg_system_release_property(threadHandle, result);
+                }
 
-        return resultString;
+                return resultString;
+            }));
     }
 };
 

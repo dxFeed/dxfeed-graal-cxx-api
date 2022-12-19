@@ -112,14 +112,8 @@ class CEntryPointErrors {
     /// Returns the description
     [[nodiscard]] const std::string &getDescription() const { return description_; }
 
-    std::strong_ordering operator<=>(const CEntryPointErrors &error1) const {
-        if (this->getCode() == error1.getCode()) {
-            return std::strong_ordering::equal;
-        } else if (this->getCode() < error1.getCode()) {
-            return std::strong_ordering::less;
-        }
-
-        return std::strong_ordering::greater;
+    bool operator == (const CEntryPointErrors &error1) const {
+        return this->getCode() == error1.getCode();
     }
 };
 } // namespace dxfcpp::detail
