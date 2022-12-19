@@ -30,7 +30,7 @@ class CEntryPointErrors {
     std::int32_t code_{};
     std::string description_{};
 
-    constexpr CEntryPointErrors(std::int32_t code, std::string description) noexcept
+    CEntryPointErrors(std::int32_t code, std::string description) noexcept
         : code_{code}, description_{std::move(description)} {}
 
   public:
