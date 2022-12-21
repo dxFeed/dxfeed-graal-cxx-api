@@ -8,6 +8,12 @@
 #include <unordered_map>
 
 namespace dxfcpp::detail {
+#ifdef NDEBUG
+constexpr bool isDebug = false;
+#else
+constexpr bool isDebug = true;
+#endif
+
 /**
  * Possible error codes returned by internal GraalVM functions
  *

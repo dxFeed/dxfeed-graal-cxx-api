@@ -10,13 +10,27 @@
 
 #include <string>
 
+#include <format>
 #include <iostream>
 #include <memory>
 #include <mutex>
 #include <shared_mutex>
+#include <source_location>
+#include <sstream>
+#include <thread>
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
+
+template <class CharT> struct std::formatter<std::thread::id, CharT> : std::formatter<std::string, CharT> {
+    auto format(const std::thread::id &id, std::format_context &ctx) {
+        std::ostringstream oss;
+
+        oss << id;
+
+        return std::formatter<std::string, CharT>::format(oss.str(), ctx);
+    }
+};
 
 namespace dxfcpp {
 
@@ -25,91 +39,201 @@ using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
 
 class Isolate final {
-    class IsolateThread final {
-        mutable std::mutex mutex_{};
-        GraalIsolateThreadHandle graalIsolateThreadHandle_{};
+    struct IsolateThread final {
+        GraalIsolateThreadHandle handle{};
+        bool isMain{};
+        std::thread::id tid{};
+        std::size_t idx{};
 
-      public:
-        explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr) noexcept
-            : graalIsolateThreadHandle_{handle} {}
+        explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr, bool isMain = false) noexcept
+            : handle{handle}, isMain{isMain}, tid{std::this_thread::get_id()} {
+            static size_t idx = 0;
 
-        CEntryPointErrors attach(const Isolate &isolate) {
-            std::lock_guard<std::mutex> guard{mutex_};
+            this->idx = idx++;
 
-            // We will not re-attach.
-            if (!graalIsolateThreadHandle_) {
-                return CEntryPointErrors::valueOf(
-                    graal_attach_thread(isolate.getHandleImpl(), &graalIsolateThreadHandle_));
+            if constexpr (isDebug) {
+                std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                                         std::source_location::current().line(),
+                                         std::source_location::current().column(),
+                                         std::source_location::current().function_name(),
+                                         std::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}",
+                                                     std::bit_cast<std::size_t>(handle), isMain, tid, idx));
             }
-
-            return CEntryPointErrors::NO_ERROR;
         }
 
         CEntryPointErrors detach() {
-            std::lock_guard<std::mutex> guard{mutex_};
+            if constexpr (isDebug) {
+                std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                                         std::source_location::current().line(),
+                                         std::source_location::current().column(),
+                                         std::source_location::current().function_name(), toString());
+            }
 
             // OK if nothing is attached.
-            if (!graalIsolateThreadHandle_) {
+            if (!handle) {
+                if constexpr (isDebug) {
+                    std::clog << "\tNot attached \n";
+                }
+
                 return CEntryPointErrors::NO_ERROR;
             }
 
-            auto result = CEntryPointErrors::valueOf(graal_detach_thread(graalIsolateThreadHandle_));
+            auto result = CEntryPointErrors::valueOf(graal_detach_thread(handle));
 
             if (result == CEntryPointErrors::NO_ERROR) {
-                graalIsolateThreadHandle_ = nullptr;
+                if constexpr (isDebug) {
+                    std::clog << "\tDetached \n";
+                }
+
+                handle = nullptr;
             }
 
             return result;
         }
 
         CEntryPointErrors detachAllThreadsAndTearDownIsolate() {
-            if (!graalIsolateThreadHandle_) {
+            if constexpr (isDebug) {
+                std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                                         std::source_location::current().line(),
+                                         std::source_location::current().column(),
+                                         std::source_location::current().function_name(), toString());
+            }
+
+            if (!handle) {
+                if constexpr (isDebug) {
+                    std::clog << "\tNot attached \n";
+                }
+
                 return CEntryPointErrors::NO_ERROR;
             }
 
-            auto result =
-                CEntryPointErrors::valueOf(graal_detach_all_threads_and_tear_down_isolate(graalIsolateThreadHandle_));
+            auto result = CEntryPointErrors::valueOf(graal_detach_all_threads_and_tear_down_isolate(handle));
 
             if (result == CEntryPointErrors::NO_ERROR) {
-                graalIsolateThreadHandle_ = nullptr;
+                if constexpr (isDebug) {
+                    std::clog << "\tAll threads have been detached. The isolate has been teared down. \n";
+                }
+
+                handle = nullptr;
             }
 
             return result;
         }
 
-        template <typename F> auto runIsolated(F &&f) {
-            std::unique_lock lock(mutex_);
+        ~IsolateThread() {
+            if constexpr (isDebug) {
+                std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                                         std::source_location::current().line(),
+                                         std::source_location::current().column(),
+                                         std::source_location::current().function_name(), toString());
+            }
 
-            return std::invoke(std::forward<F>(f), graalIsolateThreadHandle_);
+            if (isMain) {
+                if constexpr (isDebug) {
+                    std::clog << "\tThis is the main thread\n";
+                }
+
+                return;
+            }
+
+            detach();
         }
 
-        ~IsolateThread() { detach(); }
+        std::string toString() const {
+            return std::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}",
+                               std::bit_cast<std::size_t>(handle), isMain, tid, idx);
+        }
     };
 
-    mutable std::shared_mutex mutex_{};
+    mutable std::recursive_mutex mutex_{};
 
-    GraalIsolateHandle graalIsolateHandle_;
+    GraalIsolateHandle handle_;
     IsolateThread mainIsolateThread_;
     static thread_local IsolateThread currentIsolateThread_;
 
-    Isolate(GraalIsolateHandle graalIsolateHandle, GraalIsolateThreadHandle graalIsolateThreadHandle)
-        : graalIsolateHandle_{graalIsolateHandle}, mainIsolateThread_{graalIsolateThreadHandle} {}
+    Isolate(GraalIsolateHandle handle, GraalIsolateThreadHandle mainIsolateThread)
+        : handle_{handle}, mainIsolateThread_{mainIsolateThread, true} {
+
+        currentIsolateThread_.handle = mainIsolateThread;
+        currentIsolateThread_.isMain = true;
+
+        if constexpr (isDebug) {
+            std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                                     std::source_location::current().line(), std::source_location::current().column(),
+                                     std::source_location::current().function_name(),
+                                     std::format("Isolate{{{}, main = {}}}", std::bit_cast<std::size_t>(handle),
+                                                 std::bit_cast<std::size_t>(mainIsolateThread)));
+        }
+    }
 
     static std::shared_ptr<Isolate> create() {
+        if constexpr (isDebug) {
+            std::clog << std::format("{}:{}:{} > {}\n", std::source_location::current().file_name(),
+                                     std::source_location::current().line(), std::source_location::current().column(),
+                                     std::source_location::current().function_name());
+        }
+
         GraalIsolateHandle graalIsolateHandle{};
         GraalIsolateThreadHandle graalIsolateThreadHandle{};
 
         if (CEntryPointErrors::valueOf(graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) ==
             CEntryPointErrors::NO_ERROR) {
-            return std::shared_ptr<Isolate>{new Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
+
+            auto result = std::shared_ptr<Isolate>{new Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
+
+            if constexpr (isDebug) {
+                std::clog << std::format("\t-> *{}\n", result->toString());
+            }
+
+            return result;
+        }
+
+        if constexpr (isDebug) {
+            std::clog << "\t-> nullptr \n";
         }
 
         return nullptr;
     }
-    //
-    //    GraalIsolateHandle getHandleImpl() const { return graalIsolateHandle_; }
-    //
-    //    GraalIsolateThreadHandle getThreadHandleImpl() const { return graalIsolateThreadHandle_; }
+
+    CEntryPointErrors attach() {
+        if constexpr (isDebug) {
+            std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                                     std::source_location::current().line(), std::source_location::current().column(),
+                                     std::source_location::current().function_name(), toString());
+        }
+
+        // We will not re-attach.
+        if (!currentIsolateThread_.handle) {
+            if constexpr (isDebug) {
+                std::clog << "\tNeeds to be attached.\n";
+            }
+
+            GraalIsolateThreadHandle newIsolateThreadHandle{};
+
+            if (auto result = CEntryPointErrors::valueOf(graal_attach_thread(handle_, &newIsolateThreadHandle));
+                result != CEntryPointErrors::NO_ERROR) {
+
+                if constexpr (isDebug) {
+                    std::clog << std::format("\t-> {}\n", result.getDescription());
+                }
+
+                return result;
+            }
+
+            currentIsolateThread_.handle = newIsolateThreadHandle;
+            currentIsolateThread_.isMain = mainIsolateThread_.handle == newIsolateThreadHandle;
+
+            if constexpr (isDebug) {
+                std::clog << std::format("\tAttached: {}\n", currentIsolateThread_.toString());
+            }
+        } else {
+            if constexpr (isDebug) {
+                std::clog << std::format("\tCached: {}\n", currentIsolateThread_.toString());
+            }
+        }
+
+        return CEntryPointErrors::NO_ERROR;
+    }
 
   public:
     Isolate() = delete;
@@ -117,61 +241,62 @@ class Isolate final {
     Isolate &operator=(const Isolate &) = delete;
 
     static std::shared_ptr<Isolate> getInstance() {
+        if constexpr (isDebug) {
+            std::clog << std::format("{}:{}:{} > {}\n", std::source_location::current().file_name(),
+                                     std::source_location::current().line(), std::source_location::current().column(),
+                                     std::source_location::current().function_name());
+        }
+
         static std::shared_ptr<Isolate> instance = create();
+
+        if constexpr (isDebug) {
+            std::clog << std::format("\t-> *{}\n", instance->toString());
+        }
 
         return instance;
     }
 
-    //    GraalIsolateHandle getHandle() const {
-    //        std::shared_lock lock(mutex_);
-    //
-    //        return getHandleImpl();
-    //    }
-    //
-    //    GraalIsolateThreadHandle getThreadHandle() const {
-    //        std::shared_lock lock(mutex_);
-    //
-    //        return getThreadHandleImpl();
-    //    }
-
-    //    GraalIsolateThreadHandle attachThread() const {
-    //        std::unique_lock lock(mutex_);
-    //
-    //        // TODO: detach on
-    //        GraalIsolateThreadHandle graalIsolateThreadHandle{};
-    //
-    //        currentIsolateThread_.attach(*this)
-    //
-    //        if (auto result = graal_attach_thread(getHandleImpl(), &graalIsolateThreadHandle); result == 0) {
-    //            return graalIsolateThreadHandle;
-    //        }
-    //
-    //        // TODO: Handle the situation where an isolated thread cannot be attached
-    //        return graalIsolateThreadHandle;
-    //    }
-
     template <typename F>
     auto runIsolated(F &&f)
-        -> std::variant<CEntryPointErrors, decltype(currentIsolateThread_.runIsolated(std::forward<F>(f)))> {
-        std::unique_lock lock(mutex_);
-
-        auto result = currentIsolateThread_.attach(*this);
-
-        if (result == CEntryPointErrors::NO_ERROR) {
-            return currentIsolateThread_.runIsolated(std::forward<F>(f));
+        -> std::variant<CEntryPointErrors, decltype(std::invoke(std::forward<F>(f), currentIsolateThread_.handle))> {
+        std::lock_guard lock(mutex_);
+        if constexpr (isDebug) {
+            std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                                     std::source_location::current().line(), std::source_location::current().column(),
+                                     std::source_location::current().function_name(), toString());
         }
 
-        return result;
+        if (auto result = attach(); result != CEntryPointErrors::NO_ERROR) {
+            if constexpr (isDebug) {
+                std::clog << std::format("\t-> {}\n", result.getDescription());
+            }
+
+            return result;
+        }
+
+        return std::invoke(std::forward<F>(f), currentIsolateThread_.handle);
     }
 
     ~Isolate() {
-        std::unique_lock lock(mutex_);
+        std::lock_guard lock(mutex_);
+
+        if constexpr (isDebug) {
+            std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                                     std::source_location::current().line(), std::source_location::current().column(),
+                                     std::source_location::current().function_name(), toString());
+        }
 
         mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
     }
+
+    std::string toString() const {
+        std::lock_guard lock(mutex_);
+
+        return std::format("Isolate{{{}, main = {}, current = {}}}", std::bit_cast<std::size_t>(handle_),
+                           mainIsolateThread_.toString(), currentIsolateThread_.toString());
+    }
 };
 
-const auto I = Isolate::getInstance();
 } // namespace detail
 
 /**
@@ -186,9 +311,28 @@ struct System {
      * @return true if the setting of the JVM system property succeeded.
      */
     static inline bool setProperty(const std::string &key, const std::string &value) {
-        auto t = detail::Isolate::getInstance()->attachThread();
+        if constexpr (dxfcpp::detail::isDebug) {
+            std::clog << std::format("{}:{}:{} > {}\n\tParams: key = {}, value = {}\n",
+                                     std::source_location::current().file_name(),
+                                     std::source_location::current().line(), std::source_location::current().column(),
+                                     std::source_location::current().function_name(), key, value);
+        }
 
-        return dxfg_system_set_property(t, key.c_str(), value.c_str()) == DXFC_EC_SUCCESS;
+        return std::visit(
+            [](auto &&arg) {
+                using T = std::decay_t<decltype(arg)>;
+
+                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                    return false;
+                } else {
+                    return arg;
+                }
+            },
+            detail::Isolate::getInstance()->runIsolated(
+                [key = key, value = value](detail::GraalIsolateThreadHandle threadHandle) {
+                    return detail::CEntryPointErrors::valueOf(dxfg_system_set_property(
+                               threadHandle, key.c_str(), value.c_str())) == detail::CEntryPointErrors::NO_ERROR;
+                }));
     }
 
     /**
@@ -198,6 +342,12 @@ struct System {
      * @return The value of a JVM system property (UTF-8 string), or an empty string.
      */
     static inline std::string getProperty(const std::string &key) {
+        if constexpr (dxfcpp::detail::isDebug) {
+            std::clog << std::format("{}:{}:{} > {}\n\tParams: key = {}\n", std::source_location::current().file_name(),
+                                     std::source_location::current().line(), std::source_location::current().column(),
+                                     std::source_location::current().function_name(), key);
+        }
+
         return std::visit(
             [](auto &&arg) {
                 using T = std::decay_t<decltype(arg)>;
@@ -208,7 +358,7 @@ struct System {
                     return arg;
                 }
             },
-            detail::Isolate::getInstance()->runIsolated([key](detail::GraalIsolateThreadHandle threadHandle) {
+            detail::Isolate::getInstance()->runIsolated([key = key](detail::GraalIsolateThreadHandle threadHandle) {
                 std::string resultString{};
 
                 if (auto result = dxfg_system_get_property(threadHandle, key.c_str()); result != nullptr) {

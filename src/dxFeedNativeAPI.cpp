@@ -78,6 +78,9 @@ const std::unordered_map<std::int32_t, CEntryPointErrors> CEntryPointErrors::ALL
     {CPU_FEATURE_CHECK_FAILED.getCode(), CPU_FEATURE_CHECK_FAILED},
 };
 
+thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
+
+const auto I = Isolate::getInstance();
 } // namespace detail
 
 } // namespace dxfcpp
