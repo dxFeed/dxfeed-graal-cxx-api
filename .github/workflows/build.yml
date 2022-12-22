@@ -35,7 +35,7 @@ jobs:
         run: |
           py -m pip install --upgrade pip setuptools wheel conan
 
-      - name: Prepare tools [Win]
+      - name: Prepare tools [!Win]
         if: runner.os != 'Windows'
         run: |
           python3 -m pip install --upgrade pip setuptools wheel conan
@@ -57,7 +57,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           cd ${{github.workspace}}/build
-          conan install -s compiler.version=16 ..
+          py -m conan install -s compiler.version=16 ..
 
       - name: Prepare conan [macOS]
         if: runner.os == 'macOS'
