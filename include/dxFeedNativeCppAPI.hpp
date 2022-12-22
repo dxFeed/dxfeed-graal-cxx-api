@@ -8,6 +8,8 @@
 
 #include "internal/CEntryPointErrors.hpp"
 
+#include <bit>
+#include <cstring>
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -19,7 +21,6 @@
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
-#include <bit>
 
 #include <fmt/format.h>
 #include <fmt/std.h>
@@ -29,6 +30,30 @@ namespace dxfcpp {
 namespace detail {
 using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
+
+template <typename... T> constexpr void ignore_unused(const T &...) {}
+
+constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept -> bool {
+#ifdef __cpp_lib_is_constant_evaluated
+    ignore_unused(default_value);
+    return std::is_constant_evaluated();
+#else
+    return default_value;
+#endif
+}
+
+// Implementation of std::bit_cast for pre-C++20.
+template <typename To, typename From, std::enable_if_t<sizeof(To) == sizeof(From), int> = 0>
+constexpr auto bit_cast(const From &from) -> To {
+#ifdef __cpp_lib_bit_cast
+    if (is_constant_evaluated())
+        return std::bit_cast<To>(from);
+#endif
+    auto to = To();
+    // The cast suppresses a bogus -Wclass-memaccess on GCC.
+    std::memcpy(static_cast<void *>(&to), &from, sizeof(to));
+    return to;
+}
 
 class Isolate final {
     struct IsolateThread final {
@@ -45,7 +70,7 @@ class Isolate final {
 
             if constexpr (isDebug) {
                 std::clog << fmt::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}()\n",
-                                         std::bit_cast<std::size_t>(handle), isMain, tid, idx);
+                                         bit_cast<std::size_t>(handle), isMain, tid, idx);
             }
         }
 
@@ -119,8 +144,8 @@ class Isolate final {
         }
 
         std::string toString() const {
-            return fmt::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}",
-                               std::bit_cast<std::size_t>(handle), isMain, tid, idx);
+            return fmt::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}", bit_cast<std::size_t>(handle),
+                               isMain, tid, idx);
         }
     };
 
@@ -137,7 +162,7 @@ class Isolate final {
         currentIsolateThread_.isMain = true;
 
         if constexpr (isDebug) {
-            std::clog << fmt::format("Isolate{{{}, main = {}, current = {}}}()\n", std::bit_cast<std::size_t>(handle),
+            std::clog << fmt::format("Isolate{{{}, main = {}, current = {}}}()\n", bit_cast<std::size_t>(handle),
                                      mainIsolateThread_.toString(), currentIsolateThread_.toString());
         }
     }
@@ -231,7 +256,7 @@ class Isolate final {
         -> std::variant<CEntryPointErrors, decltype(std::invoke(std::forward<F>(f), currentIsolateThread_.handle))> {
         std::lock_guard lock(mutex_);
         if constexpr (isDebug) {
-            std::clog << fmt::format("{}::runIsolated({})\n", toString(), std::bit_cast<std::size_t>(&f));
+            std::clog << fmt::format("{}::runIsolated({})\n", toString(), bit_cast<std::size_t>(&f));
         }
 
         if (auto result = attach(); result != CEntryPointErrors::NO_ERROR) {
@@ -258,7 +283,7 @@ class Isolate final {
     std::string toString() const {
         std::lock_guard lock(mutex_);
 
-        return fmt::format("Isolate{{{}, main = {}, current = {}}}", std::bit_cast<std::size_t>(handle_),
+        return fmt::format("Isolate{{{}, main = {}, current = {}}}", bit_cast<std::size_t>(handle_),
                            mainIsolateThread_.toString(), currentIsolateThread_.toString());
     }
 };
