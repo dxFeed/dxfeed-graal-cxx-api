@@ -27,20 +27,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-#      - uses: actions/setup-python@v3
-#        with:
-#          cache: 'pip' # caching pip dependencies
-      - name: Prepare tools [Win]
-        if: runner.os == 'Windows'
-        run: |
-          py -m pip install --upgrade pip setuptools wheel conan
+      - uses: turtlebrowser/get-conan@main
 
-      - name: Prepare tools [!Win]
-        if: runner.os != 'Windows'
-        run: |
-          python3 -m pip install --upgrade pip setuptools wheel conan
-
-#      - run: pip install conan
+      - name: Conan version
+        run: echo "${{ steps.conan.outputs.version }}"
 
       - name: Prepare build
         run: |
