@@ -57,10 +57,11 @@ if (DXFC_USE_CONAN)
 endif ()
 
 find_package(utf8cpp)
+find_package(fmt)
 
 add_library(dxFeedNativeAPI src/dxFeedNativeAPI.cpp)
 target_include_directories(dxFeedNativeAPI PUBLIC include)
-target_link_libraries(dxFeedNativeAPI PUBLIC DxFeedGraalNativeApi utf8cpp::utf8cpp)
+target_link_libraries(dxFeedNativeAPI PUBLIC DxFeedGraalNativeApi utf8cpp::utf8cpp fmt::fmt)
 
 add_library(dxFeedNativeCppAPI INTERFACE)
 target_include_directories(dxFeedNativeCppAPI INTERFACE include)

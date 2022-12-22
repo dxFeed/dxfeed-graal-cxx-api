@@ -8,29 +8,20 @@
 
 #include "internal/CEntryPointErrors.hpp"
 
-#include <string>
-
-#include <format>
 #include <iostream>
 #include <memory>
 #include <mutex>
 #include <shared_mutex>
 #include <source_location>
 #include <sstream>
+#include <string>
 #include <thread>
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
 
-template <class CharT> struct std::formatter<std::thread::id, CharT> : std::formatter<std::string, CharT> {
-    auto format(const std::thread::id &id, std::format_context &ctx) {
-        std::ostringstream oss;
-
-        oss << id;
-
-        return std::formatter<std::string, CharT>::format(oss.str(), ctx);
-    }
-};
+#include <fmt/format.h>
+#include <fmt/std.h>
 
 namespace dxfcpp {
 
@@ -52,18 +43,18 @@ class Isolate final {
             this->idx = idx++;
 
             if constexpr (isDebug) {
-                std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                std::clog << fmt::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
                                          std::source_location::current().line(),
                                          std::source_location::current().column(),
                                          std::source_location::current().function_name(),
-                                         std::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}",
+                                         fmt::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}",
                                                      std::bit_cast<std::size_t>(handle), isMain, tid, idx));
             }
         }
 
         CEntryPointErrors detach() {
             if constexpr (isDebug) {
-                std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                std::clog << fmt::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
                                          std::source_location::current().line(),
                                          std::source_location::current().column(),
                                          std::source_location::current().function_name(), toString());
@@ -93,7 +84,7 @@ class Isolate final {
 
         CEntryPointErrors detachAllThreadsAndTearDownIsolate() {
             if constexpr (isDebug) {
-                std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                std::clog << fmt::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
                                          std::source_location::current().line(),
                                          std::source_location::current().column(),
                                          std::source_location::current().function_name(), toString());
@@ -122,7 +113,7 @@ class Isolate final {
 
         ~IsolateThread() {
             if constexpr (isDebug) {
-                std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+                std::clog << fmt::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
                                          std::source_location::current().line(),
                                          std::source_location::current().column(),
                                          std::source_location::current().function_name(), toString());
@@ -140,7 +131,7 @@ class Isolate final {
         }
 
         std::string toString() const {
-            return std::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}",
+            return fmt::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}",
                                std::bit_cast<std::size_t>(handle), isMain, tid, idx);
         }
     };
@@ -158,17 +149,17 @@ class Isolate final {
         currentIsolateThread_.isMain = true;
 
         if constexpr (isDebug) {
-            std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+            std::clog << fmt::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
                                      std::source_location::current().line(), std::source_location::current().column(),
                                      std::source_location::current().function_name(),
-                                     std::format("Isolate{{{}, main = {}}}", std::bit_cast<std::size_t>(handle),
+                                     fmt::format("Isolate{{{}, main = {}}}", std::bit_cast<std::size_t>(handle),
                                                  std::bit_cast<std::size_t>(mainIsolateThread)));
         }
     }
 
     static std::shared_ptr<Isolate> create() {
         if constexpr (isDebug) {
-            std::clog << std::format("{}:{}:{} > {}\n", std::source_location::current().file_name(),
+            std::clog << fmt::format("{}:{}:{} > {}\n", std::source_location::current().file_name(),
                                      std::source_location::current().line(), std::source_location::current().column(),
                                      std::source_location::current().function_name());
         }
@@ -182,7 +173,7 @@ class Isolate final {
             auto result = std::shared_ptr<Isolate>{new Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
 
             if constexpr (isDebug) {
-                std::clog << std::format("\t-> *{}\n", result->toString());
+                std::clog << fmt::format("\t-> *{}\n", result->toString());
             }
 
             return result;
@@ -197,7 +188,7 @@ class Isolate final {
 
     CEntryPointErrors attach() {
         if constexpr (isDebug) {
-            std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+            std::clog << fmt::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
                                      std::source_location::current().line(), std::source_location::current().column(),
                                      std::source_location::current().function_name(), toString());
         }
@@ -214,7 +205,7 @@ class Isolate final {
                 result != CEntryPointErrors::NO_ERROR) {
 
                 if constexpr (isDebug) {
-                    std::clog << std::format("\t-> {}\n", result.getDescription());
+                    std::clog << fmt::format("\t-> {}\n", result.getDescription());
                 }
 
                 return result;
@@ -224,11 +215,11 @@ class Isolate final {
             currentIsolateThread_.isMain = mainIsolateThread_.handle == newIsolateThreadHandle;
 
             if constexpr (isDebug) {
-                std::clog << std::format("\tAttached: {}\n", currentIsolateThread_.toString());
+                std::clog << fmt::format("\tAttached: {}\n", currentIsolateThread_.toString());
             }
         } else {
             if constexpr (isDebug) {
-                std::clog << std::format("\tCached: {}\n", currentIsolateThread_.toString());
+                std::clog << fmt::format("\tCached: {}\n", currentIsolateThread_.toString());
             }
         }
 
@@ -242,7 +233,7 @@ class Isolate final {
 
     static std::shared_ptr<Isolate> getInstance() {
         if constexpr (isDebug) {
-            std::clog << std::format("{}:{}:{} > {}\n", std::source_location::current().file_name(),
+            std::clog << fmt::format("{}:{}:{} > {}\n", std::source_location::current().file_name(),
                                      std::source_location::current().line(), std::source_location::current().column(),
                                      std::source_location::current().function_name());
         }
@@ -250,7 +241,7 @@ class Isolate final {
         static std::shared_ptr<Isolate> instance = create();
 
         if constexpr (isDebug) {
-            std::clog << std::format("\t-> *{}\n", instance->toString());
+            std::clog << fmt::format("\t-> *{}\n", instance->toString());
         }
 
         return instance;
@@ -261,14 +252,14 @@ class Isolate final {
         -> std::variant<CEntryPointErrors, decltype(std::invoke(std::forward<F>(f), currentIsolateThread_.handle))> {
         std::lock_guard lock(mutex_);
         if constexpr (isDebug) {
-            std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+            std::clog << fmt::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
                                      std::source_location::current().line(), std::source_location::current().column(),
                                      std::source_location::current().function_name(), toString());
         }
 
         if (auto result = attach(); result != CEntryPointErrors::NO_ERROR) {
             if constexpr (isDebug) {
-                std::clog << std::format("\t-> {}\n", result.getDescription());
+                std::clog << fmt::format("\t-> {}\n", result.getDescription());
             }
 
             return result;
@@ -281,7 +272,7 @@ class Isolate final {
         std::lock_guard lock(mutex_);
 
         if constexpr (isDebug) {
-            std::clog << std::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
+            std::clog << fmt::format("{}:{}:{} > {}\n\t{}\n", std::source_location::current().file_name(),
                                      std::source_location::current().line(), std::source_location::current().column(),
                                      std::source_location::current().function_name(), toString());
         }
@@ -292,7 +283,7 @@ class Isolate final {
     std::string toString() const {
         std::lock_guard lock(mutex_);
 
-        return std::format("Isolate{{{}, main = {}, current = {}}}", std::bit_cast<std::size_t>(handle_),
+        return fmt::format("Isolate{{{}, main = {}, current = {}}}", std::bit_cast<std::size_t>(handle_),
                            mainIsolateThread_.toString(), currentIsolateThread_.toString());
     }
 };
@@ -312,7 +303,7 @@ struct System {
      */
     static inline bool setProperty(const std::string &key, const std::string &value) {
         if constexpr (dxfcpp::detail::isDebug) {
-            std::clog << std::format("{}:{}:{} > {}\n\tParams: key = {}, value = {}\n",
+            std::clog << fmt::format("{}:{}:{} > {}\n\tParams: key = {}, value = {}\n",
                                      std::source_location::current().file_name(),
                                      std::source_location::current().line(), std::source_location::current().column(),
                                      std::source_location::current().function_name(), key, value);
@@ -343,7 +334,7 @@ struct System {
      */
     static inline std::string getProperty(const std::string &key) {
         if constexpr (dxfcpp::detail::isDebug) {
-            std::clog << std::format("{}:{}:{} > {}\n\tParams: key = {}\n", std::source_location::current().file_name(),
+            std::clog << fmt::format("{}:{}:{} > {}\n\tParams: key = {}\n", std::source_location::current().file_name(),
                                      std::source_location::current().line(), std::source_location::current().column(),
                                      std::source_location::current().function_name(), key);
         }
