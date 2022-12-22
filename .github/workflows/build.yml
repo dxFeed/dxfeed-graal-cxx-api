@@ -47,7 +47,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           cd ${{github.workspace}}/build
-          py -m conan install -s compiler.version=16 ..
+          conan install -s compiler.version=16 ..
 
       - name: Prepare conan [macOS]
         if: runner.os == 'macOS'
