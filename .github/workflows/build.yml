@@ -30,7 +30,17 @@ jobs:
 #      - uses: actions/setup-python@v3
 #        with:
 #          cache: 'pip' # caching pip dependencies
-      - run: pip install conan
+      - name: Prepare tools [Win]
+        if: runner.os == 'Windows'
+        run: |
+          py -m pip install --upgrade pip setuptools wheel conan
+
+      - name: Prepare tools [Win]
+        if: runner.os != 'Windows'
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel conan
+
+#      - run: pip install conan
 
       - name: Prepare build
         run: |
