@@ -19,6 +19,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
+#include <bit>
 
 #include <fmt/format.h>
 #include <fmt/std.h>
