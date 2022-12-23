@@ -7,6 +7,7 @@
 
 #include <graal_isolate.h>
 
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <mutex>
