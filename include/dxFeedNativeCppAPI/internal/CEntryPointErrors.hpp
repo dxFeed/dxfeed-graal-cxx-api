@@ -7,12 +7,9 @@
 #include <string>
 #include <unordered_map>
 
+#include "Common.hpp"
+
 namespace dxfcpp::detail {
-#ifdef NDEBUG
-constexpr bool isDebug = false;
-#else
-constexpr bool isDebug = true;
-#endif
 
 /**
  * Possible error codes returned by internal GraalVM functions
@@ -118,8 +115,6 @@ class CEntryPointErrors {
     /// Returns the description
     [[nodiscard]] const std::string &getDescription() const { return description_; }
 
-    bool operator == (const CEntryPointErrors &error1) const {
-        return this->getCode() == error1.getCode();
-    }
+    bool operator==(const CEntryPointErrors &error1) const { return this->getCode() == error1.getCode(); }
 };
 } // namespace dxfcpp::detail

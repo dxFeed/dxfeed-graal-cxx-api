@@ -2,24 +2,15 @@
 
 #pragma once
 
-#include <dxfg_endpoint.h>
-#include <dxfg_system.h>
+#include "CEntryPointErrors.hpp"
+#include "Common.hpp"
+
 #include <graal_isolate.h>
 
-#include "internal/CEntryPointErrors.hpp"
-
-#include <bit>
-#include <cstring>
-#include <functional>
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <shared_mutex>
-#include <sstream>
-#include <string>
 #include <thread>
-#include <type_traits>
-#include <unordered_map>
 #include <variant>
 
 #include <fmt/format.h>
@@ -30,30 +21,6 @@ namespace dxfcpp {
 namespace detail {
 using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
-
-template <typename... T> constexpr void ignore_unused(const T &...) {}
-
-constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept -> bool {
-#ifdef __cpp_lib_is_constant_evaluated
-    ignore_unused(default_value);
-    return std::is_constant_evaluated();
-#else
-    return default_value;
-#endif
-}
-
-// Implementation of std::bit_cast for pre-C++20.
-template <typename To, typename From, std::enable_if_t<sizeof(To) == sizeof(From), int> = 0>
-constexpr auto bit_cast(const From &from) -> To {
-#ifdef __cpp_lib_bit_cast
-    if (is_constant_evaluated())
-        return std::bit_cast<To>(from);
-#endif
-    auto to = To();
-    // The cast suppresses a bogus -Wclass-memaccess on GCC.
-    std::memcpy(static_cast<void *>(&to), &from, sizeof(to));
-    return to;
-}
 
 class Isolate final {
     struct IsolateThread final {
@@ -287,115 +254,6 @@ class Isolate final {
                            mainIsolateThread_.toString(), currentIsolateThread_.toString());
     }
 };
-
 } // namespace detail
-
-/**
- * A class that allows to set JVM system properties and get the values of JVM system properties.
- */
-struct System {
-    /**
-     * Sets the JVM system property indicated by the specified key.
-     *
-     * @param key The name of the system property (UTF-8 string).
-     * @param value The value of the system property (UTF-8 string).
-     * @return true if the setting of the JVM system property succeeded.
-     */
-    static inline bool setProperty(const std::string &key, const std::string &value) {
-        if constexpr (dxfcpp::detail::isDebug) {
-            std::clog << fmt::format("System::setProperty(key = '{}', value = '{}')\n", key, value);
-        }
-
-        auto result = std::visit(
-            [](auto &&arg) {
-                using T = std::decay_t<decltype(arg)>;
-
-                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
-                    return false;
-                } else {
-                    return arg;
-                }
-            },
-            detail::Isolate::getInstance()->runIsolated(
-                [key = key, value = value](detail::GraalIsolateThreadHandle threadHandle) {
-                    return detail::CEntryPointErrors::valueOf(dxfg_system_set_property(
-                               threadHandle, key.c_str(), value.c_str())) == detail::CEntryPointErrors::NO_ERROR;
-                }));
-
-        if constexpr (dxfcpp::detail::isDebug) {
-            std::clog << fmt::format("System::setProperty(key = '{}', value = '{}') -> {}\n", key, value, result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Gets the system property indicated by the specified key.
-     *
-     * @param key The name of the system property (UTF-8 string).
-     * @return The value of a JVM system property (UTF-8 string), or an empty string.
-     */
-    static inline std::string getProperty(const std::string &key) {
-        if constexpr (dxfcpp::detail::isDebug) {
-            std::clog << fmt::format("System::getProperty(key = {})\n", key);
-        }
-
-        auto result = std::visit(
-            [](auto &&arg) {
-                using T = std::decay_t<decltype(arg)>;
-
-                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
-                    return std::string{};
-                } else {
-                    return arg;
-                }
-            },
-            detail::Isolate::getInstance()->runIsolated([key = key](detail::GraalIsolateThreadHandle threadHandle) {
-                std::string resultString{};
-
-                if (auto result = dxfg_system_get_property(threadHandle, key.c_str()); result != nullptr) {
-                    resultString = result;
-                    dxfg_system_release_property(threadHandle, result);
-                }
-
-                return resultString;
-            }));
-
-        if constexpr (dxfcpp::detail::isDebug) {
-            std::clog << fmt::format("System::getProperty(key = '{}') -> '{}'\n", key, result);
-        }
-
-        return result;
-    }
-};
-
-struct DXEndpoint {
-    //    class Builder {
-    //        dxfg_endpoint_builder_t handle_;
-    //        std::mutex mutex_;
-    //
-    //        explicit Builder(dxfg_endpoint_builder_t handle) : handle_{handle}, mutex_{} {}
-    //
-    //      public:
-    //        ~Builder() {
-    //            std::lock_guard<std::mutex> guard{mutex_};
-    //
-    //            auto t = detail::Isolate::getInstance()->attachThread();
-    //
-    //            dxfg_endpoint_builder_release(t, &handle_);
-    //        }
-    //
-    //        static std::shared_ptr<Builder> create() {
-    //            dxfg_endpoint_builder_t builderHandle;
-    //            auto t = detail::Isolate::getInstance()->attachThread();
-    //
-    //            if (!dxfg_endpoint_builder_create(t, &builderHandle)) {
-    //                return nullptr;
-    //            }
-    //
-    //            return std::shared_ptr<Builder>(new Builder{builderHandle});
-    //        }
-    //    };
-};
 
 } // namespace dxfcpp

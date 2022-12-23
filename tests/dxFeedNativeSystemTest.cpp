@@ -2,8 +2,8 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <dxFeedNativeAPI.h>
-#include <dxFeedNativeCppAPI.hpp>
+#include <dxFeedNativeCAPI/dxFeedNativeCAPI.h>
+#include <dxFeedNativeCppAPI/dxFeedNativeCppAPI.hpp>
 #include <thread>
 #include <vector>
 

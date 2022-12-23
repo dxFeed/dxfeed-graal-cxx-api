@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxFeedNativeAPI.h>
-#include <dxFeedNativeCppAPI.hpp>
+#include <dxFeedNativeCAPI/dxFeedNativeCAPI.h>
+#include <dxFeedNativeCppAPI/dxFeedNativeCppAPI.hpp>
 
 #include <cstring>
 #include <utf8cpp/utf8.h>
