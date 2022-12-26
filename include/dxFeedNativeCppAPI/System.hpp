@@ -94,5 +94,85 @@ struct System {
 
         return result;
     }
+
+    struct Traceble {
+        int i{};
+
+        Traceble(int i) : i{i} {
+            std::clog << std::string{} + "Traceble(" + std::to_string(i) << ")\n";
+        }
+
+        Traceble(const Traceble& that) {
+            std::clog << toString() + "::(const& " + that.toString() + ")\n";
+
+            i = i*10 + that.i;
+        }
+
+        Traceble& operator=(const Traceble& that) {
+            std::clog << toString() + " = const& " + that.toString() + "\n";
+
+            i = i*10 + that.i;
+
+            std::clog << "\t-> " + toString() + "\n";
+
+            return *this;
+        }
+
+        Traceble(Traceble&& that) noexcept {
+            std::clog << toString() + "::(&& " + that.toString() + ")\n";
+
+            i = i*10 + that.i;
+            that.i = 0;
+        }
+
+        Traceble& operator=(Traceble&& that) noexcept {
+            std::clog << toString() + " = && " + that.toString() + "\n";
+
+            i = i*10 + that.i;
+            that.i = 0;
+
+            std::clog << "\t-> " + toString() + "\n";
+
+            return *this;
+        }
+
+        ~Traceble() {
+            std::clog << std::string{} + "~Traceble(" + std::to_string(i) << ")\n";
+        }
+
+        std::string toString() const {
+            return "Traceble{" + std::to_string(i) + "}";
+        }
+    };
+
+    static inline Traceble test() {
+        if constexpr (detail::isDebug) {
+            std::clog << fmt::format("System::test()\n");
+        }
+
+        auto result = std::visit(
+            [](auto &&arg) {
+                using T = std::decay_t<decltype(arg)>;
+
+                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                    return Traceble{-1};
+                } else {
+                    return std::forward<decltype(arg)>(arg);
+                }
+            },
+            detail::Isolate::getInstance()->runIsolated([](detail::GraalIsolateThreadHandle threadHandle) {
+                Traceble result{0};
+
+                result = Traceble(1);
+
+                return result;
+            }));
+
+        if constexpr (detail::isDebug) {
+            std::clog << fmt::format("System::test() -> 'Traceble'\n");
+        }
+
+        return result;
+    }
 };
 } // namespace dxfcpp

@@ -104,3 +104,7 @@ TEST_CASE("System properties can be set, as well as get their values. Multi-thre
 
     REQUIRE(dxfcpp::System::getProperty("PropertyName") == "123");
 }
+
+TEST_CASE("Trace", "[dxfcpp::System]") {
+    dxfcpp::System::test();
+}
