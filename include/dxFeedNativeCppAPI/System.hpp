@@ -95,57 +95,65 @@ struct System {
         return result;
     }
 
-    struct Traceble {
-        int i{};
+    struct IdGen {
+        template <typename T> static std::size_t generate() {
+            static std::size_t nextId = 0;
 
-        Traceble(int i) : i{i} {
-            std::clog << std::string{} + "Traceble(" + std::to_string(i) << ")\n";
-        }
-
-        Traceble(const Traceble& that) {
-            std::clog << toString() + "::(const& " + that.toString() + ")\n";
-
-            i = i*10 + that.i;
-        }
-
-        Traceble& operator=(const Traceble& that) {
-            std::clog << toString() + " = const& " + that.toString() + "\n";
-
-            i = i*10 + that.i;
-
-            std::clog << "\t-> " + toString() + "\n";
-
-            return *this;
-        }
-
-        Traceble(Traceble&& that) noexcept {
-            std::clog << toString() + "::(&& " + that.toString() + ")\n";
-
-            i = i*10 + that.i;
-            that.i = 0;
-        }
-
-        Traceble& operator=(Traceble&& that) noexcept {
-            std::clog << toString() + " = && " + that.toString() + "\n";
-
-            i = i*10 + that.i;
-            that.i = 0;
-
-            std::clog << "\t-> " + toString() + "\n";
-
-            return *this;
-        }
-
-        ~Traceble() {
-            std::clog << std::string{} + "~Traceble(" + std::to_string(i) << ")\n";
-        }
-
-        std::string toString() const {
-            return "Traceble{" + std::to_string(i) + "}";
+            return nextId++;
         }
     };
 
-    static inline Traceble test() {
+    class Traceable {
+        std::size_t id;
+        int data;
+
+      public:
+        Traceable() : id{IdGen::generate<Traceable>()}, data{0} {}
+
+        explicit Traceable(int i) : id{IdGen::generate<Traceable>()}, data{i} {
+            std::clog << std::string{} + "Traceable(" + std::to_string(i) << "){id = " + std::to_string(id) + "}\n";
+        }
+
+        Traceable(const Traceable &that) {
+            std::clog << toString() + "::(const& " + that.toString() + ")\n";
+
+            data = that.data;
+        }
+
+        Traceable &operator=(const Traceable &that) {
+            std::clog << toString() + " = const& " + that.toString() + "\n";
+
+            data = that.data;
+
+            std::clog << "\t-> " + toString() + "\n";
+
+            return *this;
+        }
+
+        Traceable(Traceable &&that) noexcept {
+            std::clog << toString() + "::(&& " + that.toString() + ")\n";
+
+            std::swap(data, that.data);
+        }
+
+        Traceable &operator=(Traceable &&that) noexcept {
+            std::clog << toString() + " = && " + that.toString() + "\n";
+
+            std::swap(data, that.data);
+
+            std::clog << "\t-> " + toString() + "\n";
+
+            return *this;
+        }
+
+        ~Traceable() { std::clog << "~" + toString() + "()\n"; }
+
+        std::string toString() const {
+            return "Traceable{id = " + std::to_string(id) + ", data = " + std::to_string(data) + "}";
+        }
+    };
+
+    static inline auto test() {
         if constexpr (detail::isDebug) {
             std::clog << fmt::format("System::test()\n");
         }
@@ -155,21 +163,21 @@ struct System {
                 using T = std::decay_t<decltype(arg)>;
 
                 if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
-                    return Traceble{-1};
+                    return std::make_unique<Traceable>(-1);
                 } else {
                     return std::forward<decltype(arg)>(arg);
                 }
             },
             detail::Isolate::getInstance()->runIsolated([](detail::GraalIsolateThreadHandle threadHandle) {
-                Traceble result{0};
+                std::unique_ptr<Traceable> result{};
 
-                result = Traceble(1);
+                result = std::make_unique<Traceable>(1);
 
                 return result;
             }));
 
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("System::test() -> 'Traceble'\n");
+            std::clog << fmt::format("System::test() -> 'Traceable'\n");
         }
 
         return result;
