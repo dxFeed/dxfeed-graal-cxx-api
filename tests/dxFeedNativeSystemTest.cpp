@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MPL-2.0
 
+#include <catch2/benchmark/catch_benchmark_all.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 #include <dxFeedNativeCAPI/dxFeedNativeCAPI.h>
 #include <dxFeedNativeCppAPI/dxFeedNativeCppAPI.hpp>
 #include <thread>
+#include <unordered_map>
 #include <vector>
 
 TEST_CASE("System properties can be set, as well as get their values", "[dxfc_system]") {
@@ -105,6 +107,10 @@ TEST_CASE("System properties can be set, as well as get their values. Multi-thre
     REQUIRE(dxfcpp::System::getProperty("PropertyName") == "123");
 }
 
-TEST_CASE("Trace", "[dxfcpp::System]") {
-    dxfcpp::System::test();
+TEST_CASE("System properties benchmark", "[dxfcpp::System]") {
+    BENCHMARK("System::setProperty") { dxfcpp::System::setProperty("PropertyName", "Привет"); };
+
+    std::unordered_map<std::string, std::string> um{};
+
+    BENCHMARK("std::unordered_map[]") { um["PropertyName"] = "Привет"; };
 }
