@@ -18,7 +18,7 @@ set(DXFEED_GRAAL_NATIVE_API_GITHUB_ARCHIVE_VERSION "1.0.0" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_API_GITHUB_BASE_URL "https://github.com/ttldtor/dxfeed-graal-native-api/releases/download/" CACHE STRING "")
 
 option(DXFC_USE_DXFEED_GRAAL_NATIVE_API_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_API_VERSION "0.0.5" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_API_VERSION "0.1.0" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_API_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-api/" CACHE STRING "")
 
 include(FetchContent)
