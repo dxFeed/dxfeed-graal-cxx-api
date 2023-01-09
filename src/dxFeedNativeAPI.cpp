@@ -83,6 +83,12 @@ thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
 const auto I = Isolate::getInstance();
 } // namespace detail
 
+const std::string DXEndpoint::NAME_PROPERTY = "name";
+const std::string DXEndpoint::DXFEED_PROPERTIES_PROPERTY = "dxfeed.properties";
+const std::string DXEndpoint::DXFEED_ADDRESS_PROPERTY = "dxfeed.address";
+const std::string DXEndpoint::DXFEED_USER_PROPERTY = "dxfeed.user";
+const std::string DXEndpoint::DXFEED_PASSWORD_PROPERTY = "dxfeed.password";
+
 } // namespace dxfcpp
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {

@@ -2,5 +2,8 @@
 
 #pragma once
 
-#include "Endpoint.hpp"
+#include "internal/CEntryPointErrors.hpp"
+#include "internal/Common.hpp"
+
+#include "DXEndpoint.hpp"
 #include "System.hpp"
