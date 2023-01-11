@@ -24,79 +24,79 @@ class CEntryPointErrors {
         : code_{code}, description_{std::move(description)} {}
 
   public:
-    /// 0. No error occurred.
+    /// 0 - No error occurred.
     static const CEntryPointErrors NO_ERROR;
 
-    /// 1. An unspecified error occurred.
+    /// 1 - An unspecified error occurred.
     static const CEntryPointErrors UNSPECIFIED;
 
-    /// 2. An argument was NULL (nullptr).
+    /// 2 - An argument was NULL (nullptr).
     static const CEntryPointErrors NULL_ARGUMENT;
 
-    /// 4. The specified thread is not attached to the isolate.
+    /// 4 - The specified thread is not attached to the isolate.
     static const CEntryPointErrors UNATTACHED_THREAD;
 
-    /// 5. The specified isolate is unknown.
+    /// 5 - The specified isolate is unknown.
     static const CEntryPointErrors UNINITIALIZED_ISOLATE;
 
-    /// 6. Locating the image file failed.
+    /// 6 - Locating the image file failed.
     static const CEntryPointErrors LOCATE_IMAGE_FAILED;
 
-    /// 7. Opening the located image file failed.
+    /// 7 - Opening the located image file failed.
     static const CEntryPointErrors OPEN_IMAGE_FAILED;
 
-    /// 8. Mapping the heap from the image file into memory failed.
+    /// 8 - Mapping the heap from the image file into memory failed.
     static const CEntryPointErrors MAP_HEAP_FAILED;
 
-    /// 801. Reserving address space for the new isolate failed.
+    /// 801 - Reserving address space for the new isolate failed.
     static const CEntryPointErrors RESERVE_ADDRESS_SPACE_FAILED;
 
-    /// 802. The image heap does not fit in the available address space.
+    /// 802 - The image heap does not fit in the available address space.
     static const CEntryPointErrors INSUFFICIENT_ADDRESS_SPACE;
 
-    /// 9. Setting the protection of the heap memory failed.
+    /// 9 - Setting the protection of the heap memory failed.
     static const CEntryPointErrors PROTECT_HEAP_FAILED;
 
-    /// 10. The version of the specified isolate parameters is unsupported.
+    /// 10 - The version of the specified isolate parameters is unsupported.
     static const CEntryPointErrors UNSUPPORTED_ISOLATE_PARAMETERS_VERSION;
 
-    /// 11. Initialization of threading in the isolate failed.
+    /// 11 - Initialization of threading in the isolate failed.
     static const CEntryPointErrors THREADING_INITIALIZATION_FAILED;
 
-    /// 12. Some exception is not caught.
+    /// 12 - Some exception is not caught.
     static const CEntryPointErrors UNCAUGHT_EXCEPTION;
 
-    /// 13. Initialization the isolate failed.
+    /// 13 - Initialization the isolate failed.
     static const CEntryPointErrors ISOLATE_INITIALIZATION_FAILED;
 
-    /// 14. Opening the located auxiliary image file failed.
+    /// 14 - Opening the located auxiliary image file failed.
     static const CEntryPointErrors OPEN_AUX_IMAGE_FAILED;
 
-    /// 15. Reading the opened auxiliary image file failed.
+    /// 15 - Reading the opened auxiliary image file failed.
     static const CEntryPointErrors READ_AUX_IMAGE_META_FAILED;
 
-    /// 16. Mapping the auxiliary image file into memory failed.
+    /// 16 - Mapping the auxiliary image file into memory failed.
     static const CEntryPointErrors MAP_AUX_IMAGE_FAILED;
 
-    /// 17. Insufficient memory for the auxiliary image.
+    /// 17 - Insufficient memory for the auxiliary image.
     static const CEntryPointErrors INSUFFICIENT_AUX_IMAGE_MEMORY;
 
-    /// 18. Auxiliary images are not supported on this platform or edition.
+    /// 18 - Auxiliary images are not supported on this platform or edition.
     static const CEntryPointErrors AUX_IMAGE_UNSUPPORTED;
 
-    /// 19. Releasing the isolate's address space failed.
+    /// 19 - Releasing the isolate's address space failed.
     static const CEntryPointErrors FREE_ADDRESS_SPACE_FAILED;
 
-    /// 20. Releasing the isolate's image heap memory failed.
+    /// 20 - Releasing the isolate's image heap memory failed.
     static const CEntryPointErrors FREE_IMAGE_HEAP_FAILED;
 
-    /// 21. The auxiliary image was built from a different primary image.
+    /// 21 - The auxiliary image was built from a different primary image.
     static const CEntryPointErrors AUX_IMAGE_PRIMARY_IMAGE_MISMATCH;
 
-    /// 22. The isolate arguments could not be parsed.
+    /// 22 - The isolate arguments could not be parsed.
     static const CEntryPointErrors ARGUMENT_PARSING_FAILED;
 
-    /// 23. Current target does not support the following CPU features that are required by the image.
+    /// 23 - Current target does not support the following CPU features that are required by the image.
     static const CEntryPointErrors CPU_FEATURE_CHECK_FAILED;
 
     static const std::unordered_map<std::int32_t, CEntryPointErrors> ALL;
@@ -115,6 +115,6 @@ class CEntryPointErrors {
     /// Returns the description
     [[nodiscard]] const std::string &getDescription() const { return description_; }
 
-    bool operator==(const CEntryPointErrors &error1) const { return this->getCode() == error1.getCode(); }
+    bool operator==(const CEntryPointErrors &errors) const { return this->getCode() == errors.getCode(); }
 };
 } // namespace dxfcpp::detail

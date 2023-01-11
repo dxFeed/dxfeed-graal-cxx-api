@@ -1,4 +1,4 @@
-# dxfeed-native-api
+# dxFeed Native API
 
 ![Build status](https://github.com/dxFeed/dxfeed-native-api/actions/workflows/build.yml/badge.svg?branch=main)
 
