@@ -37,3 +37,4 @@ build/
 cmake-build-*/
 .idea/
 /doc/html/
+/doc/latex/

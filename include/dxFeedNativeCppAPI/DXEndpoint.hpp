@@ -18,7 +18,102 @@
 
 namespace dxfcpp {
 /**
+ * Manages network connections to @ref DXFeed "feed" or
+ * @ref DXPublisher "publisher". There are per-process (per GraalVM Isolate for now) ready-to-use singleton instances
+ * that are available with ::getInstance() and ::getInstance(Role) methods as well as
+ * factory methods ::create() and ::create(Role), and a number of configuration methods. Advanced
+ * properties can be configured using
+ * @ref ::newBuilder() "newBuilder()".@ref Builder#withProperty(const std::string&, const std::string&) "withProperty(key, value)".@ref Builder::build() "build()".
  *
+ * See DXFeed for details on how to subscribe to symbols and receive events.
+ *
+ * <h3>Endpoint role</h3>
+ *
+ * Each endpoint has a role that is specified on its creation and cannot be changed afterwards.
+ * The default factory method ::create() creates an endpoint with a @ref Role::FEED "FEED" role.
+ * Endpoints with other roles are created with ::create(Role) factory method. Endpoint role is
+ * represented by @ref Role "DXEndpoint::Role" enumeration.
+ *
+ * Endpoint role defines the behavior of its @ref #connect(const std::string&) "connect" method:
+ *
+ * - @ref Role::FEED "FEED" connects to the remote data feed provider and is optimized for real-time or
+ *   delayed data processing (<b>this is a default role</b>).
+ *   ::getFeed() method returns a feed object that subscribes to this remote data feed provider and receives events
+ *   from it. When event processing threads cannot keep up (don't have enough CPU time), data is dynamically conflated
+ *   to minimize latency between received events and their processing time.
+ *   For example:
+ *   - <b>`DXEndpoint::create()->connect("demo.dxfeed.com:7300")->getFeed()`</b> returns a demo feed from dxFeed with
+ *     sample market quotes.
+ *   - <b>`DXEndpoint::create()->connect("localhost:7400")->getFeed()`</b> returns a feed that is connected to a
+ *     publisher that is running on the same host. See example below.
+ *   - <b>`DXEndpoint::create()->connect("file:demo-sample.data")->getFeed()`</b> returns a feed that is connected to
+ *     a "demo-sample.data" file and plays back it as if it was received in real time. File playback is supported only
+ *     when optional <b>"qds-file.jar"</b> is present in the classpath.
+ *
+ *   This endpoint is automatically connected to the configured data feed as explained in
+ *   <a href="#defaultPropertiesSection">default properties section</a>.
+ * - @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" is similar to @ref Role::FEED "FEED", but it is designed to be used with
+ *   OnDemandService for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default properties</a>,
+ *   but is not connected automatically to the data provider until @ref OnDemandService#replay(Date, double) "OnDemandService.replay"
+ *   method is invoked.
+ * - @ref Role::STREAM_FEED "STREAM_FEED" is similar to @ref Role::FEED "FEED" and also connects to the remote data
+ *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
+ *   object that subscribes to the data from the opened files and receives events from them. Events from the files are
+ *   not conflated and are processed as fast as possible. Note, that in this role, DXFeed::getLastEvent method does not
+ *   work and time-series subscription is not supported. File playback is supported only when optional
+ *   <b>"qds-file.jar"</b> is present in the classpath.
+ *   For example:
+ *   ```cpp
+ *   auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
+ *   auto feed = endpoint->getFeed();
+ *   ```
+ *   creates a feed that is ready to read data from file as soon as the following code is invoked:
+ *   ```cpp
+ *   endpoint->connect("file:demo-sample.data[speed=max]");
+ *   ```
+ *   "[speed=max]" clause forces to the file reader to play back all the data from "demo-sample.data" file as fast as
+ *   data subscribers are processing it.
+ * - @ref Role::PUBLISHER "PUBLISHER" connects to the remote publisher hub (also known as multiplexor) or creates a
+ *   publisher on the local host. ::getPublisher() method returns a publisher object that publishes events to all
+ *   connected feeds.
+ *   For example: <b>`DXEndpoint->create(DXEndpoint::Role::PUBLISHER)->connect(":7400")->getPublisher()`</b>
+ *   returns a publisher that is waiting for connections on TCP/IP port 7400. The published events will be delivered to
+ *   all feeds that are connected to this publisher.
+ *   This endpoint is automatically connected to the configured data feed as explained in <a href="#defaultPropertiesSection">default properties section</a>.
+ * - @ref Role::LOCAL_HUB "LOCAL_HUB" creates a local hub without ability to establish network connections.
+ *   Events that are published via {@link #getPublisher() publisher} are delivered to local @ref ::getFeed() "feed" only.
+ *
+ * <h3>Endpoint state</h3>
+ *
+ * Each endpoint has a state that can be retrieved with ::getState() method.
+ * When endpoint is created with any role and default address is not specified in
+ * <a href="#defaultPropertiesSection">default properties</a>, then it is not connected to any remote endpoint.
+ * Its state is @ref State::NOT_CONNECTED "NOT_CONNECTED".
+ *
+ * @ref Role#FEED "Feed" and @ref Role#PUBLISHER "publisher" endpoints can connect to remote endpoints of the opposite
+ * role. Connection is initiated by @ref ::connect(const std::string&) "connect" method.
+ * The endpoint state becomes @ref State::CONNECTING "CONNECTING".
+ *
+ * When the actual connection to the remote endpoint is established, the endpoint state becomes
+ * @ref State::CONNECTED "CONNECTED".
+ *
+ * Network connections can temporarily break and return endpoint back into @ref State::CONNECTING "CONNECTING" state.
+ * File connections can be completed and return endpoint into @ref State::NOT_CONNECTED "NOT_CONNECTED" state.
+ *
+ * Connection to the remote endpoint can be terminated with ::disconnect() method.
+ * The endpoint state becomes @ref State::NOT_CONNECTED "NOT_CONNECTED".
+ *
+ * Endpoint can be closed with ::close() method. The endpoint state becomes @ref State::CLOSED "CLOSED". This is a
+ * final state. All connection are terminated and all internal resources that are held by this endpoint are freed.
+ * No further connections can be initiated.
+ *
+ * <h3>Event times</h3>
+ *
+ * The EventType::getEventTime() on received events is available only when the endpoint is created with
+ * ::DXENDPOINT_EVENT_TIME_PROPERTY property and the data source has embedded event times. This is typically true only
+ * for data events that are read from historical tape files (see above) and from OnDemandService.
+ * Events that are coming from a network connections do not have an embedded event time information and
+ * event time is not available for them anyway.
  *
  * <h3><a name="defaultPropertiesSection">Default properties</a></h3>
  *
@@ -46,15 +141,28 @@ namespace dxfcpp {
  *
  * The ::NAME_PROPERTY is the exception from the above rule. It is never loaded from system properties.
  * It can be only specified in configuration file or programmatically. There is a convenience
- * @link Builder::withName(const std::string&) "Builder.withName" method for it. It is recommended to assign short and
- * meaningful endpoint names when multiple endpoints are used in the same JVM. The name of the endpoint shall
- * describe its role in the particular application.
+ * @ref Builder::withName(const std::string&) "Builder.withName" method for it. It is recommended to assign short and
+ * meaningful endpoint names when multiple endpoints are used in the same process (one GraalVM Isolate for now).
+ * The name of the endpoint shall describe its role in the particular application.
  *
  * Note, that individual properties that are programmatically set using @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"
  * method always take precedence.
  *
  * @ref Role::FEED "FEED" and @ref Role::PUBLISHER "PUBLISHER" automatically establish connection on creation
  * when the corresponding ::DXFEED_ADDRESS_PROPERTY or ::DXPUBLISHER_ADDRESS_PROPERTY is specified.
+ *
+ * <h3>Permanent subscription</h3>
+ *
+ * Endpoint properties can define permanent subscription for specific sets of symbols and event types in
+ * the data feed, so that DXFeed methods like @ref DXFeed::getLastEventIfSubscribed "getLastEventIfSubscribed",
+ * @ref DXFeed::getIndexedEventsIfSubscribed "getIndexedEventsIfSubscribed", and
+ * @ref DXFeed::getTimeSeriesIfSubscribed "getTimeSeriesIfSubscribed" can be used without a need to create a
+ * separate DXFeedSubscription object. Please, contact dxFeed support for details
+ * on the required configuration.
+ *
+ * <h3>Threads and locks</h3>
+ *
+ * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
  */
 struct DXEndpoint {
     /**
@@ -212,7 +320,7 @@ struct DXEndpoint {
      *
      * @see DXEndpoint
      */
-    enum Role {
+    enum class Role : std::int32_t {
         /**
          * `FEED` endpoint connects to the remote data feed provider and is optimized for real-time or
          * delayed data processing (<b>this is a default role</b>). DXEndpoint::getFeed() method
