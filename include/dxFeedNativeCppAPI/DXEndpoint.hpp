@@ -23,7 +23,8 @@ namespace dxfcpp {
  * that are available with ::getInstance() and ::getInstance(Role) methods as well as
  * factory methods ::create() and ::create(Role), and a number of configuration methods. Advanced
  * properties can be configured using
- * @ref ::newBuilder() "newBuilder()".@ref Builder#withProperty(const std::string&, const std::string&) "withProperty(key, value)".@ref Builder::build() "build()".
+ * @ref ::newBuilder() "newBuilder()".@ref Builder#withProperty(const std::string&, const std::string&)
+ * "withProperty(key, value)".@ref Builder::build() "build()".
  *
  * See DXFeed for details on how to subscribe to symbols and receive events.
  *
@@ -52,9 +53,9 @@ namespace dxfcpp {
  *   This endpoint is automatically connected to the configured data feed as explained in
  *   <a href="#defaultPropertiesSection">default properties section</a>.
  * - @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" is similar to @ref Role::FEED "FEED", but it is designed to be used with
- *   OnDemandService for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default properties</a>,
- *   but is not connected automatically to the data provider until @ref OnDemandService#replay(Date, double) "OnDemandService.replay"
- *   method is invoked.
+ *   OnDemandService for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default
+ * properties</a>, but is not connected automatically to the data provider until @ref OnDemandService#replay(Date,
+ * double) "OnDemandService.replay" method is invoked.
  * - @ref Role::STREAM_FEED "STREAM_FEED" is similar to @ref Role::FEED "FEED" and also connects to the remote data
  *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
  *   object that subscribes to the data from the opened files and receives events from them. Events from the files are
@@ -77,9 +78,11 @@ namespace dxfcpp {
  *   For example: <b>`DXEndpoint->create(DXEndpoint::Role::PUBLISHER)->connect(":7400")->getPublisher()`</b>
  *   returns a publisher that is waiting for connections on TCP/IP port 7400. The published events will be delivered to
  *   all feeds that are connected to this publisher.
- *   This endpoint is automatically connected to the configured data feed as explained in <a href="#defaultPropertiesSection">default properties section</a>.
+ *   This endpoint is automatically connected to the configured data feed as explained in <a
+ * href="#defaultPropertiesSection">default properties section</a>.
  * - @ref Role::LOCAL_HUB "LOCAL_HUB" creates a local hub without ability to establish network connections.
- *   Events that are published via {@link #getPublisher() publisher} are delivered to local @ref ::getFeed() "feed" only.
+ *   Events that are published via {@link #getPublisher() publisher} are delivered to local @ref ::getFeed() "feed"
+ * only.
  *
  * <h3>Endpoint state</h3>
  *
@@ -122,11 +125,12 @@ namespace dxfcpp {
  * @ref Role::STREAM_FEED "STREAM_FEED" and @ref Role::LOCAL_HUB "LOCAL_HUB" do not support properties file.
  *
  * The location of this file can be specified using
- * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"(::DXFEED_PROPERTIES_PROPERTY, path) or
- * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"(::DXPUBLISHER_PROPERTIES_PROPERTY, path)
- * correspondingly. When the location of this file is not explicitly specified using
- * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty" method, then the file path is taken from a system
- * property with the corresponding name.
+ * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"(::DXFEED_PROPERTIES_PROPERTY, path)
+ * or
+ * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"(::DXPUBLISHER_PROPERTIES_PROPERTY,
+ * path) correspondingly. When the location of this file is not explicitly specified using
+ * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty" method, then the file path is taken
+ * from a system property with the corresponding name.
  *
  * When the path to the above properties file is not provided, then a resource named "dxfeed.properties" or
  * "dxpublisher.properties" is loaded from classpath. When classpath is set to "." (current directory),
@@ -143,8 +147,8 @@ namespace dxfcpp {
  * meaningful endpoint names when multiple endpoints are used in the same process (one GraalVM Isolate for now).
  * The name of the endpoint shall describe its role in the particular application.
  *
- * Note, that individual properties that are programmatically set using @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"
- * method always take precedence.
+ * Note, that individual properties that are programmatically set using @ref Builder::withProperty(const std::string&,
+ * const std::string&) "withProperty" method always take precedence.
  *
  * @ref Role::FEED "FEED" and @ref Role::PUBLISHER "PUBLISHER" automatically establish connection on creation
  * when the corresponding ::DXFEED_ADDRESS_PROPERTY or ::DXPUBLISHER_ADDRESS_PROPERTY is specified.
@@ -382,6 +386,85 @@ struct DXEndpoint {
          */
         LOCAL_HUB
     };
+
+    /**
+     * Represents the current state of endpoint.
+     *
+     * @see DXEndpoint
+     */
+    enum class State : std::int32_t {
+        /**
+         * Endpoint was created by is not connected to remote endpoints.
+         */
+        NOT_CONNECTED,
+
+        /**
+         * The @ref DXEndpoint::connect(const std::string&) "connect" method was called to establish connection to
+         * remove endpoint, but connection is not actually established yet or was lost.
+         */
+        CONNECTING,
+
+        /**
+         * The connection to remote endpoint is established.
+         */
+        CONNECTED,
+
+        /**
+         * Endpoint was @ref DXEndpoint::close() "closed".
+         */
+        CLOSED
+    };
+
+  protected:
+    DXEndpoint() {}
+
+  private:
+    static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
+
+  public:
+    /**
+     * Returns a default application-wide singleton instance of DXEndpoint with a @ref Role::FEED "FEED" role.
+     * Most applications use only a single data-source and should rely on this method to get one.
+     * This method creates an endpoint on the first use with a default
+     * configuration as explained in
+     * <a href="#defaultPropertiesSection">default properties section</a> of DXEndpoint class documentation.
+     * You can provide configuration via classpath or via system properties as explained there.
+     *
+     * This is a shortcut to
+     * @ref ::getInstance(Role) "getInstance"(@ref DXEndpoint "DXEndpoint"::@ref DXEndpoint::Role "Role"::@ref
+     * DXEndpoint.Role::FEED "FEED").
+     * @see #getInstance(Role)
+     */
+    static std::shared_ptr<DXEndpoint> getInstance() { return getInstance(Role::FEED); }
+
+    /**
+     * Returns a default application-wide singleton instance of DXEndpoint for a specific role.
+     * Most applications use only a single data-source and should rely on this method to get one.
+     * This method creates an endpoint with the corresponding role on the first use with a default
+     * configuration as explained in
+     * <a href="#defaultPropertiesSection">default properties section</a> of DXEndpoint class documentation.
+     * You can provide configuration via classpath or via system properties as explained there.
+     *
+     * The configuration does not have to include an address. You can use @ref ::connect(const std::string&)
+     * "connect(address)" and ::disconnect() methods on the instance that is returned by this method to programmatically
+     * establish and tear-down connection to a user-provided address.
+     *
+     * If you need a fully programmatic configuration and/or multiple endpoints of the same role in your
+     * application, then create a custom instance of DXEndpoint with DXEndpoint::newBuilder() method, configure it,
+     * and use Builder::build() method.
+     *
+     * @param role The role of DXEndpoint instance
+     * @return The DXEndpoint instance
+     */
+    static std::shared_ptr<DXEndpoint> getInstance(Role role) {
+        //        if (INSTANCES.contains(role)) {
+        //            return INSTANCES[role];
+        //        } else {
+        //            return INSTANCES[role] = newBuilder().withRole(role).build();
+        //        }
+
+        return {};
+    }
 
     /**
      * Creates an endpoint with @ref Role::FEED "FEED" role.
