@@ -14,6 +14,11 @@ extern "C" {
 #endif
 
 /**
+ * @file
+ * @brief dxFeed Native C API enums, structs and functions declarations
+ */
+
+/**
  * @brief List of error codes.
  */
 typedef enum dxfc_error_code_t {
