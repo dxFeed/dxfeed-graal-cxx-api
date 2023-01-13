@@ -70,7 +70,7 @@ for example 16:
 conan install -s compiler.version=16 ..
 ```
 
-**Windows\Mac\Linux**: it is possible that the Conan repository does not contain packages (catch2, fmt) for the current 
+**Windows or Mac or Linux**: it is possible that the Conan repository does not contain packages (catch2, fmt) for the current 
 version of a compiler. You can build them:  
 ```shell
 conan install --build=catch2 --build=fmt ..
