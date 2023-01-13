@@ -55,10 +55,10 @@ cd build
 ctest -C Release --extra-verbose
 ```
 
-### Known Issues
+## Known Issues
 
 **Ubuntu**: it is possible that Conan incorrectly sets the C ABI for the C++ standard library (5 instead of 11), 
-in which case it needs to be run with the following options:
+in which case it needs to be run with the following options:  
 ```shell
 conan install -s compiler.libcxx=libstdc++11 ..
 ```
@@ -68,6 +68,12 @@ Studio compiler (which is detected automatically and set to the default profile)
 for example 16:
 ```shell
 conan install -s compiler.version=16 ..
+```
+
+**Windows\Mac\Linux**: it is possible that the Conan repository does not contain packages (catch2, fmt) for the current 
+version of a compiler. You can build them:  
+```shell
+conan install --build=catch2 --build=fmt ..
 ```
 
 # License

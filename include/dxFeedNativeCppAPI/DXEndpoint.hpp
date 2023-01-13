@@ -47,8 +47,7 @@ namespace dxfcpp {
  *   - <b>`DXEndpoint::create()->connect("localhost:7400")->getFeed()`</b> returns a feed that is connected to a
  *     publisher that is running on the same host. See example below.
  *   - <b>`DXEndpoint::create()->connect("file:demo-sample.data")->getFeed()`</b> returns a feed that is connected to
- *     a "demo-sample.data" file and plays back it as if it was received in real time. File playback is supported only
- *     when optional <b>"qds-file.jar"</b> is present in the classpath.
+ *     a "demo-sample.data" file and plays back it as if it was received in real time.
  *
  *   This endpoint is automatically connected to the configured data feed as explained in
  *   <a href="#defaultPropertiesSection">default properties section</a>.
@@ -60,8 +59,7 @@ namespace dxfcpp {
  *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
  *   object that subscribes to the data from the opened files and receives events from them. Events from the files are
  *   not conflated and are processed as fast as possible. Note, that in this role, DXFeed::getLastEvent method does not
- *   work and time-series subscription is not supported. File playback is supported only when optional
- *   <b>"qds-file.jar"</b> is present in the classpath.
+ *   work and time-series subscription is not supported.
  *   For example:
  *   ```cpp
  *   auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
