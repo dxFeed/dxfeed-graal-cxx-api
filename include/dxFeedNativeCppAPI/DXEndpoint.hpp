@@ -387,6 +387,23 @@ struct DXEndpoint {
         LOCAL_HUB
     };
 
+    static dxfg_endpoint_role_t roleToGraalRole(Role role) {
+        switch (role) {
+        case Role::FEED:
+            return DXFG_ENDPOINT_ROLE_FEED;
+        case Role::ON_DEMAND_FEED:
+            return DXFG_ENDPOINT_ROLE_ON_DEMAND_FEED;
+        case Role::STREAM_FEED:
+            return DXFG_ENDPOINT_ROLE_STREAM_FEED;
+        case Role::PUBLISHER:
+            return DXFG_ENDPOINT_ROLE_PUBLISHER;
+        case Role::STREAM_PUBLISHER:
+            return DXFG_ENDPOINT_ROLE_STREAM_PUBLISHER;
+        case Role::LOCAL_HUB:
+            return DXFG_ENDPOINT_ROLE_LOCAL_HUB;
+        }
+    }
+
     /**
      * Represents the current state of endpoint.
      *
@@ -475,5 +492,68 @@ struct DXEndpoint {
      * @return the created endpoint.
      */
     static std::shared_ptr<DXEndpoint> create() { return {}; }
+
+    class Builder : public std::enable_shared_from_this<Builder> {
+        friend DXEndpoint;
+
+        std::recursive_mutex mtx_;
+        dxfg_endpoint_builder_t *handle_;
+        Role role_ = Role::FEED;
+        Builder() : mtx_(), handle_() {}
+
+        static std::shared_ptr<Builder> create() {
+            auto result = std::visit(
+                [](auto &&arg) -> dxfg_endpoint_builder_t * {
+                    using T = std::decay_t<decltype(arg)>;
+
+                    if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                        return nullptr;
+                    } else {
+                        return arg;
+                    }
+                },
+                detail::Isolate::getInstance()->runIsolated([](detail::GraalIsolateThreadHandle threadHandle) {
+                    return dxfg_DXEndpoint_newBuilder(threadHandle);
+                }));
+
+            auto builder = std::shared_ptr<Builder>(new Builder{});
+            builder->handle_ = result;
+
+            return builder;
+        }
+
+      public:
+
+        virtual ~Builder() {
+
+        }
+
+        std::shared_ptr<Builder> withRole(Role role) {
+            std::lock_guard guard(mtx_);
+
+            role_ = role;
+
+            std::visit(
+                [](auto &&arg) -> bool {
+                    using T = std::decay_t<decltype(arg)>;
+
+                    if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                        return false;
+                    } else {
+                        return arg;
+                    }
+                },
+                detail::Isolate::getInstance()->runIsolated(
+                    [role = role, this](detail::GraalIsolateThreadHandle threadHandle) {
+                        return dxfg_DXEndpoint_Builder_withRole(threadHandle, handle_, roleToGraalRole(role)) == 0;
+                    }));
+
+            return shared_from_this();
+        }
+    };
+
+    static std::shared_ptr<Builder> newBuilder() {
+        return Builder::create();
+    }
 };
 } // namespace dxfcpp

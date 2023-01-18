@@ -114,3 +114,9 @@ TEST_CASE("System properties benchmark", "[dxfcpp::System]") {
 
     BENCHMARK("std::unordered_map[]") { um["PropertyName"] = "Привет"; };
 }
+
+TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
+    auto builder = dxfcpp::DXEndpoint::newBuilder();
+
+    builder->withRole(dxfcpp::DXEndpoint::Role::FEED);
+}
