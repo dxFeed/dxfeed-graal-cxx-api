@@ -499,7 +499,9 @@ struct DXEndpoint {
         std::recursive_mutex mtx_;
         dxfg_endpoint_builder_t *handle_;
         Role role_ = Role::FEED;
-        Builder() : mtx_(), handle_() {}
+        std::unordered_map<std::string, std::string> properties_;
+
+        Builder() : mtx_(), handle_(), properties_() {}
 
         static std::shared_ptr<Builder> create() {
             auto result = std::visit(
@@ -523,10 +525,31 @@ struct DXEndpoint {
         }
 
       public:
-
         virtual ~Builder() {
+            std::lock_guard guard(mtx_);
 
+            std::visit(
+                [](auto &&arg) -> bool {
+                    using T = std::decay_t<decltype(arg)>;
+
+                    if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                        return false;
+                    } else {
+                        return arg;
+                    }
+                },
+                detail::Isolate::getInstance()->runIsolated([this](detail::GraalIsolateThreadHandle threadHandle) {
+                    if (handle_) {
+                        return dxfg_JavaObjectHandler_release(threadHandle, (dxfg_java_object_handler *)handle_) == 0;
+                    }
+
+                    return true;
+                }));
+
+            handle_ = nullptr;
         }
+
+        std::shared_ptr<Builder> withName(const std::string &name) { return withProperty(NAME_PROPERTY, name); }
 
         std::shared_ptr<Builder> withRole(Role role) {
             std::lock_guard guard(mtx_);
@@ -550,10 +573,60 @@ struct DXEndpoint {
 
             return shared_from_this();
         }
+
+        std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value) {
+            std::lock_guard guard(mtx_);
+
+            properties_[key] = value;
+
+            std::visit(
+                [](auto &&arg) -> bool {
+                    using T = std::decay_t<decltype(arg)>;
+
+                    if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                        return false;
+                    } else {
+                        return arg;
+                    }
+                },
+                detail::Isolate::getInstance()->runIsolated([key = key, value = value,
+                                                             this](detail::GraalIsolateThreadHandle threadHandle) {
+                    return dxfg_DXEndpoint_Builder_withProperty(threadHandle, handle_, key.c_str(), value.c_str()) == 0;
+                }));
+
+            return shared_from_this();
+        }
+
+        template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
+            std::lock_guard guard(mtx_);
+
+            for (auto &&[k, v] : properties) {
+                withProperty(k, v);
+            }
+
+            return shared_from_this();
+        }
+
+        bool supportsProperty(const std::string &key) {
+            std::lock_guard guard(mtx_);
+
+            return std::visit(
+                [](auto &&arg) -> bool {
+                    using T = std::decay_t<decltype(arg)>;
+
+                    if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                        return false;
+                    } else {
+                        return arg;
+                    }
+                },
+                detail::Isolate::getInstance()->runIsolated(
+                    [key = key, this](detail::GraalIsolateThreadHandle threadHandle) {
+                        return dxfg_DXEndpoint_Builder_supportsProperty(threadHandle, handle_, key.c_str()) != 0;
+                    }));
+        }
     };
 
-    static std::shared_ptr<Builder> newBuilder() {
-        return Builder::create();
-    }
+    static std::shared_ptr<Builder> newBuilder() { return Builder::create(); }
 };
 } // namespace dxfcpp
