@@ -8,6 +8,7 @@
 #include "internal/Common.hpp"
 #include "internal/Isolate.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <type_traits>
@@ -17,6 +18,15 @@
 #include <fmt/std.h>
 
 namespace dxfcpp {
+
+struct DXFeed : std::enable_shared_from_this<DXFeed> {
+    virtual ~DXFeed() = default;
+};
+
+struct DXPublisher : std::enable_shared_from_this<DXPublisher> {
+    virtual ~DXPublisher() = default;
+};
+
 /**
  * Manages network connections to @ref DXFeed "feed" or
  * @ref DXPublisher "publisher". There are per-process (per GraalVM Isolate for now) ready-to-use singleton instances
@@ -166,7 +176,7 @@ namespace dxfcpp {
  *
  * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
  */
-struct DXEndpoint {
+struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     /**
      * Defines property for endpoint name that is used to distinguish multiple endpoints
      * in the same process in logs and in other diagnostic means.
@@ -432,13 +442,70 @@ struct DXEndpoint {
         CLOSED
     };
 
-  protected:
-    DXEndpoint() {}
-
   private:
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
+    std::recursive_mutex mtx_;
+    dxfg_endpoint_t *handle_;
+    Role role_;
+    // std::string name_;
+    std::shared_ptr<DXFeed> feed_;
+    std::shared_ptr<DXPublisher> publisher_;
+
+    static std::shared_ptr<DXEndpoint> create(dxfg_endpoint_t *endpointHandle, Role role,
+                                              const std::unordered_map<std::string, std::string> &properties) {
+        if constexpr (detail::isDebug) {
+            std::clog << fmt::format("DXEndpoint::create{{handle = {}, role = {}, properties}}()\n",
+                                     detail::bit_cast<std::size_t>(endpointHandle), static_cast<std::int32_t>(role));
+        }
+
+        std::shared_ptr<DXEndpoint> endpoint{new DXEndpoint{}};
+
+        endpoint->handle_ = endpointHandle;
+        endpoint->role_ = role;
+
+        // TODO: state change listener (Handler?)
+        // References-lifetimes
+
+        return endpoint;
+    }
+
+  protected:
+    DXEndpoint() : mtx_(), handle_(), role_(), feed_(), publisher_() {
+        if constexpr (detail::isDebug) {
+            std::clog << fmt::format("DXEndpoint()\n");
+        }
+    }
+
   public:
+    virtual ~DXEndpoint() {
+        if constexpr (detail::isDebug) {
+            std::clog << fmt::format("~DXEndpoint{{{}}}()\n", detail::bit_cast<std::size_t>(handle_));
+        }
+
+        std::lock_guard guard(mtx_);
+
+        std::visit(
+            [](auto &&arg) -> bool {
+                using T = std::decay_t<decltype(arg)>;
+
+                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                    return false;
+                } else {
+                    return arg;
+                }
+            },
+            detail::Isolate::getInstance()->runIsolated([this](detail::GraalIsolateThreadHandle threadHandle) {
+                if (handle_) {
+                    return dxfg_JavaObjectHandler_release(threadHandle, (dxfg_java_object_handler *)handle_) == 0;
+                }
+
+                return true;
+            }));
+
+        handle_ = nullptr;
+    }
+
     /**
      * Returns a default application-wide singleton instance of DXEndpoint with a @ref Role::FEED "FEED" role.
      * Most applications use only a single data-source and should rely on this method to get one.
@@ -474,13 +541,11 @@ struct DXEndpoint {
      * @return The DXEndpoint instance
      */
     static std::shared_ptr<DXEndpoint> getInstance(Role role) {
-        //        if (INSTANCES.contains(role)) {
-        //            return INSTANCES[role];
-        //        } else {
-        //            return INSTANCES[role] = newBuilder().withRole(role).build();
-        //        }
+        if (INSTANCES.contains(role)) {
+            return INSTANCES[role];
+        }
 
-        return {};
+        return INSTANCES[role] = newBuilder()->withRole(role)->build();
     }
 
     /**
@@ -501,9 +566,17 @@ struct DXEndpoint {
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() : mtx_(), handle_(), properties_() {}
+        Builder() : mtx_(), handle_(), properties_() {
+            if constexpr (detail::isDebug) {
+                std::clog << fmt::format("DXEndpoint::Builder::Builder()\n");
+            }
+        }
 
         static std::shared_ptr<Builder> create() {
+            if constexpr (detail::isDebug) {
+                std::clog << fmt::format("DXEndpoint::Builder::create()\n");
+            }
+
             auto result = std::visit(
                 [](auto &&arg) -> dxfg_endpoint_builder_t * {
                     using T = std::decay_t<decltype(arg)>;
@@ -524,8 +597,72 @@ struct DXEndpoint {
             return builder;
         }
 
+        /**
+         * Tries to load the default properties file for Role::FEED, Role::ON_DEMAND_FEED or Role::PUBLISHER role.
+         *
+         * The default properties file is loaded only if there are no system properties or user properties set with the
+         * same key and the file itself exists and is readable.
+         *
+         * This file must be in the <a href="https://en.wikipedia.org/wiki/.properties">Java properties file format</a>.
+         * File be named "dxfeed.properties" for Role::FEED and Role::ON_DEMAND_FEED roles
+         * or "dxpublisher.properties" for the Role::PUBLISHER role.
+         *
+         * Non thread-safe.
+         */
+        void loadDefaultPropertiesImpl() {
+            // The default properties file is only valid for the
+            // Feed, OnDemandFeed and Publisher roles.
+            auto propertiesFileKey = [this]() -> std::string {
+                switch (role_) {
+                case Role::FEED:
+                case Role::ON_DEMAND_FEED:
+                    return DXFEED_PROPERTIES_PROPERTY;
+                case Role::PUBLISHER:
+                    return DXPUBLISHER_PROPERTIES_PROPERTY;
+                case Role::STREAM_FEED:
+                case Role::STREAM_PUBLISHER:
+                case Role::LOCAL_HUB:
+                    break;
+                }
+
+                return {};
+            }();
+
+            // If propertiesFileKey was set in system properties,
+            // don't try to load the default properties file.
+            if (propertiesFileKey.empty()) {
+                return;
+            }
+
+            // If there is no propertiesFileKey in user-set properties,
+            // try load default properties file from current runtime directory if file exist.
+            if (!properties_.contains(propertiesFileKey) && std::filesystem::exists(propertiesFileKey)) {
+                // The default property file has the same value as the key.
+                std::visit(
+                    [](auto &&arg) -> bool {
+                        using T = std::decay_t<decltype(arg)>;
+
+                        if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                            return false;
+                        } else {
+                            return arg;
+                        }
+                    },
+                    detail::Isolate::getInstance()->runIsolated([key = propertiesFileKey, value = propertiesFileKey,
+                                                                 this](detail::GraalIsolateThreadHandle threadHandle) {
+                        return dxfg_DXEndpoint_Builder_withProperty(threadHandle, handle_, key.c_str(),
+                                                                    value.c_str()) == 0;
+                    }));
+            }
+        }
+
       public:
         virtual ~Builder() {
+            if constexpr (detail::isDebug) {
+                std::clog << fmt::format("DXEndpoint::Builder::~Builder{{{}}}()\n",
+                                         detail::bit_cast<std::size_t>(handle_));
+            }
+
             std::lock_guard guard(mtx_);
 
             std::visit(
@@ -624,6 +761,32 @@ struct DXEndpoint {
                     [key = key, this](detail::GraalIsolateThreadHandle threadHandle) {
                         return dxfg_DXEndpoint_Builder_supportsProperty(threadHandle, handle_, key.c_str()) != 0;
                     }));
+        }
+
+        std::shared_ptr<DXEndpoint> build() {
+            std::lock_guard guard(mtx_);
+
+            loadDefaultPropertiesImpl();
+
+            auto endpointHandle = std::visit(
+                [](auto &&arg) -> dxfg_endpoint_t * {
+                    using T = std::decay_t<decltype(arg)>;
+
+                    if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                        return nullptr;
+                    } else {
+                        return arg;
+                    }
+                },
+                detail::Isolate::getInstance()->runIsolated([this](detail::GraalIsolateThreadHandle threadHandle) {
+                    return dxfg_DXEndpoint_Builder_build(threadHandle, handle_);
+                }));
+
+            if (!endpointHandle) {
+                return {};
+            }
+
+            return DXEndpoint::create(endpointHandle, role_, properties_);
         }
     };
 
