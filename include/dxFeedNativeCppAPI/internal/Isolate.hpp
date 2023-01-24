@@ -220,8 +220,7 @@ class Isolate final {
     }
 
     template <typename F>
-    auto runIsolated(F &&f)
-        -> std::variant<CEntryPointErrors, decltype(std::invoke(std::forward<F>(f), currentIsolateThread_.handle))> {
+    auto runIsolated(F &&f) -> std::variant<CEntryPointErrors, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
         std::lock_guard lock(mutex_);
         if constexpr (isDebug) {
             std::clog << fmt::format("{}::runIsolated({})\n", toString(), bit_cast<std::size_t>(&f));
