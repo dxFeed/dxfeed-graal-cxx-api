@@ -240,11 +240,11 @@ class Isolate final {
     }
 
     template <typename F, typename R>
-    auto runIsolatedOrElse(F &&f, R defaultValue) -> std::invoke_result_t<F, GraalIsolateThreadHandle> {
+        requires std::convertible_to<R, std::invoke_result_t<F &&, GraalIsolateThreadHandle>>
+    auto runIsolatedOrElse(F &&f, R defaultValue) {
         return std::visit(
-            [defaultValue](auto &&arg) -> std::invoke_result_t<F, GraalIsolateThreadHandle> {
-                using T = std::decay_t<decltype(arg)>;
-
+            [defaultValue =
+                 std::move(defaultValue)]<typename T>(T &&arg) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle> {
                 if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
                     return defaultValue;
                 } else {
