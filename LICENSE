@@ -371,3 +371,12 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
+
+---------------------------------------------------------------------------
+Note:
+Individual files contain the following tag instead of the full license text.
+
+    SPDX-License-Identifier: MPL-2.0
+
+This enables machine processing of license information based on the SPDX
+License Identifiers that are here available: http://spdx.org/licenses/
