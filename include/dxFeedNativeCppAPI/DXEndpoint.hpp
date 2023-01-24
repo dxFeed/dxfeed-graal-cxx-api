@@ -13,6 +13,7 @@
 #include <string>
 #include <type_traits>
 #include <variant>
+#include <unordered_map>
 
 #include <fmt/format.h>
 #include <fmt/std.h>
@@ -442,13 +443,26 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         CLOSED
     };
 
+    static State graalStateToState(dxfg_endpoint_state_t state) {
+        switch (state) {
+        case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
+            return State::NOT_CONNECTED;
+        case DXFG_ENDPOINT_STATE_CONNECTING:
+            return State::CONNECTING;
+        case DXFG_ENDPOINT_STATE_CONNECTED:
+            return State::CONNECTED;
+        case DXFG_ENDPOINT_STATE_CLOSED:
+            return State::CLOSED;
+        }
+    }
+
   private:
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
-    std::recursive_mutex mtx_;
+    mutable std::recursive_mutex mtx_;
     dxfg_endpoint_t *handle_;
     Role role_;
-    // std::string name_;
+    std::string name_;
     std::shared_ptr<DXFeed> feed_;
     std::shared_ptr<DXPublisher> publisher_;
 
@@ -463,6 +477,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
         endpoint->handle_ = endpointHandle;
         endpoint->role_ = role;
+        endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
 
         // TODO: state change listener (Handler?)
         // References-lifetimes
@@ -545,16 +560,54 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * Creates an endpoint with @ref Role::FEED "FEED" role.
      * The result of this method is the same as <b>`create(DXEndpoint::Role::FEED)`</b>.
      * This is a shortcut to
-     * @ref ::newBuilder() "newBuilder()".@ref Builder::build() "build()"
+     * @ref ::newBuilder() "newBuilder()"->@ref Builder::build() "build()"
      *
      * @return the created endpoint.
      */
-    static std::shared_ptr<DXEndpoint> create() { return {}; }
+    static std::shared_ptr<DXEndpoint> create() { return newBuilder()->build(); }
+
+    /**
+     * Creates an endpoint with a specified role.
+     * This is a shortcut to
+     * @ref ::newBuilder() "newBuilder()"->@ref Builder::withRole(Role) "withRole(role)"->@ref Builder::build()
+     * "build()"
+     *
+     * @param role the role.
+     * @return the created endpoint.
+     */
+    static std::shared_ptr<DXEndpoint> create(Role role) { return newBuilder()->withRole(role)->build(); }
+
+    /**
+     * Returns the role of this endpoint.
+     *
+     * @return the role.
+     *
+     * @see DXEndpoint
+     */
+    Role getRole() const { return role_; }
+
+    /**
+     * Returns the state of this endpoint.
+     *
+     * @return the state.
+     *
+     * @see DXEndpoint
+     */
+    State getState() const {
+        std::lock_guard guard(mtx_);
+
+        return detail::Isolate::getInstance()->runIsolatedOrElse(
+            [this](auto threadHandle) { return graalStateToState(dxfg_DXEndpoint_getState(threadHandle, handle_)); },
+            State::CLOSED);
+    }
+
+    /// Returns `true` if the endpoint is closed
+    bool isClosed() const { return getState() == State::CLOSED; }
 
     class Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
-        std::recursive_mutex mtx_;
+        mutable std::recursive_mutex mtx_;
         dxfg_endpoint_builder_t *handle_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
@@ -719,6 +772,12 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         }
     };
 
+    /**
+     * Creates new Builder instance.
+     * Use Builder::build() to build an instance of DXEndpoint when all configuration properties were set.
+     *
+     * @return the created endpoint builder.
+     */
     static std::shared_ptr<Builder> newBuilder() { return Builder::create(); }
 };
 } // namespace dxfcpp
