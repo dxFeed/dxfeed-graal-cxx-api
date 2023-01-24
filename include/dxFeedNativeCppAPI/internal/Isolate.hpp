@@ -239,6 +239,21 @@ class Isolate final {
         return std::invoke(std::forward<F>(f), currentIsolateThread_.handle);
     }
 
+    template <typename F, typename R>
+    auto runIsolatedOrElse(F &&f, R defaultValue) -> std::invoke_result_t<F, GraalIsolateThreadHandle> {
+        return std::visit(
+            [defaultValue](auto &&arg) -> std::invoke_result_t<F, GraalIsolateThreadHandle> {
+                using T = std::decay_t<decltype(arg)>;
+
+                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                    return defaultValue;
+                } else {
+                    return arg;
+                }
+            },
+            detail::Isolate::getInstance()->runIsolated(std::forward<F>(f)));
+    }
+
     ~Isolate() {
         std::lock_guard lock(mutex_);
 

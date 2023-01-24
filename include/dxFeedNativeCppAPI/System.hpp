@@ -33,21 +33,12 @@ struct System {
             std::clog << fmt::format("System::setProperty(key = '{}', value = '{}')\n", key, value);
         }
 
-        auto result = std::visit(
-            [](auto &&arg) {
-                using T = std::decay_t<decltype(arg)>;
-
-                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
-                    return false;
-                } else {
-                    return arg;
-                }
+        auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
+            [key = key, value = value](auto threadHandle) {
+                return detail::CEntryPointErrors::valueOf(dxfg_system_set_property(
+                           threadHandle, key.c_str(), value.c_str())) == detail::CEntryPointErrors::NO_ERROR;
             },
-            detail::Isolate::getInstance()->runIsolated(
-                [key = key, value = value](detail::GraalIsolateThreadHandle threadHandle) {
-                    return detail::CEntryPointErrors::valueOf(dxfg_system_set_property(
-                               threadHandle, key.c_str(), value.c_str())) == detail::CEntryPointErrors::NO_ERROR;
-                }));
+            false);
 
         if constexpr (dxfcpp::detail::isDebug) {
             std::clog << fmt::format("System::setProperty(key = '{}', value = '{}') -> {}\n", key, value, result);
@@ -67,17 +58,8 @@ struct System {
             std::clog << fmt::format("System::getProperty(key = {})\n", key);
         }
 
-        auto result = std::visit(
-            [](auto &&arg) {
-                using T = std::decay_t<decltype(arg)>;
-
-                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
-                    return std::string{};
-                } else {
-                    return arg;
-                }
-            },
-            detail::Isolate::getInstance()->runIsolated([key = key](detail::GraalIsolateThreadHandle threadHandle) {
+        auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
+            [key = key](auto threadHandle) {
                 std::string resultString{};
 
                 if (auto result = dxfg_system_get_property(threadHandle, key.c_str()); result != nullptr) {
@@ -86,7 +68,8 @@ struct System {
                 }
 
                 return resultString;
-            }));
+            },
+            std::string{});
 
         if constexpr (detail::isDebug) {
             std::clog << fmt::format("System::getProperty(key = '{}') -> '{}'\n", key, result);
