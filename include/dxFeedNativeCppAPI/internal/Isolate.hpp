@@ -219,7 +219,6 @@ class Isolate final {
         return instance;
     }
 
-    // Please wrap non-primitive user-defined data types in std::unique_ptr
     template <typename F>
     auto runIsolated(F &&f)
         -> std::variant<CEntryPointErrors, decltype(std::invoke(std::forward<F>(f), currentIsolateThread_.handle))> {
