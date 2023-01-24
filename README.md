@@ -98,4 +98,6 @@ conan install --build missing ..
 
 # License
 
-MPL-2.0
+[SPDX-License-Identifier: MPL-2.0](LICENSE)
+
+[THIRD PARTY LICENSES](THIRD_PARTY_LICENSES)
