@@ -605,6 +605,77 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     bool isClosed() const { return getState() == State::CLOSED; }
 
     /**
+     * @return The user defined endpoint's name
+     */
+    const std::string& getName() const& {
+        return name_;
+    }
+
+    template<typename Listener>
+    auto addStateChangeListener(Listener&&) {}
+
+    template<typename ListenerId>
+    void removeStateChangeListener(ListenerId) {}
+
+    auto onChangeState() {}
+
+    template<typename Executor>
+    void executor(Executor&&) {}
+
+    std::shared_ptr<DXEndpoint> user(const std::string& user) {
+        return shared_from_this();
+    }
+
+    std::shared_ptr<DXEndpoint> password(const std::string& password) {
+        return shared_from_this();
+    }
+
+    std::shared_ptr<DXEndpoint> connect(const std::string& address) {
+        return shared_from_this();
+    }
+
+    void reconnect() {
+
+    }
+
+    void disconnect() {
+
+    }
+
+    void disconnectAndClear() {
+
+    }
+
+    void close() {
+
+    }
+
+    void awaitNotConnected() {
+
+    }
+
+    void awaitProcessed() {
+
+    }
+
+    void closeAndAwaitTermination() {
+
+    }
+
+    auto getEventTypes() {
+
+    }
+
+    std::shared_ptr<DXFeed> getFeed() {
+        return {};
+    }
+
+    std::shared_ptr<DXPublisher> getPublisher() {
+        return {};
+    }
+
+
+    /**
      * Builder class for DXEndpoint that supports additional configuration properties.
      */
     class Builder : public std::enable_shared_from_this<Builder> {
