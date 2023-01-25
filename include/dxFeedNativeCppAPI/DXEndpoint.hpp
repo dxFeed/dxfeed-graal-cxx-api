@@ -601,9 +601,12 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             State::CLOSED);
     }
 
-    /// Returns `true` if the endpoint is closed
+    /// @return `true` if the endpoint is closed
     bool isClosed() const { return getState() == State::CLOSED; }
 
+    /**
+     * Builder class for DXEndpoint that supports additional configuration properties.
+     */
     class Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
@@ -684,6 +687,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         }
 
       public:
+        /// Releases the GraalVM handle
         virtual ~Builder() {
             if constexpr (detail::isDebug) {
                 std::clog << fmt::format("DXEndpoint::Builder::~Builder{{{}}}()\n",
@@ -706,8 +710,21 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             handle_ = nullptr;
         }
 
+        /**
+         * Changes name that is used to distinguish multiple endpoints
+         * in the same process (GraalVM Isolate) in logs and in other diagnostic means.
+         * This is a shortcut for @ref ::withProperty "withProperty"(::NAME_PROPERTY, `name`)
+         *
+         * @return `this` endpoint builder.
+         */
         std::shared_ptr<Builder> withName(const std::string &name) { return withProperty(NAME_PROPERTY, name); }
 
+        /**
+         * Sets role for the created DXEndpoint.
+         * Default role is @ref Role::FEED "FEED".
+         *
+         * @return `this` endpoint builder.
+         */
         std::shared_ptr<Builder> withRole(Role role) {
             std::lock_guard guard(mtx_);
 
@@ -722,6 +739,13 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             return shared_from_this();
         }
 
+        /**
+         * Sets the specified property. Unsupported properties are ignored.
+         *
+         * @return `this` endpoint builder.
+         *
+         * @see ::supportsProperty(const std::string&)
+         */
         std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value) {
             std::lock_guard guard(mtx_);
 
@@ -736,6 +760,13 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             return shared_from_this();
         }
 
+        /**
+         * Sets all supported properties from the provided properties object.
+         *
+         * @return `this` endpoint builder.
+         *
+         * @see ::withProperty(const std::string&, const std::string&)
+         */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             std::lock_guard guard(mtx_);
 
@@ -746,6 +777,11 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             return shared_from_this();
         }
 
+        /**
+         * @rturn `true` if the corresponding property key is supported.
+         *
+         * @see ::withProperty(const std::string&, const std::string&)
+         */
         bool supportsProperty(const std::string &key) {
             std::lock_guard guard(mtx_);
 
@@ -756,6 +792,11 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
                 false);
         }
 
+        /**
+         * Builds DXEndpoint instance.
+         *
+         * @return the created endpoint.
+         */
         std::shared_ptr<DXEndpoint> build() {
             std::lock_guard guard(mtx_);
 
