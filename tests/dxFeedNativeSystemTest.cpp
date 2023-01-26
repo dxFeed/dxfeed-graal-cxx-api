@@ -116,8 +116,16 @@ TEST_CASE("System properties benchmark", "[dxfcpp::System]") {
 }
 
 TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
+    std::ios::sync_with_stdio(false);
+
     auto builder = dxfcpp::DXEndpoint::newBuilder();
 
     builder->withRole(dxfcpp::DXEndpoint::Role::FEED);
     auto endpoint = builder->build();
+    endpoint->connect("demo.dxfeed.com:7300");
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    endpoint->disconnect();
+    endpoint->close();
 }

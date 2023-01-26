@@ -12,8 +12,16 @@
 namespace dxfcpp::detail {
 #ifdef NDEBUG
 constexpr bool isDebug = false;
+constexpr bool isDebugIsolates = false;
 #else
 constexpr bool isDebug = true;
+
+#    ifdef DXFCPP_DEBUG_ISOLATES
+constexpr bool isDebugIsolates = true;
+#    else
+constexpr bool isDebugIsolates = false;
+#    endif
+
 #endif
 
 template <typename... T> constexpr void ignore_unused(const T &...) {}

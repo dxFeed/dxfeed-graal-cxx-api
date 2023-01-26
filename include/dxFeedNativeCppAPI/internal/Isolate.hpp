@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include "CEntryPointErrors.hpp"
-#include "Common.hpp"
-
 #include <graal_isolate.h>
+
+#include "Common.hpp"
+#include "CEntryPointErrors.hpp"
 
 #include <functional>
 #include <iostream>
@@ -36,20 +36,20 @@ class Isolate final {
 
             this->idx = idx++;
 
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << fmt::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}()\n",
                                          bit_cast<std::size_t>(handle), isMain, tid, idx);
             }
         }
 
         CEntryPointErrors detach() {
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << fmt::format("{}::detach()\n", toString());
             }
 
             // OK if nothing is attached.
             if (!handle) {
-                if constexpr (isDebug) {
+                if constexpr (isDebugIsolates) {
                     std::clog << "\tNot attached \n";
                 }
 
@@ -59,7 +59,7 @@ class Isolate final {
             auto result = CEntryPointErrors::valueOf(graal_detach_thread(handle));
 
             if (result == CEntryPointErrors::NO_ERROR) {
-                if constexpr (isDebug) {
+                if constexpr (isDebugIsolates) {
                     std::clog << "\tDetached \n";
                 }
 
@@ -70,12 +70,12 @@ class Isolate final {
         }
 
         CEntryPointErrors detachAllThreadsAndTearDownIsolate() {
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << fmt::format("{}::detachAllThreadsAndTearDownIsolate()\n", toString());
             }
 
             if (!handle) {
-                if constexpr (isDebug) {
+                if constexpr (isDebugIsolates) {
                     std::clog << "\tNot attached\n";
                 }
 
@@ -85,7 +85,7 @@ class Isolate final {
             auto result = CEntryPointErrors::valueOf(graal_detach_all_threads_and_tear_down_isolate(handle));
 
             if (result == CEntryPointErrors::NO_ERROR) {
-                if constexpr (isDebug) {
+                if constexpr (isDebugIsolates) {
                     std::clog << "\tAll threads have been detached. The isolate has been teared down.\n";
                 }
 
@@ -96,12 +96,12 @@ class Isolate final {
         }
 
         ~IsolateThread() {
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << fmt::format("~{}()\n", toString());
             }
 
             if (isMain) {
-                if constexpr (isDebug) {
+                if constexpr (isDebugIsolates) {
                     std::clog << "\tThis is the main thread\n";
                 }
 
@@ -129,14 +129,14 @@ class Isolate final {
         currentIsolateThread_.handle = mainIsolateThreadHandle;
         currentIsolateThread_.isMain = true;
 
-        if constexpr (isDebug) {
+        if constexpr (isDebugIsolates) {
             std::clog << fmt::format("Isolate{{{}, main = {}, current = {}}}()\n", bit_cast<std::size_t>(handle),
                                      mainIsolateThread_.toString(), currentIsolateThread_.toString());
         }
     }
 
     static std::shared_ptr<Isolate> create() {
-        if constexpr (isDebug) {
+        if constexpr (isDebugIsolates) {
             std::clog << "Isolate::create()\n";
         }
 
@@ -148,14 +148,14 @@ class Isolate final {
 
             auto result = std::shared_ptr<Isolate>{new Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
 
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << fmt::format("Isolate::create() -> *{}\n", result->toString());
             }
 
             return result;
         }
 
-        if constexpr (isDebug) {
+        if constexpr (isDebugIsolates) {
             std::clog << "\t-> nullptr \n";
         }
 
@@ -163,13 +163,13 @@ class Isolate final {
     }
 
     CEntryPointErrors attach() {
-        if constexpr (isDebug) {
+        if constexpr (isDebugIsolates) {
             std::clog << fmt::format("{}::attach()\n", toString());
         }
 
         // We will not re-attach.
         if (!currentIsolateThread_.handle) {
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << "\tNeeds to be attached.\n";
             }
 
@@ -178,7 +178,7 @@ class Isolate final {
             if (auto result = CEntryPointErrors::valueOf(graal_attach_thread(handle_, &newIsolateThreadHandle));
                 result != CEntryPointErrors::NO_ERROR) {
 
-                if constexpr (isDebug) {
+                if constexpr (isDebugIsolates) {
                     std::clog << fmt::format("\t-> {}\n", result.getDescription());
                 }
 
@@ -188,11 +188,11 @@ class Isolate final {
             currentIsolateThread_.handle = newIsolateThreadHandle;
             currentIsolateThread_.isMain = mainIsolateThread_.handle == newIsolateThreadHandle;
 
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << fmt::format("\tAttached: {}\n", currentIsolateThread_.toString());
             }
         } else {
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << fmt::format("\tCached: {}\n", currentIsolateThread_.toString());
             }
         }
@@ -206,13 +206,13 @@ class Isolate final {
     Isolate &operator=(const Isolate &) = delete;
 
     static std::shared_ptr<Isolate> getInstance() {
-        if constexpr (isDebug) {
+        if constexpr (isDebugIsolates) {
             std::clog << "Isolate::getInstance()\n";
         }
 
         static std::shared_ptr<Isolate> instance = create();
 
-        if constexpr (isDebug) {
+        if constexpr (isDebugIsolates) {
             std::clog << fmt::format("Isolate::getInstance() -> *{}\n", instance->toString());
         }
 
@@ -222,12 +222,12 @@ class Isolate final {
     template <typename F>
     auto runIsolated(F &&f) -> std::variant<CEntryPointErrors, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
         std::lock_guard lock(mutex_);
-        if constexpr (isDebug) {
+        if constexpr (isDebugIsolates) {
             std::clog << fmt::format("{}::runIsolated({})\n", toString(), bit_cast<std::size_t>(&f));
         }
 
         if (auto result = attach(); result != CEntryPointErrors::NO_ERROR) {
-            if constexpr (isDebug) {
+            if constexpr (isDebugIsolates) {
                 std::clog << fmt::format("\t-> {}\n", result.getDescription());
             }
 
@@ -255,7 +255,7 @@ class Isolate final {
     ~Isolate() {
         std::lock_guard lock(mutex_);
 
-        if constexpr (isDebug) {
+        if constexpr (isDebugIsolates) {
             std::clog << fmt::format("~{}()\n", toString());
         }
 
