@@ -12,6 +12,13 @@
 
 namespace dxfcpp::detail {
 
+/**
+ * A thread-safe class that allows to asynchronously notify listeners with a given signature.
+ * Listeners can be any callable entities.
+ * This class executes incoming events sequentially using a simple fixed-length circular buffer implementation.
+ *
+ * @tparam Signature The arguments "signature" (example: `void(int, int)`)
+ */
 template <typename Signature> struct Handler;
 
 /**
@@ -19,10 +26,10 @@ template <typename Signature> struct Handler;
  * Listeners can be any callable entities.
  * This class executes incoming events sequentially using a simple fixed-length circular buffer implementation.
  *
- * @tparam ArgTypes The arguments "signature"
+ * @tparam ArgTypes The arguments "signature" (example: `void(int, int)`)
  */
 template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
-    ///
+    /// The listener type
     using ListenerType = std::function<void(ArgTypes...)>;
 
   private:

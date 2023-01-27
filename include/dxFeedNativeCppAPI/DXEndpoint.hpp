@@ -738,7 +738,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     /**
      * Adds listener that is notified about changes in @ref ::getState() "state" property.
      *
-     * <p>Installed listener can be removed by `id` with ::removeStateChangeListener method or by call `::onStateChange() -= id`;
+     * <p>Installed listener can be removed by `id` with ::removeStateChangeListener method or by call
+     * `::onStateChange() -= id`;
      *
      * @tparam StateChangeListener The listener type. It can be any callable with signature: `void(State, State)`
      * @param listener The listener to add
@@ -746,29 +747,25 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     template <typename StateChangeListener>
     std::size_t addStateChangeListener(StateChangeListener &&listener)
-        requires requires { listener(State{}, State{}); }
+        requires requires {
+                     { listener(State{}, State{}) } -> std::same_as<void>;
+                 }
     {
         return onStateChange_ += listener;
     }
 
     /**
-     * Adds listener that is notified about changes in {@link #getState() state} property.
-     * Notification will be performed using this endpoint's {@link #executor(Executor) executor}.
+     * Removes listener that is notified about changes in @ref ::getState() "state" property.
+     * It removes the listener that was previously installed with ::addStateChangeListener method.
      *
-     * <p>Installed listener can be removed with
-     * {@link #removeStateChangeListener(PropertyChangeListener) removeStateChangeListener} method.
-     *
-     * @param listener the listener to add.
-     */
-
-    /**
-     * Removes
-     * @param listenerId
+     * @param listenerId The listener id to remove
      */
     void removeStateChangeListener(std::size_t listenerId) { onStateChange_ -= listenerId; }
 
     /**
-     * @return onStateChangeHandler with `void(State, State)` signature
+     * Returns the onStateChange @ref detail::Handler<void(ArgTypes...)> "handler" that can be used to add or remove listeners.
+     *
+     * @return onStateChange handler with `void(State, State)` signature
      */
     auto &onStateChange() { return onStateChange_; }
 
@@ -777,7 +774,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
     /**
      * Changes user name for this endpoint.
-     * This method shall be called before @ref ::connect(const std::&string) "connect" together
+     * This method shall be called before @ref ::connect(const std::string&) "connect" together
      * with @ref ::password(const std::string&) "password" to configure service access credentials.
      *
      * @param user The user name.
@@ -803,7 +800,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
     /**
      * Changes password for this endpoint.
-     * This method shall be called before @ref ::connect(const std::&string) "connect" together
+     * This method shall be called before @ref ::connect(const std::string&) "connect" together
      * with @ref ::user(const std::string&) "user" to configure service access credentials.
      *
      * @param password The password.
@@ -1030,8 +1027,10 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     // TODO: implement
     auto getEventTypes() {}
 
+    // TODO: implement
     std::shared_ptr<DXFeed> getFeed() { return {}; }
 
+    // TODO: implement
     std::shared_ptr<DXPublisher> getPublisher() { return {}; }
 
     /**
