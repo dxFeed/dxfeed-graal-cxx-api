@@ -1,3 +1,4 @@
+// Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -6,6 +7,7 @@
 
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
+#include "internal/Handler.hpp"
 #include "internal/Isolate.hpp"
 
 #include <filesystem>
@@ -13,6 +15,7 @@
 #include <string>
 #include <type_traits>
 #include <unordered_map>
+#include <unordered_set>
 #include <variant>
 
 #include <fmt/format.h>
@@ -400,6 +403,23 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         LOCAL_HUB
     };
 
+    static std::string roleToString(Role role) {
+        switch (role) {
+        case Role::FEED:
+            return "FEED";
+        case Role::ON_DEMAND_FEED:
+            return "ON_DEMAND_FEED";
+        case Role::STREAM_FEED:
+            return "STREAM_FEED";
+        case Role::PUBLISHER:
+            return "PUBLISHER";
+        case Role::STREAM_PUBLISHER:
+            return "STREAM_PUBLISHER";
+        case Role::LOCAL_HUB:
+            return "LOCAL_HUB";
+        }
+    }
+
     static dxfg_endpoint_role_t roleToGraalRole(Role role) {
         switch (role) {
         case Role::FEED:
@@ -415,6 +435,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         case Role::LOCAL_HUB:
             return DXFG_ENDPOINT_ROLE_LOCAL_HUB;
         }
+
+        return DXFG_ENDPOINT_ROLE_FEED;
     }
 
     /**
@@ -445,6 +467,21 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         CLOSED
     };
 
+    static std::string stateToString(State state) {
+        switch (state) {
+        case State::NOT_CONNECTED:
+            return "NOT_CONNECTED";
+        case State::CONNECTING:
+            return "CONNECTING";
+        case State::CONNECTED:
+            return "CONNECTED";
+        case State::CLOSED:
+            return "CLOSED";
+        }
+
+        return "";
+    }
+
     static State graalStateToState(dxfg_endpoint_state_t state) {
         switch (state) {
         case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
@@ -456,17 +493,22 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         case DXFG_ENDPOINT_STATE_CLOSED:
             return State::CLOSED;
         }
+
+        return State::NOT_CONNECTED;
     }
 
   private:
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
+    static std::unordered_map<DXEndpoint *, std::shared_ptr<DXEndpoint>> ROOT_REFERENCES;
 
     mutable std::recursive_mutex mtx_;
-    dxfg_endpoint_t *handle_;
+    dxfg_endpoint_t *handle_ = nullptr;
     Role role_;
     std::string name_;
     std::shared_ptr<DXFeed> feed_;
     std::shared_ptr<DXPublisher> publisher_;
+    dxfg_endpoint_state_change_listener_t *stateChangeListenerHandle_{};
+    detail::Handler<void(State, State)> onStateChange_;
 
     static std::shared_ptr<DXEndpoint> create(dxfg_endpoint_t *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties) {
@@ -481,14 +523,83 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         endpoint->role_ = role;
         endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
 
-        // TODO: state change listener (Handler?)
-        // References-lifetimes
+        auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
+            [endpoint](auto threadHandle) {
+                return dxfg_PropertyChangeListener_new(
+                    threadHandle,
+                    [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState, dxfg_endpoint_state_t newState,
+                       void *user_data) {
+                        detail::bit_cast<DXEndpoint *>(user_data)->onStateChange_(graalStateToState(oldState),
+                                                                                  graalStateToState(newState));
+                    },
+                    endpoint.get());
+            },
+            nullptr);
+
+        endpoint->stateChangeListenerHandle_ = result;
+        endpoint->setStateChangeListenerImpl();
+
+        ROOT_REFERENCES[endpoint.get()] = endpoint;
+
+        endpoint->onStateChange_ %= [endpoint = endpoint.get()](State oldState, State newState) {
+            if (newState == State::CLOSED) {
+                if constexpr (detail::isDebug) {
+                    std::clog << fmt::format("DXEndpoint::onStateChange() = CLOSED\n");
+                }
+            }
+        };
 
         return endpoint;
     }
 
+    void setStateChangeListenerImpl() {
+        if (stateChangeListenerHandle_) {
+            detail::Isolate::getInstance()->runIsolatedOrElse(
+                [this](auto threadHandle) {
+                    return dxfg_DXEndpoint_addStateChangeListener(threadHandle, handle_, stateChangeListenerHandle_) ==
+                           0;
+                },
+                false);
+        }
+    }
+
+    void releaseStateChangeListenerImpl() {
+        if (stateChangeListenerHandle_) {
+            detail::Isolate::getInstance()->runIsolatedOrElse(
+                [this](auto threadHandle) {
+                    return dxfg_JavaObjectHandler_release(threadHandle, detail::bit_cast<dxfg_java_object_handler *>(
+                                                                            stateChangeListenerHandle_)) == 0;
+                },
+                false);
+
+            stateChangeListenerHandle_ = nullptr;
+        }
+    }
+
+    void closeImpl() {
+        detail::Isolate::getInstance()->runIsolatedOrElse(
+            [this](auto threadHandle) { return dxfg_DXEndpoint_close(threadHandle, handle_) == 0; }, false);
+
+        // TODO: close the Feed and Publisher
+    }
+
+    void releaseHandleImpl() {
+        detail::Isolate::getInstance()->runIsolatedOrElse(
+            [this](auto threadHandle) {
+                if (handle_) {
+                    return dxfg_JavaObjectHandler_release(threadHandle,
+                                                          detail::bit_cast<dxfg_java_object_handler *>(handle_)) == 0;
+                }
+
+                return true;
+            },
+            false);
+
+        handle_ = nullptr;
+    }
+
   protected:
-    DXEndpoint() : mtx_(), handle_(), role_(), feed_(), publisher_() {
+    DXEndpoint() : mtx_(), handle_(), role_(), feed_(), publisher_(), stateChangeListenerHandle_(), onStateChange_() {
         if constexpr (detail::isDebug) {
             std::clog << fmt::format("DXEndpoint()\n") << std::flush;
         }
@@ -502,20 +613,9 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
         std::lock_guard guard(mtx_);
 
-        close();
-
-        detail::Isolate::getInstance()->runIsolatedOrElse(
-            [this](auto threadHandle) {
-                if (handle_) {
-                    return dxfg_JavaObjectHandler_release(threadHandle,
-                                                          detail::bit_cast<dxfg_java_object_handler *>(handle_)) == 0;
-                }
-
-                return true;
-            },
-            false);
-
-        handle_ = nullptr;
+        closeImpl();
+        releaseStateChangeListenerImpl();
+        releaseHandleImpl();
     }
 
     /**
@@ -635,14 +735,42 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     const std::string &getName() const & { return name_; }
 
-    // TODO: implement
-    template <typename Listener> auto addStateChangeListener(Listener &&) {}
+    /**
+     * Adds listener that is notified about changes in @ref ::getState() "state" property.
+     *
+     * <p>Installed listener can be removed by `id` with ::removeStateChangeListener method or by call `::onStateChange() -= id`;
+     *
+     * @tparam StateChangeListener The listener type. It can be any callable with signature: `void(State, State)`
+     * @param listener The listener to add
+     * @return the listener id
+     */
+    template <typename StateChangeListener>
+    std::size_t addStateChangeListener(StateChangeListener &&listener)
+        requires requires { listener(State{}, State{}); }
+    {
+        return onStateChange_ += listener;
+    }
 
-    // TODO: implement
-    template <typename ListenerId> void removeStateChangeListener(ListenerId) {}
+    /**
+     * Adds listener that is notified about changes in {@link #getState() state} property.
+     * Notification will be performed using this endpoint's {@link #executor(Executor) executor}.
+     *
+     * <p>Installed listener can be removed with
+     * {@link #removeStateChangeListener(PropertyChangeListener) removeStateChangeListener} method.
+     *
+     * @param listener the listener to add.
+     */
 
-    // TODO: implement
-    auto onChangeState() {}
+    /**
+     * Removes
+     * @param listenerId
+     */
+    void removeStateChangeListener(std::size_t listenerId) { onStateChange_ -= listenerId; }
+
+    /**
+     * @return onStateChangeHandler with `void(State, State)` signature
+     */
+    auto &onStateChange() { return onStateChange_; }
 
     // TODO: implement
     template <typename Executor> void executor(Executor &&) {}
@@ -658,7 +786,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     std::shared_ptr<DXEndpoint> user(const std::string &user) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::user(user = {})\n", detail::bit_cast<std::size_t>(handle_), user);
+            std::clog << fmt::format("DXEndpoint{{{}}}::user(user = {})\n", detail::bit_cast<std::size_t>(handle_),
+                                     user);
         }
 
         std::lock_guard guard(mtx_);
@@ -727,8 +856,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     std::shared_ptr<DXEndpoint> connect(const std::string &address) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::connect(address = {})\n", detail::bit_cast<std::size_t>(handle_),
-                                     address);
+            std::clog << fmt::format("DXEndpoint{{{}}}::connect(address = {})\n",
+                                     detail::bit_cast<std::size_t>(handle_), address);
         }
 
         std::lock_guard guard(mtx_);
@@ -802,7 +931,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void disconnectAndClear() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::disconnectAndClear()\n", detail::bit_cast<std::size_t>(handle_));
+            std::clog << fmt::format("DXEndpoint{{{}}}::disconnectAndClear()\n",
+                                     detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -828,18 +958,15 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
         std::lock_guard guard(mtx_);
 
-        detail::Isolate::getInstance()->runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXEndpoint_close(threadHandle, handle_) == 0; }, false);
-
-        // TODO: close the Feed and Publisher
+        closeImpl();
     }
 
     /**
      * Waits while this endpoint @ref ::getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
      * @ref State::CLOSED "CLOSED". It is a signal that any files that were opened with
-     * @ref connect(const std::string&) "connect(\"file:...\")" method were finished reading, but not necessary were completely
-     * processed by the corresponding subscription listeners. Use closeAndAwaitTermination() after
-     * this method returns to make sure that all processing has completed.
+     * @ref connect(const std::string&) "connect(\"file:...\")" method were finished reading, but not necessary were
+     * completely processed by the corresponding subscription listeners. Use closeAndAwaitTermination() after this
+     * method returns to make sure that all processing has completed.
      *
      * <p><b>This method is blocking.</b>
      *

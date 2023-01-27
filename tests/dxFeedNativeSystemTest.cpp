@@ -1,3 +1,4 @@
+// Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include <catch2/benchmark/catch_benchmark_all.hpp>
@@ -116,16 +117,26 @@ TEST_CASE("System properties benchmark", "[dxfcpp::System]") {
 }
 
 TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
-    std::ios::sync_with_stdio(false);
-
-    auto builder = dxfcpp::DXEndpoint::newBuilder();
-
-    builder->withRole(dxfcpp::DXEndpoint::Role::FEED);
+    auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
     auto endpoint = builder->build();
+
+    endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
+        std::cout << "State changed: " + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                         dxfcpp::DXEndpoint::stateToString(newState) + "\n";
+    };
+
+    endpoint->addStateChangeListener([](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
+                std::cout << "State changed 2: " + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                 dxfcpp::DXEndpoint::stateToString(newState) + "\n";
+            });
+
     endpoint->connect("demo.dxfeed.com:7300");
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
     endpoint->disconnect();
+    endpoint->connect("demo.dxfeed.com:7300");
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
     endpoint->close();
 }

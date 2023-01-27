@@ -1,3 +1,4 @@
+// Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxFeedNativeCAPI/dxFeedNativeCAPI.h>
@@ -100,6 +101,7 @@ const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
 const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
 
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::INSTANCES{};
+std::unordered_map<DXEndpoint*, std::shared_ptr<DXEndpoint>> DXEndpoint::ROOT_REFERENCES{};
 
 } // namespace dxfcpp
 

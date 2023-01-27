@@ -1,3 +1,4 @@
+// Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #ifndef DXFEED_NATIVE_API_H_INCLUDED
