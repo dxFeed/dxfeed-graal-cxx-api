@@ -14,6 +14,8 @@ extern "C" {
 #    include <stdint.h>
 #endif
 
+#define DXFC_OUT
+
 /**
  * @file
  * @brief dxFeed Native C API enums, structs and functions declarations
@@ -57,12 +59,25 @@ dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value);
  * @param buffer_size The buffer's size.
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t buffer_size);
+dxfc_error_code_t dxfc_system_get_property(const char *key, DXFC_OUT char *buffer, size_t buffer_size);
 
 /**
  *
  */
-typedef void *dxfc_endpoint_t;
+typedef enum dxfc_endpoint_role_t {
+    ///
+    DXFC_ENDPOINT_ROLE_FEED = 0,
+    ///
+    DXFC_ENDPOINT_ROLE_ON_DEMAND_FEED,
+    ///
+    DXFC_ENDPOINT_ROLE_STREAM_FEED,
+    ///
+    DXFC_ENDPOINT_ROLE_PUBLISHER,
+    ///
+    DXFC_ENDPOINT_ROLE_STREAM_PUBLISHER,
+    ///
+    DXFC_ENDPOINT_ROLE_LOCAL_HUB,
+} dxfc_endpoint_role_t;
 
 /**
  *
@@ -86,88 +101,262 @@ typedef void (*dxfc_endpoint_state_change_listener)(dxfc_endpoint_state_t old_st
 
 /**
  *
- * @param endpoint
+ */
+typedef struct dxfc_enpoint_property_t {
+    const char *key;
+    const char *value;
+} dxfc_enpoint_property_t;
+
+/**
+ *
+ */
+typedef void *dxfc_endpoint_t;
+
+/**
+ *
+ */
+typedef void *dxfc_endpoint_builder_t;
+
+/**
+ *
+ */
+typedef void *dxfc_feed_t;
+
+/**
+ *
+ */
+typedef void *dxfc_publisher_t;
+
+/**
+ *
+ * @param[out] builder
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_new_builder(DXFC_OUT dxfc_endpoint_builder_t *builder);
+
+/**
+ *
+ * @param builder
+ * @param role
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_builder_with_role(dxfc_endpoint_builder_t builder, dxfc_endpoint_role_t role);
+
+/**
+ *
+ * @param builder
+ * @param name
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_builder_with_name(dxfc_endpoint_builder_t builder, const char *name);
+
+/**
+ *
+ * @param builder
+ * @param key
+ * @param value
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_builder_with_property(dxfc_endpoint_builder_t builder, const char *key,
+                                                      const char *value);
+
+/**
+ *
+ * @param builder
+ * @param properties
+ * @param size
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_builder_with_properties(dxfc_endpoint_builder_t builder,
+                                                        const dxfc_enpoint_property_t **properties, size_t size);
+
+/**
+ *
+ * @param builder
+ * @param key
  * @return
  */
-dxfc_error_code_t dxfc_endpoint_create(dxfc_endpoint_t *endpoint);
+int dxfc_endpoint_builder_supports_property(dxfc_endpoint_builder_t builder, const char *key);
+
+/**
+ *
+ * @param user_data
+ * @param[out] endpoint
+ * @return
+ */
+dxfc_error_code_t dxfc_endpoint_builder_build(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint);
+
+/**
+ *
+ * @param builder
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_builder_free(dxfc_endpoint_builder_t builder);
+
+/**
+ *
+ * @param user_data
+ * @param[out] endpoint
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_get_instance(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint);
+
+/**
+ *
+ * @param role
+ * @param user_data
+ * @param[out] endpoint
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_get_instance2(dxfc_endpoint_role_t role, void *user_data,
+                                              DXFC_OUT dxfc_endpoint_t *endpoint);
+
+/**
+ *
+ * @param user_data
+ * @param[out] endpoint
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_create(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint);
+
+/**
+ *
+ * @param role
+ * @param user_data
+ * @param[out] endpoint
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_create2(dxfc_endpoint_role_t role, void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint);
 
 /**
  *
  * @param endpoint
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_close(dxfc_endpoint_t *endpoint);
+dxfc_error_code_t dxfc_endpoint_close(dxfc_endpoint_t endpoint);
 
 /**
  *
  * @param endpoint
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_close_and_await_termination(dxfc_endpoint_t *endpoint);
+dxfc_error_code_t dxfc_endpoint_close_and_await_termination(dxfc_endpoint_t endpoint);
+
+/**
+ *
+ * @param endpoint
+ * @param[out] role
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_get_role(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_endpoint_role_t *role);
+
+/**
+ *
+ * @param endpoint
+ * @param user
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_user(dxfc_endpoint_t endpoint, const char *user);
+
+/**
+ *
+ * @param endpoint
+ * @param password
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_password(dxfc_endpoint_t endpoint, const char *password);
 
 /**
  *
  * @param endpoint
  * @param address
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_connect(dxfc_endpoint_t *endpoint, const char *address);
+dxfc_error_code_t dxfc_endpoint_connect(dxfc_endpoint_t endpoint, const char *address);
 
 /**
  *
  * @param endpoint
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_reconnect(dxfc_endpoint_t *endpoint);
+dxfc_error_code_t dxfc_endpoint_reconnect(dxfc_endpoint_t endpoint);
 
 /**
  *
  * @param endpoint
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_disconnect(dxfc_endpoint_t *endpoint);
+dxfc_error_code_t dxfc_endpoint_disconnect(dxfc_endpoint_t endpoint);
 
 /**
  *
  * @param endpoint
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_disconnect_and_clear(dxfc_endpoint_t *endpoint);
+dxfc_error_code_t dxfc_endpoint_disconnect_and_clear(dxfc_endpoint_t endpoint);
 
 /**
  *
  * @param endpoint
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_await_not_connected(dxfc_endpoint_t *endpoint);
+dxfc_error_code_t dxfc_endpoint_await_processed(dxfc_endpoint_t endpoint);
 
 /**
  *
  * @param endpoint
- * @param state
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_get_state(dxfc_endpoint_t *endpoint, dxfc_endpoint_state_t *state);
+dxfc_error_code_t dxfc_endpoint_await_not_connected(dxfc_endpoint_t endpoint);
+
+/**
+ *
+ * @param endpoint
+ * @param[out] state
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_get_state(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_endpoint_state_t *state);
 
 /**
  *
  * @param endpoint
  * @param listener
- * @param user_data
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_add_state_change_listener(dxfc_endpoint_t *endpoint,
-                                                          dxfc_endpoint_state_change_listener listener,
-                                                          void *user_data);
+dxfc_error_code_t dxfc_endpoint_add_state_change_listener(dxfc_endpoint_t endpoint,
+                                                          dxfc_endpoint_state_change_listener listener);
 
 /**
  *
  * @param endpoint
  * @param listener
- * @return
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_endpoint_remove_state_change_listener(dxfc_endpoint_t *endpoint,
+dxfc_error_code_t dxfc_endpoint_remove_state_change_listener(dxfc_endpoint_t endpoint,
                                                              dxfc_endpoint_state_change_listener listener);
+
+/**
+ *
+ * @param endpoint
+ * @param[out] feed
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_get_feed(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_feed_t *feed);
+
+/**
+ *
+ * @param endpoint
+ * @param[out] publisher
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfg_endpoint_get_publisher(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_publisher_t *publisher);
+
+/**
+ *
+ * @param endpoint
+ * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
+ */
+dxfc_error_code_t dxfc_endpoint_free(dxfc_endpoint_t endpoint);
 
 #ifdef __cplusplus
 }

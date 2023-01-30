@@ -23,20 +23,29 @@ API features via dxfeed-graal-native-api as a backend
 # TBD
 
 - [ ] Endpoint entity
+  - [x] C++ API
+  - [ ] C API
 - [ ] DXFeed "anchor" entity
 - [ ] DXPublisher "anchor" entity
 - [ ] Subscription entity
 - [ ] Native events mapper
 - [x] System properties processing
+  - [x] C++ API
+  - [x] C API
 - [ ] Obj-C artifacts (also for the Swift's FFI)
 - [ ] C\C++ samples
 - [ ] CI\CD
-    - [x] Build
-    - [ ] Tests
-        - [x] System properties processing
-    - [ ] Packaging
-- [ ] Docs
+  - [x] Build
+  - [ ] Tests
     - [x] System properties processing
+  - [ ] Packaging
+- [ ] Docs
+  - [x] System properties processing
+    - [x] C++ API
+    - [x] C API
+  - [ ] Endpoint entity
+    - [x] C++ API
+    - [ ] C API
 
 # How To Build
 

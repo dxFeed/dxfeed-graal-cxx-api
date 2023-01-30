@@ -101,7 +101,7 @@ const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
 const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
 
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::INSTANCES{};
-std::unordered_map<DXEndpoint*, std::shared_ptr<DXEndpoint>> DXEndpoint::ROOT_REFERENCES{};
+std::unordered_map<DXEndpoint *, std::shared_ptr<DXEndpoint>> DXEndpoint::ROOT_REFERENCES{};
 
 } // namespace dxfcpp
 
@@ -137,3 +137,126 @@ dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t
 
     return DXFC_EC_SUCCESS;
 }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_new_builder(DXFC_OUT dxfc_endpoint_builder_t *builder) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_builder_with_role(dxfc_endpoint_builder_t builder, dxfc_endpoint_role_t role) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_builder_with_name(dxfc_endpoint_builder_t builder, const char *name) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_builder_with_property(dxfc_endpoint_builder_t builder, const char *key,
+                                                      const char *value) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_builder_with_properties(dxfc_endpoint_builder_t builder,
+                                                        const dxfc_enpoint_property_t **properties, size_t size) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+int dxfc_endpoint_builder_supports_property(dxfc_endpoint_builder_t builder, const char *key) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_builder_build(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_builder_free(dxfc_endpoint_builder_t builder) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_get_instance(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_get_instance2(dxfc_endpoint_role_t role, void *user_data,
+                                              DXFC_OUT dxfc_endpoint_t *endpoint) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_create(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_create2(dxfc_endpoint_role_t role, void *user_data,
+                                        DXFC_OUT dxfc_endpoint_t *endpoint) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_close(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_close_and_await_termination(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_get_role(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_endpoint_role_t *role) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_user(dxfc_endpoint_t endpoint, const char *user) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_password(dxfc_endpoint_t endpoint, const char *password) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_connect(dxfc_endpoint_t endpoint, const char *address) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_reconnect(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_disconnect(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_disconnect_and_clear(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_await_processed(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_await_not_connected(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_get_state(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_endpoint_state_t *state) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_add_state_change_listener(dxfc_endpoint_t endpoint,
+                                                          dxfc_endpoint_state_change_listener listener) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_remove_state_change_listener(dxfc_endpoint_t endpoint,
+                                                             dxfc_endpoint_state_change_listener listener) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_get_feed(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_feed_t *feed) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfg_endpoint_get_publisher(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_publisher_t *publisher) {
+    return DXFC_EC_SUCCESS;
+}
+
+// TODO: implement
+dxfc_error_code_t dxfc_endpoint_free(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
