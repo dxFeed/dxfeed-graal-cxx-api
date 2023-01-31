@@ -138,8 +138,26 @@ dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t
     return DXFC_EC_SUCCESS;
 }
 
+namespace dxfcpp::detail {
+    struct BuilderHandle {
+        std::size_t index;
+    };
+
+    struct BuilderManager {
+        static std::unordered_map<BuilderHandle*, std::shared_ptr<DXEndpoint::Builder>> builders;
+
+
+    };
+
+//    template <typename Entity, >
+//    struct
+}
+
 // TODO: implement
-dxfc_error_code_t dxfc_endpoint_new_builder(DXFC_OUT dxfc_endpoint_builder_t *builder) { return DXFC_EC_SUCCESS; }
+dxfc_error_code_t dxfc_endpoint_new_builder(DXFC_OUT dxfc_endpoint_builder_t *builder) {
+    dxfcpp::DXEndpoint::newBuilder();
+    return DXFC_EC_SUCCESS;
+}
 
 // TODO: implement
 dxfc_error_code_t dxfc_endpoint_builder_with_role(dxfc_endpoint_builder_t builder, dxfc_endpoint_role_t role) {

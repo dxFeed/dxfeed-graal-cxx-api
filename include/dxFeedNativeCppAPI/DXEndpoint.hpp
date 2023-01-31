@@ -18,9 +18,6 @@
 #include <unordered_set>
 #include <variant>
 
-#include <fmt/format.h>
-#include <fmt/std.h>
-
 namespace dxfcpp {
 
 struct DXFeed : std::enable_shared_from_this<DXFeed> {
@@ -513,8 +510,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     static std::shared_ptr<DXEndpoint> create(dxfg_endpoint_t *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint::create{{handle = {}, role = {}, properties}}()\n",
-                                     detail::bit_cast<std::size_t>(endpointHandle), static_cast<std::int32_t>(role));
+            detail::debug("DXEndpoint::create{{handle = {}, role = {}, properties}}()",
+                          detail::bit_cast<std::size_t>(endpointHandle), static_cast<std::int32_t>(role));
         }
 
         std::shared_ptr<DXEndpoint> endpoint{new DXEndpoint{}};
@@ -544,7 +541,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         endpoint->onStateChange_ %= [endpoint = endpoint.get()](State oldState, State newState) {
             if (newState == State::CLOSED) {
                 if constexpr (detail::isDebug) {
-                    std::clog << fmt::format("DXEndpoint::onStateChange() = CLOSED\n");
+                    detail::debug("DXEndpoint::onStateChange() = CLOSED");
                 }
             }
         };
@@ -601,14 +598,14 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
   protected:
     DXEndpoint() : mtx_(), handle_(), role_(), feed_(), publisher_(), stateChangeListenerHandle_(), onStateChange_() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint()\n") << std::flush;
+            detail::debug("DXEndpoint()");
         }
     }
 
   public:
     virtual ~DXEndpoint() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::~DXEndpoint()\n", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -633,7 +630,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     static std::shared_ptr<DXEndpoint> getInstance() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint::getInstance()\n");
+            detail::debug("DXEndpoint::getInstance()");
         }
 
         return getInstance(Role::FEED);
@@ -660,7 +657,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     static std::shared_ptr<DXEndpoint> getInstance(Role role) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint::getInstance(role = {})\n", detail::bit_cast<std::int32_t>(role));
+            detail::debug("DXEndpoint::getInstance(role = {})", detail::bit_cast<std::int32_t>(role));
         }
 
         if (INSTANCES.contains(role)) {
@@ -680,7 +677,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     static std::shared_ptr<DXEndpoint> create() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint::create()\n");
+            detail::debug("DXEndpoint::create()");
         }
 
         return newBuilder()->build();
@@ -697,7 +694,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     static std::shared_ptr<DXEndpoint> create(Role role) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint::create(role = {})\n", detail::bit_cast<std::int32_t>(role));
+            detail::debug("DXEndpoint::create(role = {})", detail::bit_cast<std::int32_t>(role));
         }
 
         return newBuilder()->withRole(role)->build();
@@ -763,7 +760,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     void removeStateChangeListener(std::size_t listenerId) { onStateChange_ -= listenerId; }
 
     /**
-     * Returns the onStateChange @ref detail::Handler<void(ArgTypes...)> "handler" that can be used to add or remove listeners.
+     * Returns the onStateChange @ref detail::Handler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * listeners.
      *
      * @return onStateChange handler with `void(State, State)` signature
      */
@@ -783,8 +781,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     std::shared_ptr<DXEndpoint> user(const std::string &user) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::user(user = {})\n", detail::bit_cast<std::size_t>(handle_),
-                                     user);
+            detail::debug("DXEndpoint{{{}}}::user(user = {})", detail::bit_cast<std::size_t>(handle_), user);
         }
 
         std::lock_guard guard(mtx_);
@@ -809,8 +806,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     std::shared_ptr<DXEndpoint> password(const std::string &password) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::password(password = {})\n",
-                                     detail::bit_cast<std::size_t>(handle_), password);
+            detail::debug("DXEndpoint{{{}}}::password(password = {})", detail::bit_cast<std::size_t>(handle_), password);
         }
 
         std::lock_guard guard(mtx_);
@@ -853,8 +849,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     std::shared_ptr<DXEndpoint> connect(const std::string &address) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::connect(address = {})\n",
-                                     detail::bit_cast<std::size_t>(handle_), address);
+            detail::debug("DXEndpoint{{{}}}::connect(address = {})", detail::bit_cast<std::size_t>(handle_), address);
         }
 
         std::lock_guard guard(mtx_);
@@ -886,7 +881,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void reconnect() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::reconnect()\n", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::reconnect()", detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -907,7 +902,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void disconnect() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::disconnect()\n", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::disconnect()", detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -928,8 +923,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void disconnectAndClear() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::disconnectAndClear()\n",
-                                     detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::disconnectAndClear()", detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -950,7 +944,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void close() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::close()\n", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::close()", detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -971,7 +965,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void awaitNotConnected() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::awaitNotConnected()\n", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::awaitNotConnected()", detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -989,7 +983,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void awaitProcessed() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::awaitProcessed()\n", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::awaitProcessed()", detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -1011,8 +1005,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void closeAndAwaitTermination() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint{{{}}}::closeAndAwaitTermination()\n",
-                                     detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", detail::bit_cast<std::size_t>(handle_));
         }
 
         std::lock_guard guard(mtx_);
@@ -1046,13 +1039,13 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
         Builder() : mtx_(), handle_(), properties_() {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder::Builder()\n");
+                detail::debug("DXEndpoint::Builder::Builder()");
             }
         }
 
         static std::shared_ptr<Builder> create() {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder::create()\n");
+                detail::debug("DXEndpoint::Builder::create()");
             }
 
             auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
@@ -1119,8 +1112,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         /// Releases the GraalVM handle
         virtual ~Builder() {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder{{{}}}::~Builder()\n",
-                                         detail::bit_cast<std::size_t>(handle_));
+                detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", detail::bit_cast<std::size_t>(handle_));
             }
 
             std::lock_guard guard(mtx_);
@@ -1148,8 +1140,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder{{{}}}::withName(name = {})\n",
-                                         detail::bit_cast<std::size_t>(handle_), name);
+                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", detail::bit_cast<std::size_t>(handle_), name);
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -1163,8 +1154,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         std::shared_ptr<Builder> withRole(Role role) {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder{{{}}}::withRole(role = {})\n",
-                                         detail::bit_cast<std::size_t>(handle_), detail::bit_cast<std::int32_t>(role));
+                detail::debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", detail::bit_cast<std::size_t>(handle_),
+                      detail::bit_cast<std::int32_t>(role));
             }
 
             std::lock_guard guard(mtx_);
@@ -1189,8 +1180,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value) {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})\n",
-                                         detail::bit_cast<std::size_t>(handle_), key, value);
+                detail::debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})",
+                      detail::bit_cast<std::size_t>(handle_), key, value);
             }
 
             std::lock_guard guard(mtx_);
@@ -1215,8 +1206,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])\n",
-                                         detail::bit_cast<std::size_t>(handle_), properties.size());
+                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])",
+                      detail::bit_cast<std::size_t>(handle_), properties.size());
             }
 
             std::lock_guard guard(mtx_);
@@ -1235,8 +1226,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         bool supportsProperty(const std::string &key) {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})\n",
-                                         detail::bit_cast<std::size_t>(handle_), key);
+                detail::debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", detail::bit_cast<std::size_t>(handle_),
+                      key);
             }
 
             std::lock_guard guard(mtx_);
@@ -1255,8 +1246,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         std::shared_ptr<DXEndpoint> build() {
             if constexpr (detail::isDebug) {
-                std::clog << fmt::format("DXEndpoint::Builder{{{}}}::build()\n",
-                                         detail::bit_cast<std::size_t>(handle_));
+                detail::debug("DXEndpoint::Builder{{{}}}::build()", detail::bit_cast<std::size_t>(handle_));
             }
 
             std::lock_guard guard(mtx_);
@@ -1282,7 +1272,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     static std::shared_ptr<Builder> newBuilder() {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("DXEndpoint::newBuilder()\n");
+            detail::debug("DXEndpoint::newBuilder()");
         }
 
         return Builder::create();

@@ -121,14 +121,16 @@ TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
     auto endpoint = builder->build();
 
     endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        std::cout << "State changed: " + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                         dxfcpp::DXEndpoint::stateToString(newState) + "\n";
+        dxfcpp::detail::debug("DXEndpoint::Builder Test: {}",
+                              "State changed: " + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                  dxfcpp::DXEndpoint::stateToString(newState));
     };
 
     endpoint->addStateChangeListener([](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-                std::cout << "State changed 2: " + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                 dxfcpp::DXEndpoint::stateToString(newState) + "\n";
-            });
+        dxfcpp::detail::debug("DXEndpoint::Builder Test: {}",
+                              "State changed 2: " + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                  dxfcpp::DXEndpoint::stateToString(newState));
+    });
 
     endpoint->connect("demo.dxfeed.com:7300");
 
@@ -136,7 +138,5 @@ TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
 
     endpoint->disconnect();
     endpoint->connect("demo.dxfeed.com:7300");
-
-    std::this_thread::sleep_for(std::chrono::seconds(5));
     endpoint->close();
 }

@@ -14,9 +14,6 @@
 #include <type_traits>
 #include <variant>
 
-#include <fmt/format.h>
-#include <fmt/std.h>
-
 namespace dxfcpp {
 /**
  * A class that allows to set JVM system properties and get the values of JVM system properties.
@@ -31,7 +28,7 @@ struct System {
      */
     static inline bool setProperty(const std::string &key, const std::string &value) {
         if constexpr (dxfcpp::detail::isDebug) {
-            std::clog << fmt::format("System::setProperty(key = '{}', value = '{}')\n", key, value);
+            detail::debug("System::setProperty(key = '{}', value = '{}')", key, value);
         }
 
         auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
@@ -42,7 +39,7 @@ struct System {
             false);
 
         if constexpr (dxfcpp::detail::isDebug) {
-            std::clog << fmt::format("System::setProperty(key = '{}', value = '{}') -> {}\n", key, value, result);
+            detail::debug("System::setProperty(key = '{}', value = '{}') -> {}", key, value, result);
         }
 
         return result;
@@ -56,7 +53,7 @@ struct System {
      */
     static inline std::string getProperty(const std::string &key) {
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("System::getProperty(key = {})\n", key);
+            detail::debug("System::getProperty(key = {})", key);
         }
 
         auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
@@ -73,7 +70,7 @@ struct System {
             std::string{});
 
         if constexpr (detail::isDebug) {
-            std::clog << fmt::format("System::getProperty(key = '{}') -> '{}'\n", key, result);
+            detail::debug("System::getProperty(key = '{}') -> '{}'", key, result);
         }
 
         return result;
