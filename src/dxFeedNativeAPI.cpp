@@ -792,7 +792,7 @@ dxfc_error_code_t dxfc_endpoint_get_feed(dxfc_endpoint_t endpointHandle, DXFC_OU
 }
 
 // TODO: implement
-dxfc_error_code_t dxfg_endpoint_get_publisher(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_publisher_t *publisher) {
+dxfc_error_code_t dxfc_endpoint_get_publisher(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_publisher_t *publisher) {
     return DXFC_EC_SUCCESS;
 }
 

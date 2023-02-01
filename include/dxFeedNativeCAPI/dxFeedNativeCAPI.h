@@ -558,7 +558,7 @@ dxfc_error_code_t dxfc_endpoint_get_feed(dxfc_endpoint_t endpoint, DXFC_OUT dxfc
  * @param[out] publisher
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfg_endpoint_get_publisher(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_publisher_t *publisher);
+dxfc_error_code_t dxfc_endpoint_get_publisher(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_publisher_t *publisher);
 
 /**
  * Removes the dxFeed endpoint from the registry.
