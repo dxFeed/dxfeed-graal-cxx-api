@@ -11,6 +11,7 @@
 #include <chrono>
 #include <type_traits>
 #include <iostream>
+#include <sstream>
 
 #include <fmt/format.h>
 #include <fmt/std.h>
