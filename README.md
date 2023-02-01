@@ -22,9 +22,9 @@ API features via dxfeed-graal-native-api as a backend
 
 # TBD
 
-- [ ] Endpoint entity
+- [x] Endpoint entity
   - [x] C++ API
-  - [ ] C API
+  - [x] C API
 - [ ] DXFeed "anchor" entity
 - [ ] DXPublisher "anchor" entity
 - [ ] Subscription entity
@@ -38,14 +38,19 @@ API features via dxfeed-graal-native-api as a backend
   - [x] Build
   - [ ] Tests
     - [x] System properties processing
+      - [x] C++ API
+      - [x] C API 
+    - [x] Endpoint entity
+      - [x] C++ API
+      - [x] C API     
   - [ ] Packaging
 - [ ] Docs
   - [x] System properties processing
     - [x] C++ API
     - [x] C API
-  - [ ] Endpoint entity
+  - [x] Endpoint entity
     - [x] C++ API
-    - [ ] C API
+    - [x] C API
 
 # How To Build
 

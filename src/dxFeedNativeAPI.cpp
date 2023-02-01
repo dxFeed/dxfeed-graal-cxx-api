@@ -6,6 +6,7 @@
 
 #include <cstring>
 #include <utf8cpp/utf8.h>
+#include <utility>
 
 namespace dxfcpp {
 
@@ -139,142 +140,671 @@ dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t
 }
 
 namespace dxfcpp::detail {
-    struct BuilderHandle {
-        std::size_t index;
-    };
 
-    struct BuilderManager {
-        static std::unordered_map<BuilderHandle*, std::shared_ptr<DXEndpoint::Builder>> builders;
+struct BuilderHandle {};
 
+struct BuilderRegistry {
+    static std::unordered_map<BuilderHandle *, std::shared_ptr<DXEndpoint::Builder>> builders;
 
-    };
+    static std::shared_ptr<DXEndpoint::Builder> get(BuilderHandle *handle) {
+        if (builders.contains(handle)) {
+            return builders[handle];
+        }
 
-//    template <typename Entity, >
-//    struct
+        return {};
+    }
+
+    static BuilderHandle *add(std::shared_ptr<DXEndpoint::Builder> builder) noexcept {
+        auto handle = new (std::nothrow) BuilderHandle{};
+
+        builders[handle] = std::move(builder);
+
+        return handle;
+    }
+
+    static bool remove(BuilderHandle *handle) {
+        if (!handle) {
+            return false;
+        }
+
+        auto result = builders.erase(handle) == 1;
+
+        if (result) {
+            delete handle;
+        }
+
+        return result;
+    }
+};
+
+std::unordered_map<BuilderHandle *, std::shared_ptr<DXEndpoint::Builder>> BuilderRegistry::builders{};
+
+struct EndpointWrapperHandle {};
+
+struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
+    std::shared_ptr<dxfcpp::DXEndpoint> endpoint{};
+    void *userData{};
+    std::unordered_map<dxfc_endpoint_state_change_listener, std::size_t> listeners{};
+
+    EndpointWrapper(std::shared_ptr<dxfcpp::DXEndpoint> endpoint, void *userData)
+        : endpoint{std::move(endpoint)}, userData{userData}, listeners{} {}
+};
+
+struct EndpointWrapperRegistry {
+    static std::unordered_map<EndpointWrapperHandle *, std::shared_ptr<EndpointWrapper>> endpointWrappers;
+
+    static std::shared_ptr<EndpointWrapper> get(EndpointWrapperHandle *handle) {
+        if (endpointWrappers.contains(handle)) {
+            return endpointWrappers[handle];
+        }
+
+        return {};
+    }
+
+    static EndpointWrapperHandle *add(std::shared_ptr<EndpointWrapper> endpointWrapper) noexcept {
+        auto handle = new (std::nothrow) EndpointWrapperHandle{};
+
+        endpointWrappers[handle] = std::move(endpointWrapper);
+
+        return handle;
+    }
+
+    static bool remove(EndpointWrapperHandle *handle) {
+        if (!handle) {
+            return false;
+        }
+
+        auto result = endpointWrappers.erase(handle) == 1;
+
+        if (result) {
+            delete handle;
+        }
+
+        return result;
+    }
+};
+
+std::unordered_map<EndpointWrapperHandle *, std::shared_ptr<EndpointWrapper>>
+    EndpointWrapperRegistry::endpointWrappers{};
+
+static dxfcpp::DXEndpoint::Role cApiRoleToRole(dxfc_endpoint_role_t role) {
+    switch (role) {
+    case DXFC_ENDPOINT_ROLE_FEED:
+        return dxfcpp::DXEndpoint::Role::FEED;
+    case DXFC_ENDPOINT_ROLE_ON_DEMAND_FEED:
+        return dxfcpp::DXEndpoint::Role::ON_DEMAND_FEED;
+    case DXFC_ENDPOINT_ROLE_STREAM_FEED:
+        return dxfcpp::DXEndpoint::Role::STREAM_FEED;
+    case DXFC_ENDPOINT_ROLE_PUBLISHER:
+        return dxfcpp::DXEndpoint::Role::PUBLISHER;
+    case DXFC_ENDPOINT_ROLE_STREAM_PUBLISHER:
+        return dxfcpp::DXEndpoint::Role::STREAM_PUBLISHER;
+    case DXFC_ENDPOINT_ROLE_LOCAL_HUB:
+        return dxfcpp::DXEndpoint::Role::LOCAL_HUB;
+    }
+
+    return dxfcpp::DXEndpoint::Role::FEED;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_new_builder(DXFC_OUT dxfc_endpoint_builder_t *builder) {
-    dxfcpp::DXEndpoint::newBuilder();
+static dxfc_endpoint_role_t roleToCApiRole(dxfcpp::DXEndpoint::Role role) {
+    switch (role) {
+    case DXEndpoint::Role::FEED:
+        return DXFC_ENDPOINT_ROLE_FEED;
+    case DXEndpoint::Role::ON_DEMAND_FEED:
+        return DXFC_ENDPOINT_ROLE_ON_DEMAND_FEED;
+    case DXEndpoint::Role::STREAM_FEED:
+        return DXFC_ENDPOINT_ROLE_STREAM_FEED;
+    case DXEndpoint::Role::PUBLISHER:
+        return DXFC_ENDPOINT_ROLE_PUBLISHER;
+    case DXEndpoint::Role::STREAM_PUBLISHER:
+        return DXFC_ENDPOINT_ROLE_STREAM_PUBLISHER;
+    case DXEndpoint::Role::LOCAL_HUB:
+        return DXFC_ENDPOINT_ROLE_LOCAL_HUB;
+    }
+
+    return DXFC_ENDPOINT_ROLE_FEED;
+}
+
+static dxfc_endpoint_state_t stateToCApiState(dxfcpp::DXEndpoint::State state) {
+    switch (state) {
+    case DXEndpoint::State::NOT_CONNECTED:
+        return DXFC_ENDPOINT_STATE_NOT_CONNECTED;
+    case DXEndpoint::State::CONNECTING:
+        return DXFC_ENDPOINT_STATE_CONNECTING;
+    case DXEndpoint::State::CONNECTED:
+        return DXFC_ENDPOINT_STATE_CONNECTED;
+    case DXEndpoint::State::CLOSED:
+        return DXFC_ENDPOINT_STATE_CLOSED;
+    }
+
+    return DXFC_ENDPOINT_STATE_NOT_CONNECTED;
+}
+
+} // namespace dxfcpp::detail
+
+dxfc_error_code_t dxfc_endpoint_new_builder(DXFC_OUT dxfc_endpoint_builder_t *builderHandle) {
+    if (!builderHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto result = dxfcpp::detail::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
+
+    if (!result) {
+        return DXFC_EC_ERROR;
+    }
+
+    *builderHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_builder_t>(result);
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_builder_with_role(dxfc_endpoint_builder_t builder, dxfc_endpoint_role_t role) {
+dxfc_error_code_t dxfc_endpoint_builder_with_role(dxfc_endpoint_builder_t builderHandle, dxfc_endpoint_role_t role) {
+    if (!builderHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto builder =
+        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+
+    if (!builder) {
+        return DXFC_EC_ERROR;
+    }
+
+    builder->withRole(dxfcpp::detail::cApiRoleToRole(role));
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_builder_with_name(dxfc_endpoint_builder_t builder, const char *name) {
+dxfc_error_code_t dxfc_endpoint_builder_with_name(dxfc_endpoint_builder_t builderHandle, const char *name) {
+    if (!builderHandle || !name) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto builder =
+        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+
+    if (!builder) {
+        return DXFC_EC_ERROR;
+    }
+
+    builder->withName(name);
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_builder_with_property(dxfc_endpoint_builder_t builder, const char *key,
+dxfc_error_code_t dxfc_endpoint_builder_with_property(dxfc_endpoint_builder_t builderHandle, const char *key,
                                                       const char *value) {
+    if (!builderHandle || !key || !value) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto builder =
+        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+
+    if (!builder) {
+        return DXFC_EC_ERROR;
+    }
+
+    builder->withProperty(key, value);
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_builder_with_properties(dxfc_endpoint_builder_t builder,
+dxfc_error_code_t dxfc_endpoint_builder_with_properties(dxfc_endpoint_builder_t builderHandle,
                                                         const dxfc_enpoint_property_t **properties, size_t size) {
+    if (!builderHandle || !properties || size == 0) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto builder =
+        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+
+    if (!builder) {
+        return DXFC_EC_ERROR;
+    }
+
+    for (std::size_t i = 0; i < size; i++) {
+        if (!properties[i]) {
+            continue;
+        }
+
+        if (!properties[i]->key || !properties[i]->value) {
+            continue;
+        }
+
+        builder->withProperty(properties[i]->key, properties[i]->value);
+    }
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-int dxfc_endpoint_builder_supports_property(dxfc_endpoint_builder_t builder, const char *key) {
+dxfc_error_code_t dxfc_endpoint_builder_supports_property(dxfc_endpoint_builder_t builderHandle, const char *key,
+                                                          DXFC_OUT int *supports) {
+    if (!builderHandle || !key || !supports) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto builder =
+        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+
+    if (!builder) {
+        return DXFC_EC_ERROR;
+    }
+
+    *supports = builder->supportsProperty(key);
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_builder_build(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint) {
+dxfc_error_code_t dxfc_endpoint_builder_build(dxfc_endpoint_builder_t builderHandle, void *userData,
+                                              DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+    if (!builderHandle || !endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto builder =
+        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+
+    if (!builder) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpoint = builder->build();
+
+    if (!endpoint) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
+        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+
+    if (!result) {
+        return DXFC_EC_ERROR;
+    }
+
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_builder_free(dxfc_endpoint_builder_t builder) { return DXFC_EC_SUCCESS; }
+dxfc_error_code_t dxfc_endpoint_builder_free(dxfc_endpoint_builder_t builderHandle) {
+    if (!builderHandle) {
+        return DXFC_EC_ERROR;
+    }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_get_instance(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint) {
+    if (!dxfcpp::detail::BuilderRegistry::remove(
+            dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle))) {
+        return DXFC_EC_ERROR;
+    }
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_get_instance2(dxfc_endpoint_role_t role, void *user_data,
-                                              DXFC_OUT dxfc_endpoint_t *endpoint) {
+dxfc_error_code_t dxfc_endpoint_get_instance(void *userData, DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpoint = dxfcpp::DXEndpoint::getInstance();
+
+    if (!endpoint) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
+        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+
+    if (!result) {
+        return DXFC_EC_ERROR;
+    }
+
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_create(void *user_data, DXFC_OUT dxfc_endpoint_t *endpoint) { return DXFC_EC_SUCCESS; }
+dxfc_error_code_t dxfc_endpoint_get_instance2(dxfc_endpoint_role_t role, void *userData,
+                                              DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_create2(dxfc_endpoint_role_t role, void *user_data,
-                                        DXFC_OUT dxfc_endpoint_t *endpoint) {
+    auto endpoint = dxfcpp::DXEndpoint::getInstance(dxfcpp::detail::cApiRoleToRole(role));
+
+    if (!endpoint) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
+        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+
+    if (!result) {
+        return DXFC_EC_ERROR;
+    }
+
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_close(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+dxfc_error_code_t dxfc_endpoint_create(void *userData, DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_close_and_await_termination(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+    auto endpoint = dxfcpp::DXEndpoint::create();
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_get_role(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_endpoint_role_t *role) {
+    if (!endpoint) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
+        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+
+    if (!result) {
+        return DXFC_EC_ERROR;
+    }
+
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_user(dxfc_endpoint_t endpoint, const char *user) { return DXFC_EC_SUCCESS; }
+dxfc_error_code_t dxfc_endpoint_create2(dxfc_endpoint_role_t role, void *userData,
+                                        DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_password(dxfc_endpoint_t endpoint, const char *password) { return DXFC_EC_SUCCESS; }
+    auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::detail::cApiRoleToRole(role));
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_connect(dxfc_endpoint_t endpoint, const char *address) { return DXFC_EC_SUCCESS; }
+    if (!endpoint) {
+        return DXFC_EC_ERROR;
+    }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_reconnect(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
+        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_disconnect(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+    if (!result) {
+        return DXFC_EC_ERROR;
+    }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_disconnect_and_clear(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_await_processed(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
-
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_await_not_connected(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
-
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_get_state(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_endpoint_state_t *state) {
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_add_state_change_listener(dxfc_endpoint_t endpoint,
+dxfc_error_code_t dxfc_endpoint_close(dxfc_endpoint_t endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->close();
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_close_and_await_termination(dxfc_endpoint_t endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->closeAndAwaitTermination();
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_get_role(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_endpoint_role_t *role) {
+    if (!endpointHandle || !role) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    *role = dxfcpp::detail::roleToCApiRole(endpointWrapper->endpoint->getRole());
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_user(dxfc_endpoint_t endpointHandle, const char *user) {
+    if (!endpointHandle || !user) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->user(user);
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_password(dxfc_endpoint_t endpointHandle, const char *password) {
+    if (!endpointHandle || !password) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->password(password);
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_connect(dxfc_endpoint_t endpointHandle, const char *address) {
+    if (!endpointHandle || !address) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->connect(address);
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_reconnect(dxfc_endpoint_t endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->reconnect();
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_disconnect(dxfc_endpoint_t endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->disconnect();
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_disconnect_and_clear(dxfc_endpoint_t endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->disconnectAndClear();
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_await_processed(dxfc_endpoint_t endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->awaitProcessed();
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_await_not_connected(dxfc_endpoint_t endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    endpointWrapper->endpoint->awaitNotConnected();
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_get_state(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_endpoint_state_t *state) {
+    if (!endpointHandle || !state) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    *state = dxfcpp::detail::stateToCApiState(endpointWrapper->endpoint->getState());
+
+    return DXFC_EC_SUCCESS;
+}
+
+dxfc_error_code_t dxfc_endpoint_add_state_change_listener(dxfc_endpoint_t endpointHandle,
                                                           dxfc_endpoint_state_change_listener listener) {
+    if (!endpointHandle || !listener) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    if (endpointWrapper->listeners.contains(listener)) {
+        return DXFC_EC_SUCCESS;
+    }
+
+    endpointWrapper->listeners[listener] = endpointWrapper->endpoint->onStateChange() +=
+        [userData = endpointWrapper->userData, listener](dxfcpp::DXEndpoint::State oldState,
+                                                         dxfcpp::DXEndpoint::State newState) {
+            listener(dxfcpp::detail::stateToCApiState(oldState), dxfcpp::detail::stateToCApiState(newState), userData);
+        };
+
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_remove_state_change_listener(dxfc_endpoint_t endpoint,
+dxfc_error_code_t dxfc_endpoint_remove_state_change_listener(dxfc_endpoint_t endpointHandle,
                                                              dxfc_endpoint_state_change_listener listener) {
+    if (!endpointHandle || !listener) {
+        return DXFC_EC_ERROR;
+    }
+
+    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
+        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+
+    if (!endpointWrapper) {
+        return DXFC_EC_ERROR;
+    }
+
+    if (!endpointWrapper->listeners.contains(listener)) {
+        return DXFC_EC_SUCCESS;
+    }
+
+    endpointWrapper->endpoint->onStateChange() -= endpointWrapper->listeners[listener];
+
     return DXFC_EC_SUCCESS;
 }
 
 // TODO: implement
-dxfc_error_code_t dxfc_endpoint_get_feed(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_feed_t *feed) {
+dxfc_error_code_t dxfc_endpoint_get_feed(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_feed_t *feed) {
     return DXFC_EC_SUCCESS;
 }
 
 // TODO: implement
-dxfc_error_code_t dxfg_endpoint_get_publisher(dxfc_endpoint_t endpoint, DXFC_OUT dxfc_publisher_t *publisher) {
+dxfc_error_code_t dxfg_endpoint_get_publisher(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_publisher_t *publisher) {
     return DXFC_EC_SUCCESS;
 }
 
-// TODO: implement
-dxfc_error_code_t dxfc_endpoint_free(dxfc_endpoint_t endpoint) { return DXFC_EC_SUCCESS; }
+dxfc_error_code_t dxfc_endpoint_free(dxfc_endpoint_t endpointHandle) {
+    if (!endpointHandle) {
+        return DXFC_EC_ERROR;
+    }
+
+    if (!dxfcpp::detail::EndpointWrapperRegistry::remove(
+            dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle))) {
+        return DXFC_EC_ERROR;
+    }
+
+    return DXFC_EC_SUCCESS;
+}

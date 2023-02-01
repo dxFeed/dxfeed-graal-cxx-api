@@ -121,15 +121,15 @@ TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
     auto endpoint = builder->build();
 
     endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        dxfcpp::detail::debug("DXEndpoint::Builder Test: {}",
-                              "State changed: " + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                  dxfcpp::DXEndpoint::stateToString(newState));
+        dxfcpp::detail::debug("DXEndpoint::Builder Test: {}", std::string("State changed: ") +
+                                                                  dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                                                  dxfcpp::DXEndpoint::stateToString(newState));
     };
 
     endpoint->addStateChangeListener([](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        dxfcpp::detail::debug("DXEndpoint::Builder Test: {}",
-                              "State changed 2: " + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                  dxfcpp::DXEndpoint::stateToString(newState));
+        dxfcpp::detail::debug("DXEndpoint::Builder Test: {}", std::string("State changed 2: ") +
+                                                                  dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                                                  dxfcpp::DXEndpoint::stateToString(newState));
     });
 
     endpoint->connect("demo.dxfeed.com:7300");
@@ -139,4 +139,76 @@ TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
     endpoint->disconnect();
     endpoint->connect("demo.dxfeed.com:7300");
     endpoint->close();
+}
+
+auto cApiStateToString(dxfc_endpoint_state_t state) {
+    switch (state) {
+    case DXFC_ENDPOINT_STATE_NOT_CONNECTED:
+        return "NOT_CONNECTED";
+    case DXFC_ENDPOINT_STATE_CONNECTING:
+        return "CONNECTING";
+    case DXFC_ENDPOINT_STATE_CONNECTED:
+        return "CONNECTED";
+    case DXFC_ENDPOINT_STATE_CLOSED:
+        return "CLOSED";
+    }
+
+    return "";
+}
+
+TEST_CASE("dxfc_endpoint_builder_t", "[dxfc_endpoint_t]") {
+    dxfc_endpoint_builder_t builder{};
+
+    auto result = dxfc_endpoint_new_builder(&builder);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_endpoint_builder_with_role(builder, DXFC_ENDPOINT_ROLE_FEED);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    dxfc_endpoint_t endpoint{};
+
+    result = dxfc_endpoint_builder_build(builder, nullptr, &endpoint);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_endpoint_add_state_change_listener(
+        endpoint, [](dxfc_endpoint_state_t oldState, dxfc_endpoint_state_t newState, void *) {
+            dxfcpp::detail::debug("DXEndpoint::Builder Test: {}", std::string("State changed: ") +
+                                                                      cApiStateToString(oldState) + " -> " +
+                                                                      cApiStateToString(newState));
+        });
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_endpoint_connect(endpoint, "demo.dxfeed.com:7300");
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    result = dxfc_endpoint_disconnect(endpoint);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_endpoint_connect(endpoint, "demo.dxfeed.com:7300");
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    dxfc_endpoint_close(endpoint);
 }

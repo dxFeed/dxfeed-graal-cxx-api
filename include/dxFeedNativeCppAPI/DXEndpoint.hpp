@@ -400,7 +400,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         LOCAL_HUB
     };
 
-    static std::string roleToString(Role role) {
+    static auto roleToString(Role role) {
         switch (role) {
         case Role::FEED:
             return "FEED";
@@ -415,6 +415,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         case Role::LOCAL_HUB:
             return "LOCAL_HUB";
         }
+
+        return "";
     }
 
     static dxfg_endpoint_role_t roleToGraalRole(Role role) {
@@ -464,7 +466,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         CLOSED
     };
 
-    static std::string stateToString(State state) {
+    static auto stateToString(State state) {
         switch (state) {
         case State::NOT_CONNECTED:
             return "NOT_CONNECTED";
@@ -510,11 +512,11 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     static std::shared_ptr<DXEndpoint> create(dxfg_endpoint_t *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties) {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint::create{{handle = {}, role = {}, properties}}()",
-                          detail::bit_cast<std::size_t>(endpointHandle), static_cast<std::int32_t>(role));
+            detail::debug("DXEndpoint::create{{handle = {}, role = {}, properties[{}]}}()",
+                          detail::bit_cast<std::size_t>(endpointHandle), roleToString(role), properties.size());
         }
 
-        std::shared_ptr<DXEndpoint> endpoint{new DXEndpoint{}};
+        std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
 
         endpoint->handle_ = endpointHandle;
         endpoint->role_ = role;
@@ -621,7 +623,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * This method creates an endpoint on the first use with a default
      * configuration as explained in
      * <a href="#defaultPropertiesSection">default properties section</a> of DXEndpoint class documentation.
-     * You can provide configuration via classpath or via system properties as explained there.
+     * You can provide configuration via system properties as explained there.
      *
      * This is a shortcut to
      * @ref ::getInstance(Role) "getInstance"(@ref DXEndpoint "DXEndpoint"::@ref DXEndpoint::Role "Role"::@ref
@@ -642,7 +644,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * This method creates an endpoint with the corresponding role on the first use with a default
      * configuration as explained in
      * <a href="#defaultPropertiesSection">default properties section</a> of DXEndpoint class documentation.
-     * You can provide configuration via classpath or via system properties as explained there.
+     * You can provide configuration via system properties as explained there.
      *
      * The configuration does not have to include an address. You can use @ref ::connect(const std::string&)
      * "connect(address)" and ::disconnect() methods on the instance that is returned by this method to programmatically
@@ -694,7 +696,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     static std::shared_ptr<DXEndpoint> create(Role role) {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint::create(role = {})", detail::bit_cast<std::int32_t>(role));
+            detail::debug("DXEndpoint::create(role = {})", roleToString(role));
         }
 
         return newBuilder()->withRole(role)->build();
@@ -806,7 +808,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     std::shared_ptr<DXEndpoint> password(const std::string &password) {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::password(password = {})", detail::bit_cast<std::size_t>(handle_), password);
+            detail::debug("DXEndpoint{{{}}}::password(password = {})", detail::bit_cast<std::size_t>(handle_),
+                          password);
         }
 
         std::lock_guard guard(mtx_);
@@ -844,7 +847,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#connect-java.lang.String-)
      *
-     * @param address the data source address.
+     * @param address The data source address.
      * @return this DXEndpoint.
      */
     std::shared_ptr<DXEndpoint> connect(const std::string &address) {
@@ -896,7 +899,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * The endpoint @ref ::getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
      *
      * <p>This method does not release all resources that are associated with this endpoint.
-     * Use {@link #close()} method to release all resources.
+     * Use ::close() method to release all resources.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnect--)
      */
@@ -917,7 +920,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * The endpoint @ref ::getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
      *
      * <p>This method does not release all resources that are associated with this endpoint.
-     * Use {@link #close()} method to release all resources.
+     * Use close() method to release all resources.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnectAndClear--)
      */
@@ -1043,7 +1046,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             }
         }
 
-        static std::shared_ptr<Builder> create() {
+        static std::shared_ptr<Builder> create() noexcept {
             if constexpr (detail::isDebug) {
                 detail::debug("DXEndpoint::Builder::create()");
             }
@@ -1051,7 +1054,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
                 [](auto threadHandle) { return dxfg_DXEndpoint_newBuilder(threadHandle); }, nullptr);
 
-            auto builder = std::shared_ptr<Builder>(new Builder{});
+            auto builder = std::shared_ptr<Builder>(new (std::nothrow) Builder{});
             builder->handle_ = result;
 
             return builder;
@@ -1136,11 +1139,14 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          * in the same process (GraalVM Isolate) in logs and in other diagnostic means.
          * This is a shortcut for @ref ::withProperty "withProperty"(::NAME_PROPERTY, `name`)
          *
+         * @param name The endpoint's name
+         *
          * @return `this` endpoint builder.
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", detail::bit_cast<std::size_t>(handle_), name);
+                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", detail::bit_cast<std::size_t>(handle_),
+                              name);
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -1150,12 +1156,14 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          * Sets role for the created DXEndpoint.
          * Default role is @ref Role::FEED "FEED".
          *
+         * @param role The endpoint's role
+         *
          * @return `this` endpoint builder.
          */
         std::shared_ptr<Builder> withRole(Role role) {
             if constexpr (detail::isDebug) {
                 detail::debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", detail::bit_cast<std::size_t>(handle_),
-                      detail::bit_cast<std::int32_t>(role));
+                              roleToString(role));
             }
 
             std::lock_guard guard(mtx_);
@@ -1174,6 +1182,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         /**
          * Sets the specified property. Unsupported properties are ignored.
          *
+         * @param key The endpoint's property key
+         * @param value The endpoint's property value
          * @return `this` endpoint builder.
          *
          * @see ::supportsProperty(const std::string&)
@@ -1181,7 +1191,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value) {
             if constexpr (detail::isDebug) {
                 detail::debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})",
-                      detail::bit_cast<std::size_t>(handle_), key, value);
+                              detail::bit_cast<std::size_t>(handle_), key, value);
             }
 
             std::lock_guard guard(mtx_);
@@ -1200,6 +1210,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         /**
          * Sets all supported properties from the provided properties object.
          *
+         * @tparam Properties The properties' type (std::map, std::unordered_map etc)
+         * @param properties The endpoint's properties
          * @return `this` endpoint builder.
          *
          * @see ::withProperty(const std::string&, const std::string&)
@@ -1207,7 +1219,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             if constexpr (detail::isDebug) {
                 detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])",
-                      detail::bit_cast<std::size_t>(handle_), properties.size());
+                              detail::bit_cast<std::size_t>(handle_), properties.size());
             }
 
             std::lock_guard guard(mtx_);
@@ -1220,14 +1232,17 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         }
 
         /**
-         * @rturn `true` if the corresponding property key is supported.
+         * Checks if a property is supported
+         *
+         * @param key The property's key to be checked for support
+         * @return `true` if the corresponding property key is supported.
          *
          * @see ::withProperty(const std::string&, const std::string&)
          */
         bool supportsProperty(const std::string &key) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", detail::bit_cast<std::size_t>(handle_),
-                      key);
+                detail::debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})",
+                              detail::bit_cast<std::size_t>(handle_), key);
             }
 
             std::lock_guard guard(mtx_);
@@ -1270,7 +1285,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      *
      * @return the created endpoint builder.
      */
-    static std::shared_ptr<Builder> newBuilder() {
+    static std::shared_ptr<Builder> newBuilder() noexcept {
         if constexpr (detail::isDebug) {
             detail::debug("DXEndpoint::newBuilder()");
         }

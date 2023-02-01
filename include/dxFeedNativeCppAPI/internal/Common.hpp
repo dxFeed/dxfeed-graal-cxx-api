@@ -9,13 +9,13 @@
 #include <cstring>
 
 #include <chrono>
-#include <type_traits>
 #include <iostream>
 #include <sstream>
+#include <type_traits>
 
+#include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/std.h>
-#include <fmt/chrono.h>
 
 namespace dxfcpp::detail {
 #ifdef NDEBUG
@@ -61,13 +61,11 @@ inline auto now() {
         .count();
 }
 
-template <typename... Args>
-std::string vformat(std::string_view format, Args&&... args) {
+template <typename... Args> std::string vformat(std::string_view format, Args &&...args) {
     return fmt::vformat(format, fmt::make_format_args(args...));
 }
 
-template <typename... Args>
-void vprint(std::ostream& os, std::string_view format, Args&&... args) {
+template <typename... Args> void vprint(std::ostream &os, std::string_view format, Args &&...args) {
     fmt::vprint(os, format, fmt::make_format_args(args...));
 }
 
@@ -86,10 +84,8 @@ inline std::string debugPrefixStr() {
     return vformat("D {} [{}]", nowStr(), tid.str());
 }
 
-template <typename... Args>
-inline void debug(std::string_view format, Args&&... args) {
-    vprint(std::clog, "{} {}\n", debugPrefixStr(), vformat(format, std::forward<Args>(args)...));
+template <typename... Args> inline void debug(std::string_view format, Args &&...args) {
+    vprint(std::cerr, "{} {}\n", debugPrefixStr(), vformat(format, std::forward<Args>(args)...));
 }
-
 
 } // namespace dxfcpp::detail
