@@ -1,3 +1,4 @@
+# Copyright (c) 2023 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
 # Prerequisites
@@ -36,3 +37,5 @@
 build/
 cmake-build-*/
 .idea/
+/doc/html/
+/doc/latex/
