@@ -75,7 +75,7 @@ inline std::string nowStr() {
     auto now = std::chrono::system_clock::now();
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
 
-    return vformat("{:%d%m%y %H%M%S}.{:0>3}", std::chrono::floor<std::chrono::seconds>(now), ms);
+    return vformat("{:%y%m%d %H%M%S}.{:0>3}", std::chrono::floor<std::chrono::seconds>(now), ms);
 }
 
 inline std::string debugPrefixStr() {
