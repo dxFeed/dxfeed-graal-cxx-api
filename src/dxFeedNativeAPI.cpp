@@ -104,7 +104,13 @@ const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabl
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::INSTANCES{};
 std::unordered_map<DXEndpoint *, std::shared_ptr<DXEndpoint>> DXEndpoint::ROOT_REFERENCES{};
 
-std::shared_ptr<DXFeed> DXFeed::getInstance() { return DXEndpoint::getInstance()->getFeed(); }
+std::shared_ptr<DXFeed> DXFeed::getInstance() {
+    if constexpr (detail::isDebug) {
+        detail::debug("DXFeed::getInstance()");
+    }
+
+    return DXEndpoint::getInstance()->getFeed();
+}
 
 } // namespace dxfcpp
 

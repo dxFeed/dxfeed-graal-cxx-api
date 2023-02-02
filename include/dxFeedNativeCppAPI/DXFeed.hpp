@@ -22,11 +22,19 @@ struct DXEndpoint;
  * Main entry class for dxFeed API (<b>read it first</b>).
  */
 struct DXFeed : std::enable_shared_from_this<DXFeed> {
+    friend struct DXEndpoint;
+
   private:
     mutable std::recursive_mutex mtx_{};
     dxfg_feed_t *handle_{};
 
-    static std::shared_ptr<DXFeed> create(dxfg_feed_t *feedHandle) {}
+    static std::shared_ptr<DXFeed> create(dxfg_feed_t *feedHandle) {
+        std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
+
+        feed->handle_ = feedHandle;
+
+        return feed;
+    }
 
   protected:
     DXFeed() : mtx_(), handle_() {
