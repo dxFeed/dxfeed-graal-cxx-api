@@ -36,6 +36,25 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
         return feed;
     }
 
+    void releaseHandleImpl() {
+        if (!handle_) {
+            return;
+        }
+
+        detail::Isolate::getInstance()->runIsolatedOrElse(
+            [this](auto threadHandle) {
+                if (handle_) {
+                    return dxfg_JavaObjectHandler_release(threadHandle,
+                                                          detail::bit_cast<dxfg_java_object_handler *>(handle_)) == 0;
+                }
+
+                return true;
+            },
+            false);
+
+        handle_ = nullptr;
+    }
+
   protected:
     DXFeed() : mtx_(), handle_() {
         if constexpr (detail::isDebug) {
@@ -48,6 +67,8 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeed{{{}}}::~DXFeed()", detail::bit_cast<std::size_t>(handle_));
         }
+
+        releaseHandleImpl();
     }
 
     /**
