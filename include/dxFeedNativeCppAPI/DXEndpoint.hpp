@@ -20,13 +20,11 @@
 
 namespace dxfcpp {
 
-struct DXFeed : std::enable_shared_from_this<DXFeed> {
-    virtual ~DXFeed() = default;
-};
-
 struct DXPublisher : std::enable_shared_from_this<DXPublisher> {
     virtual ~DXPublisher() = default;
 };
+
+struct DXFeed;
 
 /**
  * Manages network connections to @ref DXFeed "feed" or
@@ -1024,7 +1022,18 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     auto getEventTypes() {}
 
     // TODO: implement
-    std::shared_ptr<DXFeed> getFeed() { return {}; }
+    std::shared_ptr<DXFeed> getFeed() {
+        std::lock_guard guard(mtx_);
+        if (!feed_) {
+            auto feedHandle = detail::Isolate::getInstance()->runIsolatedOrElse(
+                [this](auto threadHandle) { return dxfg_DXEndpoint_getFeed(threadHandle, handle_); }, nullptr);
+
+            if (!feedHandle) {
+                return {};
+            }
+        }
+        return {};
+    }
 
     // TODO: implement
     std::shared_ptr<DXPublisher> getPublisher() { return {}; }
