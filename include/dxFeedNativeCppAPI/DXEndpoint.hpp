@@ -6,6 +6,7 @@
 #include <dxfg_endpoint.h>
 
 #include "DXFeed.hpp"
+#include "System.hpp"
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
 #include "internal/Handler.hpp"
@@ -1148,9 +1149,13 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
                 return {};
             }();
 
+            if (propertiesFileKey.empty()) {
+                return;
+            }
+
             // If propertiesFileKey was set in system properties,
             // don't try to load the default properties file.
-            if (propertiesFileKey.empty()) {
+            if (!System::getProperty(propertiesFileKey).empty()) {
                 return;
             }
 
