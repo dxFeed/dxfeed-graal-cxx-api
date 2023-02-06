@@ -135,6 +135,8 @@ const EventTypeEnum EventTypeEnum::ANALYTIC_ORDER{DXFG_EVENT_ANALYTIC_ORDER, fal
 const EventTypeEnum EventTypeEnum::SPREAD_ORDER{DXFG_EVENT_SPREAD_ORDER, false, true};
 const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, false, true};
 
+const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
+
 } // namespace dxfcpp
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
