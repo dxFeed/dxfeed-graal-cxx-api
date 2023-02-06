@@ -8,5 +8,6 @@
 
 #include "DXEndpoint.hpp"
 #include "DXFeed.hpp"
+#include "DXEvent.hpp"
 #include "DXFeedSubscription.hpp"
 #include "System.hpp"

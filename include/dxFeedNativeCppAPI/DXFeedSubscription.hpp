@@ -9,6 +9,8 @@ namespace dxfcpp {
 
 struct DXFeedSubscription : std::enable_shared_from_this<DXFeedSubscription> {
     virtual ~DXFeedSubscription() = default;
+
+
 };
 
 } // namespace dxfcpp
