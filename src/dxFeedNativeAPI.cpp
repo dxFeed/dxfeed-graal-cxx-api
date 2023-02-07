@@ -153,6 +153,9 @@ const EventFlag IndexedEvent::SNAPSHOT_END = EventFlag::SNAPSHOT_END;
 const EventFlag IndexedEvent::SNAPSHOT_SNIP = EventFlag::SNAPSHOT_SNIP;
 const EventFlag IndexedEvent::SNAPSHOT_MODE = EventFlag::SNAPSHOT_MODE;
 
+
+auto s = DXFeedSubscription({EventTypeEnum::QUOTE});
+
 } // namespace dxfcpp
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
