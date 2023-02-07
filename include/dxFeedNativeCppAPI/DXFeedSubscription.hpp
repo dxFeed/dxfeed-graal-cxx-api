@@ -49,7 +49,7 @@ struct DXFeedSubscription : std::enable_shared_from_this<DXFeedSubscription> {
             return;
         }
 
-        l.size = size;
+        l.size = static_cast<std::int32_t>(size);
         l.elements = new (std::nothrow) dxfg_event_clazz_t *[size];
 
         if (!l.elements) {
