@@ -137,6 +137,22 @@ const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, false, true};
 
 const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
 
+const EventFlag EventFlag::TX_PENDING{0x01u, "TX_PENDING"};
+const EventFlag EventFlag::REMOVE_EVENT{0x02u, "REMOVE_EVENT"};
+const EventFlag EventFlag::SNAPSHOT_BEGIN{0x04u, "SNAPSHOT_BEGIN"};
+const EventFlag EventFlag::SNAPSHOT_END{0x08u, "SNAPSHOT_END"};
+const EventFlag EventFlag::SNAPSHOT_SNIP{0x10u, "SNAPSHOT_SNIP"};
+// 0x20 is reserved. This flag will fit into 1-byte on the wire in QTP protocol
+const EventFlag EventFlag::SNAPSHOT_MODE{0x40u, "SNAPSHOT_MODE"};
+const EventFlag EventFlag::REMOVE_SYMBOL{0x80u, "REMOVE_SYMBOL"};
+
+const EventFlag IndexedEvent::TX_PENDING = EventFlag::TX_PENDING;
+const EventFlag IndexedEvent::REMOVE_EVENT = EventFlag::REMOVE_EVENT;
+const EventFlag IndexedEvent::SNAPSHOT_BEGIN = EventFlag::SNAPSHOT_BEGIN;
+const EventFlag IndexedEvent::SNAPSHOT_END = EventFlag::SNAPSHOT_END;
+const EventFlag IndexedEvent::SNAPSHOT_SNIP = EventFlag::SNAPSHOT_SNIP;
+const EventFlag IndexedEvent::SNAPSHOT_MODE = EventFlag::SNAPSHOT_MODE;
+
 } // namespace dxfcpp
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {

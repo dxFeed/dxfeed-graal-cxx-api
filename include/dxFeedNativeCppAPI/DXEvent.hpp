@@ -303,34 +303,17 @@ class IndexedEventSource {
     std::string toString() const { return name_; }
 };
 
+class EventFlagsMask;
+
 /**
- * Represents an indexed collection of up-to-date information about some
- * condition or state of an external entity that updates in real-time. For example, ::Order represents an order to buy
- * or to sell some market instrument that is currently active on a market exchange and multiple
- * orders are active for each symbol at any given moment in time.
- * ::Candle represent snapshots of aggregate information about trading over a specific time period and there are
- * multiple periods available.
- * The ::Candle is also an example of ::TimeSeriesEvent that is a more specific event type.
- *
- * <p> Index for each event is available via @ref ::getIndex() "index" property.
- * Indexed events retain information about multiple events per symbol based on the event index
- * and are conflated based on the event index. Last indexed event for each symbol and index is always
- * delivered to event listeners on subscription, but intermediate (next-to-last) events for each
- * symbol+index pair are not queued anywhere, they are simply discarded as stale events.
- * More recent events represent an up-to-date information about some external entity.
- *
- * <h3>Event flags, transactions and snapshots</h3>
+ * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some indexed event sources provide a consistent view of a set of events for a given symbol. Their updates
  * may incorporate multiple changes that have to be processed at the same time.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
- * Some indexed events, like ::Order, support multiple sources of information for the
- * same symbol. The event source is available via @ref ::getSource() "source" property.
- * The value of @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT" for
- * time-series events and other singe-sourced events like ::Series, that do not support this feature.
+ * The corresponding information is carried in @ref IndexedEvent::getEventFlags() "eventFlags" property.
  *
- * <p> The value of @ref ::getEventFlags() ::eventFlags property has several significant bits that are packed
- * into an integer in the following way:
+ * <p> The value of @ref IndexedEvent::getEventFlags() "eventFlags" property has several significant bits that are
+ * packed into an integer in the following way:
  *
  * <pre><tt>
  *    31..7    6    5    4    3    2    1    0
@@ -341,15 +324,16 @@ class IndexedEventSource {
  *
  * Each source updates its transactional state using these bits separately.
  * The state of each source has to be tracked separately in a map for each source.
- * However, event @ref ::getIndex() "index" is unique across the sources. This is achieved by allocating
- * an event-specific number of most significant bits of @ref ::getIndex() "index" for use as
- * a @ref ::getSource() "source" @ref IndexedEventSource::id() "id".
+ * However, event @ref IndexedEvent::getIndex() "index" is unique across the sources. This is achieved by allocating
+ * an event-specific number of most significant bits of @ref IndexedEvent::getIndex() "index" for use as
+ * a @ref IndexedEvent::getSource() "source" @ref IndexedEventSource::id() "id".
  *
  * <p> `TX` (bit 0) &mdash; ::TX_PENDING is an indicator of pending transactional update.
  * It can be retrieved from `eventFlags` with the following piece of code:
  *
- * <p>`bool txPending = (event->@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::@ref ::TX_PENDING
- * "TX_PENDING") != 0;`
+ * ```cpp
+ * bool txPending = (event-> getEventFlags() & IndexedEvent::TX_PENDING) != 0;
+ * ```
  *
  * <p>When `txPending` is `true` it means, that an ongoing transaction update that spans multiple events is
  * in process. All events with `txPending` `true` shall be put into a separate <em>pending list</em>
@@ -358,13 +342,15 @@ class IndexedEventSource {
  * <p> `RE` (bit 1) &mdash; ::REMOVE_EVENT is used to indicate that that the event with the
  * corresponding index has to be removed.
  *
- * <p>`bool removeEvent = (event->{@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::@ref ::REMOVE_EVENT
- * "REMOVE_EVENT") != 0;`
+ * ```cpp
+ * bool removeEvent = (event-> getEventFlags() & IndexedEvent::REMOVE_EVENT) != 0;
+ * ```
  *
  * <p> `SB` (bit 2) &mdash; ::SNAPSHOT_BEGIN is used to indicate when the loading of a snapshot starts.
  *
- * <p>`bool snapshotBegin = (event->{@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::@ref ::SNAPSHOT_BEGIN
- * "SNAPSHOT_BEGIN") != 0;`
+ * ```cpp
+ * bool snapshotBegin = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;
+ * ```
  *
  * <p> Snapshot load starts on new subscription and the first indexed event that arrives for each non-zero source id
  * on new subscription may have `snapshotBegin` set to `true`. It means, that an ongoing snapshot
@@ -374,9 +360,10 @@ class IndexedEventSource {
  * <p> `SE` (bit 3) &mdash; ::SNAPSHOT_END or `SS` (bit 4) &mdash; ::SNAPSHOT_SNIP are used to indicate the end of a
  * snapshot.
  *
- * <p> `bool snapshotEnd = (event->@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::@ref ::SNAPSHOT_END
- * "SNAPSHOT_END") != 0;` <br>`bool snapshotSnip = (event->@ref ::getEventFlags() "getEventFlags"() &amp;
- * IndexedEvent::@ref ::SNAPSHOT_SNIP SNAPSHOT_SNIP) != 0;`
+ * ```cpp
+ * bool snapshotEnd = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_END) != 0;
+ * bool snapshotSnip = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_SNIP) != 0;
+ * ```
  *
  * <p>The last event of a snapshot is marked with either `snapshotEnd` or `snapshotSnip`. At this time, all events
  * from a <em>pending list</em> for the corresponding source can be processed, unless `txPending` is also
@@ -396,64 +383,170 @@ class IndexedEventSource {
  * and `snapshotEnd` or `snapshotSnip` flags. In case of an empty snapshot, `removeEvent` on this event is
  * also set to `true`.
  */
+class EventFlag final {
+    std::uint32_t flag_;
+    std::string name_;
+
+    EventFlag(std::uint32_t flag, std::string name) : flag_{flag}, name_{std::move(name)} {}
+
+  public:
+    /**
+     * `0x01` - A bitmask to get transaction pending indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     *
+     * ```cpp
+     * bool txPending = (event-> getEventFlags() & IndexedEvent::TX_PENDING) != 0;
+     * ```
+     *
+     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     */
+    static const EventFlag TX_PENDING;
+
+    /**
+     * `0x02` - A bitmask to get removal indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     *
+     * ```cpp
+     * bool removeEvent = (event-> getEventFlags() & IndexedEvent::REMOVE_EVENT) != 0;
+     * ```
+     *
+     * See <a href="#eventFlagsSection">"Event Flags" section</a>
+     */
+    static const EventFlag REMOVE_EVENT;
+
+    /**
+     * `0x04` - A bitmask to get snapshot begin indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     *
+     * ```cpp
+     * bool snapshotBegin = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;
+     * ```
+     *
+     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     */
+    static const EventFlag SNAPSHOT_BEGIN;
+
+    /**
+     * `0x08` - A bitmask to get snapshot end indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     *
+     * ```cpp
+     * bool snapshotEnd = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_END) != 0;
+     * ```
+     *
+     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     */
+    static const EventFlag SNAPSHOT_END;
+
+    /**
+     * `0x10` - A bitmask to get snapshot snip indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     *
+     * ```cpp
+     * bool snapshotSnip = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_SNIP) != 0;
+     * ```
+     *
+     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     */
+    static const EventFlag SNAPSHOT_SNIP;
+
+    // 0x20 is reserved. This flag will fit into 1-byte on the wire in QTP protocol
+
+    /**
+     * `0x40` - A bitmask to set snapshot mode indicator into the value of @ref ::setEventFlags() "eventFlags" property.
+     * This flag is intended for publishing only.
+     *
+     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     */
+    static const EventFlag SNAPSHOT_MODE;
+
+    /**
+     * `0x80` - For internal use. Marks a subscription for deletion.
+     */
+    static const EventFlag REMOVE_SYMBOL;
+
+    /**
+     * Creates the invalid event flag
+     */
+    explicit EventFlag() : flag_{unsigned(-1)}, name_{"INVALID"} {}
+
+    /**
+     * @return The event flag's value
+     */
+    std::uint32_t getFlag() const { return flag_; }
+
+    /**
+     * Determines if the given flag is in the mask.
+     *
+     * @param eventFlagsMask The event flags mask
+     *
+     * @return `true` the given flag is in the mask.
+     */
+    bool in(std::uint32_t eventFlagsMask) const { return (eventFlagsMask & flag_) != 0; }
+
+    /**
+     * Determines if the given flag is in the mask.
+     *
+     * @tparam EventFlagsMask An event flags mask type that satisfies the condition: there is a `getMask` method that
+     * returns std::uint32_t
+     * @param eventFlagsMask The event flags mask.
+     * @return `true` the given flag is in the mask.
+     */
+    template <typename EventFlagsMask>
+    bool in(const EventFlagsMask &eventFlagsMask) const
+        requires requires {
+                     { eventFlagsMask.getMask() } -> std::same_as<std::uint32_t>;
+                 }
+    {
+        return in(eventFlagsMask.getMask());
+    }
+
+    ///
+    const std::string &getName() const { return name_; }
+
+    ///
+    std::string toString() const { return name_; }
+};
+
+/**
+ * Represents an indexed collection of up-to-date information about some
+ * condition or state of an external entity that updates in real-time. For example, ::Order represents an order to buy
+ * or to sell some market instrument that is currently active on a market exchange and multiple
+ * orders are active for each symbol at any given moment in time.
+ * ::Candle represent snapshots of aggregate information about trading over a specific time period and there are
+ * multiple periods available.
+ * The ::Candle is also an example of ::TimeSeriesEvent that is a more specific event type.
+ *
+ * Index for each event is available via @ref ::getIndex() "index" property.
+ * Indexed events retain information about multiple events per symbol based on the event index
+ * and are conflated based on the event index. Last indexed event for each symbol and index is always
+ * delivered to event listeners on subscription, but intermediate (next-to-last) events for each
+ * symbol+index pair are not queued anywhere, they are simply discarded as stale events.
+ * More recent events represent an up-to-date information about some external entity.
+ *
+ * Some indexed events, like ::Order, support multiple sources of information for the
+ * same symbol. The event source is available via @ref IndexedEvent::getSource() "source" property.
+ * The value of @ref IndexedEvent::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT"
+ * for time-series events and other singe-sourced events like ::Series, that do not support this feature.
+ *
+ * See also the <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+ */
 struct IndexedEvent {
     /// The alias to a type of shared pointer to the IndexedEvent object
     using Ptr = std::shared_ptr<IndexedEvent>;
 
-    // The constants below must be synchronized with similar constants in EventFlag
+    /// @copydoc EventFlag::TX_PENDING
+    static const EventFlag TX_PENDING;
 
-    /**
-     * Bit mask to get transaction pending indicator from the value of @ref ::getEventFlags() "eventFlags" property.
-     *
-     * `bool txPending = (event->@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::TX_PENDING) != 0;`
-     *
-     * See "Event Flags" section.
-     */
-    static const std::uint32_t TX_PENDING = 0x01;
+    /// @copydoc EventFlag::REMOVE_EVENT
+    static const EventFlag REMOVE_EVENT;
 
-    /**
-     * Bit mask to get removal indicator from the value of @ref ::getEventFlags() "eventFlags" property.
-     *
-     * `bool removeEvent = (event->@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::REMOVE_EVENT != 0;`
-     *
-     * See "Event Flags" section.
-     */
-    static const std::uint32_t REMOVE_EVENT = 0x02;
+    /// @copydoc EventFlag::SNAPSHOT_BEGIN
+    static const EventFlag SNAPSHOT_BEGIN;
 
-    /**
-     * Bit mask to get snapshot begin indicator from the value of @ref ::getEventFlags() "eventFlags" property.
-     *
-     * `bool snapshotBegin = (event->@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::SNAPSHOT_BEGIN) != 0;`
-     *
-     * <p>See "Event Flags" section.
-     */
-    static const std::uint32_t SNAPSHOT_BEGIN = 0x04;
+    /// @copydoc EventFlag::SNAPSHOT_END
+    static const EventFlag SNAPSHOT_END;
 
-    /**
-     * Bit mask to get snapshot end indicator from the value of @ref ::getEventFlags() "eventFlags" property.
-     *
-     * `bool snapshotEnd = (event->@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::SNAPSHOT_END) != 0;`
-     *
-     * <p>See "Event Flags" section.
-     */
-    static const std::uint32_t SNAPSHOT_END = 0x08;
+    /// @copydoc EventFlag::SNAPSHOT_SNIP
+    static const EventFlag SNAPSHOT_SNIP;
 
-    /**
-     * Bit mask to get snapshot snip indicator from the value of @ref ::getEventFlags() "eventFlags" property.
-     *
-     * `bool snapshotSnip = (event->@ref ::getEventFlags() "getEventFlags"() &amp; IndexedEvent::SNAPSHOT_SNIP) != 0;`
-     *
-     * See "Event Flags" section.
-     */
-    static const std::uint32_t SNAPSHOT_SNIP = 0x10;
-
-    /**
-     * Bit mask to set snapshot mode indicator into the value of @ref ::setEventFlags() "eventFlags" property.
-     * This flag is intended for publishing only.
-     *
-     * See "Event Flags" section.
-     */
-    static const std::uint32_t SNAPSHOT_MODE = 0x40;
+    /// @copydoc EventFlag::SNAPSHOT_MODE
+    static const EventFlag SNAPSHOT_MODE;
 
     /**
      * Returns the source of this event.
@@ -464,19 +557,19 @@ struct IndexedEvent {
 
     /**
      * Returns transactional event flags.
-     * See "Event Flags" section.
+     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
      *
      * @return The transactional event flags.
      */
-    virtual std::uint32_t getEventFlags() const = 0;
+    virtual const EventFlagsMask &getEventFlags() const = 0;
 
     /**
      * Changes transactional event flags.
-     * See "Event Flags" section.
+     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
      *
      * @param eventFlags transactional event flags.
      */
-    virtual void setEventFlags(std::uint32_t eventFlags) = 0;
+    virtual void setEventFlags(const EventFlagsMask &eventFlags) = 0;
 
     /**
      * Returns unique per-symbol index of this event.
