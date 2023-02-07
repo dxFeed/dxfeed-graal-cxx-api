@@ -118,7 +118,7 @@ const EventTypeEnum EventTypeEnum::SUMMARY{DXFG_EVENT_SUMMARY, true};
 const EventTypeEnum EventTypeEnum::GREEKS{DXFG_EVENT_GREEKS, true, true, true};
 const EventTypeEnum EventTypeEnum::CANDLE{DXFG_EVENT_CANDLE, true, true, true};
 
-//const EventTypeEnum EventTypeEnum::DAILY_CANDLE{DXFG_EVENT_DAILY_CANDLE, true, true, true};
+// const EventTypeEnum EventTypeEnum::DAILY_CANDLE{DXFG_EVENT_DAILY_CANDLE, true, true, true};
 
 const EventTypeEnum EventTypeEnum::UNDERLYING{DXFG_EVENT_UNDERLYING, true, true, true};
 const EventTypeEnum EventTypeEnum::THEO_PRICE{DXFG_EVENT_THEO_PRICE, true, true, true};
@@ -128,7 +128,7 @@ const EventTypeEnum EventTypeEnum::CONFIGURATION{DXFG_EVENT_CONFIGURATION, true}
 const EventTypeEnum EventTypeEnum::MESSAGE{DXFG_EVENT_MESSAGE, false};
 const EventTypeEnum EventTypeEnum::TIME_AND_SALE{DXFG_EVENT_TIME_AND_SALE, false, true, true};
 
-//const EventTypeEnum EventTypeEnum::ORDER_BASE{DXFG_EVENT_ORDER_BASE, false, true};
+// const EventTypeEnum EventTypeEnum::ORDER_BASE{DXFG_EVENT_ORDER_BASE, false, true};
 
 const EventTypeEnum EventTypeEnum::ORDER{DXFG_EVENT_ORDER, false, true};
 const EventTypeEnum EventTypeEnum::ANALYTIC_ORDER{DXFG_EVENT_ANALYTIC_ORDER, false, true};
@@ -152,9 +152,6 @@ const EventFlag IndexedEvent::SNAPSHOT_BEGIN = EventFlag::SNAPSHOT_BEGIN;
 const EventFlag IndexedEvent::SNAPSHOT_END = EventFlag::SNAPSHOT_END;
 const EventFlag IndexedEvent::SNAPSHOT_SNIP = EventFlag::SNAPSHOT_SNIP;
 const EventFlag IndexedEvent::SNAPSHOT_MODE = EventFlag::SNAPSHOT_MODE;
-
-
-auto s = DXFeedSubscription({EventTypeEnum::QUOTE});
 
 } // namespace dxfcpp
 

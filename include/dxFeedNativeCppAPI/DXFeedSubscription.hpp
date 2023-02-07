@@ -36,7 +36,7 @@ struct DXFeedSubscription : std::enable_shared_from_this<DXFeedSubscription> {
                 return;
             }
 
-            for (auto i = l.size; i >= 0; i--) {
+            for (auto i = l.size - 1; i >= 0; i--) {
                 delete l.elements[i];
             }
 
