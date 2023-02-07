@@ -532,50 +532,45 @@ struct LastingEvent {
  *
  * Time-series events are a more specific subtype of IndexedEvent.
  * All general documentation and <a href="IndexedEvent.html#eventFlagsSection">Event Flags</a> section, in particular,
- * applies to time-series events. However, the time-series events never come from multiple sources for the
- * same symbol and their @ref #getSource() source} is always {@link IndexedEventSource#DEFAULT DEFAULT}.
+ * applies to time-series events. However, the time-series events never come from multiple sources for the same symbol
+ * and their @ref #getSource() "source" is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
- * <p>Unlike a general {@link IndexedEvent} that is subscribed to via {@link DXFeedSubscription} using a plain symbol
- * to receive all events for all indices, time-series events are typically subscribed to using
- * {@link TimeSeriesSubscriptionSymbol} class to specific time range of the subscription. There is a dedicated
- * {@link DXFeedTimeSeriesSubscription} class that is designed to simplify the task of subscribing for
- * time-series events.
+ * Unlike a general IndexedEvent that is subscribed to via DXFeedSubscription} using a plain symbol to receive all
+ * events for all indices, time-series events are typically subscribed to using TimeSeriesSubscriptionSymbol class to
+ * specific time range of the subscription. There is a dedicated DXFeedTimeSeriesSubscription class that is designed
+ * to simplify the task of subscribing for time-series events.
  *
- * <p>{@link TimeSeriesEventModel} class handles all the snapshot and transaction logic and conveniently represents
- * a list of current time-series events ordered by their {@link #getTime() time}.
- * It relies on the code of {@link AbstractIndexedEventModel} to handle this logic.
- * Use the source code of {@link AbstractIndexedEventModel} for clarification on transactions and snapshot logic.
+ * TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents a list of
+ * current time-series events ordered by their @ref ::getTime() "time". It relies on the code
+ * of AbstractIndexedEventModel to handle this logic.
+ * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
- * <p> Classes that implement this interface may also implement
- * {@link LastingEvent} interface, which makes it possible to
- * use {@link DXFeed#getLastEvent(LastingEvent) DXFeed.getLastEvent} method to
- * retrieve the last event for the corresponding symbol.
+ * Classes that implement this interface may also implement LastingEvent interface, which makes it possible to use
+ * DXFeed::getLastEvent() method to retrieve the last event for the corresponding symbol.
  *
  * <h3>Publishing time-series</h3>
  *
- * When publishing time-series event with {@link DXPublisher#publishEvents(Collection) DXPublisher.publishEvents}
- * method on incoming {@link TimeSeriesSubscriptionSymbol} the snapshot of currently known events for the
- * requested time range has to be published first.
+ * When publishing time-series event with DXPublisher::publishEvents() method on incoming TimeSeriesSubscriptionSymbol
+ * the snapshot of currently known events for the requested time range has to be published first.
  *
- * <p> A snapshot is published in the <em>descending</em> order of {@link #getIndex() index}
- * (which is the same as the descending order of {@link #getTime() time}), starting with
- * an event with the largest index and marking it with {@link #SNAPSHOT_BEGIN} bit in {@link #getEventFlags()
- * eventFlags}. All other event follow with default, zero {@link #getEventFlags() eventFlags}. If there is no actual
- * event at the time that was specified in subscription
- * {@link TimeSeriesSubscriptionSymbol#getFromTime() fromTime} property, then event with the corresponding time
- * has to be created anyway and published. To distinguish it from the actual event, it has to be marked
- * with {@link #REMOVE_EVENT} bit in {@link #getEventFlags() eventFlags}.
- * {@link #SNAPSHOT_END} bit in this event's {@link #getEventFlags() eventFlags}
- * is optional during publishing. It will be properly set on receiving end anyway. Note, that publishing
- * any event with time that is below subscription {@link TimeSeriesSubscriptionSymbol#getFromTime() fromTime}
- * also works as a legal indicator for the end of the snapshot.
+ * A snapshot is published in the <em>descending</em> order of @ref ::getIndex() "index" (which is the same as the
+ * descending order of @ref ::getTime() "time"), starting with an event with the largest index and marking it
+ * with ::SNAPSHOT_BEGIN bit in @ref ::getEventFlags "eventFlags". All other event follow with default, zero
+ * @ref ::getEventFlags() "eventFlags". If there is no actual event at the time that was specified in subscription
+ * @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" property, then event with the corresponding time
+ * has to be created anyway and published. To distinguish it from the actual event, it has to be marked with
+ * ::REMOVE_EVENT bit in @ref ::getEventFlags() "eventFlags". ::SNAPSHOT_END bit in this event's
+ * @ref #getEventFlags() "eventFlags" s optional during publishing. It will be properly set on receiving end anyway.
+ * Note, that publishing any event with time that is below subscription
+ * @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" also works as a legal indicator for the end of the
+ * snapshot.
  *
- * <p>Both {@link TimeAndSale} and {@link Candle} time-series events define a sequence property that is mixed
- * into an {@link #getIndex() index} property. It provides a way to distinguish different events at the same time.
- * For a snapshot end event the sequence has to be left at its default zero value. It means, that if there is
- * an actual event to be published at subscription {@link TimeSeriesSubscriptionSymbol#getFromTime() fromTime}
- * with non-zero sequence, then generation of an additional snapshot end event with the subscription
- * {@link TimeSeriesSubscriptionSymbol#getFromTime() fromTime} and zero sequence is still required.
+ * Both TimeAndSale and Candle time-series events define a sequence property that is mixed into an
+ * @ref ::getIndex() "index" property. It provides a way to distinguish different events at the same time. For a
+ * snapshot end event the sequence has to be left at its default zero value. It means, that if there is an actual
+ * event to be published at subscription @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" with non-zero
+ * sequence, then generation of an additional snapshot end event with the subscription
+ * @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" and zero sequence is still required.
  */
 struct TimeSeriesEvent : public IndexedEvent {
     /// The alias to a type of shared pointer to the TimeSeriesEvent object
@@ -613,7 +608,7 @@ struct TimeSeriesEvent : public IndexedEvent {
      * Returns unique per-symbol index of this event.
      *
      * @return unique per-symbol index of this event.
-     * @deprecated Use {@link #getIndex()}
+     * @deprecated Use ::getIndex()
      */
     virtual std::uint64_t getEventId() const { return getIndex(); }
 
@@ -622,8 +617,6 @@ struct TimeSeriesEvent : public IndexedEvent {
      * The timestamp is in milliseconds from midnight, January 1, 1970 UTC.
      *
      * @return timestamp of the event.
-     *
-     * @see System#currentTimeMillis()
      */
     virtual std::uint64_t getTime() const = 0;
 };
