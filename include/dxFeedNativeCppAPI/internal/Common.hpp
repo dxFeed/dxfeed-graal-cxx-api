@@ -13,6 +13,8 @@
 #include <sstream>
 #include <type_traits>
 
+#include <dxfg_javac.h>
+
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/std.h>
@@ -113,6 +115,53 @@ inline std::string debugPrefixStr() {
 
 template <typename... Args> inline void debug(std::string_view format, Args &&...args) {
     vprint(std::cerr, "{} {}\n", debugPrefixStr(), vformat(format, std::forward<Args>(args)...));
+}
+
+/**
+ * Non thread-safe
+ *
+ * @tparam HandleType The handle type (must be pointer)
+ */
+template <typename HandleType>
+    requires requires { std::is_pointer_v<HandleType>; }
+struct WithHandle {
+  protected:
+    HandleType handle_ = nullptr;
+
+    void releaseHandle() {
+        if constexpr (detail::isDebug) {
+            detail::debug("WithHandle::releaseHandle(handle_ = {})", bit_cast<std::size_t>(handle_));
+        }
+
+        if (!handle_) {
+            return;
+        }
+
+        runIsolatedOrElse(
+            [this](auto threadHandle) {
+                if (handle_) {
+                    return dxfg_JavaObjectHandler_release(threadHandle,
+                                                          detail::bit_cast<dxfg_java_object_handler *>(handle_)) == 0;
+                }
+
+                return true;
+            },
+            false);
+
+        handle_ = nullptr;
+    }
+};
+
+template <typename It>
+    requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }
+std::string namesToString(It begin, It end) {
+    std::string result{"["};
+
+    for (auto it = begin; it != end; it++) {
+        result += fmt::format("'{}'{}", it->getName(), std::next(it) == end ? "" : ", ");
+    }
+
+    return result + "]";
 }
 
 } // namespace dxfcpp::detail

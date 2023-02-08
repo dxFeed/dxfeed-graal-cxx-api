@@ -19,6 +19,8 @@ class EventTypeEnum {
     /// The dxFeed Graal Native C-API event class id corresponding to the current enum element.
     dxfg_event_clazz_t dxFeedGraalNativeApiEventClazz_;
 
+    std::string name_;
+
     // A flag that indicates that the current enum element is characterizing the Lasting (TICKER) event.
     bool isLasting_;
 
@@ -32,11 +34,11 @@ class EventTypeEnum {
     // TimeSeries) event.
     bool isOnlyIndexed_;
 
-    EventTypeEnum(dxfg_event_clazz_t dxFeedGraalNativeApiEventClazz, bool isLasting, bool isIndexed = false,
-                  bool isTimeSeries = false)
-        : dxFeedGraalNativeApiEventClazz_{dxFeedGraalNativeApiEventClazz}, isLasting_{isLasting},
-          isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries}, isOnlyIndexed_{isIndexed &&
-                                                                                             !isTimeSeries} {}
+    EventTypeEnum(dxfg_event_clazz_t dxFeedGraalNativeApiEventClazz, std::string name, bool isLasting,
+                  bool isIndexed = false, bool isTimeSeries = false)
+        : dxFeedGraalNativeApiEventClazz_{dxFeedGraalNativeApiEventClazz}, name_{std::move(name)},
+          isLasting_{isLasting}, isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries},
+          isOnlyIndexed_{isIndexed && !isTimeSeries} {}
 
   public:
     static const EventTypeEnum QUOTE;
@@ -62,12 +64,19 @@ class EventTypeEnum {
     static const EventTypeEnum SPREAD_ORDER;
     static const EventTypeEnum SERIES;
 
-    explicit EventTypeEnum() : EventTypeEnum{static_cast<dxfg_event_clazz_t>(-1), false} {}
+    explicit EventTypeEnum() : EventTypeEnum{static_cast<dxfg_event_clazz_t>(-1), "INVALID", false} {}
 
     /**
      * @return The dxFeed Graal Native C-API event class id
      */
     dxfg_event_clazz_t getDxFeedGraalNativeApiEventClazz() const { return dxFeedGraalNativeApiEventClazz_; }
+
+    /**
+     * @return The current enum element name
+     */
+    const std::string& getName() const {
+        return name_;
+    }
 
     bool operator==(const EventTypeEnum &eventTypeEnum) const {
         return dxFeedGraalNativeApiEventClazz_ == eventTypeEnum.dxFeedGraalNativeApiEventClazz_;
@@ -391,7 +400,8 @@ class EventFlag final {
 
   public:
     /**
-     * `0x01` - A bitmask to get transaction pending indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     * `0x01` - A bitmask to get transaction pending indicator from the value of @ref ::getEventFlags() "eventFlags"
+     * property.
      *
      * ```cpp
      * bool txPending = (event-> getEventFlags() & IndexedEvent::TX_PENDING) != 0;
@@ -413,7 +423,8 @@ class EventFlag final {
     static const EventFlag REMOVE_EVENT;
 
     /**
-     * `0x04` - A bitmask to get snapshot begin indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     * `0x04` - A bitmask to get snapshot begin indicator from the value of @ref ::getEventFlags() "eventFlags"
+     * property.
      *
      * ```cpp
      * bool snapshotBegin = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;

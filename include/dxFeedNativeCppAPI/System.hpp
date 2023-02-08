@@ -31,7 +31,7 @@ struct System {
             detail::debug("System::setProperty(key = '{}', value = '{}')", key, value);
         }
 
-        auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
+        auto result = detail::runIsolatedOrElse(
             [key = key, value = value](auto threadHandle) {
                 return detail::CEntryPointErrors::valueOf(dxfg_system_set_property(
                            threadHandle, key.c_str(), value.c_str())) == detail::CEntryPointErrors::NO_ERROR;
@@ -56,7 +56,7 @@ struct System {
             detail::debug("System::getProperty(key = {})", key);
         }
 
-        auto result = detail::Isolate::getInstance()->runIsolatedOrElse(
+        auto result = detail::runIsolatedOrElse(
             [key = key](auto threadHandle) {
                 std::string resultString{};
 

@@ -13,20 +13,23 @@
 
 #include <memory>
 #include <mutex>
+#include <unordered_set>
 
 namespace dxfcpp {
 
 struct DXEndpoint;
+class DXFeedSubscription;
 
 /**
  * Main entry class for dxFeed API (<b>read it first</b>).
  */
-struct DXFeed : std::enable_shared_from_this<DXFeed> {
+struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_feed_t *> {
     friend struct DXEndpoint;
 
   private:
     mutable std::recursive_mutex mtx_{};
-    dxfg_feed_t *handle_{};
+
+    std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 
     static std::shared_ptr<DXFeed> create(dxfg_feed_t *feedHandle) {
         std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
@@ -36,27 +39,8 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
         return feed;
     }
 
-    void releaseHandleImpl() {
-        if (!handle_) {
-            return;
-        }
-
-        detail::Isolate::getInstance()->runIsolatedOrElse(
-            [this](auto threadHandle) {
-                if (handle_) {
-                    return dxfg_JavaObjectHandler_release(threadHandle,
-                                                          detail::bit_cast<dxfg_java_object_handler *>(handle_)) == 0;
-                }
-
-                return true;
-            },
-            false);
-
-        handle_ = nullptr;
-    }
-
   protected:
-    DXFeed() : mtx_(), handle_() {
+    DXFeed() : mtx_() {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeed()");
         }
@@ -65,10 +49,12 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
   public:
     virtual ~DXFeed() {
         if constexpr (detail::isDebug) {
-            detail::debug("DXFeed{{{}}}::~DXFeed()", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("{}::~DXFeed()", toString());
         }
 
-        releaseHandleImpl();
+        std::lock_guard guard(mtx_);
+
+        releaseHandle();
     }
 
     /**
@@ -80,6 +66,14 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
      * @return The DXFeed instance
      */
     static std::shared_ptr<DXFeed> getInstance();
+
+    void attachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
+
+    std::string toString() const {
+        std::lock_guard lock(mtx_);
+
+        return detail::vformat("DXFeed{{{}}}", detail::bit_cast<std::size_t>(handle_));
+    }
 };
 
 } // namespace dxfcpp

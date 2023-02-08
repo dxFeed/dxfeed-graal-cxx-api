@@ -75,3 +75,5 @@ if (DXFC_BUILD_UNIT_TESTS)
     include(CTest)
     add_subdirectory(tests)
 endif ()
+
+add_subdirectory(samples/cpp/PrintQuoteEvents)

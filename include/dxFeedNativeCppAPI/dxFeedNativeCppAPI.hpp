@@ -7,7 +7,7 @@
 #include "internal/Common.hpp"
 
 #include "DXEndpoint.hpp"
-#include "DXFeed.hpp"
 #include "DXEvent.hpp"
+#include "DXFeed.hpp"
 #include "DXFeedSubscription.hpp"
 #include "System.hpp"

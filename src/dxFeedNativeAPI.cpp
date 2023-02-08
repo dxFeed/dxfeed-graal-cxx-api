@@ -104,36 +104,28 @@ const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabl
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::INSTANCES{};
 std::unordered_map<DXEndpoint *, std::shared_ptr<DXEndpoint>> DXEndpoint::ROOT_REFERENCES{};
 
-std::shared_ptr<DXFeed> DXFeed::getInstance() {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXFeed::getInstance()");
-    }
+const EventTypeEnum EventTypeEnum::QUOTE{DXFG_EVENT_QUOTE, "QUOTE", true};
+const EventTypeEnum EventTypeEnum::PROFILE{DXFG_EVENT_PROFILE, "PROFILE", true};
+const EventTypeEnum EventTypeEnum::SUMMARY{DXFG_EVENT_SUMMARY, "SUMMARY", true};
+const EventTypeEnum EventTypeEnum::GREEKS{DXFG_EVENT_GREEKS, "GREEKS", true, true, true};
+const EventTypeEnum EventTypeEnum::CANDLE{DXFG_EVENT_CANDLE, "CANDLE", true, true, true};
 
-    return DXEndpoint::getInstance()->getFeed();
-}
+// const EventTypeEnum EventTypeEnum::DAILY_CANDLE{DXFG_EVENT_DAILY_CANDLE, "DAILY_CANDLE", true, true, true};
 
-const EventTypeEnum EventTypeEnum::QUOTE{DXFG_EVENT_QUOTE, true};
-const EventTypeEnum EventTypeEnum::PROFILE{DXFG_EVENT_PROFILE, true};
-const EventTypeEnum EventTypeEnum::SUMMARY{DXFG_EVENT_SUMMARY, true};
-const EventTypeEnum EventTypeEnum::GREEKS{DXFG_EVENT_GREEKS, true, true, true};
-const EventTypeEnum EventTypeEnum::CANDLE{DXFG_EVENT_CANDLE, true, true, true};
+const EventTypeEnum EventTypeEnum::UNDERLYING{DXFG_EVENT_UNDERLYING, "UNDERLYING", true, true, true};
+const EventTypeEnum EventTypeEnum::THEO_PRICE{DXFG_EVENT_THEO_PRICE, "THEO_PRICE", true, true, true};
+const EventTypeEnum EventTypeEnum::TRADE{DXFG_EVENT_TRADE, "TRADE", true};
+const EventTypeEnum EventTypeEnum::TRADE_ETH{DXFG_EVENT_TRADE_ETH, "TRADE_ETH", true};
+const EventTypeEnum EventTypeEnum::CONFIGURATION{DXFG_EVENT_CONFIGURATION, "CONFIGURATION", true};
+const EventTypeEnum EventTypeEnum::MESSAGE{DXFG_EVENT_MESSAGE, "MESSAGE", false};
+const EventTypeEnum EventTypeEnum::TIME_AND_SALE{DXFG_EVENT_TIME_AND_SALE, "TIME_AND_SALE", false, true, true};
 
-// const EventTypeEnum EventTypeEnum::DAILY_CANDLE{DXFG_EVENT_DAILY_CANDLE, true, true, true};
+// const EventTypeEnum EventTypeEnum::ORDER_BASE{DXFG_EVENT_ORDER_BASE, "ORDER_BASE", false, true};
 
-const EventTypeEnum EventTypeEnum::UNDERLYING{DXFG_EVENT_UNDERLYING, true, true, true};
-const EventTypeEnum EventTypeEnum::THEO_PRICE{DXFG_EVENT_THEO_PRICE, true, true, true};
-const EventTypeEnum EventTypeEnum::TRADE{DXFG_EVENT_TRADE, true};
-const EventTypeEnum EventTypeEnum::TRADE_ETH{DXFG_EVENT_TRADE_ETH, true};
-const EventTypeEnum EventTypeEnum::CONFIGURATION{DXFG_EVENT_CONFIGURATION, true};
-const EventTypeEnum EventTypeEnum::MESSAGE{DXFG_EVENT_MESSAGE, false};
-const EventTypeEnum EventTypeEnum::TIME_AND_SALE{DXFG_EVENT_TIME_AND_SALE, false, true, true};
-
-// const EventTypeEnum EventTypeEnum::ORDER_BASE{DXFG_EVENT_ORDER_BASE, false, true};
-
-const EventTypeEnum EventTypeEnum::ORDER{DXFG_EVENT_ORDER, false, true};
-const EventTypeEnum EventTypeEnum::ANALYTIC_ORDER{DXFG_EVENT_ANALYTIC_ORDER, false, true};
-const EventTypeEnum EventTypeEnum::SPREAD_ORDER{DXFG_EVENT_SPREAD_ORDER, false, true};
-const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, false, true};
+const EventTypeEnum EventTypeEnum::ORDER{DXFG_EVENT_ORDER, "ORDER", false, true};
+const EventTypeEnum EventTypeEnum::ANALYTIC_ORDER{DXFG_EVENT_ANALYTIC_ORDER, "ANALYTIC_ORDER", false, true};
+const EventTypeEnum EventTypeEnum::SPREAD_ORDER{DXFG_EVENT_SPREAD_ORDER, "SPREAD_ORDER", false, true};
+const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, "SERIES", false, true};
 
 const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
 
@@ -152,6 +144,35 @@ const EventFlag IndexedEvent::SNAPSHOT_BEGIN = EventFlag::SNAPSHOT_BEGIN;
 const EventFlag IndexedEvent::SNAPSHOT_END = EventFlag::SNAPSHOT_END;
 const EventFlag IndexedEvent::SNAPSHOT_SNIP = EventFlag::SNAPSHOT_SNIP;
 const EventFlag IndexedEvent::SNAPSHOT_MODE = EventFlag::SNAPSHOT_MODE;
+
+std::shared_ptr<DXFeed> DXFeed::getInstance() {
+    if constexpr (detail::isDebug) {
+        detail::debug("DXFeed::getInstance()");
+    }
+
+    return DXEndpoint::getInstance()->getFeed();
+}
+
+void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::attachSubscription({})", toString(), subscription->toString());
+    }
+
+    std::lock_guard guard(mtx_);
+
+    if (!handle_ || !subscription->handle_) {
+        return;
+    }
+
+    if (detail::runIsolatedOrElse(
+            [this, subHandle = subscription->handle_](auto threadHandle) {
+                return dxfg_DXFeed_attachSubscription(threadHandle, handle_, subHandle) == 0;
+            },
+            false)) {
+
+        subscriptions_.emplace(subscription);
+    }
+}
 
 } // namespace dxfcpp
 

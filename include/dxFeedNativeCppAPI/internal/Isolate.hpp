@@ -111,7 +111,7 @@ class Isolate final {
 
         std::string toString() const {
             return vformat("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}", bit_cast<std::size_t>(handle),
-                               isMain, tid, idx);
+                           isMain, tid, idx);
         }
     };
 
@@ -129,7 +129,7 @@ class Isolate final {
 
         if constexpr (isDebugIsolates) {
             debug("Isolate{{{}, main = {}, current = {}}}()", bit_cast<std::size_t>(handle),
-                       mainIsolateThread_.toString(), currentIsolateThread_.toString());
+                  mainIsolateThread_.toString(), currentIsolateThread_.toString());
         }
     }
 
@@ -264,9 +264,18 @@ class Isolate final {
         std::lock_guard lock(mutex_);
 
         return vformat("Isolate{{{}, main = {}, current = {}}}", bit_cast<std::size_t>(handle_),
-                           mainIsolateThread_.toString(), currentIsolateThread_.toString());
+                       mainIsolateThread_.toString(), currentIsolateThread_.toString());
     }
 };
+
+template <typename F> auto runIsolated(F &&f) { return Isolate::getInstance()->runIsolated(std::forward<F>(f)); }
+
+template <typename F, typename R>
+    requires std::convertible_to<R, std::invoke_result_t<F &&, GraalIsolateThreadHandle>>
+auto runIsolatedOrElse(F &&f, R defaultValue) {
+    return Isolate::getInstance()->runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue));
+}
+
 } // namespace detail
 
 } // namespace dxfcpp

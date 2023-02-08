@@ -212,3 +212,12 @@ TEST_CASE("dxfc_dxendpoint_builder_t", "[dxfc_dxendpoint_t]") {
 
     dxfc_dxendpoint_close(endpoint);
 }
+
+TEST_CASE("DXFeedSubscription", "[dxfcpp::DXFeedSubscription]") {
+    auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
+    auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
+    auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
+
+    dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
+    dxfcpp::DXFeed::getInstance();
+}
