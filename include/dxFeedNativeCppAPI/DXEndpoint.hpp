@@ -498,7 +498,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
 
   private:
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
-    static std::unordered_map<DXEndpoint *, std::shared_ptr<DXEndpoint>> ROOT_REFERENCES;
 
     mutable std::recursive_mutex mtx_{};
     Role role_ = Role::FEED;
@@ -536,16 +535,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
 
         endpoint->stateChangeListenerHandle_ = result;
         endpoint->setStateChangeListenerImpl();
-
-        ROOT_REFERENCES[endpoint.get()] = endpoint;
-
-        endpoint->onStateChange_ %= [endpoint = endpoint](State oldState, State newState) {
-            if (newState == State::CLOSED) {
-                if constexpr (detail::isDebug) {
-                    detail::debug("DXEndpoint::onStateChange() = CLOSED");
-                }
-            }
-        };
 
         return endpoint;
     }

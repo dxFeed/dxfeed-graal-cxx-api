@@ -136,9 +136,9 @@ TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
-    endpoint->disconnect();
-    endpoint->connect("demo.dxfeed.com:7300");
-    endpoint->close();
+    //endpoint->disconnect();
+    //endpoint->connect("demo.dxfeed.com:7300");
+    //endpoint->close();
 }
 
 auto cApiStateToString(dxfc_dxendpoint_state_t state) {
