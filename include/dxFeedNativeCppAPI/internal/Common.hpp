@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 #include <type_traits>
+#include <mutex>
 
 #include <dxfg_javac.h>
 
