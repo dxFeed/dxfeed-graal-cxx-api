@@ -253,10 +253,11 @@ class Isolate final {
             debug("~{}()", toString());
         }
 
-        std::lock_guard guard{mtx_};
-        mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
+        if constexpr (!isClangFlavouredCompiler) {
+            std::lock_guard guard{mtx_};
+        }
 
-        //tryCallWithLock(mtx_, [this] { mainIsolateThread_.detachAllThreadsAndTearDownIsolate(); });
+        mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
     }
 
     std::string toString() const {
