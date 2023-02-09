@@ -21,7 +21,7 @@
 #include <fmt/std.h>
 
 namespace dxfcpp::detail {
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(DXFCPP_DEBUG)
 constexpr bool isDebug = false;
 constexpr bool isDebugIsolates = false;
 #else
