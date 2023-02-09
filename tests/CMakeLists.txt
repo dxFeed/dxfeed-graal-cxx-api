@@ -9,7 +9,7 @@ set(DXFC_TEST_SOURCES dxFeedNativeSystemTest.cpp)
 
 string(REPLACE ".cpp" "" DXFC_TEST_BASENAMES "${DXFC_TEST_SOURCES}")
 set(DXFC_TEST_TARGETS ${DXFC_TEST_BASENAMES})
-add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
+#add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
 foreach (dxfc_test_target ${DXFC_TEST_TARGETS})
     add_executable(${dxfc_test_target} ${dxfc_test_target}.cpp)
