@@ -93,6 +93,7 @@ class Isolate final {
 
                 handle = nullptr;
             }
+            debug("IsolateThread::detachAllThreadsAndTearDownIsolate(5)");
 
             return result;
         }
@@ -265,6 +266,7 @@ class Isolate final {
 
         debug("~Isolate(2)");
         mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
+        debug("~Isolate(3)");
     }
 
     std::string toString() const {
