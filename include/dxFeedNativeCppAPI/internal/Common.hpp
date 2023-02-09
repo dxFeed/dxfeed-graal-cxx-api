@@ -35,6 +35,12 @@ constexpr bool isDebugIsolates = false;
 
 #endif
 
+#if defined(__clang__)
+constexpr bool isClangFlavouredCompiler = true;
+#else
+constexpr bool isClangFlavouredCompiler = false;
+#endif
+
 template <typename... T> constexpr void ignore_unused(const T &...) {}
 
 constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept -> bool {

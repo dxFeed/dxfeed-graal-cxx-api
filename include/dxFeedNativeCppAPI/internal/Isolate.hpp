@@ -115,14 +115,13 @@ class Isolate final {
         }
     };
 
-    mutable std::recursive_mutex mutex_{};
-
-    GraalIsolateHandle handle_;
+    mutable std::recursive_mutex mtx_{};
+    GraalIsolateHandle handle_ = nullptr;
     IsolateThread mainIsolateThread_;
     static thread_local IsolateThread currentIsolateThread_;
 
     Isolate(GraalIsolateHandle handle, GraalIsolateThreadHandle mainIsolateThreadHandle)
-        : handle_{handle}, mainIsolateThread_{mainIsolateThreadHandle, true} {
+        : mtx_{}, handle_{handle}, mainIsolateThread_{mainIsolateThreadHandle, true} {
 
         currentIsolateThread_.handle = mainIsolateThreadHandle;
         currentIsolateThread_.isMain = true;
@@ -254,13 +253,19 @@ class Isolate final {
             debug("~{}()", toString());
         }
 
-        mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
+        tryCallWithLock(mtx_, [this] { mainIsolateThread_.detachAllThreadsAndTearDownIsolate(); });
 
-        //tryCallWithLock(mutex_, [this] { mainIsolateThread_.detachAllThreadsAndTearDownIsolate(); });
+/*
+        if constexpr (isClangFlavouredCompiler) {
+            mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
+        } else {
+            tryCallWithLock(mtx_, [this] { mainIsolateThread_.detachAllThreadsAndTearDownIsolate(); });
+        }
+        */
     }
 
     std::string toString() const {
-        std::lock_guard lock(mutex_);
+        std::lock_guard lock(mtx_);
 
         return vformat("Isolate{{{}, main = {}, current = {}}}", bit_cast<std::size_t>(handle_),
                        mainIsolateThread_.toString(), currentIsolateThread_.toString());
