@@ -265,7 +265,7 @@ class Isolate final {
         }
 
         debug("~Isolate(2)");
-        mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
+        //mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
         debug("~Isolate(3)");
     }
 
