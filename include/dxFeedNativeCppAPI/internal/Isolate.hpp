@@ -68,11 +68,13 @@ class Isolate final {
         }
 
         CEntryPointErrors detachAllThreadsAndTearDownIsolate() {
+            debug("IsolateThread::detachAllThreadsAndTearDownIsolate(1)");
             if constexpr (isDebugIsolates) {
                 debug("{}::detachAllThreadsAndTearDownIsolate()", toString());
             }
 
             if (!handle) {
+                debug("IsolateThread::detachAllThreadsAndTearDownIsolate(2)");
                 if constexpr (isDebugIsolates) {
                     debug("\tNot attached");
                 }
@@ -80,9 +82,11 @@ class Isolate final {
                 return CEntryPointErrors::NO_ERROR;
             }
 
+            debug("IsolateThread::detachAllThreadsAndTearDownIsolate(3)");
             auto result = CEntryPointErrors::valueOf(graal_detach_all_threads_and_tear_down_isolate(handle));
 
             if (result == CEntryPointErrors::NO_ERROR) {
+                debug("IsolateThread::detachAllThreadsAndTearDownIsolate(4)");
                 if constexpr (isDebugIsolates) {
                     debug("\tAll threads have been detached. The isolate has been teared down.");
                 }
@@ -249,14 +253,17 @@ class Isolate final {
     }
 
     ~Isolate() {
+        debug("~Isolate()");
         if constexpr (isDebugIsolates) {
             debug("~{}()", toString());
         }
 
         if constexpr (!isClangFlavouredCompiler) {
+            debug("~Isolate(1)");
             std::lock_guard guard{mtx_};
         }
 
+        debug("~Isolate(2)");
         mainIsolateThread_.detachAllThreadsAndTearDownIsolate();
     }
 
