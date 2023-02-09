@@ -52,9 +52,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
             detail::debug("{}::~DXFeed()", toString());
         }
 
-        std::lock_guard guard(mtx_);
-
-        releaseHandle();
+        detail::tryCallWithLock(mtx_, [this] { releaseHandle(); });
     }
 
     /**
@@ -70,7 +68,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
     void attachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
 
     std::string toString() const {
-        std::lock_guard lock(mtx_);
+        std::lock_guard guard(mtx_);
 
         return detail::vformat("DXFeed{{{}}}", detail::bit_cast<std::size_t>(handle_));
     }

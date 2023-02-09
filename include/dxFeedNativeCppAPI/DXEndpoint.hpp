@@ -587,11 +587,11 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
             detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", detail::bit_cast<std::size_t>(handle_));
         }
 
-        std::lock_guard guard(mtx_);
-
-        closeImpl();
-        releaseStateChangeListenerImpl();
-        releaseHandle();
+        detail::tryCallWithLock(mtx_, [this] {
+            closeImpl();
+            releaseStateChangeListenerImpl();
+            releaseHandle();
+        });
     }
 
     /**
@@ -1151,9 +1151,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
                 detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", detail::bit_cast<std::size_t>(handle_));
             }
 
-            std::lock_guard guard(mtx_);
-
-            releaseHandle();
+            detail::tryCallWithLock(mtx_, [this] { releaseHandle(); });
         }
 
         /**

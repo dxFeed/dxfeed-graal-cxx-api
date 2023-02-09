@@ -74,9 +74,7 @@ class EventTypeEnum {
     /**
      * @return The current enum element name
      */
-    const std::string& getName() const {
-        return name_;
-    }
+    const std::string &getName() const { return name_; }
 
     bool operator==(const EventTypeEnum &eventTypeEnum) const {
         return dxFeedGraalNativeApiEventClazz_ == eventTypeEnum.dxFeedGraalNativeApiEventClazz_;

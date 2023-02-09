@@ -96,9 +96,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
             detail::debug("{}::~DXFeedSubscription()", toString());
         }
 
-        std::lock_guard guard(mtx_);
-
-        releaseHandle();
+        detail::tryCallWithLock(mtx_, [this] { releaseHandle(); });
     }
 
     static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) noexcept {

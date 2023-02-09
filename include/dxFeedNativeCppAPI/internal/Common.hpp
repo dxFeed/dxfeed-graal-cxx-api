@@ -164,4 +164,17 @@ std::string namesToString(It begin, It end) {
     return result + "]";
 }
 
+template <typename M, typename F, typename... Args>
+inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
+    std::once_flag once{};
+
+    try {
+        std::lock_guard guard{mtx};
+
+        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
+    } catch (...) {
+        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
+    }
+}
+
 } // namespace dxfcpp::detail

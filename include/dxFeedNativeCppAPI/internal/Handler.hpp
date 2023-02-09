@@ -49,7 +49,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
         return std::async(
             std::launch::async,
             [this](ArgTypes &&...args) {
-                std::lock_guard<std::recursive_mutex> guard{listenersMutex_};
+                std::lock_guard guard{listenersMutex_};
 
                 for (auto &listener : listeners_) {
                     listener.second(args...);
@@ -82,7 +82,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
         auto f = handleImpl(std::forward<ArgTypes>(args)...);
 
         {
-            std::lock_guard<std::recursive_mutex> guard{mainFuturesMutex_};
+            std::lock_guard guard{mainFuturesMutex_};
 
             if (mainFutures_.size() < mainFuturesSize_) {
                 mainFutures_.emplace_back(f);
@@ -109,7 +109,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      * @return The listener id
      */
     std::size_t add(ListenerType &&listener) {
-        std::lock_guard<std::recursive_mutex> guard{listenersMutex_};
+        std::lock_guard guard{listenersMutex_};
 
         lastId_++;
         listeners_.emplace(lastId_, std::forward<ListenerType>(listener));
@@ -125,7 +125,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      * @return The listener id
      */
     std::size_t addLowPriority(ListenerType &&listener) {
-        std::lock_guard<std::recursive_mutex> guard{listenersMutex_};
+        std::lock_guard guard{listenersMutex_};
 
         lastId_++;
         lowPriorityListeners_.emplace(lastId_, std::forward<ListenerType>(listener));
@@ -156,7 +156,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      * @param id The listener id
      */
     void remove(std::size_t id) {
-        std::lock_guard<std::recursive_mutex> guard{listenersMutex_};
+        std::lock_guard guard{listenersMutex_};
 
         if (listeners_.count(id) > 0) {
             listeners_.erase(id);
