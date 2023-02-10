@@ -723,4 +723,8 @@ struct TimeSeriesEvent : public IndexedEvent {
     virtual std::uint64_t getTime() const = 0;
 };
 
+template <typename Collection>
+concept ElementIsEventTypeEnum =
+    requires(Collection &&c) { std::is_same_v<std::decay_t<decltype(*std::begin(c))>, EventTypeEnum>; };
+
 } // namespace dxfcpp

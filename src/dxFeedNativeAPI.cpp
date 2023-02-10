@@ -144,7 +144,7 @@ const EventFlag IndexedEvent::SNAPSHOT_END = EventFlag::SNAPSHOT_END;
 const EventFlag IndexedEvent::SNAPSHOT_SNIP = EventFlag::SNAPSHOT_SNIP;
 const EventFlag IndexedEvent::SNAPSHOT_MODE = EventFlag::SNAPSHOT_MODE;
 
-std::shared_ptr<DXFeed> DXFeed::getInstance() {
+std::shared_ptr<DXFeed> DXFeed::getInstance() noexcept {
     if constexpr (detail::isDebug) {
         detail::debug("DXFeed::getInstance()");
     }
@@ -152,14 +152,14 @@ std::shared_ptr<DXFeed> DXFeed::getInstance() {
     return DXEndpoint::getInstance()->getFeed();
 }
 
-void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) {
+void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
     if constexpr (detail::isDebug) {
         detail::debug("{}::attachSubscription({})", toString(), subscription->toString());
     }
 
     std::lock_guard guard(mtx_);
 
-    if (!handle_ || !subscription->handle_) {
+    if (!handle_ || !subscription || !subscription->handle_) {
         return;
     }
 
@@ -171,6 +171,60 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
 
         subscriptions_.emplace(subscription);
     }
+}
+
+void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::detachSubscription({})", toString(), subscription->toString());
+    }
+
+    std::lock_guard guard(mtx_);
+
+    if (!handle_ || !subscription || !subscription->handle_) {
+        return;
+    }
+
+    if (detail::runIsolatedOrElse(
+            [this, subHandle = subscription->handle_](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscription(threadHandle, handle_, subHandle) == 0;
+            },
+            false)) {
+
+        subscriptions_.erase(subscription);
+    }
+}
+
+void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::detachSubscriptionAndClear({})", toString(), subscription->toString());
+    }
+
+    std::lock_guard guard(mtx_);
+
+    if (!handle_ || !subscription || !subscription->handle_) {
+        return;
+    }
+
+    if (detail::runIsolatedOrElse(
+            [this, subHandle = subscription->handle_](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscriptionAndClear(threadHandle, handle_, subHandle) == 0;
+            },
+            false)) {
+
+        subscriptions_.erase(subscription);
+    }
+}
+
+std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::createSubscription(eventType = {})", toString(), eventType.getName());
+    }
+
+    auto sub = DXFeedSubscription::create(eventType);
+
+    attachSubscription(sub);
+
+    return sub;
 }
 
 } // namespace dxfcpp

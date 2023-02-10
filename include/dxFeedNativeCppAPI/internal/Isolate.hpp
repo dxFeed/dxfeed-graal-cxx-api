@@ -40,7 +40,7 @@ class Isolate final {
             }
         }
 
-        CEntryPointErrors detach() {
+        CEntryPointErrors detach() noexcept {
             if constexpr (isDebugIsolates) {
                 debug("{}::detach()", toString());
             }
@@ -67,7 +67,7 @@ class Isolate final {
             return result;
         }
 
-        CEntryPointErrors detachAllThreadsAndTearDownIsolate() {
+        CEntryPointErrors detachAllThreadsAndTearDownIsolate() noexcept {
             if constexpr (isDebugIsolates) {
                 debug("{}::detachAllThreadsAndTearDownIsolate()", toString());
             }
@@ -93,7 +93,7 @@ class Isolate final {
             return result;
         }
 
-        ~IsolateThread() {
+        ~IsolateThread() noexcept {
             if constexpr (isDebugIsolates) {
                 debug("~{}()", toString());
             }
@@ -120,7 +120,7 @@ class Isolate final {
     IsolateThread mainIsolateThread_;
     static thread_local IsolateThread currentIsolateThread_;
 
-    Isolate(GraalIsolateHandle handle, GraalIsolateThreadHandle mainIsolateThreadHandle)
+    Isolate(GraalIsolateHandle handle, GraalIsolateThreadHandle mainIsolateThreadHandle) noexcept
         : mtx_{}, handle_{handle}, mainIsolateThread_{mainIsolateThreadHandle, true} {
 
         currentIsolateThread_.handle = mainIsolateThreadHandle;
@@ -132,7 +132,7 @@ class Isolate final {
         }
     }
 
-    static std::shared_ptr<Isolate> create() {
+    static std::shared_ptr<Isolate> create() noexcept {
         if constexpr (isDebugIsolates) {
             debug("Isolate::create()");
         }
@@ -159,7 +159,7 @@ class Isolate final {
         return nullptr;
     }
 
-    CEntryPointErrors attach() {
+    CEntryPointErrors attach() noexcept {
         if constexpr (isDebugIsolates) {
             debug("{}::attach()", toString());
         }
@@ -202,7 +202,7 @@ class Isolate final {
     Isolate(const Isolate &) = delete;
     Isolate &operator=(const Isolate &) = delete;
 
-    static std::shared_ptr<Isolate> getInstance() {
+    static std::shared_ptr<Isolate> getInstance() noexcept {
         if constexpr (isDebugIsolates) {
             debug("Isolate::getInstance()");
         }

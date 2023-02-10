@@ -11,6 +11,8 @@
 #include "internal/Handler.hpp"
 #include "internal/Isolate.hpp"
 
+#include "DXEvent.hpp"
+
 #include <memory>
 #include <mutex>
 #include <unordered_set>
@@ -19,6 +21,7 @@ namespace dxfcpp {
 
 struct DXEndpoint;
 class DXFeedSubscription;
+class EventTypeEnum;
 
 /**
  * Main entry class for dxFeed API (<b>read it first</b>).
@@ -31,7 +34,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 
-    static std::shared_ptr<DXFeed> create(dxfg_feed_t *feedHandle) {
+    static std::shared_ptr<DXFeed> create(dxfg_feed_t *feedHandle) noexcept {
         std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
 
         feed->handle_ = feedHandle;
@@ -40,14 +43,14 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
     }
 
   protected:
-    DXFeed() : mtx_() {
+    DXFeed() noexcept : mtx_() {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeed()");
         }
     }
 
   public:
-    virtual ~DXFeed() {
+    virtual ~DXFeed() noexcept {
         if constexpr (detail::isDebug) {
             detail::debug("{}::~DXFeed()", toString());
         }
@@ -63,9 +66,41 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
      *
      * @return The DXFeed instance
      */
-    static std::shared_ptr<DXFeed> getInstance();
+    static std::shared_ptr<DXFeed> getInstance() noexcept;
 
-    void attachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
+    void attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept;
+
+    void detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept;
+
+    void detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) noexcept;
+
+    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypeEnum &eventType) noexcept;
+
+    template <typename EventTypeIt>
+    static std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) noexcept {
+        if constexpr (detail::isDebug) {
+            detail::debug("{}::createSubscription(eventTypes = {})", detail::namesToString(begin, end));
+        }
+
+        auto sub = DXFeedSubscription::create(begin, end);
+
+        attachSubscription(sub);
+
+        return sub;
+    }
+
+    static std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept;
+
+    template <typename EventTypesCollection>
+    static std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
+        requires requires { ElementIsEventTypeEnum<EventTypesCollection>; }
+    {
+        auto sub = DXFeedSubscription::create(eventTypes);
+
+        attachSubscription(sub);
+
+        return sub;
+    }
 
     std::string toString() const {
         std::lock_guard guard(mtx_);

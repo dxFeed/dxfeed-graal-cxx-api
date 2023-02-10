@@ -7,13 +7,11 @@
 
 #include <memory>
 
+#include "DXEvent.hpp"
+
 namespace dxfcpp {
 
 struct DXFeed;
-
-template <typename Collection>
-concept ElementIsEventTypeEnum =
-    requires(Collection &&c) { std::is_same_v<std::decay_t<decltype(*std::begin(c))>, EventTypeEnum>; };
 
 class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscription>,
                            public detail::WithHandle<dxfg_subscription_t *> {
