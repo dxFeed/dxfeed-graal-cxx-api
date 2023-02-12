@@ -108,7 +108,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
             return false;
         }
 
-        detail::runIsolatedOrElse(
+        return detail::runIsolatedOrElse(
             [this](auto threadHandle) { return dxfg_DXFeedSubscription_isClosed(threadHandle, handle_) != 0; }, false);
     }
 

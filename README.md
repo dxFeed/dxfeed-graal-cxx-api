@@ -25,9 +25,17 @@ API features via dxfeed-graal-native-api as a backend
 - [x] Endpoint entity
   - [x] C++ API
   - [x] C API
-- [ ] DXFeed "anchor" entity
-- [ ] DXPublisher "anchor" entity
+- [ ] DXFeed entity
+  - [ ] C++ API
+    - [x] getInstance, attachSub*, detachSub*, detachSubAndClear, createSub
+    - [ ] getLast*, getIndexed*, getTimeSeries*
+  - [ ] C API
+- [ ] DXPublisher entity
 - [ ] Subscription entity
+  - [ ] C++ API
+    - [x] constructors, create, attach, detach, close, clear, isClosed
+    - [ ] etc
+  - [ ] C API
 - [ ] Native events mapper
 - [x] System properties processing
   - [x] C++ API
@@ -51,6 +59,12 @@ API features via dxfeed-graal-native-api as a backend
   - [x] Endpoint entity
     - [x] C++ API
     - [x] C API
+  - [ ] DXFeed entity
+  - [ ] Subscription entity
+    - [ ] C++ API
+      - [x] constructors, create, attach, detach, close, clear, isClosed
+      - [ ] etc
+    - [ ] C API
 
 # How To Build
 
