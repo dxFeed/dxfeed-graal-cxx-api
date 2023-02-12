@@ -241,6 +241,22 @@ DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noex
     return sub;
 }
 
+void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::attach(feed = {})", toString(), feed->toString());
+    }
+
+    feed->attachSubscription(shared_from_this());
+}
+
+void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::detach(feed = {})", toString(), feed->toString());
+    }
+
+    feed->detachSubscription(shared_from_this());
+}
+
 } // namespace dxfcpp
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {

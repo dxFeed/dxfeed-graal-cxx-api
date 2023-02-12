@@ -10,6 +10,8 @@
 #include "internal/Common.hpp"
 #include "DXEvent.hpp"
 
+#include <unordered_set>
+
 namespace dxfcpp {
 
 struct DXFeed;
@@ -188,26 +190,14 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      *
      * @param feed The feed to attach to.
      */
-    void attach(std::shared_ptr<DXFeed> feed) noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::attach(feed = {})", toString(), feed->toString());
-        }
-
-        feed->attachSubscription(shared_from_this());
-    }
+    void attach(std::shared_ptr<DXFeed> feed) noexcept;
 
     /**
      * Detaches subscription from the specified feed.
      *
      * @param feed The feed to detach from.
      */
-    void detach(std::shared_ptr<DXFeed> feed) noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::detach(feed = {})", toString(), feed->toString());
-        }
-
-        feed->detachSubscription(shared_from_this());
-    }
+    void detach(std::shared_ptr<DXFeed> feed) noexcept;
 
     /**
      * Closes this subscription and makes it <i>permanently detached</i>.

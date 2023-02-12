@@ -12,6 +12,7 @@
 #include "internal/Isolate.hpp"
 
 #include "DXEvent.hpp"
+#include "DXFeedSubscription.hpp"
 
 #include <memory>
 #include <mutex>
@@ -20,7 +21,6 @@
 namespace dxfcpp {
 
 struct DXEndpoint;
-class DXFeedSubscription;
 class EventTypeEnum;
 
 /**
