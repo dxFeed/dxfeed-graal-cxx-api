@@ -102,7 +102,160 @@ const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
 const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
 
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::INSTANCES{};
-std::unordered_map<DXEndpoint *, std::shared_ptr<DXEndpoint>> DXEndpoint::ROOT_REFERENCES{};
+
+const EventTypeEnum EventTypeEnum::QUOTE{DXFG_EVENT_QUOTE, "QUOTE", true};
+const EventTypeEnum EventTypeEnum::PROFILE{DXFG_EVENT_PROFILE, "PROFILE", true};
+const EventTypeEnum EventTypeEnum::SUMMARY{DXFG_EVENT_SUMMARY, "SUMMARY", true};
+const EventTypeEnum EventTypeEnum::GREEKS{DXFG_EVENT_GREEKS, "GREEKS", true, true, true};
+const EventTypeEnum EventTypeEnum::CANDLE{DXFG_EVENT_CANDLE, "CANDLE", true, true, true};
+
+// const EventTypeEnum EventTypeEnum::DAILY_CANDLE{DXFG_EVENT_DAILY_CANDLE, "DAILY_CANDLE", true, true, true};
+
+const EventTypeEnum EventTypeEnum::UNDERLYING{DXFG_EVENT_UNDERLYING, "UNDERLYING", true, true, true};
+const EventTypeEnum EventTypeEnum::THEO_PRICE{DXFG_EVENT_THEO_PRICE, "THEO_PRICE", true, true, true};
+const EventTypeEnum EventTypeEnum::TRADE{DXFG_EVENT_TRADE, "TRADE", true};
+const EventTypeEnum EventTypeEnum::TRADE_ETH{DXFG_EVENT_TRADE_ETH, "TRADE_ETH", true};
+const EventTypeEnum EventTypeEnum::CONFIGURATION{DXFG_EVENT_CONFIGURATION, "CONFIGURATION", true};
+const EventTypeEnum EventTypeEnum::MESSAGE{DXFG_EVENT_MESSAGE, "MESSAGE", false};
+const EventTypeEnum EventTypeEnum::TIME_AND_SALE{DXFG_EVENT_TIME_AND_SALE, "TIME_AND_SALE", false, true, true};
+
+// const EventTypeEnum EventTypeEnum::ORDER_BASE{DXFG_EVENT_ORDER_BASE, "ORDER_BASE", false, true};
+
+const EventTypeEnum EventTypeEnum::ORDER{DXFG_EVENT_ORDER, "ORDER", false, true};
+const EventTypeEnum EventTypeEnum::ANALYTIC_ORDER{DXFG_EVENT_ANALYTIC_ORDER, "ANALYTIC_ORDER", false, true};
+const EventTypeEnum EventTypeEnum::SPREAD_ORDER{DXFG_EVENT_SPREAD_ORDER, "SPREAD_ORDER", false, true};
+const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, "SERIES", false, true};
+
+const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
+
+const EventFlag EventFlag::TX_PENDING{0x01u, "TX_PENDING"};
+const EventFlag EventFlag::REMOVE_EVENT{0x02u, "REMOVE_EVENT"};
+const EventFlag EventFlag::SNAPSHOT_BEGIN{0x04u, "SNAPSHOT_BEGIN"};
+const EventFlag EventFlag::SNAPSHOT_END{0x08u, "SNAPSHOT_END"};
+const EventFlag EventFlag::SNAPSHOT_SNIP{0x10u, "SNAPSHOT_SNIP"};
+// 0x20 is reserved. This flag will fit into 1-byte on the wire in QTP protocol
+const EventFlag EventFlag::SNAPSHOT_MODE{0x40u, "SNAPSHOT_MODE"};
+const EventFlag EventFlag::REMOVE_SYMBOL{0x80u, "REMOVE_SYMBOL"};
+
+const EventFlag IndexedEvent::TX_PENDING = EventFlag::TX_PENDING;
+const EventFlag IndexedEvent::REMOVE_EVENT = EventFlag::REMOVE_EVENT;
+const EventFlag IndexedEvent::SNAPSHOT_BEGIN = EventFlag::SNAPSHOT_BEGIN;
+const EventFlag IndexedEvent::SNAPSHOT_END = EventFlag::SNAPSHOT_END;
+const EventFlag IndexedEvent::SNAPSHOT_SNIP = EventFlag::SNAPSHOT_SNIP;
+const EventFlag IndexedEvent::SNAPSHOT_MODE = EventFlag::SNAPSHOT_MODE;
+
+std::shared_ptr<DXFeed> DXFeed::getInstance() noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("DXFeed::getInstance()");
+    }
+
+    return DXEndpoint::getInstance()->getFeed();
+}
+
+void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::attachSubscription({})", toString(), subscription->toString());
+    }
+
+    std::lock_guard guard(mtx_);
+
+    if (!handle_ || !subscription || !subscription->handle_) {
+        return;
+    }
+
+    if (detail::runIsolatedOrElse(
+            [this, subHandle = subscription->handle_](auto threadHandle) {
+                return dxfg_DXFeed_attachSubscription(threadHandle, handle_, subHandle) == 0;
+            },
+            false)) {
+
+        subscriptions_.emplace(subscription);
+    }
+}
+
+void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::detachSubscription({})", toString(), subscription->toString());
+    }
+
+    std::lock_guard guard(mtx_);
+
+    if (!handle_ || !subscription || !subscription->handle_) {
+        return;
+    }
+
+    if (detail::runIsolatedOrElse(
+            [this, subHandle = subscription->handle_](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscription(threadHandle, handle_, subHandle) == 0;
+            },
+            false)) {
+
+        subscriptions_.erase(subscription);
+    }
+}
+
+void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::detachSubscriptionAndClear({})", toString(), subscription->toString());
+    }
+
+    std::lock_guard guard(mtx_);
+
+    if (!handle_ || !subscription || !subscription->handle_) {
+        return;
+    }
+
+    if (detail::runIsolatedOrElse(
+            [this, subHandle = subscription->handle_](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscriptionAndClear(threadHandle, handle_, subHandle) == 0;
+            },
+            false)) {
+
+        subscriptions_.erase(subscription);
+    }
+}
+
+std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::createSubscription(eventType = {})", toString(), eventType.getName());
+    }
+
+    auto sub = DXFeedSubscription::create(eventType);
+
+    attachSubscription(sub);
+
+    return sub;
+}
+
+std::shared_ptr<DXFeedSubscription>
+DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::createSubscription(eventTypes = {})", toString(),
+                      detail::namesToString(eventTypes.begin(), eventTypes.end()));
+    }
+
+    auto sub = DXFeedSubscription::create(eventTypes);
+
+    attachSubscription(sub);
+
+    return sub;
+}
+
+void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::attach(feed = {})", toString(), feed->toString());
+    }
+
+    feed->attachSubscription(shared_from_this());
+}
+
+void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
+    if constexpr (detail::isDebug) {
+        detail::debug("{}::detach(feed = {})", toString(), feed->toString());
+    }
+
+    feed->detachSubscription(shared_from_this());
+}
 
 } // namespace dxfcpp
 
@@ -184,7 +337,7 @@ struct EndpointWrapperHandle {};
 struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
     std::shared_ptr<dxfcpp::DXEndpoint> endpoint{};
     void *userData{};
-    std::unordered_map<dxfc_endpoint_state_change_listener, std::size_t> listeners{};
+    std::unordered_map<dxfc_dxendpoint_state_change_listener, std::size_t> listeners{};
 
     EndpointWrapper(std::shared_ptr<dxfcpp::DXEndpoint> endpoint, void *userData)
         : endpoint{std::move(endpoint)}, userData{userData}, listeners{} {}
@@ -227,62 +380,62 @@ struct EndpointWrapperRegistry {
 std::unordered_map<EndpointWrapperHandle *, std::shared_ptr<EndpointWrapper>>
     EndpointWrapperRegistry::endpointWrappers{};
 
-static dxfcpp::DXEndpoint::Role cApiRoleToRole(dxfc_endpoint_role_t role) {
+static dxfcpp::DXEndpoint::Role cApiRoleToRole(dxfc_dxendpoint_role_t role) {
     switch (role) {
-    case DXFC_ENDPOINT_ROLE_FEED:
+    case DXFC_DXENDPOINT_ROLE_FEED:
         return dxfcpp::DXEndpoint::Role::FEED;
-    case DXFC_ENDPOINT_ROLE_ON_DEMAND_FEED:
+    case DXFC_DXENDPOINT_ROLE_ON_DEMAND_FEED:
         return dxfcpp::DXEndpoint::Role::ON_DEMAND_FEED;
-    case DXFC_ENDPOINT_ROLE_STREAM_FEED:
+    case DXFC_DXENDPOINT_ROLE_STREAM_FEED:
         return dxfcpp::DXEndpoint::Role::STREAM_FEED;
-    case DXFC_ENDPOINT_ROLE_PUBLISHER:
+    case DXFC_DXENDPOINT_ROLE_PUBLISHER:
         return dxfcpp::DXEndpoint::Role::PUBLISHER;
-    case DXFC_ENDPOINT_ROLE_STREAM_PUBLISHER:
+    case DXFC_DXENDPOINT_ROLE_STREAM_PUBLISHER:
         return dxfcpp::DXEndpoint::Role::STREAM_PUBLISHER;
-    case DXFC_ENDPOINT_ROLE_LOCAL_HUB:
+    case DXFC_DXENDPOINT_ROLE_LOCAL_HUB:
         return dxfcpp::DXEndpoint::Role::LOCAL_HUB;
     }
 
     return dxfcpp::DXEndpoint::Role::FEED;
 }
 
-static dxfc_endpoint_role_t roleToCApiRole(dxfcpp::DXEndpoint::Role role) {
+static dxfc_dxendpoint_role_t roleToCApiRole(dxfcpp::DXEndpoint::Role role) {
     switch (role) {
     case DXEndpoint::Role::FEED:
-        return DXFC_ENDPOINT_ROLE_FEED;
+        return DXFC_DXENDPOINT_ROLE_FEED;
     case DXEndpoint::Role::ON_DEMAND_FEED:
-        return DXFC_ENDPOINT_ROLE_ON_DEMAND_FEED;
+        return DXFC_DXENDPOINT_ROLE_ON_DEMAND_FEED;
     case DXEndpoint::Role::STREAM_FEED:
-        return DXFC_ENDPOINT_ROLE_STREAM_FEED;
+        return DXFC_DXENDPOINT_ROLE_STREAM_FEED;
     case DXEndpoint::Role::PUBLISHER:
-        return DXFC_ENDPOINT_ROLE_PUBLISHER;
+        return DXFC_DXENDPOINT_ROLE_PUBLISHER;
     case DXEndpoint::Role::STREAM_PUBLISHER:
-        return DXFC_ENDPOINT_ROLE_STREAM_PUBLISHER;
+        return DXFC_DXENDPOINT_ROLE_STREAM_PUBLISHER;
     case DXEndpoint::Role::LOCAL_HUB:
-        return DXFC_ENDPOINT_ROLE_LOCAL_HUB;
+        return DXFC_DXENDPOINT_ROLE_LOCAL_HUB;
     }
 
-    return DXFC_ENDPOINT_ROLE_FEED;
+    return DXFC_DXENDPOINT_ROLE_FEED;
 }
 
-static dxfc_endpoint_state_t stateToCApiState(dxfcpp::DXEndpoint::State state) {
+static dxfc_dxendpoint_state_t stateToCApiState(dxfcpp::DXEndpoint::State state) {
     switch (state) {
     case DXEndpoint::State::NOT_CONNECTED:
-        return DXFC_ENDPOINT_STATE_NOT_CONNECTED;
+        return DXFC_DXENDPOINT_STATE_NOT_CONNECTED;
     case DXEndpoint::State::CONNECTING:
-        return DXFC_ENDPOINT_STATE_CONNECTING;
+        return DXFC_DXENDPOINT_STATE_CONNECTING;
     case DXEndpoint::State::CONNECTED:
-        return DXFC_ENDPOINT_STATE_CONNECTED;
+        return DXFC_DXENDPOINT_STATE_CONNECTED;
     case DXEndpoint::State::CLOSED:
-        return DXFC_ENDPOINT_STATE_CLOSED;
+        return DXFC_DXENDPOINT_STATE_CLOSED;
     }
 
-    return DXFC_ENDPOINT_STATE_NOT_CONNECTED;
+    return DXFC_DXENDPOINT_STATE_NOT_CONNECTED;
 }
 
 } // namespace dxfcpp::detail
 
-dxfc_error_code_t dxfc_endpoint_new_builder(DXFC_OUT dxfc_endpoint_builder_t *builderHandle) {
+dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t *builderHandle) {
     if (!builderHandle) {
         return DXFC_EC_ERROR;
     }
@@ -293,12 +446,13 @@ dxfc_error_code_t dxfc_endpoint_new_builder(DXFC_OUT dxfc_endpoint_builder_t *bu
         return DXFC_EC_ERROR;
     }
 
-    *builderHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_builder_t>(result);
+    *builderHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_builder_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_builder_with_role(dxfc_endpoint_builder_t builderHandle, dxfc_endpoint_role_t role) {
+dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t builderHandle,
+                                                    dxfc_dxendpoint_role_t role) {
     if (!builderHandle) {
         return DXFC_EC_ERROR;
     }
@@ -315,7 +469,7 @@ dxfc_error_code_t dxfc_endpoint_builder_with_role(dxfc_endpoint_builder_t builde
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_builder_with_name(dxfc_endpoint_builder_t builderHandle, const char *name) {
+dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t builderHandle, const char *name) {
     if (!builderHandle || !name) {
         return DXFC_EC_ERROR;
     }
@@ -332,8 +486,8 @@ dxfc_error_code_t dxfc_endpoint_builder_with_name(dxfc_endpoint_builder_t builde
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_builder_with_property(dxfc_endpoint_builder_t builderHandle, const char *key,
-                                                      const char *value) {
+dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_t builderHandle, const char *key,
+                                                        const char *value) {
     if (!builderHandle || !key || !value) {
         return DXFC_EC_ERROR;
     }
@@ -350,8 +504,8 @@ dxfc_error_code_t dxfc_endpoint_builder_with_property(dxfc_endpoint_builder_t bu
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_builder_with_properties(dxfc_endpoint_builder_t builderHandle,
-                                                        const dxfc_enpoint_property_t **properties, size_t size) {
+dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builder_t builderHandle,
+                                                          const dxfc_dxendpoint_property_t **properties, size_t size) {
     if (!builderHandle || !properties || size == 0) {
         return DXFC_EC_ERROR;
     }
@@ -378,8 +532,8 @@ dxfc_error_code_t dxfc_endpoint_builder_with_properties(dxfc_endpoint_builder_t 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_builder_supports_property(dxfc_endpoint_builder_t builderHandle, const char *key,
-                                                          DXFC_OUT int *supports) {
+dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_builder_t builderHandle, const char *key,
+                                                            DXFC_OUT int *supports) {
     if (!builderHandle || !key || !supports) {
         return DXFC_EC_ERROR;
     }
@@ -396,8 +550,8 @@ dxfc_error_code_t dxfc_endpoint_builder_supports_property(dxfc_endpoint_builder_
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_builder_build(dxfc_endpoint_builder_t builderHandle, void *userData,
-                                              DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builderHandle, void *userData,
+                                                DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
     if (!builderHandle || !endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -422,12 +576,12 @@ dxfc_error_code_t dxfc_endpoint_builder_build(dxfc_endpoint_builder_t builderHan
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_builder_free(dxfc_endpoint_builder_t builderHandle) {
+dxfc_error_code_t dxfc_dxendpoint_builder_free(dxfc_dxendpoint_builder_t builderHandle) {
     if (!builderHandle) {
         return DXFC_EC_ERROR;
     }
@@ -440,7 +594,7 @@ dxfc_error_code_t dxfc_endpoint_builder_free(dxfc_endpoint_builder_t builderHand
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_get_instance(void *userData, DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_get_instance(void *userData, DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -458,13 +612,13 @@ dxfc_error_code_t dxfc_endpoint_get_instance(void *userData, DXFC_OUT dxfc_endpo
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_get_instance2(dxfc_endpoint_role_t role, void *userData,
-                                              DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, void *userData,
+                                                DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -482,12 +636,12 @@ dxfc_error_code_t dxfc_endpoint_get_instance2(dxfc_endpoint_role_t role, void *u
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_create(void *userData, DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_create(void *userData, DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -505,13 +659,13 @@ dxfc_error_code_t dxfc_endpoint_create(void *userData, DXFC_OUT dxfc_endpoint_t 
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_create2(dxfc_endpoint_role_t role, void *userData,
-                                        DXFC_OUT dxfc_endpoint_t *endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *userData,
+                                          DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -529,12 +683,12 @@ dxfc_error_code_t dxfc_endpoint_create2(dxfc_endpoint_role_t role, void *userDat
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_endpoint_t>(result);
+    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_close(dxfc_endpoint_t endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -551,7 +705,7 @@ dxfc_error_code_t dxfc_endpoint_close(dxfc_endpoint_t endpointHandle) {
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_close_and_await_termination(dxfc_endpoint_t endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_close_and_await_termination(dxfc_dxendpoint_t endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -568,7 +722,7 @@ dxfc_error_code_t dxfc_endpoint_close_and_await_termination(dxfc_endpoint_t endp
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_get_role(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_endpoint_role_t *role) {
+dxfc_error_code_t dxfc_dxendpoint_get_role(dxfc_dxendpoint_t endpointHandle, DXFC_OUT dxfc_dxendpoint_role_t *role) {
     if (!endpointHandle || !role) {
         return DXFC_EC_ERROR;
     }
@@ -585,7 +739,7 @@ dxfc_error_code_t dxfc_endpoint_get_role(dxfc_endpoint_t endpointHandle, DXFC_OU
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_user(dxfc_endpoint_t endpointHandle, const char *user) {
+dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpointHandle, const char *user) {
     if (!endpointHandle || !user) {
         return DXFC_EC_ERROR;
     }
@@ -602,7 +756,7 @@ dxfc_error_code_t dxfc_endpoint_user(dxfc_endpoint_t endpointHandle, const char 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_password(dxfc_endpoint_t endpointHandle, const char *password) {
+dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpointHandle, const char *password) {
     if (!endpointHandle || !password) {
         return DXFC_EC_ERROR;
     }
@@ -619,7 +773,7 @@ dxfc_error_code_t dxfc_endpoint_password(dxfc_endpoint_t endpointHandle, const c
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_connect(dxfc_endpoint_t endpointHandle, const char *address) {
+dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpointHandle, const char *address) {
     if (!endpointHandle || !address) {
         return DXFC_EC_ERROR;
     }
@@ -636,7 +790,7 @@ dxfc_error_code_t dxfc_endpoint_connect(dxfc_endpoint_t endpointHandle, const ch
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_reconnect(dxfc_endpoint_t endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_reconnect(dxfc_dxendpoint_t endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -653,7 +807,7 @@ dxfc_error_code_t dxfc_endpoint_reconnect(dxfc_endpoint_t endpointHandle) {
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_disconnect(dxfc_endpoint_t endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_disconnect(dxfc_dxendpoint_t endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -670,7 +824,7 @@ dxfc_error_code_t dxfc_endpoint_disconnect(dxfc_endpoint_t endpointHandle) {
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_disconnect_and_clear(dxfc_endpoint_t endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_disconnect_and_clear(dxfc_dxendpoint_t endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -687,7 +841,7 @@ dxfc_error_code_t dxfc_endpoint_disconnect_and_clear(dxfc_endpoint_t endpointHan
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_await_processed(dxfc_endpoint_t endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_await_processed(dxfc_dxendpoint_t endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -704,7 +858,7 @@ dxfc_error_code_t dxfc_endpoint_await_processed(dxfc_endpoint_t endpointHandle) 
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_await_not_connected(dxfc_endpoint_t endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_await_not_connected(dxfc_dxendpoint_t endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }
@@ -721,7 +875,7 @@ dxfc_error_code_t dxfc_endpoint_await_not_connected(dxfc_endpoint_t endpointHand
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_get_state(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_endpoint_state_t *state) {
+dxfc_error_code_t dxfc_dxendpoint_get_state(dxfc_dxendpoint_t endpointHandle, DXFC_OUT dxfc_dxendpoint_state_t *state) {
     if (!endpointHandle || !state) {
         return DXFC_EC_ERROR;
     }
@@ -738,8 +892,8 @@ dxfc_error_code_t dxfc_endpoint_get_state(dxfc_endpoint_t endpointHandle, DXFC_O
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_add_state_change_listener(dxfc_endpoint_t endpointHandle,
-                                                          dxfc_endpoint_state_change_listener listener) {
+dxfc_error_code_t dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t endpointHandle,
+                                                            dxfc_dxendpoint_state_change_listener listener) {
     if (!endpointHandle || !listener) {
         return DXFC_EC_ERROR;
     }
@@ -764,8 +918,8 @@ dxfc_error_code_t dxfc_endpoint_add_state_change_listener(dxfc_endpoint_t endpoi
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_remove_state_change_listener(dxfc_endpoint_t endpointHandle,
-                                                             dxfc_endpoint_state_change_listener listener) {
+dxfc_error_code_t dxfc_dxendpoint_remove_state_change_listener(dxfc_dxendpoint_t endpointHandle,
+                                                               dxfc_dxendpoint_state_change_listener listener) {
     if (!endpointHandle || !listener) {
         return DXFC_EC_ERROR;
     }
@@ -787,16 +941,17 @@ dxfc_error_code_t dxfc_endpoint_remove_state_change_listener(dxfc_endpoint_t end
 }
 
 // TODO: implement
-dxfc_error_code_t dxfc_endpoint_get_feed(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_feed_t *feed) {
+dxfc_error_code_t dxfc_dxendpoint_get_feed(dxfc_dxendpoint_t endpointHandle, DXFC_OUT dxfc_dxfeed_t *feed) {
     return DXFC_EC_SUCCESS;
 }
 
 // TODO: implement
-dxfc_error_code_t dxfc_endpoint_get_publisher(dxfc_endpoint_t endpointHandle, DXFC_OUT dxfc_publisher_t *publisher) {
+dxfc_error_code_t dxfc_dxendpoint_get_publisher(dxfc_dxendpoint_t endpointHandle,
+                                                DXFC_OUT dxfc_dxpublisher_t *publisher) {
     return DXFC_EC_SUCCESS;
 }
 
-dxfc_error_code_t dxfc_endpoint_free(dxfc_endpoint_t endpointHandle) {
+dxfc_error_code_t dxfc_dxendpoint_free(dxfc_dxendpoint_t endpointHandle) {
     if (!endpointHandle) {
         return DXFC_EC_ERROR;
     }

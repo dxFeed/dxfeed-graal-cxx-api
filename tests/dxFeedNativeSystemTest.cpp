@@ -136,61 +136,61 @@ TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
-    endpoint->disconnect();
-    endpoint->connect("demo.dxfeed.com:7300");
-    endpoint->close();
+    //endpoint->disconnect();
+    //endpoint->connect("demo.dxfeed.com:7300");
+    //endpoint->close();
 }
 
-auto cApiStateToString(dxfc_endpoint_state_t state) {
+auto cApiStateToString(dxfc_dxendpoint_state_t state) {
     switch (state) {
-    case DXFC_ENDPOINT_STATE_NOT_CONNECTED:
+    case DXFC_DXENDPOINT_STATE_NOT_CONNECTED:
         return "NOT_CONNECTED";
-    case DXFC_ENDPOINT_STATE_CONNECTING:
+    case DXFC_DXENDPOINT_STATE_CONNECTING:
         return "CONNECTING";
-    case DXFC_ENDPOINT_STATE_CONNECTED:
+    case DXFC_DXENDPOINT_STATE_CONNECTED:
         return "CONNECTED";
-    case DXFC_ENDPOINT_STATE_CLOSED:
+    case DXFC_DXENDPOINT_STATE_CLOSED:
         return "CLOSED";
     }
 
     return "";
 }
 
-TEST_CASE("dxfc_endpoint_builder_t", "[dxfc_endpoint_t]") {
-    dxfc_endpoint_builder_t builder{};
+TEST_CASE("dxfc_dxendpoint_builder_t", "[dxfc_dxendpoint_t]") {
+    dxfc_dxendpoint_builder_t builder{};
 
-    auto result = dxfc_endpoint_new_builder(&builder);
-
-    if (result != DXFC_EC_SUCCESS) {
-        return;
-    }
-
-    result = dxfc_endpoint_builder_with_role(builder, DXFC_ENDPOINT_ROLE_FEED);
+    auto result = dxfc_dxendpoint_new_builder(&builder);
 
     if (result != DXFC_EC_SUCCESS) {
         return;
     }
 
-    dxfc_endpoint_t endpoint{};
-
-    result = dxfc_endpoint_builder_build(builder, nullptr, &endpoint);
+    result = dxfc_dxendpoint_builder_with_role(builder, DXFC_DXENDPOINT_ROLE_FEED);
 
     if (result != DXFC_EC_SUCCESS) {
         return;
     }
 
-    result = dxfc_endpoint_add_state_change_listener(
-        endpoint, [](dxfc_endpoint_state_t oldState, dxfc_endpoint_state_t newState, void *) {
-            dxfcpp::detail::debug("DXEndpoint::Builder Test: {}", std::string("State changed: ") +
-                                                                      cApiStateToString(oldState) + " -> " +
-                                                                      cApiStateToString(newState));
+    dxfc_dxendpoint_t endpoint{};
+
+    result = dxfc_dxendpoint_builder_build(builder, nullptr, &endpoint);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_dxendpoint_add_state_change_listener(
+        endpoint, [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *) {
+            dxfcpp::detail::debug("dxfc_dxendpoint_builder_t Test: {}", std::string("State changed: ") +
+                                                                            cApiStateToString(oldState) + " -> " +
+                                                                            cApiStateToString(newState));
         });
 
     if (result != DXFC_EC_SUCCESS) {
         return;
     }
 
-    result = dxfc_endpoint_connect(endpoint, "demo.dxfeed.com:7300");
+    result = dxfc_dxendpoint_connect(endpoint, "demo.dxfeed.com:7300");
 
     if (result != DXFC_EC_SUCCESS) {
         return;
@@ -198,17 +198,26 @@ TEST_CASE("dxfc_endpoint_builder_t", "[dxfc_endpoint_t]") {
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
-    result = dxfc_endpoint_disconnect(endpoint);
+    result = dxfc_dxendpoint_disconnect(endpoint);
 
     if (result != DXFC_EC_SUCCESS) {
         return;
     }
 
-    result = dxfc_endpoint_connect(endpoint, "demo.dxfeed.com:7300");
+    result = dxfc_dxendpoint_connect(endpoint, "demo.dxfeed.com:7300");
 
     if (result != DXFC_EC_SUCCESS) {
         return;
     }
 
-    dxfc_endpoint_close(endpoint);
+    dxfc_dxendpoint_close(endpoint);
+}
+
+TEST_CASE("DXFeedSubscription", "[dxfcpp::DXFeedSubscription]") {
+    auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
+    auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
+    auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
+
+    dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
+    dxfcpp::DXFeed::getInstance();
 }
