@@ -1031,7 +1031,9 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
     }
 
     // TODO: implement
-    auto getEventTypes() {}
+    std::unordered_set<EventTypeEnum> getEventTypes() {
+        return {};
+    }
 
     /**
      * @return The feed that is associated with this endpoint.

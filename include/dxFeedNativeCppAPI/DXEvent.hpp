@@ -80,6 +80,10 @@ class EventTypeEnum {
         return dxFeedGraalNativeApiEventClazz_ == eventTypeEnum.dxFeedGraalNativeApiEventClazz_;
     }
 
+    bool operator<(const EventTypeEnum &eventTypeEnum) const {
+        return dxFeedGraalNativeApiEventClazz_ < eventTypeEnum.dxFeedGraalNativeApiEventClazz_;
+    }
+
     /**
      * @return `true` if the current enum element is characterizing the Lasting (TICKER) event
      */
@@ -722,9 +726,5 @@ struct TimeSeriesEvent : public IndexedEvent {
      */
     virtual std::uint64_t getTime() const = 0;
 };
-
-template <typename Collection>
-concept ElementIsEventTypeEnum =
-    requires(Collection &&c) { std::is_same_v<std::decay_t<decltype(*std::begin(c))>, EventTypeEnum>; };
 
 } // namespace dxfcpp

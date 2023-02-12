@@ -77,7 +77,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
     std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypeEnum &eventType) noexcept;
 
     template <typename EventTypeIt>
-    static std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) noexcept {
+    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) noexcept {
         if constexpr (detail::isDebug) {
             detail::debug("{}::createSubscription(eventTypes = {})", detail::namesToString(begin, end));
         }
@@ -89,12 +89,17 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
         return sub;
     }
 
-    static std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept;
+    std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept;
 
     template <typename EventTypesCollection>
-    static std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
-        requires requires { ElementIsEventTypeEnum<EventTypesCollection>; }
+    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
+        requires requires { detail::ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
     {
+        if constexpr (detail::isDebug) {
+            detail::debug("{}::createSubscription(eventTypes = {})", toString(),
+                          detail::namesToString(std::begin(eventTypes), std::end(eventTypes)));
+        }
+
         auto sub = DXFeedSubscription::create(eventTypes);
 
         attachSubscription(sub);

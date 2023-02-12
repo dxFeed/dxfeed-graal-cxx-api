@@ -172,6 +172,18 @@ std::string namesToString(It begin, It end) {
 }
 
 template <typename M, typename F, typename... Args>
+inline void callWithLock(M &mtx, F &&f, Args &&...args) noexcept {
+    std::once_flag once{};
+
+    try {
+        std::lock_guard guard{mtx};
+
+        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
+    } catch (...) {
+    }
+}
+
+template <typename M, typename F, typename... Args>
 inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
     std::once_flag once{};
 
@@ -183,5 +195,9 @@ inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
         return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
     }
 }
+
+template <typename Collection, typename ElementType>
+concept ElementTypeIs =
+    requires(Collection &&c) { std::is_same_v<std::decay_t<decltype(*std::begin(c))>, ElementType>; };
 
 } // namespace dxfcpp::detail
