@@ -196,8 +196,7 @@ inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
     }
 }
 
-template <typename Collection, typename ElementType>
-concept ElementTypeIs =
-    requires(Collection &&c) { std::is_same_v<std::decay_t<decltype(*std::begin(c))>, ElementType>; };
+template<typename Collection, typename ElementType>
+concept ElementTypeIs = std::is_same_v<std::decay_t<decltype(*std::begin(Collection{}))>, ElementType>;
 
 } // namespace dxfcpp::detail
