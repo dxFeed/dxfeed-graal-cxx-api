@@ -116,7 +116,7 @@ class Isolate final {
     };
 
     mutable std::recursive_mutex mtx_{};
-    GraalIsolateHandle handle_ = nullptr;
+    const GraalIsolateHandle handle_;
     IsolateThread mainIsolateThread_;
     static thread_local IsolateThread currentIsolateThread_;
 
@@ -197,6 +197,14 @@ class Isolate final {
         return CEntryPointErrors::NO_ERROR;
     }
 
+    GraalIsolateThreadHandle get() noexcept {
+        if constexpr (isDebugIsolates) {
+            debug("{}::get()", toString());
+        }
+
+        return graal_get_current_thread(handle_);
+    }
+
   public:
     Isolate() = delete;
     Isolate(const Isolate &) = delete;
@@ -220,6 +228,11 @@ class Isolate final {
     auto runIsolated(F &&f) -> std::variant<CEntryPointErrors, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
         if constexpr (isDebugIsolates) {
             debug("{}::runIsolated({})", toString(), bit_cast<std::size_t>(&f));
+        }
+
+        // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
+        if (auto currentThreadHandle = get(); currentThreadHandle != nullptr) {
+            return std::invoke(std::forward<F>(f), currentThreadHandle);
         }
 
         if (auto result = attach(); result != CEntryPointErrors::NO_ERROR) {
