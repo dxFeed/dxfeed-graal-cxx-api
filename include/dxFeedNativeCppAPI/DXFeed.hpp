@@ -3,9 +3,6 @@
 
 #pragma once
 
-#include <dxfg_endpoint.h>
-#include <dxfg_feed.h>
-
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
 #include "internal/Handler.hpp"
@@ -26,24 +23,19 @@ class EventTypeEnum;
 /**
  * Main entry class for dxFeed API (<b>read it first</b>).
  */
-struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_feed_t *> {
+struct DXFeed : std::enable_shared_from_this<DXFeed> {
     friend struct DXEndpoint;
 
   private:
     mutable std::recursive_mutex mtx_{};
+    detail::JavaObjectHandler handler_;
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 
-    static std::shared_ptr<DXFeed> create(dxfg_feed_t *feedHandle) noexcept {
-        std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
-
-        feed->handle_ = feedHandle;
-
-        return feed;
-    }
+    static std::shared_ptr<DXFeed> create(void *feedHandle) noexcept;
 
   protected:
-    DXFeed() noexcept : mtx_() {
+    DXFeed() noexcept : mtx_(), handler_{nullptr, &detail::javaObjectHandlerDeleter} {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeed()");
         }
@@ -55,7 +47,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
             detail::debug("{}::~DXFeed()", toString());
         }
 
-        detail::tryCallWithLock(mtx_, [this] { releaseHandle(); });
+        detail::tryCallWithLock(mtx_, [this] { handler_.release(); });
     }
 
     /**
@@ -110,7 +102,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed>, detail::WithHandle<dxfg_fe
     std::string toString() const {
         std::lock_guard guard(mtx_);
 
-        return detail::vformat("DXFeed{{{}}}", detail::bit_cast<std::size_t>(handle_));
+        return detail::vformat("DXFeed{{{}}}", detail::toString(handler_));
     }
 };
 

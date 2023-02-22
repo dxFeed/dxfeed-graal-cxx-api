@@ -16,6 +16,7 @@ namespace dxfcpp {
  * Useful when used as a subscription parameter.
  */
 class EventTypeEnum {
+    //TODO: wrap
     /// The dxFeed Graal Native C-API event class id corresponding to the current enum element.
     dxfg_event_clazz_t dxFeedGraalNativeApiEventClazz_;
 
@@ -726,5 +727,7 @@ struct TimeSeriesEvent : public IndexedEvent {
      */
     virtual std::uint64_t getTime() const = 0;
 };
+
+
 
 } // namespace dxfcpp

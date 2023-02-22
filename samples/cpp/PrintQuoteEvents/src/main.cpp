@@ -21,4 +21,18 @@ int main() {
     }
 
     std::cin.get();
+
+//    using namespace dxfcpp;
+//
+//    auto endpoint = DXEndpoint::newBuilder()
+//            ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
+//            ->build();
+//    auto subscription = endpoint->getFeed()->createSubscription(Quote::type);
+//    subscription->addEventListener([](auto&& events) {
+//        for (auto&& e : events) {
+//            std::cout << e << "\n";
+//        }
+//    });
+//    subscription->addSymbols({"AAPL"});
+
 }

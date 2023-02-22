@@ -7,8 +7,8 @@
 
 #include <memory>
 
-#include "internal/Common.hpp"
 #include "DXEvent.hpp"
+#include "internal/Common.hpp"
 
 #include <unordered_set>
 
@@ -16,25 +16,28 @@ namespace dxfcpp {
 
 struct DXFeed;
 
-class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscription>,
-                           public detail::WithHandle<dxfg_subscription_t *> {
+class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscription> {
     friend struct DXFeed;
 
     mutable std::recursive_mutex mtx_{};
+    detail::JavaObjectHandler handler_;
 
-    explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept : mtx_{} {
+    explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept
+        : mtx_{}, handler_{detail::createJavaObjectHandler(nullptr)} {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeedSubscription(eventType = {})", eventType.getName());
         }
 
-        handle_ = detail::runIsolatedOrElse(
+        handler_ = detail::createJavaObjectHandler(detail::runIsolatedOrElse(
             [eventType](auto threadHandle) {
                 return dxfg_DXFeedSubscription_new(threadHandle, eventType.getDxFeedGraalNativeApiEventClazz());
             },
-            nullptr);
+            nullptr));
     }
 
-    template <typename EventTypeIt> DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept : mtx_{} {
+    template <typename EventTypeIt>
+    DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
+        : mtx_{}, handler_{detail::createJavaObjectHandler(nullptr)} {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeedSubscription(eventTypes = {})", detail::namesToString(begin, end));
         }
@@ -68,12 +71,13 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
         std::size_t i = 0;
 
+        //TODO: extract
         for (auto it = begin; it != end; it++, i++) {
             l.elements[i] = new (std::nothrow) dxfg_event_clazz_t{it->getDxFeedGraalNativeApiEventClazz()};
         }
 
-        handle_ = detail::runIsolatedOrElse(
-            [&l](auto threadHandle) { return dxfg_DXFeedSubscription_new2(threadHandle, &l); }, nullptr);
+        handler_ = detail::createJavaObjectHandler(detail::runIsolatedOrElse(
+            [&l](auto threadHandle) { return dxfg_DXFeedSubscription_new2(threadHandle, &l); }, nullptr));
     }
 
     DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
@@ -85,38 +89,17 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
         : DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
                              std::end(std::forward<EventTypesCollection>(eventTypes))) {}
 
-    void closeImpl() noexcept {
-        if (!handle_) {
-            return;
-        }
+    void closeImpl() noexcept;
 
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXFeedSubscription_close(threadHandle, handle_) == 0; }, false);
-    }
+    void clearImpl() noexcept;
 
-    void clearImpl() noexcept {
-        if (!handle_) {
-            return;
-        }
-
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXFeedSubscription_clear(threadHandle, handle_) == 0; }, false);
-    }
-
-    bool isClosedImpl() noexcept {
-        if (!handle_) {
-            return false;
-        }
-
-        return detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXFeedSubscription_isClosed(threadHandle, handle_) != 0; }, false);
-    }
+    bool isClosedImpl() noexcept;
 
   public:
     std::string toString() const {
         std::lock_guard lock(mtx_);
 
-        return detail::vformat("DXFeedSubscription{{{}}}", detail::bit_cast<std::size_t>(handle_));
+        return detail::vformat("DXFeedSubscription{{{}}}", detail::toString(handler_));
     }
 
     virtual ~DXFeedSubscription() {
@@ -126,7 +109,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
         detail::tryCallWithLock(mtx_, [this] {
             closeImpl();
-            releaseHandle();
+            handler_.release();
         });
     }
 
@@ -216,24 +199,21 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
         closeImpl();
     }
 
-    template <typename EventListener>
-    std::size_t addEventListener(EventListener&& listener) noexcept;
+    template <typename EventListener> std::size_t addEventListener(EventListener &&listener) noexcept;
 
     void removeEventListener(std::size_t listenerId) noexcept;
 
     auto onEvent() noexcept;
 
-    template <typename Symbol>
-    void addSymbol(Symbol&& symbol) noexcept;
+    template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept;
 
-    template <typename SymbolsCollection>
-    void addSymbols(SymbolsCollection&& collection) noexcept;
+    template <typename SymbolsCollection> void addSymbols(SymbolsCollection &&collection) noexcept;
 
-    template <typename Symbol>
-    void removeSymbol(Symbol&& symbol) noexcept;
+    template <typename Symbol> void addSymbols(std::initializer_list<Symbol> collection) noexcept;
 
-    template <typename SymbolsCollection>
-    void removeSymbols(SymbolsCollection&& collection) noexcept;
+    template <typename Symbol> void removeSymbol(Symbol &&symbol) noexcept;
+
+    template <typename SymbolsCollection> void removeSymbols(SymbolsCollection &&collection) noexcept;
 
     /**
      * Clears the set of subscribed symbols.
@@ -279,7 +259,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      *
      * @see ::getEventTypes()
      */
-    bool containsEventType(const EventTypeEnum& eventType) noexcept;
+    bool containsEventType(const EventTypeEnum &eventType) noexcept;
 
     /**
      * Returns a set of subscribed symbols. The resulting set maybe either a snapshot of the set of
@@ -289,11 +269,9 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      */
     auto getSymbols() noexcept;
 
-    template <typename Symbol>
-    void setSymbol(Symbol&& symbol) noexcept;
+    template <typename Symbol> void setSymbol(Symbol &&symbol) noexcept;
 
-    template <typename SymbolsCollection>
-    void setSymbols(SymbolsCollection&& collection) noexcept;
+    template <typename SymbolsCollection> void setSymbols(SymbolsCollection &&collection) noexcept;
 
     /**
      * Returns a set of decorated symbols (depending on the actual implementation of subscription).
@@ -305,11 +283,9 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
     auto getExecutor() noexcept;
 
-    template <typename Executor>
-    void setExecutor(Executor&& executor) noexcept;
+    template <typename Executor> void setExecutor(Executor &&executor) noexcept;
 
-    template <typename ChangeListener>
-    std::size_t addChangeListener(ChangeListener&& changeListener) noexcept;
+    template <typename ChangeListener> std::size_t addChangeListener(ChangeListener &&changeListener) noexcept;
 
     void removeChangeListener(std::size_t changeListenerId) noexcept;
 

@@ -10,11 +10,11 @@
 
 #include <chrono>
 #include <iostream>
+#include <mutex>
 #include <sstream>
 #include <type_traits>
-#include <mutex>
 
-#include <dxfg_javac.h>
+// #include <dxfg_javac.h>
 
 #include <fmt/chrono.h>
 #include <fmt/format.h>
@@ -124,40 +124,13 @@ template <typename... Args> inline void debug(std::string_view format, Args &&..
     vprint(std::cerr, "{} {}\n", debugPrefixStr(), vformat(format, std::forward<Args>(args)...));
 }
 
-/**
- * Non thread-safe
- *
- * @tparam HandleType The handle type (must be pointer)
- */
-template <typename HandleType>
-    requires requires { std::is_pointer_v<HandleType>; }
-struct WithHandle {
-  protected:
-    HandleType handle_ = nullptr;
+void javaObjectHandlerDeleter(void* javaObjectHandler);
 
-    void releaseHandle() {
-        if constexpr (detail::isDebug) {
-            detail::debug("WithHandle::releaseHandle(handle_ = {})", bit_cast<std::size_t>(handle_));
-        }
+using JavaObjectHandler = std::unique_ptr<void, decltype(&javaObjectHandlerDeleter)>;
 
-        if (!handle_) {
-            return;
-        }
+inline JavaObjectHandler createJavaObjectHandler(void* handler = nullptr);
 
-        runIsolatedOrElse(
-            [this](auto threadHandle) {
-                if (handle_) {
-                    return dxfg_JavaObjectHandler_release(threadHandle,
-                                                          detail::bit_cast<dxfg_java_object_handler *>(handle_)) == 0;
-                }
-
-                return true;
-            },
-            false);
-
-        handle_ = nullptr;
-    }
-};
+inline std::string toString(const JavaObjectHandler& handler);
 
 template <typename It>
     requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }
@@ -171,8 +144,7 @@ std::string namesToString(It begin, It end) {
     return result + "]";
 }
 
-template <typename M, typename F, typename... Args>
-inline void callWithLock(M &mtx, F &&f, Args &&...args) noexcept {
+template <typename M, typename F, typename... Args> inline void callWithLock(M &mtx, F &&f, Args &&...args) noexcept {
     std::once_flag once{};
 
     try {
@@ -196,7 +168,7 @@ inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
     }
 }
 
-template<typename Collection, typename ElementType>
+template <typename Collection, typename ElementType>
 concept ElementTypeIs = std::is_same_v<std::decay_t<decltype(*std::begin(Collection{}))>, ElementType>;
 
 } // namespace dxfcpp::detail

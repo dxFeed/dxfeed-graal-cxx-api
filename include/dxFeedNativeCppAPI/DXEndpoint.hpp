@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <dxfg_endpoint.h>
-
 #include "DXFeed.hpp"
-#include "System.hpp"
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
 #include "internal/Handler.hpp"
@@ -179,7 +176,7 @@ struct DXFeed;
  *
  * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html)
  */
-struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle<dxfg_endpoint_t *> {
+struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     /**
      * Defines property for endpoint name that is used to distinguish multiple endpoints
      * in the same process in logs and in other diagnostic means.
@@ -419,25 +416,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
         return "";
     }
 
-    static dxfg_endpoint_role_t roleToGraalRole(Role role) {
-        switch (role) {
-        case Role::FEED:
-            return DXFG_ENDPOINT_ROLE_FEED;
-        case Role::ON_DEMAND_FEED:
-            return DXFG_ENDPOINT_ROLE_ON_DEMAND_FEED;
-        case Role::STREAM_FEED:
-            return DXFG_ENDPOINT_ROLE_STREAM_FEED;
-        case Role::PUBLISHER:
-            return DXFG_ENDPOINT_ROLE_PUBLISHER;
-        case Role::STREAM_PUBLISHER:
-            return DXFG_ENDPOINT_ROLE_STREAM_PUBLISHER;
-        case Role::LOCAL_HUB:
-            return DXFG_ENDPOINT_ROLE_LOCAL_HUB;
-        }
-
-        return DXFG_ENDPOINT_ROLE_FEED;
-    }
-
     /**
      * Represents the current state of endpoint.
      *
@@ -481,101 +459,29 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
         return "";
     }
 
-    static State graalStateToState(dxfg_endpoint_state_t state) {
-        switch (state) {
-        case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
-            return State::NOT_CONNECTED;
-        case DXFG_ENDPOINT_STATE_CONNECTING:
-            return State::CONNECTING;
-        case DXFG_ENDPOINT_STATE_CONNECTED:
-            return State::CONNECTED;
-        case DXFG_ENDPOINT_STATE_CLOSED:
-            return State::CLOSED;
-        }
-
-        return State::NOT_CONNECTED;
-    }
-
   private:
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
     mutable std::recursive_mutex mtx_{};
+    detail::JavaObjectHandler handler_;
     Role role_ = Role::FEED;
     std::string name_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
-    dxfg_endpoint_state_change_listener_t *stateChangeListenerHandle_{};
+    detail::JavaObjectHandler stateChangeListenerHandler_;
     detail::Handler<void(State, State)> onStateChange_{};
 
-    static std::shared_ptr<DXEndpoint> create(dxfg_endpoint_t *endpointHandle, Role role,
-                                              const std::unordered_map<std::string, std::string> &properties) {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint::create{{handle = {}, role = {}, properties[{}]}}()",
-                          detail::bit_cast<std::size_t>(endpointHandle), roleToString(role), properties.size());
-        }
+    static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
+                                              const std::unordered_map<std::string, std::string> &properties);
 
-        std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
+    void setStateChangeListenerImpl();
 
-        endpoint->handle_ = endpointHandle;
-        endpoint->role_ = role;
-        endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
-
-        auto result = detail::runIsolatedOrElse(
-            [endpoint](auto threadHandle) {
-                return dxfg_PropertyChangeListener_new(
-                    threadHandle,
-                    [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState, dxfg_endpoint_state_t newState,
-                       void *user_data) {
-                        detail::bit_cast<DXEndpoint *>(user_data)->onStateChange_(graalStateToState(oldState),
-                                                                                  graalStateToState(newState));
-                    },
-                    endpoint.get());
-            },
-            nullptr);
-
-        endpoint->stateChangeListenerHandle_ = result;
-        endpoint->setStateChangeListenerImpl();
-
-        return endpoint;
-    }
-
-    void setStateChangeListenerImpl() {
-        if (handle_ && stateChangeListenerHandle_) {
-            detail::runIsolatedOrElse(
-                [this](auto threadHandle) {
-                    return dxfg_DXEndpoint_addStateChangeListener(threadHandle, handle_, stateChangeListenerHandle_) ==
-                           0;
-                },
-                false);
-        }
-    }
-
-    void releaseStateChangeListenerImpl() {
-        if (handle_ && stateChangeListenerHandle_) {
-            detail::runIsolatedOrElse(
-                [this](auto threadHandle) {
-                    return dxfg_JavaObjectHandler_release(threadHandle, detail::bit_cast<dxfg_java_object_handler *>(
-                                                                            stateChangeListenerHandle_)) == 0;
-                },
-                false);
-        }
-
-        stateChangeListenerHandle_ = nullptr;
-    }
-
-    void closeImpl() {
-        if (!handle_) {
-            return;
-        }
-
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXEndpoint_close(threadHandle, handle_) == 0; }, false);
-
-        // TODO: close the Feed and Publisher
-    }
+    void closeImpl();
 
   protected:
-    DXEndpoint() : mtx_(), role_(), feed_(), publisher_(), stateChangeListenerHandle_(), onStateChange_() {
+    DXEndpoint()
+        : mtx_(), handler_(detail::createJavaObjectHandler()), role_(), feed_(), publisher_(),
+          stateChangeListenerHandler_(detail::createJavaObjectHandler()), onStateChange_() {
         if constexpr (detail::isDebug) {
             detail::debug("DXEndpoint()");
         }
@@ -584,14 +490,10 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
   public:
     virtual ~DXEndpoint() {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.get());
         }
 
-        detail::tryCallWithLock(mtx_, [this] {
-            closeImpl();
-            releaseStateChangeListenerImpl();
-            releaseHandle();
-        });
+        detail::tryCallWithLock(mtx_, [this] { closeImpl(); });
     }
 
     /**
@@ -695,16 +597,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * @see DXEndpoint
      */
-    State getState() const {
-        std::lock_guard guard(mtx_);
-
-        return !handle_ ? State::CLOSED
-                        : detail::runIsolatedOrElse(
-                              [this](auto threadHandle) {
-                                  return graalStateToState(dxfg_DXEndpoint_getState(threadHandle, handle_));
-                              },
-                              State::CLOSED);
-    }
+    State getState() const;
 
     /// @return `true` if the endpoint is closed
     bool isClosed() const { return getState() == State::CLOSED; }
@@ -761,23 +654,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * @return this DXEndpoint.
      */
-    std::shared_ptr<DXEndpoint> user(const std::string &user) {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::user(user = {})", detail::bit_cast<std::size_t>(handle_), user);
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (handle_) {
-            detail::runIsolatedOrElse(
-                [user = user, this](auto threadHandle) {
-                    return dxfg_DXEndpoint_user(threadHandle, handle_, user.c_str()) == 0;
-                },
-                false);
-        }
-
-        return shared_from_this();
-    }
+    std::shared_ptr<DXEndpoint> user(const std::string &user);
 
     /**
      * Changes password for this endpoint.
@@ -788,24 +665,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * @return this DXEndpoint.
      */
-    std::shared_ptr<DXEndpoint> password(const std::string &password) {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::password(password = {})", detail::bit_cast<std::size_t>(handle_),
-                          password);
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (handle_) {
-            detail::runIsolatedOrElse(
-                [password = password, this](auto threadHandle) {
-                    return dxfg_DXEndpoint_password(threadHandle, handle_, password.c_str()) == 0;
-                },
-                false);
-        }
-
-        return shared_from_this();
-    }
+    std::shared_ptr<DXEndpoint> password(const std::string &password);
 
     /**
      * Connects to the specified remote address. Previously established connections are closed if
@@ -834,23 +694,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      * @param address The data source address.
      * @return this DXEndpoint.
      */
-    std::shared_ptr<DXEndpoint> connect(const std::string &address) {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::connect(address = {})", detail::bit_cast<std::size_t>(handle_), address);
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (handle_) {
-            detail::runIsolatedOrElse(
-                [address = address, this](auto threadHandle) {
-                    return dxfg_DXEndpoint_connect(threadHandle, handle_, address.c_str()) == 0;
-                },
-                false);
-        }
-
-        return shared_from_this();
-    }
+    std::shared_ptr<DXEndpoint> connect(const std::string &address);
 
     /**
      * Terminates all established network connections and initiates connecting again with the same address.
@@ -868,20 +712,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#reconnect--)
      */
-    void reconnect() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::reconnect()", detail::bit_cast<std::size_t>(handle_));
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (!handle_) {
-            return;
-        }
-
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXEndpoint_reconnect(threadHandle, handle_) == 0; }, false);
-    }
+    void reconnect();
 
     /**
      * Terminates all remote network connections.
@@ -893,20 +724,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnect--)
      */
-    void disconnect() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::disconnect()", detail::bit_cast<std::size_t>(handle_));
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (!handle_) {
-            return;
-        }
-
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXEndpoint_disconnect(threadHandle, handle_) == 0; }, false);
-    }
+    void disconnect();
 
     /**
      * Terminates all remote network connections and clears stored data.
@@ -918,21 +736,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnectAndClear--)
      */
-    void disconnectAndClear() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::disconnectAndClear()", detail::bit_cast<std::size_t>(handle_));
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (!handle_) {
-            return;
-        }
-
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXEndpoint_disconnectAndClear(threadHandle, handle_) == 0; },
-            false);
-    }
+    void disconnectAndClear();
 
     /**
      * Closes this endpoint. All network connection are terminated as with ::disconnect() method and no further
@@ -945,7 +749,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      */
     void close() {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::close()", detail::bit_cast<std::size_t>(handle_));
+            detail::debug("DXEndpoint{{{}}}::close()", handler_.get());
         }
 
         std::lock_guard guard(mtx_);
@@ -964,20 +768,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitNotConnected--)
      */
-    void awaitNotConnected() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::awaitNotConnected()", detail::bit_cast<std::size_t>(handle_));
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (!handle_) {
-            return;
-        }
-
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXEndpoint_awaitNotConnected(threadHandle, handle_) == 0; }, false);
-    }
+    void awaitNotConnected();
 
     /**
      * Waits until this endpoint stops processing data (becomes quiescent).
@@ -986,20 +777,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitProcessed--)
      */
-    void awaitProcessed() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::awaitProcessed()", detail::bit_cast<std::size_t>(handle_));
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (!handle_) {
-            return;
-        }
-
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXEndpoint_awaitProcessed(threadHandle, handle_) == 0; }, false);
-    }
+    void awaitProcessed();
 
     /**
      * Closes this endpoint and wait until all pending data processing tasks are completed.
@@ -1012,47 +790,15 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#closeAndAwaitTermination--)
      */
-    void closeAndAwaitTermination() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", detail::bit_cast<std::size_t>(handle_));
-        }
-
-        std::lock_guard guard(mtx_);
-
-        if (!handle_) {
-            return;
-        }
-
-        detail::runIsolatedOrElse(
-            [this](auto threadHandle) { return dxfg_DXEndpoint_closeAndAwaitTermination(threadHandle, handle_) == 0; },
-            false);
-
-        // TODO: close the Feed and Publisher
-    }
+    void closeAndAwaitTermination();
 
     // TODO: implement
-    std::unordered_set<EventTypeEnum> getEventTypes() {
-        return {};
-    }
+    std::unordered_set<EventTypeEnum> getEventTypes() { return {}; }
 
     /**
      * @return The feed that is associated with this endpoint.
      */
-    std::shared_ptr<DXFeed> getFeed() {
-        std::lock_guard guard(mtx_);
-
-        if (!feed_) {
-            auto feedHandle =
-                !handle_ ? nullptr
-                         : detail::runIsolatedOrElse(
-                               [this](auto threadHandle) { return dxfg_DXEndpoint_getFeed(threadHandle, handle_); },
-                               nullptr);
-
-            feed_ = DXFeed::create(feedHandle);
-        }
-
-        return feed_;
-    }
+    std::shared_ptr<DXFeed> getFeed();
 
     // TODO: implement
     std::shared_ptr<DXPublisher> getPublisher() { return {}; }
@@ -1060,33 +806,21 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.
      */
-    class Builder : public std::enable_shared_from_this<Builder>, public detail::WithHandle<dxfg_endpoint_builder_t *> {
+    class Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
         mutable std::recursive_mutex mtx_{};
+        detail::JavaObjectHandler handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() : mtx_(), properties_() {
+        Builder() : mtx_{}, handler_{detail::createJavaObjectHandler()}, properties_{} {
             if constexpr (detail::isDebug) {
                 detail::debug("DXEndpoint::Builder::Builder()");
             }
         }
 
-        static std::shared_ptr<Builder> create() noexcept {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder::create()");
-            }
-
-            auto result = detail::runIsolatedOrElse(
-                [](auto threadHandle) { return dxfg_DXEndpoint_newBuilder(threadHandle); }, nullptr);
-
-            auto builder = std::shared_ptr<Builder>(new (std::nothrow) Builder{});
-
-            builder->handle_ = result;
-
-            return builder;
-        }
+        static std::shared_ptr<Builder> create() noexcept;
 
         /**
          * Tries to load the default properties file for Role::FEED, Role::ON_DEMAND_FEED or Role::PUBLISHER role.
@@ -1100,60 +834,14 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
          *
          * Non thread-safe.
          */
-        void loadDefaultPropertiesImpl() {
-            // The default properties file is only valid for the
-            // Feed, OnDemandFeed and Publisher roles.
-            auto propertiesFileKey = [this]() -> std::string {
-                switch (role_) {
-                case Role::FEED:
-                case Role::ON_DEMAND_FEED:
-                    return DXFEED_PROPERTIES_PROPERTY;
-                case Role::PUBLISHER:
-                    return DXPUBLISHER_PROPERTIES_PROPERTY;
-                case Role::STREAM_FEED:
-                case Role::STREAM_PUBLISHER:
-                case Role::LOCAL_HUB:
-                    break;
-                }
-
-                return {};
-            }();
-
-            if (propertiesFileKey.empty()) {
-                return;
-            }
-
-            // If propertiesFileKey was set in system properties,
-            // don't try to load the default properties file.
-            if (!System::getProperty(propertiesFileKey).empty()) {
-                return;
-            }
-
-            // If there is no propertiesFileKey in user-set properties,
-            // try load default properties file from current runtime directory if file exist.
-            if (!properties_.contains(propertiesFileKey) && std::filesystem::exists(propertiesFileKey)) {
-                if (!handle_) {
-                    return;
-                }
-
-                // The default property file has the same value as the key.
-                detail::runIsolatedOrElse(
-                    [key = propertiesFileKey, value = propertiesFileKey, this](auto threadHandle) {
-                        return dxfg_DXEndpoint_Builder_withProperty(threadHandle, handle_, key.c_str(),
-                                                                    value.c_str()) == 0;
-                    },
-                    false);
-            }
-        }
+        void loadDefaultPropertiesImpl();
 
       public:
         /// Releases the GraalVM handle
         virtual ~Builder() {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", detail::bit_cast<std::size_t>(handle_));
+                detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", handler_.get());
             }
-
-            detail::tryCallWithLock(mtx_, [this] { releaseHandle(); });
         }
 
         /**
@@ -1167,8 +855,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", detail::bit_cast<std::size_t>(handle_),
-                              name);
+                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.get(), name);
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -1182,26 +869,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
          *
          * @return `this` endpoint builder.
          */
-        std::shared_ptr<Builder> withRole(Role role) {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", detail::bit_cast<std::size_t>(handle_),
-                              roleToString(role));
-            }
-
-            std::lock_guard guard(mtx_);
-
-            role_ = role;
-
-            if (handle_) {
-                detail::runIsolatedOrElse(
-                    [role = role, this](auto threadHandle) {
-                        return dxfg_DXEndpoint_Builder_withRole(threadHandle, handle_, roleToGraalRole(role)) == 0;
-                    },
-                    false);
-            }
-
-            return shared_from_this();
-        }
+        std::shared_ptr<Builder> withRole(Role role);
 
         /**
          * Sets the specified property. Unsupported properties are ignored.
@@ -1212,27 +880,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
          *
          * @see ::supportsProperty(const std::string&)
          */
-        std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value) {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})",
-                              detail::bit_cast<std::size_t>(handle_), key, value);
-            }
-
-            std::lock_guard guard(mtx_);
-
-            properties_[key] = value;
-
-            if (handle_) {
-                detail::runIsolatedOrElse(
-                    [key = key, value = value, this](auto threadHandle) {
-                        return dxfg_DXEndpoint_Builder_withProperty(threadHandle, handle_, key.c_str(),
-                                                                    value.c_str()) == 0;
-                    },
-                    false);
-            }
-
-            return shared_from_this();
-        }
+        std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value);
 
         /**
          * Sets all supported properties from the provided properties object.
@@ -1245,8 +893,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])",
-                              detail::bit_cast<std::size_t>(handle_), properties.size());
+                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", handler_.get(),
+                              properties.size());
             }
 
             std::lock_guard guard(mtx_);
@@ -1266,48 +914,14 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint>, detail::WithHandle
          *
          * @see ::withProperty(const std::string&, const std::string&)
          */
-        bool supportsProperty(const std::string &key) {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})",
-                              detail::bit_cast<std::size_t>(handle_), key);
-            }
-
-            std::lock_guard guard(mtx_);
-
-            if (!handle_) {
-                return false;
-            }
-
-            return detail::runIsolatedOrElse(
-                [key = key, this](auto threadHandle) {
-                    return dxfg_DXEndpoint_Builder_supportsProperty(threadHandle, handle_, key.c_str()) != 0;
-                },
-                false);
-        }
+        bool supportsProperty(const std::string &key);
 
         /**
          * Builds DXEndpoint instance.
          *
          * @return the created endpoint.
          */
-        std::shared_ptr<DXEndpoint> build() {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::build()", detail::bit_cast<std::size_t>(handle_));
-            }
-
-            std::lock_guard guard(mtx_);
-
-            loadDefaultPropertiesImpl();
-
-            auto endpointHandle =
-                !handle_
-                    ? nullptr
-                    : detail::runIsolatedOrElse(
-                          [this](auto threadHandle) { return dxfg_DXEndpoint_Builder_build(threadHandle, handle_); },
-                          nullptr);
-
-            return DXEndpoint::create(endpointHandle, role_, properties_);
-        }
+        std::shared_ptr<DXEndpoint> build();
     };
 
     /**
