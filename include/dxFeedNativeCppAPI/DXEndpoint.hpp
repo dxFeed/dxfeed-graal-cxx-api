@@ -855,7 +855,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", detail::handler_utils::toString(handler_), name);
+                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})",
+                              detail::handler_utils::toString(handler_), name);
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -893,8 +894,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", detail::handler_utils::toString(handler_),
-                              properties.size());
+                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])",
+                              detail::handler_utils::toString(handler_), properties.size());
             }
 
             std::lock_guard guard(mtx_);

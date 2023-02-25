@@ -14,8 +14,6 @@
 #include <sstream>
 #include <type_traits>
 
-// #include <dxfg_javac.h>
-
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/std.h>
@@ -142,12 +140,11 @@ struct EventClassList {
 
     std::size_t size() const noexcept;
 
-    void* getHandler() noexcept;
+    void *getHandler() noexcept;
 
     ~EventClassList() noexcept;
 
   private:
-
     EventClassList() noexcept;
 
     struct Impl;

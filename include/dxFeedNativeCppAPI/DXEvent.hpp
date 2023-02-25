@@ -32,11 +32,9 @@ class EventTypeEnum {
     // TimeSeries) event.
     bool isOnlyIndexed_;
 
-    EventTypeEnum(std::uint32_t id, std::string name, bool isLasting,
-                  bool isIndexed = false, bool isTimeSeries = false)
-        : id_{id}, name_{std::move(name)},
-          isLasting_{isLasting}, isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries},
-          isOnlyIndexed_{isIndexed && !isTimeSeries} {}
+    EventTypeEnum(std::uint32_t id, std::string name, bool isLasting, bool isIndexed = false, bool isTimeSeries = false)
+        : id_{id}, name_{std::move(name)}, isLasting_{isLasting}, isIndexed_{isIndexed || isTimeSeries},
+          isTimeSeries_{isTimeSeries}, isOnlyIndexed_{isIndexed && !isTimeSeries} {}
 
   public:
     static const EventTypeEnum QUOTE;
@@ -74,13 +72,9 @@ class EventTypeEnum {
      */
     const std::string &getName() const { return name_; }
 
-    bool operator==(const EventTypeEnum &eventTypeEnum) const {
-        return id_ == eventTypeEnum.id_;
-    }
+    bool operator==(const EventTypeEnum &eventTypeEnum) const { return id_ == eventTypeEnum.id_; }
 
-    bool operator<(const EventTypeEnum &eventTypeEnum) const {
-        return id_ < eventTypeEnum.id_;
-    }
+    bool operator<(const EventTypeEnum &eventTypeEnum) const { return id_ < eventTypeEnum.id_; }
 
     /**
      * @return `true` if the current enum element is characterizing the Lasting (TICKER) event
@@ -108,9 +102,7 @@ class EventTypeEnum {
 namespace std {
 
 template <> struct hash<dxfcpp::EventTypeEnum> {
-    std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept {
-        return eventType.getId();
-    }
+    std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept { return eventType.getId(); }
 };
 
 } // namespace std
@@ -724,7 +716,5 @@ struct TimeSeriesEvent : public IndexedEvent {
      */
     virtual std::uint64_t getTime() const = 0;
 };
-
-
 
 } // namespace dxfcpp
