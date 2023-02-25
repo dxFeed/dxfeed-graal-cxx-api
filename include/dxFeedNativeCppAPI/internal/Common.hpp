@@ -124,13 +124,38 @@ template <typename... Args> inline void debug(std::string_view format, Args &&..
     vprint(std::cerr, "{} {}\n", debugPrefixStr(), vformat(format, std::forward<Args>(args)...));
 }
 
-void javaObjectHandlerDeleter(void* javaObjectHandler);
+namespace handler_utils {
+void javaObjectHandlerDeleter(void *javaObjectHandler);
 
 using JavaObjectHandler = std::unique_ptr<void, decltype(&javaObjectHandlerDeleter)>;
 
-inline JavaObjectHandler createJavaObjectHandler(void* handler = nullptr);
+inline JavaObjectHandler createJavaObjectHandler(void *handler = nullptr);
 
-inline std::string toString(const JavaObjectHandler& handler);
+inline std::string toString(const JavaObjectHandler &handler);
+
+struct EventClassList {
+    static std::unique_ptr<EventClassList> create(std::size_t size) noexcept;
+
+    void set(std::size_t index, std::uint32_t id) noexcept;
+
+    bool isEmpty() const noexcept;
+
+    std::size_t size() const noexcept;
+
+    void* getHandler() noexcept;
+
+    ~EventClassList() noexcept;
+
+  private:
+
+    EventClassList() noexcept;
+
+    struct Impl;
+
+    std::unique_ptr<Impl> impl_;
+};
+
+} // namespace handler_utils
 
 template <typename It>
     requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }

@@ -28,14 +28,14 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
   private:
     mutable std::recursive_mutex mtx_{};
-    detail::JavaObjectHandler handler_;
+    detail::handler_utils::JavaObjectHandler handler_;
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 
     static std::shared_ptr<DXFeed> create(void *feedHandle) noexcept;
 
   protected:
-    DXFeed() noexcept : mtx_(), handler_{nullptr, &detail::javaObjectHandlerDeleter} {
+    DXFeed() noexcept : mtx_(), handler_{nullptr, &detail::handler_utils::javaObjectHandlerDeleter} {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeed()");
         }
@@ -102,7 +102,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
     std::string toString() const {
         std::lock_guard guard(mtx_);
 
-        return detail::vformat("DXFeed{{{}}}", detail::toString(handler_));
+        return detail::vformat("DXFeed{{{}}}", detail::handler_utils::toString(handler_));
     }
 };
 

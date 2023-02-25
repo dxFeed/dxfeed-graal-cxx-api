@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <dxfg_subscription.h>
-
 #include <memory>
 
 #include "DXEvent.hpp"
@@ -20,41 +18,19 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     friend struct DXFeed;
 
     mutable std::recursive_mutex mtx_{};
-    detail::JavaObjectHandler handler_;
+    detail::handler_utils::JavaObjectHandler handler_;
 
-    explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept
-        : mtx_{}, handler_{detail::createJavaObjectHandler(nullptr)} {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXFeedSubscription(eventType = {})", eventType.getName());
-        }
+    explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
-        handler_ = detail::createJavaObjectHandler(detail::runIsolatedOrElse(
-            [eventType](auto threadHandle) {
-                return dxfg_DXFeedSubscription_new(threadHandle, eventType.getDxFeedGraalNativeApiEventClazz());
-            },
-            nullptr));
-    }
+    detail::handler_utils::JavaObjectHandler
+    createFromEventClassList(const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept;
 
     template <typename EventTypeIt>
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : mtx_{}, handler_{detail::createJavaObjectHandler(nullptr)} {
+        : mtx_{}, handler_{detail::handler_utils::createJavaObjectHandler(nullptr)} {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeedSubscription(eventTypes = {})", detail::namesToString(begin, end));
         }
-
-        dxfg_event_clazz_list_t l{0, nullptr};
-
-        auto clazzListCleaner = detail::finally([&l] {
-            if (l.size == 0 || l.elements == nullptr) {
-                return;
-            }
-
-            for (auto i = l.size - 1; i >= 0; i--) {
-                delete l.elements[i];
-            }
-
-            delete[] l.elements;
-        });
 
         auto size = std::distance(begin, end);
 
@@ -62,22 +38,19 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
             return;
         }
 
-        l.size = static_cast<std::int32_t>(size);
-        l.elements = new (std::nothrow) dxfg_event_clazz_t *[size];
+        auto list = detail::handler_utils::EventClassList::create(size);
 
-        if (!l.elements) {
+        if (list->isEmpty()) {
             return;
         }
 
         std::size_t i = 0;
 
-        //TODO: extract
         for (auto it = begin; it != end; it++, i++) {
-            l.elements[i] = new (std::nothrow) dxfg_event_clazz_t{it->getDxFeedGraalNativeApiEventClazz()};
+            list->set(i, it->getId());
         }
 
-        handler_ = detail::createJavaObjectHandler(detail::runIsolatedOrElse(
-            [&l](auto threadHandle) { return dxfg_DXFeedSubscription_new2(threadHandle, &l); }, nullptr));
+        handler_ = createFromEventClassList(list);
     }
 
     DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
@@ -99,7 +72,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     std::string toString() const {
         std::lock_guard lock(mtx_);
 
-        return detail::vformat("DXFeedSubscription{{{}}}", detail::toString(handler_));
+        return detail::vformat("DXFeedSubscription{{{}}}", detail::handler_utils::toString(handler_));
     }
 
     virtual ~DXFeedSubscription() {

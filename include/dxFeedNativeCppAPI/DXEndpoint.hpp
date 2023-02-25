@@ -463,12 +463,12 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
     mutable std::recursive_mutex mtx_{};
-    detail::JavaObjectHandler handler_;
+    detail::handler_utils::JavaObjectHandler handler_;
     Role role_ = Role::FEED;
     std::string name_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
-    detail::JavaObjectHandler stateChangeListenerHandler_;
+    detail::handler_utils::JavaObjectHandler stateChangeListenerHandler_;
     detail::Handler<void(State, State)> onStateChange_{};
 
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
@@ -480,8 +480,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
   protected:
     DXEndpoint()
-        : mtx_(), handler_(detail::createJavaObjectHandler()), role_(), feed_(), publisher_(),
-          stateChangeListenerHandler_(detail::createJavaObjectHandler()), onStateChange_() {
+        : mtx_(), handler_(detail::handler_utils::createJavaObjectHandler()), role_(), feed_(), publisher_(),
+          stateChangeListenerHandler_(detail::handler_utils::createJavaObjectHandler()), onStateChange_() {
         if constexpr (detail::isDebug) {
             detail::debug("DXEndpoint()");
         }
@@ -490,7 +490,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
   public:
     virtual ~DXEndpoint() {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.get());
+            detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", detail::handler_utils::toString(handler_));
         }
 
         detail::tryCallWithLock(mtx_, [this] { closeImpl(); });
@@ -749,7 +749,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void close() {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::close()", handler_.get());
+            detail::debug("DXEndpoint{{{}}}::close()", detail::handler_utils::toString(handler_));
         }
 
         std::lock_guard guard(mtx_);
@@ -810,11 +810,11 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         friend DXEndpoint;
 
         mutable std::recursive_mutex mtx_{};
-        detail::JavaObjectHandler handler_;
+        detail::handler_utils::JavaObjectHandler handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() : mtx_{}, handler_{detail::createJavaObjectHandler()}, properties_{} {
+        Builder() : mtx_{}, handler_{detail::handler_utils::createJavaObjectHandler()}, properties_{} {
             if constexpr (detail::isDebug) {
                 detail::debug("DXEndpoint::Builder::Builder()");
             }
@@ -840,7 +840,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         /// Releases the GraalVM handle
         virtual ~Builder() {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", handler_.get());
+                detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", detail::handler_utils::toString(handler_));
             }
         }
 
@@ -855,7 +855,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.get(), name);
+                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", detail::handler_utils::toString(handler_), name);
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -893,7 +893,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", handler_.get(),
+                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", detail::handler_utils::toString(handler_),
                               properties.size());
             }
 

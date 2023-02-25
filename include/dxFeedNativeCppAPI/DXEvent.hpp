@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <dxfg_events.h>
-
 #include <memory>
 #include <string>
 #include <utility>
@@ -16,9 +14,8 @@ namespace dxfcpp {
  * Useful when used as a subscription parameter.
  */
 class EventTypeEnum {
-    //TODO: wrap
     /// The dxFeed Graal Native C-API event class id corresponding to the current enum element.
-    dxfg_event_clazz_t dxFeedGraalNativeApiEventClazz_;
+    std::uint32_t id_;
 
     std::string name_;
 
@@ -35,9 +32,9 @@ class EventTypeEnum {
     // TimeSeries) event.
     bool isOnlyIndexed_;
 
-    EventTypeEnum(dxfg_event_clazz_t dxFeedGraalNativeApiEventClazz, std::string name, bool isLasting,
+    EventTypeEnum(std::uint32_t id, std::string name, bool isLasting,
                   bool isIndexed = false, bool isTimeSeries = false)
-        : dxFeedGraalNativeApiEventClazz_{dxFeedGraalNativeApiEventClazz}, name_{std::move(name)},
+        : id_{id}, name_{std::move(name)},
           isLasting_{isLasting}, isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries},
           isOnlyIndexed_{isIndexed && !isTimeSeries} {}
 
@@ -65,12 +62,12 @@ class EventTypeEnum {
     static const EventTypeEnum SPREAD_ORDER;
     static const EventTypeEnum SERIES;
 
-    explicit EventTypeEnum() : EventTypeEnum{static_cast<dxfg_event_clazz_t>(-1), "INVALID", false} {}
+    explicit EventTypeEnum() : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", false} {}
 
     /**
      * @return The dxFeed Graal Native C-API event class id
      */
-    dxfg_event_clazz_t getDxFeedGraalNativeApiEventClazz() const { return dxFeedGraalNativeApiEventClazz_; }
+    std::uint32_t getId() const { return id_; }
 
     /**
      * @return The current enum element name
@@ -78,11 +75,11 @@ class EventTypeEnum {
     const std::string &getName() const { return name_; }
 
     bool operator==(const EventTypeEnum &eventTypeEnum) const {
-        return dxFeedGraalNativeApiEventClazz_ == eventTypeEnum.dxFeedGraalNativeApiEventClazz_;
+        return id_ == eventTypeEnum.id_;
     }
 
     bool operator<(const EventTypeEnum &eventTypeEnum) const {
-        return dxFeedGraalNativeApiEventClazz_ < eventTypeEnum.dxFeedGraalNativeApiEventClazz_;
+        return id_ < eventTypeEnum.id_;
     }
 
     /**
@@ -112,7 +109,7 @@ namespace std {
 
 template <> struct hash<dxfcpp::EventTypeEnum> {
     std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept {
-        return eventType.getDxFeedGraalNativeApiEventClazz();
+        return eventType.getId();
     }
 };
 
