@@ -139,18 +139,24 @@ struct EventClassList::Impl {
         list_.size = static_cast<std::int32_t>(size);
         list_.elements = new (std::nothrow) dxfg_event_clazz_t *[list_.size];
 
-        auto cleaner = detail::finally([this] { release(); });
-
         if (!list_.elements) {
+            release();
+
             return;
         }
+
+        bool needToRelease = false;
 
         for (std::int32_t i = 0; i < list_.size; i++) {
             list_.elements[i] = new (std::nothrow) dxfg_event_clazz_t{};
 
             if (!list_.elements[i]) {
-                return;
+                needToRelease = true;
             }
+        }
+
+        if (needToRelease) {
+            release();
         }
     }
 
@@ -748,8 +754,8 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
         nullptr));
 }
 
-detail::handler_utils::JavaObjectHandler
-DXFeedSubscription::createFromEventClassList(const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept {
+detail::handler_utils::JavaObjectHandler DXFeedSubscription::createFromEventClassList(
+    const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept {
     return detail::handler_utils::createJavaObjectHandler(detail::runIsolatedOrElse(
         [listHandler = detail::bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](auto threadHandle) {
             return dxfg_DXFeedSubscription_new2(threadHandle, listHandler);
