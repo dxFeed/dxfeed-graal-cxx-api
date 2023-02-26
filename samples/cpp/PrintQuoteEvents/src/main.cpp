@@ -4,6 +4,12 @@
 #include <dxFeedNativeCppAPI.hpp>
 
 int main() {
+    dxfcpp::Quote q{};
+
+    std::cout << dxfcpp::detail::nowStrWithTimeZone() << std::endl;
+    std::cout << dxfcpp::detail::formatTimeStamp(1677448613000) << std::endl;
+    std::cout << dxfcpp::detail::formatTimeStampWithMillis(1677448613023) << std::endl;
+
     {
         auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
         auto endpoint = builder->build();

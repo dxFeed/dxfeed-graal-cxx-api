@@ -518,6 +518,7 @@ const EventTypeEnum EventTypeEnum::ORDER{DXFG_EVENT_ORDER, "ORDER", false, true}
 const EventTypeEnum EventTypeEnum::ANALYTIC_ORDER{DXFG_EVENT_ANALYTIC_ORDER, "ANALYTIC_ORDER", false, true};
 const EventTypeEnum EventTypeEnum::SPREAD_ORDER{DXFG_EVENT_SPREAD_ORDER, "SPREAD_ORDER", false, true};
 const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, "SERIES", false, true};
+const EventTypeEnum EventTypeEnum::OPTION_SALE{DXFG_EVENT_OPTION_SALE, "OPTION_SALE", false, true};
 
 const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
 
@@ -906,6 +907,43 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
 
     return DXEndpoint::create(endpointHandle, role_, properties_);
 }
+
+char utf16to8(std::int16_t in) {
+    try {
+        std::string out{};
+        auto utf16in = {in};
+
+        utf8::utf16to8(std::begin(utf16in), std::end(utf16in), std::back_inserter(out));
+
+        return out.empty() ? char{} : out[0];
+    } catch (...) {
+        return char{};
+    }
+}
+
+std::int16_t utf8to16(char in) {
+    try {
+        std::u16string out{};
+        auto utf8in = {in};
+
+        utf8::utf8to16(std::begin(utf8in), std::end(utf8in), std::back_inserter(out));
+
+        return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
+    } catch (...) {
+        return std::int16_t{};
+    }
+}
+
+const EventTypeEnum Quote::type = EventTypeEnum::QUOTE;
+
+char Quote::getBidExchangeCode() const { return utf16to8(data_.bidExchangeCode); }
+
+void Quote::setBidExchangeCode(char bidExchangeCode) { data_.bidExchangeCode = utf8to16(bidExchangeCode); }
+
+char Quote::getAskExchangeCode() const { return utf16to8(data_.askExchangeCode); }
+
+void Quote::setAskExchangeCode(char askExchangeCode) { data_.askExchangeCode = utf8to16(askExchangeCode); }
+
 } // namespace dxfcpp
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {

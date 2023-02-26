@@ -9,6 +9,7 @@
 #include <cstring>
 
 #include <chrono>
+#include <cmath>
 #include <iostream>
 #include <mutex>
 #include <sstream>
@@ -110,6 +111,26 @@ inline std::string nowStr() {
     return vformat("{:%y%m%d %H%M%S}.{:0>3}", std::chrono::floor<std::chrono::seconds>(now), ms);
 }
 
+inline std::string nowStrWithTimeZone() {
+    auto now = std::chrono::system_clock::now();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
+
+    return vformat("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", std::chrono::floor<std::chrono::seconds>(now), ms, std::chrono::floor<std::chrono::seconds>(now));
+}
+
+inline std::string formatTimeStamp(std::int64_t timestamp) {
+    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+
+    return vformat("{:%y%m%d-%H%M%S%z}", tm);
+}
+
+inline std::string formatTimeStampWithMillis(std::int64_t timestamp) {
+    auto ms = timestamp % 1000;
+    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+
+    return vformat("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
+}
+
 inline std::string debugPrefixStr() {
     std::ostringstream tid{};
 
@@ -192,5 +213,61 @@ inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
 
 template <typename Collection, typename ElementType>
 concept ElementTypeIs = std::is_same_v<std::decay_t<decltype(*std::begin(Collection{}))>, ElementType>;
+
+namespace math {
+static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
+    std::int64_t r = x / y;
+
+    // if the signs are different and modulo not zero, round down
+    if ((x < 0) != (y < 0) && (r * y != x)) {
+        r--;
+    }
+
+    return r;
+}
+
+static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) { return x - (floorDiv(x, y) * y); }
+
+static const double NaN = std::numeric_limits<double>::quiet_NaN();
+
+} // namespace math
+
+namespace time_nanos_util {
+static const std::int64_t NANOS_IN_MILLIS = 1'000'000LL;
+
+static std::int64_t getNanosFromMillisAndNanoPart(std::int64_t timeMillis, std::int32_t timeNanoPart) {
+    return (timeMillis * NANOS_IN_MILLIS) + timeNanoPart;
+}
+} // namespace time_nanos_util
+
+namespace time_util {
+/// Number of milliseconds in a second.
+static const std::int64_t SECOND = 1000LL;
+
+/**
+ * Returns correct number of milliseconds with proper handling negative values.
+ * Idea is that number of milliseconds shall be within [0..999] interval
+ *
+ * @param timeMillis
+ * @return
+ */
+static std::int32_t getMillisFromTime(std::int64_t timeMillis) {
+    return static_cast<std::int32_t>(math::floorMod(timeMillis, SECOND));
+}
+} // namespace time_util
+
+namespace string_util {
+static std::string encodeChar(std::int16_t c) {
+    if (c >= 32 && c <= 126) {
+        return std::string{} + static_cast<char>(c);
+    }
+
+    if (c == 0) {
+        return "\\0";
+    }
+
+    return std::string("\\u") + vformat("{0:04x}", 65536 + static_cast<int>(c)).substr(1);
+}
+}
 
 } // namespace dxfcpp::detail
