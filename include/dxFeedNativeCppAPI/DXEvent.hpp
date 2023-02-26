@@ -754,6 +754,8 @@ class Quote final : public MarketEvent, public LastingEvent {
             static_cast<std::uint32_t>(getSequence()));
     }
 
+    std::shared_ptr<Quote> fromGraalNative(void* graalNative);
+
   public:
     static const EventTypeEnum type;
 

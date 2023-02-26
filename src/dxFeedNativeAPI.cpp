@@ -6,10 +6,12 @@
 #include <dxFeedNativeCAPI/dxFeedNativeCAPI.h>
 #include <dxFeedNativeCppAPI/dxFeedNativeCppAPI.hpp>
 
-#include "dxFeedNativeCppAPI/internal/Common.hpp"
+#include "dxFeedNativeCppAPI/DXEvent.hpp"
 #include "dxFeedNativeCppAPI/DXFeedSubscription.hpp"
+#include "dxFeedNativeCppAPI/internal/Common.hpp"
 
 #include <cstring>
+#include <memory>
 #include <utf8cpp/utf8.h>
 #include <utility>
 
@@ -290,7 +292,7 @@ void DXEndpoint::setStateChangeListenerImpl() {
             [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get()),
              stateChangeListenerHandler = detail::bit_cast<dxfg_endpoint_state_change_listener_t *>(
                  stateChangeListenerHandler_.get())](auto threadHandle) {
-                //TODO: finalize function
+                // TODO: finalize function
 
                 return dxfg_DXEndpoint_addStateChangeListener(
                            threadHandle, handler, stateChangeListenerHandler, [](auto, auto) {}, nullptr) == 0;
@@ -776,8 +778,7 @@ void DXFeedSubscription::setEventListenerHandler() noexcept {
             return dxfg_DXFeedEventListener_new(
                 threadHandle,
                 [](graal_isolatethread_t *thread, dxfg_event_type_list *events, void *user_data) {
-
-                    //TODO: implement
+                    // TODO: implement
                 },
                 subscription.get());
         },
@@ -786,9 +787,9 @@ void DXFeedSubscription::setEventListenerHandler() noexcept {
     if (handler_ && eventListenerHandler_) {
         detail::runIsolatedOrElse(
             [handler = detail::bit_cast<dxfg_subscription_t *>(handler_.get()),
-             eventListenerHandler = detail::bit_cast<dxfg_feed_event_listener_t *>(
-                 eventListenerHandler_.get())](auto threadHandle) {
-                //TODO: finalize function
+             eventListenerHandler =
+                 detail::bit_cast<dxfg_feed_event_listener_t *>(eventListenerHandler_.get())](auto threadHandle) {
+                // TODO: finalize function
 
                 return dxfg_DXFeedSubscription_addEventListener(
                            threadHandle, handler, eventListenerHandler, [](auto, auto) {}, nullptr) == 0;
@@ -976,6 +977,35 @@ void Quote::setBidExchangeCode(char bidExchangeCode) { data_.bidExchangeCode = u
 char Quote::getAskExchangeCode() const { return utf16to8(data_.askExchangeCode); }
 
 void Quote::setAskExchangeCode(char askExchangeCode) { data_.askExchangeCode = utf8to16(askExchangeCode); }
+
+std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_QUOTE) {
+        return {};
+    }
+
+    auto graalQuote = detail::bit_cast<dxfg_quote_t *>(graalNative);
+    auto quote = std::make_shared<Quote>(graalQuote->market_event.event_symbol);
+
+    quote->setEventTime(graalQuote->market_event.event_time);
+    quote->data_.timeMillisSequence = graalQuote->time_millis_sequence;
+    quote->data_.timeNanoPart = graalQuote->time_nano_part;
+    quote->data_.bidTime = graalQuote->bid_time;
+    quote->data_.bidExchangeCode = graalQuote->bid_exchange_code;
+    quote->data_.bidPrice = graalQuote->bid_price;
+    quote->data_.bidSize = graalQuote->bid_size;
+    quote->data_.askTime = graalQuote->ask_time;
+    quote->data_.askExchangeCode = graalQuote->ask_exchange_code;
+    quote->data_.askPrice = graalQuote->ask_price;
+    quote->data_.askSize = graalQuote->ask_size;
+
+    return quote;
+}
 
 } // namespace dxfcpp
 
