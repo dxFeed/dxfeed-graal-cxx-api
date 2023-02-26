@@ -7,6 +7,8 @@
 #include <dxFeedNativeCppAPI/dxFeedNativeCppAPI.hpp>
 
 #include "dxFeedNativeCppAPI/internal/Common.hpp"
+#include "dxFeedNativeCppAPI/DXFeedSubscription.hpp"
+
 #include <cstring>
 #include <utf8cpp/utf8.h>
 #include <utility>
@@ -288,6 +290,8 @@ void DXEndpoint::setStateChangeListenerImpl() {
             [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get()),
              stateChangeListenerHandler = detail::bit_cast<dxfg_endpoint_state_change_listener_t *>(
                  stateChangeListenerHandler_.get())](auto threadHandle) {
+                //TODO: finalize function
+
                 return dxfg_DXEndpoint_addStateChangeListener(
                            threadHandle, handler, stateChangeListenerHandler, [](auto, auto) {}, nullptr) == 0;
             },
@@ -743,7 +747,8 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
-    : mtx_{}, handler_{detail::handler_utils::createJavaObjectHandler(nullptr)} {
+    : mtx_{}, handler_{detail::handler_utils::createJavaObjectHandler(nullptr)},
+      eventListenerHandler_{detail::handler_utils::createJavaObjectHandler(nullptr)}, onEvent_{} {
     if constexpr (detail::isDebug) {
         detail::debug("DXFeedSubscription(eventType = {})", eventType.getName());
     }
@@ -753,15 +758,43 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
             return dxfg_DXFeedSubscription_new(threadHandle, static_cast<dxfg_event_clazz_t>(eventType.getId()));
         },
         nullptr));
+
+    setEventListenerHandler();
 }
 
-detail::handler_utils::JavaObjectHandler DXFeedSubscription::createFromEventClassList(
+detail::handler_utils::JavaObjectHandler DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
     const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept {
     return detail::handler_utils::createJavaObjectHandler(detail::runIsolatedOrElse(
         [listHandler = detail::bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](auto threadHandle) {
             return dxfg_DXFeedSubscription_new2(threadHandle, listHandler);
         },
         nullptr));
+}
+void DXFeedSubscription::setEventListenerHandler() noexcept {
+    eventListenerHandler_ = detail::handler_utils::createJavaObjectHandler(detail::runIsolatedOrElse(
+        [subscription = shared_from_this()](auto threadHandle) {
+            return dxfg_DXFeedEventListener_new(
+                threadHandle,
+                [](graal_isolatethread_t *thread, dxfg_event_type_list *events, void *user_data) {
+
+                    //TODO: implement
+                },
+                subscription.get());
+        },
+        nullptr));
+
+    if (handler_ && eventListenerHandler_) {
+        detail::runIsolatedOrElse(
+            [handler = detail::bit_cast<dxfg_subscription_t *>(handler_.get()),
+             eventListenerHandler = detail::bit_cast<dxfg_feed_event_listener_t *>(
+                 eventListenerHandler_.get())](auto threadHandle) {
+                //TODO: finalize function
+
+                return dxfg_DXFeedSubscription_addEventListener(
+                           threadHandle, handler, eventListenerHandler, [](auto, auto) {}, nullptr) == 0;
+            },
+            false);
+    }
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
