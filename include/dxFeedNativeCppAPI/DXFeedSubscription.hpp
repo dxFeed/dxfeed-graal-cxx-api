@@ -20,7 +20,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     mutable std::recursive_mutex mtx_{};
     detail::handler_utils::JavaObjectHandler handler_;
     detail::handler_utils::JavaObjectHandler eventListenerHandler_;
-    detail::Handler<void(const std::vector<std::shared_ptr<EventType>>)> onEvent_{};
+    detail::Handler<void(const std::vector<std::shared_ptr<EventType>>&)> onEvent_{};
 
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 

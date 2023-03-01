@@ -777,8 +777,10 @@ void DXFeedSubscription::setEventListenerHandler() noexcept {
         [subscription = shared_from_this()](auto threadHandle) {
             return dxfg_DXFeedEventListener_new(
                 threadHandle,
-                [](graal_isolatethread_t *thread, dxfg_event_type_list *events, void *user_data) {
-                    // TODO: implement
+                [](graal_isolatethread_t *thread, dxfg_event_type_list *graalNativeEvents, void *user_data) {
+                    auto &&events = EventMapper::fromGraalNativeList(detail::bit_cast<void *>(graalNativeEvents));
+
+                    detail::bit_cast<DXFeedSubscription *>(user_data)->onEvent_(events);
                 },
                 subscription.get());
         },
@@ -951,6 +953,7 @@ char utf16to8(std::int16_t in) {
 
         return out.empty() ? char{} : out[0];
     } catch (...) {
+        //TODO: error handling
         return char{};
     }
 }
@@ -964,6 +967,7 @@ std::int16_t utf8to16(char in) {
 
         return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
     } catch (...) {
+        //TODO: error handling
         return std::int16_t{};
     }
 }
@@ -978,7 +982,7 @@ char Quote::getAskExchangeCode() const { return utf16to8(data_.askExchangeCode);
 
 void Quote::setAskExchangeCode(char askExchangeCode) { data_.askExchangeCode = utf8to16(askExchangeCode); }
 
-std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) {
+std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }
@@ -989,22 +993,87 @@ std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) {
         return {};
     }
 
-    auto graalQuote = detail::bit_cast<dxfg_quote_t *>(graalNative);
-    auto quote = std::make_shared<Quote>(graalQuote->market_event.event_symbol);
+    try {
+        auto graalQuote = detail::bit_cast<dxfg_quote_t *>(graalNative);
+        auto quote = std::make_shared<Quote>(graalQuote->market_event.event_symbol);
 
-    quote->setEventTime(graalQuote->market_event.event_time);
-    quote->data_.timeMillisSequence = graalQuote->time_millis_sequence;
-    quote->data_.timeNanoPart = graalQuote->time_nano_part;
-    quote->data_.bidTime = graalQuote->bid_time;
-    quote->data_.bidExchangeCode = graalQuote->bid_exchange_code;
-    quote->data_.bidPrice = graalQuote->bid_price;
-    quote->data_.bidSize = graalQuote->bid_size;
-    quote->data_.askTime = graalQuote->ask_time;
-    quote->data_.askExchangeCode = graalQuote->ask_exchange_code;
-    quote->data_.askPrice = graalQuote->ask_price;
-    quote->data_.askSize = graalQuote->ask_size;
+        quote->setEventTime(graalQuote->market_event.event_time);
+        quote->data_.timeMillisSequence = graalQuote->time_millis_sequence;
+        quote->data_.timeNanoPart = graalQuote->time_nano_part;
+        quote->data_.bidTime = graalQuote->bid_time;
+        quote->data_.bidExchangeCode = graalQuote->bid_exchange_code;
+        quote->data_.bidPrice = graalQuote->bid_price;
+        quote->data_.bidSize = graalQuote->bid_size;
+        quote->data_.askTime = graalQuote->ask_time;
+        quote->data_.askExchangeCode = graalQuote->ask_exchange_code;
+        quote->data_.askPrice = graalQuote->ask_price;
+        quote->data_.askSize = graalQuote->ask_size;
 
-    return quote;
+        return quote;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
+std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) {
+    auto list = detail::bit_cast<dxfg_event_type_list *>(graalNativeList);
+
+    if (list->size <= 0) {
+        return {};
+    }
+
+    std::vector<std::shared_ptr<EventType>> result{static_cast<std::size_t>(list->size)};
+
+    for (std::size_t i = 0; i < list->size; i++) {
+        auto *e = list->elements[i];
+
+        //TODO: implement other types
+        switch (e->clazz) {
+        case DXFG_EVENT_QUOTE:
+            result[i] = Quote::fromGraalNative(e);
+
+            break;
+        case DXFG_EVENT_PROFILE:
+            break;
+        case DXFG_EVENT_SUMMARY:
+            break;
+        case DXFG_EVENT_GREEKS:
+            break;
+        case DXFG_EVENT_CANDLE:
+            break;
+        case DXFG_EVENT_DAILY_CANDLE:
+            break;
+        case DXFG_EVENT_UNDERLYING:
+            break;
+        case DXFG_EVENT_THEO_PRICE:
+            break;
+        case DXFG_EVENT_TRADE:
+            break;
+        case DXFG_EVENT_TRADE_ETH:
+            break;
+        case DXFG_EVENT_CONFIGURATION:
+            break;
+        case DXFG_EVENT_MESSAGE:
+            break;
+        case DXFG_EVENT_TIME_AND_SALE:
+            break;
+        case DXFG_EVENT_ORDER_BASE:
+            break;
+        case DXFG_EVENT_ORDER:
+            break;
+        case DXFG_EVENT_ANALYTIC_ORDER:
+            break;
+        case DXFG_EVENT_SPREAD_ORDER:
+            break;
+        case DXFG_EVENT_SERIES:
+            break;
+        case DXFG_EVENT_OPTION_SALE:
+            break;
+        }
+    }
+
+    return result;
 }
 
 } // namespace dxfcpp

@@ -195,6 +195,7 @@ template <typename M, typename F, typename... Args> inline void callWithLock(M &
 
         return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
     } catch (...) {
+        //TODO: error handling
     }
 }
 
