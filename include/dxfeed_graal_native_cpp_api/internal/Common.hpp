@@ -115,7 +115,8 @@ inline std::string nowStrWithTimeZone() {
     auto now = std::chrono::system_clock::now();
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
 
-    return vformat("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", std::chrono::floor<std::chrono::seconds>(now), ms, std::chrono::floor<std::chrono::seconds>(now));
+    return vformat("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", std::chrono::floor<std::chrono::seconds>(now), ms,
+                   std::chrono::floor<std::chrono::seconds>(now));
 }
 
 inline std::string formatTimeStamp(std::int64_t timestamp) {
@@ -195,7 +196,7 @@ template <typename M, typename F, typename... Args> inline void callWithLock(M &
 
         return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
     } catch (...) {
-        //TODO: error handling
+        // TODO: error handling
     }
 }
 
@@ -269,6 +270,58 @@ static std::string encodeChar(std::int16_t c) {
 
     return std::string("\\u") + vformat("{0:04x}", 65536 + static_cast<int>(c)).substr(1);
 }
+
+} // namespace string_util
+
+namespace util {
+
+template <typename T>
+concept Integral = std::is_integral<T>::value;
+
+template <Integral T, Integral U> using Max = std::conditional_t<bool(sizeof(T) >= sizeof(U)), T, U>;
+
+template <Integral T> static constexpr T getBits(T flags, T mask, T shift) {
+    if constexpr (std::is_signed_v<T>) {
+        using U = std::make_unsigned_t<T>;
+
+        return static_cast<T>((static_cast<U>(flags) >> static_cast<U>(shift)) & static_cast<U>(mask));
+    } else {
+        return (flags >> shift) & mask;
+    }
 }
+
+template <Integral F, Integral M, Integral S> static constexpr F getBits(F flags, M mask, S shift) {
+    if constexpr (std::is_signed_v<F> || std::is_signed_v<M> || std::is_signed_v<S>) {
+        using U = std::make_unsigned_t<Max<F, Max<M, S>>>;
+
+        return static_cast<F>((static_cast<U>(flags) >> static_cast<U>(shift)) & static_cast<U>(mask));
+    } else {
+        return (flags >> shift) & mask;
+    }
+}
+
+template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bits) {
+    if constexpr (std::is_signed_v<T>) {
+        using U = std::make_unsigned_t<T>;
+
+        return static_cast<T>((static_cast<U>(flags) & ~(static_cast<U>(mask) << static_cast<U>(shift))) |
+                              ((static_cast<U>(bits) & static_cast<U>(mask)) << static_cast<U>(shift)));
+    } else {
+        return (flags & ~(mask << shift)) | ((bits & mask) << shift);
+    }
+}
+
+template <Integral F, Integral M, Integral S, Integral B> static constexpr F setBits(F flags, M mask, S shift, B bits) {
+    if constexpr (std::is_signed_v<F> || std::is_signed_v<M> || std::is_signed_v<S> || std::is_signed_v<B>) {
+        using U = std::make_unsigned_t<Max<F, Max<M, Max<S, B>>>>;
+
+        return static_cast<F>((static_cast<U>(flags) & ~(static_cast<U>(mask) << static_cast<U>(shift))) |
+                              ((static_cast<U>(bits) & static_cast<U>(mask)) << static_cast<U>(shift)));
+    } else {
+        return (flags & ~(mask << shift)) | ((bits & mask) << shift);
+    }
+}
+
+} // namespace util
 
 } // namespace dxfcpp::detail

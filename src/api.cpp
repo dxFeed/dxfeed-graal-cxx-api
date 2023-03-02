@@ -949,7 +949,7 @@ char utf16to8(std::int16_t in) {
 
         return out.empty() ? char{} : out[0];
     } catch (...) {
-        //TODO: error handling
+        // TODO: error handling
         return char{};
     }
 }
@@ -963,7 +963,7 @@ std::int16_t utf8to16(char in) {
 
         return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
     } catch (...) {
-        //TODO: error handling
+        // TODO: error handling
         return std::int16_t{};
     }
 }
@@ -1024,7 +1024,7 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
     for (std::size_t i = 0; i < list->size; i++) {
         auto *e = list->elements[i];
 
-        //TODO: implement other types
+        // TODO: implement other types
         switch (e->clazz) {
         case DXFG_EVENT_QUOTE:
             result[i] = Quote::fromGraalNative(e);
@@ -1071,6 +1071,16 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
     return result;
 }
+
+const ShortSaleRestriction ShortSaleRestriction::UNDEFINED{0};
+const ShortSaleRestriction ShortSaleRestriction::ACTIVE{1};
+const ShortSaleRestriction ShortSaleRestriction::INACTIVE{2};
+
+const std::unordered_map<std::int32_t, ShortSaleRestriction> ShortSaleRestriction::ALL{
+    {ShortSaleRestriction::UNDEFINED.getCode(), ShortSaleRestriction::UNDEFINED},
+    {ShortSaleRestriction::ACTIVE.getCode(), ShortSaleRestriction::ACTIVE},
+    {ShortSaleRestriction::INACTIVE.getCode(), ShortSaleRestriction::INACTIVE},
+};
 
 } // namespace dxfcpp
 
