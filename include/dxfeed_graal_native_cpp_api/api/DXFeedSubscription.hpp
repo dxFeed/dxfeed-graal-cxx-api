@@ -5,7 +5,7 @@
 
 #include <memory>
 
-#include "DXEvent.hpp"
+#include "event/DXEvent.hpp"
 #include "internal/Common.hpp"
 
 #include <unordered_set>

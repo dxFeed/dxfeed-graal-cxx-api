@@ -3,12 +3,8 @@
 
 #include <dxfg_api.h>
 
-#include <dxFeedNativeCAPI/dxFeedNativeCAPI.h>
-#include <dxFeedNativeCppAPI/dxFeedNativeCppAPI.hpp>
-
-#include "dxFeedNativeCppAPI/DXEvent.hpp"
-#include "dxFeedNativeCppAPI/DXFeedSubscription.hpp"
-#include "dxFeedNativeCppAPI/internal/Common.hpp"
+#include <dxfeed_graal_native_c_api/api.h>
+#include <dxfeed_graal_native_cpp_api/api.hpp>
 
 #include <cstring>
 #include <memory>

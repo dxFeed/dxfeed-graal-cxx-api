@@ -60,7 +60,7 @@ endif ()
 find_package(utf8cpp)
 find_package(fmt)
 
-add_library(dxFeedNativeAPI src/dxFeedNativeAPI.cpp)
+add_library(dxFeedNativeAPI src/api.cpp)
 target_include_directories(dxFeedNativeAPI PUBLIC include)
 target_link_libraries(dxFeedNativeAPI PUBLIC DxFeedGraalNativeApi utf8cpp::utf8cpp fmt::fmt)
 

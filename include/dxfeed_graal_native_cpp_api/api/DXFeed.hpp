@@ -8,8 +8,8 @@
 #include "internal/Handler.hpp"
 #include "internal/Isolate.hpp"
 
-#include "DXEvent.hpp"
 #include "DXFeedSubscription.hpp"
+#include "event/DXEvent.hpp"
 
 #include <memory>
 #include <mutex>
