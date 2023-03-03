@@ -278,7 +278,23 @@ namespace util {
 template <typename T>
 concept Integral = std::is_integral<T>::value;
 
-template <Integral T, Integral U> using Max = std::conditional_t<bool(sizeof(T) >= sizeof(U)), T, U>;
+namespace detail {
+template <typename...> struct MaxImpl;
+
+template <typename T> struct MaxImpl<T> {
+    using Type = T;
+};
+
+template <typename T, typename U> struct MaxImpl<T, U> {
+    using Type = std::conditional_t<sizeof(T) >= sizeof(U), T, U>;
+};
+
+template <typename T, typename U, typename V, typename... Ws> struct MaxImpl<T, U, V, Ws...> {
+    using Type = typename MaxImpl<T, typename MaxImpl<U, typename MaxImpl<V, Ws...>::Type>::Type>::Type;
+};
+} // namespace detail
+
+template <typename... Ts> using Max = typename detail::MaxImpl<Ts...>::Type;
 
 template <Integral T> static constexpr T getBits(T flags, T mask, T shift) {
     if constexpr (std::is_signed_v<T>) {
