@@ -308,7 +308,7 @@ template <Integral T> static constexpr T getBits(T flags, T mask, T shift) {
 
 template <Integral F, Integral M, Integral S> static constexpr F getBits(F flags, M mask, S shift) {
     if constexpr (std::is_signed_v<F> || std::is_signed_v<M> || std::is_signed_v<S>) {
-        using U = std::make_unsigned_t<Max<F, Max<M, S>>>;
+        using U = std::make_unsigned_t<Max<F, M, S>>;
 
         return static_cast<F>((static_cast<U>(flags) >> static_cast<U>(shift)) & static_cast<U>(mask));
     } else {
@@ -329,7 +329,7 @@ template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bit
 
 template <Integral F, Integral M, Integral S, Integral B> static constexpr F setBits(F flags, M mask, S shift, B bits) {
     if constexpr (std::is_signed_v<F> || std::is_signed_v<M> || std::is_signed_v<S> || std::is_signed_v<B>) {
-        using U = std::make_unsigned_t<Max<F, Max<M, Max<S, B>>>>;
+        using U = std::make_unsigned_t<Max<F, M, S, B>>;
 
         return static_cast<F>((static_cast<U>(flags) & ~(static_cast<U>(mask) << static_cast<U>(shift))) |
                               ((static_cast<U>(bits) & static_cast<U>(mask)) << static_cast<U>(shift)));
