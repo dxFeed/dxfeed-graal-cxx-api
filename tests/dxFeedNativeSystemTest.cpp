@@ -4,8 +4,8 @@
 #include <catch2/benchmark/catch_benchmark_all.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include <dxFeedNativeCAPI/dxFeedNativeCAPI.h>
-#include <dxFeedNativeCppAPI/dxFeedNativeCppAPI.hpp>
+#include <dxfeed_graal_native_c_api/api.h>
+#include <dxfeed_graal_native_cpp_api/api.hpp>
 #include <thread>
 #include <unordered_map>
 #include <vector>
