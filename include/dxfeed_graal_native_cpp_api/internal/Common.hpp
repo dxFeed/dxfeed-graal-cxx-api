@@ -301,6 +301,8 @@ template <Integral T> constexpr static T div(T a, T b) {
     return ((a + 1) / b) + 1;
 }
 
+template <Integral T> constexpr static T abs(T a) { return a < 0 ? -a : a; }
+
 } // namespace math_util
 
 namespace day_util {
@@ -333,7 +335,7 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
     std::int32_t yyyy = y - 4800 + (m + 2) / 12;
     std::int32_t mm = (m + 2) % 12 + 1;
     std::int32_t dd = d + 1;
-    std::int32_t yyyymmdd = std::abs(yyyy) * 10000 + mm * 100 + dd;
+    std::int32_t yyyymmdd = math_util::abs(yyyy) * 10000 + mm * 100 + dd;
 
     return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
 }
@@ -404,7 +406,7 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
 
 } // namespace util
 
-std::string toString(const char* chars) {
+static std::string toString(const char *chars) {
     if (chars == nullptr) {
         return "";
     }
