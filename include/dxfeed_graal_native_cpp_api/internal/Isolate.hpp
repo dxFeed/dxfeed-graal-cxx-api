@@ -110,7 +110,7 @@ class Isolate final {
         }
 
         std::string toString() const {
-            return vformat("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}", bit_cast<std::size_t>(handle),
+            return fmt::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}", bit_cast<std::size_t>(handle),
                            isMain, tid, idx);
         }
     };
@@ -270,7 +270,7 @@ class Isolate final {
     std::string toString() const {
         std::lock_guard lock(mtx_);
 
-        return vformat("Isolate{{{}, main = {}, current = {}}}", bit_cast<std::size_t>(handle_),
+        return fmt::format("Isolate{{{}, main = {}, current = {}}}", bit_cast<std::size_t>(handle_),
                        mainIsolateThread_.toString(), currentIsolateThread_.toString());
     }
 };

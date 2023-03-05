@@ -55,33 +55,34 @@ const CEntryPointErrors CEntryPointErrors::ARGUMENT_PARSING_FAILED(22, "The isol
 const CEntryPointErrors CEntryPointErrors::CPU_FEATURE_CHECK_FAILED(
     23, "Current target does not support the following CPU features that are required by the image.");
 
-const std::unordered_map<std::int32_t, CEntryPointErrors> CEntryPointErrors::ALL{
-    {NO_ERROR.getCode(), NO_ERROR},
-    {UNSPECIFIED.getCode(), UNSPECIFIED},
-    {NULL_ARGUMENT.getCode(), NULL_ARGUMENT},
-    {UNATTACHED_THREAD.getCode(), UNATTACHED_THREAD},
-    {UNINITIALIZED_ISOLATE.getCode(), UNINITIALIZED_ISOLATE},
-    {LOCATE_IMAGE_FAILED.getCode(), LOCATE_IMAGE_FAILED},
-    {OPEN_IMAGE_FAILED.getCode(), OPEN_IMAGE_FAILED},
-    {MAP_HEAP_FAILED.getCode(), MAP_HEAP_FAILED},
-    {RESERVE_ADDRESS_SPACE_FAILED.getCode(), RESERVE_ADDRESS_SPACE_FAILED},
-    {INSUFFICIENT_ADDRESS_SPACE.getCode(), INSUFFICIENT_ADDRESS_SPACE},
-    {PROTECT_HEAP_FAILED.getCode(), PROTECT_HEAP_FAILED},
-    {UNSUPPORTED_ISOLATE_PARAMETERS_VERSION.getCode(), UNSUPPORTED_ISOLATE_PARAMETERS_VERSION},
-    {THREADING_INITIALIZATION_FAILED.getCode(), THREADING_INITIALIZATION_FAILED},
-    {UNCAUGHT_EXCEPTION.getCode(), UNCAUGHT_EXCEPTION},
-    {ISOLATE_INITIALIZATION_FAILED.getCode(), ISOLATE_INITIALIZATION_FAILED},
-    {OPEN_AUX_IMAGE_FAILED.getCode(), OPEN_AUX_IMAGE_FAILED},
-    {READ_AUX_IMAGE_META_FAILED.getCode(), READ_AUX_IMAGE_META_FAILED},
-    {MAP_AUX_IMAGE_FAILED.getCode(), MAP_AUX_IMAGE_FAILED},
-    {INSUFFICIENT_AUX_IMAGE_MEMORY.getCode(), INSUFFICIENT_AUX_IMAGE_MEMORY},
-    {AUX_IMAGE_UNSUPPORTED.getCode(), AUX_IMAGE_UNSUPPORTED},
-    {FREE_ADDRESS_SPACE_FAILED.getCode(), FREE_ADDRESS_SPACE_FAILED},
-    {FREE_IMAGE_HEAP_FAILED.getCode(), FREE_IMAGE_HEAP_FAILED},
-    {AUX_IMAGE_PRIMARY_IMAGE_MISMATCH.getCode(), AUX_IMAGE_PRIMARY_IMAGE_MISMATCH},
-    {ARGUMENT_PARSING_FAILED.getCode(), ARGUMENT_PARSING_FAILED},
-    {CPU_FEATURE_CHECK_FAILED.getCode(), CPU_FEATURE_CHECK_FAILED},
-};
+const std::unordered_map<CEntryPointErrors::CodeType, std::reference_wrapper<const CEntryPointErrors>>
+    CEntryPointErrors::ALL{
+        {NO_ERROR.getCode(), std::cref(NO_ERROR)},
+        {UNSPECIFIED.getCode(), std::cref(UNSPECIFIED)},
+        {NULL_ARGUMENT.getCode(), std::cref(NULL_ARGUMENT)},
+        {UNATTACHED_THREAD.getCode(), std::cref(UNATTACHED_THREAD)},
+        {UNINITIALIZED_ISOLATE.getCode(), std::cref(UNINITIALIZED_ISOLATE)},
+        {LOCATE_IMAGE_FAILED.getCode(), std::cref(LOCATE_IMAGE_FAILED)},
+        {OPEN_IMAGE_FAILED.getCode(), std::cref(OPEN_IMAGE_FAILED)},
+        {MAP_HEAP_FAILED.getCode(), std::cref(MAP_HEAP_FAILED)},
+        {RESERVE_ADDRESS_SPACE_FAILED.getCode(), std::cref(RESERVE_ADDRESS_SPACE_FAILED)},
+        {INSUFFICIENT_ADDRESS_SPACE.getCode(), std::cref(INSUFFICIENT_ADDRESS_SPACE)},
+        {PROTECT_HEAP_FAILED.getCode(), std::cref(PROTECT_HEAP_FAILED)},
+        {UNSUPPORTED_ISOLATE_PARAMETERS_VERSION.getCode(), std::cref(UNSUPPORTED_ISOLATE_PARAMETERS_VERSION)},
+        {THREADING_INITIALIZATION_FAILED.getCode(), std::cref(THREADING_INITIALIZATION_FAILED)},
+        {UNCAUGHT_EXCEPTION.getCode(), std::cref(UNCAUGHT_EXCEPTION)},
+        {ISOLATE_INITIALIZATION_FAILED.getCode(), std::cref(ISOLATE_INITIALIZATION_FAILED)},
+        {OPEN_AUX_IMAGE_FAILED.getCode(), std::cref(OPEN_AUX_IMAGE_FAILED)},
+        {READ_AUX_IMAGE_META_FAILED.getCode(), std::cref(READ_AUX_IMAGE_META_FAILED)},
+        {MAP_AUX_IMAGE_FAILED.getCode(), std::cref(MAP_AUX_IMAGE_FAILED)},
+        {INSUFFICIENT_AUX_IMAGE_MEMORY.getCode(), std::cref(INSUFFICIENT_AUX_IMAGE_MEMORY)},
+        {AUX_IMAGE_UNSUPPORTED.getCode(), std::cref(AUX_IMAGE_UNSUPPORTED)},
+        {FREE_ADDRESS_SPACE_FAILED.getCode(), std::cref(FREE_ADDRESS_SPACE_FAILED)},
+        {FREE_IMAGE_HEAP_FAILED.getCode(), std::cref(FREE_IMAGE_HEAP_FAILED)},
+        {AUX_IMAGE_PRIMARY_IMAGE_MISMATCH.getCode(), std::cref(AUX_IMAGE_PRIMARY_IMAGE_MISMATCH)},
+        {ARGUMENT_PARSING_FAILED.getCode(), std::cref(ARGUMENT_PARSING_FAILED)},
+        {CPU_FEATURE_CHECK_FAILED.getCode(), std::cref(CPU_FEATURE_CHECK_FAILED)},
+    };
 
 thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
 
@@ -105,7 +106,7 @@ inline JavaObjectHandler createJavaObjectHandler(void *handler) { return {handle
 
 inline std::string toString(const JavaObjectHandler &handler) {
     if (handler)
-        return vformat("{}", handler.get());
+        return fmt::format("{}", handler.get());
     else
         return "nullptr";
 }
@@ -991,19 +992,22 @@ std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
 
     try {
         auto graalQuote = detail::bit_cast<dxfg_quote_t *>(graalNative);
-        auto quote = std::make_shared<Quote>(graalQuote->market_event.event_symbol);
+        auto quote = std::make_shared<Quote>(detail::toString(graalQuote->market_event.event_symbol));
 
         quote->setEventTime(graalQuote->market_event.event_time);
-        quote->data_.timeMillisSequence = graalQuote->time_millis_sequence;
-        quote->data_.timeNanoPart = graalQuote->time_nano_part;
-        quote->data_.bidTime = graalQuote->bid_time;
-        quote->data_.bidExchangeCode = graalQuote->bid_exchange_code;
-        quote->data_.bidPrice = graalQuote->bid_price;
-        quote->data_.bidSize = graalQuote->bid_size;
-        quote->data_.askTime = graalQuote->ask_time;
-        quote->data_.askExchangeCode = graalQuote->ask_exchange_code;
-        quote->data_.askPrice = graalQuote->ask_price;
-        quote->data_.askSize = graalQuote->ask_size;
+
+        quote->data_ = {
+            graalQuote->time_millis_sequence,
+            graalQuote->time_nano_part,
+            graalQuote->bid_time,
+            graalQuote->bid_exchange_code,
+            graalQuote->bid_price,
+            graalQuote->bid_size,
+            graalQuote->ask_time,
+            graalQuote->ask_exchange_code,
+            graalQuote->ask_price,
+            graalQuote->ask_size,
+        };
 
         return quote;
     } catch (...) {
@@ -1031,6 +1035,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
             break;
         case DXFG_EVENT_PROFILE:
+            result[i] = Profile::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_SUMMARY:
             break;
@@ -1072,15 +1078,68 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
     return result;
 }
 
-const ShortSaleRestriction ShortSaleRestriction::UNDEFINED{0};
-const ShortSaleRestriction ShortSaleRestriction::ACTIVE{1};
-const ShortSaleRestriction ShortSaleRestriction::INACTIVE{2};
+const ShortSaleRestriction ShortSaleRestriction::UNDEFINED{0, "UNDEFINED"};
+const ShortSaleRestriction ShortSaleRestriction::ACTIVE{1, "ACTIVE"};
+const ShortSaleRestriction ShortSaleRestriction::INACTIVE{2, "INACTIVE"};
 
-const std::unordered_map<std::int32_t, ShortSaleRestriction> ShortSaleRestriction::ALL{
-    {ShortSaleRestriction::UNDEFINED.getCode(), ShortSaleRestriction::UNDEFINED},
-    {ShortSaleRestriction::ACTIVE.getCode(), ShortSaleRestriction::ACTIVE},
-    {ShortSaleRestriction::INACTIVE.getCode(), ShortSaleRestriction::INACTIVE},
+const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<const ShortSaleRestriction>>
+    ShortSaleRestriction::ALL{
+        {ShortSaleRestriction::UNDEFINED.getCode(), std::cref(ShortSaleRestriction::UNDEFINED)},
+        {ShortSaleRestriction::ACTIVE.getCode(), std::cref(ShortSaleRestriction::ACTIVE)},
+        {ShortSaleRestriction::INACTIVE.getCode(), std::cref(ShortSaleRestriction::INACTIVE)},
+    };
+
+const TradingStatus TradingStatus::UNDEFINED{0, "UNDEFINED"};
+const TradingStatus TradingStatus::HALTED{1, "HALTED"};
+const TradingStatus TradingStatus::ACTIVE{2, "ACTIVE"};
+
+const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>> TradingStatus::ALL{
+    {TradingStatus::UNDEFINED.getCode(), std::cref(TradingStatus::UNDEFINED)},
+    {TradingStatus::HALTED.getCode(), std::cref(TradingStatus::HALTED)},
+    {TradingStatus::ACTIVE.getCode(), std::cref(TradingStatus::ACTIVE)},
 };
+
+std::shared_ptr<Profile> Profile::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_PROFILE) {
+        return {};
+    }
+
+    try {
+        auto graalProfile = detail::bit_cast<dxfg_profile_t *>(graalNative);
+        auto profile = std::make_shared<Profile>(detail::toString(graalProfile->market_event.event_symbol));
+
+        profile->setEventTime(graalProfile->market_event.event_time);
+        profile->data_ = {
+            detail::toString(graalProfile->description),
+            detail::toString(graalProfile->status_reason),
+            graalProfile->halt_start_time,
+            graalProfile->halt_end_time,
+            graalProfile->high_limit_price,
+            graalProfile->low_limit_price,
+            graalProfile->high_52_week_price,
+            graalProfile->low_52_week_price,
+            graalProfile->beta,
+            graalProfile->earnings_per_share,
+            graalProfile->dividend_frequency,
+            graalProfile->ex_dividend_amount,
+            graalProfile->ex_dividend_day_id,
+            graalProfile->shares,
+            graalProfile->free_float,
+            graalProfile->flags,
+        };
+
+        return profile;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
 
 } // namespace dxfcpp
 

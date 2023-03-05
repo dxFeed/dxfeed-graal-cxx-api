@@ -17,7 +17,13 @@
 
 #include <fmt/chrono.h>
 #include <fmt/format.h>
+#include <fmt/ostream.h>
 #include <fmt/std.h>
+
+namespace dxfcpp {
+template <typename T>
+concept Integral = std::is_integral<T>::value;
+}
 
 namespace dxfcpp::detail {
 #if defined(NDEBUG) && !defined(DXFCPP_DEBUG)
@@ -108,28 +114,28 @@ inline std::string nowStr() {
     auto now = std::chrono::system_clock::now();
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
 
-    return vformat("{:%y%m%d %H%M%S}.{:0>3}", std::chrono::floor<std::chrono::seconds>(now), ms);
+    return fmt::format("{:%y%m%d %H%M%S}.{:0>3}", std::chrono::floor<std::chrono::seconds>(now), ms);
 }
 
 inline std::string nowStrWithTimeZone() {
     auto now = std::chrono::system_clock::now();
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
 
-    return vformat("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", std::chrono::floor<std::chrono::seconds>(now), ms,
-                   std::chrono::floor<std::chrono::seconds>(now));
+    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", std::chrono::floor<std::chrono::seconds>(now), ms,
+                       std::chrono::floor<std::chrono::seconds>(now));
 }
 
 inline std::string formatTimeStamp(std::int64_t timestamp) {
     auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
 
-    return vformat("{:%y%m%d-%H%M%S%z}", tm);
+    return fmt::format("{:%y%m%d-%H%M%S%z}", tm);
 }
 
 inline std::string formatTimeStampWithMillis(std::int64_t timestamp) {
     auto ms = timestamp % 1000;
     auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
 
-    return vformat("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
+    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
 }
 
 inline std::string debugPrefixStr() {
@@ -137,7 +143,7 @@ inline std::string debugPrefixStr() {
 
     tid << std::this_thread::get_id();
 
-    return vformat("D {} [{}]", nowStr(), tid.str());
+    return fmt::format("D {} [{}]", nowStr(), tid.str());
 }
 
 template <typename... Args> inline void debug(std::string_view format, Args &&...args) {
@@ -158,9 +164,9 @@ struct EventClassList {
 
     void set(std::size_t index, std::uint32_t id) noexcept;
 
-    bool isEmpty() const noexcept;
+    [[nodiscard]] bool isEmpty() const noexcept;
 
-    std::size_t size() const noexcept;
+    [[nodiscard]] std::size_t size() const noexcept;
 
     void *getHandler() noexcept;
 
@@ -268,15 +274,73 @@ static std::string encodeChar(std::int16_t c) {
         return "\\0";
     }
 
-    return std::string("\\u") + vformat("{0:04x}", 65536 + static_cast<int>(c)).substr(1);
+    return std::string("\\u") + fmt::format("{0:04x}", 65536 + static_cast<int>(c)).substr(1);
 }
 
 } // namespace string_util
 
-namespace util {
+namespace math_util {
 
-template <typename T>
-concept Integral = std::is_integral<T>::value;
+/**
+ * Returns quotient according to number theory - i.e. when remainder is zero or positive.
+ *
+ * @tparam T The dividend's and divisor's type
+ * @param a dividend
+ * @param b divisor
+ * @return quotient according to number theory
+ */
+template <Integral T> constexpr static T div(T a, T b) {
+    if (a >= 0) {
+        return a / b;
+    }
+
+    if (b >= 0) {
+        return ((a + 1) / b) - 1;
+    }
+
+    return ((a + 1) / b) + 1;
+}
+
+} // namespace math_util
+
+namespace day_util {
+
+/**
+ * Returns yyyymmdd integer in Gregorian calendar for a specified day identifier.
+ * The day identifier is defined as the number of days since Unix epoch of January 1, 1970.
+ * The result is equal to `yearSign * (abs(year) * 10000 + month * 100 + day)`, where year,
+ * month, and day are in Gregorian calendar, month is between 1 and 12 inclusive, and day is counted from 1.
+ *
+ * @param dayId The day id
+ * @return integer date
+ */
+constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
+    std::int32_t j = dayId + 2472632; // this shifts the epoch back to astronomical year -4800
+    std::int32_t g = math_util::div(j, 146097);
+    std::int32_t dg = j - g * 146097;
+    std::int32_t c = (dg / 36524 + 1) * 3 / 4;
+    std::int32_t dc = dg - c * 36524;
+    std::int32_t b = dc / 1461;
+    std::int32_t db = dc - b * 1461;
+    std::int32_t a = (db / 365 + 1) * 3 / 4;
+    std::int32_t da = db - a * 365;
+    std::int32_t y = g * 400 + c * 100 + b * 4 +
+                     a; // this is the integer number of full years elapsed since March 1, 4801 BC at 00:00 UTC
+    std::int32_t m = (da * 5 + 308) / 153 -
+                     2; // this is the integer number of full months elapsed since the last March 1 at 00:00 UTC
+    std::int32_t d =
+        da - (m + 4) * 153 / 5 + 122; // this is the number of days elapsed since day 1 of the month at 00:00 UTC
+    std::int32_t yyyy = y - 4800 + (m + 2) / 12;
+    std::int32_t mm = (m + 2) % 12 + 1;
+    std::int32_t dd = d + 1;
+    std::int32_t yyyymmdd = std::abs(yyyy) * 10000 + mm * 100 + dd;
+
+    return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
+}
+
+} // namespace day_util
+
+namespace util {
 
 namespace detail {
 template <typename...> struct MaxImpl;
@@ -339,5 +403,13 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
 }
 
 } // namespace util
+
+std::string toString(const char* chars) {
+    if (chars == nullptr) {
+        return "";
+    }
+
+    return chars;
+}
 
 } // namespace dxfcpp::detail

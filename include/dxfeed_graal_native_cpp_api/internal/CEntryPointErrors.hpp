@@ -17,12 +17,16 @@ namespace dxfcpp::detail {
  *
  *  [Graal:CEntryPointErrors](https://github.com/oracle/graal/blob/96a1a66347bd4e5e00ae4e8e79812ebaf8cd5e33/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/c/function/CEntryPointErrors.java#L43)
  */
-class CEntryPointErrors {
-    std::int32_t code_{};
+struct CEntryPointErrors {
+    using CodeType = std::uint32_t;
+
+  private:
+    CodeType code_{};
     std::string description_{};
 
-    CEntryPointErrors(std::int32_t code, std::string description) noexcept
-        : code_{code}, description_{std::move(description)} {}
+    template <Integral Code>
+    CEntryPointErrors(Code code, std::string description) noexcept
+        : code_{static_cast<CodeType>(code)}, description_{std::move(description)} {}
 
   public:
     /// 0 - No error occurred.
@@ -100,10 +104,10 @@ class CEntryPointErrors {
     /// 23 - Current target does not support the following CPU features that are required by the image.
     static const CEntryPointErrors CPU_FEATURE_CHECK_FAILED;
 
-    static const std::unordered_map<std::int32_t, CEntryPointErrors> ALL;
+    static const std::unordered_map<CodeType, std::reference_wrapper<const CEntryPointErrors>> ALL;
 
-    static CEntryPointErrors valueOf(std::int32_t code) {
-        if (auto found = ALL.find(code); found != ALL.end()) {
+    template <Integral Code> static const CEntryPointErrors &valueOf(Code code) {
+        if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
             return found->second;
         }
 
@@ -111,10 +115,10 @@ class CEntryPointErrors {
     }
 
     /// Returns the code
-    [[nodiscard]] std::int32_t getCode() const { return code_; }
+    [[nodiscard]] CodeType getCode() const { return code_; }
 
     /// Returns the description
-    [[nodiscard]] const std::string &getDescription() const { return description_; }
+    [[nodiscard]] const std::string &getDescription() const & { return description_; }
 
     bool operator==(const CEntryPointErrors &errors) const { return this->getCode() == errors.getCode(); }
 };

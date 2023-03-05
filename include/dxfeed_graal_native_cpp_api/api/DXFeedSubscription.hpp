@@ -78,7 +78,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     std::string toString() const {
         std::lock_guard lock(mtx_);
 
-        return detail::vformat("DXFeedSubscription{{{}}}", detail::handler_utils::toString(handler_));
+        return fmt::format("DXFeedSubscription{{{}}}", detail::handler_utils::toString(handler_));
     }
 
     virtual ~DXFeedSubscription() {

@@ -102,7 +102,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
     std::string toString() const {
         std::lock_guard guard(mtx_);
 
-        return detail::vformat("DXFeed{{{}}}", detail::handler_utils::toString(handler_));
+        return fmt::format("DXFeed{{{}}}", detail::handler_utils::toString(handler_));
     }
 };
 

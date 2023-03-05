@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "event/EventType.hpp"
+#include "../EventType.hpp"
 
 namespace dxfcpp {
 

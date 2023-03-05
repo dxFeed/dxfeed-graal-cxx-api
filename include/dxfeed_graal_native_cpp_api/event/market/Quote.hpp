@@ -9,9 +9,9 @@
 #include <string>
 
 #include "MarketEvent.hpp"
-#include "event/EventTypeEnum.hpp"
-#include "event/LastingEvent.hpp"
-#include "internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
+#include "../LastingEvent.hpp"
+#include "../../internal/Common.hpp"
 
 namespace dxfcpp {
 
@@ -275,7 +275,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      * @return a string representation
      */
     std::string toString() const noexcept {
-        return detail::vformat(
+        return fmt::format(
             "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
             "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
             MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),

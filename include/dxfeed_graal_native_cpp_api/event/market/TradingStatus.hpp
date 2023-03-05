@@ -4,8 +4,8 @@
 #pragma once
 
 #include <cstdint>
-#include <type_traits>
 #include <unordered_map>
+#include <type_traits>
 #include <string>
 
 #include "../../internal/Common.hpp"
@@ -13,9 +13,9 @@
 namespace dxfcpp {
 
 /**
- * Short sale restriction on an instrument.
+ * Trading status of an instrument.
  */
-struct ShortSaleRestriction {
+struct TradingStatus {
     using CodeType = std::uint32_t;
 
   private:
@@ -23,34 +23,28 @@ struct ShortSaleRestriction {
     std::string name_;
 
     template <Integral Code>
-    explicit ShortSaleRestriction(Code code, std::string name) noexcept
+    explicit TradingStatus(Code code, std::string name) noexcept
         : code_{static_cast<CodeType>(code)}, name_{std::move(name)} {}
 
   public:
     /**
-     * Short sale restriction is undefined, unknown or inapplicable.
+     * Trading status is undefined, unknown or inapplicable.
      */
-    static const ShortSaleRestriction UNDEFINED;
+    static const TradingStatus UNDEFINED;
 
     /**
-     * Short sale restriction is active.
+     * Trading is halted.
      */
-    static const ShortSaleRestriction ACTIVE;
+    static const TradingStatus HALTED;
 
     /**
-     * Short sale restriction is inactive.
+     * Trading is active.
      */
-    static const ShortSaleRestriction INACTIVE;
+    static const TradingStatus ACTIVE;
 
-    static const std::unordered_map<CodeType, std::reference_wrapper<const ShortSaleRestriction>> ALL;
+    static const std::unordered_map<CodeType, std::reference_wrapper<const TradingStatus>> ALL;
 
-    /**
-     * Returns restriction by integer code bit pattern.
-     *
-     * @param code integer code.
-     * @return restriction.
-     */
-    template <Integral Code> static const ShortSaleRestriction &valueOf(Code code) {
+    template <Integral Code> static const TradingStatus &valueOf(Code code) {
         if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
             return found->second;
         }
@@ -78,7 +72,7 @@ struct ShortSaleRestriction {
      * @param other An other enum element
      * @return `true` if the elements are the same
      */
-    bool operator==(const ShortSaleRestriction &other) const { return code_ == other.code_; }
+    bool operator==(const TradingStatus &other) const { return code_ == other.code_; }
 
     /**
      * Returns a string representation of an enum element.
@@ -92,12 +86,12 @@ struct ShortSaleRestriction {
      *
      * @tparam OStream A type of the output stream
      * @param os The output stream
-     * @param ssr An enum element
+     * @param tradingStatus An enum element
      * @return The output stream
      */
-    template <typename OStream> friend OStream &operator<<(OStream &&os, const ShortSaleRestriction &ssr) {
-        return os << ssr.toString();
+    template <typename OStream> friend OStream &operator<<(OStream &&os, const TradingStatus &tradingStatus) {
+        return os << tradingStatus.toString();
     }
 };
 
-} // namespace dxfcpp
+}
