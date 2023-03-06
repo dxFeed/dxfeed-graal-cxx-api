@@ -44,21 +44,18 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           cd ${{github.workspace}}/build
-          conan profile detect
           conan install -s compiler.libcxx=libstdc++11 --build missing ..
 
       - name: Prepare conan [Win]
         if: runner.os == 'Windows'
         run: |
           cd ${{github.workspace}}/build
-          conan profile detect
           conan install --build missing ..
 
       - name: Prepare conan [macOS]
         if: runner.os == 'macOS'
         run: |
           cd ${{github.workspace}}/build
-          conan profile detect
           conan install --build missing ..
 
       - name: Configure CMake
