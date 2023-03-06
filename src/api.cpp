@@ -89,7 +89,7 @@ thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
 const auto I = Isolate::getInstance();
 
 namespace handler_utils {
-void JavaObjectHandler::deleter(void *handler) noexcept {
+template <typename T> void JavaObjectHandler<T>::deleter(void *handler) noexcept {
     runIsolatedOrElse(
         [handler = handler](auto threadHandle) {
             if (handler) {
@@ -254,10 +254,10 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 
     std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
 
-    endpoint->handler_ = detail::handler_utils::JavaObjectHandler(endpointHandle);
+    endpoint->handler_ = detail::handler_utils::JavaObjectHandler<DXEndpoint>(endpointHandle);
     endpoint->role_ = role;
     endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
-    endpoint->stateChangeListenerHandler_ = detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
+    endpoint->stateChangeListenerHandler_ = detail::handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>(detail::runIsolatedOrElse(
         [endpoint](auto threadHandle) {
             return dxfg_PropertyChangeListener_new(
                 threadHandle,
@@ -679,7 +679,7 @@ DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noex
 std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
     std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
 
-    feed->handler_ = detail::handler_utils::JavaObjectHandler(feedHandle);
+    feed->handler_ = detail::handler_utils::JavaObjectHandler<DXFeed>(feedHandle);
 
     return feed;
 }
@@ -737,13 +737,13 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
-    : mtx_{}, handler_{detail::handler_utils::JavaObjectHandler(nullptr)},
-      eventListenerHandler_{detail::handler_utils::JavaObjectHandler(nullptr)}, onEvent_{} {
+    : mtx_{}, handler_{},
+      eventListenerHandler_{}, onEvent_{} {
     if constexpr (detail::isDebug) {
         detail::debug("DXFeedSubscription(eventType = {})", eventType.getName());
     }
 
-    handler_ = detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
+    handler_ = detail::handler_utils::JavaObjectHandler<DXFeedSubscription>(detail::runIsolatedOrElse(
         [eventType](auto threadHandle) {
             return dxfg_DXFeedSubscription_new(threadHandle, static_cast<dxfg_event_clazz_t>(eventType.getId()));
         },
@@ -752,18 +752,19 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
     setEventListenerHandler();
 }
 
-detail::handler_utils::JavaObjectHandler DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
+detail::handler_utils::JavaObjectHandler<DXFeedSubscription>
+DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
     const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept {
-    return detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
+    return detail::handler_utils::JavaObjectHandler<DXFeedSubscription>(detail::runIsolatedOrElse(
         [listHandler = detail::bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](auto threadHandle) {
             return dxfg_DXFeedSubscription_new2(threadHandle, listHandler);
         },
         nullptr));
 }
 void DXFeedSubscription::setEventListenerHandler() noexcept {
-    //TODO: sub manager
+    // TODO: sub manager
 
-    eventListenerHandler_ = detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
+    eventListenerHandler_ = detail::handler_utils::JavaObjectHandler<DXFeedEventListener>(detail::runIsolatedOrElse(
         [subscription = this](auto threadHandle) {
             return dxfg_DXFeedEventListener_new(
                 threadHandle,
@@ -798,7 +799,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
     auto builder = std::shared_ptr<Builder>(new (std::nothrow) Builder{});
 
     if (builder) {
-        builder->handler_ = detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
+        builder->handler_ = detail::handler_utils::JavaObjectHandler<DXEndpoint::Builder>(detail::runIsolatedOrElse(
             [](auto threadHandle) { return dxfg_DXEndpoint_newBuilder(threadHandle); }, nullptr));
     }
 

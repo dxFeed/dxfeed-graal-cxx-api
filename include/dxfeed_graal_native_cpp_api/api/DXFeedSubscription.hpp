@@ -18,21 +18,21 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     friend struct DXFeed;
 
     mutable std::recursive_mutex mtx_{};
-    detail::handler_utils::JavaObjectHandler handler_;
-    detail::handler_utils::JavaObjectHandler eventListenerHandler_;
+    detail::handler_utils::JavaObjectHandler<DXFeedSubscription> handler_;
+    detail::handler_utils::JavaObjectHandler<DXFeedEventListener> eventListenerHandler_;
     detail::Handler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
 
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
-    detail::handler_utils::JavaObjectHandler createSubscriptionHandlerFromEventClassList(
+    static detail::handler_utils::JavaObjectHandler<DXFeedSubscription> createSubscriptionHandlerFromEventClassList(
         const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept;
 
     void setEventListenerHandler() noexcept;
 
     template <typename EventTypeIt>
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : mtx_{}, handler_{detail::handler_utils::JavaObjectHandler(nullptr)},
-          eventListenerHandler_{detail::handler_utils::JavaObjectHandler(nullptr)}, onEvent_{} {
+        : mtx_{}, handler_{},
+          eventListenerHandler_{}, onEvent_{} {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeedSubscription(eventTypes = {})", detail::namesToString(begin, end));
         }

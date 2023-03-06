@@ -28,7 +28,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
   private:
     mutable std::recursive_mutex mtx_{};
-    detail::handler_utils::JavaObjectHandler handler_;
+    detail::handler_utils::JavaObjectHandler<DXFeed> handler_;
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 

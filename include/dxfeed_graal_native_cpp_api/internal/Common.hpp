@@ -23,7 +23,12 @@
 namespace dxfcpp {
 template <typename T>
 concept Integral = std::is_integral<T>::value;
-}
+
+struct DXFeedEventListener {};
+
+struct DXEndpointStateChangeListener{};
+
+} // namespace dxfcpp
 
 namespace dxfcpp::detail {
 #if defined(NDEBUG) && !defined(DXFCPP_DEBUG)
@@ -152,12 +157,13 @@ template <typename... Args> inline void debug(std::string_view format, Args &&..
 
 namespace handler_utils {
 
-struct JavaObjectHandler {
+template <typename T> struct JavaObjectHandler {
+    using Type = T;
     static void deleter(void *handler) noexcept;
     explicit JavaObjectHandler(void *handler = nullptr) noexcept : impl_{handler, &deleter} {}
 
-    JavaObjectHandler(JavaObjectHandler&&) = default;
-    JavaObjectHandler& operator=(JavaObjectHandler&&) = default;
+    JavaObjectHandler(JavaObjectHandler &&) = default;
+    JavaObjectHandler &operator=(JavaObjectHandler &&) = default;
     virtual ~JavaObjectHandler() noexcept = default;
 
     [[nodiscard]] std::string toString() const noexcept {
@@ -167,13 +173,9 @@ struct JavaObjectHandler {
             return "nullptr";
     }
 
-    [[nodiscard]] void* get() const noexcept {
-        return impl_.get();
-    }
+    [[nodiscard]] void *get() const noexcept { return impl_.get(); }
 
-    explicit operator bool() const noexcept {
-        return static_cast<bool>(impl_);
-    }
+    explicit operator bool() const noexcept { return static_cast<bool>(impl_); }
 
   private:
     std::unique_ptr<void, decltype(&deleter)> impl_;

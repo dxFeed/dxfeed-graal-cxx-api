@@ -463,12 +463,12 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
     mutable std::recursive_mutex mtx_{};
-    detail::handler_utils::JavaObjectHandler handler_;
+    detail::handler_utils::JavaObjectHandler<DXEndpoint> handler_;
     Role role_ = Role::FEED;
     std::string name_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
-    detail::handler_utils::JavaObjectHandler stateChangeListenerHandler_;
+    detail::handler_utils::JavaObjectHandler<DXEndpointStateChangeListener> stateChangeListenerHandler_;
     detail::Handler<void(State, State)> onStateChange_{};
 
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
@@ -479,9 +479,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     void closeImpl();
 
   protected:
-    DXEndpoint()
-        : mtx_(), handler_(detail::handler_utils::JavaObjectHandler()), role_(), feed_(), publisher_(),
-          stateChangeListenerHandler_(detail::handler_utils::JavaObjectHandler()), onStateChange_() {
+    DXEndpoint() : mtx_{}, handler_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandler_{}, onStateChange_{} {
         if constexpr (detail::isDebug) {
             detail::debug("DXEndpoint()");
         }
@@ -810,7 +808,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         friend DXEndpoint;
 
         mutable std::recursive_mutex mtx_{};
-        detail::handler_utils::JavaObjectHandler handler_;
+        detail::handler_utils::JavaObjectHandler<Builder> handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
