@@ -13,6 +13,7 @@
 namespace dxfcpp {
 
 template <typename Child, typename Code> struct Enum {
+    using ParentType = Enum<Child, Code>;
     using ChildType = Child;
     using CodeType = Code;
 
@@ -26,6 +27,8 @@ template <typename Child, typename Code> struct Enum {
     template <Integral OtherCodeType>
     Enum(OtherCodeType code, std::string name) noexcept
         : code_{static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code))}, name_{std::move(name)} {}
+
+    static const std::unordered_map<CodeType, std::reference_wrapper<const Child>> ALL;
 
   public:
     /**
@@ -75,6 +78,20 @@ template <typename Child, typename Code> struct Enum {
      */
     template <typename OStream, std::convertible_to<Enum<Child, Code>> E> friend OStream &operator<<(OStream &&os, const E &e) {
         return os << e.toString();
+    }
+
+    /**
+     * Returns enum element by integer code bit pattern.
+     *
+     * @param code integer code.
+     * @return enum element.
+     */
+    template <Integral OtherCodeType> static const Child &valueOf(OtherCodeType code) {
+        if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
+            return found->second;
+        }
+
+        return Child::getDefault();
     }
 };
 } // namespace dxfcpp

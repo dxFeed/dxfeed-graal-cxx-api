@@ -34,19 +34,7 @@ struct ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
      */
     static const ShortSaleRestriction INACTIVE;
 
-    static const std::unordered_map<CodeType, std::reference_wrapper<const ShortSaleRestriction>> ALL;
-
-    /**
-     * Returns restriction by integer code bit pattern.
-     *
-     * @param code integer code.
-     * @return restriction.
-     */
-    template <Integral Code> static const ShortSaleRestriction &valueOf(Code code) {
-        if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
-            return found->second;
-        }
-
+    static const ShortSaleRestriction& getDefault() {
         return UNDEFINED;
     }
 };
