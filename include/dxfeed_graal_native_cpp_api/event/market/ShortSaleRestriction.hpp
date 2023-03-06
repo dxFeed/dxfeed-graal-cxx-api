@@ -4,9 +4,9 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <type_traits>
 #include <unordered_map>
-#include <string>
 
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
@@ -16,14 +16,9 @@ namespace dxfcpp {
 /**
  * Short sale restriction on an instrument.
  */
-class ShortSaleRestriction : public Enum<ShortSaleRestriction, std::uint32_t> {
-//    template <Integral Code>
-//    explicit ShortSaleRestriction(Code code, std::string name) noexcept
-//        : Enum<ShortSaleRestriction, std::uint32_t>(code, std::move(name)) {}
+struct ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
+    using Enum::Enum;
 
-using Enum::Enum;
-
-  public:
     /**
      * Short sale restriction is undefined, unknown or inapplicable.
      */

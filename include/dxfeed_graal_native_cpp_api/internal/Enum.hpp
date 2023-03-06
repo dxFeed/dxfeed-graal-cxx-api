@@ -25,7 +25,7 @@ template <typename Child, typename Code> struct Enum {
   protected:
     template <Integral OtherCodeType>
     Enum(OtherCodeType code, std::string name) noexcept
-        : code_{static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code_))}, name_{std::move(name)} {}
+        : code_{static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code))}, name_{std::move(name)} {}
 
   public:
     /**
