@@ -10,15 +10,15 @@ API features via dxfeed-graal-native-api as a backend
 ## Compile-time
 
 - dxFeed Native Graal API v0.1.0
-- [utfcpp](https://github.com/nemtrif/utfcpp) v3.2.1
+- [utfcpp](https://github.com/nemtrif/utfcpp) v3.2.3
 - [fmt](https://github.com/fmtlib/fmt) v9.1.0
-- [Catch2](https://github.com/catchorg/Catch2) v3.1.0 (Tests)
+- [Catch2](https://github.com/catchorg/Catch2) v3.3.1 (Tests)
 
 ## Run-time
 
 - dxFeed Native Graal API v0.1.0
 - [fmt](https://github.com/fmtlib/fmt) v9.1.0 (C++)
-- [Catch2](https://github.com/catchorg/Catch2) v3.1.0 (Tests)
+- [Catch2](https://github.com/catchorg/Catch2) v3.3.0 (Tests)
 
 # TBD
 
