@@ -151,13 +151,33 @@ template <typename... Args> inline void debug(std::string_view format, Args &&..
 }
 
 namespace handler_utils {
-void javaObjectHandlerDeleter(void *javaObjectHandler);
 
-using JavaObjectHandler = std::unique_ptr<void, decltype(&javaObjectHandlerDeleter)>;
+struct JavaObjectHandler {
+    static void deleter(void *handler) noexcept;
+    explicit JavaObjectHandler(void *handler = nullptr) noexcept : impl_{handler, &deleter} {}
 
-inline JavaObjectHandler createJavaObjectHandler(void *handler = nullptr);
+    JavaObjectHandler(JavaObjectHandler&&) = default;
+    JavaObjectHandler& operator=(JavaObjectHandler&&) = default;
+    virtual ~JavaObjectHandler() noexcept = default;
 
-inline std::string toString(const JavaObjectHandler &handler);
+    [[nodiscard]] std::string toString() const noexcept {
+        if (impl_)
+            return fmt::format("{}", impl_.get());
+        else
+            return "nullptr";
+    }
+
+    [[nodiscard]] void* get() const noexcept {
+        return impl_.get();
+    }
+
+    explicit operator bool() const noexcept {
+        return static_cast<bool>(impl_);
+    }
+
+  private:
+    std::unique_ptr<void, decltype(&deleter)> impl_;
+};
 
 struct EventClassList {
     static std::unique_ptr<EventClassList> create(std::size_t size) noexcept;

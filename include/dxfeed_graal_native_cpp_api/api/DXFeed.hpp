@@ -35,7 +35,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
     static std::shared_ptr<DXFeed> create(void *feedHandle) noexcept;
 
   protected:
-    DXFeed() noexcept : mtx_(), handler_{nullptr, &detail::handler_utils::javaObjectHandlerDeleter} {
+    DXFeed() noexcept : mtx_(), handler_{} {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeed()");
         }
@@ -46,8 +46,6 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
         if constexpr (detail::isDebug) {
             detail::debug("{}::~DXFeed()", toString());
         }
-
-        detail::tryCallWithLock(mtx_, [this] { handler_.release(); });
     }
 
     /**
@@ -102,7 +100,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
     std::string toString() const {
         std::lock_guard guard(mtx_);
 
-        return fmt::format("DXFeed{{{}}}", detail::handler_utils::toString(handler_));
+        return fmt::format("DXFeed{{{}}}", handler_.toString());
     }
 };
 

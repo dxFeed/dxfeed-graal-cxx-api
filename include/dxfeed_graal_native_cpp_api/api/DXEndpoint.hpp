@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "DXFeed.hpp"
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
+#include "DXFeed.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -480,8 +480,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
   protected:
     DXEndpoint()
-        : mtx_(), handler_(detail::handler_utils::createJavaObjectHandler()), role_(), feed_(), publisher_(),
-          stateChangeListenerHandler_(detail::handler_utils::createJavaObjectHandler()), onStateChange_() {
+        : mtx_(), handler_(detail::handler_utils::JavaObjectHandler()), role_(), feed_(), publisher_(),
+          stateChangeListenerHandler_(detail::handler_utils::JavaObjectHandler()), onStateChange_() {
         if constexpr (detail::isDebug) {
             detail::debug("DXEndpoint()");
         }
@@ -490,7 +490,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
   public:
     virtual ~DXEndpoint() {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", detail::handler_utils::toString(handler_));
+            detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.toString());
         }
 
         detail::tryCallWithLock(mtx_, [this] { closeImpl(); });
@@ -749,7 +749,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     void close() {
         if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::close()", detail::handler_utils::toString(handler_));
+            detail::debug("DXEndpoint{{{}}}::close()", handler_.toString());
         }
 
         std::lock_guard guard(mtx_);
@@ -814,7 +814,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() : mtx_{}, handler_{detail::handler_utils::createJavaObjectHandler()}, properties_{} {
+        Builder() : mtx_{}, handler_{}, properties_{} {
             if constexpr (detail::isDebug) {
                 detail::debug("DXEndpoint::Builder::Builder()");
             }
@@ -840,7 +840,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         /// Releases the GraalVM handle
         virtual ~Builder() {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", detail::handler_utils::toString(handler_));
+                detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", handler_.toString());
             }
         }
 
@@ -855,8 +855,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})",
-                              detail::handler_utils::toString(handler_), name);
+                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.toString(), name);
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -894,8 +893,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])",
-                              detail::handler_utils::toString(handler_), properties.size());
+                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", handler_.toString(),
+                              properties.size());
             }
 
             std::lock_guard guard(mtx_);

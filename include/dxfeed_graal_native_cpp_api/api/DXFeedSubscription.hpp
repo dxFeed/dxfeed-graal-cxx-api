@@ -20,7 +20,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     mutable std::recursive_mutex mtx_{};
     detail::handler_utils::JavaObjectHandler handler_;
     detail::handler_utils::JavaObjectHandler eventListenerHandler_;
-    detail::Handler<void(const std::vector<std::shared_ptr<EventType>>&)> onEvent_{};
+    detail::Handler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
 
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
@@ -31,8 +31,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
     template <typename EventTypeIt>
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : mtx_{}, handler_{detail::handler_utils::createJavaObjectHandler(nullptr)},
-          eventListenerHandler_{detail::handler_utils::createJavaObjectHandler(nullptr)}, onEvent_{} {
+        : mtx_{}, handler_{detail::handler_utils::JavaObjectHandler(nullptr)},
+          eventListenerHandler_{detail::handler_utils::JavaObjectHandler(nullptr)}, onEvent_{} {
         if constexpr (detail::isDebug) {
             detail::debug("DXFeedSubscription(eventTypes = {})", detail::namesToString(begin, end));
         }
@@ -78,7 +78,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     std::string toString() const {
         std::lock_guard lock(mtx_);
 
-        return fmt::format("DXFeedSubscription{{{}}}", detail::handler_utils::toString(handler_));
+        return fmt::format("DXFeedSubscription{{{}}}", handler_.toString());
     }
 
     virtual ~DXFeedSubscription() {
@@ -86,10 +86,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
             detail::debug("{}::~DXFeedSubscription()", toString());
         }
 
-        detail::tryCallWithLock(mtx_, [this] {
-            closeImpl();
-            handler_.release();
-        });
+        detail::tryCallWithLock(mtx_, [this] { closeImpl(); });
     }
 
     /**

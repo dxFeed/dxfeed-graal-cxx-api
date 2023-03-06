@@ -89,9 +89,9 @@ thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
 const auto I = Isolate::getInstance();
 
 namespace handler_utils {
-void javaObjectHandlerDeleter(void *javaObjectHandler) {
+void JavaObjectHandler::deleter(void *handler) noexcept {
     runIsolatedOrElse(
-        [handler = javaObjectHandler](auto threadHandle) {
+        [handler = handler](auto threadHandle) {
             if (handler) {
                 return dxfg_JavaObjectHandler_release(threadHandle,
                                                       detail::bit_cast<dxfg_java_object_handler *>(handler)) == 0;
@@ -100,15 +100,6 @@ void javaObjectHandlerDeleter(void *javaObjectHandler) {
             return true;
         },
         false);
-}
-
-JavaObjectHandler createJavaObjectHandler(void *handler) { return {handler, &javaObjectHandlerDeleter}; }
-
-std::string toString(const JavaObjectHandler &handler) {
-    if (handler)
-        return fmt::format("{}", handler.get());
-    else
-        return "nullptr";
 }
 
 struct EventClassList::Impl {
@@ -126,9 +117,9 @@ struct EventClassList::Impl {
         }
     }
 
-    bool isEmpty() const noexcept { return list_.size == 0; }
+    [[nodiscard]] bool isEmpty() const noexcept { return list_.size == 0; }
 
-    std::size_t size() const noexcept { return static_cast<std::size_t>(list_.size); }
+    [[nodiscard]] std::size_t size() const noexcept { return static_cast<std::size_t>(list_.size); }
 
     void *getHandler() noexcept { return detail::bit_cast<void *>(&list_); }
 
@@ -263,10 +254,10 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 
     std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
 
-    endpoint->handler_ = detail::handler_utils::createJavaObjectHandler(endpointHandle);
+    endpoint->handler_ = detail::handler_utils::JavaObjectHandler(endpointHandle);
     endpoint->role_ = role;
     endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
-    endpoint->stateChangeListenerHandler_ = detail::handler_utils::createJavaObjectHandler(detail::runIsolatedOrElse(
+    endpoint->stateChangeListenerHandler_ = detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
         [endpoint](auto threadHandle) {
             return dxfg_PropertyChangeListener_new(
                 threadHandle,
@@ -323,7 +314,7 @@ void DXEndpoint::closeImpl() {
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::user(user = {})", detail::handler_utils::toString(handler_), user);
+        detail::debug("DXEndpoint{{{}}}::user(user = {})", handler_.toString(), user);
     }
 
     std::lock_guard guard(mtx_);
@@ -341,7 +332,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
 
 std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::password(password = {})", detail::handler_utils::toString(handler_), password);
+        detail::debug("DXEndpoint{{{}}}::password(password = {})", handler_.toString(), password);
     }
 
     std::lock_guard guard(mtx_);
@@ -359,7 +350,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
 
 std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::connect(address = {})", detail::handler_utils::toString(handler_), address);
+        detail::debug("DXEndpoint{{{}}}::connect(address = {})", handler_.toString(), address);
     }
 
     std::lock_guard guard(mtx_);
@@ -377,7 +368,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
 
 void DXEndpoint::reconnect() {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::reconnect()", detail::handler_utils::toString(handler_));
+        detail::debug("DXEndpoint{{{}}}::reconnect()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -393,7 +384,7 @@ void DXEndpoint::reconnect() {
 
 void DXEndpoint::disconnect() {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::disconnect()", detail::handler_utils::toString(handler_));
+        detail::debug("DXEndpoint{{{}}}::disconnect()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -409,7 +400,7 @@ void DXEndpoint::disconnect() {
 
 void DXEndpoint::disconnectAndClear() {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::disconnectAndClear()", detail::handler_utils::toString(handler_));
+        detail::debug("DXEndpoint{{{}}}::disconnectAndClear()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -427,7 +418,7 @@ void DXEndpoint::disconnectAndClear() {
 
 void DXEndpoint::awaitNotConnected() {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::awaitNotConnected()", detail::handler_utils::toString(handler_));
+        detail::debug("DXEndpoint{{{}}}::awaitNotConnected()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -445,7 +436,7 @@ void DXEndpoint::awaitNotConnected() {
 
 void DXEndpoint::awaitProcessed() {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::awaitProcessed()", detail::handler_utils::toString(handler_));
+        detail::debug("DXEndpoint{{{}}}::awaitProcessed()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -463,7 +454,7 @@ void DXEndpoint::awaitProcessed() {
 
 void DXEndpoint::closeAndAwaitTermination() {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", detail::handler_utils::toString(handler_));
+        detail::debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -688,7 +679,7 @@ DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noex
 std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
     std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
 
-    feed->handler_ = detail::handler_utils::createJavaObjectHandler(feedHandle);
+    feed->handler_ = detail::handler_utils::JavaObjectHandler(feedHandle);
 
     return feed;
 }
@@ -746,13 +737,13 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
-    : mtx_{}, handler_{detail::handler_utils::createJavaObjectHandler(nullptr)},
-      eventListenerHandler_{detail::handler_utils::createJavaObjectHandler(nullptr)}, onEvent_{} {
+    : mtx_{}, handler_{detail::handler_utils::JavaObjectHandler(nullptr)},
+      eventListenerHandler_{detail::handler_utils::JavaObjectHandler(nullptr)}, onEvent_{} {
     if constexpr (detail::isDebug) {
         detail::debug("DXFeedSubscription(eventType = {})", eventType.getName());
     }
 
-    handler_ = detail::handler_utils::createJavaObjectHandler(detail::runIsolatedOrElse(
+    handler_ = detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
         [eventType](auto threadHandle) {
             return dxfg_DXFeedSubscription_new(threadHandle, static_cast<dxfg_event_clazz_t>(eventType.getId()));
         },
@@ -763,15 +754,17 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
 
 detail::handler_utils::JavaObjectHandler DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
     const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept {
-    return detail::handler_utils::createJavaObjectHandler(detail::runIsolatedOrElse(
+    return detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
         [listHandler = detail::bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](auto threadHandle) {
             return dxfg_DXFeedSubscription_new2(threadHandle, listHandler);
         },
         nullptr));
 }
 void DXFeedSubscription::setEventListenerHandler() noexcept {
-    eventListenerHandler_ = detail::handler_utils::createJavaObjectHandler(detail::runIsolatedOrElse(
-        [subscription = shared_from_this()](auto threadHandle) {
+    //TODO: sub manager
+
+    eventListenerHandler_ = detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
+        [subscription = this](auto threadHandle) {
             return dxfg_DXFeedEventListener_new(
                 threadHandle,
                 [](graal_isolatethread_t *thread, dxfg_event_type_list *graalNativeEvents, void *user_data) {
@@ -779,7 +772,7 @@ void DXFeedSubscription::setEventListenerHandler() noexcept {
 
                     detail::bit_cast<DXFeedSubscription *>(user_data)->onEvent_(events);
                 },
-                subscription.get());
+                subscription);
         },
         nullptr));
 
@@ -805,7 +798,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
     auto builder = std::shared_ptr<Builder>(new (std::nothrow) Builder{});
 
     if (builder) {
-        builder->handler_ = detail::handler_utils::createJavaObjectHandler(detail::runIsolatedOrElse(
+        builder->handler_ = detail::handler_utils::JavaObjectHandler(detail::runIsolatedOrElse(
             [](auto threadHandle) { return dxfg_DXEndpoint_newBuilder(threadHandle); }, nullptr));
     }
 
@@ -860,8 +853,7 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::Role role) {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", detail::handler_utils::toString(handler_),
-                      roleToString(role));
+        detail::debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", handler_.toString(), roleToString(role));
     }
 
     std::lock_guard guard(mtx_);
@@ -882,8 +874,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
                                                                        const std::string &value) {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})",
-                      detail::handler_utils::toString(handler_), key, value);
+        detail::debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})", handler_.toString(), key, value);
     }
 
     std::lock_guard guard(mtx_);
@@ -904,8 +895,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 
 bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})",
-                      detail::handler_utils::toString(handler_), key);
+        detail::debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", handler_.toString(), key);
     }
 
     std::lock_guard guard(mtx_);
@@ -923,7 +913,7 @@ bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
 
 std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder{{{}}}::build()", detail::handler_utils::toString(handler_));
+        detail::debug("DXEndpoint::Builder{{{}}}::build()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
