@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "internal/CEntryPointErrors.hpp"
-#include "internal/Common.hpp"
-#include "internal/Handler.hpp"
-#include "internal/Isolate.hpp"
+#include "../internal/CEntryPointErrors.hpp"
+#include "../internal/Common.hpp"
+#include "../internal/Handler.hpp"
+#include "../internal/Isolate.hpp"
 
 #include "DXFeedSubscription.hpp"
-#include "event/DXEvent.hpp"
+#include "../event/DXEvent.hpp"
 
 #include <memory>
 #include <mutex>

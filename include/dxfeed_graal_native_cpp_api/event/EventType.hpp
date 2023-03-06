@@ -7,7 +7,7 @@
 #include <string>
 #include <cstdint>
 
-#include "entity/SharedEntity.hpp"
+#include "../entity/SharedEntity.hpp"
 
 namespace dxfcpp {
 

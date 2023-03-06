@@ -4,10 +4,10 @@
 #pragma once
 
 #include "DXFeed.hpp"
-#include "internal/CEntryPointErrors.hpp"
-#include "internal/Common.hpp"
-#include "internal/Handler.hpp"
-#include "internal/Isolate.hpp"
+#include "../internal/CEntryPointErrors.hpp"
+#include "../internal/Common.hpp"
+#include "../internal/Handler.hpp"
+#include "../internal/Isolate.hpp"
 
 #include <filesystem>
 #include <iostream>

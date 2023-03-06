@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "internal/CEntryPointErrors.hpp"
-#include "internal/Common.hpp"
-#include "internal/Isolate.hpp"
+#include "../internal/CEntryPointErrors.hpp"
+#include "../internal/Common.hpp"
+#include "../internal/Isolate.hpp"
 
 #include <iostream>
 #include <string>
