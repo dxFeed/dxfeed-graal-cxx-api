@@ -4,6 +4,8 @@
 #include <api.hpp>
 
 int main() {
+    std::cout << dxfcpp::ShortSaleRestriction::ACTIVE << std::endl;
+
     dxfcpp::Quote q{};
 
     std::cout << dxfcpp::detail::nowStrWithTimeZone() << std::endl;

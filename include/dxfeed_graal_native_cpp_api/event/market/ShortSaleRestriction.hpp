@@ -9,22 +9,19 @@
 #include <string>
 
 #include "../../internal/Common.hpp"
+#include "../../internal/Enum.hpp"
 
 namespace dxfcpp {
 
 /**
  * Short sale restriction on an instrument.
  */
-struct ShortSaleRestriction {
-    using CodeType = std::uint32_t;
+class ShortSaleRestriction : public Enum<ShortSaleRestriction, std::uint32_t> {
+//    template <Integral Code>
+//    explicit ShortSaleRestriction(Code code, std::string name) noexcept
+//        : Enum<ShortSaleRestriction, std::uint32_t>(code, std::move(name)) {}
 
-  private:
-    CodeType code_;
-    std::string name_;
-
-    template <Integral Code>
-    explicit ShortSaleRestriction(Code code, std::string name) noexcept
-        : code_{static_cast<CodeType>(code)}, name_{std::move(name)} {}
+using Enum::Enum;
 
   public:
     /**
@@ -56,47 +53,6 @@ struct ShortSaleRestriction {
         }
 
         return UNDEFINED;
-    }
-
-    /**
-     * Returns code that is used in flag bits.
-     *
-     * @return code.
-     */
-    [[nodiscard]] CodeType getCode() const { return code_; }
-
-    /**
-     * Returns the enum element name
-     *
-     * @return name
-     */
-    [[nodiscard]] const std::string &getName() const & { return name_; }
-
-    /**
-     * Compares two elements of an enum.
-     *
-     * @param other An other enum element
-     * @return `true` if the elements are the same
-     */
-    bool operator==(const ShortSaleRestriction &other) const { return code_ == other.code_; }
-
-    /**
-     * Returns a string representation of an enum element.
-     *
-     * @return a string representation
-     */
-    [[nodiscard]] const std::string &toString() const &noexcept { return name_; }
-
-    /**
-     * Puts the string representation of an enum element to the output stream.
-     *
-     * @tparam OStream A type of the output stream
-     * @param os The output stream
-     * @param ssr An enum element
-     * @return The output stream
-     */
-    template <typename OStream> friend OStream &operator<<(OStream &&os, const ShortSaleRestriction &ssr) {
-        return os << ssr.toString();
     }
 };
 
