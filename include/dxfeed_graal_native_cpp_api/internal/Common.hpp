@@ -155,9 +155,9 @@ void javaObjectHandlerDeleter(void *javaObjectHandler);
 
 using JavaObjectHandler = std::unique_ptr<void, decltype(&javaObjectHandlerDeleter)>;
 
-static JavaObjectHandler createJavaObjectHandler(void *handler = nullptr);
+inline JavaObjectHandler createJavaObjectHandler(void *handler = nullptr);
 
-static std::string toString(const JavaObjectHandler &handler);
+inline std::string toString(const JavaObjectHandler &handler);
 
 struct EventClassList {
     static std::unique_ptr<EventClassList> create(std::size_t size) noexcept;
