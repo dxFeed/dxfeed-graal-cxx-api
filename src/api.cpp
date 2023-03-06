@@ -257,18 +257,19 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     endpoint->handler_ = detail::handler_utils::JavaObjectHandler<DXEndpoint>(endpointHandle);
     endpoint->role_ = role;
     endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
-    endpoint->stateChangeListenerHandler_ = detail::handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>(detail::runIsolatedOrElse(
-        [endpoint](auto threadHandle) {
-            return dxfg_PropertyChangeListener_new(
-                threadHandle,
-                [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState, dxfg_endpoint_state_t newState,
-                   void *user_data) {
-                    detail::bit_cast<DXEndpoint *>(user_data)->onStateChange_(graalStateToState(oldState),
-                                                                              graalStateToState(newState));
-                },
-                endpoint.get());
-        },
-        nullptr));
+    endpoint->stateChangeListenerHandler_ =
+        detail::handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>(detail::runIsolatedOrElse(
+            [endpoint](auto threadHandle) {
+                return dxfg_PropertyChangeListener_new(
+                    threadHandle,
+                    [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState, dxfg_endpoint_state_t newState,
+                       void *user_data) {
+                        detail::bit_cast<DXEndpoint *>(user_data)->onStateChange_(graalStateToState(oldState),
+                                                                                  graalStateToState(newState));
+                    },
+                    endpoint.get());
+            },
+            nullptr));
     endpoint->setStateChangeListenerImpl();
 
     return endpoint;
@@ -737,8 +738,7 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
-    : mtx_{}, handler_{},
-      eventListenerHandler_{}, onEvent_{} {
+    : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
     if constexpr (detail::isDebug) {
         detail::debug("DXFeedSubscription(eventType = {})", eventType.getName());
     }
@@ -1030,6 +1030,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
             break;
         case DXFG_EVENT_SUMMARY:
+            result[i] = Summary::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_GREEKS:
             break;
@@ -1073,7 +1075,8 @@ const ShortSaleRestriction ShortSaleRestriction::UNDEFINED{0, "UNDEFINED"};
 const ShortSaleRestriction ShortSaleRestriction::ACTIVE{1, "ACTIVE"};
 const ShortSaleRestriction ShortSaleRestriction::INACTIVE{2, "INACTIVE"};
 
-template<> const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<const ShortSaleRestriction>>
+template <>
+const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<const ShortSaleRestriction>>
     ShortSaleRestriction::ParentType::ALL{
         {ShortSaleRestriction::UNDEFINED.getCode(), std::cref(ShortSaleRestriction::UNDEFINED)},
         {ShortSaleRestriction::ACTIVE.getCode(), std::cref(ShortSaleRestriction::ACTIVE)},
@@ -1084,11 +1087,13 @@ const TradingStatus TradingStatus::UNDEFINED{0, "UNDEFINED"};
 const TradingStatus TradingStatus::HALTED{1, "HALTED"};
 const TradingStatus TradingStatus::ACTIVE{2, "ACTIVE"};
 
-const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>> TradingStatus::ALL{
-    {TradingStatus::UNDEFINED.getCode(), std::cref(TradingStatus::UNDEFINED)},
-    {TradingStatus::HALTED.getCode(), std::cref(TradingStatus::HALTED)},
-    {TradingStatus::ACTIVE.getCode(), std::cref(TradingStatus::ACTIVE)},
-};
+template <>
+const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>>
+    TradingStatus::ParentType::ALL{
+        {TradingStatus::UNDEFINED.getCode(), std::cref(TradingStatus::UNDEFINED)},
+        {TradingStatus::HALTED.getCode(), std::cref(TradingStatus::HALTED)},
+        {TradingStatus::ACTIVE.getCode(), std::cref(TradingStatus::ACTIVE)},
+    };
 
 std::shared_ptr<Profile> Profile::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {
@@ -1126,6 +1131,53 @@ std::shared_ptr<Profile> Profile::fromGraalNative(void *graalNative) noexcept {
         };
 
         return profile;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
+const PriceType PriceType::REGULAR{0, "REGULAR"};
+const PriceType PriceType::INDICATIVE{1, "INDICATIVE"};
+const PriceType PriceType::PRELIMINARY{2, "PRELIMINARY"};
+const PriceType PriceType::FINAL{3, "FINAL"};
+
+template <>
+const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const PriceType>> PriceType::ParentType::ALL{
+    {PriceType::REGULAR.getCode(), std::cref(PriceType::REGULAR)},
+    {PriceType::INDICATIVE.getCode(), std::cref(PriceType::INDICATIVE)},
+    {PriceType::PRELIMINARY.getCode(), std::cref(PriceType::PRELIMINARY)},
+    {PriceType::FINAL.getCode(), std::cref(PriceType::FINAL)},
+};
+
+std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_SUMMARY) {
+        return {};
+    }
+
+    try {
+        auto graalSummary = detail::bit_cast<dxfg_summary_t *>(graalNative);
+        auto summary = std::make_shared<Summary>(detail::toString(graalSummary->market_event.event_symbol));
+
+        summary->setEventTime(graalSummary->market_event.event_time);
+        summary->data_ = {graalSummary->day_id,
+                          graalSummary->day_open_price,
+                          graalSummary->day_high_price,
+                          graalSummary->day_low_price,
+                          graalSummary->day_close_price,
+                          graalSummary->prev_day_id,
+                          graalSummary->prev_day_close_price,
+                          graalSummary->prev_day_volume,
+                          graalSummary->open_interest,
+                          graalSummary->flags};
+
+        return summary;
     } catch (...) {
         // TODO: error handling
         return {};

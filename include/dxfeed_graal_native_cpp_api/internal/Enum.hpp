@@ -91,7 +91,11 @@ template <typename Child, typename Code> struct Enum {
             return found->second;
         }
 
-        return Child::getDefault();
+        if constexpr (requires { Child::getDefault(); } ) {
+            return Child::getDefault();
+        } else {
+            return ALL.at(0);
+        }
     }
 };
 } // namespace dxfcpp

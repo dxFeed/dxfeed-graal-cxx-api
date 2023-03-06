@@ -33,10 +33,6 @@ struct ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
      * Short sale restriction is inactive.
      */
     static const ShortSaleRestriction INACTIVE;
-
-    static const ShortSaleRestriction& getDefault() {
-        return UNDEFINED;
-    }
 };
 
 } // namespace dxfcpp

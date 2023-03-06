@@ -22,5 +22,6 @@
 #include "market/Profile.hpp"
 #include "market/ShortSaleRestriction.hpp"
 #include "market/TradingStatus.hpp"
+#include "market/PriceType.hpp"
 #include "market/Summary.hpp"
 #include "EventMapper.hpp"

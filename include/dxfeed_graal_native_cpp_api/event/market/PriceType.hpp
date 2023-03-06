@@ -1,8 +1,43 @@
-//
-// Created by ttldt on 06.03.2023.
-//
+// Copyright (c) 2023 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
 
-#ifndef DXFEEDNATIVEAPI_PRICETYPE_HPP
-#define DXFEEDNATIVEAPI_PRICETYPE_HPP
+#pragma once
 
-#endif // DXFEEDNATIVEAPI_PRICETYPE_HPP
+#include <cstdint>
+#include <unordered_map>
+#include <type_traits>
+#include <string>
+
+#include "../../internal/Common.hpp"
+#include "../../internal/Enum.hpp"
+
+namespace dxfcpp {
+
+/**
+ * Type of the price value.
+ */
+struct PriceType : Enum<PriceType, std::uint32_t> {
+    using Enum::Enum;
+
+    /**
+     * Regular price.
+     */
+    static const PriceType REGULAR;
+
+    /**
+     * Indicative price (derived via math formula).
+     */
+    static const PriceType INDICATIVE;
+
+    /**
+     * Preliminary price (preliminary settlement price), usually posted prior to ::FINAL price.
+     */
+    static const PriceType PRELIMINARY;
+
+    /**
+     * Final price (final settlement price).
+     */
+    static const PriceType FINAL;
+};
+
+}

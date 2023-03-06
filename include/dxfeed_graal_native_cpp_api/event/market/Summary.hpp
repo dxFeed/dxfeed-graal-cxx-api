@@ -10,8 +10,7 @@
 #include "../../internal/Common.hpp"
 #include "../LastingEvent.hpp"
 #include "MarketEvent.hpp"
-#include "ShortSaleRestriction.hpp"
-#include "TradingStatus.hpp"
+#include "PriceType.hpp"
 
 namespace dxfcpp {
 
@@ -144,7 +143,6 @@ class Summary final : public MarketEvent, public LastingEvent {
      *
      * @return the price type of the last (close) price for the day.
      */
-    template <typename PriceType>
     const PriceType &getDayClosePriceType() const & {
         return PriceType::valueOf(
             detail::util::getBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT));
@@ -155,7 +153,6 @@ class Summary final : public MarketEvent, public LastingEvent {
      *
      * @param type the price type of the last (close) price for the day.
      */
-    template <typename PriceType>
     void setDayClosePriceType(const PriceType &type) {
         data_.flags =
             detail::util::setBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
@@ -196,7 +193,6 @@ class Summary final : public MarketEvent, public LastingEvent {
      *
      * @return the price type of the last (close) price for the previous day.
      */
-    template <typename PriceType>
     const PriceType &getPrevDayClosePriceType() const & {
         return PriceType::valueOf(
             detail::util::getBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK, PREV_DAY_CLOSE_PRICE_TYPE_SHIFT));
@@ -207,7 +203,6 @@ class Summary final : public MarketEvent, public LastingEvent {
      *
      * @param type the price type of the last (close) price for the previous day.
      */
-    template <typename PriceType>
     void setPrevDayClosePriceType(const PriceType &type) {
         data_.flags = detail::util::setBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK,
                                             PREV_DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
@@ -240,6 +235,31 @@ class Summary final : public MarketEvent, public LastingEvent {
      * @param openInterest open interest of the symbol as the number of open contracts.
      */
     void setOpenInterest(std::int64_t openInterest) { data_.openInterest = openInterest; }
+
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
+    std::string toString() const noexcept {
+        return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
+                           "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
+                           "prevDayVolume={}, openInterest={}}}",
+                           MarketEvent::getEventSymbol(),
+                           detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                           detail::day_util::getYearMonthDayByDayId(getDayId()), getDayOpenPrice(), getDayHighPrice(),
+                           getDayLowPrice(), getDayLowPrice(), getDayClosePrice(), getDayClosePriceType().toString(),
+                           detail::day_util::getYearMonthDayByDayId(getPrevDayId()), getPrevDayClosePrice(),
+                           getPrevDayClosePriceType().toString(), getPrevDayVolume(), getOpenInterest());
+    }
+
+    template <typename OStream> friend OStream &operator<<(OStream &&os, const Summary &summary) {
+        return os << summary.toString();
+    }
+
+    template <typename OStream> friend OStream &operator<<(OStream &&os, const std::shared_ptr<Summary> &summary) {
+        return os << summary->toString();
+    }
 };
 
 } // namespace dxfcpp

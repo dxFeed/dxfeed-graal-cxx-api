@@ -6,6 +6,7 @@
 int main() {
     std::cout << dxfcpp::ShortSaleRestriction::ACTIVE << std::endl;
     std::cout << dxfcpp::ShortSaleRestriction::valueOf(100500) << std::endl;
+    std::cout << dxfcpp::PriceType::valueOf(100500) << std::endl;
 
     dxfcpp::Quote q{};
 
