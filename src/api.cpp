@@ -102,9 +102,9 @@ void javaObjectHandlerDeleter(void *javaObjectHandler) {
         false);
 }
 
-inline JavaObjectHandler createJavaObjectHandler(void *handler) { return {handler, &javaObjectHandlerDeleter}; }
+JavaObjectHandler createJavaObjectHandler(void *handler) { return {handler, &javaObjectHandlerDeleter}; }
 
-inline std::string toString(const JavaObjectHandler &handler) {
+std::string toString(const JavaObjectHandler &handler) {
     if (handler)
         return fmt::format("{}", handler.get());
     else
