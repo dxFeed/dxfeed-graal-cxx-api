@@ -18,14 +18,12 @@ template <typename Child, typename Code> struct Enum {
     using CodeType = Code;
 
   private:
-    friend Child;
-
-    CodeType code_;
-    std::string name_;
+    const CodeType code_;
+    const std::string name_;
 
   protected:
     template <Integral OtherCodeType>
-    Enum(OtherCodeType code, std::string name) noexcept
+    constexpr Enum(OtherCodeType code, std::string name) noexcept
         : code_{static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code))}, name_{std::move(name)} {}
 
     static const std::unordered_map<CodeType, std::reference_wrapper<const Child>> ALL;
@@ -43,7 +41,7 @@ template <typename Child, typename Code> struct Enum {
      *
      * @return name
      */
-    [[nodiscard]] const std::string &getName() const & { return name_; }
+    [[nodiscard]] const std::string &getName() const &noexcept { return name_; }
 
     /**
      * Returns a string representation of an enum element.
@@ -51,7 +49,6 @@ template <typename Child, typename Code> struct Enum {
      * @return a string representation
      */
     [[nodiscard]] const std::string &toString() const &noexcept { return name_; }
-
 
     /**
      * Compares two elements of an enum.
@@ -76,7 +73,8 @@ template <typename Child, typename Code> struct Enum {
      *
      * @return The output stream
      */
-    template <typename OStream, std::convertible_to<Enum<Child, Code>> E> friend OStream &operator<<(OStream &&os, const E &e) {
+    template <typename OStream, std::convertible_to<Enum<Child, Code>> E>
+    friend OStream &operator<<(OStream &&os, const E &e) {
         return os << e.toString();
     }
 
@@ -86,12 +84,12 @@ template <typename Child, typename Code> struct Enum {
      * @param code integer code.
      * @return enum element.
      */
-    template <Integral OtherCodeType> static const Child &valueOf(OtherCodeType code) {
+    template <Integral OtherCodeType> inline static const Child &valueOf(OtherCodeType code) {
         if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
             return found->second;
         }
 
-        if constexpr (requires { Child::getDefault(); } ) {
+        if constexpr (requires { Child::getDefault(); }) {
             return Child::getDefault();
         } else {
             return ALL.at(0);
