@@ -253,11 +253,11 @@ class Summary final : public MarketEvent, public LastingEvent {
                            getPrevDayClosePriceType().toString(), getPrevDayVolume(), getOpenInterest());
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &&os, const Summary &summary) {
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Summary &summary) {
         return os << summary.toString();
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &&os, const std::shared_ptr<Summary> &summary) {
+    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Summary> &summary) {
         return os << summary->toString();
     }
 };

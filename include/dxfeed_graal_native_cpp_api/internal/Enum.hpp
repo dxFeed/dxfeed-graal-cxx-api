@@ -74,7 +74,7 @@ template <typename Child, typename Code> struct Enum {
      * @return The output stream
      */
     template <typename OStream, std::convertible_to<Enum<Child, Code>> E>
-    friend OStream &operator<<(OStream &&os, const E &e) {
+    friend OStream &operator<<(OStream &os, const E &e) {
         return os << e.toString();
     }
 

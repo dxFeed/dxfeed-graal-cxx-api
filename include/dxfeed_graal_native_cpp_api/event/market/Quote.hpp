@@ -286,9 +286,9 @@ class Quote final : public MarketEvent, public LastingEvent {
             detail::string_util::encodeChar(data_.askExchangeCode), getAskPrice(), getAskSize());
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &&os, const Quote &q) { return os << q.toString(); }
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Quote &q) { return os << q.toString(); }
 
-    template <typename OStream> friend OStream &operator<<(OStream &&os, const std::shared_ptr<Quote> &q) {
+    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Quote> &q) {
         return os << q->toString();
     }
 };

@@ -360,11 +360,11 @@ class Profile final : public MarketEvent, public LastingEvent {
                            detail::day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &&os, const Profile &profile) {
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Profile &profile) {
         return os << profile.toString();
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &&os, const std::shared_ptr<Profile> &profile) {
+    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Profile> &profile) {
         return os << profile->toString();
     }
 };
