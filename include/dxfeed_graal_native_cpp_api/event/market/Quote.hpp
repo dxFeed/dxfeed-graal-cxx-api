@@ -58,7 +58,7 @@ class Quote final : public MarketEvent, public LastingEvent {
     static std::shared_ptr<Quote> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum type;
+    static const EventTypeEnum Type;
 
     /// Creates new quote with default values.
     Quote() noexcept : data_{} {}
@@ -90,6 +90,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      * @see ::getSequence()
      */
     void setSequence(std::int32_t sequence) {
+        //TODO: Improve error handling
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
         data_.timeMillisSequence = static_cast<std::int32_t>(

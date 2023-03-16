@@ -24,4 +24,5 @@
 #include "market/TradingStatus.hpp"
 #include "market/PriceType.hpp"
 #include "market/Summary.hpp"
+#include "option/Greeks.hpp"
 #include "EventMapper.hpp"

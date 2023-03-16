@@ -82,7 +82,7 @@ struct TimeSeriesEvent : public IndexedEvent {
      * @return The source identifier for this event, which is always @ref IndexedEventSource::DEFAULT "DEFAULT" for
      * time-series events.
      */
-    const IndexedEventSource &getSource() const override;
+    const IndexedEventSource &getSource() const & override;
 
     /**
      * Returns unique per-symbol index of this event.
@@ -101,7 +101,7 @@ struct TimeSeriesEvent : public IndexedEvent {
      *
      * @return unique per-symbol index of this event.
      */
-    std::uint64_t getIndex() const override;
+    std::int64_t getIndex() const override;
 
     /**
      * Returns unique per-symbol index of this event.
@@ -109,7 +109,7 @@ struct TimeSeriesEvent : public IndexedEvent {
      * @return unique per-symbol index of this event.
      * @deprecated Use ::getIndex()
      */
-    virtual std::uint64_t getEventId() const { return getIndex(); }
+    virtual std::int64_t getEventId() const { return getIndex(); }
 
     /**
      * Returns timestamp of the event.
@@ -117,7 +117,7 @@ struct TimeSeriesEvent : public IndexedEvent {
      *
      * @return timestamp of the event.
      */
-    virtual std::uint64_t getTime() const = 0;
+    virtual std::int64_t getTime() const = 0;
 };
 
 }

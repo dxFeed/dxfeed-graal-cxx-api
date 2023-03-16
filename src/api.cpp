@@ -960,7 +960,7 @@ std::int16_t utf8to16(char in) {
     }
 }
 
-const EventTypeEnum Quote::type = EventTypeEnum::QUOTE;
+const EventTypeEnum Quote::Type = EventTypeEnum::QUOTE;
 
 char Quote::getBidExchangeCode() const { return utf16to8(data_.bidExchangeCode); }
 

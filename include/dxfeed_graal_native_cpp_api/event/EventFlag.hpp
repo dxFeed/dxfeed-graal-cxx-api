@@ -3,12 +3,14 @@
 
 #pragma once
 
+#include <algorithm>
+#include <cstdint>
+#include <numeric>
+#include <sstream>
 #include <string>
 #include <utility>
-#include <cstdint>
-#include <algorithm>
-#include <sstream>
-#include <numeric>
+
+#include "../internal/Common.hpp"
 
 namespace dxfcpp {
 
@@ -206,7 +208,7 @@ class EventFlag final {
     }
 
     ///
-    const std::string &getName() const { return name_; }
+    [[nodiscard]] const std::string &getName() const { return name_; }
 
     ///
     std::string toString() const { return name_; }
@@ -226,19 +228,25 @@ class EventFlagsMask final {
     std::uint32_t mask_;
 
   public:
-    ///
-    explicit EventFlagsMask() : mask_{0u} {}
     /**
-     *
-     * @param mask
+     * Creates an empty event flags mask
      */
-    explicit EventFlagsMask(std::uint32_t mask) : mask_{mask} {}
+    explicit EventFlagsMask() : mask_{0u} {}
 
     /**
+     * Create event flags mask by integer value
      *
-     * @tparam EventFlagIt
-     * @param begin
-     * @param end
+     * @tparam MaskType The type of integer mask
+     * @param mask The integer mask value
+     */
+    template <Integral MaskType> explicit EventFlagsMask(MaskType mask) : mask_{static_cast<std::uint32_t>(mask)} {}
+
+    /**
+     * Creates event flags mask by iterators of container with flags
+     *
+     * @tparam EventFlagIt The iterator type
+     * @param begin The start position
+     * @param end The end position
      */
     template <typename EventFlagIt> EventFlagsMask(EventFlagIt begin, EventFlagIt end) {
         mask_ =
@@ -246,13 +254,18 @@ class EventFlagsMask final {
     }
 
     /**
+     * Creates event flags mask by initializer list with flags\
      *
-     * @param eventTypes
+     * @param eventTypes The list with flags
      */
     EventFlagsMask(std::initializer_list<EventFlag> eventTypes)
         : EventFlagsMask(eventTypes.begin(), eventTypes.end()) {}
 
-    ///
+    /**
+     * Returns an integer representation of event mask
+     *
+     * @return an integer representation
+     */
     constexpr std::uint32_t getMask() const { return mask_; }
 
     /**

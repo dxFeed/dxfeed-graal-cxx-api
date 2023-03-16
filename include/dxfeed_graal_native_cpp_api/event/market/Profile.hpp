@@ -64,6 +64,8 @@ class Profile final : public MarketEvent, public LastingEvent {
     static std::shared_ptr<Profile> fromGraalNative(void *graalNative) noexcept;
 
   public:
+    static const EventTypeEnum Type;
+
     /// Creates new profile with default values.
     Profile() noexcept : data_{} {}
 
