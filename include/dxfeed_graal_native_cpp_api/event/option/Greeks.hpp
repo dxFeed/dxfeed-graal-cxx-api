@@ -48,7 +48,10 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
      *
      * @see ::setSequence()
      */
-    static const std::int32_t MAX_SEQUENCE = (1 << 22) - 1;
+    static constexpr std::int32_t MAX_SEQUENCE = (1 << 22) - 1;
+    static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
+    static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
 
     // ========================= instance =========================
 
@@ -70,7 +73,7 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
         double theta = detail::math::NaN;
         double rho = detail::math::NaN;
         double vega = detail::math::NaN;
-    } data_;
+    } data_{};
 
     static std::shared_ptr<Greeks> fromGraalNative(void *graalNative) noexcept;
 
@@ -125,10 +128,6 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
      * @return timestamp of the event in milliseconds
      */
     std::int64_t getTime() const override {
-        const std::uint64_t SECONDS_SHIFT = 32ULL;
-        const std::uint64_t MILLISECONDS_SHIFT = 22ULL;
-        const std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
-
         return detail::BitOps::sar(data_.index, SECONDS_SHIFT) * 1000 +
                detail::BitOps::andOp(detail::BitOps::sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
     }
@@ -140,9 +139,6 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
      * @see ::getTime()
      */
     void setTime(std::int64_t time) {
-        const std::uint64_t SECONDS_SHIFT = 32ULL;
-        const std::uint64_t MILLISECONDS_SHIFT = 22ULL;
-
         data_.index = detail::BitOps::orOp(
             detail::BitOps::orOp(detail::BitOps::sal(detail::time_util::getSecondsFromTime(time), SECONDS_SHIFT),
                                  detail::BitOps::sal(detail::time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
