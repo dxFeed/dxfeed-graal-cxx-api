@@ -73,7 +73,9 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
         double theta = detail::math::NaN;
         double rho = detail::math::NaN;
         double vega = detail::math::NaN;
-    } data_{};
+    };
+
+    Data data_{};
 
     static std::shared_ptr<Greeks> fromGraalNative(void *graalNative) noexcept;
 
@@ -81,14 +83,14 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
     static const EventTypeEnum Type;
 
     /// Creates new greeks with default values.
-    Greeks() noexcept : data_{} {}
+    Greeks() noexcept = default;
 
     /**
      * Creates new greeks with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Greeks(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)), data_{} {}
+    explicit Greeks(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {}
 
     ///
     const IndexedEventSource &getSource() const & override { return IndexedEventSource::DEFAULT; }
@@ -265,6 +267,26 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
      * @param vega option vega.
      */
     void setVega(double vega) { data_.vega = vega; }
+
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
+    std::string toString() const noexcept {
+        return fmt::format(
+            "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
+            "gamma={}, theta={}, rho={}, vega={}}}",
+            MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
+            getEventFlags().getMask(), detail::formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
+            getVolatility(), getDelta(), getGamma(), getTime(), getRho(), getVega());
+    }
+
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Greeks &e) { return os << e.toString(); }
+
+    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Greeks> &e) {
+        return os << e->toString();
+    }
 };
 
 } // namespace dxfcpp

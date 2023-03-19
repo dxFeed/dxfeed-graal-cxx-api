@@ -51,20 +51,22 @@ class Summary final : public MarketEvent, public LastingEvent {
         double prevDayVolume = detail::math::NaN;
         std::int64_t openInterest{};
         std::int32_t flags{};
-    } data_;
+    };
+
+    Data data_{};
 
     static std::shared_ptr<Summary> fromGraalNative(void *graalNative) noexcept;
 
   public:
     /// Creates new summary with default values.
-    Summary() noexcept : data_{} {}
+    Summary() noexcept = default;
 
     /**
      * Creates new summary with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Summary(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)), data_{} {}
+    explicit Summary(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {}
 
     /**
      * Returns identifier of the day that this summary represents.
@@ -253,12 +255,12 @@ class Summary final : public MarketEvent, public LastingEvent {
                            getPrevDayClosePriceType().toString(), getPrevDayVolume(), getOpenInterest());
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Summary &summary) {
-        return os << summary.toString();
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Summary &e) {
+        return os << e.toString();
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Summary> &summary) {
-        return os << summary->toString();
+    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Summary> &e) {
+        return os << e->toString();
     }
 };
 

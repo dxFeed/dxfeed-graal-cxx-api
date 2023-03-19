@@ -26,7 +26,7 @@ struct MarketEvent : public EventType {
     std::int64_t eventTime_{};
 
   protected:
-    MarketEvent() noexcept {}
+    MarketEvent() noexcept = default;
 
     /**
      * Protected constructor for concrete implementation classes that initializes `eventSymbol` property.

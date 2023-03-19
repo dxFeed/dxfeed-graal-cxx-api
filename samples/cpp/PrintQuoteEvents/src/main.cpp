@@ -4,6 +4,9 @@
 #include <api.hpp>
 
 int main() {
+    std::cout << fmt::format("{:#06x}", 123) << std::endl;
+    std::cout << fmt::format("{:#x}", 123) << std::endl;
+
     std::cout << dxfcpp::ShortSaleRestriction::ACTIVE << std::endl;
     std::cout << dxfcpp::ShortSaleRestriction::valueOf(100500) << std::endl;
     std::cout << dxfcpp::PriceType::valueOf(100500) << std::endl;

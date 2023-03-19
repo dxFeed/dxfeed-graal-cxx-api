@@ -6,8 +6,8 @@
 #include <cstdint>
 #include <memory>
 
-#include "IndexedEventSource.hpp"
 #include "IndexedEvent.hpp"
+#include "IndexedEventSource.hpp"
 
 namespace dxfcpp {
 
@@ -82,7 +82,7 @@ struct TimeSeriesEvent : public IndexedEvent {
      * @return The source identifier for this event, which is always @ref IndexedEventSource::DEFAULT "DEFAULT" for
      * time-series events.
      */
-    const IndexedEventSource &getSource() const & override;
+    const IndexedEventSource &getSource() const & override { return IndexedEventSource::DEFAULT; }
 
     /**
      * Returns unique per-symbol index of this event.
@@ -101,7 +101,7 @@ struct TimeSeriesEvent : public IndexedEvent {
      *
      * @return unique per-symbol index of this event.
      */
-    std::int64_t getIndex() const override;
+    std::int64_t getIndex() const override { return 0; }
 
     /**
      * Returns unique per-symbol index of this event.
@@ -120,4 +120,4 @@ struct TimeSeriesEvent : public IndexedEvent {
     virtual std::int64_t getTime() const = 0;
 };
 
-}
+} // namespace dxfcpp

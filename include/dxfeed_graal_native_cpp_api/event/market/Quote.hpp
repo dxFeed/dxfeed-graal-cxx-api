@@ -8,10 +8,10 @@
 #include <memory>
 #include <string>
 
-#include "MarketEvent.hpp"
+#include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
-#include "../../internal/Common.hpp"
+#include "MarketEvent.hpp"
 
 namespace dxfcpp {
 
@@ -33,7 +33,8 @@ class Quote final : public MarketEvent, public LastingEvent {
      *
      * @see ::setSequence()
      */
-    static const std::int32_t MAX_SEQUENCE = (1 << 22) - 1;
+    static constexpr std::int32_t MAX_SEQUENCE = (1 << 22) - 1;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
 
     struct Data {
         std::int32_t timeMillisSequence{};
@@ -46,13 +47,15 @@ class Quote final : public MarketEvent, public LastingEvent {
         std::int16_t askExchangeCode{};
         double askPrice = detail::math::NaN;
         double askSize = detail::math::NaN;
-    } data_;
+    };
+
+    Data data_{};
 
     void recomputeTimeMillisPart() {
-        data_.timeMillisSequence = static_cast<std::int32_t>(
-            static_cast<std::uint32_t>(detail::time_util::getMillisFromTime(std::max(data_.askTime, data_.bidTime)))
-                << 22U |
-            static_cast<std::uint32_t>(getSequence()));
+        data_.timeMillisSequence = detail::BitOps::orOp(
+            detail::BitOps::sal(detail::time_util::getMillisFromTime(std::max(data_.askTime, data_.bidTime)),
+                                MILLISECONDS_SHIFT),
+            getSequence());
     }
 
     static std::shared_ptr<Quote> fromGraalNative(void *graalNative) noexcept;
@@ -61,14 +64,14 @@ class Quote final : public MarketEvent, public LastingEvent {
     static const EventTypeEnum Type;
 
     /// Creates new quote with default values.
-    Quote() noexcept : data_{} {}
+    Quote() noexcept = default;
 
     /**
      * Creates new quote with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Quote(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)), data_{} {}
+    explicit Quote(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {}
 
     /**
      * Returns sequence number of this quote to distinguish quotes that have the same @ref ::getTime() "time". This
@@ -77,10 +80,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      *
      * @return sequence of this quote.
      */
-    std::int32_t getSequence() const {
-        return static_cast<std::int32_t>(static_cast<std::uint32_t>(data_.timeMillisSequence) &
-                                         static_cast<std::uint32_t>(MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const { return detail::BitOps::andOp(data_.timeMillisSequence, MAX_SEQUENCE); }
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this quote.
@@ -90,12 +90,11 @@ class Quote final : public MarketEvent, public LastingEvent {
      * @see ::getSequence()
      */
     void setSequence(std::int32_t sequence) {
-        //TODO: Improve error handling
+        // TODO: Improve error handling
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
-        data_.timeMillisSequence = static_cast<std::int32_t>(
-            (static_cast<std::uint32_t>(data_.timeMillisSequence) & ~static_cast<std::uint32_t>(MAX_SEQUENCE)) |
-            static_cast<std::uint32_t>(sequence));
+        data_.timeMillisSequence =
+            detail::BitOps::orOp(detail::BitOps::andOp(data_.timeMillisSequence, ~MAX_SEQUENCE), sequence);
     }
 
     /**
@@ -105,8 +104,8 @@ class Quote final : public MarketEvent, public LastingEvent {
      * @return time of the last bid or ask change.
      */
     std::int64_t getTime() const {
-        return detail::math::floorDiv(std::max(data_.bidTime, data_.askTime), 1000) * 1000 +
-               static_cast<std::int64_t>(static_cast<std::uint32_t>(data_.timeMillisSequence) >> 22U);
+        return detail::math::floorDiv(std::max(data_.bidTime, data_.askTime), 1000LL) * 1000LL +
+               detail::BitOps::shr(data_.timeMillisSequence, MILLISECONDS_SHIFT);
     }
 
     /**
@@ -286,10 +285,10 @@ class Quote final : public MarketEvent, public LastingEvent {
             detail::string_util::encodeChar(data_.askExchangeCode), getAskPrice(), getAskSize());
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Quote &q) { return os << q.toString(); }
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Quote &e) { return os << e.toString(); }
 
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Quote> &q) {
-        return os << q->toString();
+    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Quote> &e) {
+        return os << e->toString();
     }
 };
 

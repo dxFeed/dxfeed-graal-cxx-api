@@ -313,7 +313,7 @@ static std::string encodeChar(std::int16_t c) {
         return "\\0";
     }
 
-    return std::string("\\u") + fmt::format("{0:04x}", 65536 + static_cast<int>(c)).substr(1);
+    return fmt::format("\\u{:04x}", c);
 }
 
 } // namespace string_util

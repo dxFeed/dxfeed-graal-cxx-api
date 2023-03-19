@@ -1007,6 +1007,36 @@ std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
     }
 }
 
+std::shared_ptr<Greeks> Greeks::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_GREEKS) {
+        return {};
+    }
+
+    try {
+        auto graalGreeks = detail::bit_cast<dxfg_greeks_t *>(graalNative);
+        auto greeks = std::make_shared<Greeks>(detail::toString(graalGreeks->market_event.event_symbol));
+
+        greeks->setEventTime(graalGreeks->market_event.event_time);
+
+        greeks->data_ = {
+            graalGreeks->event_flags, graalGreeks->index, graalGreeks->price,
+            graalGreeks->volatility,  graalGreeks->delta, graalGreeks->gamma,
+            graalGreeks->theta,       graalGreeks->rho,   graalGreeks->vega,
+        };
+
+        return greeks;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) {
     auto list = detail::bit_cast<dxfg_event_type_list *>(graalNativeList);
 
@@ -1034,6 +1064,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
             break;
         case DXFG_EVENT_GREEKS:
+            result[i] = Greeks::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_CANDLE:
             break;

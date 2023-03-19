@@ -59,7 +59,9 @@ class Profile final : public MarketEvent, public LastingEvent {
         double shares = detail::math::NaN;
         double freeFloat = detail::math::NaN;
         std::int32_t flags{};
-    } data_;
+    };
+
+    Data data_{};
 
     static std::shared_ptr<Profile> fromGraalNative(void *graalNative) noexcept;
 
@@ -67,14 +69,14 @@ class Profile final : public MarketEvent, public LastingEvent {
     static const EventTypeEnum Type;
 
     /// Creates new profile with default values.
-    Profile() noexcept : data_{} {}
+    Profile() noexcept = default;
 
     /**
      * Creates new profile with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Profile(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)), data_{} {}
+    explicit Profile(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {}
 
     /**
      * Returns description of the security instrument.
@@ -104,7 +106,7 @@ class Profile final : public MarketEvent, public LastingEvent {
      *
      * @param restriction short sale restriction of the security instrument.
      */
-    void setShortSaleRestriction(ShortSaleRestriction restriction) {
+    void setShortSaleRestriction(const ShortSaleRestriction& restriction) {
         data_.flags = detail::util::setBits(data_.flags, SSR_MASK, SSR_SHIFT, restriction.getCode());
     }
 
@@ -360,12 +362,12 @@ class Profile final : public MarketEvent, public LastingEvent {
                            detail::day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Profile &profile) {
-        return os << profile.toString();
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Profile &e) {
+        return os << e.toString();
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Profile> &profile) {
-        return os << profile->toString();
+    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Profile> &e) {
+        return os << e->toString();
     }
 };
 
