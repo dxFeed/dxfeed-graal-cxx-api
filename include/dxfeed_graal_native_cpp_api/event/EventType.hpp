@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <string>
-#include <cstdint>
 
 #include "../entity/SharedEntity.hpp"
 
@@ -17,7 +17,7 @@ namespace dxfcpp {
  * (each event is individually delivered) unless they implement one of interfaces
  * defined in this package to further refine their meaning.
  *
- * <p>Event types are POCO (plain old cpp objects) that follow bean naming convention with
+ * <p>Event types are POCO (plain old cpp objects, not POD) that follow bean naming convention with
  * getters and setters for their properties.
  * All event types are serializable, because they are transferred over network from publishers to
  * data feed consumers. However, they are using custom serialization format for this purpose.
@@ -27,20 +27,6 @@ namespace dxfcpp {
 struct EventType : public SharedEntity {
     /// The alias to a type of shared pointer to the EventType's child object.
     using Ptr = std::shared_ptr<EventType>;
-
-    /**
-     * Returns event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
-     *
-     * @return The event symbol.
-     */
-    virtual const std::string &getEventSymbol() const = 0;
-
-    /**
-     * Changes event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
-     *
-     * @param eventSymbol event symbol.
-     */
-    virtual void setEventSymbol(const std::string &eventSymbol) = 0;
 
     /**
      * Returns time when event was created or zero when time is not available.
@@ -67,7 +53,35 @@ struct EventType : public SharedEntity {
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
      */
-    virtual void setEventTime(std::int64_t eventTime){};
+    virtual void setEventTime(std::int64_t eventTime){
+        // The default implementation is empty
+    };
 };
 
-}
+/**
+ * Event type parametrized by a symbol
+ *
+ * @tparam Symbol The type od symbol
+ */
+template <typename Symbol> struct EventTypeWithSymbol : public EventType {
+    /// The alias to a type of shared pointer to the EventTypeWithSymbol's child object.
+    using Ptr = std::shared_ptr<EventTypeWithSymbol<Symbol>>;
+
+    using SymbolType = Symbol;
+
+    /**
+     * Returns event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @return The event symbol.
+     */
+    virtual const Symbol &getEventSymbol() const = 0;
+
+    /**
+     * Changes event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @param eventSymbol event symbol.
+     */
+    virtual void setEventSymbol(const Symbol &eventSymbol) = 0;
+};
+
+} // namespace dxfcpp

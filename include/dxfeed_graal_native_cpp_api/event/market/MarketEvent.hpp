@@ -17,7 +17,7 @@ namespace dxfcpp {
  * properties and minimal business logic. All market events have `eventSymbol` property that is
  * defined by this class.
  */
-struct MarketEvent : public EventType {
+struct MarketEvent : public EventTypeWithSymbol<std::string> {
     /// The alias to a type of shared pointer to the MarketEvent object
     using Ptr = std::shared_ptr<MarketEvent>;
 

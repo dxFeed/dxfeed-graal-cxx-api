@@ -25,4 +25,5 @@
 #include "market/PriceType.hpp"
 #include "market/Summary.hpp"
 #include "option/Greeks.hpp"
+#include "candle/Candle.hpp"
 #include "EventMapper.hpp"
