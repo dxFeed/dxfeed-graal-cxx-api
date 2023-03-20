@@ -58,6 +58,8 @@ class Summary final : public MarketEvent, public LastingEvent {
     static std::shared_ptr<Summary> fromGraalNative(void *graalNative) noexcept;
 
   public:
+    static const EventTypeEnum &Type;
+
     /// Creates new summary with default values.
     Summary() noexcept = default;
 

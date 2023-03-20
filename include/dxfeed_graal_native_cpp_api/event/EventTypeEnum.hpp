@@ -14,22 +14,22 @@ namespace dxfcpp {
  */
 class EventTypeEnum {
     /// The dxFeed Graal Native C-API event class id corresponding to the current enum element.
-    std::uint32_t id_;
+    const std::uint32_t id_;
 
-    std::string name_;
+    const std::string name_;
 
     // A flag that indicates that the current enum element is characterizing the Lasting (TICKER) event.
-    bool isLasting_;
+    const bool isLasting_;
 
     // A flag that indicates that the current enum element is characterizing the Indexed event.
-    bool isIndexed_;
+    const bool isIndexed_;
 
     // A flag that indicates that the current enum element is characterizing the TimeSeries (HISTORY) event.
-    bool isTimeSeries_;
+    const bool isTimeSeries_;
 
     // A flag that indicates that the current enum element is characterizing the OnlyIndexed (Indexed, but not
     // TimeSeries) event.
-    bool isOnlyIndexed_;
+    const bool isOnlyIndexed_;
 
     EventTypeEnum(std::uint32_t id, std::string name, bool isLasting, bool isIndexed = false, bool isTimeSeries = false)
         : id_{id}, name_{std::move(name)}, isLasting_{isLasting}, isIndexed_{isIndexed || isTimeSeries},

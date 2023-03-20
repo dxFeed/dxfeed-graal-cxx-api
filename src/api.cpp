@@ -960,7 +960,7 @@ std::int16_t utf8to16(char in) {
     }
 }
 
-const EventTypeEnum Quote::Type = EventTypeEnum::QUOTE;
+const EventTypeEnum &Quote::Type = EventTypeEnum::QUOTE;
 
 char Quote::getBidExchangeCode() const { return utf16to8(data_.bidExchangeCode); }
 
@@ -1007,6 +1007,8 @@ std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
     }
 }
 
+const EventTypeEnum &Greeks::Type = EventTypeEnum::GREEKS;
+
 std::shared_ptr<Greeks> Greeks::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
@@ -1031,6 +1033,159 @@ std::shared_ptr<Greeks> Greeks::fromGraalNative(void *graalNative) noexcept {
         };
 
         return greeks;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
+const ShortSaleRestriction ShortSaleRestriction::UNDEFINED{0, "UNDEFINED"};
+const ShortSaleRestriction ShortSaleRestriction::ACTIVE{1, "ACTIVE"};
+const ShortSaleRestriction ShortSaleRestriction::INACTIVE{2, "INACTIVE"};
+
+template <>
+const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<const ShortSaleRestriction>>
+    ShortSaleRestriction::ParentType::ALL{
+        {ShortSaleRestriction::UNDEFINED.getCode(), std::cref(ShortSaleRestriction::UNDEFINED)},
+        {ShortSaleRestriction::ACTIVE.getCode(), std::cref(ShortSaleRestriction::ACTIVE)},
+        {ShortSaleRestriction::INACTIVE.getCode(), std::cref(ShortSaleRestriction::INACTIVE)},
+    };
+
+const TradingStatus TradingStatus::UNDEFINED{0, "UNDEFINED"};
+const TradingStatus TradingStatus::HALTED{1, "HALTED"};
+const TradingStatus TradingStatus::ACTIVE{2, "ACTIVE"};
+
+template <>
+const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>>
+    TradingStatus::ParentType::ALL{
+        {TradingStatus::UNDEFINED.getCode(), std::cref(TradingStatus::UNDEFINED)},
+        {TradingStatus::HALTED.getCode(), std::cref(TradingStatus::HALTED)},
+        {TradingStatus::ACTIVE.getCode(), std::cref(TradingStatus::ACTIVE)},
+    };
+
+const EventTypeEnum &Profile::Type = EventTypeEnum::PROFILE;
+
+std::shared_ptr<Profile> Profile::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_PROFILE) {
+        return {};
+    }
+
+    try {
+        auto graalProfile = detail::bit_cast<dxfg_profile_t *>(graalNative);
+        auto profile = std::make_shared<Profile>(detail::toString(graalProfile->market_event.event_symbol));
+
+        profile->setEventTime(graalProfile->market_event.event_time);
+        profile->data_ = {
+            detail::toString(graalProfile->description),
+            detail::toString(graalProfile->status_reason),
+            graalProfile->halt_start_time,
+            graalProfile->halt_end_time,
+            graalProfile->high_limit_price,
+            graalProfile->low_limit_price,
+            graalProfile->high_52_week_price,
+            graalProfile->low_52_week_price,
+            graalProfile->beta,
+            graalProfile->earnings_per_share,
+            graalProfile->dividend_frequency,
+            graalProfile->ex_dividend_amount,
+            graalProfile->ex_dividend_day_id,
+            graalProfile->shares,
+            graalProfile->free_float,
+            graalProfile->flags,
+        };
+
+        return profile;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
+const PriceType PriceType::REGULAR{0, "REGULAR"};
+const PriceType PriceType::INDICATIVE{1, "INDICATIVE"};
+const PriceType PriceType::PRELIMINARY{2, "PRELIMINARY"};
+const PriceType PriceType::FINAL{3, "FINAL"};
+
+template <>
+const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const PriceType>> PriceType::ParentType::ALL{
+    {PriceType::REGULAR.getCode(), std::cref(PriceType::REGULAR)},
+    {PriceType::INDICATIVE.getCode(), std::cref(PriceType::INDICATIVE)},
+    {PriceType::PRELIMINARY.getCode(), std::cref(PriceType::PRELIMINARY)},
+    {PriceType::FINAL.getCode(), std::cref(PriceType::FINAL)},
+};
+
+const EventTypeEnum &Summary::Type = EventTypeEnum::SUMMARY;
+
+std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_SUMMARY) {
+        return {};
+    }
+
+    try {
+        auto graalSummary = detail::bit_cast<dxfg_summary_t *>(graalNative);
+        auto summary = std::make_shared<Summary>(detail::toString(graalSummary->market_event.event_symbol));
+
+        summary->setEventTime(graalSummary->market_event.event_time);
+        summary->data_ = {graalSummary->day_id,
+                          graalSummary->day_open_price,
+                          graalSummary->day_high_price,
+                          graalSummary->day_low_price,
+                          graalSummary->day_close_price,
+                          graalSummary->prev_day_id,
+                          graalSummary->prev_day_close_price,
+                          graalSummary->prev_day_volume,
+                          graalSummary->open_interest,
+                          graalSummary->flags};
+
+        return summary;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
+const EventTypeEnum &Underlying::Type = EventTypeEnum::UNDERLYING;
+
+std::shared_ptr<Underlying> fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_UNDERLYING) {
+        return {};
+    }
+
+    try {
+        auto graalUnderlying = detail::bit_cast<dxfg_underlying_t *>(graalNative);
+//        auto underlying = std::make_shared<Underlying>(detail::toString(graalUnderlying->market_event.event_symbol));
+//
+//        summary->setEventTime(graalSummary->market_event.event_time);
+//        summary->data_ = {graalSummary->day_id,
+//                          graalSummary->day_open_price,
+//                          graalSummary->day_high_price,
+//                          graalSummary->day_low_price,
+//                          graalSummary->day_close_price,
+//                          graalSummary->prev_day_id,
+//                          graalSummary->prev_day_close_price,
+//                          graalSummary->prev_day_volume,
+//                          graalSummary->open_interest,
+//                          graalSummary->flags};
+//
+//        return underlying;
     } catch (...) {
         // TODO: error handling
         return {};
@@ -1101,119 +1256,6 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
     }
 
     return result;
-}
-
-const ShortSaleRestriction ShortSaleRestriction::UNDEFINED{0, "UNDEFINED"};
-const ShortSaleRestriction ShortSaleRestriction::ACTIVE{1, "ACTIVE"};
-const ShortSaleRestriction ShortSaleRestriction::INACTIVE{2, "INACTIVE"};
-
-template <>
-const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<const ShortSaleRestriction>>
-    ShortSaleRestriction::ParentType::ALL{
-        {ShortSaleRestriction::UNDEFINED.getCode(), std::cref(ShortSaleRestriction::UNDEFINED)},
-        {ShortSaleRestriction::ACTIVE.getCode(), std::cref(ShortSaleRestriction::ACTIVE)},
-        {ShortSaleRestriction::INACTIVE.getCode(), std::cref(ShortSaleRestriction::INACTIVE)},
-    };
-
-const TradingStatus TradingStatus::UNDEFINED{0, "UNDEFINED"};
-const TradingStatus TradingStatus::HALTED{1, "HALTED"};
-const TradingStatus TradingStatus::ACTIVE{2, "ACTIVE"};
-
-template <>
-const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>>
-    TradingStatus::ParentType::ALL{
-        {TradingStatus::UNDEFINED.getCode(), std::cref(TradingStatus::UNDEFINED)},
-        {TradingStatus::HALTED.getCode(), std::cref(TradingStatus::HALTED)},
-        {TradingStatus::ACTIVE.getCode(), std::cref(TradingStatus::ACTIVE)},
-    };
-
-std::shared_ptr<Profile> Profile::fromGraalNative(void *graalNative) noexcept {
-    if (!graalNative) {
-        return {};
-    }
-
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_PROFILE) {
-        return {};
-    }
-
-    try {
-        auto graalProfile = detail::bit_cast<dxfg_profile_t *>(graalNative);
-        auto profile = std::make_shared<Profile>(detail::toString(graalProfile->market_event.event_symbol));
-
-        profile->setEventTime(graalProfile->market_event.event_time);
-        profile->data_ = {
-            detail::toString(graalProfile->description),
-            detail::toString(graalProfile->status_reason),
-            graalProfile->halt_start_time,
-            graalProfile->halt_end_time,
-            graalProfile->high_limit_price,
-            graalProfile->low_limit_price,
-            graalProfile->high_52_week_price,
-            graalProfile->low_52_week_price,
-            graalProfile->beta,
-            graalProfile->earnings_per_share,
-            graalProfile->dividend_frequency,
-            graalProfile->ex_dividend_amount,
-            graalProfile->ex_dividend_day_id,
-            graalProfile->shares,
-            graalProfile->free_float,
-            graalProfile->flags,
-        };
-
-        return profile;
-    } catch (...) {
-        // TODO: error handling
-        return {};
-    }
-}
-
-const PriceType PriceType::REGULAR{0, "REGULAR"};
-const PriceType PriceType::INDICATIVE{1, "INDICATIVE"};
-const PriceType PriceType::PRELIMINARY{2, "PRELIMINARY"};
-const PriceType PriceType::FINAL{3, "FINAL"};
-
-template <>
-const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const PriceType>> PriceType::ParentType::ALL{
-    {PriceType::REGULAR.getCode(), std::cref(PriceType::REGULAR)},
-    {PriceType::INDICATIVE.getCode(), std::cref(PriceType::INDICATIVE)},
-    {PriceType::PRELIMINARY.getCode(), std::cref(PriceType::PRELIMINARY)},
-    {PriceType::FINAL.getCode(), std::cref(PriceType::FINAL)},
-};
-
-std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
-    if (!graalNative) {
-        return {};
-    }
-
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_SUMMARY) {
-        return {};
-    }
-
-    try {
-        auto graalSummary = detail::bit_cast<dxfg_summary_t *>(graalNative);
-        auto summary = std::make_shared<Summary>(detail::toString(graalSummary->market_event.event_symbol));
-
-        summary->setEventTime(graalSummary->market_event.event_time);
-        summary->data_ = {graalSummary->day_id,
-                          graalSummary->day_open_price,
-                          graalSummary->day_high_price,
-                          graalSummary->day_low_price,
-                          graalSummary->day_close_price,
-                          graalSummary->prev_day_id,
-                          graalSummary->prev_day_close_price,
-                          graalSummary->prev_day_volume,
-                          graalSummary->open_interest,
-                          graalSummary->flags};
-
-        return summary;
-    } catch (...) {
-        // TODO: error handling
-        return {};
-    }
 }
 
 } // namespace dxfcpp

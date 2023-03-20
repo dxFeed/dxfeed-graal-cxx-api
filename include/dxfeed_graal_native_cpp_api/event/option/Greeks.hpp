@@ -53,8 +53,6 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
 
-    // ========================= instance =========================
-
     /*
      * EventFlags property has several significant bits that are packed into an integer in the following way:
      *    31..7    6    5    4    3    2    1    0
@@ -80,7 +78,7 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
     static std::shared_ptr<Greeks> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum Type;
+    static const EventTypeEnum& Type;
 
     /// Creates new greeks with default values.
     Greeks() noexcept = default;

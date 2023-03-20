@@ -66,7 +66,7 @@ class Profile final : public MarketEvent, public LastingEvent {
     static std::shared_ptr<Profile> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum Type;
+    static const EventTypeEnum &Type;
 
     /// Creates new profile with default values.
     Profile() noexcept = default;
@@ -106,7 +106,7 @@ class Profile final : public MarketEvent, public LastingEvent {
      *
      * @param restriction short sale restriction of the security instrument.
      */
-    void setShortSaleRestriction(const ShortSaleRestriction& restriction) {
+    void setShortSaleRestriction(const ShortSaleRestriction &restriction) {
         data_.flags = detail::util::setBits(data_.flags, SSR_MASK, SSR_SHIFT, restriction.getCode());
     }
 
@@ -362,9 +362,7 @@ class Profile final : public MarketEvent, public LastingEvent {
                            detail::day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Profile &e) {
-        return os << e.toString();
-    }
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Profile &e) { return os << e.toString(); }
 
     template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Profile> &e) {
         return os << e->toString();

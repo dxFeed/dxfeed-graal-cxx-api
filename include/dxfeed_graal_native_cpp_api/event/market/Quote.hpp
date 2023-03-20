@@ -61,7 +61,7 @@ class Quote final : public MarketEvent, public LastingEvent {
     static std::shared_ptr<Quote> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum Type;
+    static const EventTypeEnum &Type;
 
     /// Creates new quote with default values.
     Quote() noexcept = default;
