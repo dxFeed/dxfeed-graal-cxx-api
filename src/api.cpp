@@ -1007,38 +1007,6 @@ std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
     }
 }
 
-const EventTypeEnum &Greeks::Type = EventTypeEnum::GREEKS;
-
-std::shared_ptr<Greeks> Greeks::fromGraalNative(void *graalNative) noexcept {
-    if (!graalNative) {
-        return {};
-    }
-
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_GREEKS) {
-        return {};
-    }
-
-    try {
-        auto graalGreeks = detail::bit_cast<dxfg_greeks_t *>(graalNative);
-        auto greeks = std::make_shared<Greeks>(detail::toString(graalGreeks->market_event.event_symbol));
-
-        greeks->setEventTime(graalGreeks->market_event.event_time);
-
-        greeks->data_ = {
-            graalGreeks->event_flags, graalGreeks->index, graalGreeks->price,
-            graalGreeks->volatility,  graalGreeks->delta, graalGreeks->gamma,
-            graalGreeks->theta,       graalGreeks->rho,   graalGreeks->vega,
-        };
-
-        return greeks;
-    } catch (...) {
-        // TODO: error handling
-        return {};
-    }
-}
-
 const ShortSaleRestriction ShortSaleRestriction::UNDEFINED{0, "UNDEFINED"};
 const ShortSaleRestriction ShortSaleRestriction::ACTIVE{1, "ACTIVE"};
 const ShortSaleRestriction ShortSaleRestriction::INACTIVE{2, "INACTIVE"};
@@ -1156,6 +1124,38 @@ std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
     }
 }
 
+const EventTypeEnum &Greeks::Type = EventTypeEnum::GREEKS;
+
+std::shared_ptr<Greeks> Greeks::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_GREEKS) {
+        return {};
+    }
+
+    try {
+        auto graalGreeks = detail::bit_cast<dxfg_greeks_t *>(graalNative);
+        auto greeks = std::make_shared<Greeks>(detail::toString(graalGreeks->market_event.event_symbol));
+
+        greeks->setEventTime(graalGreeks->market_event.event_time);
+
+        greeks->data_ = {
+            graalGreeks->event_flags, graalGreeks->index, graalGreeks->price,
+            graalGreeks->volatility,  graalGreeks->delta, graalGreeks->gamma,
+            graalGreeks->theta,       graalGreeks->rho,   graalGreeks->vega,
+        };
+
+        return greeks;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
 const EventTypeEnum &Underlying::Type = EventTypeEnum::UNDERLYING;
 
 std::shared_ptr<Underlying> Underlying::fromGraalNative(void *graalNative) noexcept {
@@ -1181,6 +1181,37 @@ std::shared_ptr<Underlying> Underlying::fromGraalNative(void *graalNative) noexc
         };
 
         return underlying;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
+const EventTypeEnum &TheoPrice::Type = EventTypeEnum::THEO_PRICE;
+
+std::shared_ptr<TheoPrice> TheoPrice::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_THEO_PRICE) {
+        return {};
+    }
+
+    try {
+        auto graalTheoPrice = detail::bit_cast<dxfg_theo_price_t *>(graalNative);
+        auto theoPrice = std::make_shared<TheoPrice>(detail::toString(graalTheoPrice->market_event.event_symbol));
+
+        theoPrice->setEventTime(graalTheoPrice->market_event.event_time);
+        theoPrice->data_ = {
+            graalTheoPrice->event_flags,      graalTheoPrice->index,    graalTheoPrice->price,
+            graalTheoPrice->underlying_price, graalTheoPrice->delta,    graalTheoPrice->gamma,
+            graalTheoPrice->dividend,         graalTheoPrice->interest,
+        };
+
+        return theoPrice;
     } catch (...) {
         // TODO: error handling
         return {};
@@ -1226,6 +1257,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
             break;
         case DXFG_EVENT_THEO_PRICE:
+            result[i] = TheoPrice::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_TRADE:
             break;

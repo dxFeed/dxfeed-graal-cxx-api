@@ -9,6 +9,7 @@
 #include <string>
 
 #include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"
 #include "../TimeSeriesEvent.hpp"
@@ -18,8 +19,7 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: implement
-
+//TODO: doc
 class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
@@ -32,8 +32,6 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
-
-    // ========================= instance =========================
 
     /*
      * EventFlags property has several significant bits that are packed into an integer in the following way:
@@ -257,7 +255,7 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
      */
     std::string toString() const noexcept {
         return fmt::format(
-            "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
+            "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
             "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
             MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
             getEventFlags().getMask(), detail::formatTimeStampWithMillis(getTime()), getSequence(), getVolatility(),

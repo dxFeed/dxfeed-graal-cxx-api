@@ -8,6 +8,7 @@
 #include <string>
 
 #include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
 #include "MarketEvent.hpp"
 #include "ShortSaleRestriction.hpp"

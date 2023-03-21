@@ -28,4 +28,5 @@
 #include "candle/CandleSymbol.hpp"
 #include "candle/Candle.hpp"
 #include "option/Underlying.hpp"
+#include "option/TheoPrice.hpp"
 #include "EventMapper.hpp"

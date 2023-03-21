@@ -9,6 +9,7 @@
 #include <string>
 
 #include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
 #include "../EventType.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"

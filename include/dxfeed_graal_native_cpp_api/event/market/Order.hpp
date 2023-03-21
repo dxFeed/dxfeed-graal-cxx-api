@@ -8,6 +8,9 @@
 #include <memory>
 #include <string>
 
+#include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
+
 namespace dxfcpp {
 
 struct EventMapper;
