@@ -149,7 +149,128 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
         data_.index = detail::BitOps::orOp(detail::BitOps::andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }
 
+    /**
+     * Returns 30-day implied volatility for this underlying based on VIX methodology.
+     *
+     * @return 30-day implied volatility for this underlying based on VIX methodology.
+     */
+    double getVolatility() const { return data_.volatility; }
 
+    /**
+     * Changes 30-day implied volatility for this underlying based on VIX methodology.
+     *
+     * @param volatility 30-day implied volatility for this underlying based on VIX methodology.
+     */
+    void setVolatility(double volatility) { data_.volatility = volatility; }
+
+    /**
+     * Returns front month implied volatility for this underlying based on VIX methodology.
+     *
+     * @return front month implied volatility for this underlying based on VIX methodology.
+     */
+    double getFrontVolatility() const { return data_.frontVolatility; }
+
+    /**
+     * Changes front month implied volatility for this underlying based on VIX methodology.
+     *
+     * @param frontVolatility front month implied volatility for this underlying based on VIX methodology.
+     */
+    void setFrontVolatility(double frontVolatility) { data_.frontVolatility = frontVolatility; }
+
+    /**
+     * Returns back month implied volatility for this underlying based on VIX methodology.
+     *
+     * @return back month implied volatility for this underlying based on VIX methodology.
+     */
+    double getBackVolatility() const { return data_.backVolatility; }
+
+    /**
+     * Changes back month implied volatility for this underlying based on VIX methodology.
+     *
+     * @param backVolatility back month implied volatility for this underlying based on VIX methodology.
+     */
+    void setBackVolatility(double backVolatility) { data_.backVolatility = backVolatility; }
+
+    /**
+     * Returns call options traded volume for a day.
+     *
+     * @return call options traded volume for a day.
+     */
+    double getCallVolume() const { return data_.callVolume; }
+
+    /**
+     * Changes call options traded volume for a day.
+     *
+     * @param callVolume call options traded volume for a day.
+     */
+    void setCallVolume(double callVolume) { data_.callVolume = callVolume; }
+
+    /**
+     * Returns put options traded volume for a day.
+     *
+     * @return put options traded volume for a day.
+     */
+    double getPutVolume() const { return data_.putVolume; }
+
+    /**
+     * Changes put options traded volume for a day.
+     *
+     * @param putVolume put options traded volume for a day.
+     */
+    void setPutVolume(double putVolume) { data_.putVolume = putVolume; }
+
+    /**
+     * Returns options traded volume for a day.
+     *
+     * @return options traded volume for a day.
+     */
+    double getOptionVolume() const {
+        if (std::isnan(data_.putVolume)) {
+            return data_.callVolume;
+        }
+
+        if (std::isnan(data_.callVolume)) {
+            return data_.putVolume;
+        }
+
+        return data_.putVolume + data_.callVolume;
+    }
+
+    /**
+     * Returns ratio of put options traded volume to call options traded volume for a day.
+     *
+     * @return ratio of put options traded volume to call options traded volume for a day.
+     */
+    double getPutCallRatio() const { return data_.putCallRatio; }
+
+    /**
+     * Changes ratio of put options traded volume to call options traded volume for a day.
+     *
+     * @param putCallRatio ratio of put options traded volume to call options traded volume for a day.
+     */
+    void setPutCallRatio(double putCallRatio) { data_.putCallRatio = putCallRatio; }
+
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
+    std::string toString() const noexcept {
+        return fmt::format(
+            "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
+            "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
+            MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
+            getEventFlags().getMask(), detail::formatTimeStampWithMillis(getTime()), getSequence(), getVolatility(),
+            getFrontVolatility(), getBackVolatility(), getCallVolume(), getPutVolume(), getPutCallRatio());
+    }
+
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Underlying &e) {
+        return os << e.toString();
+    }
+
+    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Underlying> &e) {
+        return os << e->toString();
+    }
 };
 
 } // namespace dxfcpp

@@ -1158,7 +1158,7 @@ std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
 
 const EventTypeEnum &Underlying::Type = EventTypeEnum::UNDERLYING;
 
-std::shared_ptr<Underlying> fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<Underlying> Underlying::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }
@@ -1171,21 +1171,16 @@ std::shared_ptr<Underlying> fromGraalNative(void *graalNative) noexcept {
 
     try {
         auto graalUnderlying = detail::bit_cast<dxfg_underlying_t *>(graalNative);
-//        auto underlying = std::make_shared<Underlying>(detail::toString(graalUnderlying->market_event.event_symbol));
-//
-//        summary->setEventTime(graalSummary->market_event.event_time);
-//        summary->data_ = {graalSummary->day_id,
-//                          graalSummary->day_open_price,
-//                          graalSummary->day_high_price,
-//                          graalSummary->day_low_price,
-//                          graalSummary->day_close_price,
-//                          graalSummary->prev_day_id,
-//                          graalSummary->prev_day_close_price,
-//                          graalSummary->prev_day_volume,
-//                          graalSummary->open_interest,
-//                          graalSummary->flags};
-//
-//        return underlying;
+        auto underlying = std::make_shared<Underlying>(detail::toString(graalUnderlying->market_event.event_symbol));
+
+        underlying->setEventTime(graalUnderlying->market_event.event_time);
+        underlying->data_ = {
+            graalUnderlying->event_flags,      graalUnderlying->index,           graalUnderlying->volatility,
+            graalUnderlying->front_volatility, graalUnderlying->back_volatility, graalUnderlying->call_volume,
+            graalUnderlying->put_volume,       graalUnderlying->put_call_ratio,
+        };
+
+        return underlying;
     } catch (...) {
         // TODO: error handling
         return {};
@@ -1227,6 +1222,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
         case DXFG_EVENT_DAILY_CANDLE:
             break;
         case DXFG_EVENT_UNDERLYING:
+            result[i] = Underlying::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_THEO_PRICE:
             break;

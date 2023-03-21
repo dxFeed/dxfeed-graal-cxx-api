@@ -277,7 +277,7 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
             "gamma={}, theta={}, rho={}, vega={}}}",
             MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
             getEventFlags().getMask(), detail::formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
-            getVolatility(), getDelta(), getGamma(), getTime(), getRho(), getVega());
+            getVolatility(), getDelta(), getGamma(), getTheta(), getRho(), getVega());
     }
 
     template <typename OStream> friend OStream &operator<<(OStream &os, const Greeks &e) { return os << e.toString(); }
