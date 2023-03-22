@@ -48,17 +48,17 @@ class Profile final : public MarketEvent, public LastingEvent {
         std::string statusReason{};
         std::int64_t haltStartTime{};
         std::int64_t haltEndTime{};
-        double highLimitPrice = detail::math::NaN;
-        double lowLimitPrice = detail::math::NaN;
-        double high52WeekPrice = detail::math::NaN;
-        double low52WeekPrice = detail::math::NaN;
-        double beta = detail::math::NaN;
-        double earningsPerShare = detail::math::NaN;
-        double dividendFrequency = detail::math::NaN;
-        double exDividendAmount = detail::math::NaN;
+        double highLimitPrice = math::NaN;
+        double lowLimitPrice = math::NaN;
+        double high52WeekPrice = math::NaN;
+        double low52WeekPrice = math::NaN;
+        double beta = math::NaN;
+        double earningsPerShare = math::NaN;
+        double dividendFrequency = math::NaN;
+        double exDividendAmount = math::NaN;
         std::int32_t exDividendDayId{};
-        double shares = detail::math::NaN;
-        double freeFloat = detail::math::NaN;
+        double shares = math::NaN;
+        double freeFloat = math::NaN;
         std::int32_t flags{};
     };
 
@@ -99,7 +99,7 @@ class Profile final : public MarketEvent, public LastingEvent {
      * @return short sale restriction of the security instrument.
      */
     const ShortSaleRestriction &getShortSaleRestriction() const & {
-        return ShortSaleRestriction::valueOf(detail::util::getBits(data_.flags, SSR_MASK, SSR_SHIFT));
+        return ShortSaleRestriction::valueOf(getBits(data_.flags, SSR_MASK, SSR_SHIFT));
     }
 
     /**
@@ -108,7 +108,7 @@ class Profile final : public MarketEvent, public LastingEvent {
      * @param restriction short sale restriction of the security instrument.
      */
     void setShortSaleRestriction(const ShortSaleRestriction &restriction) {
-        data_.flags = detail::util::setBits(data_.flags, SSR_MASK, SSR_SHIFT, restriction.getCode());
+        data_.flags = setBits(data_.flags, SSR_MASK, SSR_SHIFT, restriction.getCode());
     }
 
     /**
@@ -124,7 +124,7 @@ class Profile final : public MarketEvent, public LastingEvent {
      * @return trading status of the security instrument.
      */
     const TradingStatus &getTradingStatus() const & {
-        return TradingStatus::valueOf(detail::util::getBits(data_.flags, STATUS_MASK, STATUS_SHIFT));
+        return TradingStatus::valueOf(getBits(data_.flags, STATUS_MASK, STATUS_SHIFT));
     }
 
     /**
@@ -133,7 +133,7 @@ class Profile final : public MarketEvent, public LastingEvent {
      * @param status trading status of the security instrument.
      */
     void setTradingStatus(const TradingStatus &status) {
-        data_.flags = detail::util::setBits(data_.flags, STATUS_MASK, STATUS_SHIFT, status.getCode());
+        data_.flags = setBits(data_.flags, STATUS_MASK, STATUS_SHIFT, status.getCode());
     }
 
     /**
@@ -354,13 +354,12 @@ class Profile final : public MarketEvent, public LastingEvent {
                            "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
                            "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
                            "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
-                           MarketEvent::getEventSymbol(),
-                           detail::formatTimeStampWithMillis(MarketEvent::getEventTime()), getDescription(),
-                           getShortSaleRestriction().toString(), getTradingStatus().toString(), getStatusReason(),
-                           detail::formatTimeStamp(getHaltStartTime()), detail::formatTimeStamp(getHaltEndTime()),
+                           MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                           getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(),
+                           getStatusReason(), formatTimeStamp(getHaltStartTime()), formatTimeStamp(getHaltEndTime()),
                            getHighLimitPrice(), getLowLimitPrice(), getHigh52WeekPrice(), getLow52WeekPrice(),
                            getBeta(), getEarningsPerShare(), getDividendFrequency(), getExDividendAmount(),
-                           detail::day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
+                           day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
     }
 
     template <typename OStream> friend OStream &operator<<(OStream &os, const Profile &e) { return os << e.toString(); }

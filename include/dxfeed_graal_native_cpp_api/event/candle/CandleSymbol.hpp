@@ -5,8 +5,6 @@
 
 namespace dxfcpp {
 
-class CandleSymbol {
+class CandleSymbol {};
 
-};
-
-}
+} // namespace dxfcpp

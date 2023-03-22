@@ -61,7 +61,7 @@ struct IndexedEvent {
      *
      * @return The source of this event.
      */
-    virtual const IndexedEventSource &getSource() const& = 0;
+    virtual const IndexedEventSource &getSource() const & = 0;
 
     /**
      * Returns transactional event flags.

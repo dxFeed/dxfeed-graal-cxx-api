@@ -26,4 +26,4 @@ struct LastingEvent {
     using Ptr = std::shared_ptr<LastingEvent>;
 };
 
-}
+} // namespace dxfcpp

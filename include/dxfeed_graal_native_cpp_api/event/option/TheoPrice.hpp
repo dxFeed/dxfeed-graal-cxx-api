@@ -44,12 +44,12 @@ class TheoPrice : public MarketEvent, public TimeSeriesEvent, public LastingEven
     struct Data {
         std::int32_t eventFlags{};
         std::int64_t index{};
-        double price = detail::math::NaN;
-        double underlyingPrice = detail::math::NaN;
-        double delta = detail::math::NaN;
-        double gamma = detail::math::NaN;
-        double dividend = detail::math::NaN;
-        double interest = detail::math::NaN;
+        double price = math::NaN;
+        double underlyingPrice = math::NaN;
+        double delta = math::NaN;
+        double gamma = math::NaN;
+        double dividend = math::NaN;
+        double interest = math::NaN;
     };
 
     Data data_{};
@@ -59,11 +59,11 @@ class TheoPrice : public MarketEvent, public TimeSeriesEvent, public LastingEven
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new greeks with default values.
+    /// Creates new theoprice with default values.
     TheoPrice() noexcept = default;
 
     /**
-     * Creates new greeks with the specified event symbol.
+     * Creates new theoprice with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
@@ -107,8 +107,7 @@ class TheoPrice : public MarketEvent, public TimeSeriesEvent, public LastingEven
      * @return timestamp of the event in milliseconds
      */
     std::int64_t getTime() const override {
-        return detail::BitOps::sar(data_.index, SECONDS_SHIFT) * 1000 +
-               detail::BitOps::andOp(detail::BitOps::sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+        return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
     }
 
     /**
@@ -118,10 +117,9 @@ class TheoPrice : public MarketEvent, public TimeSeriesEvent, public LastingEven
      * @see ::getTime()
      */
     void setTime(std::int64_t time) {
-        data_.index = detail::BitOps::orOp(
-            detail::BitOps::orOp(detail::BitOps::sal(detail::time_util::getSecondsFromTime(time), SECONDS_SHIFT),
-                                 detail::BitOps::sal(detail::time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
-            getSequence());
+        data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
+                                sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
+                           getSequence());
     }
 
     /**
@@ -131,9 +129,7 @@ class TheoPrice : public MarketEvent, public TimeSeriesEvent, public LastingEven
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const {
-        return static_cast<std::int32_t>(detail::BitOps::andOp(data_.index, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const { return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE)); }
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
@@ -144,7 +140,7 @@ class TheoPrice : public MarketEvent, public TimeSeriesEvent, public LastingEven
         // TODO: Improve error handling
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
-        data_.index = detail::BitOps::orOp(detail::BitOps::andOp(data_.index, ~MAX_SEQUENCE), sequence);
+        data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }
 
     /**
@@ -242,8 +238,8 @@ class TheoPrice : public MarketEvent, public TimeSeriesEvent, public LastingEven
         return fmt::format(
             "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
             "delta={}, gamma={}, dividend={}, interest={}}}",
-            MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            getEventFlags().getMask(), detail::formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
+            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+            getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
             getUnderlyingPrice(), getDelta(), getGamma(), getDividend(), getInterest());
     }
 

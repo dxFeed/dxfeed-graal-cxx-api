@@ -13,8 +13,6 @@
 
 namespace dxfcpp {
 
-namespace detail {
-
 const CEntryPointErrors CEntryPointErrors::NO_ERROR(0, "No error occurred.");
 const CEntryPointErrors CEntryPointErrors::UNSPECIFIED(1, "An unspecified error occurred.");
 const CEntryPointErrors CEntryPointErrors::NULL_ARGUMENT(2, "An argument was NULL (nullptr).");
@@ -93,8 +91,7 @@ template <typename T> void JavaObjectHandler<T>::deleter(void *handler) noexcept
     runIsolatedOrElse(
         [handler = handler](auto threadHandle) {
             if (handler) {
-                return dxfg_JavaObjectHandler_release(threadHandle,
-                                                      detail::bit_cast<dxfg_java_object_handler *>(handler)) == 0;
+                return dxfg_JavaObjectHandler_release(threadHandle, bit_cast<dxfg_java_object_handler *>(handler)) == 0;
             }
 
             return true;
@@ -121,7 +118,7 @@ struct EventClassList::Impl {
 
     [[nodiscard]] std::size_t size() const noexcept { return static_cast<std::size_t>(list_.size); }
 
-    void *getHandler() noexcept { return detail::bit_cast<void *>(&list_); }
+    void *getHandler() noexcept { return bit_cast<void *>(&list_); }
 
     void init(std::uint32_t size) noexcept {
         if (size <= 0) {
@@ -191,8 +188,6 @@ EventClassList::~EventClassList() noexcept {}
 
 } // namespace handler_utils
 
-} // namespace detail
-
 const std::string DXEndpoint::NAME_PROPERTY = "name";
 const std::string DXEndpoint::DXFEED_PROPERTIES_PROPERTY = "dxfeed.properties";
 const std::string DXEndpoint::DXFEED_ADDRESS_PROPERTY = "dxfeed.address";
@@ -247,25 +242,25 @@ static DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
 
 std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
                                                const std::unordered_map<std::string, std::string> &properties) {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::create{{handle = {}, role = {}, properties[{}]}}()", endpointHandle,
-                      roleToString(role), properties.size());
+    if constexpr (isDebug) {
+        debug("DXEndpoint::create{{handle = {}, role = {}, properties[{}]}}()", endpointHandle, roleToString(role),
+              properties.size());
     }
 
     std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
 
-    endpoint->handler_ = detail::handler_utils::JavaObjectHandler<DXEndpoint>(endpointHandle);
+    endpoint->handler_ = handler_utils::JavaObjectHandler<DXEndpoint>(endpointHandle);
     endpoint->role_ = role;
     endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
     endpoint->stateChangeListenerHandler_ =
-        detail::handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>(detail::runIsolatedOrElse(
+        handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>(runIsolatedOrElse(
             [endpoint](auto threadHandle) {
                 return dxfg_PropertyChangeListener_new(
                     threadHandle,
                     [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState, dxfg_endpoint_state_t newState,
                        void *user_data) {
-                        detail::bit_cast<DXEndpoint *>(user_data)->onStateChange_(graalStateToState(oldState),
-                                                                                  graalStateToState(newState));
+                        bit_cast<DXEndpoint *>(user_data)->onStateChange_(graalStateToState(oldState),
+                                                                          graalStateToState(newState));
                     },
                     endpoint.get());
             },
@@ -277,9 +272,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 
 void DXEndpoint::setStateChangeListenerImpl() {
     if (handler_ && stateChangeListenerHandler_) {
-        detail::runIsolatedOrElse(
-            [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get()),
-             stateChangeListenerHandler = detail::bit_cast<dxfg_endpoint_state_change_listener_t *>(
+        runIsolatedOrElse(
+            [handler = bit_cast<dxfg_endpoint_t *>(handler_.get()),
+             stateChangeListenerHandler = bit_cast<dxfg_endpoint_state_change_listener_t *>(
                  stateChangeListenerHandler_.get())](auto threadHandle) {
                 // TODO: finalize function
 
@@ -294,8 +289,8 @@ DXEndpoint::State DXEndpoint::getState() const {
     std::lock_guard guard(mtx_);
 
     return !handler_ ? State::CLOSED
-                     : detail::runIsolatedOrElse(
-                           [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
+                     : runIsolatedOrElse(
+                           [handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
                                return graalStateToState(dxfg_DXEndpoint_getState(threadHandle, handler));
                            },
                            State::CLOSED);
@@ -306,23 +301,23 @@ void DXEndpoint::closeImpl() {
         return;
     }
 
-    detail::runIsolatedOrElse([handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](
-                                  auto threadHandle) { return dxfg_DXEndpoint_close(threadHandle, handler) == 0; },
-                              false);
+    runIsolatedOrElse([handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](
+                          auto threadHandle) { return dxfg_DXEndpoint_close(threadHandle, handler) == 0; },
+                      false);
 
     // TODO: close the Feed and Publisher
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::user(user = {})", handler_.toString(), user);
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::user(user = {})", handler_.toString(), user);
     }
 
     std::lock_guard guard(mtx_);
 
     if (handler_) {
-        detail::runIsolatedOrElse(
-            [user = user, handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
+        runIsolatedOrElse(
+            [user = user, handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
                 return dxfg_DXEndpoint_user(threadHandle, handler, user.c_str()) == 0;
             },
             false);
@@ -332,15 +327,15 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::password(password = {})", handler_.toString(), password);
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::password(password = {})", handler_.toString(), password);
     }
 
     std::lock_guard guard(mtx_);
 
     if (handler_) {
-        detail::runIsolatedOrElse(
-            [password = password, handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
+        runIsolatedOrElse(
+            [password = password, handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
                 return dxfg_DXEndpoint_password(threadHandle, handler, password.c_str()) == 0;
             },
             false);
@@ -350,15 +345,15 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::connect(address = {})", handler_.toString(), address);
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::connect(address = {})", handler_.toString(), address);
     }
 
     std::lock_guard guard(mtx_);
 
     if (handler_) {
-        detail::runIsolatedOrElse(
-            [address = address, handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
+        runIsolatedOrElse(
+            [address = address, handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
                 return dxfg_DXEndpoint_connect(threadHandle, handler, address.c_str()) == 0;
             },
             false);
@@ -368,8 +363,8 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
 }
 
 void DXEndpoint::reconnect() {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::reconnect()", handler_.toString());
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::reconnect()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -378,14 +373,14 @@ void DXEndpoint::reconnect() {
         return;
     }
 
-    detail::runIsolatedOrElse([handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](
-                                  auto threadHandle) { return dxfg_DXEndpoint_reconnect(threadHandle, handler) == 0; },
-                              false);
+    runIsolatedOrElse([handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](
+                          auto threadHandle) { return dxfg_DXEndpoint_reconnect(threadHandle, handler) == 0; },
+                      false);
 }
 
 void DXEndpoint::disconnect() {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::disconnect()", handler_.toString());
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::disconnect()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -394,14 +389,14 @@ void DXEndpoint::disconnect() {
         return;
     }
 
-    detail::runIsolatedOrElse([handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](
-                                  auto threadHandle) { return dxfg_DXEndpoint_disconnect(threadHandle, handler) == 0; },
-                              false);
+    runIsolatedOrElse([handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](
+                          auto threadHandle) { return dxfg_DXEndpoint_disconnect(threadHandle, handler) == 0; },
+                      false);
 }
 
 void DXEndpoint::disconnectAndClear() {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::disconnectAndClear()", handler_.toString());
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::disconnectAndClear()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -410,16 +405,14 @@ void DXEndpoint::disconnectAndClear() {
         return;
     }
 
-    detail::runIsolatedOrElse(
-        [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_disconnectAndClear(threadHandle, handler) == 0;
-        },
-        false);
+    runIsolatedOrElse([handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](
+                          auto threadHandle) { return dxfg_DXEndpoint_disconnectAndClear(threadHandle, handler) == 0; },
+                      false);
 }
 
 void DXEndpoint::awaitNotConnected() {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::awaitNotConnected()", handler_.toString());
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::awaitNotConnected()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -428,16 +421,14 @@ void DXEndpoint::awaitNotConnected() {
         return;
     }
 
-    detail::runIsolatedOrElse(
-        [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_awaitNotConnected(threadHandle, handler) == 0;
-        },
-        false);
+    runIsolatedOrElse([handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](
+                          auto threadHandle) { return dxfg_DXEndpoint_awaitNotConnected(threadHandle, handler) == 0; },
+                      false);
 }
 
 void DXEndpoint::awaitProcessed() {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::awaitProcessed()", handler_.toString());
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::awaitProcessed()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -446,16 +437,14 @@ void DXEndpoint::awaitProcessed() {
         return;
     }
 
-    detail::runIsolatedOrElse(
-        [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_awaitProcessed(threadHandle, handler) == 0;
-        },
-        false);
+    runIsolatedOrElse([handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](
+                          auto threadHandle) { return dxfg_DXEndpoint_awaitProcessed(threadHandle, handler) == 0; },
+                      false);
 }
 
 void DXEndpoint::closeAndAwaitTermination() {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", handler_.toString());
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -464,8 +453,8 @@ void DXEndpoint::closeAndAwaitTermination() {
         return;
     }
 
-    detail::runIsolatedOrElse(
-        [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
+    runIsolatedOrElse(
+        [handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
             return dxfg_DXEndpoint_closeAndAwaitTermination(threadHandle, handler) == 0;
         },
         false);
@@ -477,13 +466,12 @@ std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
     std::lock_guard guard(mtx_);
 
     if (!feed_) {
-        auto feedHandle = !handler_
-                              ? nullptr
-                              : detail::runIsolatedOrElse(
-                                    [handler = detail::bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
-                                        return dxfg_DXEndpoint_getFeed(threadHandle, handler);
-                                    },
-                                    nullptr);
+        auto feedHandle = !handler_ ? nullptr
+                                    : runIsolatedOrElse(
+                                          [handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
+                                              return dxfg_DXEndpoint_getFeed(threadHandle, handler);
+                                          },
+                                          nullptr);
 
         feed_ = DXFeed::create(feedHandle);
     }
@@ -534,38 +522,38 @@ const EventFlag IndexedEvent::SNAPSHOT_SNIP = EventFlag::SNAPSHOT_SNIP;
 const EventFlag IndexedEvent::SNAPSHOT_MODE = EventFlag::SNAPSHOT_MODE;
 
 std::shared_ptr<DXFeed> DXFeed::getInstance() noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXFeed::getInstance()");
+    if constexpr (isDebug) {
+        debug("DXFeed::getInstance()");
     }
 
     return DXEndpoint::getInstance()->getFeed();
 }
 
 bool System::setProperty(const std::string &key, const std::string &value) {
-    if constexpr (dxfcpp::detail::isDebug) {
-        detail::debug("System::setProperty(key = '{}', value = '{}')", key, value);
+    if constexpr (dxfcpp::isDebug) {
+        debug("System::setProperty(key = '{}', value = '{}')", key, value);
     }
 
-    auto result = detail::runIsolatedOrElse(
+    auto result = runIsolatedOrElse(
         [key = key, value = value](auto threadHandle) {
-            return detail::CEntryPointErrors::valueOf(dxfg_system_set_property(
-                       threadHandle, key.c_str(), value.c_str())) == detail::CEntryPointErrors::NO_ERROR;
+            return CEntryPointErrors::valueOf(dxfg_system_set_property(threadHandle, key.c_str(), value.c_str())) ==
+                   CEntryPointErrors::NO_ERROR;
         },
         false);
 
-    if constexpr (dxfcpp::detail::isDebug) {
-        detail::debug("System::setProperty(key = '{}', value = '{}') -> {}", key, value, result);
+    if constexpr (dxfcpp::isDebug) {
+        debug("System::setProperty(key = '{}', value = '{}') -> {}", key, value, result);
     }
 
     return result;
 }
 
 std::string System::getProperty(const std::string &key) {
-    if constexpr (detail::isDebug) {
-        detail::debug("System::getProperty(key = {})", key);
+    if constexpr (isDebug) {
+        debug("System::getProperty(key = {})", key);
     }
 
-    auto result = detail::runIsolatedOrElse(
+    auto result = runIsolatedOrElse(
         [key = key](auto threadHandle) {
             std::string resultString{};
 
@@ -578,16 +566,16 @@ std::string System::getProperty(const std::string &key) {
         },
         std::string{});
 
-    if constexpr (detail::isDebug) {
-        detail::debug("System::getProperty(key = '{}') -> '{}'", key, result);
+    if constexpr (isDebug) {
+        debug("System::getProperty(key = '{}') -> '{}'", key, result);
     }
 
     return result;
 }
 
 void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("{}::attachSubscription({})", toString(), subscription->toString());
+    if constexpr (isDebug) {
+        debug("{}::attachSubscription({})", toString(), subscription->toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -596,9 +584,9 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
         return;
     }
 
-    if (detail::runIsolatedOrElse(
-            [handler = detail::bit_cast<dxfg_feed_t *>(handler_.get()),
-             subHandler = detail::bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
+    if (runIsolatedOrElse(
+            [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
+             subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
                 return dxfg_DXFeed_attachSubscription(threadHandle, handler, subHandler) == 0;
             },
             false)) {
@@ -608,8 +596,8 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
 }
 
 void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("{}::detachSubscription({})", toString(), subscription->toString());
+    if constexpr (isDebug) {
+        debug("{}::detachSubscription({})", toString(), subscription->toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -618,9 +606,9 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
         return;
     }
 
-    if (detail::runIsolatedOrElse(
-            [handler = detail::bit_cast<dxfg_feed_t *>(handler_.get()),
-             subHandler = detail::bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
+    if (runIsolatedOrElse(
+            [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
+             subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
                 return dxfg_DXFeed_detachSubscription(threadHandle, handler, subHandler) == 0;
             },
             false)) {
@@ -630,8 +618,8 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
 }
 
 void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("{}::detachSubscriptionAndClear({})", toString(), subscription->toString());
+    if constexpr (isDebug) {
+        debug("{}::detachSubscriptionAndClear({})", toString(), subscription->toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -640,9 +628,9 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
         return;
     }
 
-    if (detail::runIsolatedOrElse(
-            [handler = detail::bit_cast<dxfg_feed_t *>(handler_.get()),
-             subHandler = detail::bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
+    if (runIsolatedOrElse(
+            [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
+             subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
                 return dxfg_DXFeed_detachSubscriptionAndClear(threadHandle, handler, subHandler) == 0;
             },
             false)) {
@@ -652,8 +640,8 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("{}::createSubscription(eventType = {})", toString(), eventType.getName());
+    if constexpr (isDebug) {
+        debug("{}::createSubscription(eventType = {})", toString(), eventType.getName());
     }
 
     auto sub = DXFeedSubscription::create(eventType);
@@ -665,9 +653,9 @@ std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEn
 
 std::shared_ptr<DXFeedSubscription>
 DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("{}::createSubscription(eventTypes = {})", toString(),
-                      detail::namesToString(eventTypes.begin(), eventTypes.end()));
+    if constexpr (isDebug) {
+        debug("{}::createSubscription(eventTypes = {})", toString(),
+              namesToString(eventTypes.begin(), eventTypes.end()));
     }
 
     auto sub = DXFeedSubscription::create(eventTypes);
@@ -680,22 +668,22 @@ DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noex
 std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
     std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
 
-    feed->handler_ = detail::handler_utils::JavaObjectHandler<DXFeed>(feedHandle);
+    feed->handler_ = handler_utils::JavaObjectHandler<DXFeed>(feedHandle);
 
     return feed;
 }
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("{}::attach(feed = {})", toString(), feed->toString());
+    if constexpr (isDebug) {
+        debug("{}::attach(feed = {})", toString(), feed->toString());
     }
 
     feed->attachSubscription(shared_from_this());
 }
 
 void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("{}::detach(feed = {})", toString(), feed->toString());
+    if constexpr (isDebug) {
+        debug("{}::detach(feed = {})", toString(), feed->toString());
     }
 
     feed->detachSubscription(shared_from_this());
@@ -706,11 +694,9 @@ void DXFeedSubscription::closeImpl() noexcept {
         return;
     }
 
-    detail::runIsolatedOrElse(
-        [handler = detail::bit_cast<dxfg_subscription_t *>(handler_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_close(threadHandle, handler) == 0;
-        },
-        false);
+    runIsolatedOrElse([handler = bit_cast<dxfg_subscription_t *>(handler_.get())](
+                          auto threadHandle) { return dxfg_DXFeedSubscription_close(threadHandle, handler) == 0; },
+                      false);
 }
 
 void DXFeedSubscription::clearImpl() noexcept {
@@ -718,11 +704,9 @@ void DXFeedSubscription::clearImpl() noexcept {
         return;
     }
 
-    detail::runIsolatedOrElse(
-        [handler = detail::bit_cast<dxfg_subscription_t *>(handler_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_clear(threadHandle, handler) == 0;
-        },
-        false);
+    runIsolatedOrElse([handler = bit_cast<dxfg_subscription_t *>(handler_.get())](
+                          auto threadHandle) { return dxfg_DXFeedSubscription_clear(threadHandle, handler) == 0; },
+                      false);
 }
 
 bool DXFeedSubscription::isClosedImpl() noexcept {
@@ -730,8 +714,8 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
         return false;
     }
 
-    return detail::runIsolatedOrElse(
-        [handler = detail::bit_cast<dxfg_subscription_t *>(handler_.get())](auto threadHandle) {
+    return runIsolatedOrElse(
+        [handler = bit_cast<dxfg_subscription_t *>(handler_.get())](auto threadHandle) {
             return dxfg_DXFeedSubscription_isClosed(threadHandle, handler) != 0;
         },
         false);
@@ -739,11 +723,11 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
     : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXFeedSubscription(eventType = {})", eventType.getName());
+    if constexpr (isDebug) {
+        debug("DXFeedSubscription(eventType = {})", eventType.getName());
     }
 
-    handler_ = detail::handler_utils::JavaObjectHandler<DXFeedSubscription>(detail::runIsolatedOrElse(
+    handler_ = handler_utils::JavaObjectHandler<DXFeedSubscription>(runIsolatedOrElse(
         [eventType](auto threadHandle) {
             return dxfg_DXFeedSubscription_new(threadHandle, static_cast<dxfg_event_clazz_t>(eventType.getId()));
         },
@@ -752,36 +736,34 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
     setEventListenerHandler();
 }
 
-detail::handler_utils::JavaObjectHandler<DXFeedSubscription>
-DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
-    const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept {
-    return detail::handler_utils::JavaObjectHandler<DXFeedSubscription>(detail::runIsolatedOrElse(
-        [listHandler = detail::bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_new2(threadHandle, listHandler);
-        },
-        nullptr));
+handler_utils::JavaObjectHandler<DXFeedSubscription> DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
+    const std::unique_ptr<handler_utils::EventClassList> &list) noexcept {
+    return handler_utils::JavaObjectHandler<DXFeedSubscription>(
+        runIsolatedOrElse([listHandler = bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](
+                              auto threadHandle) { return dxfg_DXFeedSubscription_new2(threadHandle, listHandler); },
+                          nullptr));
 }
 void DXFeedSubscription::setEventListenerHandler() noexcept {
     // TODO: sub manager
 
-    eventListenerHandler_ = detail::handler_utils::JavaObjectHandler<DXFeedEventListener>(detail::runIsolatedOrElse(
+    eventListenerHandler_ = handler_utils::JavaObjectHandler<DXFeedEventListener>(runIsolatedOrElse(
         [subscription = this](auto threadHandle) {
             return dxfg_DXFeedEventListener_new(
                 threadHandle,
                 [](graal_isolatethread_t *thread, dxfg_event_type_list *graalNativeEvents, void *user_data) {
-                    auto &&events = EventMapper::fromGraalNativeList(detail::bit_cast<void *>(graalNativeEvents));
+                    auto &&events = EventMapper::fromGraalNativeList(bit_cast<void *>(graalNativeEvents));
 
-                    detail::bit_cast<DXFeedSubscription *>(user_data)->onEvent_(events);
+                    bit_cast<DXFeedSubscription *>(user_data)->onEvent_(events);
                 },
                 subscription);
         },
         nullptr));
 
     if (handler_ && eventListenerHandler_) {
-        detail::runIsolatedOrElse(
-            [handler = detail::bit_cast<dxfg_subscription_t *>(handler_.get()),
+        runIsolatedOrElse(
+            [handler = bit_cast<dxfg_subscription_t *>(handler_.get()),
              eventListenerHandler =
-                 detail::bit_cast<dxfg_feed_event_listener_t *>(eventListenerHandler_.get())](auto threadHandle) {
+                 bit_cast<dxfg_feed_event_listener_t *>(eventListenerHandler_.get())](auto threadHandle) {
                 // TODO: finalize function
 
                 return dxfg_DXFeedSubscription_addEventListener(
@@ -792,15 +774,15 @@ void DXFeedSubscription::setEventListenerHandler() noexcept {
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder::create()");
+    if constexpr (isDebug) {
+        debug("DXEndpoint::Builder::create()");
     }
 
     auto builder = std::shared_ptr<Builder>(new (std::nothrow) Builder{});
 
     if (builder) {
-        builder->handler_ = detail::handler_utils::JavaObjectHandler<DXEndpoint::Builder>(detail::runIsolatedOrElse(
-            [](auto threadHandle) { return dxfg_DXEndpoint_newBuilder(threadHandle); }, nullptr));
+        builder->handler_ = handler_utils::JavaObjectHandler<DXEndpoint::Builder>(
+            runIsolatedOrElse([](auto threadHandle) { return dxfg_DXEndpoint_newBuilder(threadHandle); }, nullptr));
     }
 
     return builder;
@@ -843,9 +825,9 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
         }
 
         // The default property file has the same value as the key.
-        detail::runIsolatedOrElse(
+        runIsolatedOrElse(
             [key = propertiesFileKey, value = propertiesFileKey,
-             handler = detail::bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
+             handler = bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
                 return dxfg_DXEndpoint_Builder_withProperty(threadHandle, handler, key.c_str(), value.c_str()) == 0;
             },
             false);
@@ -853,8 +835,8 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::Role role) {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", handler_.toString(), roleToString(role));
+    if constexpr (isDebug) {
+        debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", handler_.toString(), roleToString(role));
     }
 
     std::lock_guard guard(mtx_);
@@ -862,8 +844,8 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
     role_ = role;
 
     if (handler_) {
-        detail::runIsolatedOrElse(
-            [role = role, handler = detail::bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
+        runIsolatedOrElse(
+            [role = role, handler = bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
                 return dxfg_DXEndpoint_Builder_withRole(threadHandle, handler, roleToGraalRole(role)) == 0;
             },
             false);
@@ -874,8 +856,8 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
                                                                        const std::string &value) {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})", handler_.toString(), key, value);
+    if constexpr (isDebug) {
+        debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})", handler_.toString(), key, value);
     }
 
     std::lock_guard guard(mtx_);
@@ -883,9 +865,9 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
     properties_[key] = value;
 
     if (handler_) {
-        detail::runIsolatedOrElse(
+        runIsolatedOrElse(
             [key = key, value = value,
-             handler = detail::bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
+             handler = bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
                 return dxfg_DXEndpoint_Builder_withProperty(threadHandle, handler, key.c_str(), value.c_str()) == 0;
             },
             false);
@@ -895,8 +877,8 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 }
 
 bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", handler_.toString(), key);
+    if constexpr (isDebug) {
+        debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", handler_.toString(), key);
     }
 
     std::lock_guard guard(mtx_);
@@ -905,16 +887,16 @@ bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
         return false;
     }
 
-    return detail::runIsolatedOrElse(
-        [key = key, handler = detail::bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
+    return runIsolatedOrElse(
+        [key = key, handler = bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
             return dxfg_DXEndpoint_Builder_supportsProperty(threadHandle, handler, key.c_str()) != 0;
         },
         false);
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
-    if constexpr (detail::isDebug) {
-        detail::debug("DXEndpoint::Builder{{{}}}::build()", handler_.toString());
+    if constexpr (isDebug) {
+        debug("DXEndpoint::Builder{{{}}}::build()", handler_.toString());
     }
 
     std::lock_guard guard(mtx_);
@@ -922,12 +904,11 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     loadDefaultPropertiesImpl();
 
     auto endpointHandle =
-        !handler_ ? nullptr
-                  : detail::runIsolatedOrElse(
-                        [handler = detail::bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](auto threadHandle) {
-                            return dxfg_DXEndpoint_Builder_build(threadHandle, handler);
-                        },
-                        nullptr);
+        !handler_
+            ? nullptr
+            : runIsolatedOrElse([handler = bit_cast<dxfg_endpoint_builder_t *>(handler_.get())](
+                                    auto threadHandle) { return dxfg_DXEndpoint_Builder_build(threadHandle, handler); },
+                                nullptr);
 
     return DXEndpoint::create(endpointHandle, role_, properties_);
 }
@@ -962,28 +943,32 @@ std::int16_t utf8to16(char in) {
 
 const EventTypeEnum &Quote::Type = EventTypeEnum::QUOTE;
 
-char Quote::getBidExchangeCode() const { return utf16to8(data_.bidExchangeCode); }
+std::int16_t Quote::getBidExchangeCode() const { return data_.bidExchangeCode; }
 
 void Quote::setBidExchangeCode(char bidExchangeCode) { data_.bidExchangeCode = utf8to16(bidExchangeCode); }
 
-char Quote::getAskExchangeCode() const { return utf16to8(data_.askExchangeCode); }
+void Quote::setBidExchangeCode(std::int16_t bidExchangeCode) { data_.bidExchangeCode = bidExchangeCode; }
+
+std::int16_t Quote::getAskExchangeCode() const { return data_.askExchangeCode; }
 
 void Quote::setAskExchangeCode(char askExchangeCode) { data_.askExchangeCode = utf8to16(askExchangeCode); }
+
+void Quote::setAskExchangeCode(std::int16_t askExchangeCode) { data_.askExchangeCode = askExchangeCode; }
 
 std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }
 
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
 
     if (eventType->clazz != DXFG_EVENT_QUOTE) {
         return {};
     }
 
     try {
-        auto graalQuote = detail::bit_cast<dxfg_quote_t *>(graalNative);
-        auto quote = std::make_shared<Quote>(detail::toString(graalQuote->market_event.event_symbol));
+        auto graalQuote = bit_cast<dxfg_quote_t *>(graalNative);
+        auto quote = std::make_shared<Quote>(dxfcpp::toString(graalQuote->market_event.event_symbol));
 
         quote->setEventTime(graalQuote->market_event.event_time);
 
@@ -1038,20 +1023,20 @@ std::shared_ptr<Profile> Profile::fromGraalNative(void *graalNative) noexcept {
         return {};
     }
 
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
 
     if (eventType->clazz != DXFG_EVENT_PROFILE) {
         return {};
     }
 
     try {
-        auto graalProfile = detail::bit_cast<dxfg_profile_t *>(graalNative);
-        auto profile = std::make_shared<Profile>(detail::toString(graalProfile->market_event.event_symbol));
+        auto graalProfile = bit_cast<dxfg_profile_t *>(graalNative);
+        auto profile = std::make_shared<Profile>(dxfcpp::toString(graalProfile->market_event.event_symbol));
 
         profile->setEventTime(graalProfile->market_event.event_time);
         profile->data_ = {
-            detail::toString(graalProfile->description),
-            detail::toString(graalProfile->status_reason),
+            dxfcpp::toString(graalProfile->description),
+            dxfcpp::toString(graalProfile->status_reason),
             graalProfile->halt_start_time,
             graalProfile->halt_end_time,
             graalProfile->high_limit_price,
@@ -1095,15 +1080,15 @@ std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
         return {};
     }
 
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
 
     if (eventType->clazz != DXFG_EVENT_SUMMARY) {
         return {};
     }
 
     try {
-        auto graalSummary = detail::bit_cast<dxfg_summary_t *>(graalNative);
-        auto summary = std::make_shared<Summary>(detail::toString(graalSummary->market_event.event_symbol));
+        auto graalSummary = bit_cast<dxfg_summary_t *>(graalNative);
+        auto summary = std::make_shared<Summary>(dxfcpp::toString(graalSummary->market_event.event_symbol));
 
         summary->setEventTime(graalSummary->market_event.event_time);
         summary->data_ = {graalSummary->day_id,
@@ -1131,15 +1116,15 @@ std::shared_ptr<Greeks> Greeks::fromGraalNative(void *graalNative) noexcept {
         return {};
     }
 
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
 
     if (eventType->clazz != DXFG_EVENT_GREEKS) {
         return {};
     }
 
     try {
-        auto graalGreeks = detail::bit_cast<dxfg_greeks_t *>(graalNative);
-        auto greeks = std::make_shared<Greeks>(detail::toString(graalGreeks->market_event.event_symbol));
+        auto graalGreeks = bit_cast<dxfg_greeks_t *>(graalNative);
+        auto greeks = std::make_shared<Greeks>(dxfcpp::toString(graalGreeks->market_event.event_symbol));
 
         greeks->setEventTime(graalGreeks->market_event.event_time);
 
@@ -1163,15 +1148,15 @@ std::shared_ptr<Underlying> Underlying::fromGraalNative(void *graalNative) noexc
         return {};
     }
 
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
 
     if (eventType->clazz != DXFG_EVENT_UNDERLYING) {
         return {};
     }
 
     try {
-        auto graalUnderlying = detail::bit_cast<dxfg_underlying_t *>(graalNative);
-        auto underlying = std::make_shared<Underlying>(detail::toString(graalUnderlying->market_event.event_symbol));
+        auto graalUnderlying = bit_cast<dxfg_underlying_t *>(graalNative);
+        auto underlying = std::make_shared<Underlying>(dxfcpp::toString(graalUnderlying->market_event.event_symbol));
 
         underlying->setEventTime(graalUnderlying->market_event.event_time);
         underlying->data_ = {
@@ -1194,15 +1179,15 @@ std::shared_ptr<TheoPrice> TheoPrice::fromGraalNative(void *graalNative) noexcep
         return {};
     }
 
-    auto eventType = detail::bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
 
     if (eventType->clazz != DXFG_EVENT_THEO_PRICE) {
         return {};
     }
 
     try {
-        auto graalTheoPrice = detail::bit_cast<dxfg_theo_price_t *>(graalNative);
-        auto theoPrice = std::make_shared<TheoPrice>(detail::toString(graalTheoPrice->market_event.event_symbol));
+        auto graalTheoPrice = bit_cast<dxfg_theo_price_t *>(graalNative);
+        auto theoPrice = std::make_shared<TheoPrice>(dxfcpp::toString(graalTheoPrice->market_event.event_symbol));
 
         theoPrice->setEventTime(graalTheoPrice->market_event.event_time);
         theoPrice->data_ = {
@@ -1218,8 +1203,27 @@ std::shared_ptr<TheoPrice> TheoPrice::fromGraalNative(void *graalNative) noexcep
     }
 }
 
+const Direction Direction::UNDEFINED{0, "UNDEFINED"};
+const Direction Direction::DOWN{1, "DOWN"};
+const Direction Direction::ZERO_DOWN{2, "ZERO_DOWN"};
+const Direction Direction::ZERO{3, "ZERO"};
+const Direction Direction::ZERO_UP{4, "ZERO_UP"};
+const Direction Direction::UP{5, "UP"};
+
+template <>
+const std::unordered_map<Direction::CodeType, std::reference_wrapper<const Direction>> Direction::ParentType::ALL{
+    {Direction::UNDEFINED.getCode(), std::cref(Direction::UNDEFINED)},
+    {Direction::DOWN.getCode(), std::cref(Direction::DOWN)},
+    {Direction::ZERO_DOWN.getCode(), std::cref(Direction::ZERO_DOWN)},
+    {Direction::ZERO.getCode(), std::cref(Direction::ZERO)},
+    {Direction::ZERO_UP.getCode(), std::cref(Direction::ZERO_UP)},
+    {Direction::UP.getCode(), std::cref(Direction::UP)},
+};
+
+void TradeBase::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
+
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) {
-    auto list = detail::bit_cast<dxfg_event_type_list *>(graalNativeList);
+    auto list = bit_cast<dxfg_event_type_list *>(graalNativeList);
 
     if (list->size <= 0) {
         return {};
@@ -1323,7 +1327,7 @@ dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t
     return DXFC_EC_SUCCESS;
 }
 
-namespace dxfcpp::detail {
+namespace dxfcpp {
 
 struct BuilderHandle {};
 
@@ -1464,20 +1468,20 @@ static dxfc_dxendpoint_state_t stateToCApiState(dxfcpp::DXEndpoint::State state)
     return DXFC_DXENDPOINT_STATE_NOT_CONNECTED;
 }
 
-} // namespace dxfcpp::detail
+} // namespace dxfcpp
 
 dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t *builderHandle) {
     if (!builderHandle) {
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::detail::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
+    auto result = dxfcpp::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
 
     if (!result) {
         return DXFC_EC_ERROR;
     }
 
-    *builderHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_builder_t>(result);
+    *builderHandle = dxfcpp::bit_cast<dxfc_dxendpoint_builder_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -1488,14 +1492,13 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t bu
         return DXFC_EC_ERROR;
     }
 
-    auto builder =
-        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
     }
 
-    builder->withRole(dxfcpp::detail::cApiRoleToRole(role));
+    builder->withRole(dxfcpp::cApiRoleToRole(role));
 
     return DXFC_EC_SUCCESS;
 }
@@ -1505,8 +1508,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t bu
         return DXFC_EC_ERROR;
     }
 
-    auto builder =
-        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -1523,8 +1525,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_
         return DXFC_EC_ERROR;
     }
 
-    auto builder =
-        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -1541,8 +1542,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builde
         return DXFC_EC_ERROR;
     }
 
-    auto builder =
-        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -1569,8 +1569,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_buil
         return DXFC_EC_ERROR;
     }
 
-    auto builder =
-        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -1587,8 +1586,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builde
         return DXFC_EC_ERROR;
     }
 
-    auto builder =
-        dxfcpp::detail::BuilderRegistry::get(dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -1600,14 +1598,13 @@ dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builde
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
-        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -1617,8 +1614,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_free(dxfc_dxendpoint_builder_t builder
         return DXFC_EC_ERROR;
     }
 
-    if (!dxfcpp::detail::BuilderRegistry::remove(
-            dxfcpp::detail::bit_cast<dxfcpp::detail::BuilderHandle *>(builderHandle))) {
+    if (!dxfcpp::BuilderRegistry::remove(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle))) {
         return DXFC_EC_ERROR;
     }
 
@@ -1636,14 +1632,13 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance(void *userData, DXFC_OUT dxfc_dxe
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
-        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -1654,20 +1649,19 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, voi
         return DXFC_EC_ERROR;
     }
 
-    auto endpoint = dxfcpp::DXEndpoint::getInstance(dxfcpp::detail::cApiRoleToRole(role));
+    auto endpoint = dxfcpp::DXEndpoint::getInstance(dxfcpp::cApiRoleToRole(role));
 
     if (!endpoint) {
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
-        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -1683,14 +1677,13 @@ dxfc_error_code_t dxfc_dxendpoint_create(void *userData, DXFC_OUT dxfc_dxendpoin
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
-        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -1701,20 +1694,19 @@ dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *use
         return DXFC_EC_ERROR;
     }
 
-    auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::detail::cApiRoleToRole(role));
+    auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::cApiRoleToRole(role));
 
     if (!endpoint) {
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::detail::EndpointWrapperRegistry::add(
-        std::make_shared<dxfcpp::detail::EndpointWrapper>(endpoint, userData));
+    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::detail::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -1724,8 +1716,8 @@ dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpointHandle) {
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1741,8 +1733,8 @@ dxfc_error_code_t dxfc_dxendpoint_close_and_await_termination(dxfc_dxendpoint_t 
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1758,14 +1750,14 @@ dxfc_error_code_t dxfc_dxendpoint_get_role(dxfc_dxendpoint_t endpointHandle, DXF
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
     }
 
-    *role = dxfcpp::detail::roleToCApiRole(endpointWrapper->endpoint->getRole());
+    *role = dxfcpp::roleToCApiRole(endpointWrapper->endpoint->getRole());
 
     return DXFC_EC_SUCCESS;
 }
@@ -1775,8 +1767,8 @@ dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpointHandle, const c
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1792,8 +1784,8 @@ dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpointHandle, con
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1809,8 +1801,8 @@ dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpointHandle, cons
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1826,8 +1818,8 @@ dxfc_error_code_t dxfc_dxendpoint_reconnect(dxfc_dxendpoint_t endpointHandle) {
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1843,8 +1835,8 @@ dxfc_error_code_t dxfc_dxendpoint_disconnect(dxfc_dxendpoint_t endpointHandle) {
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1860,8 +1852,8 @@ dxfc_error_code_t dxfc_dxendpoint_disconnect_and_clear(dxfc_dxendpoint_t endpoin
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1877,8 +1869,8 @@ dxfc_error_code_t dxfc_dxendpoint_await_processed(dxfc_dxendpoint_t endpointHand
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1894,8 +1886,8 @@ dxfc_error_code_t dxfc_dxendpoint_await_not_connected(dxfc_dxendpoint_t endpoint
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1911,14 +1903,14 @@ dxfc_error_code_t dxfc_dxendpoint_get_state(dxfc_dxendpoint_t endpointHandle, DX
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
     }
 
-    *state = dxfcpp::detail::stateToCApiState(endpointWrapper->endpoint->getState());
+    *state = dxfcpp::stateToCApiState(endpointWrapper->endpoint->getState());
 
     return DXFC_EC_SUCCESS;
 }
@@ -1929,8 +1921,8 @@ dxfc_error_code_t dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t en
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1943,7 +1935,7 @@ dxfc_error_code_t dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t en
     endpointWrapper->listeners[listener] = endpointWrapper->endpoint->onStateChange() +=
         [userData = endpointWrapper->userData, listener](dxfcpp::DXEndpoint::State oldState,
                                                          dxfcpp::DXEndpoint::State newState) {
-            listener(dxfcpp::detail::stateToCApiState(oldState), dxfcpp::detail::stateToCApiState(newState), userData);
+            listener(dxfcpp::stateToCApiState(oldState), dxfcpp::stateToCApiState(newState), userData);
         };
 
     return DXFC_EC_SUCCESS;
@@ -1955,8 +1947,8 @@ dxfc_error_code_t dxfc_dxendpoint_remove_state_change_listener(dxfc_dxendpoint_t
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper = dxfcpp::detail::EndpointWrapperRegistry::get(
-        dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle));
+    auto endpointWrapper =
+        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1987,8 +1979,7 @@ dxfc_error_code_t dxfc_dxendpoint_free(dxfc_dxendpoint_t endpointHandle) {
         return DXFC_EC_ERROR;
     }
 
-    if (!dxfcpp::detail::EndpointWrapperRegistry::remove(
-            dxfcpp::detail::bit_cast<dxfcpp::detail::EndpointWrapperHandle *>(endpointHandle))) {
+    if (!dxfcpp::EndpointWrapperRegistry::remove(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle))) {
         return DXFC_EC_ERROR;
     }
 

@@ -121,24 +121,24 @@ TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
     auto endpoint = builder->build();
 
     endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        dxfcpp::detail::debug("DXEndpoint::Builder Test: {}", std::string("State changed: ") +
-                                                                  dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                                                  dxfcpp::DXEndpoint::stateToString(newState));
+        dxfcpp::debug("DXEndpoint::Builder Test: {}", std::string("State changed: ") +
+                                                          dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                                          dxfcpp::DXEndpoint::stateToString(newState));
     };
 
     endpoint->addStateChangeListener([](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        dxfcpp::detail::debug("DXEndpoint::Builder Test: {}", std::string("State changed 2: ") +
-                                                                  dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                                                  dxfcpp::DXEndpoint::stateToString(newState));
+        dxfcpp::debug("DXEndpoint::Builder Test: {}", std::string("State changed 2: ") +
+                                                          dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                                          dxfcpp::DXEndpoint::stateToString(newState));
     });
 
     endpoint->connect("demo.dxfeed.com:7300");
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
-    //endpoint->disconnect();
-    //endpoint->connect("demo.dxfeed.com:7300");
-    //endpoint->close();
+    // endpoint->disconnect();
+    // endpoint->connect("demo.dxfeed.com:7300");
+    // endpoint->close();
 }
 
 auto cApiStateToString(dxfc_dxendpoint_state_t state) {
@@ -181,9 +181,9 @@ TEST_CASE("dxfc_dxendpoint_builder_t", "[dxfc_dxendpoint_t]") {
 
     result = dxfc_dxendpoint_add_state_change_listener(
         endpoint, [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *) {
-            dxfcpp::detail::debug("dxfc_dxendpoint_builder_t Test: {}", std::string("State changed: ") +
-                                                                            cApiStateToString(oldState) + " -> " +
-                                                                            cApiStateToString(newState));
+            dxfcpp::debug("dxfc_dxendpoint_builder_t Test: {}", std::string("State changed: ") +
+                                                                    cApiStateToString(oldState) + " -> " +
+                                                                    cApiStateToString(newState));
         });
 
     if (result != DXFC_EC_SUCCESS) {

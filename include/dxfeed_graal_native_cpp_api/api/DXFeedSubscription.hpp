@@ -18,23 +18,22 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     friend struct DXFeed;
 
     mutable std::recursive_mutex mtx_{};
-    detail::handler_utils::JavaObjectHandler<DXFeedSubscription> handler_;
-    detail::handler_utils::JavaObjectHandler<DXFeedEventListener> eventListenerHandler_;
-    detail::Handler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
+    handler_utils::JavaObjectHandler<DXFeedSubscription> handler_;
+    handler_utils::JavaObjectHandler<DXFeedEventListener> eventListenerHandler_;
+    Handler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
 
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
-    static detail::handler_utils::JavaObjectHandler<DXFeedSubscription> createSubscriptionHandlerFromEventClassList(
-        const std::unique_ptr<detail::handler_utils::EventClassList> &list) noexcept;
+    static handler_utils::JavaObjectHandler<DXFeedSubscription>
+    createSubscriptionHandlerFromEventClassList(const std::unique_ptr<handler_utils::EventClassList> &list) noexcept;
 
     void setEventListenerHandler() noexcept;
 
     template <typename EventTypeIt>
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : mtx_{}, handler_{},
-          eventListenerHandler_{}, onEvent_{} {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXFeedSubscription(eventTypes = {})", detail::namesToString(begin, end));
+        : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
+        if constexpr (isDebug) {
+            debug("DXFeedSubscription(eventTypes = {})", namesToString(begin, end));
         }
 
         auto size = std::distance(begin, end);
@@ -43,7 +42,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
             return;
         }
 
-        auto list = detail::handler_utils::EventClassList::create(size);
+        auto list = handler_utils::EventClassList::create(size);
 
         if (list->isEmpty()) {
             return;
@@ -64,7 +63,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
     template <typename EventTypesCollection>
     explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
-        requires requires { detail::ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+        requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
         : DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
                              std::end(std::forward<EventTypesCollection>(eventTypes))) {}
 
@@ -82,11 +81,11 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     }
 
     virtual ~DXFeedSubscription() {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::~DXFeedSubscription()", toString());
+        if constexpr (isDebug) {
+            debug("{}::~DXFeedSubscription()", toString());
         }
 
-        detail::tryCallWithLock(mtx_, [this] { closeImpl(); });
+        tryCallWithLock(mtx_, [this] { closeImpl(); });
     }
 
     /**
@@ -95,8 +94,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * @param eventType the event type.
      */
     static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXFeedSubscription::create(eventType = {})", eventType.getName());
+        if constexpr (isDebug) {
+            debug("DXFeedSubscription::create(eventType = {})", eventType.getName());
         }
 
         return std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventType));
@@ -112,8 +111,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      */
     template <typename EventTypeIt>
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXFeedSubscription::create(eventTypes = {})", detail::namesToString(begin, end));
+        if constexpr (isDebug) {
+            debug("DXFeedSubscription::create(eventTypes = {})", namesToString(begin, end));
         }
 
         return std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(begin, end));
@@ -138,7 +137,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      */
     template <typename EventTypesCollection>
     static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept
-        requires requires { detail::ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+        requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
     {
         return std::shared_ptr<DXFeedSubscription>(
             new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
@@ -166,8 +165,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * can be added.
      */
     void close() noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::close()", toString());
+        if constexpr (isDebug) {
+            debug("{}::close()", toString());
         }
 
         std::lock_guard lock(mtx_);
@@ -195,8 +194,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * Clears the set of subscribed symbols.
      */
     void clear() noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::clear()", toString());
+        if constexpr (isDebug) {
+            debug("{}::clear()", toString());
         }
 
         std::lock_guard lock(mtx_);
@@ -212,8 +211,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * @see ::close
      */
     bool isClosed() noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::isClosed()", toString());
+        if constexpr (isDebug) {
+            debug("{}::isClosed()", toString());
         }
 
         std::lock_guard lock(mtx_);

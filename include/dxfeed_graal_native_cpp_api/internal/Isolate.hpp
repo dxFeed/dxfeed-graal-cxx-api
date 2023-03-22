@@ -16,8 +16,6 @@
 #include <variant>
 
 namespace dxfcpp {
-
-namespace detail {
 using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
 
@@ -111,7 +109,7 @@ class Isolate final {
 
         std::string toString() const {
             return fmt::format("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}", bit_cast<std::size_t>(handle),
-                           isMain, tid, idx);
+                               isMain, tid, idx);
         }
     };
 
@@ -252,13 +250,13 @@ class Isolate final {
         return std::visit(
             [defaultValue =
                  std::move(defaultValue)]<typename T>(T &&arg) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle> {
-                if constexpr (std::is_same_v<T, detail::CEntryPointErrors>) {
+                if constexpr (std::is_same_v<T, CEntryPointErrors>) {
                     return defaultValue;
                 } else {
                     return arg;
                 }
             },
-            detail::Isolate::getInstance()->runIsolated(std::forward<F>(f)));
+            Isolate::getInstance()->runIsolated(std::forward<F>(f)));
     }
 
     ~Isolate() {
@@ -271,7 +269,7 @@ class Isolate final {
         std::lock_guard lock(mtx_);
 
         return fmt::format("Isolate{{{}, main = {}, current = {}}}", bit_cast<std::size_t>(handle_),
-                       mainIsolateThread_.toString(), currentIsolateThread_.toString());
+                           mainIsolateThread_.toString(), currentIsolateThread_.toString());
     }
 };
 
@@ -282,7 +280,5 @@ template <typename F, typename R>
 auto runIsolatedOrElse(F &&f, R defaultValue) {
     return Isolate::getInstance()->runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue));
 }
-
-} // namespace detail
 
 } // namespace dxfcpp

@@ -43,13 +43,13 @@ class Summary final : public MarketEvent, public LastingEvent {
 
     struct Data {
         std::int32_t dayId{};
-        double dayOpenPrice = detail::math::NaN;
-        double dayHighPrice = detail::math::NaN;
-        double dayLowPrice = detail::math::NaN;
-        double dayClosePrice = detail::math::NaN;
+        double dayOpenPrice = math::NaN;
+        double dayHighPrice = math::NaN;
+        double dayLowPrice = math::NaN;
+        double dayClosePrice = math::NaN;
         std::int32_t prevDayId{};
-        double prevDayClosePrice = detail::math::NaN;
-        double prevDayVolume = detail::math::NaN;
+        double prevDayClosePrice = math::NaN;
+        double prevDayVolume = math::NaN;
         std::int64_t openInterest{};
         std::int32_t flags{};
     };
@@ -149,8 +149,7 @@ class Summary final : public MarketEvent, public LastingEvent {
      * @return the price type of the last (close) price for the day.
      */
     const PriceType &getDayClosePriceType() const & {
-        return PriceType::valueOf(
-            detail::util::getBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT));
+        return PriceType::valueOf(getBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT));
     }
 
     /**
@@ -159,8 +158,7 @@ class Summary final : public MarketEvent, public LastingEvent {
      * @param type the price type of the last (close) price for the day.
      */
     void setDayClosePriceType(const PriceType &type) {
-        data_.flags =
-            detail::util::setBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
+        data_.flags = setBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
     }
 
     /**
@@ -200,7 +198,7 @@ class Summary final : public MarketEvent, public LastingEvent {
      */
     const PriceType &getPrevDayClosePriceType() const & {
         return PriceType::valueOf(
-            detail::util::getBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK, PREV_DAY_CLOSE_PRICE_TYPE_SHIFT));
+            getBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK, PREV_DAY_CLOSE_PRICE_TYPE_SHIFT));
     }
 
     /**
@@ -209,8 +207,8 @@ class Summary final : public MarketEvent, public LastingEvent {
      * @param type the price type of the last (close) price for the previous day.
      */
     void setPrevDayClosePriceType(const PriceType &type) {
-        data_.flags = detail::util::setBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK,
-                                            PREV_DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
+        data_.flags =
+            setBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK, PREV_DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
     }
 
     /**
@@ -250,17 +248,14 @@ class Summary final : public MarketEvent, public LastingEvent {
         return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
                            "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
                            "prevDayVolume={}, openInterest={}}}",
-                           MarketEvent::getEventSymbol(),
-                           detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                           detail::day_util::getYearMonthDayByDayId(getDayId()), getDayOpenPrice(), getDayHighPrice(),
+                           MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                           day_util::getYearMonthDayByDayId(getDayId()), getDayOpenPrice(), getDayHighPrice(),
                            getDayLowPrice(), getDayLowPrice(), getDayClosePrice(), getDayClosePriceType().toString(),
-                           detail::day_util::getYearMonthDayByDayId(getPrevDayId()), getPrevDayClosePrice(),
+                           day_util::getYearMonthDayByDayId(getPrevDayId()), getPrevDayClosePrice(),
                            getPrevDayClosePriceType().toString(), getPrevDayVolume(), getOpenInterest());
     }
 
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Summary &e) {
-        return os << e.toString();
-    }
+    template <typename OStream> friend OStream &operator<<(OStream &os, const Summary &e) { return os << e.toString(); }
 
     template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Summary> &e) {
         return os << e->toString();

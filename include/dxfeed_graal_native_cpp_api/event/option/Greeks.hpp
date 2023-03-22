@@ -65,13 +65,13 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
     struct Data {
         std::int32_t eventFlags{};
         std::int64_t index{};
-        double price = detail::math::NaN;
-        double volatility = detail::math::NaN;
-        double delta = detail::math::NaN;
-        double gamma = detail::math::NaN;
-        double theta = detail::math::NaN;
-        double rho = detail::math::NaN;
-        double vega = detail::math::NaN;
+        double price = math::NaN;
+        double volatility = math::NaN;
+        double delta = math::NaN;
+        double gamma = math::NaN;
+        double theta = math::NaN;
+        double rho = math::NaN;
+        double vega = math::NaN;
     };
 
     Data data_{};
@@ -79,7 +79,7 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
     static std::shared_ptr<Greeks> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum& Type;
+    static const EventTypeEnum &Type;
 
     /// Creates new greeks with default values.
     Greeks() noexcept = default;
@@ -129,8 +129,7 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
      * @return timestamp of the event in milliseconds
      */
     std::int64_t getTime() const override {
-        return detail::BitOps::sar(data_.index, SECONDS_SHIFT) * 1000 +
-               detail::BitOps::andOp(detail::BitOps::sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+        return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
     }
 
     /**
@@ -140,10 +139,9 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
      * @see ::getTime()
      */
     void setTime(std::int64_t time) {
-        data_.index = detail::BitOps::orOp(
-            detail::BitOps::orOp(detail::BitOps::sal(detail::time_util::getSecondsFromTime(time), SECONDS_SHIFT),
-                                 detail::BitOps::sal(detail::time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
-            getSequence());
+        data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
+                                sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
+                           getSequence());
     }
 
     /**
@@ -153,9 +151,7 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const {
-        return static_cast<std::int32_t>(detail::BitOps::andOp(data_.index, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const { return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE)); }
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
@@ -166,7 +162,7 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
         // TODO: Improve error handling
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
-        data_.index = detail::BitOps::orOp(detail::BitOps::andOp(data_.index, ~MAX_SEQUENCE), sequence);
+        data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }
 
     /**
@@ -276,9 +272,9 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
         return fmt::format(
             "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
             "gamma={}, theta={}, rho={}, vega={}}}",
-            MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            getEventFlags().getMask(), detail::formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
-            getVolatility(), getDelta(), getGamma(), getTheta(), getRho(), getVega());
+            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+            getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(), getVolatility(),
+            getDelta(), getGamma(), getTheta(), getRho(), getVega());
     }
 
     template <typename OStream> friend OStream &operator<<(OStream &os, const Greeks &e) { return os << e.toString(); }

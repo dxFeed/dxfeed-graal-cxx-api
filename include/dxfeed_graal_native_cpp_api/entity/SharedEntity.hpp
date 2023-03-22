@@ -52,4 +52,4 @@ struct SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> 
     }
 };
 
-}
+} // namespace dxfcpp

@@ -4,9 +4,9 @@
 #pragma once
 
 #include <cstdint>
-#include <unordered_map>
-#include <type_traits>
 #include <string>
+#include <type_traits>
+#include <unordered_map>
 
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
@@ -35,4 +35,4 @@ struct TradingStatus : Enum<TradingStatus, std::uint32_t> {
     static const TradingStatus ACTIVE;
 };
 
-}
+} // namespace dxfcpp

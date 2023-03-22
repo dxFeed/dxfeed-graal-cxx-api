@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace dxfcpp::detail {
+namespace dxfcpp {
 
 /**
  * A thread-safe class that allows to asynchronously notify listeners with a given signature.
@@ -173,4 +173,4 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
     void operator-=(std::size_t id) { return remove(id); }
 };
 
-} // namespace dxfcpp::detail
+} // namespace dxfcpp

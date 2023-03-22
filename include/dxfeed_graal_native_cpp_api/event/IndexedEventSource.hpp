@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <string>
 #include <cstdint>
+#include <string>
 
 namespace dxfcpp {
 
@@ -53,4 +53,4 @@ class IndexedEventSource {
     std::string toString() const { return name_; }
 };
 
-}
+} // namespace dxfcpp

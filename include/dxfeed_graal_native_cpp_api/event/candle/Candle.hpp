@@ -9,8 +9,8 @@
 #include <string>
 
 #include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
 #include "../EventType.hpp"
+#include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"
 #include "../TimeSeriesEvent.hpp"
@@ -20,7 +20,7 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-//TODO: implement
+// TODO: implement
 
 class Candle final : public EventTypeWithSymbol<CandleSymbol>, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;

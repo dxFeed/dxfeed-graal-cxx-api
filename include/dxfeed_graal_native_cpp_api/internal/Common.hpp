@@ -28,9 +28,6 @@ struct DXFeedEventListener {};
 
 struct DXEndpointStateChangeListener {};
 
-} // namespace dxfcpp
-
-namespace dxfcpp::detail {
 #if defined(NDEBUG) && !defined(DXFCPP_DEBUG)
 constexpr bool isDebug = false;
 constexpr bool isDebugIsolates = false;
@@ -63,8 +60,10 @@ constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept
 }
 
 // Implementation of std::bit_cast for pre-C++20.
-template <typename To, typename From, std::enable_if_t<sizeof(To) == sizeof(From), int> = 0>
-constexpr auto bit_cast(const From &from) -> To {
+template <typename To, typename From>
+constexpr To bit_cast(const From &from)
+    requires(sizeof(To) == sizeof(From))
+{
 #ifdef __cpp_lib_bit_cast
     if (is_constant_evaluated())
         return std::bit_cast<To>(from);
@@ -263,11 +262,48 @@ static const double NaN = std::numeric_limits<double>::quiet_NaN();
 } // namespace math
 
 namespace time_nanos_util {
-static const std::int64_t NANOS_IN_MILLIS = 1'000'000LL;
+static constexpr std::int64_t NANOS_IN_MILLIS = 1'000'000LL;
 
-static std::int64_t getNanosFromMillisAndNanoPart(std::int64_t timeMillis, std::int32_t timeNanoPart) {
+/**
+ * Returns time measured in nanoseconds since epoch from the time in milliseconds and its nano part.
+ * The result of this method is `timeMillis * 1'000'000 + timeNanoPart`.
+ *
+ * @param timeMillis time in milliseconds since epoch.
+ * @param timeNanoPart nanoseconds part that shall lie within [0..999999] interval.
+ * @return time measured in nanoseconds since epoch.
+ */
+static constexpr std::int64_t getNanosFromMillisAndNanoPart(std::int64_t timeMillis, std::int32_t timeNanoPart) {
     return (timeMillis * NANOS_IN_MILLIS) + timeNanoPart;
 }
+
+/**
+ * Returns time measured in milliseconds since Java epoch from the time in nanoseconds.
+ * Idea is that nano part of time shall be within [0..999999] interval
+ * so that the following equation always holds
+ * `getMillisFromNanos(timeNanos) * 1'000'000 + getNanoPartFromNanos(timeNanos) == timeNanos`.
+ *
+ * @param timeNanos time measured in nanoseconds since epoch
+ * @return time measured in milliseconds since epoch.
+ * @see ::getNanoPartFromNanos()
+ */
+static constexpr std::int64_t getMillisFromNanos(std::int64_t timeNanos) {
+    return math::floorDiv(timeNanos, NANOS_IN_MILLIS);
+}
+
+/**
+ * Returns nano part of time.
+ * Idea is that nano part of time shall be within [0..999999] interval
+ * so that the following equation always holds
+ * `getMillisFromNanos(timeNanos) * 1'000'000 + getNanoPartFromNanos(timeNanos) == timeNanos`.
+ *
+ * @param timeNanos time measured in nanoseconds since epoch
+ * @return time measured in milliseconds since epoch.
+ * @see ::getMillisFromNanos()
+ */
+static constexpr std::int32_t getNanoPartFromNanos(std::int64_t timeNanos) {
+    return static_cast<std::int32_t>(math::floorMod(timeNanos, NANOS_IN_MILLIS));
+}
+
 } // namespace time_nanos_util
 
 namespace time_util {
@@ -381,8 +417,6 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
 
 } // namespace day_util
 
-namespace util {
-
 namespace detail {
 template <typename...> struct MaxImpl;
 
@@ -399,26 +433,223 @@ template <typename T, typename U, typename V, typename... Ws> struct MaxImpl<T, 
 };
 } // namespace detail
 
+/**
+ * Returns max type by size (first is better)
+ */
 template <typename... Ts> using Max = typename detail::MaxImpl<Ts...>::Type;
 
-template <Integral T> static constexpr T getBits(T flags, T mask, T shift) {
-    if constexpr (std::is_signed_v<T>) {
-        using U = std::make_unsigned_t<T>;
+static constexpr auto sar(auto value, auto shift);
 
-        return static_cast<T>((static_cast<U>(flags) >> static_cast<U>(shift)) & static_cast<U>(mask));
-    } else {
-        return (flags >> shift) & mask;
+/**
+ * Performs a left arithmetic bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::sar() "right arithmetic shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
+ * returned.
+ *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
+ * @param value The value to be shifted
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value, S shift) {
+    if constexpr (std::is_signed_v<S>) {
+        if (shift < 0) {
+            return sar(value, -shift);
+        }
     }
+
+    if (shift == 0 || value == 0) {
+        return value;
+    }
+
+    if (shift >= sizeof(V) * 8) {
+        return 0;
+    }
+
+    return value << static_cast<std::make_unsigned_t<S>>(shift);
+}
+
+/**
+ * Performs a left arithmetic bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::sar() "right arithmetic shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
+ * returned.
+ *
+ * @param value The value to be shifted.
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+static constexpr auto sal(auto value, auto shift) { return leftArithmeticShift(value, shift); }
+
+/**
+ * Performs a right arithmetic bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then if the `value` is
+ * negative (signed integer type), `-1` will be returned, and if positive, then `0` will be returned.
+ *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
+ * @param value The value to be shifted
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+template <Integral V, Integral S> static constexpr V rightArithmeticShift(V value, S shift) {
+    if constexpr (std::is_signed_v<S>) {
+        if (shift < 0) {
+            return sal(value, -shift);
+        }
+    }
+
+    if (shift == 0 || value == 0) {
+        return value;
+    }
+
+    if (shift >= sizeof(V) * 8) {
+        if (value < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    return value >> static_cast<std::make_unsigned_t<S>>(shift);
+}
+
+/**
+ * Performs a right arithmetic bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then if the `value` is
+ * negative (signed integer type), `-1` will be returned, and if positive, then `0` will be returned.
+ *
+ * @param value The value to be shifted.
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+static constexpr auto sar(auto value, auto shift) { return rightArithmeticShift(value, shift); }
+
+static constexpr auto shr(auto value, auto shift);
+
+/**
+ * Performs a left logical bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::shr() "right logical shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
+ * returned.
+ *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
+ * @param value The value to be shifted
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S shift) {
+    if constexpr (std::is_signed_v<S>) {
+        if (shift < 0) {
+            return shr(value, -shift);
+        }
+    }
+
+    if (shift == 0 || value == 0) {
+        return value;
+    }
+
+    if (shift >= sizeof(V) * 8) {
+        return 0;
+    }
+
+    return value << static_cast<std::make_unsigned_t<S>>(shift);
+}
+
+/**
+ * Performs a left logical bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::shr() "right logical shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
+ * returned.
+ *
+ * @param value The value to be shifted.
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+static constexpr auto shl(auto value, auto shift) { return leftLogicalShift(value, shift); }
+
+/**
+ * Performs a right logical bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
+ * returned.
+ *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
+ * @param value The value to be shifted
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, S shift) {
+    if constexpr (std::is_signed_v<S>) {
+        if (shift < 0) {
+            return shl(value, -shift);
+        }
+    }
+
+    if (shift == 0 || value == 0) {
+        return value;
+    }
+
+    if (shift >= sizeof(V) * 8) {
+        return 0;
+    }
+
+    return static_cast<V>(static_cast<std::make_unsigned_t<V>>(value) >> static_cast<std::make_unsigned_t<S>>(shift));
+}
+
+/**
+ * Performs a right logical bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
+ * returned.
+ *
+ * @param value The value to be shifted.
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+static constexpr auto shr(auto value, auto shift) { return rightLogicalShift(value, shift); }
+
+template <Integral A, Integral B> static constexpr A andOp(A a, B b) {
+    using Common = std::make_unsigned_t<Max<A, B>>;
+
+    return static_cast<A>(static_cast<Common>(a) & static_cast<Common>(b));
+}
+
+template <Integral A, Integral B> static constexpr A orOp(A a, B b) {
+    using Common = std::make_unsigned_t<Max<A, B>>;
+
+    return static_cast<A>(static_cast<Common>(a) | static_cast<Common>(b));
+}
+
+template <Integral A, Integral B> static constexpr A xorOp(A a, B b) {
+    using Common = std::make_unsigned_t<Max<A, B>>;
+
+    return static_cast<A>(static_cast<Common>(a) ^ static_cast<Common>(b));
 }
 
 template <Integral F, Integral M, Integral S> static constexpr F getBits(F flags, M mask, S shift) {
-    if constexpr (std::is_signed_v<F> || std::is_signed_v<M> || std::is_signed_v<S>) {
-        using U = std::make_unsigned_t<Max<F, M, S>>;
-
-        return static_cast<F>((static_cast<U>(flags) >> static_cast<U>(shift)) & static_cast<U>(mask));
-    } else {
-        return (flags >> shift) & mask;
-    }
+    return static_cast<F>(andOp(shr(flags, shift), mask));
 }
 
 template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bits) {
@@ -443,211 +674,6 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
     }
 }
 
-} // namespace util
-
-struct BitOps {
-    /**
-     * Performs a left arithmetic bit shift operation.
-     *
-     * The result of the shift will be of the same type as the `value` being shifted.
-     * If the shift is a negative number of bits, then a @ref ::sar() "right arithmetic shift" will be performed.
-     * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be returned.
-     *
-     * @tparam V The type of `value`
-     * @tparam S The type of `shift`
-     * @param value The value to be shifted
-     * @param shift The shift in bits
-     * @return The shifted `value`
-     */
-    template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value, S shift) {
-        if constexpr (std::is_signed_v<S>) {
-            if (shift < 0) {
-                return rightArithmeticShift(value, -shift);
-            }
-        }
-
-        if (shift == 0 || value == 0) {
-            return value;
-        }
-
-        if (shift >= sizeof(V) * 8) {
-            return 0;
-        }
-
-        return value << static_cast<std::make_unsigned_t<S>>(shift);
-    }
-
-    /**
-     * Performs a left arithmetic bit shift operation.
-     *
-     * The result of the shift will be of the same type as the `value` being shifted.
-     * If the shift is a negative number of bits, then a @ref ::sar() "right arithmetic shift" will be performed.
-     * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be returned.
-     *
-     * @param value The value to be shifted.
-     * @param shift The shift in bits
-     * @return The shifted `value`
-     */
-    static constexpr auto sal(auto value, auto shift) { return leftArithmeticShift(value, shift); }
-
-    /**
-     * Performs a right arithmetic bit shift operation.
-     *
-     * The result of the shift will be of the same type as the `value` being shifted.
-     * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
-     * If the shift size is greater than or equal to the number of bits in the shifted `value`, then if the `value` is
-     * negative (signed integer type), `-1` will be returned, and if positive, then `0` will be returned.
-     *
-     * @tparam V The type of `value`
-     * @tparam S The type of `shift`
-     * @param value The value to be shifted
-     * @param shift The shift in bits
-     * @return The shifted `value`
-     */
-    template <Integral V, Integral S> static constexpr V rightArithmeticShift(V value, S shift) {
-        if constexpr (std::is_signed_v<S>) {
-            if (shift < 0) {
-                return leftArithmeticShift(value, -shift);
-            }
-        }
-
-        if (shift == 0 || value == 0) {
-            return value;
-        }
-
-        if (shift >= sizeof(V) * 8) {
-            if (value < 0) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-
-        return value >> static_cast<std::make_unsigned_t<S>>(shift);
-    }
-
-    /**
-     * Performs a right arithmetic bit shift operation.
-     *
-     * The result of the shift will be of the same type as the `value` being shifted.
-     * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
-     * If the shift size is greater than or equal to the number of bits in the shifted `value`, then if the `value` is
-     * negative (signed integer type), `-1` will be returned, and if positive, then `0` will be returned.
-     *
-     * @param value The value to be shifted.
-     * @param shift The shift in bits
-     * @return The shifted `value`
-     */
-    static constexpr auto sar(auto value, auto shift) { return rightArithmeticShift(value, shift); }
-
-    /**
-     * Performs a left logical bit shift operation.
-     *
-     * The result of the shift will be of the same type as the `value` being shifted.
-     * If the shift is a negative number of bits, then a @ref ::shr() "right logical shift" will be performed.
-     * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be returned.
-     *
-     * @tparam V The type of `value`
-     * @tparam S The type of `shift`
-     * @param value The value to be shifted
-     * @param shift The shift in bits
-     * @return The shifted `value`
-     */
-    template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S shift) {
-        if constexpr (std::is_signed_v<S>) {
-            if (shift < 0) {
-                return rightLogicalShift(value, -shift);
-            }
-        }
-
-        if (shift == 0 || value == 0) {
-            return value;
-        }
-
-        if (shift >= sizeof(V) * 8) {
-            return 0;
-        }
-
-        return value << static_cast<std::make_unsigned_t<S>>(shift);
-    }
-
-    /**
-     * Performs a left logical bit shift operation.
-     *
-     * The result of the shift will be of the same type as the `value` being shifted.
-     * If the shift is a negative number of bits, then a @ref ::shr() "right logical shift" will be performed.
-     * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be returned.
-     *
-     * @param value The value to be shifted.
-     * @param shift The shift in bits
-     * @return The shifted `value`
-     */
-    static constexpr auto shl(auto value, auto shift) { return leftLogicalShift(value, shift); }
-
-    /**
-     * Performs a right logical bit shift operation.
-     *
-     * The result of the shift will be of the same type as the `value` being shifted.
-     * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
-     * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be returned.
-     *
-     * @tparam V The type of `value`
-     * @tparam S The type of `shift`
-     * @param value The value to be shifted
-     * @param shift The shift in bits
-     * @return The shifted `value`
-     */
-    template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, S shift) {
-        if constexpr (std::is_signed_v<S>) {
-            if (shift < 0) {
-                return leftLogicalShift(value, -shift);
-            }
-        }
-
-        if (shift == 0 || value == 0) {
-            return value;
-        }
-
-        if (shift >= sizeof(V) * 8) {
-            return 0;
-        }
-
-        return static_cast<V>(static_cast<std::make_unsigned_t<V>>(value) >>
-                              static_cast<std::make_unsigned_t<S>>(shift));
-    }
-
-    /**
-     * Performs a right logical bit shift operation.
-     *
-     * The result of the shift will be of the same type as the `value` being shifted.
-     * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
-     * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be returned.
-     *
-     * @param value The value to be shifted.
-     * @param shift The shift in bits
-     * @return The shifted `value`
-     */
-    static constexpr auto shr(auto value, auto shift) { return rightLogicalShift(value, shift); }
-
-    template <Integral A, Integral B> static constexpr A andOp(A a, B b) {
-        using Common = std::make_unsigned_t<util::Max<A, B>>;
-
-        return static_cast<A>(static_cast<Common>(a) & static_cast<Common>(b));
-    }
-
-    template <Integral A, Integral B> static constexpr A orOp(A a, B b) {
-        using Common = std::make_unsigned_t<util::Max<A, B>>;
-
-        return static_cast<A>(static_cast<Common>(a) | static_cast<Common>(b));
-    }
-
-    template <Integral A, Integral B> static constexpr A xorOp(A a, B b) {
-        using Common = std::make_unsigned_t<util::Max<A, B>>;
-
-        return static_cast<A>(static_cast<Common>(a) ^ static_cast<Common>(b));
-    }
-};
-
 static std::string toString(const char *chars) {
     if (chars == nullptr) {
         return "";
@@ -656,4 +682,4 @@ static std::string toString(const char *chars) {
     return chars;
 }
 
-} // namespace dxfcpp::detail
+} // namespace dxfcpp

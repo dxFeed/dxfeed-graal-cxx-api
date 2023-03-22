@@ -8,8 +8,8 @@
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
 
-#include "DXFeedSubscription.hpp"
 #include "../event/DXEvent.hpp"
+#include "DXFeedSubscription.hpp"
 
 #include <memory>
 #include <mutex>
@@ -28,7 +28,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
   private:
     mutable std::recursive_mutex mtx_{};
-    detail::handler_utils::JavaObjectHandler<DXFeed> handler_;
+    handler_utils::JavaObjectHandler<DXFeed> handler_;
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 
@@ -36,15 +36,15 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
   protected:
     DXFeed() noexcept : mtx_(), handler_{} {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXFeed()");
+        if constexpr (isDebug) {
+            debug("DXFeed()");
         }
     }
 
   public:
     virtual ~DXFeed() noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::~DXFeed()", toString());
+        if constexpr (isDebug) {
+            debug("{}::~DXFeed()", toString());
         }
     }
 
@@ -68,8 +68,8 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::createSubscription(eventTypes = {})", detail::namesToString(begin, end));
+        if constexpr (isDebug) {
+            debug("{}::createSubscription(eventTypes = {})", namesToString(begin, end));
         }
 
         auto sub = DXFeedSubscription::create(begin, end);
@@ -83,11 +83,11 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
-        requires requires { detail::ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+        requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
     {
-        if constexpr (detail::isDebug) {
-            detail::debug("{}::createSubscription(eventTypes = {})", toString(),
-                          detail::namesToString(std::begin(eventTypes), std::end(eventTypes)));
+        if constexpr (isDebug) {
+            debug("{}::createSubscription(eventTypes = {})", toString(),
+                  namesToString(std::begin(eventTypes), std::end(eventTypes)));
         }
 
         auto sub = DXFeedSubscription::create(eventTypes);

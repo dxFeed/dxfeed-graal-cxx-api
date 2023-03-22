@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <string>
 #include <cstdint>
 #include <memory>
+#include <string>
 
 #include "../EventType.hpp"
 
@@ -57,4 +57,4 @@ struct MarketEvent : public EventTypeWithSymbol<std::string> {
     void setEventTime(std::int64_t eventTime) override { eventTime_ = eventTime; }
 };
 
-}
+} // namespace dxfcpp

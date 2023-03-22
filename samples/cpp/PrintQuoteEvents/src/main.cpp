@@ -13,17 +13,17 @@ int main() {
 
     dxfcpp::Quote q{};
 
-    std::cout << dxfcpp::detail::nowStrWithTimeZone() << std::endl;
-    std::cout << dxfcpp::detail::formatTimeStamp(1677448613000) << std::endl;
-    std::cout << dxfcpp::detail::formatTimeStampWithMillis(1677448613023) << std::endl;
+    std::cout << dxfcpp::nowStrWithTimeZone() << std::endl;
+    std::cout << dxfcpp::formatTimeStamp(1677448613000) << std::endl;
+    std::cout << dxfcpp::formatTimeStampWithMillis(1677448613023) << std::endl;
 
     {
         auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
         auto endpoint = builder->build();
 
         endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-            dxfcpp::detail::debug("{}", std::string("State changed: ") + dxfcpp::DXEndpoint::stateToString(oldState) +
-                                            " -> " + dxfcpp::DXEndpoint::stateToString(newState));
+            dxfcpp::debug("{}", std::string("State changed: ") + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                    dxfcpp::DXEndpoint::stateToString(newState));
         };
 
         auto sub =
@@ -35,17 +35,16 @@ int main() {
 
     std::cin.get();
 
-//    using namespace dxfcpp;
-//
-//    auto endpoint = DXEndpoint::newBuilder()
-//            ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
-//            ->build();
-//    auto subscription = endpoint->getFeed()->createSubscription(Quote::type);
-//    subscription->addEventListener([](auto&& events) {
-//        for (auto&& e : events) {
-//            std::cout << e << "\n";
-//        }
-//    });
-//    subscription->addSymbols({"AAPL"});
-
+    //    using namespace dxfcpp;
+    //
+    //    auto endpoint = DXEndpoint::newBuilder()
+    //            ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
+    //            ->build();
+    //    auto subscription = endpoint->getFeed()->createSubscription(Quote::type);
+    //    subscription->addEventListener([](auto&& events) {
+    //        for (auto&& e : events) {
+    //            std::cout << e << "\n";
+    //        }
+    //    });
+    //    subscription->addSymbols({"AAPL"});
 }

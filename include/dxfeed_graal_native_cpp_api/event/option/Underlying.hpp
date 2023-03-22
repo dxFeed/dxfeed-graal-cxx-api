@@ -19,7 +19,7 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-//TODO: doc
+// TODO: doc
 class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
@@ -44,12 +44,12 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
     struct Data {
         std::int32_t eventFlags{};
         std::int64_t index{};
-        double volatility = detail::math::NaN;
-        double frontVolatility = detail::math::NaN;
-        double backVolatility = detail::math::NaN;
-        double callVolume = detail::math::NaN;
-        double putVolume = detail::math::NaN;
-        double putCallRatio = detail::math::NaN;
+        double volatility = math::NaN;
+        double frontVolatility = math::NaN;
+        double backVolatility = math::NaN;
+        double callVolume = math::NaN;
+        double putVolume = math::NaN;
+        double putCallRatio = math::NaN;
     };
 
     Data data_{};
@@ -59,11 +59,11 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new greeks with default values.
+    /// Creates new underlying with default values.
     Underlying() noexcept = default;
 
     /**
-     * Creates new greeks with the specified event symbol.
+     * Creates new underlying with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
@@ -107,8 +107,7 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
      * @return timestamp of the event in milliseconds
      */
     std::int64_t getTime() const override {
-        return detail::BitOps::sar(data_.index, SECONDS_SHIFT) * 1000 +
-               detail::BitOps::andOp(detail::BitOps::sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+        return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
     }
 
     /**
@@ -118,10 +117,9 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
      * @see ::getTime()
      */
     void setTime(std::int64_t time) {
-        data_.index = detail::BitOps::orOp(
-            detail::BitOps::orOp(detail::BitOps::sal(detail::time_util::getSecondsFromTime(time), SECONDS_SHIFT),
-                                 detail::BitOps::sal(detail::time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
-            getSequence());
+        data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
+                                sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
+                           getSequence());
     }
 
     /**
@@ -131,9 +129,7 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const {
-        return static_cast<std::int32_t>(detail::BitOps::andOp(data_.index, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const { return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE)); }
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
@@ -144,7 +140,7 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
         // TODO: Improve error handling
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
-        data_.index = detail::BitOps::orOp(detail::BitOps::andOp(data_.index, ~MAX_SEQUENCE), sequence);
+        data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }
 
     /**
@@ -257,8 +253,8 @@ class Underlying : public MarketEvent, public TimeSeriesEvent, public LastingEve
         return fmt::format(
             "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
             "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
-            MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            getEventFlags().getMask(), detail::formatTimeStampWithMillis(getTime()), getSequence(), getVolatility(),
+            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+            getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getVolatility(),
             getFrontVolatility(), getBackVolatility(), getCallVolume(), getPutVolume(), getPutCallRatio());
     }
 

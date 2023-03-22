@@ -10,7 +10,7 @@
 
 #include "Common.hpp"
 
-namespace dxfcpp::detail {
+namespace dxfcpp {
 
 /**
  * Possible error codes returned by internal GraalVM functions
@@ -122,4 +122,4 @@ struct CEntryPointErrors {
 
     bool operator==(const CEntryPointErrors &errors) const { return this->getCode() == errors.getCode(); }
 };
-} // namespace dxfcpp::detail
+} // namespace dxfcpp

@@ -463,13 +463,13 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
     mutable std::recursive_mutex mtx_{};
-    detail::handler_utils::JavaObjectHandler<DXEndpoint> handler_;
+    handler_utils::JavaObjectHandler<DXEndpoint> handler_;
     Role role_ = Role::FEED;
     std::string name_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
-    detail::handler_utils::JavaObjectHandler<DXEndpointStateChangeListener> stateChangeListenerHandler_;
-    detail::Handler<void(State, State)> onStateChange_{};
+    handler_utils::JavaObjectHandler<DXEndpointStateChangeListener> stateChangeListenerHandler_;
+    Handler<void(State, State)> onStateChange_{};
 
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties);
@@ -480,18 +480,18 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
   protected:
     DXEndpoint() : mtx_{}, handler_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandler_{}, onStateChange_{} {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint()");
+        if constexpr (isDebug) {
+            debug("DXEndpoint()");
         }
     }
 
   public:
     virtual ~DXEndpoint() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.toString());
+        if constexpr (isDebug) {
+            debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.toString());
         }
 
-        detail::tryCallWithLock(mtx_, [this] { closeImpl(); });
+        tryCallWithLock(mtx_, [this] { closeImpl(); });
     }
 
     /**
@@ -508,8 +508,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @see #getInstance(Role)
      */
     static std::shared_ptr<DXEndpoint> getInstance() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint::getInstance()");
+        if constexpr (isDebug) {
+            debug("DXEndpoint::getInstance()");
         }
 
         return getInstance(Role::FEED);
@@ -535,8 +535,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return The DXEndpoint instance
      */
     static std::shared_ptr<DXEndpoint> getInstance(Role role) {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint::getInstance(role = {})", roleToString(role));
+        if constexpr (isDebug) {
+            debug("DXEndpoint::getInstance(role = {})", roleToString(role));
         }
 
         if (INSTANCES.contains(role)) {
@@ -555,8 +555,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return the created endpoint.
      */
     static std::shared_ptr<DXEndpoint> create() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint::create()");
+        if constexpr (isDebug) {
+            debug("DXEndpoint::create()");
         }
 
         return newBuilder()->build();
@@ -572,8 +572,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return the created endpoint.
      */
     static std::shared_ptr<DXEndpoint> create(Role role) {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint::create(role = {})", roleToString(role));
+        if constexpr (isDebug) {
+            debug("DXEndpoint::create(role = {})", roleToString(role));
         }
 
         return newBuilder()->withRole(role)->build();
@@ -633,7 +633,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     void removeStateChangeListener(std::size_t listenerId) { onStateChange_ -= listenerId; }
 
     /**
-     * Returns the onStateChange @ref detail::Handler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * Returns the onStateChange @ref Handler<void(ArgTypes...)> "handler" that can be used to add or remove
      * listeners.
      *
      * @return onStateChange handler with `void(State, State)` signature
@@ -746,8 +746,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#close--)
      */
     void close() {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint{{{}}}::close()", handler_.toString());
+        if constexpr (isDebug) {
+            debug("DXEndpoint{{{}}}::close()", handler_.toString());
         }
 
         std::lock_guard guard(mtx_);
@@ -808,13 +808,13 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         friend DXEndpoint;
 
         mutable std::recursive_mutex mtx_{};
-        detail::handler_utils::JavaObjectHandler<Builder> handler_;
+        handler_utils::JavaObjectHandler<Builder> handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
         Builder() : mtx_{}, handler_{}, properties_{} {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder::Builder()");
+            if constexpr (isDebug) {
+                debug("DXEndpoint::Builder::Builder()");
             }
         }
 
@@ -837,8 +837,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
       public:
         /// Releases the GraalVM handle
         virtual ~Builder() {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::~Builder()", handler_.toString());
+            if constexpr (isDebug) {
+                debug("DXEndpoint::Builder{{{}}}::~Builder()", handler_.toString());
             }
         }
 
@@ -852,8 +852,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          * @return `this` endpoint builder.
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.toString(), name);
+            if constexpr (isDebug) {
+                debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.toString(), name);
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -890,9 +890,9 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          * @see ::withProperty(const std::string&, const std::string&)
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
-            if constexpr (detail::isDebug) {
-                detail::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", handler_.toString(),
-                              properties.size());
+            if constexpr (isDebug) {
+                debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", handler_.toString(),
+                      properties.size());
             }
 
             std::lock_guard guard(mtx_);
@@ -929,8 +929,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return the created endpoint builder.
      */
     static std::shared_ptr<Builder> newBuilder() noexcept {
-        if constexpr (detail::isDebug) {
-            detail::debug("DXEndpoint::newBuilder()");
+        if constexpr (isDebug) {
+            debug("DXEndpoint::newBuilder()");
         }
 
         return Builder::create();

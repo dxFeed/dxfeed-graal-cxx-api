@@ -41,21 +41,20 @@ class Quote final : public MarketEvent, public LastingEvent {
         std::int32_t timeNanoPart{};
         std::int64_t bidTime{};
         std::int16_t bidExchangeCode{};
-        double bidPrice = detail::math::NaN;
-        double bidSize = detail::math::NaN;
+        double bidPrice = math::NaN;
+        double bidSize = math::NaN;
         std::int64_t askTime{};
         std::int16_t askExchangeCode{};
-        double askPrice = detail::math::NaN;
-        double askSize = detail::math::NaN;
+        double askPrice = math::NaN;
+        double askSize = math::NaN;
     };
 
     Data data_{};
 
     void recomputeTimeMillisPart() {
-        data_.timeMillisSequence = detail::BitOps::orOp(
-            detail::BitOps::sal(detail::time_util::getMillisFromTime(std::max(data_.askTime, data_.bidTime)),
-                                MILLISECONDS_SHIFT),
-            getSequence());
+        data_.timeMillisSequence =
+            orOp(sal(time_util::getMillisFromTime(std::max(data_.askTime, data_.bidTime)), MILLISECONDS_SHIFT),
+                 getSequence());
     }
 
     static std::shared_ptr<Quote> fromGraalNative(void *graalNative) noexcept;
@@ -80,7 +79,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      *
      * @return sequence of this quote.
      */
-    std::int32_t getSequence() const { return detail::BitOps::andOp(data_.timeMillisSequence, MAX_SEQUENCE); }
+    std::int32_t getSequence() const { return andOp(data_.timeMillisSequence, MAX_SEQUENCE); }
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this quote.
@@ -93,8 +92,7 @@ class Quote final : public MarketEvent, public LastingEvent {
         // TODO: Improve error handling
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
-        data_.timeMillisSequence =
-            detail::BitOps::orOp(detail::BitOps::andOp(data_.timeMillisSequence, ~MAX_SEQUENCE), sequence);
+        data_.timeMillisSequence = orOp(andOp(data_.timeMillisSequence, ~MAX_SEQUENCE), sequence);
     }
 
     /**
@@ -104,8 +102,8 @@ class Quote final : public MarketEvent, public LastingEvent {
      * @return time of the last bid or ask change.
      */
     std::int64_t getTime() const {
-        return detail::math::floorDiv(std::max(data_.bidTime, data_.askTime), 1000LL) * 1000LL +
-               detail::BitOps::shr(data_.timeMillisSequence, MILLISECONDS_SHIFT);
+        return math::floorDiv(std::max(data_.bidTime, data_.askTime), 1000LL) * 1000LL +
+               shr(data_.timeMillisSequence, MILLISECONDS_SHIFT);
     }
 
     /**
@@ -115,7 +113,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      * @return time of the last bid or ask change in nanoseconds.
      */
     std::int64_t getTimeNanos() const {
-        return detail::time_nanos_util::getNanosFromMillisAndNanoPart(getTime(), data_.timeNanoPart);
+        return time_nanos_util::getNanosFromMillisAndNanoPart(getTime(), data_.timeNanoPart);
     }
 
     /**
@@ -164,7 +162,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      *
      * @return bid exchange code.
      */
-    char getBidExchangeCode() const;
+    std::int16_t getBidExchangeCode() const;
 
     /**
      * Changes bid exchange code.
@@ -172,6 +170,13 @@ class Quote final : public MarketEvent, public LastingEvent {
      * @param bidExchangeCode bid exchange code.
      */
     void setBidExchangeCode(char bidExchangeCode);
+
+    /**
+     * Changes bid exchange code.
+     *
+     * @param bidExchangeCode bid exchange code.
+     */
+    void setBidExchangeCode(std::int16_t bidExchangeCode);
 
     /**
      * Returns bid price.
@@ -232,15 +237,21 @@ class Quote final : public MarketEvent, public LastingEvent {
      *
      * @return ask exchange code.
      */
-    char getAskExchangeCode() const;
+    std::int16_t getAskExchangeCode() const;
 
     /**
      * Changes ask exchange code.
      *
      * @param askExchangeCode ask exchange code.
      */
-    void setAskExchangeCode(char bidExchangeCode);
+    void setAskExchangeCode(char askExchangeCode);
 
+    /**
+     * Changes ask exchange code.
+     *
+     * @param askExchangeCode ask exchange code.
+     */
+    void setAskExchangeCode(std::int16_t askExchangeCode);
     /**
      * Returns ask price.
      *
@@ -278,11 +289,10 @@ class Quote final : public MarketEvent, public LastingEvent {
         return fmt::format(
             "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
             "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
-            MarketEvent::getEventSymbol(), detail::formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            detail::formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(),
-            detail::formatTimeStamp(getBidTime()), detail::string_util::encodeChar(data_.bidExchangeCode),
-            getBidPrice(), getBidSize(), detail::formatTimeStamp(getAskTime()),
-            detail::string_util::encodeChar(data_.askExchangeCode), getAskPrice(), getAskSize());
+            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+            formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(), formatTimeStamp(getBidTime()),
+            string_util::encodeChar(data_.bidExchangeCode), getBidPrice(), getBidSize(), formatTimeStamp(getAskTime()),
+            string_util::encodeChar(data_.askExchangeCode), getAskPrice(), getAskSize());
     }
 
     template <typename OStream> friend OStream &operator<<(OStream &os, const Quote &e) { return os << e.toString(); }

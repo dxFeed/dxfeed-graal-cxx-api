@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "EventType.hpp"
 
@@ -14,4 +14,4 @@ struct EventMapper {
     static std::vector<std::shared_ptr<EventType>> fromGraalNativeList(void *graalNativeList);
 };
 
-}
+} // namespace dxfcpp
