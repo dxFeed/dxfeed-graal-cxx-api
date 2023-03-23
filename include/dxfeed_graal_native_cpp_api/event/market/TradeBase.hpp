@@ -17,8 +17,18 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: implement
-
+/**
+ * Base class for common fields of Trade} and TradeETH events.
+ * Trade events represent the most recent information that is available about the last trade on the market at any
+ * given moment of time.
+ *
+ * Trade event represents last trade information for <b>regular trading hours</b> (RTH) with an official volume and
+ * turnover <b>for the whole trading day</b> identified by @ref ::getDayId() "dayId" field.
+ *
+ * TradeETH event is defined only for symbols (typically stocks and ETFs) with a designated
+ * <b>extended trading hours</b> (ETH, pre market and post market trading sessions). It represents last trade price
+ * during ETH and also accumulated volume and turnover during ETH for current trading day.
+ */
 class TradeBase : public MarketEvent, public LastingEvent {
     friend struct EventMapper;
 
@@ -312,6 +322,22 @@ class TradeBase : public MarketEvent, public LastingEvent {
      * @param change price of the last trade.
      */
     void setChange(double change) { data_.change = change; }
+
+    /**
+     * Returns string representation of this trade event's fields.
+     *
+     * @return string representation of this trade event's fields.
+     */
+    std::string baseFieldsToString() const noexcept {
+        return fmt::format("{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, price={}, "
+                           "change={}, size={}, day={}, dayVolume={}, dayTurnover={}, "
+                           "direction={}, ETH={}",
+                           MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                           formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(),
+                           string_util::encodeChar(getExchangeCode()), getPrice(), getChange(), getSize(),
+                           day_util::getYearMonthDayByDayId(getDayId()), getDayVolume(), getDayTurnover(),
+                           getTickDirection().toString(), isExtendedTradingHours());
+    }
 };
 
 } // namespace dxfcpp
