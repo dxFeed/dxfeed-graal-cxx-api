@@ -438,7 +438,21 @@ template <typename T, typename U, typename V, typename... Ws> struct MaxImpl<T, 
  */
 template <typename... Ts> using Max = typename detail::MaxImpl<Ts...>::Type;
 
-static constexpr auto sar(auto value, auto shift);
+/**
+ * Performs a right arithmetic bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then if the `value` is
+ * negative (signed integer type), `-1` will be returned, and if positive, then `0` will be returned.
+ *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
+ * @param value The value to be shifted.
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+template <Integral V, Integral S> static constexpr V sar(V value, S shift);
 
 /**
  * Performs a left arithmetic bit shift operation.
@@ -480,11 +494,13 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
  * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
  * returned.
  *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
  * @param value The value to be shifted.
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-static constexpr auto sal(auto value, auto shift) { return leftArithmeticShift(value, shift); }
+template <Integral V, Integral S> static constexpr V sal(V value, S shift) { return leftArithmeticShift(value, shift); }
 
 /**
  * Performs a right arithmetic bit shift operation.
@@ -530,13 +546,31 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
  * If the shift size is greater than or equal to the number of bits in the shifted `value`, then if the `value` is
  * negative (signed integer type), `-1` will be returned, and if positive, then `0` will be returned.
  *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
  * @param value The value to be shifted.
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-static constexpr auto sar(auto value, auto shift) { return rightArithmeticShift(value, shift); }
+template <Integral V, Integral S> static constexpr V sar(V value, S shift) {
+    return rightArithmeticShift(value, shift);
+}
 
-static constexpr auto shr(auto value, auto shift);
+/**
+ * Performs a right logical bit shift operation.
+ *
+ * The result of the shift will be of the same type as the `value` being shifted.
+ * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
+ * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
+ * returned.
+ *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
+ * @param value The value to be shifted.
+ * @param shift The shift in bits
+ * @return The shifted `value`
+ */
+template <Integral V, Integral S> static constexpr V shr(V value, S shift);
 
 /**
  * Performs a left logical bit shift operation.
@@ -578,11 +612,13 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
  * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
  * returned.
  *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
  * @param value The value to be shifted.
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-static constexpr auto shl(auto value, auto shift) { return leftLogicalShift(value, shift); }
+template <Integral V, Integral S> static constexpr V shl(V value, S shift) { return leftLogicalShift(value, shift); }
 
 /**
  * Performs a right logical bit shift operation.
@@ -624,11 +660,13 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
  * If the shift size is greater than or equal to the number of bits in the shifted `value`, then `0` will be
  * returned.
  *
+ * @tparam V The type of `value`
+ * @tparam S The type of `shift`
  * @param value The value to be shifted.
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-static constexpr auto shr(auto value, auto shift) { return rightLogicalShift(value, shift); }
+template <Integral V, Integral S> static constexpr V shr(V value, S shift) { return rightLogicalShift(value, shift); }
 
 template <Integral A, Integral B> static constexpr A andOp(A a, B b) {
     using Common = std::make_unsigned_t<Max<A, B>>;
