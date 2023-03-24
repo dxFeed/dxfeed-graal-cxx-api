@@ -1222,6 +1222,39 @@ const std::unordered_map<Direction::CodeType, std::reference_wrapper<const Direc
 
 void TradeBase::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
 
+const EventTypeEnum &Trade::Type = EventTypeEnum::TRADE;
+
+std::shared_ptr<Trade> Trade::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_TRADE) {
+        return {};
+    }
+
+    try {
+        auto graalTrade = bit_cast<dxfg_trade_t *>(graalNative);
+        auto trade = std::make_shared<Trade>(dxfcpp::toString(graalTrade->trade_base.market_event.event_symbol));
+
+        trade->setEventTime(graalTrade->trade_base.market_event.event_time);
+        trade->data_ = {
+            graalTrade->trade_base.time_sequence, graalTrade->trade_base.time_nano_part,
+            graalTrade->trade_base.exchange_code, graalTrade->trade_base.price,
+            graalTrade->trade_base.change,        graalTrade->trade_base.size,
+            graalTrade->trade_base.day_id,        graalTrade->trade_base.day_volume,
+            graalTrade->trade_base.day_turnover,  graalTrade->trade_base.flags,
+        };
+
+        return trade;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) {
     auto list = bit_cast<dxfg_event_type_list *>(graalNativeList);
 
@@ -1265,6 +1298,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
             break;
         case DXFG_EVENT_TRADE:
+            result[i] = Trade::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_TRADE_ETH:
             break;

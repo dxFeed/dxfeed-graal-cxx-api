@@ -32,6 +32,8 @@ struct EventMapper;
 class TradeBase : public MarketEvent, public LastingEvent {
     friend struct EventMapper;
 
+  protected:
+
     /**
      * Maximum allowed sequence value.
      *
@@ -72,8 +74,6 @@ class TradeBase : public MarketEvent, public LastingEvent {
     Data data_{};
 
   public:
-    static const EventTypeEnum &Type;
-
     /// Creates new trade with default values.
     TradeBase() noexcept = default;
 
