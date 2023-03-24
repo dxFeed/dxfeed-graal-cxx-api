@@ -17,6 +17,6 @@ struct EventMapper;
 
 // TODO: implement
 
-class Order {};
+class Order final {};
 
 } // namespace dxfcpp

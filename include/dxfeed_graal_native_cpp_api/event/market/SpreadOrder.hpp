@@ -17,6 +17,6 @@ struct EventMapper;
 
 // TODO: implement
 
-class SpreadOrder {};
+class SpreadOrder final {};
 
 } // namespace dxfcpp

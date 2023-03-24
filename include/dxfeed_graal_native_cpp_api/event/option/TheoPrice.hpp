@@ -20,7 +20,7 @@ namespace dxfcpp {
 struct EventMapper;
 
 // TODO: doc
-class TheoPrice : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
+class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
     /**

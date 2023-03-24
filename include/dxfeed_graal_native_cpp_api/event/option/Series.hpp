@@ -17,6 +17,6 @@ struct EventMapper;
 
 // TODO: implement
 
-class Series {};
+class Series final {};
 
 } // namespace dxfcpp

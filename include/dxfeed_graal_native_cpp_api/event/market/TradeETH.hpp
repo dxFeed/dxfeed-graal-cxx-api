@@ -20,7 +20,7 @@ struct EventMapper;
 
 // TODO: doc
 
-class TradeETH : public TradeBase {
+class TradeETH final : public TradeBase {
     friend struct EventMapper;
 
     static std::shared_ptr<TradeETH> fromGraalNative(void *graalNative) noexcept;

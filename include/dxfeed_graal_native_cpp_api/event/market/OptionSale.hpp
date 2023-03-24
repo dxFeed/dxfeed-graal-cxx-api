@@ -17,6 +17,6 @@ struct EventMapper;
 
 // TODO: implement
 
-class OptionSale {};
+class OptionSale final {};
 
 } // namespace dxfcpp

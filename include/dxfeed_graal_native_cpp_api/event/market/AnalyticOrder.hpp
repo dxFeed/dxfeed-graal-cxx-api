@@ -17,6 +17,6 @@ struct EventMapper;
 
 // TODO: implement
 
-class AnalyticOrder {};
+class AnalyticOrder final {};
 
 } // namespace dxfcpp

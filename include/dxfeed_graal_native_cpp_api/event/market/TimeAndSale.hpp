@@ -10,13 +10,17 @@
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
-
+#include "../IndexedEventSource.hpp"
+#include "../TimeSeriesEvent.hpp"
+#include "../market/MarketEvent.hpp"
 namespace dxfcpp {
 
 struct EventMapper;
 
 // TODO: implement
 
-class TimeAndSale {};
+class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
+
+};
 
 } // namespace dxfcpp
