@@ -1255,6 +1255,40 @@ std::shared_ptr<Trade> Trade::fromGraalNative(void *graalNative) noexcept {
     }
 }
 
+const EventTypeEnum &TradeETH::Type = EventTypeEnum::TRADE_ETH;
+
+std::shared_ptr<TradeETH> TradeETH::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_TRADE_ETH) {
+        return {};
+    }
+
+    try {
+        auto graalTradeEth = bit_cast<dxfg_trade_eth_t *>(graalNative);
+        auto tradeEth =
+            std::make_shared<TradeETH>(dxfcpp::toString(graalTradeEth->trade_base.market_event.event_symbol));
+
+        tradeEth->setEventTime(graalTradeEth->trade_base.market_event.event_time);
+        tradeEth->data_ = {
+            graalTradeEth->trade_base.time_sequence, graalTradeEth->trade_base.time_nano_part,
+            graalTradeEth->trade_base.exchange_code, graalTradeEth->trade_base.price,
+            graalTradeEth->trade_base.change,        graalTradeEth->trade_base.size,
+            graalTradeEth->trade_base.day_id,        graalTradeEth->trade_base.day_volume,
+            graalTradeEth->trade_base.day_turnover,  graalTradeEth->trade_base.flags,
+        };
+
+        return tradeEth;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) {
     auto list = bit_cast<dxfg_event_type_list *>(graalNativeList);
 

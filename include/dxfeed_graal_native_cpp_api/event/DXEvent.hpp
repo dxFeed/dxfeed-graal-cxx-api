@@ -33,3 +33,4 @@
 #include "option/TheoPrice.hpp"
 #include "option/Underlying.hpp"
 #include "market/Trade.hpp"
+#include "market/TradeETH.hpp"

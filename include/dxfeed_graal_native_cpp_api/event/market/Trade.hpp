@@ -18,7 +18,7 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: implement
+// TODO: doc
 
 class Trade final : public TradeBase {
     friend struct EventMapper;
