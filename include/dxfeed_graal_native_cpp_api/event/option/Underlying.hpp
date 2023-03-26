@@ -28,7 +28,7 @@ class Underlying final: public MarketEvent, public TimeSeriesEvent, public Lasti
      *
      * @see ::setSequence()
      */
-    static constexpr std::int32_t MAX_SEQUENCE = (1 << 22) - 1;
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;

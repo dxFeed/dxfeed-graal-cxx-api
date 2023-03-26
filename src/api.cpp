@@ -1289,6 +1289,71 @@ std::shared_ptr<TradeETH> TradeETH::fromGraalNative(void *graalNative) noexcept 
     }
 }
 
+const Side Side::UNDEFINED{0, "UNDEFINED"};
+const Side Side::BUY{1, "BUY"};
+const Side Side::SELL{2, "SELL"};
+
+template <>
+const std::unordered_map<Side::CodeType, std::reference_wrapper<const Side>> Side::ParentType::ALL{
+    {Side::UNDEFINED.getCode(), std::cref(Side::UNDEFINED)},
+    {Side::BUY.getCode(), std::cref(Side::BUY)},
+    {Side::SELL.getCode(), std::cref(Side::SELL)},
+};
+
+const TimeAndSaleType TimeAndSaleType::NEW{0, "NEW"};
+const TimeAndSaleType TimeAndSaleType::CORRECTION{1, "CORRECTION"};
+const TimeAndSaleType TimeAndSaleType::CANCEL{2, "CANCEL"};
+
+template <>
+const std::unordered_map<TimeAndSaleType::CodeType, std::reference_wrapper<const TimeAndSaleType>>
+    TimeAndSaleType::ParentType::ALL{
+        {TimeAndSaleType::NEW.getCode(), std::cref(TimeAndSaleType::NEW)},
+        {TimeAndSaleType::CORRECTION.getCode(), std::cref(TimeAndSaleType::CORRECTION)},
+        {TimeAndSaleType::CANCEL.getCode(), std::cref(TimeAndSaleType::CANCEL)},
+    };
+
+void TimeAndSale::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
+
+const EventTypeEnum &TimeAndSale::Type = EventTypeEnum::TIME_AND_SALE;
+
+std::shared_ptr<TimeAndSale> TimeAndSale::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_TIME_AND_SALE) {
+        return {};
+    }
+
+    try {
+        auto graalTimeAndSale = bit_cast<dxfg_time_and_sale_t *>(graalNative);
+        auto timeAndSale = std::make_shared<TimeAndSale>(dxfcpp::toString(graalTimeAndSale->market_event.event_symbol));
+
+        timeAndSale->setEventTime(graalTimeAndSale->market_event.event_time);
+        timeAndSale->data_ = {
+            graalTimeAndSale->event_flags,
+            graalTimeAndSale->index,
+            graalTimeAndSale->time_nano_part,
+            graalTimeAndSale->exchange_code,
+            graalTimeAndSale->price,
+            graalTimeAndSale->size,
+            graalTimeAndSale->bid_price,
+            graalTimeAndSale->ask_price,
+            dxfcpp::toString(graalTimeAndSale->exchange_sale_conditions),
+            graalTimeAndSale->flags,
+            dxfcpp::toString(graalTimeAndSale->buyer),
+            dxfcpp::toString(graalTimeAndSale->seller),
+        };
+
+        return timeAndSale;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) {
     auto list = bit_cast<dxfg_event_type_list *>(graalNativeList);
 
@@ -1336,12 +1401,16 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
             break;
         case DXFG_EVENT_TRADE_ETH:
+            result[i] = TradeETH::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_CONFIGURATION:
             break;
         case DXFG_EVENT_MESSAGE:
             break;
         case DXFG_EVENT_TIME_AND_SALE:
+            result[i] = TimeAndSale::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_ORDER_BASE:
             break;

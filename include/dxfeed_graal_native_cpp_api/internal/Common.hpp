@@ -352,6 +352,8 @@ static std::string encodeChar(std::int16_t c) {
     return fmt::format("\\u{:04x}", c);
 }
 
+static std::string encodeChar(char c) { return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c))); }
+
 } // namespace string_util
 
 namespace math_util {

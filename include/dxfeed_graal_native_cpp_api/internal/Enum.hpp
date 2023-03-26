@@ -23,8 +23,13 @@ template <typename Child, typename Code> struct Enum {
 
   protected:
     template <Integral OtherCodeType>
+    static constexpr CodeType convertToInnerCodeType(OtherCodeType code) noexcept {
+        return static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code));
+    }
+
+    template <Integral OtherCodeType>
     Enum(OtherCodeType code, std::string name) noexcept
-        : code_{static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code))}, name_{std::move(name)} {}
+        : code_{convertToInnerCodeType(code)}, name_{std::move(name)} {}
 
     static const std::unordered_map<CodeType, std::reference_wrapper<const Child>> ALL;
 
@@ -85,7 +90,7 @@ template <typename Child, typename Code> struct Enum {
      * @return enum element.
      */
     template <Integral OtherCodeType> inline static const Child &valueOf(OtherCodeType code) {
-        if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
+        if (auto found = ALL.find(convertToInnerCodeType(code)); found != ALL.end()) {
             return found->second;
         }
 

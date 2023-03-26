@@ -33,7 +33,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      *
      * @see ::setSequence()
      */
-    static constexpr std::int32_t MAX_SEQUENCE = (1 << 22) - 1;
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
 
     struct Data {
@@ -291,8 +291,8 @@ class Quote final : public MarketEvent, public LastingEvent {
             "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
             MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
             formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(), formatTimeStamp(getBidTime()),
-            string_util::encodeChar(data_.bidExchangeCode), getBidPrice(), getBidSize(), formatTimeStamp(getAskTime()),
-            string_util::encodeChar(data_.askExchangeCode), getAskPrice(), getAskSize());
+            string_util::encodeChar(getBidExchangeCode()), getBidPrice(), getBidSize(), formatTimeStamp(getAskTime()),
+            string_util::encodeChar(getAskExchangeCode()), getAskPrice(), getAskSize());
     }
 
     template <typename OStream> friend OStream &operator<<(OStream &os, const Quote &e) { return os << e.toString(); }

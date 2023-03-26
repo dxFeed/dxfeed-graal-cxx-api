@@ -34,3 +34,6 @@
 #include "option/Underlying.hpp"
 #include "market/Trade.hpp"
 #include "market/TradeETH.hpp"
+#include "market/Side.hpp"
+#include "market/TimeAndSaleType.hpp"
+#include "market/TimeAndSale.hpp"
