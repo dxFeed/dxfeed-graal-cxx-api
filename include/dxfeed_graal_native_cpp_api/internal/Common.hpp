@@ -384,6 +384,8 @@ template <Integral T> constexpr static T abs(T a) { return a < 0 ? -a : a; }
 
 namespace day_util {
 
+static std::int32_t DAY_OF_YEAR[] = {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+
 /**
  * Returns yyyymmdd integer in Gregorian calendar for a specified day identifier.
  * The day identifier is defined as the number of days since Unix epoch of January 1, 1970.
@@ -415,6 +417,22 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
     std::int32_t yyyymmdd = math_util::abs(yyyy) * 10000 + mm * 100 + dd;
 
     return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
+}
+
+constexpr static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
+    // TODO: error handling
+    if (month < 1 || month > 12) {
+        return -1;
+    }
+
+    std::int32_t dayOfYear = DAY_OF_YEAR[month] + day - 1;
+
+    if (month > 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+        dayOfYear++;
+    }
+
+    return year * 365 + math_util::div(year - 1, 4) - math_util::div(year - 1, 100) + math_util::div(year - 1, 400) +
+           dayOfYear - 719527;
 }
 
 } // namespace day_util

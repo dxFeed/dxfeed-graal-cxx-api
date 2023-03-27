@@ -1354,6 +1354,38 @@ std::shared_ptr<TimeAndSale> TimeAndSale::fromGraalNative(void *graalNative) noe
     }
 }
 
+const EventTypeEnum &Series::Type = EventTypeEnum::SERIES;
+
+std::shared_ptr<Series> Series::fromGraalNative(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_SERIES) {
+        return {};
+    }
+
+    try {
+        auto graalSeries = bit_cast<dxfg_series_t *>(graalNative);
+        auto series = std::make_shared<Series>(dxfcpp::toString(graalSeries->market_event.event_symbol));
+
+        series->setEventTime(graalSeries->market_event.event_time);
+        series->data_ = {
+            graalSeries->event_flags, graalSeries->index,          graalSeries->time_sequence,
+            graalSeries->expiration,  graalSeries->volatility,     graalSeries->call_volume,
+            graalSeries->put_volume,  graalSeries->put_call_ratio, graalSeries->forward_price,
+            graalSeries->dividend,    graalSeries->interest,
+        };
+
+        return series;
+    } catch (...) {
+        // TODO: error handling
+        return {};
+    }
+}
+
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) {
     auto list = bit_cast<dxfg_event_type_list *>(graalNativeList);
 
@@ -1421,6 +1453,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
         case DXFG_EVENT_SPREAD_ORDER:
             break;
         case DXFG_EVENT_SERIES:
+            result[i] = Series::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_OPTION_SALE:
             break;

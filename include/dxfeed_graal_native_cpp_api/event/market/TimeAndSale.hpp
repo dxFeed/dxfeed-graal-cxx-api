@@ -20,8 +20,7 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: implement
-
+// TODO: doc
 class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
     friend struct EventMapper;
 

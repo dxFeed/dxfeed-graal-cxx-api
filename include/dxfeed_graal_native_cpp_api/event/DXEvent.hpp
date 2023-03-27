@@ -37,3 +37,4 @@
 #include "market/Side.hpp"
 #include "market/TimeAndSaleType.hpp"
 #include "market/TimeAndSale.hpp"
+#include "option/Series.hpp"
