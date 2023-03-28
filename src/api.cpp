@@ -1225,68 +1225,15 @@ void TradeBase::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to
 const EventTypeEnum &Trade::Type = EventTypeEnum::TRADE;
 
 std::shared_ptr<Trade> Trade::fromGraalNative(void *graalNative) noexcept {
-    if (!graalNative) {
-        return {};
-    }
-
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_TRADE) {
-        return {};
-    }
-
-    try {
-        auto graalTrade = bit_cast<dxfg_trade_t *>(graalNative);
-        auto trade = std::make_shared<Trade>(dxfcpp::toString(graalTrade->trade_base.market_event.event_symbol));
-
-        trade->setEventTime(graalTrade->trade_base.market_event.event_time);
-        trade->data_ = {
-            graalTrade->trade_base.time_sequence, graalTrade->trade_base.time_nano_part,
-            graalTrade->trade_base.exchange_code, graalTrade->trade_base.price,
-            graalTrade->trade_base.change,        graalTrade->trade_base.size,
-            graalTrade->trade_base.day_id,        graalTrade->trade_base.day_volume,
-            graalTrade->trade_base.day_turnover,  graalTrade->trade_base.flags,
-        };
-
-        return trade;
-    } catch (...) {
-        // TODO: error handling
-        return {};
-    }
+    return TradeBase::fromGraalNative<Trade, dxfg_event_type_t, dxfg_trade_t, dxfg_event_clazz_t::DXFG_EVENT_TRADE>(
+        graalNative);
 }
 
 const EventTypeEnum &TradeETH::Type = EventTypeEnum::TRADE_ETH;
 
 std::shared_ptr<TradeETH> TradeETH::fromGraalNative(void *graalNative) noexcept {
-    if (!graalNative) {
-        return {};
-    }
-
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_TRADE_ETH) {
-        return {};
-    }
-
-    try {
-        auto graalTradeEth = bit_cast<dxfg_trade_eth_t *>(graalNative);
-        auto tradeEth =
-            std::make_shared<TradeETH>(dxfcpp::toString(graalTradeEth->trade_base.market_event.event_symbol));
-
-        tradeEth->setEventTime(graalTradeEth->trade_base.market_event.event_time);
-        tradeEth->data_ = {
-            graalTradeEth->trade_base.time_sequence, graalTradeEth->trade_base.time_nano_part,
-            graalTradeEth->trade_base.exchange_code, graalTradeEth->trade_base.price,
-            graalTradeEth->trade_base.change,        graalTradeEth->trade_base.size,
-            graalTradeEth->trade_base.day_id,        graalTradeEth->trade_base.day_volume,
-            graalTradeEth->trade_base.day_turnover,  graalTradeEth->trade_base.flags,
-        };
-
-        return tradeEth;
-    } catch (...) {
-        // TODO: error handling
-        return {};
-    }
+    return TradeBase::fromGraalNative<TradeETH, dxfg_event_type_t, dxfg_trade_eth_t,
+                                      dxfg_event_clazz_t::DXFG_EVENT_TRADE_ETH>(graalNative);
 }
 
 const Side Side::UNDEFINED{0, "UNDEFINED"};

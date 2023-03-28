@@ -33,7 +33,6 @@ class TradeBase : public MarketEvent, public LastingEvent {
     friend struct EventMapper;
 
   protected:
-
     /**
      * Maximum allowed sequence value.
      *
@@ -72,6 +71,39 @@ class TradeBase : public MarketEvent, public LastingEvent {
     };
 
     Data data_{};
+
+    template <typename ChildType, typename GraalNativeEventType, typename ChildGraalNativeEventType, auto clazz>
+    static std::shared_ptr<ChildType> fromGraalNative(void *graalNative) noexcept
+        requires(std::is_base_of_v<TradeBase, ChildType>)
+    {
+        if (!graalNative) {
+            return {};
+        }
+
+        if (bit_cast<GraalNativeEventType *>(graalNative)->clazz != clazz) {
+            return {};
+        }
+
+        try {
+            auto graalTrade = bit_cast<ChildGraalNativeEventType *>(graalNative);
+            auto trade =
+                std::make_shared<ChildType>(dxfcpp::toString(graalTrade->trade_base.market_event.event_symbol));
+
+            trade->setEventTime(graalTrade->trade_base.market_event.event_time);
+            trade->data_ = {
+                graalTrade->trade_base.time_sequence, graalTrade->trade_base.time_nano_part,
+                graalTrade->trade_base.exchange_code, graalTrade->trade_base.price,
+                graalTrade->trade_base.change,        graalTrade->trade_base.size,
+                graalTrade->trade_base.day_id,        graalTrade->trade_base.day_volume,
+                graalTrade->trade_base.day_turnover,  graalTrade->trade_base.flags,
+            };
+
+            return trade;
+        } catch (...) {
+            // TODO: error handling
+            return {};
+        }
+    }
 
   public:
     /// Creates new trade event with default values.
