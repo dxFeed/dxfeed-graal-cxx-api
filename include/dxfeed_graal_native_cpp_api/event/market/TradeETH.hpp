@@ -28,11 +28,11 @@ class TradeETH final : public TradeBase {
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new trade with default values.
+    /// Creates new trade event with default values.
     TradeETH() noexcept = default;
 
     /**
-     * Creates new trade with the specified event symbol.
+     * Creates new trade event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */

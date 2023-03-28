@@ -19,10 +19,12 @@
 namespace dxfcpp {
 
 struct EventMapper;
+class OptionSale;
 
 // TODO: doc
 class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
     friend struct EventMapper;
+    friend class OptionSale;
 
     /**
      * Maximum allowed sequence value.
@@ -58,12 +60,15 @@ class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
     static constexpr std::uint32_t TYPE_MASK = 3U;
     static constexpr std::uint32_t TYPE_SHIFT = 0;
 
-    /*
+    /**
      * EventFlags property has several significant bits that are packed into an integer in the following way:
+     * <br>
+     * <pre><tt>
      *    31..7    6    5    4    3    2    1    0
      * +--------+----+----+----+----+----+----+----+
      * |        | SM |    | SS | SE | SB | RE | TX |
      * +--------+----+----+----+----+----+----+----+
+     * </tt></pre>
      */
 
     struct Data {
@@ -88,11 +93,11 @@ class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new tns with default values.
+    /// Creates new time and sale event with default values.
     TimeAndSale() noexcept = default;
 
     /**
-     * Creates new tns with the specified event symbol.
+     * Creates new time and sale event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
@@ -197,6 +202,7 @@ class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
+     *
      * @param sequence the sequence.
      * @see ::getSequence()
      */
@@ -243,16 +249,16 @@ class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
     void setPrice(double price) { data_.price = price; }
 
     /**
-     * Returns size of this time and sale event as floating number with fractions.
+     * Returns size of this time and sale event.
      *
-     * @return size of this time and sale event as floating number with fractions.
+     * @return size of this time and sale event.
      */
     double getSize() const { return data_.size; }
 
     /**
-     * Changes size of this time and sale event as floating number with fractions.
+     * Changes size of this time and sale event.
      *
-     * @param size size of this time and sale event as floating number with fractions.
+     * @param size size of this time and sale event.
      */
     void setSize(double size) { data_.size = size; }
 

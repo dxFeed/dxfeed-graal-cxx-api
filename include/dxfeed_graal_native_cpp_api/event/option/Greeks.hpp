@@ -54,12 +54,15 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
 
-    /*
+    /**
      * EventFlags property has several significant bits that are packed into an integer in the following way:
+     * <br>
+     * <pre><tt>
      *    31..7    6    5    4    3    2    1    0
-     * +---------+----+----+----+----+----+----+----+
-     * |         | SM |    | SS | SE | SB | RE | TX |
-     * +---------+----+----+----+----+----+----+----+
+     * +--------+----+----+----+----+----+----+----+
+     * |        | SM |    | SS | SE | SB | RE | TX |
+     * +--------+----+----+----+----+----+----+----+
+     * </tt></pre>
      */
 
     struct Data {
@@ -81,11 +84,11 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new greeks with default values.
+    /// Creates new greeks event with default values.
     Greeks() noexcept = default;
 
     /**
-     * Creates new greeks with the specified event symbol.
+     * Creates new greeks event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */

@@ -61,11 +61,11 @@ class Summary final : public MarketEvent, public LastingEvent {
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new summary with default values.
+    /// Creates new summary event with default values.
     Summary() noexcept = default;
 
     /**
-     * Creates new summary with the specified event symbol.
+     * Creates new summary event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */

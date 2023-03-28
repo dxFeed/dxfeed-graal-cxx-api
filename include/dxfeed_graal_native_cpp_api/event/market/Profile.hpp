@@ -69,11 +69,11 @@ class Profile final : public MarketEvent, public LastingEvent {
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new profile with default values.
+    /// Creates new profile event with default values.
     Profile() noexcept = default;
 
     /**
-     * Creates new profile with the specified event symbol.
+     * Creates new profile event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */

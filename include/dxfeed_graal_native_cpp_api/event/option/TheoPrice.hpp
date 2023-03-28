@@ -33,12 +33,15 @@ class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public Lasti
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
 
-    /*
+    /**
      * EventFlags property has several significant bits that are packed into an integer in the following way:
+     * <br>
+     * <pre><tt>
      *    31..7    6    5    4    3    2    1    0
-     * +---------+----+----+----+----+----+----+----+
-     * |         | SM |    | SS | SE | SB | RE | TX |
-     * +---------+----+----+----+----+----+----+----+
+     * +--------+----+----+----+----+----+----+----+
+     * |        | SM |    | SS | SE | SB | RE | TX |
+     * +--------+----+----+----+----+----+----+----+
+     * </tt></pre>
      */
 
     struct Data {
@@ -59,11 +62,11 @@ class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public Lasti
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new theoprice with default values.
+    /// Creates new theoprice event with default values.
     TheoPrice() noexcept = default;
 
     /**
-     * Creates new theoprice with the specified event symbol.
+     * Creates new theoprice event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */

@@ -18,8 +18,7 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: implement
-
+// TODO: doc
 class Series final : public MarketEvent, public IndexedEvent {
     friend struct EventMapper;
 
@@ -33,12 +32,15 @@ class Series final : public MarketEvent, public IndexedEvent {
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
 
-    /*
+    /**
      * EventFlags property has several significant bits that are packed into an integer in the following way:
+     * <br>
+     * <pre><tt>
      *    31..7    6    5    4    3    2    1    0
-     * +---------+----+----+----+----+----+----+----+
-     * |         | SM |    | SS | SE | SB | RE | TX |
-     * +---------+----+----+----+----+----+----+----+
+     * +--------+----+----+----+----+----+----+----+
+     * |        | SM |    | SS | SE | SB | RE | TX |
+     * +--------+----+----+----+----+----+----+----+
+     * </tt></pre>
      */
 
     struct Data {
@@ -62,11 +64,11 @@ class Series final : public MarketEvent, public IndexedEvent {
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new series with default values.
+    /// Creates new series event with default values.
     Series() noexcept = default;
 
     /**
-     * Creates new series with the specified event symbol.
+     * Creates new series event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
@@ -105,14 +107,14 @@ class Series final : public MarketEvent, public IndexedEvent {
     void setIndex(std::int64_t index) override { data_.index = index; }
 
     /**
-     * Returns time and sequence of this series event packaged into single long value.
+     * Returns time and sequence of this event packaged into single long value.
      *
-     * @return time and sequence of this series event.
+     * @return time and sequence of this event.
      */
     std::int64_t getTimeSequence() const { return data_.timeSequence; }
 
     /**
-     * Changes time and sequence of this series event.
+     * Changes time and sequence of this event.
      * <b>Do not use this method directly.</b>
      * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
      *

@@ -38,3 +38,4 @@
 #include "market/TimeAndSaleType.hpp"
 #include "market/TimeAndSale.hpp"
 #include "option/Series.hpp"
+#include "market/OptionSale.hpp"

@@ -62,11 +62,11 @@ class Quote final : public MarketEvent, public LastingEvent {
   public:
     static const EventTypeEnum &Type;
 
-    /// Creates new quote with default values.
+    /// Creates new quote event with default values.
     Quote() noexcept = default;
 
     /**
-     * Creates new quote with the specified event symbol.
+     * Creates new quote event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */

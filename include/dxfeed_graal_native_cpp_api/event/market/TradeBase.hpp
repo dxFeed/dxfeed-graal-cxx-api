@@ -74,11 +74,11 @@ class TradeBase : public MarketEvent, public LastingEvent {
     Data data_{};
 
   public:
-    /// Creates new trade with default values.
+    /// Creates new trade event with default values.
     TradeBase() noexcept = default;
 
     /**
-     * Creates new trade with the specified event symbol.
+     * Creates new trade event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
