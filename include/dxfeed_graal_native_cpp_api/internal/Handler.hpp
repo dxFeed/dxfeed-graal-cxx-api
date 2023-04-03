@@ -15,25 +15,35 @@ namespace dxfcpp {
 /**
  * A thread-safe class that allows to asynchronously notify listeners with a given signature.
  * Listeners can be any callable entities.
- * This class executes incoming events sequentially using a simple fixed-length circular buffer implementation.
+ * Listeners are placed in a future. Within one batch, listeners will be called sequentially. Futures are placed in
+ * a circular buffer and executed asynchronously.
+ *
+ * If you need synchronous execution of listeners, but it was possible to execute them in another thread, then limit
+ * the buffer size to one.
  *
  * @tparam Signature The arguments "signature" (example: `void(int, int)`)
  */
-template <typename Signature> struct Handler;
+template<typename Signature>
+struct Handler;
 
 /**
  * A thread-safe class that allows to asynchronously notify listeners with a given signature.
  * Listeners can be any callable entities.
- * This class executes incoming events sequentially using a simple fixed-length circular buffer implementation.
+ * Listeners are placed in a future. Within one batch, listeners will be called sequentially. Futures are placed in
+ * a circular buffer and executed asynchronously.
+ *
+ * If you need synchronous execution of listeners, but it was possible to execute them in another thread, then limit
+ * the buffer size to one.
  *
  * @tparam ArgTypes The arguments "signature" (example: `void(int, int)`)
  */
-template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
+template<typename... ArgTypes>
+struct Handler<void(ArgTypes...)> final {
     /// The listener type
     using ListenerType = std::function<void(ArgTypes...)>;
 
   private:
-    static const unsigned MAIN_FUTURES_DEFAULT_SIZE = 1024;
+    static constexpr unsigned MAIN_FUTURES_DEFAULT_SIZE = 1024;
 
     std::recursive_mutex listenersMutex_{};
     std::unordered_map<std::size_t, ListenerType> listeners_{};
@@ -43,23 +53,23 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
     std::recursive_mutex mainFuturesMutex_{};
     std::vector<std::shared_future<void>> mainFutures_{};
     std::size_t mainFuturesCurrentIndex_{};
-    std::size_t mainFuturesSize_{};
+    const std::size_t mainFuturesSize_{};
 
-    std::shared_future<void> handleImpl(ArgTypes &&...args) {
+    std::shared_future<void> handleImpl(ArgTypes...args) {
         return std::async(
             std::launch::async,
-            [this](ArgTypes &&...args) {
+            [this](ArgTypes...args) {
                 std::lock_guard guard{listenersMutex_};
 
-                for (auto &listener : listeners_) {
+                for (auto &listener: listeners_) {
                     listener.second(args...);
                 }
 
-                for (auto &listener : lowPriorityListeners_) {
+                for (auto &listener: lowPriorityListeners_) {
                     listener.second(args...);
                 }
             },
-            std::forward<ArgTypes>(args)...);
+            args...);
     }
 
   public:
@@ -78,8 +88,8 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      *
      * @param args The listeners arguments
      */
-    void handle(ArgTypes &&...args) {
-        auto f = handleImpl(std::forward<ArgTypes>(args)...);
+    void handle(ArgTypes...args) {
+        auto f = handleImpl(args...);
 
         {
             std::lock_guard guard{mainFuturesMutex_};
@@ -100,7 +110,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      *
      * @param args The listeners arguments
      */
-    void operator()(ArgTypes &&...args) { return handle(std::forward<ArgTypes>(args)...); }
+    void operator()(ArgTypes...args) { return handle(args...); }
 
     /**
      * Adds the listener to "main" group

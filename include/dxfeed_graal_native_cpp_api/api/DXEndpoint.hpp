@@ -460,6 +460,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     }
 
   private:
+    static inline std::mutex MTX{};
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
     mutable std::recursive_mutex mtx_{};
@@ -538,6 +539,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         if constexpr (isDebug) {
             debug("DXEndpoint::getInstance(role = {})", roleToString(role));
         }
+
+        std::lock_guard lock(MTX);
 
         if (INSTANCES.contains(role)) {
             return INSTANCES[role];

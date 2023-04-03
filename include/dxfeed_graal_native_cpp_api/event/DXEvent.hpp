@@ -39,3 +39,5 @@
 #include "market/TimeAndSale.hpp"
 #include "option/Series.hpp"
 #include "market/OptionSale.hpp"
+#include "market/OrderSource.hpp"
+#include "market/OrderBase.hpp"
