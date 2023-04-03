@@ -855,6 +855,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          * @return `this` endpoint builder.
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
+            //TODO: check invalid utf-8
             if constexpr (isDebug) {
                 debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.toString(), name);
             }

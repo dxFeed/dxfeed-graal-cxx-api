@@ -60,7 +60,12 @@ endif ()
 find_package(utf8cpp)
 find_package(fmt)
 
-add_library(dxFeedNativeAPI src/api.cpp)
+set(dxFeedNativeAPIInternalSources src/internal/CEntryPointErrors.cpp src/internal/Isolate.cpp src/internal/Common.cpp)
+set(dxFeedNativeAPIAPISources src/api/DXEndpoint.cpp src/api/DXFeed.cpp src/api/DXFeedSubscription.cpp)
+set(dxFeedNativeAPISystemSources src/system/System.cpp)
+set(dxFeedNativeAPIEventSources src/event/EventTypeEnum.cpp src/event/IndexedEventSource.cpp src/event/EventFlag.cpp src/event/IndexedEvent.cpp)
+add_library(dxFeedNativeAPI ${dxFeedNativeAPIInternalSources} ${dxFeedNativeAPIAPISources} ${dxFeedNativeAPISystemSources} ${dxFeedNativeAPIEventSources} src/api.cpp)
+
 target_include_directories(dxFeedNativeAPI PUBLIC include)
 target_link_libraries(dxFeedNativeAPI PUBLIC DxFeedGraalNativeApi utf8cpp::utf8cpp fmt::fmt)
 

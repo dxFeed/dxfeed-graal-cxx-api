@@ -48,7 +48,10 @@ struct MarketEvent : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const std::string &eventSymbol) override { eventSymbol_ = eventSymbol; }
+    void setEventSymbol(const std::string &eventSymbol) override {
+        //TODO: check invalid utf-8
+        eventSymbol_ = eventSymbol;
+    }
 
     ///
     std::int64_t getEventTime() const override { return eventTime_; }
