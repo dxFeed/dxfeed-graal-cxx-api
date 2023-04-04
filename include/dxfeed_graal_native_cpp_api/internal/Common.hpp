@@ -732,12 +732,10 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
     }
 }
 
-static std::string toString(const char *chars) {
-    if (chars == nullptr) {
-        return "";
-    }
+std::string toString(const char *chars);
 
-    return chars;
-}
+char utf16to8(std::int16_t in);
+
+std::int16_t utf8to16(char in);
 
 } // namespace dxfcpp

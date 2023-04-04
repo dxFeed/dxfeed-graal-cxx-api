@@ -123,4 +123,40 @@ EventClassList::~EventClassList() noexcept {}
 
 }
 
+std::string toString(const char *chars) {
+    if (chars == nullptr) {
+        return "";
+    }
+
+    return chars;
+}
+
+char utf16to8(std::int16_t in) {
+    try {
+        std::string out{};
+        auto utf16in = {in};
+
+        utf8::utf16to8(std::begin(utf16in), std::end(utf16in), std::back_inserter(out));
+
+        return out.empty() ? char{} : out[0];
+    } catch (...) {
+        // TODO: error handling
+        return char{};
+    }
+}
+
+std::int16_t utf8to16(char in) {
+    try {
+        std::u16string out{};
+        auto utf8in = {in};
+
+        utf8::utf8to16(std::begin(utf8in), std::end(utf8in), std::back_inserter(out));
+
+        return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
+    } catch (...) {
+        // TODO: error handling
+        return std::int16_t{};
+    }
+}
+
 }

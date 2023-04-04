@@ -60,11 +60,63 @@ endif ()
 find_package(utf8cpp)
 find_package(fmt)
 
-set(dxFeedNativeAPIInternalSources src/internal/CEntryPointErrors.cpp src/internal/Isolate.cpp src/internal/Common.cpp)
-set(dxFeedNativeAPIAPISources src/api/DXEndpoint.cpp src/api/DXFeed.cpp src/api/DXFeedSubscription.cpp)
-set(dxFeedNativeAPISystemSources src/system/System.cpp)
-set(dxFeedNativeAPIEventSources src/event/EventTypeEnum.cpp src/event/IndexedEventSource.cpp src/event/EventFlag.cpp src/event/IndexedEvent.cpp)
-add_library(dxFeedNativeAPI ${dxFeedNativeAPIInternalSources} ${dxFeedNativeAPIAPISources} ${dxFeedNativeAPISystemSources} ${dxFeedNativeAPIEventSources} src/api.cpp)
+set(dxFeedNativeAPIInternalSources
+        src/internal/CEntryPointErrors.cpp
+        src/internal/Isolate.cpp
+        src/internal/Common.cpp
+        )
+
+set(dxFeedNativeAPIAPISources
+        src/api/DXEndpoint.cpp
+        src/api/DXFeed.cpp
+        src/api/DXFeedSubscription.cpp
+        )
+
+set(dxFeedNativeAPISystemSources
+        src/system/System.cpp
+        )
+
+set(dxFeedNativeAPIEventSources
+        src/event/EventTypeEnum.cpp
+        src/event/IndexedEventSource.cpp
+        src/event/EventFlag.cpp
+        src/event/IndexedEvent.cpp
+        src/event/EventMapper.cpp
+        )
+
+set(dxFeedNativeAPIEventMarketSources
+        src/event/market/Quote.cpp
+        src/event/market/ShortSaleRestriction.cpp
+        src/event/market/TradingStatus.cpp
+        src/event/market/Profile.cpp
+        src/event/market/PriceType.cpp
+        src/event/market/Summary.cpp
+        src/event/market/Direction.cpp
+        src/event/market/TradeBase.cpp
+        src/event/market/Trade.cpp
+        src/event/market/TradeETH.cpp
+        src/event/market/Side.cpp
+        src/event/market/TimeAndSaleType.cpp
+        src/event/market/TimeAndSale.cpp
+        src/event/market/OptionSale.cpp
+        )
+
+set(dxFeedNativeAPIEventOptionSources
+        src/event/option/Greeks.cpp
+        src/event/option/Underlying.cpp
+        src/event/option/TheoPrice.cpp
+        src/event/option/Series.cpp
+        )
+
+add_library(dxFeedNativeAPI
+        ${dxFeedNativeAPIInternalSources}
+        ${dxFeedNativeAPIAPISources}
+        ${dxFeedNativeAPISystemSources}
+        ${dxFeedNativeAPIEventSources}
+        ${dxFeedNativeAPIEventMarketSources}
+        ${dxFeedNativeAPIEventOptionSources}
+        src/api.cpp
+        )
 
 target_include_directories(dxFeedNativeAPI PUBLIC include)
 target_link_libraries(dxFeedNativeAPI PUBLIC DxFeedGraalNativeApi utf8cpp::utf8cpp fmt::fmt)
