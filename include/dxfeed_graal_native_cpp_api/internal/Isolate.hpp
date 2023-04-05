@@ -15,6 +15,10 @@
 #include <thread>
 #include <variant>
 
+#ifdef NO_ERROR
+#    undef NO_ERROR
+#endif
+
 namespace dxfcpp {
 using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
 using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;

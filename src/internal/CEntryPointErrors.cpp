@@ -5,6 +5,10 @@
 
 #include <utility>
 
+#ifdef NO_ERROR
+#    undef NO_ERROR
+#endif
+
 namespace dxfcpp {
 
 const CEntryPointErrors CEntryPointErrors::NO_ERROR(0, "No error occurred.");

@@ -9,6 +9,10 @@
 #include <string>
 #include <utf8.h>
 
+#ifdef NO_ERROR
+#    undef NO_ERROR
+#endif
+
 namespace dxfcpp {
 
 bool System::setProperty(const std::string &key, const std::string &value) {

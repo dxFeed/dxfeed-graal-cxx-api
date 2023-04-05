@@ -10,6 +10,10 @@
 
 #include "Common.hpp"
 
+#ifdef NO_ERROR
+#    undef NO_ERROR
+#endif
+
 namespace dxfcpp {
 
 /**
