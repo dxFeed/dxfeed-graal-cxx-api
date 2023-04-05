@@ -1,8 +1,8 @@
 // Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <catch2/benchmark/catch_benchmark_all.hpp>
-#include <catch2/catch_test_macros.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest.h>
 
 #include "dxfeed_graal_native_c_api/api.h"
 #include "dxfeed_graal_native_cpp_api/api.hpp"
@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
-TEST_CASE("System properties can be set, as well as get their values", "[dxfc_system]") {
+TEST_CASE("System properties can be set, as well as get their values") {
     REQUIRE(dxfc_system_set_property("PropertyName", "123") == DXFC_EC_SUCCESS);
 
     std::vector<char> buffer(5);
@@ -18,10 +18,10 @@ TEST_CASE("System properties can be set, as well as get their values", "[dxfc_sy
     auto result = dxfc_system_get_property("PropertyName", buffer.data(), buffer.size());
 
     REQUIRE(result == DXFC_EC_SUCCESS);
-    REQUIRE(std::string(buffer.data()) == "123");
+    CHECK(std::string(buffer.data()) == "123");
 }
 
-TEST_CASE("System properties can be set, as well as get their values (Unicode)", "[dxfc_system]") {
+TEST_CASE("System properties can be set, as well as get their values (Unicode)") {
     REQUIRE(dxfc_system_set_property("PropertyName", "Привет") == DXFC_EC_SUCCESS);
 
     std::vector<char> buffer(1024);
@@ -29,10 +29,10 @@ TEST_CASE("System properties can be set, as well as get their values (Unicode)",
     auto result = dxfc_system_get_property("PropertyName", buffer.data(), buffer.size());
 
     REQUIRE(result == DXFC_EC_SUCCESS);
-    REQUIRE(std::string(buffer.data()) == "Привет");
+    CHECK(std::string(buffer.data()) == "Привет");
 }
 
-TEST_CASE("If a system property does not fit in the buffer, then it must be truncated.", "[dxfc_system]") {
+TEST_CASE("If a system property does not fit in the buffer, then it must be truncated.") {
     REQUIRE(dxfc_system_set_property("PropertyName", "123123123123") == DXFC_EC_SUCCESS);
 
     std::vector<char> buffer(5);
@@ -40,10 +40,10 @@ TEST_CASE("If a system property does not fit in the buffer, then it must be trun
     auto result = dxfc_system_get_property("PropertyName", buffer.data(), buffer.size());
 
     REQUIRE(result == DXFC_EC_SUCCESS);
-    REQUIRE(std::string(buffer.data()) == "1231");
+    CHECK(std::string(buffer.data()) == "1231");
 }
 
-TEST_CASE("If a system property does not fit in the buffer, then it must be truncated (Unicode).", "[dxfc_system]") {
+TEST_CASE("If a system property does not fit in the buffer, then it must be truncated (Unicode).") {
     REQUIRE(dxfc_system_set_property("PropertyName", "Привет") == DXFC_EC_SUCCESS);
 
     std::vector<char> buffer(5);
@@ -51,27 +51,27 @@ TEST_CASE("If a system property does not fit in the buffer, then it must be trun
     auto result = dxfc_system_get_property("PropertyName", buffer.data(), buffer.size());
 
     REQUIRE(result == DXFC_EC_SUCCESS);
-    REQUIRE(std::string(buffer.data()) == "Пр");
+    CHECK(std::string(buffer.data()) == "Пр");
 }
 
-TEST_CASE("If the system property does not exist, then an empty string should be returned.", "[dxfc_system]") {
+TEST_CASE("If the system property does not exist, then an empty string should be returned.") {
     std::vector<char> buffer(5);
 
     auto result = dxfc_system_get_property("UnknownPropertyName", buffer.data(), buffer.size());
 
     REQUIRE(result == DXFC_EC_SUCCESS);
-    REQUIRE(std::string(buffer.data()).empty());
+    CHECK(std::string(buffer.data()).empty());
 }
 
-TEST_CASE("Buffer pointer is NULL and buffer size is 0 - OK", "[dxfc_system]") {
+TEST_CASE("Buffer pointer is NULL and buffer size is 0 - OK") {
     REQUIRE(dxfc_system_get_property("PropertyName", nullptr, 100) == DXFC_EC_SUCCESS);
     REQUIRE(dxfc_system_get_property("PropertyName", nullptr, 0) == DXFC_EC_SUCCESS);
 
     std::vector<char> buffer(5);
-    REQUIRE(dxfc_system_get_property("PropertyName", buffer.data(), 0) == DXFC_EC_SUCCESS);
+    CHECK(dxfc_system_get_property("PropertyName", buffer.data(), 0) == DXFC_EC_SUCCESS);
 }
 
-TEST_CASE("System properties can be set, as well as get their values. Multi-thread", "[dxfc_system]") {
+TEST_CASE("System properties can be set, as well as get their values. Multi-thread") {
     dxfc_error_code_t errorCode = DXFC_EC_ERROR;
     // TODO: move to jthread on clang
     std::thread t([&errorCode] { errorCode = dxfc_system_set_property("PropertyName", "123"); });
@@ -81,37 +81,29 @@ TEST_CASE("System properties can be set, as well as get their values. Multi-thre
     std::vector<char> buffer(5);
     auto result = dxfc_system_get_property("PropertyName", buffer.data(), buffer.size());
     REQUIRE(result == DXFC_EC_SUCCESS);
-    REQUIRE(std::string(buffer.data()) == "123");
+    CHECK(std::string(buffer.data()) == "123");
 }
 
-TEST_CASE("System properties can be set, as well as get their values", "[dxfcpp::System]") {
+TEST_CASE("System properties can be set, as well as get their values") {
     REQUIRE(dxfcpp::System::setProperty("PropertyName", "123") == true);
-    REQUIRE(dxfcpp::System::getProperty("PropertyName") == "123");
+    CHECK(dxfcpp::System::getProperty("PropertyName") == "123");
 }
 
-TEST_CASE("System properties can be set, as well as get their values (Unicode)", "[dxfcpp::System]") {
+TEST_CASE("System properties can be set, as well as get their values (Unicode)") {
     REQUIRE(dxfcpp::System::setProperty("PropertyName", "Привет") == true);
-    REQUIRE(dxfcpp::System::getProperty("PropertyName") == "Привет");
+    CHECK(dxfcpp::System::getProperty("PropertyName") == "Привет");
 }
 
-TEST_CASE("If the system property does not exist, then an empty string should be returned.", "[dxfcpp::System]") {
-    REQUIRE(dxfcpp::System::getProperty("UnknownPropertyName").empty());
+TEST_CASE("If the system property does not exist, then an empty string should be returned.") {
+    CHECK(dxfcpp::System::getProperty("UnknownPropertyName").empty());
 }
 
-TEST_CASE("System properties can be set, as well as get their values. Multi-thread", "[dxfcpp::System]") {
+TEST_CASE("System properties can be set, as well as get their values. Multi-thread") {
     bool ok = false;
     // TODO: move to jthread on clang
     std::thread t([&ok] { ok = dxfcpp::System::setProperty("PropertyName", "123"); });
     t.join();
     REQUIRE(ok == true);
 
-    REQUIRE(dxfcpp::System::getProperty("PropertyName") == "123");
-}
-
-TEST_CASE("System properties benchmark", "[dxfcpp::System]") {
-    BENCHMARK("System::setProperty") { dxfcpp::System::setProperty("PropertyName", "Привет"); };
-
-    std::unordered_map<std::string, std::string> um{};
-
-    BENCHMARK("std::unordered_map[]") { um["PropertyName"] = "Привет"; };
+    CHECK(dxfcpp::System::getProperty("PropertyName") == "123");
 }

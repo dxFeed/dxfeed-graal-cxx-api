@@ -7,7 +7,7 @@
 #include <dxfeed_graal_native_cpp_api/api.hpp>
 
 #include <string>
-#include <utf8cpp/utf8.h>
+#include <utf8.h>
 
 namespace dxfcpp {
 

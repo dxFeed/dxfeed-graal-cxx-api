@@ -1,8 +1,8 @@
 // Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <catch2/benchmark/catch_benchmark_all.hpp>
-#include <catch2/catch_test_macros.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest.h>
 
 #include "dxfeed_graal_native_c_api/api.h"
 #include "dxfeed_graal_native_cpp_api/api.hpp"
@@ -11,7 +11,7 @@
 #include <vector>
 
 
-TEST_CASE("DXEndpoint::Builder", "[dxfcpp::DXEndpoint]") {
+TEST_CASE("DXEndpoint::Builder") {
     auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
     auto endpoint = builder->build();
 
@@ -51,8 +51,8 @@ auto cApiStateToString(dxfc_dxendpoint_state_t state) {
     return "";
 }
 
-TEST_CASE("dxfc_dxendpoint_builder_t", "[dxfc_dxendpoint_t]") {
-    SKIP();
+TEST_CASE("dxfc_dxendpoint_builder_t") {
+    return;
     dxfc_dxendpoint_builder_t builder{};
 
     auto result = dxfc_dxendpoint_new_builder(&builder);
@@ -109,8 +109,8 @@ TEST_CASE("dxfc_dxendpoint_builder_t", "[dxfc_dxendpoint_t]") {
     dxfc_dxendpoint_close(endpoint);
 }
 
-TEST_CASE("DXFeedSubscription", "[dxfcpp::DXFeedSubscription]") {
-    SKIP();
+TEST_CASE("DXFeedSubscription") {
+    return;
     auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
     auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
     auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});

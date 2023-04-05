@@ -8,7 +8,7 @@
 
 #include <cstring>
 #include <memory>
-#include <utf8cpp/utf8.h>
+#include <utf8.h>
 #include <utility>
 
 namespace dxfcpp {
