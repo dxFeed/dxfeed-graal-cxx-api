@@ -94,13 +94,13 @@ ready to answer any questions and help with the transition.
 
 #### Sample Mapping
 
-|  #  | Sample                                                                                                                            | Old Version                                                                                                                           | New Version                                                  |
-|:---:|:----------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------|
-|  1  | How to subscribe to `Quote`, `Trade`, `TradeETH`, `Order`, `SpreadOrder`, `AnalyticOrder`, `TimeAndSale` events                   | [CommandLineSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CommandLineSample)                                     | [DxFeed.Graal.Net.Samples.EventsSample](samples/EventSample) |
-|  2  | How to subscribe to `Candle` event                                                                                                | [CandleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CandleSample)                                               | *Q2’2023*, please see [TBD](#future-development) section     |
-|  3  | How to subscribe to `Order`, `SpreadOrder`, `Candle`, `TimeAndSale`, `Greeks`, `Series` snapshots                                 | [SnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample)                             | *Q2’2023*, please see [TBD](#future-development) section     |
-|  4  | How to subscribe to depth of market                                                                                               | [PriceLevelBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample)                               | *Q2’2023*, please see [TBD](#future-development) section     |
-|  5  | How to subscribe to order snapshot with incremental updates                                                                       | [IncSnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample)                       | *Q2’2023*, please see [TBD](#future-development) section     |
+|  #  | Sample                                                                                                                            | Old Version                                                                                                                           | New Version                                              |
+|:---:|:----------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------|
+|  1  | How to subscribe to `Quote`, `Trade`, `TradeETH`, `Order`, `SpreadOrder`, `AnalyticOrder`, `TimeAndSale` events                   | [CommandLineSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CommandLineSample)                                     | [EventSample](samples/cpp/EventsSample)                  |
+|  2  | How to subscribe to `Candle` event                                                                                                | [CandleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CandleSample)                                               | *Q2’2023*, please see [TBD](#future-development) section |
+|  3  | How to subscribe to `Order`, `SpreadOrder`, `Candle`, `TimeAndSale`, `Greeks`, `Series` snapshots                                 | [SnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample)                             | *Q2’2023*, please see [TBD](#future-development) section |
+|  4  | How to subscribe to depth of market                                                                                               | [PriceLevelBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample)                               | *Q2’2023*, please see [TBD](#future-development) section |
+|  5  | How to subscribe to order snapshot with incremental updates                                                                       | [IncSnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample)                       | *Q2’2023*, please see [TBD](#future-development) section |
 
 ### Implementation Details
 
@@ -129,7 +129,7 @@ Below is a scheme of this process:
 |  #  | Limitation                                                                                                                                                                                                                                                                                                                                    | How It’s Solved in the New Version                                                                                                                                                                                                                                                               |
 |:---:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |  1  | Single-threaded architecture limiting throughput.                                                                                                                                                                                                                                                                                             | Based on the Java API, each subscription object ([DXFeedSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html)) *can* run on its own thread.                                                                                                                   |
-|  2  | User code in event callbacks (for example, [OnQuote](https://docs.dxfeed.com/net-api/classcom_1_1dxfeed_1_1api_1_1extras_1_1EventPrinter.html#a39bcd590edd9524b64b5fee00d56fccf)) is executed in the socket read thread, which can significantly reduce throughput.                                                                           | Socket processing threads and callback threads are separated.                                                                                                                                                                                                                                    |
+|  2  | User code in event callbacks (for example, [dxf_event_listener_t](https://docs.dxfeed.com/c-api/group__event-data-structures-event-subscription-stuff.html#gac8bcb70cd4c8857f286f4be65e9522c6)) is executed in the socket read thread, which can significantly reduce throughput.                                                                           | Socket processing threads and callback threads are separated.                                                                                                                                                                                                                                    |
 |  3  | In event callbacks, one market event type and one data portion always arrive (excluding snapshot subscription), which increases the load on the CPU with a large amount of incoming data.                                                                                                                                                     | Event callbacks can receive different market event types, and more than one by batch.                                                                                                                                                                                                            |
 |  4  | It’s impossible to subscribe to data without getting [regionals](https://kb.dxfeed.com/en/data-model/exchange-codes.html) (if it is available for the market event) or only for a certain regional.                                                                                                                                           | ```subscription->addSymbols({"AAPL"});``` - [composite](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-47603)<br>```subscription->addSymbols({"AAPL&Q"});``` - [regional](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-x--regional-quote-). |
 |  5  | It’s impossible to subscribe to Order event (excluding snapshot subscription) without getting: all [sources](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#order-x), Order by Quote (including regionals), Order by [MarketMaker](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#marketmaker-47603). | ```subscription->addSymbols(IndexedEventSubscriptionSymbol::create("AAPL", OrderSource::NTV));``` - [Order.Source]() determines which data is being subscribed to.                                                                                                                               |
@@ -156,39 +156,29 @@ Find useful information in our self-service dxFeed Knowledge Base or .NET API do
 
 ## Installation
 
-Add this [package source](https://dxfeed.jfrog.io/artifactory/api/nuget/v3/nuget-open) to NuGet config.
-<br/>
-For example, you can create a [NuGet.Config](NuGet.Config) file in your solution folder with the following content:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-
-<configuration>
-    <packageSources>
-        <add key="dxFeed" value="https://dxfeed.jfrog.io/artifactory/api/nuget/v3/nuget-open" protocolVersion="3"/>
-    </packageSources>
-</configuration>
-```
-
-Then add the *DxFeed.Graal.Net* package to your project using the NuGet package manager.
+Download zip bundle, add to CMake project.
 
 ## Usage
 
-```csharp
-using DxFeed.Graal.Net.Api;
-using DxFeed.Graal.Net.Events.Market;
+```cpp
+#include <iostream>
+#include <dxfeed_graal_cpp_api/api.hpp>
 
-using var endpoint = DXEndpoint.Create().Connect("demo.dxfeed.com:7300");
-using var subscription = endpoint.GetFeed().CreateSubscription(typeof(Quote));
-subscription.AddEventListener(events =>
-{
-    foreach (var e in events)
-    {
-        Console.WriteLine(e);
-    }
-});
-subscription.AddSymbols("AAPL");
-Console.ReadKey();
+int main() {
+    auto endpoint = DXEndpoint::newBuilder()
+            ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
+            ->build();
+    
+    auto subscription = endpoint->getFeed()->createSubscription(Quote::type);
+    
+    subscription->addEventListener([](auto&& events) {
+        for (auto&& e : events) {
+            std::cout << e << "\n";
+        }
+    });
+    
+    subscription->addSymbols({"AAPL"});
+}
 ```
 
 <details>
@@ -211,17 +201,34 @@ Quote{AAPL, eventTime=0, time=20221219-223312.000, timeNanoPart=0, sequence=0, b
 
 </details>
 
+## Tools
+
+[Tools](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/)
+is a collection of tools that allow you to subscribe to various market events for the specified symbols. The tools can
+be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases) (including self-contained versions)
+* [Connect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Connect/ConnectTool.cpp)
+  connects to the specified address(es) and subscribes to the specified events with the specified symbol
+* [Dump](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Dump/DumpTool.cpp)
+  dumps all events received from address. This was designed to retrieve data from a file
+* [PerfTest](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/PerfTest/PerfTestTool.cpp)
+  connects to the specified address(es) and calculates performance counters (events per second, memory usage, CPU usage,
+  etc.)
+
 ## Samples
 
-[DxFeed.Graal.Net.Tools](src/DxFeed.Graal.Net.Tools) - the tools allow you to subscribe to various market events for
-the
-specified symbols.
-
-* [DxFeed.Graal.Net.Samples.EventsSample](samples/EventSample) demonstrates how to subscribe
-  to `Quote`, `Trade`, `TradeETH`, `Order`, `SpreadOrder`, `AnalyticOrder`, `TimeAndSale`
-  events.
-* [DxFeed.Graal.Net.Samples.PrintQuoteEvents](samples/PrintQuoteEvents) a simple demonstration of how to subscribe to
-  the `Quote` event.
+* [ConvertTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ConvertTapeFile/src/main.cpp)
+  demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering
+* [DxFeedConnect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedConnect/src/main.cpp)
+  demonstrates how to subscribe various market events for the specified symbols
+* [DxFeedFileParser](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedFileParser/src/main.cpp)
+  is a simple demonstration of how events are read form a tape file
+* [DxFeedSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedSample/src/main.cpp)
+  is a simple demonstration of how to create multiple event listeners and subscribe to `Quote` and `Trade` events
+* [PrintQuoteEvents](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PrintQuoteEvents/src/main.cpp)
+  is a simple demonstration of how to subscribe to the `Quote` event, using a `DxFeed` instance singleton
+  and `dxfeed.properties` file
+* [WriteTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp)
+  is a simple demonstration of how to write events to a tape file
 
 ## Current State
 
@@ -234,10 +241,10 @@ specified symbols.
 - [ ] [AnalyticOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/AnalyticOrder.html) represents an
   extension of Order introducing analytic information, e.g., adding iceberg-related
   information to this order
-- [ ] [Trade](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Trade.html) is a snapshot of the price and size
+- [x] [Trade](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Trade.html) is a snapshot of the price and size
   of the last trade during regular trading hours and an overall day
   volume and day turnover
-- [ ] [TradeETH](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TradeETH.html) is a snapshot of the price
+- [x] [TradeETH](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TradeETH.html) is a snapshot of the price
   and size of the last trade during extended trading hours and the extended
   trading hours day volume and day turnover
 - [ ] [Candle](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html) - event with open, high, low, and
@@ -246,22 +253,22 @@ specified symbols.
   ask prices and other fields that change with each quote
 - [x] [Profile](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Profile.html) is a snapshot that contains the
   security instrument description
-- [ ] [Summary](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Summary.html) is a snapshot of the trading
+- [x] [Summary](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Summary.html) is a snapshot of the trading
   session, including session highs, lows, etc.
 - [x] [TimeAndSale](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TimeAndSale.html) - represents a trade or
   other market event with price, like market open/close price, etc.
-- [ ] [Greeks](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Greeks.html) is a snapshot of the option
+- [x] [Greeks](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Greeks.html) is a snapshot of the option
   price, Black-Scholes volatility, and Greeks
-- [ ] [Series](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Series.html) is a snapshot of computed values
+- [x] [Series](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Series.html) is a snapshot of computed values
   available for all options series for a given underlying symbol based on options market prices
-- [ ] [TheoPrice](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/TheoPrice.html) is a snapshot of the
+- [x] [TheoPrice](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/TheoPrice.html) is a snapshot of the
   theoretical option price computation that is periodically performed
   by [dxPrice](http://www.devexperts.com/en/products/price.html) model-free computation
-- [ ] [Underlying](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Underlying.html) is a snapshot of computed
+- [x] [Underlying](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Underlying.html) is a snapshot of computed
   values available for an option underlying symbol based on the market’s option prices
-- [ ] [Configuration](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Configuration.html) is an event with an
+- [x] [Configuration](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Configuration.html) is an event with an
   application-specific attachment
-- [ ] [Message](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Message.html) is an event with an
+- [x] [Message](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Message.html) is an event with an
   application-specific attachment
 
 ### Subscription Symbols
