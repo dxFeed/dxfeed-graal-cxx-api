@@ -4,5 +4,5 @@ SPDX-License-Identifier: BSL-1.0
 2) fmt - https://github.com/fmtlib/fmt/blob/master/LICENSE.rst
 SPDX-License-Identifier: MIT
 
-3) Catch2 - https://github.com/catchorg/Catch2/blob/devel/LICENSE.txt
-SPDX-License-Identifier: BSL-1.0
+3) doctest - https://github.com/doctest/doctest/blob/master/LICENSE.txt
+SPDX-License-Identifier: MIT
