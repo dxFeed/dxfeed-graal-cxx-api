@@ -3,6 +3,9 @@
 
 project(dxFeedGraalCXXAPITests LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_C_STANDARD 11)
+
 set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-2.4.11)
 
 set(DXFC_TEST_SOURCES system/SystemTest.cpp api/DXEndpointTest.cpp)
@@ -19,6 +22,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     target_include_directories(${DXFC_TEST_BASENAME} PUBLIC ${DXFC_TEST_INCLUDE_DIRS})
     target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC DxFeedGraalNativeApi dxFeedGraalCxxApi)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CXX_STANDARD 20)
+    set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CMAKE_C_STANDARD 11)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CXX_EXTENSIONS OFF)
     add_test(NAME ${DXFC_TEST_BASENAME} COMMAND ${DXFC_TEST_BASENAME})
 
