@@ -25,8 +25,10 @@ struct EventMapper;
 class Candle final : public EventTypeWithSymbol<CandleSymbol>, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
+    CandleSymbol candleSymbol_{};
+
   public:
-    const CandleSymbol &getEventSymbol() const override { {}; }
+    const CandleSymbol &getEventSymbol() const override { return candleSymbol_; }
     void setEventSymbol(const CandleSymbol &eventSymbol) override {}
     EventFlagsMask getEventFlags() const override { return EventFlagsMask(); }
     void setEventFlags(const EventFlagsMask &eventFlags) override {}
