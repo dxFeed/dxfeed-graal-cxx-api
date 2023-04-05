@@ -11,7 +11,7 @@ set(CMAKE_C_STANDARD 11)
 cmake_policy(SET CMP0135 NEW)
 
 add_executable(PrintQuoteEvents src/main.cpp)
-target_include_directories(PrintQuoteEvents PUBLIC ../../../include/dxfeed_graal_native_cpp_api)
+target_include_directories(PrintQuoteEvents PUBLIC ../../../include)
 target_link_libraries(PrintQuoteEvents PUBLIC DxFeedGraalNativeApi dxFeedGraalCxxApi)
 
 add_custom_command(TARGET PrintQuoteEvents POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different

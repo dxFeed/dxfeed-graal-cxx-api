@@ -138,3 +138,4 @@ if (DXFC_BUILD_UNIT_TESTS)
 endif ()
 
 add_subdirectory(samples/cpp/PrintQuoteEvents)
+add_subdirectory(tools/Tools)
