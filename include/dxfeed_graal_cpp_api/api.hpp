@@ -6,6 +6,7 @@
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
 #include "internal/Enum.hpp"
+#include "internal/ErrorHandlingManager.hpp"
 
 #include "api/DXEndpoint.hpp"
 #include "api/DXFeed.hpp"
