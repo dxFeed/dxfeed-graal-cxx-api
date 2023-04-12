@@ -3,10 +3,8 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 #include <dxfeed_graal_c_api/api.h>
-#include <thread>
 
 using namespace dxfcpp;
-using namespace std::chrono_literals;
 
 int main() {
     auto endpoint = DXEndpoint::newBuilder()
