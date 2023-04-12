@@ -25,6 +25,18 @@ void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
     feed->detachSubscription(shared_from_this());
 }
 
+template <>
+void DXFeedSubscription::addSymbol(std::string&& symbol) noexcept {
+    runIsolatedOrElse([handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](
+                          auto threadHandle) {
+                            dxfg_string_symbol_t s;
+                            s.supper.type = STRING;
+                            s.symbol = symbol.c_str();                            
+                            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, (dxfg_symbol_t*)&s) == 0; 
+                          },
+                      false);
+}
+
 void DXFeedSubscription::closeImpl() noexcept {
     if (!handler_) {
         return;
