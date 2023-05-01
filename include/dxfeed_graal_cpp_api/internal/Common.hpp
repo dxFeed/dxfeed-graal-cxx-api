@@ -738,4 +738,8 @@ char utf16to8(std::int16_t in);
 
 std::int16_t utf8to16(char in);
 
+struct String {
+    inline static constexpr std::string EMPTY = "";
+};
+
 } // namespace dxfcpp

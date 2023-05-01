@@ -6,8 +6,8 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <string>
 #include <memory>
+#include <string>
 #include <utility>
 
 namespace dxfcpp {
@@ -133,7 +133,7 @@ void DXEndpoint::closeImpl() {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::user(user = {})", handler_.toString(), user);
     }
@@ -152,7 +152,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::password(password = {})", handler_.toString(), password);
     }
@@ -171,7 +171,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::connect(address = {})", handler_.toString(), address);
     }
@@ -324,8 +324,8 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
 void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
     // The default properties file is only valid for the
     // Feed, OnDemandFeed and Publisher roles.
-    auto propertiesFileKey = [this]() -> std::string {
-        switch (role_) {
+    const auto &propertiesFileKey = [](auto role) -> const std::string & {
+        switch (role) {
         case Role::FEED:
         case Role::ON_DEMAND_FEED:
             return DXFEED_PROPERTIES_PROPERTY;
@@ -337,8 +337,8 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
             break;
         }
 
-        return {};
-    }();
+        return String::EMPTY;
+    }(role_);
 
     if (propertiesFileKey.empty()) {
         return;
@@ -389,7 +389,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
                                                                        const std::string &value) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})", handler_.toString(), key, value);
     }
@@ -411,7 +411,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 }
 
 bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", handler_.toString(), key);
     }
