@@ -8,6 +8,7 @@
 #include "internal/Enum.hpp"
 #include "internal/ErrorHandlingManager.hpp"
 #include "internal/context/ApiContext.hpp"
+#include "internal/managers/DXEndpointManager.hpp"
 
 #include "api/DXEndpoint.hpp"
 #include "api/DXFeed.hpp"

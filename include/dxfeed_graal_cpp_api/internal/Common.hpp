@@ -742,4 +742,32 @@ struct String {
     inline static constexpr std::string EMPTY = "";
 };
 
+template <typename T> class Id {
+    const std::size_t value_{};
+
+    explicit Id(std::size_t value) : value_{value} {}
+
+  public:
+
+    static Id<T> getNext() {
+        static std::atomic<std::size_t> value{};
+
+        return Id<T>{value++};
+    }
+
+    [[nodiscard]] std::size_t getValue() const { return value_; }
+
+    explicit operator std::size_t() const { return value_; }
+
+    template <typename U> friend bool operator==(const Id<U> &id1, const Id<U> &id2) { return id1.getValue() == id2.getValue(); }
+
+    template <typename U> friend auto operator<=>(const Id<U> &id1, const Id<U> &id2) {
+        return id1.getValue() <=> id2.getValue();
+    }
+};
+
 } // namespace dxfcpp
+
+template <typename T> struct std::hash<dxfcpp::Id<T>> {
+    std::size_t operator()(const dxfcpp::Id<T> &id) const noexcept { return id.getValue(); }
+};
