@@ -739,31 +739,49 @@ char utf16to8(std::int16_t in);
 std::int16_t utf8to16(char in);
 
 struct String {
-    inline static constexpr std::string EMPTY = "";
+    inline static constexpr std::string EMPTY{};
 };
 
-template <typename T> class Id {
-    const std::size_t value_{};
+template <typename T> struct Id {
+    using ValueType = std::size_t;
 
-    explicit Id(std::size_t value) : value_{value} {}
+  private:
+    const ValueType value_{};
+
+    explicit Id(ValueType value) : value_{value} {}
 
   public:
-
     static Id<T> getNext() {
-        static std::atomic<std::size_t> value{};
+        static std::atomic<ValueType> value{};
 
         return Id<T>{value++};
     }
 
-    [[nodiscard]] std::size_t getValue() const { return value_; }
+    [[nodiscard]] ValueType getValue() const { return value_; }
 
-    explicit operator std::size_t() const { return value_; }
+    explicit operator ValueType() const { return value_; }
 
-    template <typename U> friend bool operator==(const Id<U> &id1, const Id<U> &id2) { return id1.getValue() == id2.getValue(); }
+    static Id<T> from(ValueType value) {
+        return Id<T>{value};
+    }
+
+    template <typename U> friend bool operator==(const Id<U> &id1, const Id<U> &id2) {
+        return id1.getValue() == id2.getValue();
+    }
 
     template <typename U> friend auto operator<=>(const Id<U> &id1, const Id<U> &id2) {
         return id1.getValue() <=> id2.getValue();
     }
+};
+
+template <class T> class NonCopyable {
+  public:
+    NonCopyable(const NonCopyable &) = delete;
+    T &operator=(const T &) = delete;
+
+  protected:
+    NonCopyable() = default;
+    ~NonCopyable() = default;
 };
 
 } // namespace dxfcpp

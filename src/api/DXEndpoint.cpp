@@ -73,20 +73,26 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 
     std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
 
+    auto id = ApiContext::getInstance()->getDxEndpointManager()->registerEntity(endpoint);
+
     endpoint->handler_ = handler_utils::JavaObjectHandler<DXEndpoint>(endpointHandle);
     endpoint->role_ = role;
     endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
+
+    auto onPropertyChange = [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState,
+                               dxfg_endpoint_state_t newState, void *userData) {
+        auto id = Id<DXEndpoint>::from(bit_cast<Id<DXEndpoint>::ValueType>(userData));
+        auto endpoint = ApiContext::getInstance()->getDxEndpointManager()->getEntity(id);
+
+        if (endpoint) {
+            endpoint->onStateChange_(graalStateToState(oldState), graalStateToState(newState));
+        }
+    };
+
     endpoint->stateChangeListenerHandler_ =
         handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>(runIsolatedOrElse(
-            [endpoint](auto threadHandle) {
-                return dxfg_PropertyChangeListener_new(
-                    threadHandle,
-                    [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState, dxfg_endpoint_state_t newState,
-                       void *user_data) {
-                        bit_cast<DXEndpoint *>(user_data)->onStateChange_(graalStateToState(oldState),
-                                                                          graalStateToState(newState));
-                    },
-                    endpoint.get());
+            [idValue = id.getValue(), onPropertyChange](auto threadHandle) {
+                return dxfg_PropertyChangeListener_new(threadHandle, onPropertyChange, bit_cast<void *>(idValue));
             },
             nullptr));
     endpoint->setStateChangeListenerImpl();
@@ -130,6 +136,8 @@ void DXEndpoint::closeImpl() {
                       false);
 
     // TODO: close the Feed and Publisher
+
+    ApiContext::getInstance()->getDxEndpointManager()->unregisterEntity(shared_from_this());
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
@@ -287,6 +295,8 @@ void DXEndpoint::closeAndAwaitTermination() {
         false);
 
     // TODO: close the Feed and Publisher
+
+    ApiContext::getInstance()->getDxEndpointManager()->unregisterEntity(shared_from_this());
 }
 
 std::shared_ptr<DXFeed> DXEndpoint::getFeed() {

@@ -492,6 +492,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.toString());
         }
 
+        //TODO: check
         tryCallWithLock(mtx_, [this] { closeImpl(); });
     }
 

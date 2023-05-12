@@ -15,7 +15,7 @@ class ApiContext {
     std::shared_ptr<DXFeedSubscriptionManager> dxFeedSubscriptionManager_;
     std::atomic<bool> initialized{false};
 
-    ApiContext() : dxEndpointManager_{}, dxFeedSubscriptionManager_{} {}
+    ApiContext() : dxEndpointManager_{std::make_shared<DXEndpointManager>()}, dxFeedSubscriptionManager_{} {}
 
   public:
     static std::shared_ptr<ApiContext> getInstance() {
