@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 #include <thread>
+#include <mutex>
+#include <unordered_map>
 
 namespace dxfcpp {
 
