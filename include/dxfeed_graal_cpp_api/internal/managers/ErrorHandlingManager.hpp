@@ -6,6 +6,10 @@
 #include <mutex>
 #include <unordered_map>
 
+#ifdef NO_ERROR
+#    undef NO_ERROR
+#endif
+
 namespace dxfcpp {
 
 //TODO: serialization

@@ -52,7 +52,6 @@ auto cApiStateToString(dxfc_dxendpoint_state_t state) {
 }
 
 TEST_CASE("dxfc_dxendpoint_builder_t") {
-    return;
     dxfc_dxendpoint_builder_t builder{};
 
     auto result = dxfc_dxendpoint_new_builder(&builder);
@@ -110,7 +109,6 @@ TEST_CASE("dxfc_dxendpoint_builder_t") {
 }
 
 TEST_CASE("DXFeedSubscription") {
-    return;
     auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
     auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
     auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});

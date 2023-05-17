@@ -174,11 +174,17 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
         closeImpl();
     }
 
-    template <typename EventListener> std::size_t addEventListener(EventListener &&listener) noexcept;
+    template <typename EventListener> std::size_t addEventListener(EventListener &&listener) noexcept {
+        return onEvent_ += listener;
+    }
 
-    void removeEventListener(std::size_t listenerId) noexcept;
+    void removeEventListener(std::size_t listenerId) noexcept {
+        onEvent_ -= listenerId;
+    }
 
-    auto onEvent() noexcept;
+    const auto& onEvent() noexcept {
+        return onEvent_;
+    }
 
     template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept;
 

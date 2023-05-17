@@ -76,54 +76,39 @@ int main() {
     dxfc_dxendpoint_close(endpoint);
 
 
-//    auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
-//    auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
-//    auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
-//
-//    dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
-//    dxfcpp::DXFeed::getInstance();
-//
-//    std::cout << fmt::format("{:#06x}", 123) << std::endl;
-//    std::cout << fmt::format("{:#x}", 123) << std::endl;
-//
-//    std::cout << dxfcpp::ShortSaleRestriction::ACTIVE << std::endl;
-//    std::cout << dxfcpp::ShortSaleRestriction::valueOf(100500) << std::endl;
-//    std::cout << dxfcpp::PriceType::valueOf(100500) << std::endl;
-//
-//    dxfcpp::Quote q{};
-//
-//    std::cout << dxfcpp::nowStrWithTimeZone() << std::endl;
-//    std::cout << dxfcpp::formatTimeStamp(1677448613000) << std::endl;
-//    std::cout << dxfcpp::formatTimeStampWithMillis(1677448613023) << std::endl;
-//
-//    {
-//        auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
-//        auto endpoint = builder->build();
-//
-//        endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-//            dxfcpp::debug("{}", std::string("State changed: ") + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-//                                    dxfcpp::DXEndpoint::stateToString(newState));
-//        };
-//
-//        auto sub =
-//            endpoint->getFeed()->createSubscription({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
-//        endpoint->connect("demo.dxfeed.com:7300");
-//
-//        std::this_thread::sleep_for(std::chrono::seconds(5));
-//    }
+    auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
+    auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
+    auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
 
-    //std::cin.get();
+    dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
+    dxfcpp::DXFeed::getInstance();
 
-    //    using namespace dxfcpp;
-    //
-    //    auto endpoint = DXEndpoint::newBuilder()
-    //            ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
-    //            ->build();
-    //    auto subscription = endpoint->getFeed()->createSubscription(Quote::type);
-    //    subscription->addEventListener([](auto&& events) {
-    //        for (auto&& e : events) {
-    //            std::cout << e << "\n";
-    //        }
-    //    });
-    //    subscription->addSymbols({"AAPL"});
+    std::cout << fmt::format("{:#06x}", 123) << std::endl;
+    std::cout << fmt::format("{:#x}", 123) << std::endl;
+
+    std::cout << dxfcpp::ShortSaleRestriction::ACTIVE << std::endl;
+    std::cout << dxfcpp::ShortSaleRestriction::valueOf(100500) << std::endl;
+    std::cout << dxfcpp::PriceType::valueOf(100500) << std::endl;
+
+    dxfcpp::Quote q{};
+
+    std::cout << dxfcpp::nowStrWithTimeZone() << std::endl;
+    std::cout << dxfcpp::formatTimeStamp(1677448613000) << std::endl;
+    std::cout << dxfcpp::formatTimeStampWithMillis(1677448613023) << std::endl;
+
+    {
+        auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
+        auto endpoint = builder->build();
+
+        endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
+            dxfcpp::debug("{}", std::string("State changed: ") + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                                    dxfcpp::DXEndpoint::stateToString(newState));
+        };
+
+        auto sub =
+            endpoint->getFeed()->createSubscription({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
+        endpoint->connect("demo.dxfeed.com:7300");
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
 }

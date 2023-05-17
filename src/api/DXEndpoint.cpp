@@ -73,6 +73,12 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 
     std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
 
+    if (!endpoint) {
+        //TODO: dummy endpoint & error handling;
+
+        return endpoint;
+    }
+
     auto id = ApiContext::getInstance()->getDxEndpointManager()->registerEntity(endpoint);
 
     endpoint->handler_ = handler_utils::JavaObjectHandler<DXEndpoint>(endpointHandle);
