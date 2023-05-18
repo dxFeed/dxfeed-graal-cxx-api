@@ -33,7 +33,6 @@ int main() {
 
         auto sub =
             endpoint->getFeed()->createSubscription({dxfcpp::EventTypeEnum::QUOTE});
-//            endpoint->getFeed()->createSubscription({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
 
         sub->addEventListener([](auto &&events) {
             for (const auto &e : events) {

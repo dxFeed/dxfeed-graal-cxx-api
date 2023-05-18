@@ -27,7 +27,6 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
     friend struct DXEndpoint;
 
   private:
-    mutable std::recursive_mutex mtx_{};
     handler_utils::JavaObjectHandler<DXFeed> handler_;
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
@@ -35,7 +34,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
     static std::shared_ptr<DXFeed> create(void *feedHandle) noexcept;
 
   protected:
-    DXFeed() noexcept : mtx_(), handler_{} {
+    DXFeed() noexcept : handler_{} {
         if constexpr (isDebug) {
             debug("DXFeed()");
         }
@@ -98,8 +97,6 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
     }
 
     std::string toString() const {
-        std::lock_guard guard(mtx_);
-
         return fmt::format("DXFeed{{{}}}", handler_.toString());
     }
 };

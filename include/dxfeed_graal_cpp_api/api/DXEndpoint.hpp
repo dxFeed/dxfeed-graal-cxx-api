@@ -463,7 +463,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     static inline std::mutex MTX{};
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
-    mutable std::recursive_mutex mtx_{};
     handler_utils::JavaObjectHandler<DXEndpoint> handler_;
     Role role_ = Role::FEED;
     std::string name_{};
@@ -480,7 +479,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     void closeImpl();
 
   protected:
-    DXEndpoint() : mtx_{}, handler_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandler_{}, onStateChange_{} {
+    DXEndpoint() : handler_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandler_{}, onStateChange_{} {
         if constexpr (isDebug) {
             debug("DXEndpoint()");
         }
@@ -751,8 +750,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             debug("DXEndpoint{{{}}}::close()", handler_.toString());
         }
 
-        std::lock_guard guard(mtx_);
-
         closeImpl();
     }
 
@@ -808,12 +805,12 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     class Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
-        mutable std::recursive_mutex mtx_{};
+//        mutable std::recursive_mutex mtx_{};
         handler_utils::JavaObjectHandler<Builder> handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() : mtx_{}, handler_{}, properties_{} {
+        Builder() : handler_{}, properties_{} {
             if constexpr (isDebug) {
                 debug("DXEndpoint::Builder::Builder()");
             }
@@ -896,8 +893,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
                 debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", handler_.toString(),
                       properties.size());
             }
-
-            std::lock_guard guard(mtx_);
 
             for (auto &&[k, v] : properties) {
                 withProperty(k, v);

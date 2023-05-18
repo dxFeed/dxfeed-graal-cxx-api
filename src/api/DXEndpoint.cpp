@@ -90,12 +90,14 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
         auto id = Id<DXEndpoint>::from(bit_cast<Id<DXEndpoint>::ValueType>(userData));
         auto endpoint = ApiContext::getInstance()->getDxEndpointManager()->getEntity(id);
 
+        std::cerr << "onStateChange: id = " + std::to_string(id.getValue()) + ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr") + "\n";
+
         if (endpoint) {
             endpoint->onStateChange_(graalStateToState(oldState), graalStateToState(newState));
-        }
 
-        if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
-            ApiContext::getInstance()->getDxEndpointManager()->unregisterEntity(id);
+            if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
+                ApiContext::getInstance()->getDxEndpointManager()->unregisterEntity(id);
+            }
         }
     };
 
@@ -126,8 +128,6 @@ void DXEndpoint::setStateChangeListenerImpl() {
 }
 
 DXEndpoint::State DXEndpoint::getState() const {
-    std::lock_guard guard(mtx_);
-
     return !handler_ ? State::CLOSED
                      : runIsolatedOrElse(
                            [handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
@@ -154,8 +154,6 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
         debug("DXEndpoint{{{}}}::user(user = {})", handler_.toString(), user);
     }
 
-    std::lock_guard guard(mtx_);
-
     if (handler_) {
         runIsolatedOrElse(
             [user = user, handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
@@ -172,8 +170,6 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::password(password = {})", handler_.toString(), password);
     }
-
-    std::lock_guard guard(mtx_);
 
     if (handler_) {
         runIsolatedOrElse(
@@ -192,8 +188,6 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
         debug("DXEndpoint{{{}}}::connect(address = {})", handler_.toString(), address);
     }
 
-    std::lock_guard guard(mtx_);
-
     if (handler_) {
         runIsolatedOrElse(
             [address = address, handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
@@ -210,8 +204,6 @@ void DXEndpoint::reconnect() {
         debug("DXEndpoint{{{}}}::reconnect()", handler_.toString());
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_) {
         return;
     }
@@ -225,8 +217,6 @@ void DXEndpoint::disconnect() {
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::disconnect()", handler_.toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     if (!handler_) {
         return;
@@ -242,8 +232,6 @@ void DXEndpoint::disconnectAndClear() {
         debug("DXEndpoint{{{}}}::disconnectAndClear()", handler_.toString());
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_) {
         return;
     }
@@ -257,8 +245,6 @@ void DXEndpoint::awaitNotConnected() {
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::awaitNotConnected()", handler_.toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     if (!handler_) {
         return;
@@ -274,8 +260,6 @@ void DXEndpoint::awaitProcessed() {
         debug("DXEndpoint{{{}}}::awaitProcessed()", handler_.toString());
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_) {
         return;
     }
@@ -289,8 +273,6 @@ void DXEndpoint::closeAndAwaitTermination() {
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", handler_.toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     if (!handler_) {
         return;
@@ -306,8 +288,6 @@ void DXEndpoint::closeAndAwaitTermination() {
 }
 
 std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
-    std::lock_guard guard(mtx_);
-
     if (!feed_) {
         auto feedHandle = !handler_ ? nullptr
                                     : runIsolatedOrElse(
@@ -388,8 +368,6 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
         debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", handler_.toString(), roleToString(role));
     }
 
-    std::lock_guard guard(mtx_);
-
     role_ = role;
 
     if (handler_) {
@@ -409,8 +387,6 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
     if constexpr (isDebug) {
         debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})", handler_.toString(), key, value);
     }
-
-    std::lock_guard guard(mtx_);
 
     properties_[key] = value;
 
@@ -432,8 +408,6 @@ bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
         debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", handler_.toString(), key);
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_) {
         return false;
     }
@@ -449,8 +423,6 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     if constexpr (isDebug) {
         debug("DXEndpoint::Builder{{{}}}::build()", handler_.toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     loadDefaultPropertiesImpl();
 

@@ -63,8 +63,8 @@ template <typename EntityType> struct EntityManager : private NonCopyable<Entity
         std::lock_guard lockGuard{mutex_};
 
         if (auto it = entitiesById_.find(id); it != entitiesById_.end()) {
-            entitiesById_.erase(id);
             idsByEntities_.erase(it->second);
+            entitiesById_.erase(id);
 
             return true;
         }

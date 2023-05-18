@@ -24,8 +24,6 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
         debug("{}::attachSubscription({})", toString(), subscription->toString());
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_ || !subscription || !subscription->handler_) {
         return;
     }
@@ -46,8 +44,6 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
         debug("{}::detachSubscription({})", toString(), subscription->toString());
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_ || !subscription || !subscription->handler_) {
         return;
     }
@@ -67,8 +63,6 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     if constexpr (isDebug) {
         debug("{}::detachSubscriptionAndClear({})", toString(), subscription->toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     if (!handler_ || !subscription || !subscription->handler_) {
         return;
