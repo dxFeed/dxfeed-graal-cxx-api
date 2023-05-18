@@ -106,6 +106,10 @@ DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noex
 }
 
 std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
+    if constexpr (isDebug) {
+        debug("DXFeed::create({})", feedHandle);
+    }
+
     std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
 
     feed->handler_ = handler_utils::JavaObjectHandler<DXFeed>(feedHandle);

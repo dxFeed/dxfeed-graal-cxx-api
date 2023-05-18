@@ -288,6 +288,10 @@ void DXEndpoint::closeAndAwaitTermination() {
 }
 
 std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::getFeed()", handler_.toString());
+    }
+
     if (!feed_) {
         auto feedHandle = !handler_ ? nullptr
                                     : runIsolatedOrElse(
