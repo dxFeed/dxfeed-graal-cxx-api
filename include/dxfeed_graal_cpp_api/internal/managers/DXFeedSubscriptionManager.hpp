@@ -12,8 +12,8 @@
 
 namespace dxfcpp {
 
-struct DXEndpoint;
+class DXFeedSubscription;
 
-using DXEndpointManager = EntityManager<DXEndpoint>;
+using DXFeedSubscriptionManager = EntityManager<DXFeedSubscription>;
 
 } // namespace dxfcpp

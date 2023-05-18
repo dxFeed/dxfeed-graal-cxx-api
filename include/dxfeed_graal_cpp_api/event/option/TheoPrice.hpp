@@ -237,21 +237,13 @@ class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public Lasti
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
+    std::string toString() const noexcept override {
         return fmt::format(
             "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
             "delta={}, gamma={}, dividend={}, interest={}}}",
             MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
             getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
             getUnderlyingPrice(), getDelta(), getGamma(), getDividend(), getInterest());
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const TheoPrice &e) {
-        return os << e.toString();
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<TheoPrice> &e) {
-        return os << e->toString();
     }
 };
 

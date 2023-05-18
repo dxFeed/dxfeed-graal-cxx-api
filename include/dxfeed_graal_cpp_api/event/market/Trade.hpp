@@ -43,13 +43,7 @@ class Trade final : public TradeBase {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept { return fmt::format("Trade{{{}}}", baseFieldsToString()); }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Trade &e) { return os << e.toString(); }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Trade> &e) {
-        return os << e->toString();
-    }
+    std::string toString() const noexcept override { return fmt::format("Trade{{{}}}", baseFieldsToString()); }
 };
 
 } // namespace dxfcpp

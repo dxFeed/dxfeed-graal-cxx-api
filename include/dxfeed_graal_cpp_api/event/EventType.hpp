@@ -56,6 +56,26 @@ struct EventType : public SharedEntity {
     virtual void setEventTime(std::int64_t eventTime){
         // The default implementation is empty
     };
+
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
+    virtual std::string toString() const noexcept { return "EventType{}"; }
+
+    friend std::ostream &operator<<(std::ostream &os, const EventType &e) { return os << e.toString(); }
+
+    friend std::ostream &operator<<(std::ostream &os, const std::shared_ptr<EventType> &e) {
+        return os << e->toString();
+    }
+
+    template <typename EntityType>
+    friend std::ostream &operator<<(std::ostream &os, const std::shared_ptr<EntityType> &e)
+        requires(std::is_base_of_v<EventType, EntityType>)
+    {
+        return os << e->toString();
+    }
 };
 
 /**

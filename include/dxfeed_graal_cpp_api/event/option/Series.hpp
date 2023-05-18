@@ -304,7 +304,7 @@ class Series final : public MarketEvent, public IndexedEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
+    std::string toString() const noexcept override {
         return fmt::format(
             "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
             "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
@@ -312,12 +312,6 @@ class Series final : public MarketEvent, public IndexedEvent {
             getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getSequence(),
             day_util::getYearMonthDayByDayId(getExpiration()), getVolatility(), getCallVolume(), getPutVolume(),
             getPutCallRatio(), getForwardPrice(), getDividend(), getInterest());
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Series &e) { return os << e.toString(); }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Series> &e) {
-        return os << e->toString();
     }
 };
 

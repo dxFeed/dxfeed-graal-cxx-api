@@ -761,17 +761,11 @@ template <typename T> struct Id {
 
     explicit operator ValueType() const { return value_; }
 
-    static Id<T> from(ValueType value) {
-        return Id<T>{value};
-    }
+    static Id<T> from(ValueType value) { return Id<T>{value}; }
 
-    template <typename U> friend bool operator==(const Id<U> &id1, const Id<U> &id2) {
-        return id1.getValue() == id2.getValue();
-    }
+    template <typename U> bool operator==(const Id<U> &id) const { return getValue() == id.getValue(); }
 
-    template <typename U> friend auto operator<=>(const Id<U> &id1, const Id<U> &id2) {
-        return id1.getValue() <=> id2.getValue();
-    }
+    template <typename U> auto operator<=>(const Id<U> &id) const { return getValue() <=> id.getValue(); }
 };
 
 template <class T> class NonCopyable {

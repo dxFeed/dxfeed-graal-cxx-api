@@ -244,7 +244,7 @@ class Summary final : public MarketEvent, public LastingEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
+    std::string toString() const noexcept override {
         return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
                            "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
                            "prevDayVolume={}, openInterest={}}}",
@@ -253,12 +253,6 @@ class Summary final : public MarketEvent, public LastingEvent {
                            getDayLowPrice(), getDayLowPrice(), getDayClosePrice(), getDayClosePriceType().toString(),
                            day_util::getYearMonthDayByDayId(getPrevDayId()), getPrevDayClosePrice(),
                            getPrevDayClosePriceType().toString(), getPrevDayVolume(), getOpenInterest());
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Summary &e) { return os << e.toString(); }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Summary> &e) {
-        return os << e->toString();
     }
 };
 

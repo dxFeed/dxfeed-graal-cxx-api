@@ -491,9 +491,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         if constexpr (isDebug) {
             debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.toString());
         }
-
-        //TODO: check
-        tryCallWithLock(mtx_, [this] { closeImpl(); });
     }
 
     /**
@@ -620,7 +617,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return the listener id
      */
     template <typename StateChangeListener>
-    std::size_t addStateChangeListener(StateChangeListener &&listener)
+    std::size_t addStateChangeListener(StateChangeListener &&listener) noexcept
         requires requires {
                      { listener(State{}, State{}) } -> std::same_as<void>;
                  }
@@ -634,7 +631,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      *
      * @param listenerId The listener id to remove
      */
-    void removeStateChangeListener(std::size_t listenerId) { onStateChange_ -= listenerId; }
+    void removeStateChangeListener(std::size_t listenerId) noexcept { onStateChange_ -= listenerId; }
 
     /**
      * Returns the onStateChange @ref Handler<void(ArgTypes...)> "handler" that can be used to add or remove
@@ -642,7 +639,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      *
      * @return onStateChange handler with `void(State, State)` signature
      */
-    auto &onStateChange() { return onStateChange_; }
+    auto &onStateChange() noexcept { return onStateChange_; }
 
     // TODO: implement
     template <typename Executor> void executor(Executor &&) {}
@@ -939,6 +936,10 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         }
 
         return Builder::create();
+    }
+
+    std::string toString() const {
+        return fmt::format("DXEndpoint{{{}}}", handler_.toString());
     }
 };
 } // namespace dxfcpp

@@ -285,7 +285,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
+    std::string toString() const noexcept override {
         return fmt::format(
             "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
             "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
@@ -293,12 +293,6 @@ class Quote final : public MarketEvent, public LastingEvent {
             formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(), formatTimeStamp(getBidTime()),
             string_util::encodeChar(getBidExchangeCode()), getBidPrice(), getBidSize(), formatTimeStamp(getAskTime()),
             string_util::encodeChar(getAskExchangeCode()), getAskPrice(), getAskSize());
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Quote &e) { return os << e.toString(); }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Quote> &e) {
-        return os << e->toString();
     }
 };
 

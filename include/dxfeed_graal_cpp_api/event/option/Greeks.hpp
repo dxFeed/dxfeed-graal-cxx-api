@@ -271,19 +271,13 @@ class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingE
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
+    std::string toString() const noexcept override {
         return fmt::format(
             "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
             "gamma={}, theta={}, rho={}, vega={}}}",
             MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
             getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(), getVolatility(),
             getDelta(), getGamma(), getTheta(), getRho(), getVega());
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Greeks &e) { return os << e.toString(); }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Greeks> &e) {
-        return os << e->toString();
     }
 };
 

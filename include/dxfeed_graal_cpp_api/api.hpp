@@ -9,6 +9,8 @@
 #include "internal/Enum.hpp"
 #include "internal/context/ApiContext.hpp"
 #include "internal/managers/DXEndpointManager.hpp"
+#include "internal/managers/DXFeedSubscriptionManager.hpp"
+#include "internal/managers/EntityManager.hpp"
 
 #include "api/DXEndpoint.hpp"
 #include "api/DXFeed.hpp"

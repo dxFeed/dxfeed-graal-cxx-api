@@ -43,15 +43,7 @@ class TradeETH final : public TradeBase {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept { return fmt::format("TradeETH{{{}}}", baseFieldsToString()); }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const TradeETH &e) {
-        return os << e.toString();
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<TradeETH> &e) {
-        return os << e->toString();
-    }
+    std::string toString() const noexcept override { return fmt::format("TradeETH{{{}}}", baseFieldsToString()); }
 };
 
 } // namespace dxfcpp
