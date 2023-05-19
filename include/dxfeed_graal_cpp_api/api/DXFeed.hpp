@@ -82,7 +82,9 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
+#if __cpp_concepts
         requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+#endif
     {
         if constexpr (isDebug) {
             debug("{}::createSubscription(eventTypes = {})", toString(),
@@ -96,9 +98,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
         return sub;
     }
 
-    std::string toString() const {
-        return fmt::format("DXFeed{{{}}}", handler_.toString());
-    }
+    std::string toString() const { return fmt::format("DXFeed{{{}}}", handler_.toString()); }
 };
 
 } // namespace dxfcpp

@@ -62,9 +62,12 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
     template <typename EventTypesCollection>
     explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
+#if __cpp_concepts
         requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+#endif
         : DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
-                             std::end(std::forward<EventTypesCollection>(eventTypes))) {}
+                             std::end(std::forward<EventTypesCollection>(eventTypes))) {
+    }
 
     void closeImpl() noexcept;
 
@@ -147,7 +150,9 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      */
     template <typename EventTypesCollection>
     static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept
+#if __cpp_concepts
         requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+#endif
     {
         auto sub =
             std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
@@ -191,9 +196,11 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
     template <typename EventListener>
     std::size_t addEventListener(EventListener &&listener) noexcept
+#if __cpp_concepts
         requires requires {
             { listener(std::vector<std::shared_ptr<EventType>>{}) } -> std::same_as<void>;
         }
+#endif
     {
         return onEvent_ += listener;
     }
@@ -202,13 +209,27 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
     const auto &onEvent() noexcept { return onEvent_; }
 
-    template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept;
+#if __cpp_lib_string_view
+    void addSymbol(std::string_view symbol) noexcept;
+#endif
+
+    void addSymbol(const char *symbol) noexcept;
+
+    void addSymbol(const std::string &symbol) noexcept;
 
     template <typename SymbolsCollection> void addSymbols(SymbolsCollection &&collection) noexcept;
 
     template <typename Symbol> void addSymbols(std::initializer_list<Symbol> collection) noexcept;
 
     template <typename Symbol> void removeSymbol(Symbol &&symbol) noexcept;
+
+#if __cpp_lib_string_view
+    void removeSymbol(std::string_view symbol) noexcept;
+#endif
+
+    void removeSymbol(const char *symbol) noexcept;
+
+    void removeSymbol(const std::string &symbol) noexcept;
 
     template <typename SymbolsCollection> void removeSymbols(SymbolsCollection &&collection) noexcept;
 

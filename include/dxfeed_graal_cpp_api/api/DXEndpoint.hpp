@@ -617,9 +617,11 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     template <typename StateChangeListener>
     std::size_t addStateChangeListener(StateChangeListener &&listener) noexcept
+#if __cpp_concepts
         requires requires {
-                     { listener(State{}, State{}) } -> std::same_as<void>;
-                 }
+            { listener(State{}, State{}) } -> std::same_as<void>;
+        }
+#endif
     {
         return onStateChange_ += listener;
     }
@@ -805,7 +807,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     class Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
-//        mutable std::recursive_mutex mtx_{};
+        //        mutable std::recursive_mutex mtx_{};
         handler_utils::JavaObjectHandler<Builder> handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
@@ -850,7 +852,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          * @return `this` endpoint builder.
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
-            //TODO: check invalid utf-8
+            // TODO: check invalid utf-8
             if constexpr (isDebug) {
                 debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.toString(), name);
             }
@@ -933,8 +935,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         return Builder::create();
     }
 
-    std::string toString() const {
-        return fmt::format("DXEndpoint{{{}}}", handler_.toString());
-    }
+    std::string toString() const { return fmt::format("DXEndpoint{{{}}}", handler_.toString()); }
 };
 } // namespace dxfcpp

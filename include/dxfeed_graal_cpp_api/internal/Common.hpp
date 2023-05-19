@@ -62,7 +62,9 @@ constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept
 // Implementation of std::bit_cast for pre-C++20.
 template <typename To, typename From>
 constexpr To bit_cast(const From &from)
+#if __cpp_concepts
     requires(sizeof(To) == sizeof(From))
+#endif
 {
 #ifdef __cpp_lib_bit_cast
     if (is_constant_evaluated())
@@ -204,7 +206,9 @@ struct EventClassList {
 } // namespace handler_utils
 
 template <typename It>
+#if __cpp_concepts
     requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }
+#endif
 std::string namesToString(It begin, It end) {
     std::string result{"["};
 

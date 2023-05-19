@@ -4,6 +4,8 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <filesystem>
+
 auto cApiStateToString(dxfc_dxendpoint_state_t state) {
     switch (state) {
     case DXFC_DXENDPOINT_STATE_NOT_CONNECTED:
@@ -22,6 +24,7 @@ auto cApiStateToString(dxfc_dxendpoint_state_t state) {
 int main() {
     {
         using namespace std::string_literals;
+        using namespace std::string_view_literals;
 
         auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
         auto endpoint = builder->build();
@@ -40,11 +43,15 @@ int main() {
             }
         });
 
-        sub->addSymbol("AAPL"s);
-        sub->addSymbol("IBM"s);
+        sub->addSymbol("AAPL");
+        sub->addSymbol("IBM"sv);
         sub->addSymbol("TSLA"s);
 
         endpoint->connect("demo.dxfeed.com:7300");
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+
+        sub->removeSymbol("TSLA");
 
         std::this_thread::sleep_for(std::chrono::seconds(5));
 

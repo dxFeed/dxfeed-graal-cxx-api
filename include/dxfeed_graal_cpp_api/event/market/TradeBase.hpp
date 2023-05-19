@@ -74,7 +74,9 @@ class TradeBase : public MarketEvent, public LastingEvent {
 
     template <typename ChildType, typename GraalNativeEventType, typename ChildGraalNativeEventType, auto clazz>
     static std::shared_ptr<ChildType> fromGraalNative(void *graalNative) noexcept
+#if __cpp_concepts
         requires(std::is_base_of_v<TradeBase, ChildType>)
+#endif
     {
         if (!graalNative) {
             return {};

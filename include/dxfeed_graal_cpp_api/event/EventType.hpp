@@ -72,7 +72,9 @@ struct EventType : public SharedEntity {
 
     template <typename EntityType>
     friend std::ostream &operator<<(std::ostream &os, const std::shared_ptr<EntityType> &e)
+#if __cpp_concepts
         requires(std::is_base_of_v<EventType, EntityType>)
+#endif
     {
         return os << e->toString();
     }
