@@ -468,7 +468,7 @@ class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
+    std::string toString() const noexcept override {
         return fmt::format("TimeAndSale{{{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
                            "exchange={}, price={}, size={}, bid={}, "
                            "ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, validTick={}, type={}{}{}}}",
@@ -480,14 +480,6 @@ class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
                            isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
                            getBuyer().empty() ? std::string{} : fmt::format(", buyer='{}'", getBuyer()),
                            getSeller().empty() ? std::string{} : fmt::format(", seller='{}'", getSeller()));
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const TimeAndSale &e) {
-        return os << e.toString();
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<TimeAndSale> &e) {
-        return os << e->toString();
     }
 };
 

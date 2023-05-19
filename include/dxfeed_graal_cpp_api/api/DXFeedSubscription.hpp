@@ -27,7 +27,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     static handler_utils::JavaObjectHandler<DXFeedSubscription>
     createSubscriptionHandlerFromEventClassList(const std::unique_ptr<handler_utils::EventClassList> &list) noexcept;
 
-    void setEventListenerHandler() noexcept;
+    void setEventListenerHandler(Id<DXFeedSubscription> id) noexcept;
 
     template <typename EventTypeIt>
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
@@ -55,7 +55,6 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
         }
 
         handler_ = createSubscriptionHandlerFromEventClassList(list);
-        setEventListenerHandler();
     }
 
     DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
@@ -74,11 +73,7 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     bool isClosedImpl() noexcept;
 
   public:
-    std::string toString() const {
-        std::lock_guard lock(mtx_);
-
-        return fmt::format("DXFeedSubscription{{{}}}", handler_.toString());
-    }
+    std::string toString() const { return fmt::format("DXFeedSubscription{{{}}}", handler_.toString()); }
 
     virtual ~DXFeedSubscription() {
         if constexpr (isDebug) {
@@ -98,7 +93,12 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
             debug("DXFeedSubscription::create(eventType = {})", eventType.getName());
         }
 
-        return std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventType));
+        auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventType));
+        auto id = ApiContext::getInstance()->getDxFeedSubscriptionManager()->registerEntity(sub);
+
+        sub->setEventListenerHandler(id);
+
+        return sub;
     }
 
     /**
@@ -115,7 +115,12 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
             debug("DXFeedSubscription::create(eventTypes = {})", namesToString(begin, end));
         }
 
-        return std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(begin, end));
+        auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(begin, end));
+        auto id = ApiContext::getInstance()->getDxFeedSubscriptionManager()->registerEntity(sub);
+
+        sub->setEventListenerHandler(id);
+
+        return sub;
     }
 
     /**
@@ -125,7 +130,12 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
     static std::shared_ptr<DXFeedSubscription> create(std::initializer_list<EventTypeEnum> eventTypes) noexcept {
-        return std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventTypes));
+        auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventTypes));
+        auto id = ApiContext::getInstance()->getDxFeedSubscriptionManager()->registerEntity(sub);
+
+        sub->setEventListenerHandler(id);
+
+        return sub;
     }
 
     /**
@@ -139,8 +149,13 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept
         requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
     {
-        return std::shared_ptr<DXFeedSubscription>(
-            new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
+        auto sub =
+            std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
+        auto id = ApiContext::getInstance()->getDxFeedSubscriptionManager()->registerEntity(sub);
+
+        sub->setEventListenerHandler(id);
+
+        return sub;
     }
 
     /**
@@ -174,11 +189,18 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
         closeImpl();
     }
 
-    template <typename EventListener> std::size_t addEventListener(EventListener &&listener) noexcept;
+    template <typename EventListener>
+    std::size_t addEventListener(EventListener &&listener) noexcept
+        requires requires {
+            { listener(std::vector<std::shared_ptr<EventType>>{}) } -> std::same_as<void>;
+        }
+    {
+        return onEvent_ += listener;
+    }
 
-    void removeEventListener(std::size_t listenerId) noexcept;
+    void removeEventListener(std::size_t listenerId) noexcept { onEvent_ -= listenerId; }
 
-    auto onEvent() noexcept;
+    const auto &onEvent() noexcept { return onEvent_; }
 
     template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept;
 

@@ -25,6 +25,16 @@ void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
     feed->detachSubscription(shared_from_this());
 }
 
+template <> void DXFeedSubscription::addSymbol(std::string &&symbol) noexcept {
+    runIsolatedOrElse(
+        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
+            dxfg_string_symbol_t s{{STRING}, symbol.c_str()};
+
+            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
+        },
+        false);
+}
+
 void DXFeedSubscription::closeImpl() noexcept {
     if (!handler_) {
         return;
@@ -68,8 +78,6 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
             return dxfg_DXFeedSubscription_new(threadHandle, static_cast<dxfg_event_clazz_t>(eventType.getId()));
         },
         nullptr));
-
-    setEventListenerHandler();
 }
 
 handler_utils::JavaObjectHandler<DXFeedSubscription> DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
@@ -79,19 +87,22 @@ handler_utils::JavaObjectHandler<DXFeedSubscription> DXFeedSubscription::createS
                               auto threadHandle) { return dxfg_DXFeedSubscription_new2(threadHandle, listHandler); },
                           nullptr));
 }
-void DXFeedSubscription::setEventListenerHandler() noexcept {
-    // TODO: sub manager
+
+void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noexcept {
+    auto onEvents = [](graal_isolatethread_t *thread, dxfg_event_type_list *graalNativeEvents, void *userData) {
+        auto id = Id<DXFeedSubscription>::from(bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
+        auto sub = ApiContext::getInstance()->getDxFeedSubscriptionManager()->getEntity(id);
+
+        if (sub) {
+            auto &&events = EventMapper::fromGraalNativeList(bit_cast<void *>(graalNativeEvents));
+
+            sub->onEvent_(events);
+        }
+    };
 
     eventListenerHandler_ = handler_utils::JavaObjectHandler<DXFeedEventListener>(runIsolatedOrElse(
-        [subscription = this](auto threadHandle) {
-            return dxfg_DXFeedEventListener_new(
-                threadHandle,
-                [](graal_isolatethread_t *thread, dxfg_event_type_list *graalNativeEvents, void *user_data) {
-                    auto &&events = EventMapper::fromGraalNativeList(bit_cast<void *>(graalNativeEvents));
-
-                    bit_cast<DXFeedSubscription *>(user_data)->onEvent_(events);
-                },
-                subscription);
+        [idValue = id.getValue(), onEvents](auto threadHandle) {
+            return dxfg_DXFeedEventListener_new(threadHandle, onEvents, bit_cast<void *>(idValue));
         },
         nullptr));
 

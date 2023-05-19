@@ -349,7 +349,7 @@ class Profile final : public MarketEvent, public LastingEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
+    std::string toString() const noexcept override {
         return fmt::format("Profile{{{}, eventTime={}, description='{}', SSR={}, status={}, statusReason='{}', "
                            "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
                            "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
@@ -360,12 +360,6 @@ class Profile final : public MarketEvent, public LastingEvent {
                            getHighLimitPrice(), getLowLimitPrice(), getHigh52WeekPrice(), getLow52WeekPrice(),
                            getBeta(), getEarningsPerShare(), getDividendFrequency(), getExDividendAmount(),
                            day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const Profile &e) { return os << e.toString(); }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<Profile> &e) {
-        return os << e->toString();
     }
 };
 

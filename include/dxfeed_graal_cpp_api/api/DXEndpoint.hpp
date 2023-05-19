@@ -463,7 +463,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     static inline std::mutex MTX{};
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
-    mutable std::recursive_mutex mtx_{};
     handler_utils::JavaObjectHandler<DXEndpoint> handler_;
     Role role_ = Role::FEED;
     std::string name_{};
@@ -480,7 +479,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     void closeImpl();
 
   protected:
-    DXEndpoint() : mtx_{}, handler_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandler_{}, onStateChange_{} {
+    DXEndpoint() : handler_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandler_{}, onStateChange_{} {
         if constexpr (isDebug) {
             debug("DXEndpoint()");
         }
@@ -491,8 +490,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         if constexpr (isDebug) {
             debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.toString());
         }
-
-        tryCallWithLock(mtx_, [this] { closeImpl(); });
     }
 
     /**
@@ -619,7 +616,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return the listener id
      */
     template <typename StateChangeListener>
-    std::size_t addStateChangeListener(StateChangeListener &&listener)
+    std::size_t addStateChangeListener(StateChangeListener &&listener) noexcept
         requires requires {
                      { listener(State{}, State{}) } -> std::same_as<void>;
                  }
@@ -633,7 +630,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      *
      * @param listenerId The listener id to remove
      */
-    void removeStateChangeListener(std::size_t listenerId) { onStateChange_ -= listenerId; }
+    void removeStateChangeListener(std::size_t listenerId) noexcept { onStateChange_ -= listenerId; }
 
     /**
      * Returns the onStateChange @ref Handler<void(ArgTypes...)> "handler" that can be used to add or remove
@@ -641,7 +638,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      *
      * @return onStateChange handler with `void(State, State)` signature
      */
-    auto &onStateChange() { return onStateChange_; }
+    auto &onStateChange() noexcept { return onStateChange_; }
 
     // TODO: implement
     template <typename Executor> void executor(Executor &&) {}
@@ -753,8 +750,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
             debug("DXEndpoint{{{}}}::close()", handler_.toString());
         }
 
-        std::lock_guard guard(mtx_);
-
         closeImpl();
     }
 
@@ -810,12 +805,12 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     class Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
-        mutable std::recursive_mutex mtx_{};
+//        mutable std::recursive_mutex mtx_{};
         handler_utils::JavaObjectHandler<Builder> handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() : mtx_{}, handler_{}, properties_{} {
+        Builder() : handler_{}, properties_{} {
             if constexpr (isDebug) {
                 debug("DXEndpoint::Builder::Builder()");
             }
@@ -899,8 +894,6 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
                       properties.size());
             }
 
-            std::lock_guard guard(mtx_);
-
             for (auto &&[k, v] : properties) {
                 withProperty(k, v);
             }
@@ -938,6 +931,10 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         }
 
         return Builder::create();
+    }
+
+    std::string toString() const {
+        return fmt::format("DXEndpoint{{{}}}", handler_.toString());
     }
 };
 } // namespace dxfcpp

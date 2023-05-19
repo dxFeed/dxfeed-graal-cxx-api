@@ -29,28 +29,28 @@ class IndexedEventSource {
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(unsigned id, std::string name) : id_{id}, name_{std::move(name)} {}
+    IndexedEventSource(unsigned id, std::string name) noexcept : id_{id}, name_{std::move(name)} {}
 
     /**
      * Returns the source identifier. Source identifier is non-negative.
      *
      * @return The source identifier.
      */
-    std::uint32_t id() const { return id_; }
+    std::uint32_t id() const noexcept { return id_; }
 
     /**
      * Returns the string representation of the object.
      *
      * @return The string representation of the object.
      */
-    const std::string &name() const { return name_; }
+    const std::string &name() const noexcept { return name_; }
 
     /**
      * Returns the string representation of the object.
      *
      * @return The string representation of the object.
      */
-    std::string toString() const { return name_; }
+    std::string toString() const noexcept { return name_; }
 };
 
 } // namespace dxfcpp

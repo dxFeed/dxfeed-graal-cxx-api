@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 #include "../../internal/Common.hpp"
 #include "../IndexedEventSource.hpp"
@@ -14,13 +15,7 @@
 namespace dxfcpp {
 
 // TODO: implement
-template <template <typename...> typename Cache>
-class OrderSourceImpl final : public IndexedEventSource {
-
-    static inline std::mutex MTX{};
-    static inline std::size_t CACHE_SIZE = 100UL;
-    static inline Cache<std::uint32_t, std::shared_ptr<OrderSourceImpl<Cache>>> SOURCES_BY_ID{};
-    static inline Cache<std::string, std::shared_ptr<OrderSourceImpl<Cache>>> SOURCES_BY_STRING{};
+class OrderSource final : public IndexedEventSource {
 
     static constexpr std::uint32_t PUB_ORDER = 0x0001U;
     static constexpr std::uint32_t PUB_ANALYTIC_ORDER = 0x0002U;
@@ -28,7 +23,22 @@ class OrderSourceImpl final : public IndexedEventSource {
     static constexpr std::uint32_t FULL_ORDER_BOOK = 0x0008U;
     static constexpr std::uint32_t FLAGS_SIZE = 4U;
 
+    static const std::unordered_map<std::uint32_t, std::reference_wrapper<const OrderSource>> INTERNAL_;
 
+    static inline std::mutex MTX_{};
+    const std::unordered_map<std::uint32_t, std::reference_wrapper<const OrderSource>> USER_;
+
+    std::uint32_t pubFlags_{};
+    bool builtin_{};
+
+    OrderSource(std::uint32_t id, std::string name, std::uint32_t pubFlags) noexcept
+        : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {}
+
+    OrderSource(const std::string& name, std::uint32_t pubFlags): OrderSource(composeId(name), name, pubFlags) {}
+
+    static std::uint32_t composeId(const std::string& name) noexcept {
+        return {};
+    }
 };
 
 } // namespace dxfcpp

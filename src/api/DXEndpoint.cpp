@@ -6,8 +6,8 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <string>
 #include <memory>
+#include <string>
 #include <utility>
 
 namespace dxfcpp {
@@ -73,20 +73,38 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 
     std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
 
+    if (!endpoint) {
+        //TODO: dummy endpoint & error handling;
+
+        return endpoint;
+    }
+
     endpoint->handler_ = handler_utils::JavaObjectHandler<DXEndpoint>(endpointHandle);
     endpoint->role_ = role;
     endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
+
+    auto id = ApiContext::getInstance()->getDxEndpointManager()->registerEntity(endpoint);
+
+    auto onPropertyChange = [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState,
+                               dxfg_endpoint_state_t newState, void *userData) {
+        auto id = Id<DXEndpoint>::from(bit_cast<Id<DXEndpoint>::ValueType>(userData));
+        auto endpoint = ApiContext::getInstance()->getDxEndpointManager()->getEntity(id);
+
+        std::cerr << "onStateChange: id = " + std::to_string(id.getValue()) + ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr") + "\n";
+
+        if (endpoint) {
+            endpoint->onStateChange_(graalStateToState(oldState), graalStateToState(newState));
+
+            if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
+                ApiContext::getInstance()->getDxEndpointManager()->unregisterEntity(id);
+            }
+        }
+    };
+
     endpoint->stateChangeListenerHandler_ =
         handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>(runIsolatedOrElse(
-            [endpoint](auto threadHandle) {
-                return dxfg_PropertyChangeListener_new(
-                    threadHandle,
-                    [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState, dxfg_endpoint_state_t newState,
-                       void *user_data) {
-                        bit_cast<DXEndpoint *>(user_data)->onStateChange_(graalStateToState(oldState),
-                                                                          graalStateToState(newState));
-                    },
-                    endpoint.get());
+            [idValue = id.getValue(), onPropertyChange](auto threadHandle) {
+                return dxfg_PropertyChangeListener_new(threadHandle, onPropertyChange, bit_cast<void *>(idValue));
             },
             nullptr));
     endpoint->setStateChangeListenerImpl();
@@ -110,8 +128,6 @@ void DXEndpoint::setStateChangeListenerImpl() {
 }
 
 DXEndpoint::State DXEndpoint::getState() const {
-    std::lock_guard guard(mtx_);
-
     return !handler_ ? State::CLOSED
                      : runIsolatedOrElse(
                            [handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
@@ -133,12 +149,10 @@ void DXEndpoint::closeImpl() {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::user(user = {})", handler_.toString(), user);
     }
-
-    std::lock_guard guard(mtx_);
 
     if (handler_) {
         runIsolatedOrElse(
@@ -152,12 +166,10 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::password(password = {})", handler_.toString(), password);
     }
-
-    std::lock_guard guard(mtx_);
 
     if (handler_) {
         runIsolatedOrElse(
@@ -171,12 +183,10 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::connect(address = {})", handler_.toString(), address);
     }
-
-    std::lock_guard guard(mtx_);
 
     if (handler_) {
         runIsolatedOrElse(
@@ -194,8 +204,6 @@ void DXEndpoint::reconnect() {
         debug("DXEndpoint{{{}}}::reconnect()", handler_.toString());
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_) {
         return;
     }
@@ -209,8 +217,6 @@ void DXEndpoint::disconnect() {
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::disconnect()", handler_.toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     if (!handler_) {
         return;
@@ -226,8 +232,6 @@ void DXEndpoint::disconnectAndClear() {
         debug("DXEndpoint{{{}}}::disconnectAndClear()", handler_.toString());
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_) {
         return;
     }
@@ -241,8 +245,6 @@ void DXEndpoint::awaitNotConnected() {
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::awaitNotConnected()", handler_.toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     if (!handler_) {
         return;
@@ -258,8 +260,6 @@ void DXEndpoint::awaitProcessed() {
         debug("DXEndpoint{{{}}}::awaitProcessed()", handler_.toString());
     }
 
-    std::lock_guard guard(mtx_);
-
     if (!handler_) {
         return;
     }
@@ -273,8 +273,6 @@ void DXEndpoint::closeAndAwaitTermination() {
     if constexpr (isDebug) {
         debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", handler_.toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     if (!handler_) {
         return;
@@ -290,7 +288,9 @@ void DXEndpoint::closeAndAwaitTermination() {
 }
 
 std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
-    std::lock_guard guard(mtx_);
+    if constexpr (isDebug) {
+        debug("DXEndpoint{{{}}}::getFeed()", handler_.toString());
+    }
 
     if (!feed_) {
         auto feedHandle = !handler_ ? nullptr
@@ -324,8 +324,8 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
 void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
     // The default properties file is only valid for the
     // Feed, OnDemandFeed and Publisher roles.
-    auto propertiesFileKey = [this]() -> std::string {
-        switch (role_) {
+    const auto &propertiesFileKey = [](auto role) -> const std::string & {
+        switch (role) {
         case Role::FEED:
         case Role::ON_DEMAND_FEED:
             return DXFEED_PROPERTIES_PROPERTY;
@@ -337,8 +337,8 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
             break;
         }
 
-        return {};
-    }();
+        return String::EMPTY;
+    }(role_);
 
     if (propertiesFileKey.empty()) {
         return;
@@ -372,8 +372,6 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
         debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", handler_.toString(), roleToString(role));
     }
 
-    std::lock_guard guard(mtx_);
-
     role_ = role;
 
     if (handler_) {
@@ -389,12 +387,10 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
                                                                        const std::string &value) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})", handler_.toString(), key, value);
     }
-
-    std::lock_guard guard(mtx_);
 
     properties_[key] = value;
 
@@ -411,12 +407,10 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 }
 
 bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
-    //TODO: check invalid utf-8
+    // TODO: check invalid utf-8
     if constexpr (isDebug) {
         debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", handler_.toString(), key);
     }
-
-    std::lock_guard guard(mtx_);
 
     if (!handler_) {
         return false;
@@ -433,8 +427,6 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     if constexpr (isDebug) {
         debug("DXEndpoint::Builder{{{}}}::build()", handler_.toString());
     }
-
-    std::lock_guard guard(mtx_);
 
     loadDefaultPropertiesImpl();
 

@@ -3,9 +3,14 @@
 
 #pragma once
 
+#include "dxfeed_graal_cpp_api/internal/managers/ErrorHandlingManager.hpp"
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
 #include "internal/Enum.hpp"
+#include "internal/context/ApiContext.hpp"
+#include "internal/managers/DXEndpointManager.hpp"
+#include "internal/managers/DXFeedSubscriptionManager.hpp"
+#include "internal/managers/EntityManager.hpp"
 
 #include "api/DXEndpoint.hpp"
 #include "api/DXFeed.hpp"
