@@ -36,22 +36,10 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
             debug("DXFeedSubscription(eventTypes = {})", namesToString(begin, end));
         }
 
-        auto size = std::distance(begin, end);
+        auto list = handler_utils::EventClassList::create(begin, end);
 
-        if (size <= 0) {
+        if (!list) {
             return;
-        }
-
-        auto list = handler_utils::EventClassList::create(size);
-
-        if (list->isEmpty()) {
-            return;
-        }
-
-        std::size_t i = 0;
-
-        for (auto it = begin; it != end; it++, i++) {
-            list->set(i, it->getId());
         }
 
         handler_ = createSubscriptionHandlerFromEventClassList(list);

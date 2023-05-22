@@ -36,21 +36,21 @@ class Isolate final {
 
             this->idx = idx++;
 
-            if constexpr (isDebugIsolates) {
-                debug("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}()", bit_cast<std::size_t>(handle), isMain,
+            if constexpr (traceIsolates) {
+                trace("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}()", bit_cast<std::size_t>(handle), isMain,
                       tid, idx);
             }
         }
 
         CEntryPointErrors detach() noexcept {
-            if constexpr (isDebugIsolates) {
-                debug("{}::detach()", toString());
+            if constexpr (traceIsolates) {
+                trace("{}::detach()", toString());
             }
 
             // OK if nothing is attached.
             if (!handle) {
-                if constexpr (isDebugIsolates) {
-                    debug("\tNot attached");
+                if constexpr (traceIsolates) {
+                    trace("\tNot attached");
                 }
 
                 return CEntryPointErrors::NO_ERROR;
@@ -59,8 +59,8 @@ class Isolate final {
             auto result = CEntryPointErrors::valueOf(graal_detach_thread(handle));
 
             if (result == CEntryPointErrors::NO_ERROR) {
-                if constexpr (isDebugIsolates) {
-                    debug("\tDetached");
+                if constexpr (traceIsolates) {
+                    trace("\tDetached");
                 }
 
                 handle = nullptr;
@@ -70,13 +70,13 @@ class Isolate final {
         }
 
         CEntryPointErrors detachAllThreadsAndTearDownIsolate() noexcept {
-            if constexpr (isDebugIsolates) {
-                debug("{}::detachAllThreadsAndTearDownIsolate()", toString());
+            if constexpr (traceIsolates) {
+                trace("{}::detachAllThreadsAndTearDownIsolate()", toString());
             }
 
             if (!handle) {
-                if constexpr (isDebugIsolates) {
-                    debug("\tNot attached");
+                if constexpr (traceIsolates) {
+                    trace("\tNot attached");
                 }
 
                 return CEntryPointErrors::NO_ERROR;
@@ -85,8 +85,8 @@ class Isolate final {
             auto result = CEntryPointErrors::valueOf(graal_detach_all_threads_and_tear_down_isolate(handle));
 
             if (result == CEntryPointErrors::NO_ERROR) {
-                if constexpr (isDebugIsolates) {
-                    debug("\tAll threads have been detached. The isolate has been teared down.");
+                if constexpr (traceIsolates) {
+                    trace("\tAll threads have been detached. The isolate has been teared down.");
                 }
 
                 handle = nullptr;
@@ -96,13 +96,13 @@ class Isolate final {
         }
 
         ~IsolateThread() noexcept {
-            if constexpr (isDebugIsolates) {
-                debug("~{}()", toString());
+            if constexpr (traceIsolates) {
+                trace("~{}()", toString());
             }
 
             if (isMain) {
-                if constexpr (isDebugIsolates) {
-                    debug("\tThis is the main thread");
+                if constexpr (traceIsolates) {
+                    trace("\tThis is the main thread");
                 }
 
                 return;
@@ -128,15 +128,15 @@ class Isolate final {
         currentIsolateThread_.handle = mainIsolateThreadHandle;
         currentIsolateThread_.isMain = true;
 
-        if constexpr (isDebugIsolates) {
-            debug("Isolate{{{}, main = {}, current = {}}}()", bit_cast<std::size_t>(handle),
+        if constexpr (traceIsolates) {
+            trace("Isolate{{{}, main = {}, current = {}}}()", bit_cast<std::size_t>(handle),
                   mainIsolateThread_.toString(), currentIsolateThread_.toString());
         }
     }
 
     static std::shared_ptr<Isolate> create() noexcept {
-        if constexpr (isDebugIsolates) {
-            debug("Isolate::create()");
+        if constexpr (traceIsolates) {
+            trace("Isolate::create()");
         }
 
         GraalIsolateHandle graalIsolateHandle{};
@@ -147,29 +147,29 @@ class Isolate final {
 
             auto result = std::shared_ptr<Isolate>{new Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
 
-            if constexpr (isDebugIsolates) {
-                debug("Isolate::create() -> *{}", result->toString());
+            if constexpr (traceIsolates) {
+                trace("Isolate::create() -> *{}", result->toString());
             }
 
             return result;
         }
 
-        if constexpr (isDebugIsolates) {
-            debug("\t-> nullptr");
+        if constexpr (traceIsolates) {
+            trace("\t-> nullptr");
         }
 
         return nullptr;
     }
 
     CEntryPointErrors attach() noexcept {
-        if constexpr (isDebugIsolates) {
-            debug("{}::attach()", toString());
+        if constexpr (traceIsolates) {
+            trace("{}::attach()", toString());
         }
 
         // We will not re-attach.
         if (!currentIsolateThread_.handle) {
-            if constexpr (isDebugIsolates) {
-                debug("\tNeeds to be attached.");
+            if constexpr (traceIsolates) {
+                trace("\tNeeds to be attached.");
             }
 
             GraalIsolateThreadHandle newIsolateThreadHandle{};
@@ -177,8 +177,8 @@ class Isolate final {
             if (auto result = CEntryPointErrors::valueOf(graal_attach_thread(handle_, &newIsolateThreadHandle));
                 result != CEntryPointErrors::NO_ERROR) {
 
-                if constexpr (isDebugIsolates) {
-                    debug("\t-> {}", result.getDescription());
+                if constexpr (traceIsolates) {
+                    trace("\t-> {}", result.getDescription());
                 }
 
                 return result;
@@ -187,12 +187,12 @@ class Isolate final {
             currentIsolateThread_.handle = newIsolateThreadHandle;
             currentIsolateThread_.isMain = mainIsolateThread_.handle == newIsolateThreadHandle;
 
-            if constexpr (isDebugIsolates) {
-                debug("\tAttached: {}", currentIsolateThread_.toString());
+            if constexpr (traceIsolates) {
+                trace("\tAttached: {}", currentIsolateThread_.toString());
             }
         } else {
-            if constexpr (isDebugIsolates) {
-                debug("\tCached: {}", currentIsolateThread_.toString());
+            if constexpr (traceIsolates) {
+                trace("\tCached: {}", currentIsolateThread_.toString());
             }
         }
 
@@ -200,8 +200,8 @@ class Isolate final {
     }
 
     GraalIsolateThreadHandle get() noexcept {
-        if constexpr (isDebugIsolates) {
-            debug("{}::get()", toString());
+        if constexpr (traceIsolates) {
+            trace("{}::get()", toString());
         }
 
         return graal_get_current_thread(handle_);
@@ -213,14 +213,14 @@ class Isolate final {
     Isolate &operator=(const Isolate &) = delete;
 
     static std::shared_ptr<Isolate> getInstance() noexcept {
-        if constexpr (isDebugIsolates) {
-            debug("Isolate::getInstance()");
+        if constexpr (traceIsolates) {
+            trace("Isolate::getInstance()");
         }
 
         static std::shared_ptr<Isolate> instance = create();
 
-        if constexpr (isDebugIsolates) {
-            debug("Isolate::getInstance() -> *{}", instance->toString());
+        if constexpr (traceIsolates) {
+            trace("Isolate::getInstance() -> *{}", instance->toString());
         }
 
         return instance;
@@ -228,8 +228,8 @@ class Isolate final {
 
     template <typename F>
     auto runIsolated(F &&f) -> std::variant<CEntryPointErrors, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
-        if constexpr (isDebugIsolates) {
-            debug("{}::runIsolated({})", toString(), bit_cast<std::size_t>(&f));
+        if constexpr (traceIsolates) {
+            trace("{}::runIsolated({})", toString(), bit_cast<std::size_t>(&f));
         }
 
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
@@ -238,8 +238,8 @@ class Isolate final {
         }
 
         if (auto result = attach(); result != CEntryPointErrors::NO_ERROR) {
-            if constexpr (isDebugIsolates) {
-                debug("\t-> {}", result.getDescription());
+            if constexpr (traceIsolates) {
+                trace("\t-> {}", result.getDescription());
             }
 
             return result;
@@ -266,8 +266,8 @@ class Isolate final {
     }
 
     ~Isolate() {
-        if constexpr (isDebugIsolates) {
-            debug("~Isolate()");
+        if constexpr (traceIsolates) {
+            trace("~Isolate()");
         }
     }
 

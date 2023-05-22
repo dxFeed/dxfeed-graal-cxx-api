@@ -3,7 +3,13 @@
 
 #pragma once
 
-#define DXFCPP_DEBUG_ISOLATES
+#ifndef DXFCPP_TRACE_ISOLATES
+#    define DXFCPP_TRACE_ISOLATES 0
+#endif
+
+#ifndef DXFCPP_TRACE_LISTS
+#    define DXFCPP_TRACE_LISTS 1
+#endif
 
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
@@ -32,14 +38,21 @@ struct DXEndpointStateChangeListener {};
 
 #if defined(NDEBUG) && !defined(DXFCPP_DEBUG)
 constexpr bool isDebug = false;
-constexpr bool isDebugIsolates = false;
+constexpr bool traceIsolates = false;
+constexpr bool traceLists = false;
 #else
 constexpr bool isDebug = true;
 
-#    ifdef DXFCPP_DEBUG_ISOLATES
-constexpr bool isDebugIsolates = true;
+#    if DXFCPP_TRACE_ISOLATES == 1
+constexpr bool traceIsolates = true;
 #    else
-constexpr bool isDebugIsolates = false;
+constexpr bool traceIsolates = false;
+#    endif
+
+#    if DXFCPP_TRACE_LISTS == 1
+constexpr bool traceLists = true;
+#    else
+constexpr bool traceLists = false;
 #    endif
 
 #endif
@@ -154,8 +167,20 @@ inline std::string debugPrefixStr() {
     return fmt::format("D {} [{}]", nowStr(), tid.str());
 }
 
+inline std::string tracePrefixStr() {
+    std::ostringstream tid{};
+
+    tid << std::this_thread::get_id();
+
+    return fmt::format("T {} [{}]", nowStr(), tid.str());
+}
+
 template <typename... Args> inline void debug(std::string_view format, Args &&...args) {
     vprint(std::cerr, "{} {}\n", debugPrefixStr(), vformat(format, std::forward<Args>(args)...));
+}
+
+template <typename... Args> inline void trace(std::string_view format, Args &&...args) {
+    vprint(std::cerr, "{} ~~ {}\n", tracePrefixStr(), vformat(format, std::forward<Args>(args)...));
 }
 
 namespace handler_utils {
@@ -185,7 +210,28 @@ template <typename T> struct JavaObjectHandler {
 };
 
 struct EventClassList {
-    static std::unique_ptr<EventClassList> create(std::size_t size) noexcept;
+    template <typename EventTypeIt>
+    static std::unique_ptr<EventClassList> create(EventTypeIt begin, EventTypeIt end) noexcept {
+        auto size = std::distance(begin, end);
+
+        if (size <= 0) {
+            return {};
+        }
+
+        auto list = handler_utils::EventClassList::create(size);
+
+        if (list->isEmpty()) {
+            return {};
+        }
+
+        std::size_t i = 0;
+
+        for (auto it = begin; it != end; it++, i++) {
+            list->set(i, it->getId());
+        }
+
+        return list;
+    }
 
     void set(std::size_t index, std::uint32_t id) noexcept;
 
@@ -198,6 +244,8 @@ struct EventClassList {
     ~EventClassList() noexcept;
 
   private:
+    static std::unique_ptr<EventClassList> create(std::size_t size) noexcept;
+
     EventClassList() noexcept;
 
     struct Impl;
