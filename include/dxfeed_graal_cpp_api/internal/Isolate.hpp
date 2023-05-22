@@ -249,7 +249,9 @@ class Isolate final {
     }
 
     template <typename F, typename R>
+#if __cpp_concepts
         requires std::convertible_to<R, std::invoke_result_t<F &&, GraalIsolateThreadHandle>>
+#endif
     auto runIsolatedOrElse(F &&f, R defaultValue) {
         return std::visit(
             [defaultValue =
@@ -280,7 +282,9 @@ class Isolate final {
 template <typename F> auto runIsolated(F &&f) { return Isolate::getInstance()->runIsolated(std::forward<F>(f)); }
 
 template <typename F, typename R>
+#if __cpp_concepts
     requires std::convertible_to<R, std::invoke_result_t<F &&, GraalIsolateThreadHandle>>
+#endif
 auto runIsolatedOrElse(F &&f, R defaultValue) {
     return Isolate::getInstance()->runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue));
 }

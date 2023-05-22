@@ -6,6 +6,7 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <memory>
+#include <typeinfo>
 
 namespace dxfcpp {
 
@@ -25,27 +26,13 @@ void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
     feed->detachSubscription(shared_from_this());
 }
 
-#if __cpp_lib_string_view
-void DXFeedSubscription::addSymbol(std::string_view symbol) noexcept {
+template <typename Symbol> auto symbolDataRetriever(Symbol &&s) {
     if constexpr (isDebug) {
-        debug("{}::addSymbol(symbol = {})", toString(), symbol);
+        debug("{}", typeid(decltype(s)).name());
     }
-
-    runIsolatedOrElse(
-        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
-            dxfg_string_symbol_t s{{STRING}, symbol.data()};
-
-            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
-        },
-        false);
 }
-#endif
 
-void DXFeedSubscription::addSymbol(const char *symbol) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::addSymbol(symbol = {})", toString(), symbol);
-    }
-
+void DXFeedSubscription::addSymbolImpl(const char *symbol) noexcept {
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
             dxfg_string_symbol_t s{{STRING}, symbol};
@@ -55,58 +42,10 @@ void DXFeedSubscription::addSymbol(const char *symbol) noexcept {
         false);
 }
 
-void DXFeedSubscription::addSymbol(const std::string &symbol) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::addSymbol(symbol = {})", toString(), symbol);
-    }
-
-    runIsolatedOrElse(
-        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
-            dxfg_string_symbol_t s{{STRING}, symbol.c_str()};
-
-            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
-        },
-        false);
-}
-
-#if __cpp_lib_string_view
-void DXFeedSubscription::removeSymbol(std::string_view symbol) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::removeSymbol(symbol = {})", toString(), symbol);
-    }
-
-    runIsolatedOrElse(
-        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
-            dxfg_string_symbol_t s{{STRING}, symbol.data()};
-
-            return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
-        },
-        false);
-}
-#endif
-
-void DXFeedSubscription::removeSymbol(const char *symbol) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::removeSymbol(symbol = {})", toString(), symbol);
-    }
-
+void DXFeedSubscription::removeSymbolImpl(const char *symbol) noexcept {
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
             dxfg_string_symbol_t s{{STRING}, symbol};
-
-            return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
-        },
-        false);
-}
-
-void DXFeedSubscription::removeSymbol(const std::string &symbol) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::removeSymbol(symbol = {})", toString(), symbol);
-    }
-
-    runIsolatedOrElse(
-        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
-            dxfg_string_symbol_t s{{STRING}, symbol.c_str()};
 
             return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
         },

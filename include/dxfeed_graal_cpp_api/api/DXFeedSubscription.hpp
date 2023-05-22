@@ -75,6 +75,10 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
 
     bool isClosedImpl() noexcept;
 
+    void addSymbolImpl(const char *symbol) noexcept;
+
+    void removeSymbolImpl(const char *symbol) noexcept;
+
   public:
     std::string toString() const { return fmt::format("DXFeedSubscription{{{}}}", handler_.toString()); }
 
@@ -194,6 +198,20 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
         closeImpl();
     }
 
+    /**
+     * Adds listener for events.
+     * Event lister can be added only when subscription is not producing any events.
+     * The subscription must be either empty
+     * (its set of @ref ::getSymbols() "symbols" is empty or not @ref ::attach() "attached" to any feed
+     * (its set of change listeners is empty).
+     *
+     * This method does nothing if this subscription is closed.
+     *
+     * @tparam EventListener The listener type. Listener can be callable with signature: `void(const
+     * std::vector<std::shared_ptr<EventType>&)`
+     * @param listener The event listener
+     * @return The listener id
+     */
     template <typename EventListener>
     std::size_t addEventListener(EventListener &&listener) noexcept
 #if __cpp_concepts
@@ -205,31 +223,59 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
         return onEvent_ += listener;
     }
 
+    /**
+     * Removes listener for events.
+     *
+     * @param listenerId The listener id
+     */
     void removeEventListener(std::size_t listenerId) noexcept { onEvent_ -= listenerId; }
 
+    /**
+     * Returns a reference to an incoming events' handler (delegate), to which listeners can be added and removed.
+     *
+     * @return The incoming events' handler (delegate)
+     */
     const auto &onEvent() noexcept { return onEvent_; }
 
+    template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept {
+        if constexpr (isDebug) {
+            debug("{}::addSymbol(symbol = {})", toString(), symbol);
+        }
+
+        if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
+            addSymbolImpl(symbol.c_str());
+        }
 #if __cpp_lib_string_view
-    void addSymbol(std::string_view symbol) noexcept;
+        else if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string_view>) {
+            addSymbolImpl(symbol.data());
+        }
 #endif
+        else {
+            addSymbolImpl(symbol);
+        }
+    }
 
-    void addSymbol(const char *symbol) noexcept;
+    template <typename Symbol> void removeSymbol(Symbol &&symbol) noexcept {
+        if constexpr (isDebug) {
+            debug("{}::removeSymbol(symbol = {})", toString(), symbol);
+        }
 
-    void addSymbol(const std::string &symbol) noexcept;
+        if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
+            removeSymbolImpl(symbol.c_str());
+        }
+#if __cpp_lib_string_view
+        else if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string_view>) {
+            removeSymbolImpl(symbol.data());
+        }
+#endif
+        else {
+            removeSymbolImpl(symbol);
+        }
+    }
 
     template <typename SymbolsCollection> void addSymbols(SymbolsCollection &&collection) noexcept;
 
     template <typename Symbol> void addSymbols(std::initializer_list<Symbol> collection) noexcept;
-
-    template <typename Symbol> void removeSymbol(Symbol &&symbol) noexcept;
-
-#if __cpp_lib_string_view
-    void removeSymbol(std::string_view symbol) noexcept;
-#endif
-
-    void removeSymbol(const char *symbol) noexcept;
-
-    void removeSymbol(const std::string &symbol) noexcept;
 
     template <typename SymbolsCollection> void removeSymbols(SymbolsCollection &&collection) noexcept;
 
