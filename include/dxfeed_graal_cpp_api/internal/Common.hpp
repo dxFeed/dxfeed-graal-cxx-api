@@ -3,6 +3,8 @@
 
 #pragma once
 
+#define DXFCPP_DEBUG_ISOLATES
+
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
