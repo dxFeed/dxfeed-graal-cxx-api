@@ -43,7 +43,7 @@ class Trade final : public TradeBase {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override { return fmt::format("Trade{{{}}}", baseFieldsToString()); }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

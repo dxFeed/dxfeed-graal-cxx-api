@@ -237,14 +237,7 @@ class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public Lasti
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override {
-        return fmt::format(
-            "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
-            "delta={}, gamma={}, dividend={}, interest={}}}",
-            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
-            getUnderlyingPrice(), getDelta(), getGamma(), getDividend(), getInterest());
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

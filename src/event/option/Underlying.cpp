@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 const EventTypeEnum &Underlying::Type = EventTypeEnum::UNDERLYING;
@@ -42,6 +47,15 @@ std::shared_ptr<Underlying> Underlying::fromGraalNative(void *graalNative) noexc
         // TODO: error handling
         return {};
     }
+}
+
+std::string Underlying::toString() const noexcept {
+    return fmt::format(
+        "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
+        "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
+        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getVolatility(),
+        getFrontVolatility(), getBackVolatility(), getCallVolume(), getPutVolume(), getPutCallRatio());
 }
 
 } // namespace dxfcpp

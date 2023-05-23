@@ -74,6 +74,10 @@ set(dxFeedNativeAPIInternalSources
         src/internal/Common.cpp
         )
 
+set(dxFeedNativeAPIInternalUtilsDebugSources
+        src/internal/utils/debug/Debug.cpp
+        )
+
 set(dxFeedNativeAPIAPISources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
@@ -118,6 +122,7 @@ set(dxFeedNativeAPIEventOptionSources
 
 add_library(dxFeedGraalCxxApi
         ${dxFeedNativeAPIInternalSources}
+        ${dxFeedNativeAPIInternalUtilsDebugSources}
         ${dxFeedNativeAPIAPISources}
         ${dxFeedNativeAPISystemSources}
         ${dxFeedNativeAPIEventSources}

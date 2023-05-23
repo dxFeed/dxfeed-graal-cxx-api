@@ -500,26 +500,7 @@ class OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
-        return fmt::format(
-            "OptionSale{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, timeNanoPart={}, sequence={}, "
-            "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
-            "validTick={}, type={}, underlyingPrice={}, volatility={}, delta={}, optionSymbol='{}'}}",
-            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
-            getSequence(), string_util::encodeChar(getExchangeCode()), getPrice(), getSize(), getBidPrice(),
-            getAskPrice(), getExchangeSaleConditions(), string_util::encodeChar(getTradeThroughExempt()),
-            getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
-            getUnderlyingPrice(), getVolatility(), getDelta(), getOptionSymbol());
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const OptionSale &e) {
-        return os << e.toString();
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<OptionSale> &e) {
-        return os << e->toString();
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

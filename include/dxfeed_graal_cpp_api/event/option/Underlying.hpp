@@ -252,14 +252,7 @@ class Underlying final: public MarketEvent, public TimeSeriesEvent, public Lasti
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override {
-        return fmt::format(
-            "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
-            "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
-            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getVolatility(),
-            getFrontVolatility(), getBackVolatility(), getCallVolume(), getPutVolume(), getPutCallRatio());
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

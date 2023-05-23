@@ -11,6 +11,7 @@
 #include "internal/managers/DXEndpointManager.hpp"
 #include "internal/managers/DXFeedSubscriptionManager.hpp"
 #include "internal/managers/EntityManager.hpp"
+#include "internal/utils/debug/Debug.hpp"
 
 #include "api/DXEndpoint.hpp"
 #include "api/DXFeed.hpp"

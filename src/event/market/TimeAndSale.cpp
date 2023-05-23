@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 void TimeAndSale::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
@@ -53,6 +58,20 @@ std::shared_ptr<TimeAndSale> TimeAndSale::fromGraalNative(void *graalNative) noe
         // TODO: error handling
         return {};
     }
+}
+
+std::string TimeAndSale::toString() const noexcept {
+    return fmt::format("TimeAndSale{{{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
+                       "exchange={}, price={}, size={}, bid={}, "
+                       "ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, validTick={}, type={}{}{}}}",
+                       MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                       getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
+                       getSequence(), string_util::encodeChar(getExchangeCode()), getPrice(), getSize(),
+                       getBidPrice(), getAskPrice(), getExchangeSaleConditions(),
+                       string_util::encodeChar(getTradeThroughExempt()), getAggressorSide().toString(),
+                       isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
+                       getBuyer().empty() ? std::string{} : fmt::format(", buyer='{}'", getBuyer()),
+                       getSeller().empty() ? std::string{} : fmt::format(", seller='{}'", getSeller()));
 }
 
 } // namespace dxfcpp

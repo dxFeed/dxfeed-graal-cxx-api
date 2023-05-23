@@ -9,6 +9,11 @@
 #include <cstdint>
 #include <memory>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 const EventTypeEnum &Quote::Type = EventTypeEnum::QUOTE;
@@ -60,6 +65,16 @@ std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
         // TODO: error handling
         return {};
     }
+}
+
+std::string Quote::toString() const noexcept {
+    return fmt::format(
+        "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
+        "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
+        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+        formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(), formatTimeStamp(getBidTime()),
+        string_util::encodeChar(getBidExchangeCode()), getBidPrice(), getBidSize(), formatTimeStamp(getAskTime()),
+        string_util::encodeChar(getAskExchangeCode()), getAskPrice(), getAskSize());
 }
 
 } // namespace dxfcpp

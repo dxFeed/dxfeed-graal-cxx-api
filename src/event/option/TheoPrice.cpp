@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 const EventTypeEnum &TheoPrice::Type = EventTypeEnum::THEO_PRICE;
@@ -42,6 +47,15 @@ std::shared_ptr<TheoPrice> TheoPrice::fromGraalNative(void *graalNative) noexcep
         // TODO: error handling
         return {};
     }
+}
+
+std::string TheoPrice::toString() const noexcept {
+    return fmt::format(
+        "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
+        "delta={}, gamma={}, dividend={}, interest={}}}",
+        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
+        getUnderlyingPrice(), getDelta(), getGamma(), getDividend(), getInterest());
 }
 
 } // namespace dxfcpp

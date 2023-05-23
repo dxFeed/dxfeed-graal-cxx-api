@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 const EventTypeEnum &Summary::Type = EventTypeEnum::SUMMARY;
@@ -47,6 +52,17 @@ std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
         // TODO: error handling
         return {};
     }
+}
+
+std::string Summary::toString() const noexcept {
+    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
+                       "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
+                       "prevDayVolume={}, openInterest={}}}",
+                       MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                       day_util::getYearMonthDayByDayId(getDayId()), getDayOpenPrice(), getDayHighPrice(),
+                       getDayLowPrice(), getDayLowPrice(), getDayClosePrice(), getDayClosePriceType().toString(),
+                       day_util::getYearMonthDayByDayId(getPrevDayId()), getPrevDayClosePrice(),
+                       getPrevDayClosePriceType().toString(), getPrevDayVolume(), getOpenInterest());
 }
 
 } // namespace dxfcpp

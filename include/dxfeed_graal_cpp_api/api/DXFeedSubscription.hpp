@@ -14,7 +14,7 @@ namespace dxfcpp {
 
 struct DXFeed;
 
-class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscription> {
+class DXFeedSubscription : public SharedEntity {
     friend struct DXFeed;
 
     mutable std::recursive_mutex mtx_{};
@@ -32,8 +32,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     template <typename EventTypeIt>
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
         : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
-        if constexpr (isDebug) {
-            debug("DXFeedSubscription(eventTypes = {})", namesToString(begin, end));
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXFeedSubscription(eventTypes = {})", namesToString(begin, end));
         }
 
         auto list = handler_utils::EventClassList::create(begin, end);
@@ -68,11 +68,11 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     void removeSymbolImpl(const char *symbol) noexcept;
 
   public:
-    std::string toString() const { return fmt::format("DXFeedSubscription{{{}}}", handler_.toString()); }
+    std::string toString() const noexcept override;
 
-    virtual ~DXFeedSubscription() {
-        if constexpr (isDebug) {
-            debug("{}::~DXFeedSubscription()", toString());
+    ~DXFeedSubscription() override {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXFeedSubscription{{{}}}::~DXFeedSubscription()", handler_.toString());
         }
 
         tryCallWithLock(mtx_, [this] { closeImpl(); });
@@ -84,8 +84,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * @param eventType the event type.
      */
     static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) noexcept {
-        if constexpr (isDebug) {
-            debug("DXFeedSubscription::create(eventType = {})", eventType.getName());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXFeedSubscription::create(eventType = {})", eventType.getName());
         }
 
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventType));
@@ -106,8 +106,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      */
     template <typename EventTypeIt>
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) noexcept {
-        if constexpr (isDebug) {
-            debug("DXFeedSubscription::create(eventTypes = {})", namesToString(begin, end));
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXFeedSubscription::create(eventTypes = {})", namesToString(begin, end));
         }
 
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(begin, end));
@@ -177,8 +177,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * can be added.
      */
     void close() noexcept {
-        if constexpr (isDebug) {
-            debug("{}::close()", toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::close()", toString());
         }
 
         std::lock_guard lock(mtx_);
@@ -226,8 +226,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     const auto &onEvent() noexcept { return onEvent_; }
 
     template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept {
-        if constexpr (isDebug) {
-            debug("{}::addSymbol(symbol = {})", toString(), symbol);
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::addSymbol(symbol = {})", toString(), symbol);
         }
 
         if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
@@ -244,8 +244,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
     }
 
     template <typename Symbol> void removeSymbol(Symbol &&symbol) noexcept {
-        if constexpr (isDebug) {
-            debug("{}::removeSymbol(symbol = {})", toString(), symbol);
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::removeSymbol(symbol = {})", toString(), symbol);
         }
 
         if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
@@ -271,8 +271,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * Clears the set of subscribed symbols.
      */
     void clear() noexcept {
-        if constexpr (isDebug) {
-            debug("{}::clear()", toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::clear()", toString());
         }
 
         std::lock_guard lock(mtx_);
@@ -288,8 +288,8 @@ class DXFeedSubscription : public std::enable_shared_from_this<DXFeedSubscriptio
      * @see ::close
      */
     bool isClosed() noexcept {
-        if constexpr (isDebug) {
-            debug("{}::isClosed()", toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::isClosed()", toString());
         }
 
         std::lock_guard lock(mtx_);

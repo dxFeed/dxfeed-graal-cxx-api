@@ -362,16 +362,7 @@ class TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return string representation of this trade event's fields.
      */
-    std::string baseFieldsToString() const noexcept {
-        return fmt::format("{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, price={}, "
-                           "change={}, size={}, day={}, dayVolume={}, dayTurnover={}, "
-                           "direction={}, ETH={}",
-                           MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                           formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(),
-                           string_util::encodeChar(getExchangeCode()), getPrice(), getChange(), getSize(),
-                           day_util::getYearMonthDayByDayId(getDayId()), getDayVolume(), getDayTurnover(),
-                           getTickDirection().toString(), isExtendedTradingHours());
-    }
+    std::string baseFieldsToString() const noexcept;
 };
 
 } // namespace dxfcpp

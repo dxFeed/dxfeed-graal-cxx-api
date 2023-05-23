@@ -9,19 +9,24 @@
 #include <utility>
 #include <string>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 std::shared_ptr<DXFeed> DXFeed::getInstance() noexcept {
-    if constexpr (isDebug) {
-        debug("DXFeed::getInstance()");
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXFeed::getInstance()");
     }
 
     return DXEndpoint::getInstance()->getFeed();
 }
 
 void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::attachSubscription({})", toString(), subscription->toString());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("{}::attachSubscription({})", toString(), subscription->toString());
     }
 
     if (!handler_ || !subscription || !subscription->handler_) {
@@ -40,8 +45,8 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
 }
 
 void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::detachSubscription({})", toString(), subscription->toString());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("{}::detachSubscription({})", toString(), subscription->toString());
     }
 
     if (!handler_ || !subscription || !subscription->handler_) {
@@ -60,8 +65,8 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
 }
 
 void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::detachSubscriptionAndClear({})", toString(), subscription->toString());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("{}::detachSubscriptionAndClear({})", toString(), subscription->toString());
     }
 
     if (!handler_ || !subscription || !subscription->handler_) {
@@ -80,8 +85,8 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::createSubscription(eventType = {})", toString(), eventType.getName());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("{}::createSubscription(eventType = {})", toString(), eventType.getName());
     }
 
     auto sub = DXFeedSubscription::create(eventType);
@@ -93,8 +98,8 @@ std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEn
 
 std::shared_ptr<DXFeedSubscription>
 DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::createSubscription(eventTypes = {})", toString(),
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("{}::createSubscription(eventTypes = {})", toString(),
               namesToString(eventTypes.begin(), eventTypes.end()));
     }
 
@@ -106,8 +111,8 @@ DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noex
 }
 
 std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
-    if constexpr (isDebug) {
-        debug("DXFeed::create({})", feedHandle);
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXFeed::create({})", feedHandle);
     }
 
     std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
@@ -116,5 +121,7 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
 
     return feed;
 }
+
+std::string DXFeed::toString() const noexcept { return fmt::format("DXFeed{{{}}}", handler_.toString()); }
 
 }

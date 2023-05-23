@@ -13,25 +13,27 @@
 namespace dxfcpp {
 
 template <typename EntityType> struct EntityManager : private NonCopyable<EntityManager<EntityType>> {
+#if DXFCPP_DEBUG == 1
+    static auto getDebugName() {
+        return std::string("EntityManager<") + typeid(EntityType).name() + ">";
+    }
+#endif
+
     // TODO: Boost.Bimap
     std::unordered_map<Id<EntityType>, std::shared_ptr<EntityType>> entitiesById_;
     std::unordered_map<std::shared_ptr<EntityType>, Id<EntityType>> idsByEntities_;
     std::mutex mutex_;
 
     EntityManager() : entitiesById_{}, idsByEntities_{}, mutex_{} {
-        if constexpr (isDebug) {
-            auto name = typeid(EntityType).name();
-
-            debug("EntityManager<{}>()", name);
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}()", getDebugName());
         }
     }
 
   public:
     Id<EntityType> registerEntity(std::shared_ptr<EntityType> entity) {
-        if constexpr (isDebug) {
-            auto name = typeid(EntityType).name();
-
-            debug("EntityManager<{}>::registerEntity({})", name, entity->toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::registerEntity({})", getDebugName(), entity->toString());
         }
 
         std::lock_guard lockGuard{mutex_};
@@ -49,10 +51,8 @@ template <typename EntityType> struct EntityManager : private NonCopyable<Entity
     }
 
     bool unregisterEntity(std::shared_ptr<EntityType> entity) {
-        if constexpr (isDebug) {
-            auto name = typeid(EntityType).name();
-
-            debug("EntityManager<{}>::unregisterEntity({})", name, entity->toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::unregisterEntity({})", getDebugName(), entity->toString());
         }
 
         std::lock_guard lockGuard{mutex_};
@@ -68,10 +68,8 @@ template <typename EntityType> struct EntityManager : private NonCopyable<Entity
     }
 
     bool unregisterEntity(Id<EntityType> id) {
-        if constexpr (isDebug) {
-            auto name = typeid(EntityType).name();
-
-            debug("EntityManager<{}>::unregisterEntity(id = {})", name, id.getValue());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::unregisterEntity(id = {})", getDebugName(), id.getValue());
         }
 
         std::lock_guard lockGuard{mutex_};
@@ -87,10 +85,8 @@ template <typename EntityType> struct EntityManager : private NonCopyable<Entity
     }
 
     std::shared_ptr<EntityType> getEntity(Id<EntityType> id) {
-        if constexpr (isDebug) {
-            auto name = typeid(EntityType).name();
-
-            debug("EntityManager<{}>::getEntity(id = {})", name, id.getValue());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::getEntity(id = {})", getDebugName(), id.getValue());
         }
 
         std::lock_guard lockGuard{mutex_};
@@ -103,10 +99,8 @@ template <typename EntityType> struct EntityManager : private NonCopyable<Entity
     }
 
     std::optional<Id<EntityType>> getId(std::shared_ptr<EntityType> entity) {
-        if constexpr (isDebug) {
-            auto name = typeid(EntityType).name();
-
-            debug("EntityManager<{}>::getId({})", name, entity->toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::getId({})", getDebugName(), entity->toString());
         }
 
         std::lock_guard lockGuard{mutex_};

@@ -468,19 +468,7 @@ class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override {
-        return fmt::format("TimeAndSale{{{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
-                           "exchange={}, price={}, size={}, bid={}, "
-                           "ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, validTick={}, type={}{}{}}}",
-                           MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                           getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
-                           getSequence(), string_util::encodeChar(getExchangeCode()), getPrice(), getSize(),
-                           getBidPrice(), getAskPrice(), getExchangeSaleConditions(),
-                           string_util::encodeChar(getTradeThroughExempt()), getAggressorSide().toString(),
-                           isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
-                           getBuyer().empty() ? std::string{} : fmt::format(", buyer='{}'", getBuyer()),
-                           getSeller().empty() ? std::string{} : fmt::format(", seller='{}'", getSeller()));
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

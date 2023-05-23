@@ -304,15 +304,7 @@ class Series final : public MarketEvent, public IndexedEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override {
-        return fmt::format(
-            "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
-            "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
-            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getSequence(),
-            day_util::getYearMonthDayByDayId(getExpiration()), getVolatility(), getCallVolume(), getPutVolume(),
-            getPutCallRatio(), getForwardPrice(), getDividend(), getInterest());
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

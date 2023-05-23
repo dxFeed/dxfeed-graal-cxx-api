@@ -43,7 +43,7 @@ class TradeETH final : public TradeBase {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override { return fmt::format("TradeETH{{{}}}", baseFieldsToString()); }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

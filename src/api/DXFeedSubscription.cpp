@@ -8,27 +8,32 @@
 #include <memory>
 #include <typeinfo>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::attach(feed = {})", toString(), feed->toString());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("{}::attach(feed = {})", toString(), feed->toString());
     }
 
-    feed->attachSubscription(shared_from_this());
+    feed->attachSubscription(sharedAs<DXFeedSubscription>());
 }
 
 void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::detach(feed = {})", toString(), feed->toString());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("{}::detach(feed = {})", toString(), feed->toString());
     }
 
-    feed->detachSubscription(shared_from_this());
+    feed->detachSubscription(sharedAs<DXFeedSubscription>());
 }
 
 template <typename Symbol> auto symbolDataRetriever(Symbol &&s) {
-    if constexpr (isDebug) {
-        debug("{}", typeid(decltype(s)).name());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("{}", typeid(decltype(s)).name());
     }
 }
 
@@ -86,8 +91,8 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
     : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
-    if constexpr (isDebug) {
-        debug("DXFeedSubscription(eventType = {})", eventType.getName());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXFeedSubscription(eventType = {})", eventType.getName());
     }
 
     handler_ = handler_utils::JavaObjectHandler<DXFeedSubscription>(runIsolatedOrElse(
@@ -135,6 +140,10 @@ void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noex
             },
             false);
     }
+}
+
+std::string DXFeedSubscription::toString() const noexcept {
+    return fmt::format("DXFeedSubscription{{{}}}", handler_.toString());
 }
 
 } // namespace dxfcpp

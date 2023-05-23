@@ -3,14 +3,6 @@
 
 #pragma once
 
-#ifndef DXFCPP_TRACE_ISOLATES
-#    define DXFCPP_TRACE_ISOLATES 0
-#endif
-
-#ifndef DXFCPP_TRACE_LISTS
-#    define DXFCPP_TRACE_LISTS 1
-#endif
-
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
@@ -23,39 +15,36 @@
 #include <sstream>
 #include <type_traits>
 
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include "utils/debug/Debug.hpp"
 
 namespace dxfcpp {
+
+struct String {
+    inline static const std::string EMPTY{};
+};
+
+std::string toString(bool b);
+
+std::string toString(const char *chars);
+
+std::string toString(std::thread::id theadId);
+
+std::string toString(void* ptr);
+
+char utf16to8(std::int16_t in);
+
+std::int16_t utf8to16(char in);
+
+std::string formatTimeStamp(std::int64_t timestamp);
+
+std::string formatTimeStampWithMillis(std::int64_t timestamp);
+
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 
 struct DXFeedEventListener {};
 
 struct DXEndpointStateChangeListener {};
-
-#if defined(NDEBUG) && !defined(DXFCPP_DEBUG)
-constexpr bool isDebug = false;
-constexpr bool traceIsolates = false;
-constexpr bool traceLists = false;
-#else
-constexpr bool isDebug = true;
-
-#    if DXFCPP_TRACE_ISOLATES == 1
-constexpr bool traceIsolates = true;
-#    else
-constexpr bool traceIsolates = false;
-#    endif
-
-#    if DXFCPP_TRACE_LISTS == 1
-constexpr bool traceLists = true;
-#    else
-constexpr bool traceLists = false;
-#    endif
-
-#endif
 
 #if defined(__clang__)
 constexpr bool isClangFlavouredCompiler = true;
@@ -123,66 +112,6 @@ inline auto now() {
         .count();
 }
 
-template <typename... Args> std::string vformat(std::string_view format, Args &&...args) {
-    return fmt::vformat(format, fmt::make_format_args(args...));
-}
-
-template <typename... Args> void vprint(std::ostream &os, std::string_view format, Args &&...args) {
-    fmt::vprint(os, format, fmt::make_format_args(args...));
-}
-
-inline std::string nowStr() {
-    auto now = std::chrono::system_clock::now();
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
-
-    return fmt::format("{:%y%m%d %H%M%S}.{:0>3}", std::chrono::floor<std::chrono::seconds>(now), ms);
-}
-
-inline std::string nowStrWithTimeZone() {
-    auto now = std::chrono::system_clock::now();
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
-
-    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", std::chrono::floor<std::chrono::seconds>(now), ms,
-                       std::chrono::floor<std::chrono::seconds>(now));
-}
-
-inline std::string formatTimeStamp(std::int64_t timestamp) {
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-
-    return fmt::format("{:%y%m%d-%H%M%S%z}", tm);
-}
-
-inline std::string formatTimeStampWithMillis(std::int64_t timestamp) {
-    auto ms = timestamp % 1000;
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-
-    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
-}
-
-inline std::string debugPrefixStr() {
-    std::ostringstream tid{};
-
-    tid << std::this_thread::get_id();
-
-    return fmt::format("D {} [{}]", nowStr(), tid.str());
-}
-
-inline std::string tracePrefixStr() {
-    std::ostringstream tid{};
-
-    tid << std::this_thread::get_id();
-
-    return fmt::format("T {} [{}]", nowStr(), tid.str());
-}
-
-template <typename... Args> inline void debug(std::string_view format, Args &&...args) {
-    vprint(std::cerr, "{} {}\n", debugPrefixStr(), vformat(format, std::forward<Args>(args)...));
-}
-
-template <typename... Args> inline void trace(std::string_view format, Args &&...args) {
-    vprint(std::cerr, "{} ~~ {}\n", tracePrefixStr(), vformat(format, std::forward<Args>(args)...));
-}
-
 namespace handler_utils {
 
 template <typename T> struct JavaObjectHandler {
@@ -196,7 +125,7 @@ template <typename T> struct JavaObjectHandler {
 
     [[nodiscard]] std::string toString() const noexcept {
         if (impl_)
-            return fmt::format("{}", impl_.get());
+            return dxfcpp::toString(impl_.get());
         else
             return "nullptr";
     }
@@ -263,7 +192,7 @@ std::string namesToString(It begin, It end) {
     std::string result{"["};
 
     for (auto it = begin; it != end; it++) {
-        result += fmt::format("'{}'{}", it->getName(), std::next(it) == end ? "" : ", ");
+        result += String::EMPTY + "'" + it->getName() + "'" + (std::next(it) == end ? "" : ", ");
     }
 
     return result + "]";
@@ -394,19 +323,10 @@ static constexpr std::int32_t getSecondsFromTime(std::int64_t timeMillis) {
 } // namespace time_util
 
 namespace string_util {
-static std::string encodeChar(std::int16_t c) {
-    if (c >= 32 && c <= 126) {
-        return std::string{} + static_cast<char>(c);
-    }
 
-    if (c == 0) {
-        return "\\0";
-    }
+std::string encodeChar(std::int16_t c);
 
-    return fmt::format("\\u{:04x}", c);
-}
-
-static std::string encodeChar(char c) { return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c))); }
+inline std::string encodeChar(char c) { return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c))); }
 
 } // namespace string_util
 
@@ -785,16 +705,6 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
         return (flags & ~(mask << shift)) | ((bits & mask) << shift);
     }
 }
-
-std::string toString(const char *chars);
-
-char utf16to8(std::int16_t in);
-
-std::int16_t utf8to16(char in);
-
-struct String {
-    inline static const std::string EMPTY{};
-};
 
 template <typename T> struct Id {
     using ValueType = std::size_t;

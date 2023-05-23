@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 namespace handler_utils {
@@ -27,39 +32,49 @@ template <typename T> void JavaObjectHandler<T>::deleter(void *handler) noexcept
         false);
 }
 
-//TODO: RawListSizeType
-template <typename RawListType, typename RawListElementType, typename IndexType, typename ValueType, auto ElementSetter>
-struct RawListWrapper {
-    mutable RawListType list_;
+template <typename T>
+concept RawGraalList = requires(T list) {
+    { list.size };
+    { list.elements };
+};
+
+template <RawGraalList List> struct RawGraalListTraits {
+    using SizeType = std::decay_t<decltype(List{}.size)>;
+    using ElementType = std::decay_t<std::remove_pointer_t<std::remove_pointer_t<decltype(List{}.elements)>>>;
+};
+
+template <RawGraalList List, typename ValueType, auto ElementSetter> struct RawListWrapper {
+#if DXFCPP_DEBUG == 1
+    static auto getDebugName() {
+        return fmt::format("RawListWrapper<{}, {}, {}>", typeid(List).name(), typeid(ValueType).name(),
+                           typeid(ElementSetter).name());
+    }
+#endif
+
+    mutable List list_;
 
     RawListWrapper() noexcept : list_{0, nullptr} {
-        if constexpr (traceLists) {
-            trace("RawListWrapper<{}, {}, {}, {}>::()", typeid(RawListType).name(), typeid(RawListElementType).name(),
-                  typeid(IndexType).name(), typeid(ValueType).name());
+        if constexpr (Debugger::traceLists) {
+            Debugger::trace("{}::()", getDebugName());
         }
     }
 
-    void set(IndexType index, ValueType value) const noexcept {
-        if constexpr (traceLists) {
-            trace("RawListWrapper<{}, {}, {}, {}>::set({}, {})", typeid(RawListType).name(),
-                  typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name(), index, value);
+    void set(std::size_t index, ValueType value) const noexcept {
+        if constexpr (Debugger::traceLists) {
+            Debugger::trace("{}::set({}, {})", getDebugName(), index, value);
         }
 
         if (list_.size == 0) {
-            if constexpr (traceLists) {
-                trace("RawListWrapper<{}, {}, {}, {}>::set({}, {}): list_.size == 0 ", typeid(RawListType).name(),
-                      typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name(), index,
-                      value);
+            if constexpr (Debugger::traceLists) {
+                Debugger::trace("{}::set({}, {}): list_.size == 0 ", getDebugName(), index, value);
             }
 
             return;
         }
 
         if (index < list_.size) {
-            if constexpr (traceLists) {
-                trace("RawListWrapper<{}, {}, {}, {}>::set({}, {}): index < list_.size ", typeid(RawListType).name(),
-                      typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name(), index,
-                      value);
+            if constexpr (Debugger::traceLists) {
+                Debugger::trace("{}::set({}, {}): index < list_.size ", getDebugName(), index, value);
             }
 
             ElementSetter(list_, index, value);
@@ -67,57 +82,48 @@ struct RawListWrapper {
     }
 
     [[nodiscard]] bool isEmpty() const noexcept {
-        if constexpr (traceLists) {
-            trace("RawListWrapper<{}, {}, {}, {}>::isEmpty() -> ", typeid(RawListType).name(),
-                  typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name(),
-                  (list_.size == 0));
+        if constexpr (Debugger::traceLists) {
+            Debugger::trace("{}::isEmpty() -> ", getDebugName(), (list_.size == 0));
         }
 
         return list_.size == 0;
     }
 
-    [[nodiscard]] IndexType size() const noexcept {
-        if constexpr (traceLists) {
-            trace("RawListWrapper<{}, {}, {}, {}>::size() -> ", typeid(RawListType).name(),
-                  typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name(),
-                  (static_cast<IndexType>(list_.size)));
+    [[nodiscard]] std::size_t size() const noexcept {
+        if constexpr (Debugger::traceLists) {
+            Debugger::trace("{}::size() -> ", getDebugName(), (static_cast<std::size_t>(list_.size)));
         }
 
         return static_cast<std::size_t>(list_.size);
     }
 
     void *getHandler() noexcept {
-        if constexpr (traceLists) {
-            trace("RawListWrapper<{}, {}, {}, {}>::getHandler() -> ", typeid(RawListType).name(),
-                  typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name(),
-                  (bit_cast<void *>(&list_)));
+        if constexpr (Debugger::traceLists) {
+            Debugger::trace("{}::getHandler() -> ", getDebugName(), (bit_cast<void *>(&list_)));
         }
 
         return bit_cast<void *>(&list_);
     }
 
-    void init(IndexType size) noexcept {
-        if constexpr (traceLists) {
-            trace("RawListWrapper<{}, {}, {}, {}>::init({})", typeid(RawListType).name(),
-                  typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name(), size);
+    void init(std::size_t size) noexcept {
+        if constexpr (Debugger::traceLists) {
+            Debugger::trace("{}::init({})", getDebugName(), size);
         }
 
         if (size <= 0) {
-            if constexpr (traceLists) {
-                trace("RawListWrapper<{}, {}, {}, {}>::init({}): size <= 0", typeid(RawListType).name(),
-                      typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name());
+            if constexpr (Debugger::traceLists) {
+                Debugger::trace("{}::init({}): size <= 0", getDebugName());
             }
 
             return;
         }
 
         list_.size = static_cast<std::int32_t>(size);
-        list_.elements = new (std::nothrow) RawListElementType *[list_.size];
+        list_.elements = new (std::nothrow) RawGraalListTraits<List>::ElementType *[list_.size];
 
         if (!list_.elements) {
-            if constexpr (traceLists) {
-                trace("RawListWrapper<{}, {}, {}, {}>::init({}): !list_.elements", typeid(RawListType).name(),
-                      typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name());
+            if constexpr (Debugger::traceLists) {
+                Debugger::trace("{}::init({}): !list_.elements", getDebugName());
             }
 
             release();
@@ -128,7 +134,7 @@ struct RawListWrapper {
         bool needToRelease = false;
 
         for (std::int32_t i = 0; i < list_.size; i++) {
-            list_.elements[i] = new (std::nothrow) RawListElementType{};
+            list_.elements[i] = new (std::nothrow) RawGraalListTraits<List>::ElementType{};
 
             if (!list_.elements[i]) {
                 needToRelease = true;
@@ -136,9 +142,8 @@ struct RawListWrapper {
         }
 
         if (needToRelease) {
-            if constexpr (traceLists) {
-                trace("RawListWrapper<{}, {}, {}, {}>::init({}): needToRelease", typeid(RawListType).name(),
-                      typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name());
+            if constexpr (Debugger::traceLists) {
+                Debugger::trace("{}::init({}): needToRelease", getDebugName());
             }
 
             release();
@@ -146,16 +151,15 @@ struct RawListWrapper {
     }
 
     void release() {
-        if constexpr (traceLists) {
-            trace("RawListWrapper<{}, {}, {}, {}>::release()", typeid(RawListType).name(),
-                  typeid(RawListElementType).name(), typeid(IndexType).name(), typeid(ValueType).name());
+        if constexpr (Debugger::traceLists) {
+            Debugger::trace("{}::release()", getDebugName());
         }
 
         if (list_.size == 0 || list_.elements == nullptr) {
-            if constexpr (traceLists) {
-                trace("RawListWrapper<{}, {}, {}, {}>::release(): list_.size == 0 || list_.elements == nullptr",
-                      typeid(RawListType).name(), typeid(RawListElementType).name(), typeid(IndexType).name(),
-                      typeid(ValueType).name());
+            if constexpr (Debugger::traceLists) {
+                Debugger::trace(
+                    "{}::release(): list_.size == 0 || list_.elements == nullptr",
+                    getDebugName());
             }
 
             return;
@@ -171,150 +175,19 @@ struct RawListWrapper {
     }
 
     ~RawListWrapper() noexcept {
-        if constexpr (traceLists) {
-            trace("RawListWrapper<{}, {}, {}, {}>::~()", typeid(RawListType).name(), typeid(RawListElementType).name(),
-                  typeid(IndexType).name(), typeid(ValueType).name());
+        if constexpr (Debugger::traceLists) {
+            Debugger::trace("{}::~()", getDebugName());
         }
 
         release();
     }
 };
 
-struct EventClassList::Impl : public RawListWrapper<dxfg_event_clazz_list_t, dxfg_event_clazz_t, std::size_t, std::uint32_t,
-                                    [](dxfg_event_clazz_list_t &list, std::size_t index, std::uint32_t id) {
-                                        *list.elements[index] = static_cast<dxfg_event_clazz_t>(id);
-                                    }> {};
-
-//struct EventClassList::Impl {
-//    dxfg_event_clazz_list_t list_;
-//
-//    Impl() noexcept : list_{0, nullptr} {
-//        if constexpr (traceLists) {
-//            trace("EventClassList::Impl()");
-//        }
-//    }
-//
-//    void set(std::size_t index, std::uint32_t id) const noexcept {
-//        if constexpr (traceLists) {
-//            trace("EventClassList::Impl::set({}, {})", index, id);
-//        }
-//
-//        if (list_.size == 0) {
-//            if constexpr (traceLists) {
-//                trace("EventClassList::Impl::set({}, {}): list_.size == 0 ", index, id);
-//            }
-//
-//            return;
-//        }
-//
-//        if (index < list_.size) {
-//            if constexpr (traceLists) {
-//                trace("EventClassList::Impl::set({}, {}): index < list_.size ", index, id);
-//            }
-//
-//            *list_.elements[index] = static_cast<dxfg_event_clazz_t>(id);
-//        }
-//    }
-//
-//    [[nodiscard]] bool isEmpty() const noexcept {
-//        if constexpr (traceLists) {
-//            trace("EventClassList::Impl::isEmpty() -> ", (list_.size == 0));
-//        }
-//
-//        return list_.size == 0;
-//    }
-//
-//    [[nodiscard]] std::size_t size() const noexcept {
-//        if constexpr (traceLists) {
-//            trace("EventClassList::Impl::size() -> ", (static_cast<std::size_t>(list_.size)));
-//        }
-//
-//        return static_cast<std::size_t>(list_.size);
-//    }
-//
-//    void *getHandler() noexcept {
-//        if constexpr (traceLists) {
-//            trace("EventClassList::Impl::getHandler() -> ", (bit_cast<void *>(&list_)));
-//        }
-//
-//        return bit_cast<void *>(&list_);
-//    }
-//
-//    void init(std::uint32_t size) noexcept {
-//        if constexpr (traceLists) {
-//            trace("EventClassList::Impl::init({})", size);
-//        }
-//
-//        if (size <= 0) {
-//            if constexpr (traceLists) {
-//                trace("EventClassList::Impl::init({}): size <= 0");
-//            }
-//
-//            return;
-//        }
-//
-//        list_.size = static_cast<std::int32_t>(size);
-//        list_.elements = new (std::nothrow) dxfg_event_clazz_t *[list_.size];
-//
-//        if (!list_.elements) {
-//            if constexpr (traceLists) {
-//                trace("EventClassList::Impl::init({}): !list_.elements");
-//            }
-//
-//            release();
-//
-//            return;
-//        }
-//
-//        bool needToRelease = false;
-//
-//        for (std::int32_t i = 0; i < list_.size; i++) {
-//            list_.elements[i] = new (std::nothrow) dxfg_event_clazz_t{};
-//
-//            if (!list_.elements[i]) {
-//                needToRelease = true;
-//            }
-//        }
-//
-//        if (needToRelease) {
-//            if constexpr (traceLists) {
-//                trace("EventClassList::Impl::init({}): needToRelease");
-//            }
-//
-//            release();
-//        }
-//    }
-//
-//    void release() {
-//        if constexpr (traceLists) {
-//            trace("EventClassList::Impl::release()");
-//        }
-//
-//        if (list_.size == 0 || list_.elements == nullptr) {
-//            if constexpr (traceLists) {
-//                trace("EventClassList::Impl::release(): list_.size == 0 || list_.elements == nullptr");
-//            }
-//
-//            return;
-//        }
-//
-//        for (auto i = list_.size - 1; i >= 0; i--) {
-//            delete list_.elements[i];
-//        }
-//
-//        delete[] list_.elements;
-//        list_.size = 0;
-//        list_.elements = nullptr;
-//    }
-//
-//    ~Impl() noexcept {
-//        if constexpr (traceLists) {
-//            trace("EventClassList::Impl::~()");
-//        }
-//
-//        release();
-//    }
-//};
+struct EventClassList::Impl
+    : public RawListWrapper<dxfg_event_clazz_list_t, std::uint32_t,
+                            [](dxfg_event_clazz_list_t &list, std::size_t index, std::uint32_t id) {
+                                *list.elements[index] = static_cast<dxfg_event_clazz_t>(id);
+                            }> {};
 
 template struct handler_utils::JavaObjectHandler<DXEndpoint>;
 template struct handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>;
@@ -345,12 +218,44 @@ EventClassList::~EventClassList() noexcept = default;
 
 } // namespace handler_utils
 
+std::string toString(bool b) {
+    return b ? "true" : "false";
+}
+
 std::string toString(const char *chars) {
     if (chars == nullptr) {
         return "";
     }
 
     return chars;
+}
+
+std::string toString(std::thread::id threadId) {
+    std::ostringstream result{};
+
+    result << threadId;
+
+    return result.str();
+}
+
+std::string toString(void* ptr) {
+    std::ostringstream result{};
+
+    result << ptr;
+
+    return result.str();
+}
+
+std::string string_util::encodeChar(std::int16_t c) {
+    if (c >= 32 && c <= 126) {
+        return std::string{} + static_cast<char>(c);
+    }
+
+    if (c == 0) {
+        return "\\0";
+    }
+
+    return fmt::format("\\u{:04x}", c);
 }
 
 char utf16to8(std::int16_t in) {
@@ -379,6 +284,19 @@ std::int16_t utf8to16(char in) {
         // TODO: error handling
         return std::int16_t{};
     }
+}
+
+std::string formatTimeStamp(std::int64_t timestamp) {
+    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+
+    return fmt::format("{:%y%m%d-%H%M%S%z}", tm);
+}
+
+std::string formatTimeStampWithMillis(std::int64_t timestamp) {
+    auto ms = timestamp % 1000;
+    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+
+    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
 }
 
 } // namespace dxfcpp

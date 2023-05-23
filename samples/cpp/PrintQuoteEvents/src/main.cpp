@@ -34,11 +34,6 @@ int main() {
         auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
         auto endpoint = builder->build();
 
-        endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-            dxfcpp::debug("{}", std::string("State changed: ") + dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                    dxfcpp::DXEndpoint::stateToString(newState));
-        };
-
         auto sub =
             endpoint->getFeed()->createSubscription({dxfcpp::EventTypeEnum::QUOTE});
 

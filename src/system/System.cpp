@@ -17,8 +17,8 @@ namespace dxfcpp {
 
 bool System::setProperty(const std::string &key, const std::string &value) {
     //TODO: check invalid utf-8
-    if constexpr (dxfcpp::isDebug) {
-        debug("System::setProperty(key = '{}', value = '{}')", key, value);
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("System::setProperty(key = '{}', value = '{}')", key, value);
     }
 
     auto result = runIsolatedOrElse(
@@ -28,8 +28,8 @@ bool System::setProperty(const std::string &key, const std::string &value) {
         },
         false);
 
-    if constexpr (dxfcpp::isDebug) {
-        debug("System::setProperty(key = '{}', value = '{}') -> {}", key, value, result);
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("System::setProperty(key = '{}', value = '{}') -> {}", key, value, result);
     }
 
     return result;
@@ -37,8 +37,8 @@ bool System::setProperty(const std::string &key, const std::string &value) {
 
 std::string System::getProperty(const std::string &key) {
     //TODO: check invalid utf-8
-    if constexpr (isDebug) {
-        debug("System::getProperty(key = {})", key);
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("System::getProperty(key = {})", key);
     }
 
     auto result = runIsolatedOrElse(
@@ -54,8 +54,8 @@ std::string System::getProperty(const std::string &key) {
         },
         std::string{});
 
-    if constexpr (isDebug) {
-        debug("System::getProperty(key = '{}') -> '{}'", key, result);
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("System::getProperty(key = '{}') -> '{}'", key, result);
     }
 
     return result;

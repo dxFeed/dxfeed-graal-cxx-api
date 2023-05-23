@@ -57,12 +57,8 @@ struct EventType : public SharedEntity {
         // The default implementation is empty
     };
 
-    /**
-     * Returns a string representation of the current object.
-     *
-     * @return a string representation
-     */
-    virtual std::string toString() const noexcept { return "EventType{}"; }
+    ///
+    std::string toString() const noexcept override { return "EventType{}"; }
 
     friend std::ostream &operator<<(std::ostream &os, const EventType &e) { return os << e.toString(); }
 
