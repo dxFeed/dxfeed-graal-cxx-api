@@ -46,8 +46,7 @@ template <RawGraalList List> struct RawGraalListTraits {
 template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 #if DXFCPP_DEBUG == 1
     static auto getDebugName() {
-        return fmt::format("RawListWrapper<{}, {}>", typeid(List).name(),
-                           typeid(ElementSetter).name());
+        return fmt::format("RawListWrapper<{}, {}>", typeid(List).name(), typeid(ElementSetter).name());
     }
 #endif
 
@@ -55,18 +54,19 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     RawListWrapper() noexcept : list_{0, nullptr} {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace("{}::()", getDebugName());
+            Debugger::trace(getDebugName() + "::()");
         }
     }
 
     void set(std::size_t index, auto value) const noexcept {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace("{}::set({}, {})", getDebugName(), index, value);
+            Debugger::trace(getDebugName() + "::set(" + std::to_string(index) + ", " + std::to_string(value) + ")");
         }
 
         if (list_.size == 0) {
             if constexpr (Debugger::traceLists) {
-                Debugger::trace("{}::set({}, {}): list_.size == 0 ", getDebugName(), index, value);
+                Debugger::trace(getDebugName() + "::set(" + std::to_string(index) + ", " + std::to_string(value) +
+                                "): list_.size == 0");
             }
 
             return;
@@ -74,7 +74,8 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
         if (index < list_.size) {
             if constexpr (Debugger::traceLists) {
-                Debugger::trace("{}::set({}, {}): index < list_.size ", getDebugName(), index, value);
+                Debugger::trace(getDebugName() + "::set(" + std::to_string(index) + ", " + std::to_string(value) +
+                                "): index < list_.size");
             }
 
             ElementSetter(list_, index, value);
@@ -83,7 +84,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     [[nodiscard]] bool isEmpty() const noexcept {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace("{}::isEmpty() -> ", getDebugName(), (list_.size == 0));
+            Debugger::trace(getDebugName() + "::isEmpty() -> " + dxfcpp::toString(list_.size == 0));
         }
 
         return list_.size == 0;
@@ -91,7 +92,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     [[nodiscard]] std::size_t size() const noexcept {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace("{}::size() -> ", getDebugName(), (static_cast<std::size_t>(list_.size)));
+            Debugger::trace(getDebugName() + "::size() -> " + std::to_string(static_cast<std::size_t>(list_.size)));
         }
 
         return static_cast<std::size_t>(list_.size);
@@ -99,7 +100,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     void *getHandler() noexcept {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace("{}::getHandler() -> ", getDebugName(), (bit_cast<void *>(&list_)));
+            Debugger::trace(getDebugName() + "::getHandler() -> " + dxfcpp::toString(bit_cast<void *>(&list_)));
         }
 
         return bit_cast<void *>(&list_);
@@ -107,12 +108,12 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     void init(std::size_t size) noexcept {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace("{}::init({})", getDebugName(), size);
+            Debugger::trace(getDebugName() + "::init(" + std::to_string(size) + ")");
         }
 
         if (size <= 0) {
             if constexpr (Debugger::traceLists) {
-                Debugger::trace("{}::init({}): size <= 0", getDebugName());
+                Debugger::trace(getDebugName() + "::init(" + std::to_string(size) + "): size <= 0");
             }
 
             return;
@@ -123,7 +124,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
         if (!list_.elements) {
             if constexpr (Debugger::traceLists) {
-                Debugger::trace("{}::init({}): !list_.elements", getDebugName());
+                Debugger::trace(getDebugName() + "::init(" + std::to_string(size) + "): !list_.elements");
             }
 
             release();
@@ -143,7 +144,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
         if (needToRelease) {
             if constexpr (Debugger::traceLists) {
-                Debugger::trace("{}::init({}): needToRelease", getDebugName());
+                Debugger::trace(getDebugName() + "::init({}): needToRelease");
             }
 
             release();
@@ -152,14 +153,12 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     void release() {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace("{}::release()", getDebugName());
+            Debugger::trace(getDebugName() + "::release()");
         }
 
         if (list_.size == 0 || list_.elements == nullptr) {
             if constexpr (Debugger::traceLists) {
-                Debugger::trace(
-                    "{}::release(): list_.size == 0 || list_.elements == nullptr",
-                    getDebugName());
+                Debugger::trace(getDebugName() + "::release(): list_.size == 0 || list_.elements == nullptr");
             }
 
             return;
@@ -176,18 +175,17 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     ~RawListWrapper() noexcept {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace("{}::~()", getDebugName());
+            Debugger::trace(getDebugName() + "::~()");
         }
 
         release();
     }
 };
 
-struct EventClassList::Impl
-    : public RawListWrapper<dxfg_event_clazz_list_t,
-                            [](dxfg_event_clazz_list_t &list, std::size_t index, std::uint32_t id) {
-                                *list.elements[index] = static_cast<dxfg_event_clazz_t>(id);
-                            }> {};
+struct EventClassList::Impl : public RawListWrapper<dxfg_event_clazz_list_t, [](dxfg_event_clazz_list_t &list,
+                                                                                std::size_t index, std::uint32_t id) {
+    *list.elements[index] = static_cast<dxfg_event_clazz_t>(id);
+}> {};
 
 template struct handler_utils::JavaObjectHandler<DXEndpoint>;
 template struct handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>;
@@ -218,9 +216,7 @@ EventClassList::~EventClassList() noexcept = default;
 
 } // namespace handler_utils
 
-std::string toString(bool b) {
-    return b ? "true" : "false";
-}
+std::string toString(bool b) { return b ? "true" : "false"; }
 
 std::string toString(const char *chars) {
     if (chars == nullptr) {
@@ -238,7 +234,7 @@ std::string toString(std::thread::id threadId) {
     return result.str();
 }
 
-std::string toString(void* ptr) {
+std::string toString(void *ptr) {
     std::ostringstream result{};
 
     result << ptr;

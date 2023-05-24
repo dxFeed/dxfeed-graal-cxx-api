@@ -76,7 +76,7 @@ TEST_CASE("dxfc_dxendpoint_builder_t bug") {
 //
 //    result = dxfc_dxendpoint_add_state_change_listener(
 //        endpoint, [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *) {
-//            dxfcpp::debug("dxfc_dxendpoint_builder_t Test: {}", std::string("State changed: ") +
+//            Debugger::debug("dxfc_dxendpoint_builder_t Test: {}", std::string("State changed: ") +
 //                                                                    cApiStateToString(oldState) + " -> " +
 //                                                                    cApiStateToString(newState));
 //        });

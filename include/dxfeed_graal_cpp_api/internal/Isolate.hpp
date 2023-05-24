@@ -37,20 +37,21 @@ class Isolate final {
             this->idx = idx++;
 
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("IsolateThread{{{}, isMain = {}, tid = {}, idx = {}}}()",
-                                dxfcpp::toString(bit_cast<void *>(handle)), isMain, dxfcpp::toString(tid), idx);
+                Debugger::trace("IsolateThread{" + dxfcpp::toString(bit_cast<void *>(handle)) +
+                                ", isMain = " + dxfcpp::toString(isMain) + ", tid = " + dxfcpp::toString(tid) +
+                                ", idx = " + std::to_string(idx) + "}()");
             }
         }
 
         CEntryPointErrors detach() noexcept {
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("{}::detach()", toString());
+                Debugger::trace(toString() + "::detach()");
             }
 
             // OK if nothing is attached.
             if (!handle) {
                 if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace("\tNot attached");
+                    Debugger::trace(toString() + "::detach(): !handle => Not attached");
                 }
 
                 return CEntryPointErrors::NO_ERROR;
@@ -60,7 +61,7 @@ class Isolate final {
 
             if (result == CEntryPointErrors::NO_ERROR) {
                 if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace("\tDetached");
+                    Debugger::trace(toString() + "::detach(): result == CEntryPointErrors::NO_ERROR => Detached");
                 }
 
                 handle = nullptr;
@@ -71,12 +72,12 @@ class Isolate final {
 
         CEntryPointErrors detachAllThreadsAndTearDownIsolate() noexcept {
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("{}::detachAllThreadsAndTearDownIsolate()", toString());
+                Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate()");
             }
 
             if (!handle) {
                 if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace("\tNot attached");
+                    Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate(): !handle => Not attached");
                 }
 
                 return CEntryPointErrors::NO_ERROR;
@@ -86,7 +87,9 @@ class Isolate final {
 
             if (result == CEntryPointErrors::NO_ERROR) {
                 if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace("\tAll threads have been detached. The isolate has been teared down.");
+                    Debugger::trace(toString() +
+                                    "::detachAllThreadsAndTearDownIsolate(): CEntryPointErrors::NO_ERROR => All "
+                                    "threads have been detached. The isolate has been teared down.");
                 }
 
                 handle = nullptr;
@@ -97,12 +100,12 @@ class Isolate final {
 
         ~IsolateThread() noexcept {
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("~{}()", toString());
+                Debugger::trace(toString() + "::~()");
             }
 
             if (isMain) {
                 if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace("\tThis is the main thread");
+                    Debugger::trace(toString() + "::~(): isMain => This is the main thread");
                 }
 
                 return;
@@ -130,8 +133,8 @@ class Isolate final {
         currentIsolateThread_.isMain = true;
 
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("Isolate{{{}, main = {}, current = {}}}()", bit_cast<std::size_t>(handle),
-                            mainIsolateThread_.toString(), currentIsolateThread_.toString());
+            Debugger::trace("Isolate{" + dxfcpp::toString(bit_cast<void *>(handle)) + ", main = " +
+                            mainIsolateThread_.toString() + ", current = " + currentIsolateThread_.toString() + "}()");
         }
     }
 
@@ -149,14 +152,14 @@ class Isolate final {
             auto result = std::shared_ptr<Isolate>{new Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
 
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("Isolate::create() -> *{}", result->toString());
+                Debugger::trace("Isolate::create() -> *" + result->toString());
             }
 
             return result;
         }
 
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("\t-> nullptr");
+            Debugger::trace("Isolate::create() -> nullptr");
         }
 
         return nullptr;
@@ -164,13 +167,13 @@ class Isolate final {
 
     CEntryPointErrors attach() noexcept {
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("{}::attach()", toString());
+            Debugger::trace(toString() + "::attach()");
         }
 
         // We will not re-attach.
         if (!currentIsolateThread_.handle) {
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("\tNeeds to be attached.");
+                Debugger::trace(toString() + "::attach(): !currentIsolateThread_.handle => Needs to be attached.");
             }
 
             GraalIsolateThreadHandle newIsolateThreadHandle{};
@@ -179,7 +182,8 @@ class Isolate final {
                 result != CEntryPointErrors::NO_ERROR) {
 
                 if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace("\t-> {}", result.getDescription());
+                    Debugger::trace(toString() + "::attach(): result != CEntryPointErrors::NO_ERROR [" +
+                                    std::to_string(result.getCode()) + "] " + result.getDescription());
                 }
 
                 return result;
@@ -189,11 +193,11 @@ class Isolate final {
             currentIsolateThread_.isMain = mainIsolateThread_.handle == newIsolateThreadHandle;
 
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("\tAttached: {}", currentIsolateThread_.toString());
+                Debugger::trace(toString() + "::attach(): Attached: " + currentIsolateThread_.toString());
             }
         } else {
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("\tCached: {}", currentIsolateThread_.toString());
+                Debugger::trace(toString() + "::attach(): Cached: " + currentIsolateThread_.toString());
             }
         }
 
@@ -202,7 +206,7 @@ class Isolate final {
 
     GraalIsolateThreadHandle get() noexcept {
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("{}::get()", toString());
+            Debugger::trace(toString() + "::get()");
         }
 
         return graal_get_current_thread(handle_);
@@ -221,7 +225,7 @@ class Isolate final {
         static std::shared_ptr<Isolate> instance = create();
 
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("Isolate::getInstance() -> *{}", instance->toString());
+            Debugger::trace("Isolate::getInstance() -> *" + instance->toString());
         }
 
         return instance;
@@ -230,7 +234,7 @@ class Isolate final {
     template <typename F>
     auto runIsolated(F &&f) -> std::variant<CEntryPointErrors, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("{}::runIsolated({})", toString(), bit_cast<std::size_t>(&f));
+            Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
         }
 
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
@@ -240,7 +244,8 @@ class Isolate final {
 
         if (auto result = attach(); result != CEntryPointErrors::NO_ERROR) {
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("\t-> {}", result.getDescription());
+                Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
+                                "): result != CEntryPointErrors::NO_ERROR -> " + result.getDescription());
             }
 
             return result;

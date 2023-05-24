@@ -33,7 +33,7 @@ class DXFeedSubscription : public SharedEntity {
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
         : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription(eventTypes = {})", namesToString(begin, end));
+            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
         auto list = handler_utils::EventClassList::create(begin, end);
@@ -72,7 +72,7 @@ class DXFeedSubscription : public SharedEntity {
 
     ~DXFeedSubscription() override {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription{{{}}}::~DXFeedSubscription()", handler_.toString());
+            Debugger::debug("DXFeedSubscription{" + handler_.toString() + "}::~DXFeedSubscription()");
         }
 
         tryCallWithLock(mtx_, [this] { closeImpl(); });
@@ -85,7 +85,7 @@ class DXFeedSubscription : public SharedEntity {
      */
     static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription::create(eventType = {})", eventType.getName());
+            Debugger::debug("DXFeedSubscription::create(eventType = " + eventType.getName() + ")");
         }
 
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventType));
@@ -107,7 +107,7 @@ class DXFeedSubscription : public SharedEntity {
     template <typename EventTypeIt>
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription::create(eventTypes = {})", namesToString(begin, end));
+            Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
         }
 
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(begin, end));
@@ -178,7 +178,7 @@ class DXFeedSubscription : public SharedEntity {
      */
     void close() noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("{}::close()", toString());
+            Debugger::debug(toString() + "::close()");
         }
 
         std::lock_guard lock(mtx_);
@@ -227,7 +227,7 @@ class DXFeedSubscription : public SharedEntity {
 
     template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("{}::addSymbol(symbol = {})", toString(), symbol);
+            Debugger::debug(toString() + "::addSymbol(symbol = " + std::string(symbol) + ")");
         }
 
         if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
@@ -245,7 +245,7 @@ class DXFeedSubscription : public SharedEntity {
 
     template <typename Symbol> void removeSymbol(Symbol &&symbol) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("{}::removeSymbol(symbol = {})", toString(), symbol);
+            Debugger::debug(toString() + "::removeSymbol(symbol = " + symbol + ")");
         }
 
         if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
@@ -272,7 +272,7 @@ class DXFeedSubscription : public SharedEntity {
      */
     void clear() noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("{}::clear()", toString());
+            Debugger::debug(toString() + "::clear()");
         }
 
         std::lock_guard lock(mtx_);
@@ -289,7 +289,7 @@ class DXFeedSubscription : public SharedEntity {
      */
     bool isClosed() noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("{}::isClosed()", toString());
+            Debugger::debug(toString() + "::isClosed()");
         }
 
         std::lock_guard lock(mtx_);

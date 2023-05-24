@@ -72,8 +72,8 @@ static DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
 std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
                                                const std::unordered_map<std::string, std::string> &properties) {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint::create{{handle = {}, role = {}, properties[{}]}}()", endpointHandle,
-                        roleToString(role), properties.size());
+        Debugger::debug("DXEndpoint::create(handle = " + dxfcpp::toString(endpointHandle) +
+                        ", role = " + roleToString(role) + ", properties[" + std::to_string(properties.size()) + "])");
     }
 
     std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
@@ -96,8 +96,8 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
         auto endpoint = ApiContext::getInstance()->getDxEndpointManager()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("onStateChange: id = {}, endpoint = {}", std::to_string(id.getValue()),
-                            ((endpoint) ? endpoint->toString() : "nullptr"));
+            Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
+                            ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr"));
         }
 
         if (endpoint) {
@@ -159,7 +159,7 @@ void DXEndpoint::closeImpl() {
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
     // TODO: check invalid utf-8
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::user(user = {})", handler_.toString(), user);
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::user(user = " + user + ")");
     }
 
     if (handler_) {
@@ -176,7 +176,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
 std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
     // TODO: check invalid utf-8
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::password(password = {})", handler_.toString(), password);
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::password(password = " + password + ")");
     }
 
     if (handler_) {
@@ -193,7 +193,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
 std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
     // TODO: check invalid utf-8
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::connect(address = {})", handler_.toString(), address);
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::connect(address = " + address + ")");
     }
 
     if (handler_) {
@@ -209,7 +209,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
 
 void DXEndpoint::reconnect() {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::reconnect()", handler_.toString());
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::reconnect()");
     }
 
     if (!handler_) {
@@ -223,7 +223,7 @@ void DXEndpoint::reconnect() {
 
 void DXEndpoint::disconnect() {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::disconnect()", handler_.toString());
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::disconnect()");
     }
 
     if (!handler_) {
@@ -237,7 +237,7 @@ void DXEndpoint::disconnect() {
 
 void DXEndpoint::disconnectAndClear() {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::disconnectAndClear()", handler_.toString());
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::disconnectAndClear()");
     }
 
     if (!handler_) {
@@ -251,7 +251,7 @@ void DXEndpoint::disconnectAndClear() {
 
 void DXEndpoint::awaitNotConnected() {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::awaitNotConnected()", handler_.toString());
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::awaitNotConnected()");
     }
 
     if (!handler_) {
@@ -265,7 +265,7 @@ void DXEndpoint::awaitNotConnected() {
 
 void DXEndpoint::awaitProcessed() {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::awaitProcessed()", handler_.toString());
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::awaitProcessed()");
     }
 
     if (!handler_) {
@@ -279,7 +279,7 @@ void DXEndpoint::awaitProcessed() {
 
 void DXEndpoint::closeAndAwaitTermination() {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::closeAndAwaitTermination()", handler_.toString());
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::closeAndAwaitTermination()");
     }
 
     if (!handler_) {
@@ -297,7 +297,7 @@ void DXEndpoint::closeAndAwaitTermination() {
 
 std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{{{}}}::getFeed()", handler_.toString());
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::getFeed()");
     }
 
     if (!feed_) {
@@ -377,7 +377,8 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::Role role) {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint::Builder{{{}}}::withRole(role = {})", handler_.toString(), roleToString(role));
+        Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::withRole(role = " + roleToString(role) +
+                        ")");
     }
 
     role_ = role;
@@ -397,7 +398,8 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
                                                                        const std::string &value) {
     // TODO: check invalid utf-8
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint::Builder{{{}}}::withProperty(key = {}, value = {})", handler_.toString(), key, value);
+        Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::withProperty(key = " + key +
+                        ", value = " + value + ")");
     }
 
     properties_[key] = value;
@@ -417,7 +419,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
     // TODO: check invalid utf-8
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint::Builder{{{}}}::supportsProperty(key = {})", handler_.toString(), key);
+        Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::supportsProperty(key = " + key + ")");
     }
 
     if (!handler_) {
@@ -433,7 +435,7 @@ bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
 
 std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint::Builder{{{}}}::build()", handler_.toString());
+        Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::build()");
     }
 
     loadDefaultPropertiesImpl();

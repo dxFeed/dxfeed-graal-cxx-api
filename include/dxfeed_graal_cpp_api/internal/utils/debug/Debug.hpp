@@ -5,6 +5,7 @@
 
 #define DXFCPP_DEBUG 1
 #define DXFCPP_TRACE_LISTS 1
+#define DXFCPP_TRACE_ISOLATES 1
 
 #ifndef DXFCPP_DEBUG
 #    define DXFCPP_DEBUG 0
@@ -49,9 +50,13 @@ struct Debugger {
 #    else
     static constexpr bool traceLists = false;
 #    endif
-    template <typename... Args> static void debug(std::string_view format, Args &&...args);
+    static std::string nowStr();
+    static std::string nowStrWithTimeZone();
+    static std::string debugPrefixStr();
+    static void debug(std::string);
 #    if DXFCPP_TRACE == 1
-    template <typename... Args> static void trace(std::string_view format, Args &&...args);
+    static std::string tracePrefixStr();
+    static void trace(std::string);
 #    else
     static void trace(...);
 #    endif

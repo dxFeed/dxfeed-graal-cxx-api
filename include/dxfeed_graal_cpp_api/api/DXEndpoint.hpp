@@ -397,7 +397,7 @@ struct DXEndpoint : SharedEntity {
         LOCAL_HUB
     };
 
-    static auto roleToString(Role role) {
+    static std::string roleToString(Role role) {
         switch (role) {
         case Role::FEED:
             return "FEED";
@@ -488,7 +488,7 @@ struct DXEndpoint : SharedEntity {
   public:
     virtual ~DXEndpoint() {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.toString());
+            Debugger::debug("DXEndpoint{" + handler_.toString() + " }::~DXEndpoint()");
         }
     }
 
@@ -534,7 +534,7 @@ struct DXEndpoint : SharedEntity {
      */
     static std::shared_ptr<DXEndpoint> getInstance(Role role) {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint::getInstance(role = {})", roleToString(role));
+            Debugger::debug("DXEndpoint::getInstance(role = " + roleToString(role) + ")");
         }
 
         std::lock_guard lock(MTX);
@@ -573,7 +573,7 @@ struct DXEndpoint : SharedEntity {
      */
     static std::shared_ptr<DXEndpoint> create(Role role) {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint::create(role = {})", roleToString(role));
+            Debugger::debug("DXEndpoint::create(role = " + roleToString(role) + ")");
         }
 
         return newBuilder()->withRole(role)->build();
@@ -749,7 +749,7 @@ struct DXEndpoint : SharedEntity {
      */
     void close() {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint{{{}}}::close()", handler_.toString());
+            Debugger::debug("DXEndpoint{" + handler_.toString() + "}::close()");
         }
 
         closeImpl();
@@ -838,7 +838,7 @@ struct DXEndpoint : SharedEntity {
         /// Releases the GraalVM handle
         virtual ~Builder() {
             if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{{{}}}::~Builder()", handler_.toString());
+                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::~Builder()");
             }
         }
 
@@ -854,7 +854,7 @@ struct DXEndpoint : SharedEntity {
         std::shared_ptr<Builder> withName(const std::string &name) {
             // TODO: check invalid utf-8
             if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.toString(), name);
+                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::withName(name = " + name + ")");
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -892,8 +892,8 @@ struct DXEndpoint : SharedEntity {
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", handler_.toString(),
-                      properties.size());
+                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::withProperties(properties[" +
+                                std::to_string(properties.size()) + "])");
             }
 
             for (auto &&[k, v] : properties) {

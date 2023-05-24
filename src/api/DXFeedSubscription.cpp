@@ -17,7 +17,7 @@ namespace dxfcpp {
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("{}::attach(feed = {})", toString(), feed->toString());
+        Debugger::debug(toString() + "::attach(feed = " + feed->toString() + ")");
     }
 
     feed->attachSubscription(sharedAs<DXFeedSubscription>());
@@ -25,7 +25,7 @@ void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
 
 void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("{}::detach(feed = {})", toString(), feed->toString());
+        Debugger::debug(toString() + "::detach(feed = " + feed->toString() + ")");
     }
 
     feed->detachSubscription(sharedAs<DXFeedSubscription>());
@@ -33,7 +33,7 @@ void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
 
 template <typename Symbol> auto symbolDataRetriever(Symbol &&s) {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("{}", typeid(decltype(s)).name());
+        Debugger::debug(typeid(decltype(s)).name());
     }
 }
 
@@ -92,7 +92,7 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
     : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXFeedSubscription(eventType = {})", eventType.getName());
+        Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
 
     handler_ = handler_utils::JavaObjectHandler<DXFeedSubscription>(runIsolatedOrElse(

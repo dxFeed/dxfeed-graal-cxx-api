@@ -43,7 +43,7 @@ struct DXFeed : SharedEntity {
   public:
     virtual ~DXFeed() noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeed{{{}}}::~DXFeed()", handler_.toString());
+            Debugger::debug("DXFeed{" + handler_.toString() + "}::~DXFeed()");
         }
     }
 
@@ -68,7 +68,7 @@ struct DXFeed : SharedEntity {
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("{}::createSubscription(eventTypes = {})", namesToString(begin, end));
+            Debugger::debug("{}::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
         auto sub = DXFeedSubscription::create(begin, end);
@@ -87,8 +87,8 @@ struct DXFeed : SharedEntity {
 #endif
     {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("{}::createSubscription(eventTypes = {})", toString(),
-                  namesToString(std::begin(eventTypes), std::end(eventTypes)));
+            Debugger::debug(toString() + "::createSubscription(eventTypes = " +
+                            namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
         }
 
         auto sub = DXFeedSubscription::create(eventTypes);
