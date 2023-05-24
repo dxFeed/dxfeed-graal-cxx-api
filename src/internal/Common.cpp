@@ -39,14 +39,14 @@ concept RawGraalList = requires(T list) {
 };
 
 template <RawGraalList List> struct RawGraalListTraits {
-    using SizeType = std::decay_t<decltype(List{}.size)>;
-    using ElementType = std::decay_t<std::remove_pointer_t<std::remove_pointer_t<decltype(List{}.elements)>>>;
+    using SizeType = typename std::decay_t<decltype(List{}.size)>;
+    using ElementType = typename std::decay_t<std::remove_pointer_t<std::remove_pointer_t<decltype(List{}.elements)>>>;
 };
 
-template <RawGraalList List, typename ValueType, auto ElementSetter> struct RawListWrapper {
+template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 #if DXFCPP_DEBUG == 1
     static auto getDebugName() {
-        return fmt::format("RawListWrapper<{}, {}, {}>", typeid(List).name(), typeid(ValueType).name(),
+        return fmt::format("RawListWrapper<{}, {}>", typeid(List).name(),
                            typeid(ElementSetter).name());
     }
 #endif
@@ -59,7 +59,7 @@ template <RawGraalList List, typename ValueType, auto ElementSetter> struct RawL
         }
     }
 
-    void set(std::size_t index, ValueType value) const noexcept {
+    void set(std::size_t index, auto value) const noexcept {
         if constexpr (Debugger::traceLists) {
             Debugger::trace("{}::set({}, {})", getDebugName(), index, value);
         }
@@ -184,7 +184,7 @@ template <RawGraalList List, typename ValueType, auto ElementSetter> struct RawL
 };
 
 struct EventClassList::Impl
-    : public RawListWrapper<dxfg_event_clazz_list_t, std::uint32_t,
+    : public RawListWrapper<dxfg_event_clazz_list_t,
                             [](dxfg_event_clazz_list_t &list, std::size_t index, std::uint32_t id) {
                                 *list.elements[index] = static_cast<dxfg_event_clazz_t>(id);
                             }> {};
