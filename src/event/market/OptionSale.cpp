@@ -70,8 +70,8 @@ std::string OptionSale::toString() const noexcept {
         "validTick={}, type={}, underlyingPrice={}, volatility={}, delta={}, optionSymbol='{}'}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
         getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
-        getSequence(), string_util::encodeChar(getExchangeCode()), getPrice(), getSize(), getBidPrice(),
-        getAskPrice(), getExchangeSaleConditions(), string_util::encodeChar(getTradeThroughExempt()),
+        getSequence(), encodeChar(getExchangeCode()), getPrice(), getSize(), getBidPrice(),
+        getAskPrice(), getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()),
         getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
         getUnderlyingPrice(), getVolatility(), getDelta(), getOptionSymbol());
 }

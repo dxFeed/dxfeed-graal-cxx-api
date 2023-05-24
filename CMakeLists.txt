@@ -71,7 +71,13 @@ add_subdirectory(third_party/fmt-9.1.0)
 set(dxFeedNativeAPIInternalSources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp
+        src/internal/JavaObjectHandler.cpp
+        src/internal/EventClassList.cpp
         src/internal/Common.cpp
+        )
+
+set(dxFeedNativeAPIInternalUtilsSources
+        src/internal/utils/StringUtils.cpp
         )
 
 set(dxFeedNativeAPIInternalUtilsDebugSources
@@ -122,6 +128,7 @@ set(dxFeedNativeAPIEventOptionSources
 
 add_library(dxFeedGraalCxxApi
         ${dxFeedNativeAPIInternalSources}
+        ${dxFeedNativeAPIInternalUtilsSources}
         ${dxFeedNativeAPIInternalUtilsDebugSources}
         ${dxFeedNativeAPIAPISources}
         ${dxFeedNativeAPISystemSources}

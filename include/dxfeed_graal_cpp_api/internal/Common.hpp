@@ -19,26 +19,6 @@
 
 namespace dxfcpp {
 
-struct String {
-    inline static const std::string EMPTY{};
-};
-
-std::string toString(bool b);
-
-std::string toString(const char *chars);
-
-std::string toString(std::thread::id theadId);
-
-std::string toString(void* ptr);
-
-char utf16to8(std::int16_t in);
-
-std::int16_t utf8to16(char in);
-
-std::string formatTimeStamp(std::int64_t timestamp);
-
-std::string formatTimeStampWithMillis(std::int64_t timestamp);
-
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 
@@ -114,77 +94,9 @@ inline auto now() {
 
 namespace handler_utils {
 
-template <typename T> struct JavaObjectHandler {
-    using Type = T;
-    static void deleter(void *handler) noexcept;
-    explicit JavaObjectHandler(void *handler = nullptr) noexcept : impl_{handler, &deleter} {}
-
-    JavaObjectHandler(JavaObjectHandler &&) = default;
-    JavaObjectHandler &operator=(JavaObjectHandler &&) = default;
-    virtual ~JavaObjectHandler() noexcept = default;
-
-    [[nodiscard]] std::string toString() const noexcept {
-        if (impl_)
-            return dxfcpp::toString(impl_.get());
-        else
-            return "nullptr";
-    }
-
-    [[nodiscard]] void *get() const noexcept { return impl_.get(); }
-
-    explicit operator bool() const noexcept { return static_cast<bool>(impl_); }
-
-  private:
-    std::unique_ptr<void, decltype(&deleter)> impl_;
-};
-
-struct EventClassList {
-    template <typename EventTypeIt>
-    static std::unique_ptr<EventClassList> create(EventTypeIt begin, EventTypeIt end) noexcept {
-        auto size = std::distance(begin, end);
-
-        if (size <= 0) {
-            return {};
-        }
-
-        auto list = create(size);
-
-        if (list->isEmpty()) {
-            return {};
-        }
-
-        std::size_t i = 0;
-
-        for (auto it = begin; it != end; it++, i++) {
-            list->set(i, it->getId());
-        }
-
-        return list;
-    }
-
-    void set(std::size_t index, std::uint32_t id) noexcept;
-
-    [[nodiscard]] bool isEmpty() const noexcept;
-
-    [[nodiscard]] std::size_t size() const noexcept;
-
-    void *getHandler() noexcept;
-
-    ~EventClassList() noexcept;
-
-  private:
-    static std::unique_ptr<EventClassList> create(std::size_t size) noexcept;
-
-    EventClassList() noexcept;
-
-    struct Impl;
-
-    std::unique_ptr<Impl> impl_;
-};
-
 struct SymbolsList {
     template <typename SymbolIt>
-    static std::unique_ptr<EventClassList> create(SymbolIt begin, SymbolIt end) noexcept {
+    static std::unique_ptr<SymbolsList> create(SymbolIt begin, SymbolIt end) noexcept {
         auto size = std::distance(begin, end);
 
         if (size <= 0) {
@@ -228,19 +140,7 @@ struct SymbolsList {
 
 } // namespace handler_utils
 
-template <typename It>
-#if __cpp_concepts
-    requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }
-#endif
-std::string namesToString(It begin, It end) {
-    std::string result{"["};
 
-    for (auto it = begin; it != end; it++) {
-        result += String::EMPTY + "'" + it->getName() + "'" + (std::next(it) == end ? "" : ", ");
-    }
-
-    return result + "]";
-}
 
 template <typename M, typename F, typename... Args> inline void callWithLock(M &mtx, F &&f, Args &&...args) noexcept {
     std::once_flag once{};
@@ -365,14 +265,6 @@ static constexpr std::int32_t getSecondsFromTime(std::int64_t timeMillis) {
         std::max((timeMillis + 1) / SECOND - 1, static_cast<std::int64_t>(std::numeric_limits<std::int32_t>::min())));
 }
 } // namespace time_util
-
-namespace string_util {
-
-std::string encodeChar(std::int16_t c);
-
-inline std::string encodeChar(char c) { return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c))); }
-
-} // namespace string_util
 
 namespace math_util {
 

@@ -95,16 +95,16 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
         Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
 
-    handler_ = handler_utils::JavaObjectHandler<DXFeedSubscription>(runIsolatedOrElse(
+    handler_ = JavaObjectHandler<DXFeedSubscription>(runIsolatedOrElse(
         [eventType](auto threadHandle) {
             return dxfg_DXFeedSubscription_new(threadHandle, static_cast<dxfg_event_clazz_t>(eventType.getId()));
         },
         nullptr));
 }
 
-handler_utils::JavaObjectHandler<DXFeedSubscription> DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
-    const std::unique_ptr<handler_utils::EventClassList> &list) noexcept {
-    return handler_utils::JavaObjectHandler<DXFeedSubscription>(
+JavaObjectHandler<DXFeedSubscription> DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
+    const std::unique_ptr<EventClassList> &list) noexcept {
+    return JavaObjectHandler<DXFeedSubscription>(
         runIsolatedOrElse([listHandler = bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](
                               auto threadHandle) { return dxfg_DXFeedSubscription_new2(threadHandle, listHandler); },
                           nullptr));
@@ -122,7 +122,7 @@ void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noex
         }
     };
 
-    eventListenerHandler_ = handler_utils::JavaObjectHandler<DXFeedEventListener>(runIsolatedOrElse(
+    eventListenerHandler_ = JavaObjectHandler<DXFeedEventListener>(runIsolatedOrElse(
         [idValue = id.getValue(), onEvents](auto threadHandle) {
             return dxfg_DXFeedEventListener_new(threadHandle, onEvents, bit_cast<void *>(idValue));
         },

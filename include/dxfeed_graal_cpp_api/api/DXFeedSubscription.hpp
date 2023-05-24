@@ -18,14 +18,14 @@ class DXFeedSubscription : public SharedEntity {
     friend struct DXFeed;
 
     mutable std::recursive_mutex mtx_{};
-    handler_utils::JavaObjectHandler<DXFeedSubscription> handler_;
-    handler_utils::JavaObjectHandler<DXFeedEventListener> eventListenerHandler_;
+    JavaObjectHandler<DXFeedSubscription> handler_;
+    JavaObjectHandler<DXFeedEventListener> eventListenerHandler_;
     Handler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{1};
 
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
-    static handler_utils::JavaObjectHandler<DXFeedSubscription>
-    createSubscriptionHandlerFromEventClassList(const std::unique_ptr<handler_utils::EventClassList> &list) noexcept;
+    static JavaObjectHandler<DXFeedSubscription>
+    createSubscriptionHandlerFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept;
 
     void setEventListenerHandler(Id<DXFeedSubscription> id) noexcept;
 
@@ -36,7 +36,7 @@ class DXFeedSubscription : public SharedEntity {
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
-        auto list = handler_utils::EventClassList::create(begin, end);
+        auto list = EventClassList::create(begin, end);
 
         if (!list) {
             return;

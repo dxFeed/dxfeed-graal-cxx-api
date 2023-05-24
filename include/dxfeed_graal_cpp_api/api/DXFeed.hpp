@@ -27,7 +27,7 @@ struct DXFeed : SharedEntity {
     friend struct DXEndpoint;
 
   private:
-    handler_utils::JavaObjectHandler<DXFeed> handler_;
+    JavaObjectHandler<DXFeed> handler_;
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 

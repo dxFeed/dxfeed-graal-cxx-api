@@ -463,12 +463,12 @@ struct DXEndpoint : SharedEntity {
     static inline std::mutex MTX{};
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
-    handler_utils::JavaObjectHandler<DXEndpoint> handler_;
+    JavaObjectHandler<DXEndpoint> handler_;
     Role role_ = Role::FEED;
     std::string name_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
-    handler_utils::JavaObjectHandler<DXEndpointStateChangeListener> stateChangeListenerHandler_;
+    JavaObjectHandler<DXEndpointStateChangeListener> stateChangeListenerHandler_;
     Handler<void(State, State)> onStateChange_{};
 
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
@@ -808,7 +808,7 @@ struct DXEndpoint : SharedEntity {
         friend DXEndpoint;
 
         //        mutable std::recursive_mutex mtx_{};
-        handler_utils::JavaObjectHandler<Builder> handler_;
+        JavaObjectHandler<Builder> handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 

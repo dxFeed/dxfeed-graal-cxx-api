@@ -84,7 +84,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
         return endpoint;
     }
 
-    endpoint->handler_ = handler_utils::JavaObjectHandler<DXEndpoint>(endpointHandle);
+    endpoint->handler_ = JavaObjectHandler<DXEndpoint>(endpointHandle);
     endpoint->role_ = role;
     endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
 
@@ -110,7 +110,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     };
 
     endpoint->stateChangeListenerHandler_ =
-        handler_utils::JavaObjectHandler<DXEndpointStateChangeListener>(runIsolatedOrElse(
+        JavaObjectHandler<DXEndpointStateChangeListener>(runIsolatedOrElse(
             [idValue = id.getValue(), onPropertyChange](auto threadHandle) {
                 return dxfg_PropertyChangeListener_new(threadHandle, onPropertyChange, bit_cast<void *>(idValue));
             },
@@ -322,7 +322,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
     auto builder = std::shared_ptr<Builder>(new (std::nothrow) Builder{});
 
     if (builder) {
-        builder->handler_ = handler_utils::JavaObjectHandler<DXEndpoint::Builder>(
+        builder->handler_ = JavaObjectHandler<DXEndpoint::Builder>(
             runIsolatedOrElse([](auto threadHandle) { return dxfg_DXEndpoint_newBuilder(threadHandle); }, nullptr));
     }
 
