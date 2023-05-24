@@ -118,8 +118,8 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
             return;
         }
 
-        list_.size = static_cast<std::int32_t>(size);
-        list_.elements = new (std::nothrow) RawGraalListTraits<List>::ElementType *[list_.size];
+        list_.size = static_cast<typename RawGraalListTraits<List>::SizeType>(size);
+        list_.elements = new (std::nothrow) typename RawGraalListTraits<List>::ElementType *[list_.size];
 
         if (!list_.elements) {
             if constexpr (Debugger::traceLists) {
@@ -133,8 +133,8 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
         bool needToRelease = false;
 
-        for (std::int32_t i = 0; i < list_.size; i++) {
-            list_.elements[i] = new (std::nothrow) RawGraalListTraits<List>::ElementType{};
+        for (typename RawGraalListTraits<List>::SizeType i = 0; i < list_.size; i++) {
+            list_.elements[i] = new (std::nothrow) typename RawGraalListTraits<List>::ElementType{};
 
             if (!list_.elements[i]) {
                 needToRelease = true;
