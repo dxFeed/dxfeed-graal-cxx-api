@@ -52,7 +52,7 @@ void DXFeedSubscription::removeSymbolImpl(const char *symbol) noexcept {
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
             dxfg_string_symbol_t s{{STRING}, symbol};
 
-            return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
+            return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler, bit_cast<dxfg_symbol_t *>(&s)) == 0;
         },
         false);
 }
@@ -102,8 +102,8 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
         nullptr));
 }
 
-JavaObjectHandler<DXFeedSubscription> DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
-    const std::unique_ptr<EventClassList> &list) noexcept {
+JavaObjectHandler<DXFeedSubscription>
+DXFeedSubscription::createSubscriptionHandlerFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept {
     return JavaObjectHandler<DXFeedSubscription>(
         runIsolatedOrElse([listHandler = bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](
                               auto threadHandle) { return dxfg_DXFeedSubscription_new2(threadHandle, listHandler); },

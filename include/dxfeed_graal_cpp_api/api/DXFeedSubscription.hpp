@@ -261,6 +261,11 @@ class DXFeedSubscription : public SharedEntity {
         }
     }
 
+    template <typename SymbolIt>
+    void addSymbols(SymbolIt begin, SymbolIt end) noexcept {
+
+    }
+
     template <typename SymbolsCollection> void addSymbols(SymbolsCollection &&collection) noexcept;
 
     template <typename Symbol> void addSymbols(std::initializer_list<Symbol> collection) noexcept;

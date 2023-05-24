@@ -92,56 +92,6 @@ inline auto now() {
         .count();
 }
 
-namespace handler_utils {
-
-struct SymbolsList {
-    template <typename SymbolIt>
-    static std::unique_ptr<SymbolsList> create(SymbolIt begin, SymbolIt end) noexcept {
-        auto size = std::distance(begin, end);
-
-        if (size <= 0) {
-            return {};
-        }
-
-        auto list = create(size);
-
-        if (list->isEmpty()) {
-            return {};
-        }
-
-        std::size_t i = 0;
-
-        for (auto it = begin; it != end; it++, i++) {
-            list->set(i, *it);
-        }
-
-        return list;
-    }
-
-    void set(std::size_t index, std::uint32_t id) noexcept;
-
-    [[nodiscard]] bool isEmpty() const noexcept;
-
-    [[nodiscard]] std::size_t size() const noexcept;
-
-    void *getHandler() noexcept;
-
-    ~SymbolsList() noexcept;
-
-  private:
-    static std::unique_ptr<SymbolsList> create(std::size_t size) noexcept;
-
-    SymbolsList() noexcept;
-
-    struct Impl;
-
-    std::unique_ptr<Impl> impl_;
-};
-
-} // namespace handler_utils
-
-
-
 template <typename M, typename F, typename... Args> inline void callWithLock(M &mtx, F &&f, Args &&...args) noexcept {
     std::once_flag once{};
 
@@ -642,44 +592,4 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
     }
 }
 
-template <typename T> struct Id {
-    using ValueType = std::size_t;
-
-  private:
-    const ValueType value_{};
-
-    explicit Id(ValueType value) : value_{value} {}
-
-  public:
-    static Id<T> getNext() {
-        static std::atomic<ValueType> value{};
-
-        return Id<T>{value++};
-    }
-
-    [[nodiscard]] ValueType getValue() const { return value_; }
-
-    explicit operator ValueType() const { return value_; }
-
-    static Id<T> from(ValueType value) { return Id<T>{value}; }
-
-    template <typename U> bool operator==(const Id<U> &id) const { return getValue() == id.getValue(); }
-
-    template <typename U> auto operator<=>(const Id<U> &id) const { return getValue() <=> id.getValue(); }
-};
-
-template <class T> class NonCopyable {
-  public:
-    NonCopyable(const NonCopyable &) = delete;
-    T &operator=(const T &) = delete;
-
-  protected:
-    NonCopyable() = default;
-    ~NonCopyable() = default;
-};
-
 } // namespace dxfcpp
-
-template <typename T> struct std::hash<dxfcpp::Id<T>> {
-    std::size_t operator()(const dxfcpp::Id<T> &id) const noexcept { return id.getValue(); }
-};

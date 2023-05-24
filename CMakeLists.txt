@@ -73,6 +73,7 @@ set(dxFeedNativeAPIInternalSources
         src/internal/Isolate.cpp
         src/internal/JavaObjectHandler.cpp
         src/internal/EventClassList.cpp
+        src/internal/SymbolList.cpp
         src/internal/Common.cpp
         )
 
