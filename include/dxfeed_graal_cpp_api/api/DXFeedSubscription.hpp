@@ -51,7 +51,7 @@ class DXFeedSubscription : public SharedEntity {
     template <typename EventTypesCollection>
     explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
 #if __cpp_concepts
-        requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
 #endif
         : DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
                              std::end(std::forward<EventTypesCollection>(eventTypes))) {
@@ -143,7 +143,7 @@ class DXFeedSubscription : public SharedEntity {
     template <typename EventTypesCollection>
     static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept
 #if __cpp_concepts
-        requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
 #endif
     {
         auto sub =
@@ -261,10 +261,7 @@ class DXFeedSubscription : public SharedEntity {
         }
     }
 
-    template <typename SymbolIt>
-    void addSymbols(SymbolIt begin, SymbolIt end) noexcept {
-
-    }
+    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) noexcept {}
 
     template <typename SymbolsCollection> void addSymbols(SymbolsCollection &&collection) noexcept;
 

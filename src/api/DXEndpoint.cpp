@@ -109,12 +109,11 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
         }
     };
 
-    endpoint->stateChangeListenerHandler_ =
-        JavaObjectHandler<DXEndpointStateChangeListener>(runIsolatedOrElse(
-            [idValue = id.getValue(), onPropertyChange](auto threadHandle) {
-                return dxfg_PropertyChangeListener_new(threadHandle, onPropertyChange, bit_cast<void *>(idValue));
-            },
-            nullptr));
+    endpoint->stateChangeListenerHandler_ = JavaObjectHandler<DXEndpointStateChangeListener>(runIsolatedOrElse(
+        [idValue = id.getValue(), onPropertyChange](auto threadHandle) {
+            return dxfg_PropertyChangeListener_new(threadHandle, onPropertyChange, bit_cast<void *>(idValue));
+        },
+        nullptr));
     endpoint->setStateChangeListenerImpl();
 
     return endpoint;
@@ -126,10 +125,7 @@ void DXEndpoint::setStateChangeListenerImpl() {
             [handler = bit_cast<dxfg_endpoint_t *>(handler_.get()),
              stateChangeListenerHandler = bit_cast<dxfg_endpoint_state_change_listener_t *>(
                  stateChangeListenerHandler_.get())](auto threadHandle) {
-                // TODO: finalize function
-
-                return dxfg_DXEndpoint_addStateChangeListener(
-                           threadHandle, handler, stateChangeListenerHandler, [](auto, auto) {}, nullptr) == 0;
+                return dxfg_DXEndpoint_addStateChangeListener(threadHandle, handler, stateChangeListenerHandler) == 0;
             },
             false);
     }

@@ -133,10 +133,7 @@ void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noex
             [handler = bit_cast<dxfg_subscription_t *>(handler_.get()),
              eventListenerHandler =
                  bit_cast<dxfg_feed_event_listener_t *>(eventListenerHandler_.get())](auto threadHandle) {
-                // TODO: finalize function
-
-                return dxfg_DXFeedSubscription_addEventListener(
-                           threadHandle, handler, eventListenerHandler, [](auto, auto) {}, nullptr) == 0;
+                return dxfg_DXFeedSubscription_addEventListener(threadHandle, handler, eventListenerHandler) == 0;
             },
             false);
     }

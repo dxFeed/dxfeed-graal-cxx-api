@@ -83,7 +83,7 @@ struct DXFeed : SharedEntity {
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
 #if __cpp_concepts
-        requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
 #endif
     {
         if constexpr (Debugger::isDebug) {

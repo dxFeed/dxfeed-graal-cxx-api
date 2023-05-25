@@ -12,7 +12,7 @@ cmake_policy(SET CMP0135 NEW)
 
 add_executable(PrintQuoteEvents src/main.cpp)
 target_include_directories(PrintQuoteEvents PUBLIC ../../../include)
-target_link_libraries(PrintQuoteEvents PUBLIC DxFeedGraalNativeApi dxFeedGraalCxxApi)
+target_link_libraries(PrintQuoteEvents PUBLIC DxFeedGraalNativeSdk dxFeedGraalCxxApi)
 
 add_custom_command(TARGET PrintQuoteEvents POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:DxFeedGraalNativeApi> $<TARGET_FILE_DIR:PrintQuoteEvents>)
+        $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:PrintQuoteEvents>)
