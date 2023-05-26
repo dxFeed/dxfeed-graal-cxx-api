@@ -13,13 +13,13 @@ namespace dxfcpp {
 
 struct StringSymbol;
 
-struct WildcardSymbol {
+struct WildcardSymbol final {
     static const WildcardSymbol ALL;
 
   private:
-    const std::string symbol;
+    std::string symbol{};
 
-    WildcardSymbol(std::string symbol) : symbol{std::move(symbol)} {}
+    WildcardSymbol(std::string symbol) noexcept: symbol{std::move(symbol)} {}
 
   public:
     const std::string &getSymbol() const noexcept;
@@ -28,7 +28,7 @@ struct WildcardSymbol {
 
     std::string toString() const noexcept { return getSymbol(); }
 
-    operator std::string() const noexcept { return toString(); }
+    explicit operator std::string() const noexcept { return toString(); }
 };
 
 inline namespace literals {
