@@ -66,6 +66,15 @@ void DXFeedSubscription::removeSymbolImpl(const char *symbol) noexcept {
         false);
 }
 
+void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) noexcept {
+    runIsolatedOrElse(
+        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), graalSymbol](auto threadHandle) {
+            return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler,
+                                                        bit_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
+        },
+        false);
+}
+
 void DXFeedSubscription::closeImpl() noexcept {
     if (!handler_) {
         return;

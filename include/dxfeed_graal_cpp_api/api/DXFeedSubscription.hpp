@@ -67,9 +67,11 @@ class DXFeedSubscription : public SharedEntity {
 
     void addSymbolImpl(const char *symbol) noexcept;
 
-    void addSymbolImpl(void* graalSymbol) noexcept;
+    void addSymbolImpl(void *graalSymbol) noexcept;
 
     void removeSymbolImpl(const char *symbol) noexcept;
+
+    void removeSymbolImpl(void *graalSymbol) noexcept;
 
   public:
     std::string toString() const noexcept override;
@@ -237,33 +239,24 @@ class DXFeedSubscription : public SharedEntity {
 
         if constexpr (std::is_same_v<std::decay_t<Symbol>, WildcardSymbol>) {
             addSymbolImpl(symbol.toGraal());
-        } if constexpr (ConvertibleToStringSymbol<Symbol>) {
+        } else if constexpr (ConvertibleToStringSymbol<Symbol>) {
             addSymbolImpl(StringSymbol(std::forward<Symbol>(symbol)).toGraal());
-        } else if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
-            addSymbolImpl(symbol.c_str());
-        }
-        else if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string_view>) {
-            addSymbolImpl(symbol.data());
-        }
-        else {
+        } else {
             addSymbolImpl(symbol);
         }
     }
 
     template <typename Symbol> void removeSymbol(Symbol &&symbol) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::removeSymbol(symbol = " + symbol + ")");
+            Debugger::debug(toString() + "::removeSymbol<" + typeid(symbol).name() +
+                            ">(symbol = " + std::string(symbol) + ")");
         }
 
-        if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
-            removeSymbolImpl(symbol.c_str());
-        }
-#if __cpp_lib_string_view
-        else if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string_view>) {
-            removeSymbolImpl(symbol.data());
-        }
-#endif
-        else {
+        if constexpr (std::is_same_v<std::decay_t<Symbol>, WildcardSymbol>) {
+            removeSymbolImpl(symbol.toGraal());
+        } else if constexpr (ConvertibleToStringSymbol<Symbol>) {
+            removeSymbolImpl(StringSymbol(std::forward<Symbol>(symbol)).toGraal());
+        } else {
             removeSymbolImpl(symbol);
         }
     }
