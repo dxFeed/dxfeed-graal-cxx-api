@@ -10,11 +10,11 @@ set(CMAKE_C_STANDARD 11)
 
 cmake_policy(SET CMP0135 NEW)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(DXFC_IS_ROOT_PROJECT ON)
-else()
+else ()
     set(DXFC_ROOT_PROJECT OFF)
-endif()
+endif ()
 
 option(DXFC_BUILD_UNIT_TESTS "" ON)
 
@@ -84,6 +84,12 @@ set(dxFeedNativeAPIAPISources
         src/api/DXFeedSubscription.cpp
         )
 
+set(dxFeedNativeAPISymbolsSources
+        src/symbols/StringSymbol.cpp
+        src/symbols/WildcardSymbol.cpp
+        src/symbols/SymbolWrapper.cpp
+        )
+
 set(dxFeedNativeAPISystemSources
         src/system/System.cpp
         )
@@ -125,6 +131,7 @@ add_library(dxFeedGraalCxxApi
         ${dxFeedNativeAPIInternalUtilsSources}
         ${dxFeedNativeAPIInternalUtilsDebugSources}
         ${dxFeedNativeAPIAPISources}
+        ${dxFeedNativeAPISymbolsSources}
         ${dxFeedNativeAPISystemSources}
         ${dxFeedNativeAPIEventSources}
         ${dxFeedNativeAPIEventMarketSources}

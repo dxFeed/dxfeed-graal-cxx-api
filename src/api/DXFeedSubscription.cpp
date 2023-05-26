@@ -42,7 +42,16 @@ void DXFeedSubscription::addSymbolImpl(const char *symbol) noexcept {
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
             dxfg_string_symbol_t s{{STRING}, symbol};
 
-            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
+            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, bit_cast<dxfg_symbol_t *>(&s)) == 0;
+        },
+        false);
+}
+
+void DXFeedSubscription::addSymbolImpl(void *graalSymbol) noexcept {
+    runIsolatedOrElse(
+        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), graalSymbol](auto threadHandle) {
+            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, bit_cast<dxfg_symbol_t *>(graalSymbol)) ==
+                   0;
         },
         false);
 }

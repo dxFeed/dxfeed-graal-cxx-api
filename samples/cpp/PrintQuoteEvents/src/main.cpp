@@ -22,20 +22,25 @@ auto cApiStateToString(dxfc_dxendpoint_state_t state) {
 }
 
 #if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
-#define __PRETTY_FUNCTION__ __FUNCSIG__
+#    define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
-
 
 int main() {
     {
         using namespace std::string_literals;
         using namespace std::string_view_literals;
+        using namespace dxfcpp::literals;
 
-        auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
+        auto s = dxfcpp::StringSymbol("123123");
+        s.toGraal();
+
+        //dxfcpp::System::setProperty("dxfeed.wildcard.enable", "true");
+        auto builder = dxfcpp::DXEndpoint::newBuilder()
+                           ->withRole(dxfcpp::DXEndpoint::Role::FEED)
+                           ->withProperty(dxfcpp::DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true");
         auto endpoint = builder->build();
 
-        auto sub =
-            endpoint->getFeed()->createSubscription({dxfcpp::EventTypeEnum::QUOTE});
+        auto sub = endpoint->getFeed()->createSubscription({dxfcpp::EventTypeEnum::QUOTE});
 
         sub->addEventListener([](auto &&events) {
             for (const auto &e : events) {
@@ -46,6 +51,9 @@ int main() {
         sub->addSymbol("AAPL");
         sub->addSymbol("IBM"sv);
         sub->addSymbol("TSLA"s);
+        sub->addSymbol(dxfcpp::WildcardSymbol::ALL);
+        sub->addSymbol("AMD"_s);
+        sub->addSymbol("*"_wcs);
 
         endpoint->connect("demo.dxfeed.com:7300");
 

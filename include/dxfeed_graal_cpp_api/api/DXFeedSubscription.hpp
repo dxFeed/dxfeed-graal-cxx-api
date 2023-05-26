@@ -7,6 +7,8 @@
 
 #include "../event/DXEvent.hpp"
 #include "../internal/Common.hpp"
+#include "../symbols/StringSymbol.hpp"
+#include "../symbols/WildcardSymbol.hpp"
 
 #include <unordered_set>
 
@@ -64,6 +66,8 @@ class DXFeedSubscription : public SharedEntity {
     bool isClosedImpl() noexcept;
 
     void addSymbolImpl(const char *symbol) noexcept;
+
+    void addSymbolImpl(void* graalSymbol) noexcept;
 
     void removeSymbolImpl(const char *symbol) noexcept;
 
@@ -227,17 +231,20 @@ class DXFeedSubscription : public SharedEntity {
 
     template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::addSymbol(symbol = " + std::string(symbol) + ")");
+            Debugger::debug(toString() + "::addSymbol<" + typeid(symbol).name() + ">(symbol = " + std::string(symbol) +
+                            ")");
         }
 
-        if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
+        if constexpr (std::is_same_v<std::decay_t<Symbol>, WildcardSymbol>) {
+            addSymbolImpl(symbol.toGraal());
+        } if constexpr (ConvertibleToStringSymbol<Symbol>) {
+            addSymbolImpl(StringSymbol(std::forward<Symbol>(symbol)).toGraal());
+        } else if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string>) {
             addSymbolImpl(symbol.c_str());
         }
-#if __cpp_lib_string_view
         else if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string_view>) {
             addSymbolImpl(symbol.data());
         }
-#endif
         else {
             addSymbolImpl(symbol);
         }

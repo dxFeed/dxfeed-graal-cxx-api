@@ -21,13 +21,11 @@ struct SymbolList::Impl
 
                                     dxfgSymbol = bit_cast<dxfg_symbol_t *>(&s);
                                 }
-#if __cpp_lib_string_view
                                 else if constexpr (std::is_same_v<std::decay_t<Symbol>, std::string_view>) {
                                     dxfg_string_symbol_t s{{STRING}, symbol.data()};
 
                                     dxfgSymbol = bit_cast<dxfg_symbol_t *>(&s);
                                 }
-#endif
                                 else {
                                     dxfg_string_symbol_t s{{STRING}, symbol};
 
