@@ -32,9 +32,7 @@ class Isolate final {
 
         explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr, bool isMain = false) noexcept
             : handle{handle}, isMain{isMain}, tid{std::this_thread::get_id()} {
-            static size_t idx = 0;
-
-            this->idx = idx++;
+            this->idx = Id<IsolateThread>::getNext().getValue();
 
             if constexpr (Debugger::traceIsolates) {
                 Debugger::trace("IsolateThread{" + dxfcpp::toString(bit_cast<void *>(handle)) +
@@ -149,7 +147,7 @@ class Isolate final {
         if (CEntryPointErrors::valueOf(graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) ==
             CEntryPointErrors::NO_ERROR) {
 
-            auto result = std::shared_ptr<Isolate>{new Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
+            auto result = std::shared_ptr<Isolate>{new (std::nothrow) Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
 
             if constexpr (Debugger::traceIsolates) {
                 Debugger::trace("Isolate::create() -> *" + result->toString());

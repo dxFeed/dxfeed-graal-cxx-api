@@ -117,7 +117,11 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
 
     std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
 
-    feed->handler_ = JavaObjectHandler<DXFeed>(feedHandle);
+    //TODO: error handling
+
+    if (feed) {
+        feed->handler_ = JavaObjectHandler<DXFeed>(feedHandle);
+    }
 
     return feed;
 }

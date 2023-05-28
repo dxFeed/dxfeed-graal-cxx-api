@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <memory>
 #include <utility>
+#include "../symbols/SymbolWrapper.hpp"
 
 namespace dxfcpp {
 
@@ -19,7 +20,7 @@ struct SymbolList {
 
         auto list = create(size);
 
-        if (list->isEmpty()) {
+        if (!list || list->isEmpty()) {
             return {};
         }
 
@@ -32,8 +33,7 @@ struct SymbolList {
         return list;
     }
 
-    template <typename Symbol>
-    void set(std::size_t index, Symbol&& symbol) noexcept;
+    void set(std::size_t index, const SymbolWrapper& symbolWrapper) noexcept;
 
     [[nodiscard]] bool isEmpty() const noexcept;
 
@@ -42,6 +42,8 @@ struct SymbolList {
     void *getHandler() noexcept;
 
     ~SymbolList() noexcept;
+
+    std::string toString() const noexcept;
 
   private:
     static std::unique_ptr<SymbolList> create(std::size_t size) noexcept;

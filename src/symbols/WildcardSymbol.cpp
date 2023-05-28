@@ -16,6 +16,4 @@ void *WildcardSymbol::toGraal() const noexcept {
     return bit_cast<void *>(&wildcardGraalSymbol);
 }
 
-const std::string &WildcardSymbol::getSymbol() const noexcept { return symbol; }
-
 } // namespace dxfcpp

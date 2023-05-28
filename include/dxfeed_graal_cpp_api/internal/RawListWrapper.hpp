@@ -40,7 +40,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
         }
     }
 
-    void set(std::size_t index, auto value) const noexcept {
+    void set(std::size_t index, const auto& value) const noexcept {
         if constexpr (Debugger::traceLists) {
             Debugger::trace(getDebugName() + "::set(" + std::to_string(index) + ", " + std::to_string(value) + ")");
         }

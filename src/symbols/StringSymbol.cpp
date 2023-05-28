@@ -11,27 +11,61 @@
 namespace dxfcpp {
 
 struct StringSymbol::Impl {
-    dxfg_string_symbol_t graalSymbol{{STRING}, nullptr};
+    dxfg_string_symbol_t graalSymbol;
+
+    Impl() noexcept : graalSymbol{{STRING}, nullptr} {}
+
+    Impl(const Impl &impl) noexcept {
+        graalSymbol.supper = {STRING};
+        graalSymbol.symbol = nullptr;
+    }
+
+    Impl &operator=(const Impl &impl) noexcept {
+        if (this == &impl) {
+            return *this;
+        }
+
+        graalSymbol.supper = {STRING};
+        graalSymbol.symbol = nullptr;
+
+        return *this;
+    }
 };
 
-StringSymbol::StringSymbol() noexcept : impl_{std::make_unique<StringSymbol::Impl>()} {}
+StringSymbol::StringSymbol(const StringSymbol &stringSymbol) noexcept {
+    impl_ = std::make_shared<StringSymbol::Impl>();
+    data_ = stringSymbol.data_;
+}
+
+StringSymbol &StringSymbol::operator=(const StringSymbol &stringSymbol) noexcept {
+    if (this == &stringSymbol) {
+        return *this;
+    }
+
+    impl_ = std::make_shared<StringSymbol::Impl>();
+    data_ = stringSymbol.data_;
+
+    return *this;
+}
+
+StringSymbol::StringSymbol() noexcept : impl_{std::make_shared<StringSymbol::Impl>()} {}
 
 StringSymbol::~StringSymbol() noexcept = default;
 
-void *StringSymbol::toGraal() {
+void *StringSymbol::toGraal() const noexcept {
     if (impl_->graalSymbol.symbol == nullptr) {
-        std::visit(
-            [this]<typename SymbolType>(SymbolType symbol) {
-                if constexpr (std::is_same_v<SymbolType, std::string>) {
-                    impl_->graalSymbol.symbol = symbol.c_str();
-                } else if constexpr (std::is_same_v<SymbolType, std::string_view>) {
-                    impl_->graalSymbol.symbol = symbol.data();
-                }
-            },
-            data_);
+        impl_->graalSymbol.symbol = data_.c_str();
+
+        // std::visit([this](auto symbol) { impl_->graalSymbol.symbol = symbol.data(); }, data_);
     }
 
     return bit_cast<void *>(&impl_->graalSymbol);
+}
+
+std::string toString(const dxfg_symbol_t *graalSymbol);
+
+std::string graalSymbolToString(void *graalSymbol) {
+    return !graalSymbol ? "null" : toString(bit_cast<const dxfg_symbol_t *>(graalSymbol));
 }
 
 } // namespace dxfcpp
