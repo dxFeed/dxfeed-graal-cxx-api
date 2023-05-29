@@ -51,6 +51,11 @@ struct StringSymbol final {
 
     void *toGraal() const noexcept;
 
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
     std::string toString() const noexcept {
         return "StringSymbol{" + data_ + "}";
     }

@@ -32,7 +32,6 @@ int main() {
         });
 
         sub->addSymbols({"AAPL", "IBM"sv, "XBT/USD:GDAX"s, "BTC/EUR:CXBITF"_s, "*"_wcs});
-
         sub->addSymbols("AAPL");
         sub->addSymbols("IBM"sv);
         sub->addSymbols("TSLA"s);
@@ -40,6 +39,15 @@ int main() {
         sub->addSymbols("AMD"_s);
         sub->addSymbols("*"_wcs);
         sub->addSymbols(symbols[4]);
+        sub->addSymbols("!@#"_sw);
+        sub->addSymbols(std::vector{"11111"s});
+        sub->addSymbols(std::vector{"AAPL", "IBM", "TSLA", "GOOG"});
+        auto v = std::vector{"AAPL", "IBM"};
+        auto v2 = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+
+        sub->addSymbols(v);
+        sub->addSymbols(v2);
+
 
 //        endpoint->connect("demo.dxfeed.com:7300");
         endpoint->connect("mddqa.in.devexperts.com:7400");

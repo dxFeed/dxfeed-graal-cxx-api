@@ -61,6 +61,11 @@ add_subdirectory(third_party/fmt-10.0.0)
 # find_package(utf8cpp)
 # find_package(fmt)
 
+if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"))
+    # Ignore undefined template var warning
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-undefined-var-template")
+endif ()
+
 set(dxFeedNativeAPIInternalSources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp

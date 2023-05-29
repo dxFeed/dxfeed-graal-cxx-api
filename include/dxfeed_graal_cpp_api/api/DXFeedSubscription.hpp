@@ -232,6 +232,22 @@ class DXFeedSubscription : public SharedEntity {
      */
     const auto &onEvent() noexcept { return onEvent_; }
 
+    /**
+     * Adds the specified symbol to the set of subscribed symbols.
+     * This is a convenience method to subscribe to one symbol at a time that has a return fast-path for a case when
+     * the symbol is already in the set.
+     * When subscribing to multiple symbols at once it is preferable to use @ref ::addSymbols(const SymbolsCollection
+     * &collection) "addSymbols(symbols)" method.
+     *
+     * Example:
+     * ```cpp
+     * sub->addSymbols("TSLA");
+     * sub->addSymbols("XBT/USD:GDAX"s);
+     * sub->addSymbols("BTC/EUR:CXBITF"sv);
+     * ```
+     *
+     * @param symbolWrapper The symbol.
+     */
     void addSymbols(const SymbolWrapper &symbolWrapper) noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::addSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
@@ -240,6 +256,20 @@ class DXFeedSubscription : public SharedEntity {
         addSymbolImpl(symbolWrapper.toGraal());
     }
 
+    /**
+     * Removes the specified symbol from the set of subscribed symbols.
+     * To conveniently remove one or few symbols you can use @ref ::removeSymbols(const SymbolsCollection &collection)
+     * "removeSymbols(symbols)" method.
+     *
+     * Example:
+     * ```cpp
+     * sub->removeSymbols("TSLA");
+     * sub->removeSymbols("XBT/USD:GDAX"s);
+     * sub->removeSymbols("BTC/EUR:CXBITF"sv);
+     * ```
+     *
+     * @param symbolWrapper The symbol.
+     */
     void removeSymbols(const SymbolWrapper &symbolWrapper) noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::removeSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
@@ -248,6 +278,20 @@ class DXFeedSubscription : public SharedEntity {
         removeSymbolImpl(symbolWrapper.toGraal());
     }
 
+    /**
+     * Adds the specified collection (using iterators) of symbols to the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->addSymbols(v.begin(), v.end());
+     * ```
+     *
+     * @tparam SymbolIt The collection's iterator type
+     * @param begin The beginning of the collection of symbols.
+     * @param end The end of symbol collection.
+     */
     template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
@@ -257,18 +301,56 @@ class DXFeedSubscription : public SharedEntity {
 #if __cpp_lib_parallel_algorithm
             std::execution::par,
 #endif
-            begin, end, [this](const auto &wrapper) { addSymbolImpl(wrapper.toGraal()); });
+            begin, end, [this](const SymbolWrapper &wrapper) { addSymbolImpl(wrapper.toGraal()); });
     }
 
+    /**
+     * Adds the specified collection of symbols to the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->addSymbols(std::vector{"AAPL", "IBM"});
+     * sub->addSymbols(v);
+     * ```
+     *
+     * @tparam SymbolsCollection The symbols collection's type
+     * @param collection The symbols collection
+     */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
     void addSymbols(const SymbolsCollection &collection) noexcept {
         addSymbols(std::begin(collection), std::end(collection));
     }
 
+    /**
+     * Adds the specified collection (initializer list) of symbols to the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * sub->addSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
+     * ```
+     *
+     * @param collection The symbols collection
+     */
     void addSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
         addSymbols(collection.begin(), collection.end());
     }
 
+    /**
+     * Removes the specified collection (using iterators) of symbols from the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->removeSymbols(v.begin(), v.end());
+     * ```
+     *
+     * @tparam SymbolIt The collection's iterator type
+     * @param begin The beginning of the collection of symbols.
+     * @param end The end of symbol collection.
+     */
     template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
@@ -278,21 +360,58 @@ class DXFeedSubscription : public SharedEntity {
 #if __cpp_lib_parallel_algorithm
             std::execution::par,
 #endif
-            begin, end,
-                      [this](const auto &wrapper) { removeSymbolImpl(wrapper.toGraal()); });
+            begin, end, [this](const SymbolWrapper &wrapper) { removeSymbolImpl(wrapper.toGraal()); });
     }
 
-    void removeSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
-        removeSymbols(collection.begin(), collection.end());
-    }
-
+    /**
+     * Removes the specified collection of symbols from the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->removeSymbols(std::vector{"AAPL", "IBM"});
+     * sub->removeSymbols(v);
+     * ```
+     *
+     * @tparam SymbolsCollection The symbols collection's type
+     * @param collection The symbols collection
+     */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
     void removeSymbols(SymbolsCollection &&collection) noexcept {
         removeSymbols(std::begin(collection), std::end(collection));
     }
 
+    /**
+     * Removes the specified collection (initializer list) of symbols from the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * sub->removeSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
+     * ```
+     *
+     * @param collection The symbols collection
+     */
+    void removeSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
+        removeSymbols(collection.begin(), collection.end());
+    }
+
+    /**
+     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using iterators).
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->setSymbols(v.begin(), v.end());
+     * ```
+     *
+     * @tparam SymbolIt The collection's iterator type
+     * @param begin The beginning of the collection of symbols.
+     * @param end The end of symbol collection.
+     */
     template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) noexcept {
-        //TODO: implement using the native implementation
+        // TODO: implement using the native implementation
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
@@ -301,13 +420,38 @@ class DXFeedSubscription : public SharedEntity {
         addSymbols(begin, end);
     }
 
-    void setSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
-        setSymbols(collection.begin(), collection.end());
-    }
-
+    /**
+     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->setSymbols(std::vector{"AAPL", "IBM"});
+     * sub->setSymbols(v);
+     * ```
+     *
+     * @tparam SymbolsCollection The symbols collection's type
+     * @param collection The symbols collection
+     */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
     void setSymbols(SymbolsCollection &&collection) noexcept {
         setSymbols(std::begin(collection), std::end(collection));
+    }
+
+    /**
+     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection
+     * (initializer list).
+     *
+     * Example:
+     * ```cpp
+     * sub->setSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
+     * ```
+     *
+     * @param collection The symbols collection
+     */
+    void setSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
+        setSymbols(collection.begin(), collection.end());
     }
 
     /**
@@ -363,10 +507,6 @@ class DXFeedSubscription : public SharedEntity {
      * @return A set of subscribed symbols.
      */
     auto getSymbols() noexcept;
-
-    template <typename Symbol> void setSymbol(Symbol &&symbol) noexcept;
-
-    template <typename SymbolsCollection> void setSymbols(SymbolsCollection &&collection) noexcept;
 
     /**
      * Returns a set of decorated symbols (depending on the actual implementation of subscription).
