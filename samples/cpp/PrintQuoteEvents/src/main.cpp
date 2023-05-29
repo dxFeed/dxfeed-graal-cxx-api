@@ -31,8 +31,19 @@ int main() {
         using namespace std::string_view_literals;
         using namespace dxfcpp::literals;
 
-        auto s = dxfcpp::StringSymbol("123123");
-        s.toGraal();
+        std::vector<dxfcpp::SymbolWrapper> symbols{{"123", "123123"sv, "123213123"s, "*"_wcs, "ZZZ"_s}};
+
+        for (const auto& s : symbols) {
+
+
+            std::cerr << dxfcpp::graalSymbolToString(s.toGraal()) + "\n";
+        }
+
+        auto sl = dxfcpp::SymbolList::create(symbols.begin(), symbols.end());
+
+        std::cerr << "\n\n" + sl->toString() + "\n";
+
+        return 0;
 
         //dxfcpp::System::setProperty("dxfeed.wildcard.enable", "true");
         auto builder = dxfcpp::DXEndpoint::newBuilder()
@@ -54,6 +65,7 @@ int main() {
         sub->addSymbol(dxfcpp::WildcardSymbol::ALL);
         sub->addSymbol("AMD"_s);
         sub->addSymbol("*"_wcs);
+        //sub->addSymbol(symbols[4]);
 
         endpoint->connect("demo.dxfeed.com:7300");
 

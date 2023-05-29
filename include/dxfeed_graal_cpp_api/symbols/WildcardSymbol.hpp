@@ -7,28 +7,29 @@
 #include <memory>
 #include <utility>
 
-#include "StringSymbol.hpp"
-
 namespace dxfcpp {
-
-struct StringSymbol;
 
 struct WildcardSymbol final {
     static const WildcardSymbol ALL;
 
   private:
-    std::string symbol{};
+    std::string symbol;
 
-    WildcardSymbol(std::string symbol) noexcept: symbol{std::move(symbol)} {}
+    WildcardSymbol(const std::string &symbol) noexcept : symbol{symbol} {}
 
   public:
-    const std::string &getSymbol() const noexcept;
+    WildcardSymbol(const WildcardSymbol &wildcardSymbol) noexcept = default;
+    WildcardSymbol(WildcardSymbol &&) noexcept = delete;
+    WildcardSymbol &operator=(const WildcardSymbol &wildcardSymbol) noexcept = default;
+    WildcardSymbol &operator=(WildcardSymbol &&) noexcept = delete;
+    WildcardSymbol() noexcept = default;
+    ~WildcardSymbol() noexcept = default;
+
+    const std::string &getSymbol() const noexcept { return symbol; }
 
     void *toGraal() const noexcept;
 
-    std::string toString() const noexcept { return getSymbol(); }
-
-    explicit operator std::string() const noexcept { return toString(); }
+    std::string toString() const noexcept { return "WildcardSymbol{" + getSymbol() + "}"; }
 };
 
 inline namespace literals {

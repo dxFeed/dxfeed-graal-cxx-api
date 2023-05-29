@@ -20,7 +20,7 @@ struct EventClassList {
 
         auto list = create(size);
 
-        if (list->isEmpty()) {
+        if (!list || list->isEmpty()) {
             return {};
         }
 

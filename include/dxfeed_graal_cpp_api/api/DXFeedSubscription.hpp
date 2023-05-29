@@ -8,6 +8,7 @@
 #include "../event/DXEvent.hpp"
 #include "../internal/Common.hpp"
 #include "../symbols/StringSymbol.hpp"
+#include "../symbols/SymbolWrapper.hpp"
 #include "../symbols/WildcardSymbol.hpp"
 
 #include <unordered_set>
@@ -231,34 +232,20 @@ class DXFeedSubscription : public SharedEntity {
      */
     const auto &onEvent() noexcept { return onEvent_; }
 
-    template <typename Symbol> void addSymbol(Symbol &&symbol) noexcept {
+    void addSymbol(const SymbolWrapper &symbolWrapper) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::addSymbol<" + typeid(symbol).name() + ">(symbol = " + std::string(symbol) +
-                            ")");
+            Debugger::debug(toString() + "::addSymbol(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
 
-        if constexpr (std::is_same_v<std::decay_t<Symbol>, WildcardSymbol>) {
-            addSymbolImpl(symbol.toGraal());
-        } else if constexpr (ConvertibleToStringSymbol<Symbol>) {
-            addSymbolImpl(StringSymbol(std::forward<Symbol>(symbol)).toGraal());
-        } else {
-            addSymbolImpl(symbol);
-        }
+        addSymbolImpl(symbolWrapper.toGraal());
     }
 
-    template <typename Symbol> void removeSymbol(Symbol &&symbol) noexcept {
+    void removeSymbol(const SymbolWrapper &symbolWrapper) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::removeSymbol<" + typeid(symbol).name() +
-                            ">(symbol = " + std::string(symbol) + ")");
+            Debugger::debug(toString() + "::removeSymbol(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
 
-        if constexpr (std::is_same_v<std::decay_t<Symbol>, WildcardSymbol>) {
-            removeSymbolImpl(symbol.toGraal());
-        } else if constexpr (ConvertibleToStringSymbol<Symbol>) {
-            removeSymbolImpl(StringSymbol(std::forward<Symbol>(symbol)).toGraal());
-        } else {
-            removeSymbolImpl(symbol);
-        }
+        removeSymbolImpl(symbolWrapper.toGraal());
     }
 
     template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) noexcept {}
