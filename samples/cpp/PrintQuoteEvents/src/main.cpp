@@ -39,7 +39,7 @@ int main() {
         sub->addSymbols(dxfcpp::WildcardSymbol::ALL);
         sub->addSymbols("AMD"_s);
         sub->addSymbols("*"_wcs);
-        //sub->addSymbol(symbols[4]);
+        sub->addSymbols(symbols[4]);
 
 //        endpoint->connect("demo.dxfeed.com:7300");
         endpoint->connect("mddqa.in.devexperts.com:7400");
@@ -47,6 +47,8 @@ int main() {
         std::this_thread::sleep_for(std::chrono::seconds(5));
 
         sub->removeSymbols("TSLA");
+
+        sub->removeSymbols(symbols);
 
         std::this_thread::sleep_for(std::chrono::seconds(5));
 

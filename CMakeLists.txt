@@ -84,9 +84,13 @@ set(dxFeedNativeAPIAPISources
         src/api/DXFeedSubscription.cpp
         )
 
+set(dxFeedNativeAPIAPIOsubSources
+        src/api/osub/WildcardSymbol.cpp
+        )
+
 set(dxFeedNativeAPISymbolsSources
+        src/symbols/SymbolMapper.cpp
         src/symbols/StringSymbol.cpp
-        src/symbols/WildcardSymbol.cpp
         src/symbols/SymbolWrapper.cpp
         )
 
@@ -131,6 +135,7 @@ add_library(dxFeedGraalCxxApi
         ${dxFeedNativeAPIInternalUtilsSources}
         ${dxFeedNativeAPIInternalUtilsDebugSources}
         ${dxFeedNativeAPIAPISources}
+        ${dxFeedNativeAPIAPIOsubSources}
         ${dxFeedNativeAPISymbolsSources}
         ${dxFeedNativeAPISystemSources}
         ${dxFeedNativeAPIEventSources}

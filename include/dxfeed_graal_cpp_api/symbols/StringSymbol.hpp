@@ -11,20 +11,17 @@
 namespace dxfcpp {
 
 struct StringSymbol final {
-    using DataType = typename std::variant<std::string_view, std::string>;
-
   private:
-    //DataType data_;
     std::string data_;
 
     struct Impl;
-    std::shared_ptr<Impl> impl_;
+    std::unique_ptr<Impl> impl_;
 
   public:
     StringSymbol(const StringSymbol &stringSymbol) noexcept;
-    StringSymbol(StringSymbol &&) noexcept = delete;
+    StringSymbol(StringSymbol &&) noexcept;
     StringSymbol &operator=(const StringSymbol &stringSymbol) noexcept;
-    StringSymbol &operator=(StringSymbol &&) noexcept = delete;
+    StringSymbol &operator=(StringSymbol &&) noexcept;
     StringSymbol() noexcept;
     ~StringSymbol() noexcept;
 
@@ -44,20 +41,21 @@ struct StringSymbol final {
         data_ = std::string(stringView);
     }
 
-    StringSymbol(const std::string &string) noexcept : StringSymbol() {
+    StringSymbol(std::string string) noexcept : StringSymbol() {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("StringSymbol(string = " + toStringAny(string) + ")");
         }
 
-        data_ = string;
+        data_ = std::move(string);
     }
 
     void *toGraal() const noexcept;
 
     std::string toString() const noexcept {
-        //return "StringSymbol{" + std::visit([](auto &&d) { return toStringAny(d); }, data_) + "}";
         return "StringSymbol{" + data_ + "}";
     }
+
+    const std::string &getData() const;
 };
 
 template <typename T>

@@ -5,11 +5,12 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <utility>
 #include <variant>
 
+#include "../api/osub/WildcardSymbol.hpp"
 #include "StringSymbol.hpp"
-#include "WildcardSymbol.hpp"
 
 namespace dxfcpp {
 
@@ -56,6 +57,18 @@ struct SymbolWrapper final {
 
     std::string toString() const noexcept {
         return "SymbolWrapper{" + std::visit([](const auto &symbol) { return toStringAny(symbol); }, data_) + "}";
+    }
+
+    bool isWildcardSymbol() const noexcept { return std::holds_alternative<WildcardSymbol>(data_); }
+
+    std::optional<WildcardSymbol> asWildcardSymbol() const noexcept {
+        return isWildcardSymbol() ? std::make_optional(WildcardSymbol::ALL) : std::nullopt;
+    }
+
+    bool isStringSymbol() const noexcept { return std::holds_alternative<StringSymbol>(data_); }
+
+    std::string asStringSymbol() const noexcept {
+        return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
     }
 };
 

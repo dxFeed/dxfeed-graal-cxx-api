@@ -31,31 +31,11 @@ void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
     feed->detachSubscription(sharedAs<DXFeedSubscription>());
 }
 
-void DXFeedSubscription::addSymbolImpl(const char *symbol) const noexcept {
-    runIsolatedOrElse(
-        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
-            dxfg_string_symbol_t s{{STRING}, symbol};
-
-            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, bit_cast<dxfg_symbol_t *>(&s)) == 0;
-        },
-        false);
-}
-
 void DXFeedSubscription::addSymbolImpl(void *graalSymbol) const noexcept {
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), graalSymbol](auto threadHandle) {
             return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, bit_cast<dxfg_symbol_t *>(graalSymbol)) ==
                    0;
-        },
-        false);
-}
-
-void DXFeedSubscription::removeSymbolImpl(const char *symbol) const noexcept {
-    runIsolatedOrElse(
-        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
-            dxfg_string_symbol_t s{{STRING}, symbol};
-
-            return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler, bit_cast<dxfg_symbol_t *>(&s)) == 0;
         },
         false);
 }

@@ -9,7 +9,7 @@
 #include "../internal/Common.hpp"
 #include "../symbols/StringSymbol.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-#include "../symbols/WildcardSymbol.hpp"
+#include "dxfeed_graal_cpp_api/api/osub/WildcardSymbol.hpp"
 
 #if __cpp_lib_parallel_algorithm
 #    include <execution>
@@ -70,11 +70,7 @@ class DXFeedSubscription : public SharedEntity {
 
     bool isClosedImpl() const noexcept;
 
-    void addSymbolImpl(const char *symbol) const noexcept;
-
     void addSymbolImpl(void *graalSymbol) const noexcept;
-
-    void removeSymbolImpl(const char *symbol) const noexcept;
 
     void removeSymbolImpl(void *graalSymbol) const noexcept;
 
@@ -293,6 +289,25 @@ class DXFeedSubscription : public SharedEntity {
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
     void removeSymbols(SymbolsCollection &&collection) noexcept {
         removeSymbols(std::begin(collection), std::end(collection));
+    }
+
+    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) noexcept {
+        //TODO: implement using the native implementation
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
+        }
+
+        clearImpl();
+        addSymbols(begin, end);
+    }
+
+    void setSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
+        setSymbols(collection.begin(), collection.end());
+    }
+
+    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+    void setSymbols(SymbolsCollection &&collection) noexcept {
+        setSymbols(std::begin(collection), std::end(collection));
     }
 
     /**

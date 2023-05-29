@@ -18,10 +18,10 @@ struct WildcardSymbol final {
     WildcardSymbol(const std::string &symbol) noexcept : symbol{symbol} {}
 
   public:
-    WildcardSymbol(const WildcardSymbol &wildcardSymbol) noexcept = default;
-    WildcardSymbol(WildcardSymbol &&) noexcept = delete;
-    WildcardSymbol &operator=(const WildcardSymbol &wildcardSymbol) noexcept = default;
-    WildcardSymbol &operator=(WildcardSymbol &&) noexcept = delete;
+    WildcardSymbol(const WildcardSymbol &) noexcept = default;
+    WildcardSymbol(WildcardSymbol &&) noexcept = default;
+    WildcardSymbol &operator=(const WildcardSymbol &) noexcept = default;
+    WildcardSymbol &operator=(WildcardSymbol &&) noexcept = default;
     WildcardSymbol() noexcept = default;
     ~WildcardSymbol() noexcept = default;
 
