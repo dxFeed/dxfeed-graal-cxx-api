@@ -11,7 +11,10 @@
 #include "../symbols/SymbolWrapper.hpp"
 #include "../symbols/WildcardSymbol.hpp"
 
-#include <execution>
+#if __cpp_lib_parallel_algorithm
+#    include <execution>
+#endif
+
 #include <unordered_set>
 
 namespace dxfcpp {
@@ -254,8 +257,11 @@ class DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        std::for_each(std::execution::par, begin, end,
-                      [this](const auto &wrapper) { addSymbolImpl(wrapper.toGraal()); });
+        std::for_each(
+#if __cpp_lib_parallel_algorithm
+            std::execution::par,
+#endif
+            begin, end, [this](const auto &wrapper) { addSymbolImpl(wrapper.toGraal()); });
     }
 
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
@@ -272,7 +278,11 @@ class DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        std::for_each(std::execution::par, begin, end,
+        std::for_each(
+#if __cpp_lib_parallel_algorithm
+            std::execution::par,
+#endif
+            begin, end,
                       [this](const auto &wrapper) { removeSymbolImpl(wrapper.toGraal()); });
     }
 
