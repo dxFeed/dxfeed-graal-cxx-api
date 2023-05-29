@@ -63,4 +63,14 @@ template <typename T>
 concept ConvertibleToSymbolWrapper =
     ConvertibleToStringSymbol<std::decay_t<T>> || std::is_same_v<std::decay_t<T>, WildcardSymbol>;
 
+template <typename Collection>
+concept ConvertibleToSymbolWrapperCollection = requires(Collection c) {
+    std::begin(c);
+    std::end(c);
+} && requires(Collection c) {
+    { *std::begin(c) } -> std::convertible_to<SymbolWrapper>;
+} || requires(Collection c) {
+    { *std::begin(c) } -> ConvertibleToSymbolWrapper;
+};
+
 } // namespace dxfcpp

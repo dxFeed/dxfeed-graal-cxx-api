@@ -4,27 +4,6 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <filesystem>
-
-auto cApiStateToString(dxfc_dxendpoint_state_t state) {
-    switch (state) {
-    case DXFC_DXENDPOINT_STATE_NOT_CONNECTED:
-        return "NOT_CONNECTED";
-    case DXFC_DXENDPOINT_STATE_CONNECTING:
-        return "CONNECTING";
-    case DXFC_DXENDPOINT_STATE_CONNECTED:
-        return "CONNECTED";
-    case DXFC_DXENDPOINT_STATE_CLOSED:
-        return "CLOSED";
-    }
-
-    return "";
-}
-
-#if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
-#    define __PRETTY_FUNCTION__ __FUNCSIG__
-#endif
-
 int main() {
     {
         using namespace std::string_literals;
@@ -39,13 +18,6 @@ int main() {
             std::cerr << dxfcpp::graalSymbolToString(s.toGraal()) + "\n";
         }
 
-        auto sl = dxfcpp::SymbolList::create(symbols.begin(), symbols.end());
-
-        std::cerr << "\n\n" + sl->toString() + "\n";
-
-        return 0;
-
-        //dxfcpp::System::setProperty("dxfeed.wildcard.enable", "true");
         auto builder = dxfcpp::DXEndpoint::newBuilder()
                            ->withRole(dxfcpp::DXEndpoint::Role::FEED)
                            ->withProperty(dxfcpp::DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true");
@@ -59,19 +31,22 @@ int main() {
             }
         });
 
-        sub->addSymbol("AAPL");
-        sub->addSymbol("IBM"sv);
-        sub->addSymbol("TSLA"s);
-        sub->addSymbol(dxfcpp::WildcardSymbol::ALL);
-        sub->addSymbol("AMD"_s);
-        sub->addSymbol("*"_wcs);
+        sub->addSymbols({"AAPL", "IBM"sv, "XBT/USD:GDAX"s, "BTC/EUR:CXBITF"_s, "*"_wcs});
+
+        sub->addSymbols("AAPL");
+        sub->addSymbols("IBM"sv);
+        sub->addSymbols("TSLA"s);
+        sub->addSymbols(dxfcpp::WildcardSymbol::ALL);
+        sub->addSymbols("AMD"_s);
+        sub->addSymbols("*"_wcs);
         //sub->addSymbol(symbols[4]);
 
-        endpoint->connect("demo.dxfeed.com:7300");
+//        endpoint->connect("demo.dxfeed.com:7300");
+        endpoint->connect("mddqa.in.devexperts.com:7400");
 
         std::this_thread::sleep_for(std::chrono::seconds(5));
 
-        sub->removeSymbol("TSLA");
+        sub->removeSymbols("TSLA");
 
         std::this_thread::sleep_for(std::chrono::seconds(5));
 

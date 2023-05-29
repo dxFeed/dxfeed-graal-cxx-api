@@ -22,12 +22,12 @@ std::string toString(std::thread::id theadId);
 std::string toString(void *ptr);
 
 template <typename T> std::string toStringAny(T &&t) {
-    if constexpr (requires { toString(t); }) {
-        return toString(t);
-    } else if constexpr (requires { t.toString(); }) {
+    if constexpr (requires { t.toString(); }) {
         return t.toString();
     } else if constexpr (requires { *t.toString(); }) {
         return *t.toString();
+    } else if constexpr (requires { toString(t); }) {
+        return toString(t);
     } else if constexpr (requires { std::to_string(t); }) {
         return std::to_string(t);
     } else if constexpr (requires { std::string(t); }) {
@@ -54,6 +54,17 @@ std::string namesToString(It begin, It end) {
 
     for (auto it = begin; it != end; it++) {
         result += String::EMPTY + "'" + it->getName() + "'" + (std::next(it) == end ? "" : ", ");
+    }
+
+    return result + "]";
+}
+
+template <typename It>
+std::string elementsToString(It begin, It end) {
+    std::string result{"["};
+
+    for (auto it = begin; it != end; it++) {
+        result += String::EMPTY + "'" + toStringAny(*it) + "'" + (std::next(it) == end ? "" : ", ");
     }
 
     return result + "]";

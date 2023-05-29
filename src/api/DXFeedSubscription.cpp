@@ -31,13 +31,7 @@ void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
     feed->detachSubscription(sharedAs<DXFeedSubscription>());
 }
 
-template <typename Symbol> auto symbolDataRetriever(Symbol &&s) {
-    if constexpr (Debugger::isDebug) {
-        Debugger::debug(typeid(decltype(s)).name());
-    }
-}
-
-void DXFeedSubscription::addSymbolImpl(const char *symbol) noexcept {
+void DXFeedSubscription::addSymbolImpl(const char *symbol) const noexcept {
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
             dxfg_string_symbol_t s{{STRING}, symbol};
@@ -47,7 +41,7 @@ void DXFeedSubscription::addSymbolImpl(const char *symbol) noexcept {
         false);
 }
 
-void DXFeedSubscription::addSymbolImpl(void *graalSymbol) noexcept {
+void DXFeedSubscription::addSymbolImpl(void *graalSymbol) const noexcept {
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), graalSymbol](auto threadHandle) {
             return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, bit_cast<dxfg_symbol_t *>(graalSymbol)) ==
@@ -56,7 +50,7 @@ void DXFeedSubscription::addSymbolImpl(void *graalSymbol) noexcept {
         false);
 }
 
-void DXFeedSubscription::removeSymbolImpl(const char *symbol) noexcept {
+void DXFeedSubscription::removeSymbolImpl(const char *symbol) const noexcept {
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
             dxfg_string_symbol_t s{{STRING}, symbol};
@@ -66,7 +60,7 @@ void DXFeedSubscription::removeSymbolImpl(const char *symbol) noexcept {
         false);
 }
 
-void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) noexcept {
+void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) const noexcept {
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), graalSymbol](auto threadHandle) {
             return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler,
@@ -75,7 +69,7 @@ void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) noexcept {
         false);
 }
 
-void DXFeedSubscription::closeImpl() noexcept {
+void DXFeedSubscription::closeImpl() const noexcept {
     if (!handler_) {
         return;
     }
@@ -85,7 +79,7 @@ void DXFeedSubscription::closeImpl() noexcept {
                       false);
 }
 
-void DXFeedSubscription::clearImpl() noexcept {
+void DXFeedSubscription::clearImpl() const noexcept {
     if (!handler_) {
         return;
     }
@@ -95,7 +89,7 @@ void DXFeedSubscription::clearImpl() noexcept {
                       false);
 }
 
-bool DXFeedSubscription::isClosedImpl() noexcept {
+bool DXFeedSubscription::isClosedImpl() const noexcept {
     if (!handler_) {
         return false;
     }

@@ -266,9 +266,9 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   by [dxPrice](http://www.devexperts.com/en/products/price.html) model-free computation
 - [x] [Underlying](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Underlying.html) is a snapshot of computed
   values available for an option underlying symbol based on the market’s option prices
-- [x] [Configuration](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Configuration.html) is an event with an
+- [ ] [Configuration](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Configuration.html) is an event with an
   application-specific attachment
-- [x] [Message](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Message.html) is an event with an
+- [ ] [Message](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Message.html) is an event with an
   application-specific attachment
 
 ### Subscription Symbols
@@ -278,7 +278,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   represents subscription to time-series events
 - [ ] [IndexedSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/IndexedEventSubscriptionSymbol.html) -
   represents subscription to a specific source of indexed events
-- [ ] [WildcardSymbol.ALL](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/WildcardSymbol.html) - represents a
+- [x] [WildcardSymbol.ALL](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/WildcardSymbol.html) - represents a
   *wildcard* subscription to all events of the specific event type
 - [ ] [CandleSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/CandleSymbol.html) - symbol used
   with [DXFeedSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html) class to

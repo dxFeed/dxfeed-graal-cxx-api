@@ -11,6 +11,7 @@
 #include "../symbols/SymbolWrapper.hpp"
 #include "../symbols/WildcardSymbol.hpp"
 
+#include <execution>
 #include <unordered_set>
 
 namespace dxfcpp {
@@ -60,19 +61,19 @@ class DXFeedSubscription : public SharedEntity {
                              std::end(std::forward<EventTypesCollection>(eventTypes))) {
     }
 
-    void closeImpl() noexcept;
+    void closeImpl() const noexcept;
 
-    void clearImpl() noexcept;
+    void clearImpl() const noexcept;
 
-    bool isClosedImpl() noexcept;
+    bool isClosedImpl() const noexcept;
 
-    void addSymbolImpl(const char *symbol) noexcept;
+    void addSymbolImpl(const char *symbol) const noexcept;
 
-    void addSymbolImpl(void *graalSymbol) noexcept;
+    void addSymbolImpl(void *graalSymbol) const noexcept;
 
-    void removeSymbolImpl(const char *symbol) noexcept;
+    void removeSymbolImpl(const char *symbol) const noexcept;
 
-    void removeSymbolImpl(void *graalSymbol) noexcept;
+    void removeSymbolImpl(void *graalSymbol) const noexcept;
 
   public:
     std::string toString() const noexcept override;
@@ -232,29 +233,57 @@ class DXFeedSubscription : public SharedEntity {
      */
     const auto &onEvent() noexcept { return onEvent_; }
 
-    void addSymbol(const SymbolWrapper &symbolWrapper) noexcept {
+    void addSymbols(const SymbolWrapper &symbolWrapper) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::addSymbol(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
+            Debugger::debug(toString() + "::addSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
 
         addSymbolImpl(symbolWrapper.toGraal());
     }
 
-    void removeSymbol(const SymbolWrapper &symbolWrapper) noexcept {
+    void removeSymbols(const SymbolWrapper &symbolWrapper) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::removeSymbol(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
+            Debugger::debug(toString() + "::removeSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
 
         removeSymbolImpl(symbolWrapper.toGraal());
     }
 
-    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) noexcept {}
+    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
+        }
 
-    template <typename SymbolsCollection> void addSymbols(SymbolsCollection &&collection) noexcept;
+        std::for_each(std::execution::par, begin, end,
+                      [this](const auto &wrapper) { addSymbolImpl(wrapper.toGraal()); });
+    }
 
-    template <typename Symbol> void addSymbols(std::initializer_list<Symbol> collection) noexcept;
+    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+    void addSymbols(const SymbolsCollection &collection) noexcept {
+        addSymbols(std::begin(collection), std::end(collection));
+    }
 
-    template <typename SymbolsCollection> void removeSymbols(SymbolsCollection &&collection) noexcept;
+    void addSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
+        addSymbols(collection.begin(), collection.end());
+    }
+
+    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
+        }
+
+        std::for_each(std::execution::par, begin, end,
+                      [this](const auto &wrapper) { removeSymbolImpl(wrapper.toGraal()); });
+    }
+
+    void removeSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
+        removeSymbols(collection.begin(), collection.end());
+    }
+
+    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+    void removeSymbols(SymbolsCollection &&collection) noexcept {
+        removeSymbols(std::begin(collection), std::end(collection));
+    }
 
     /**
      * Clears the set of subscribed symbols.
