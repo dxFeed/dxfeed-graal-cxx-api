@@ -97,6 +97,12 @@ struct SymbolWrapper final {
     std::string asStringSymbol() const noexcept {
         return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
     }
+
+    const DataType &getData() const noexcept { return data_; }
+
+    bool operator==(const SymbolWrapper &symbolWrapper) const { return getData() == symbolWrapper.getData(); }
+
+    auto operator<=>(const SymbolWrapper &symbolWrapper) const { return getData() <=> symbolWrapper.getData(); }
 };
 
 /**
@@ -132,3 +138,9 @@ inline SymbolWrapper operator""_sw(const char *string, size_t length) noexcept {
 } // namespace literals
 
 } // namespace dxfcpp
+
+template <> struct std::hash<dxfcpp::SymbolWrapper> {
+    std::size_t operator()(const dxfcpp::SymbolWrapper &symbolWrapper) const noexcept {
+        return std::hash<dxfcpp::SymbolWrapper::DataType>{}(symbolWrapper.getData());
+    }
+};

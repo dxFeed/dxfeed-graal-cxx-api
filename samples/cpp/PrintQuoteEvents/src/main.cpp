@@ -32,21 +32,30 @@ int main() {
         });
 
         sub->addSymbols({"AAPL", "IBM"sv, "XBT/USD:GDAX"s, "BTC/EUR:CXBITF"_s, "*"_wcs});
-        sub->addSymbols("AAPL");
-        sub->addSymbols("IBM"sv);
-        sub->addSymbols("TSLA"s);
+        sub->addSymbols("META");
+        sub->addSymbols("ADDYY"sv);
+        sub->addSymbols("MSFT"s);
         sub->addSymbols(dxfcpp::WildcardSymbol::ALL);
-        sub->addSymbols("AMD"_s);
+        sub->addSymbols("TCELL:TR"_s);
         sub->addSymbols("*"_wcs);
-        sub->addSymbols(symbols[4]);
-        sub->addSymbols("!@#"_sw);
-        sub->addSymbols(std::vector{"11111"s});
-        sub->addSymbols(std::vector{"AAPL", "IBM", "TSLA", "GOOG"});
-        auto v = std::vector{"AAPL", "IBM"};
-        auto v2 = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+        sub->addSymbols("PFE"_sw);
+        sub->addSymbols(std::vector{"CSCO"s});
+        sub->addSymbols(std::vector{"$TOP10L/Q", "$SP500#45", "$TICK", "SPX"});
+
+        auto v = std::vector{"$TOP10G/Q", "30Y:SME"};
+        auto v2 = std::vector<dxfcpp::SymbolWrapper>{"$DECN"s, "./E1AN23P3580:XCME"sv, "/ESZ23:XCME", "/ESH25:XCME"_s};
 
         sub->addSymbols(v);
         sub->addSymbols(v2);
+        sub->addSymbols(v2.begin(), v2.end());
+
+        // D 230530 103822.766 [8212] DXFeedSubscription{000002672C607310}::addSymbols(symbols = ['SymbolWrapper{StringSymbol{333}}', 'SymbolWrapper{StringSymbol{222}}', 'SymbolWrapper{StringSymbol{111}}'])
+        auto us = std::unordered_set<dxfcpp::SymbolWrapper>{"111"s, "222"sv, "333", "111"_s};
+
+        sub->addSymbols(us);
+
+        // D 230530 103822.766 [8212] DXFeedSubscription{000002672C607310}::addSymbols(symbols = ['SymbolWrapper{WildcardSymbol{*}}', 'SymbolWrapper{StringSymbol{*}}'])
+        sub->addSymbols(std::unordered_set<dxfcpp::SymbolWrapper>{"*", "*"_wcs});
 
 
 //        endpoint->connect("demo.dxfeed.com:7300");

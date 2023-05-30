@@ -30,6 +30,10 @@ struct WildcardSymbol final {
     void *toGraal() const noexcept;
 
     std::string toString() const noexcept { return "WildcardSymbol{" + getSymbol() + "}"; }
+
+    bool operator==(const WildcardSymbol &wildcardSymbol) const { return getSymbol() == wildcardSymbol.getSymbol(); }
+
+    auto operator<=>(const WildcardSymbol &wildcardSymbol) const { return getSymbol() <=> wildcardSymbol.getSymbol(); }
 };
 
 inline namespace literals {
@@ -41,3 +45,9 @@ inline WildcardSymbol operator""_wcs(const char *string, size_t length) noexcept
 } // namespace literals
 
 } // namespace dxfcpp
+
+template <> struct std::hash<dxfcpp::WildcardSymbol> {
+    std::size_t operator()(const dxfcpp::WildcardSymbol &wildcardSymbol) const noexcept {
+        return std::hash<std::string>{}(wildcardSymbol.getSymbol());
+    }
+};

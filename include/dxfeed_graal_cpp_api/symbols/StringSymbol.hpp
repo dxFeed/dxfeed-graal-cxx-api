@@ -56,11 +56,13 @@ struct StringSymbol final {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
-        return "StringSymbol{" + data_ + "}";
-    }
+    std::string toString() const noexcept { return "StringSymbol{" + data_ + "}"; }
 
     const std::string &getData() const;
+
+    bool operator==(const StringSymbol &stringSymbol) const { return getData() == stringSymbol.getData(); }
+
+    auto operator<=>(const StringSymbol &stringSymbol) const { return getData() <=> stringSymbol.getData(); }
 };
 
 template <typename T>
@@ -75,6 +77,12 @@ inline StringSymbol operator""_s(const char *string, size_t length) noexcept {
 
 } // namespace literals
 
-std::string graalSymbolToString(void* graalSymbol);
+std::string graalSymbolToString(void *graalSymbol);
 
 } // namespace dxfcpp
+
+template <> struct std::hash<dxfcpp::StringSymbol> {
+    std::size_t operator()(const dxfcpp::StringSymbol &stringSymbol) const noexcept {
+        return std::hash<std::string>{}(stringSymbol.getData());
+    }
+};
