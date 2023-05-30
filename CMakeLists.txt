@@ -61,11 +61,6 @@ add_subdirectory(third_party/fmt-10.0.0)
 # find_package(utf8cpp)
 # find_package(fmt)
 
-if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"))
-    # Ignore undefined template var warning
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-undefined-var-template")
-endif ()
-
 set(dxFeedNativeAPIInternalSources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp
@@ -149,8 +144,15 @@ add_library(dxFeedGraalCxxApi
         src/api.cpp
         )
 
+add_library(dxFeedGraalCxxApi_Clang INTERFACE)
+
+if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"))
+    # Ignore undefined template var warning
+    target_compile_options(dxFeedGraalCxxApi_Clang INTERFACE -Wno-undefined-var-template)
+endif ()
+
 target_include_directories(dxFeedGraalCxxApi PUBLIC include)
-target_link_libraries(dxFeedGraalCxxApi PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt)
+target_link_libraries(dxFeedGraalCxxApi PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt PUBLIC dxFeedGraalCxxApi_Clang)
 
 add_custom_command(TARGET dxFeedGraalCxxApi POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:dxFeedGraalCxxApi>)

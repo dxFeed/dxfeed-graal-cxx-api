@@ -19,7 +19,36 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: doc
+/**
+ * Theo price is a snapshot of the theoretical option price computation that is
+ * periodically performed by <a href="http://www.devexperts.com/en/products/price.html">dxPrice</a>
+ * model-free computation.
+ * It represents the most recent information that is available about the corresponding
+ * values at any given moment of time.
+ * The values include first and second order derivative of the price curve by price, so that
+ * the real-time theoretical option price can be estimated on real-time changes of the underlying
+ * price in the vicinity.
+ *
+ * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ *
+ * Some TheoPrice sources provide a consistent view of the set of known TheoPrice.
+ * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The logic behind this property is detailed in IndexedEvent class documentation.
+ * Multiple event sources for the same symbol are not supported for TheoPrice, thus
+ * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ *
+ * <p>TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents
+ * a list current of time-series events order by their @ref ::getTime() "time".
+ *
+ * <h3>Publishing TheoPrice</h3>
+ *
+ * Publishing of TheoPrice events follows the general rules explained in TimeSeriesEvent class
+ * documentation.
+ *
+ * <h3>Implementation details</h3>
+ *
+ * This event is implemented on top of QDS records `TheoPrice`.
+ */
 class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 

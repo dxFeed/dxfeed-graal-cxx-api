@@ -15,7 +15,7 @@
 namespace dxfcpp {
 
 /**
- * A helper wrapper class needed to pass heterogeneous symbols using a container.
+ * A helper wrapper class needed to pass heterogeneous symbols using a container and convert them to internal Graal representation.
  */
 struct SymbolWrapper final {
     using DataType = typename std::variant<WildcardSymbol, StringSymbol>;
@@ -86,14 +86,26 @@ struct SymbolWrapper final {
         return "SymbolWrapper{" + std::visit([](const auto &symbol) { return toStringAny(symbol); }, data_) + "}";
     }
 
+    /**
+     * @return `true` if current SymbolWrapper holds a WildcardSymbol
+     */
     bool isWildcardSymbol() const noexcept { return std::holds_alternative<WildcardSymbol>(data_); }
 
+    /**
+     * @return WildcardSymbol (optional) or nullopt if current SymbolWrapper doesn't hold WildcardSymbol
+     */
     std::optional<WildcardSymbol> asWildcardSymbol() const noexcept {
         return isWildcardSymbol() ? std::make_optional(WildcardSymbol::ALL) : std::nullopt;
     }
 
+    /**
+     * @return `true` if current SymbolWrapper holds a StringSymbol
+     */
     bool isStringSymbol() const noexcept { return std::holds_alternative<StringSymbol>(data_); }
 
+    /**
+     * @return String representation of StringSymbol or an empty string
+     */
     std::string asStringSymbol() const noexcept {
         return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
     }
@@ -131,6 +143,13 @@ concept ConvertibleToSymbolWrapperCollection = requires(Collection c) {
 
 inline namespace literals {
 
+/**
+ * String literal that helps to construct SymbolWrapper from a char array.
+ *
+ * @param string The char array
+ * @param length Tha char array's length
+ * @return Wrapped string view built on char array
+ */
 inline SymbolWrapper operator""_sw(const char *string, size_t length) noexcept {
     return {std::string_view{string, length}};
 }

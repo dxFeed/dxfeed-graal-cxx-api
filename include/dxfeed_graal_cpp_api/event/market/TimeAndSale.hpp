@@ -21,7 +21,29 @@ namespace dxfcpp {
 struct EventMapper;
 class OptionSale;
 
-// TODO: doc
+/**
+ * Time and Sale represents a trade or other market event with price, like market open/close price, etc.
+ * Time and Sales are intended to provide information about trades <b>in a continuous time slice</b>
+ * (unlike Trade events which are supposed to provide snapshot about the <b>current last</b> trade).
+ *
+ * <p> Time and Sale events have unique @ref ::getIndex() "index" which can be used for later
+ * correction/cancellation processing.
+ *
+ * Some time and sale sources provide a consistent view of the set of known time and sales
+ * for a given time range when used with DXFeedTimeSeriesSubscription}.
+ * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The logic behind this property is detailed in IndexedEvent class documentation.
+ * Multiple event sources for the same symbol are not supported for time and sales, thus
+ * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ *
+ * <p> Regular subscription via DXFeedSubscription produces a stream of time and
+ * sale events as they happen and their @ref ::getEventFlags() "eventFlags" are always zero.
+ *
+ * Publishing of time and sales events follows the general rules explained in TimeSeriesEvent class
+ * documentation.
+ *
+ * This event is implemented on top of QDS record `TimeAndSale`.
+ */
 class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
     friend struct EventMapper;
     friend class OptionSale;

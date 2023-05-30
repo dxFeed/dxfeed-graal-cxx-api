@@ -20,7 +20,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE})
     target_include_directories(${DXFC_TEST_BASENAME} PUBLIC ${DXFC_TEST_INCLUDE_DIRS})
-    target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC DxFeedGraalNativeSdk dxFeedGraalCxxApi)
+    target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC DxFeedGraalNativeSdk dxFeedGraalCxxApi dxFeedGraalCxxApi_Clang)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CXX_STANDARD 20)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CMAKE_C_STANDARD 11)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CXX_EXTENSIONS OFF)

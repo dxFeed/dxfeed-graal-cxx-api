@@ -22,7 +22,6 @@ struct EventMapper;
  * Profile information snapshot that contains security instrument description.
  * It represents the most recent information that is available about the traded security
  * on the market at any given moment of time.
- *
  */
 class Profile final : public MarketEvent, public LastingEvent {
     friend struct EventMapper;

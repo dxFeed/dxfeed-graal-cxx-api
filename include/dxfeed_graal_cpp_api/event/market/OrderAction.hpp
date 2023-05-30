@@ -1,8 +1,4 @@
-//
-// Created by ttldt on 31.03.2023.
-//
+// Copyright (c) 2023 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
 
-#ifndef DXFEEDNATIVEAPI_ORDERACTION_HPP
-#define DXFEEDNATIVEAPI_ORDERACTION_HPP
-// TODO: implement
-#endif // DXFEEDNATIVEAPI_ORDERACTION_HPP
+#pragma once

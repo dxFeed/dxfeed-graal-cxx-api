@@ -18,7 +18,35 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: doc
+/**
+ * Series event is a snapshot of computed values that are available for all option series for
+ * a given underlying symbol based on the option prices on the market.
+ * It represents the most recent information that is available about the corresponding values on
+ * the market at any given moment of time.
+ *
+ * <p>Series is an IndexedEvent with multiple instances of event available for
+ * each underlying symbol. Each series event instance corresponds to an OptionSeries
+ * of the corresponding underlying. The correspondence between a series event instance and
+ * an OptionSeries is established via @ref ::getExpiration() "expiration" property.
+ * If case where there are multiple series at the same expiration day id, then series events are
+ * are ordered by their @ref #getIndex() "index" in the same order as the corresponding
+ * OptionSeries are @ref OptionSeries::compareTo(OptionSeries) "ordered" by their attributes.
+ *
+ * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ *
+ * Series data source provides a consistent view of the set of known series.
+ * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The logic behind this property is detailed in IndexedEvent class documentation.
+ * Multiple event sources for the same symbol are not supported for series, thus
+ * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ *
+ * <p>IndexedEventModel class handles all the snapshot and transaction logic and conveniently represents
+ * a list current of events.
+ *
+ * <h3>Implementation details</h3>
+ *
+ * This event is implemented on top of QDS records `Series`.
+ */
 class Series final : public MarketEvent, public IndexedEvent {
     friend struct EventMapper;
 

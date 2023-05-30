@@ -21,10 +21,15 @@ namespace dxfcpp {
 
 struct DXFeed;
 
+/**
+ * Subscription for a set of symbols and event types.
+ */
 class DXFeedSubscription : public SharedEntity {
     friend struct DXFeed;
 
     mutable std::recursive_mutex mtx_{};
+
+    std::unordered_set<EventTypeEnum> eventTypes_;
     JavaObjectHandler<DXFeedSubscription> handler_;
     JavaObjectHandler<DXFeedEventListener> eventListenerHandler_;
     Handler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{1};
@@ -37,13 +42,18 @@ class DXFeedSubscription : public SharedEntity {
     void setEventListenerHandler(Id<DXFeedSubscription> id) noexcept;
 
     template <typename EventTypeIt>
+#if __cpp_concepts
+        requires requires(EventTypeIt iter) {
+            { *iter } -> std::convertible_to<EventTypeEnum>;
+        }
+#endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
+        : mtx_{}, eventTypes_(begin, end), handler_{}, eventListenerHandler_{}, onEvent_{} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
-        auto list = EventClassList::create(begin, end);
+        auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
 
         if (!list) {
             return;
@@ -75,6 +85,7 @@ class DXFeedSubscription : public SharedEntity {
     void removeSymbolImpl(void *graalSymbol) const noexcept;
 
   public:
+    ///
     std::string toString() const noexcept override;
 
     ~DXFeedSubscription() override {
@@ -87,6 +98,11 @@ class DXFeedSubscription : public SharedEntity {
 
     /**
      * Creates <i>detached</i> subscription for a single event type.
+     *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeedSubscription(Quote::Type);
+     * ```
      *
      * @param eventType the event type.
      */
@@ -106,12 +122,23 @@ class DXFeedSubscription : public SharedEntity {
     /**
      * Creates <i>detached</i> subscription for the given collection of event types.
      *
+     * Example:
+     * ```cpp
+     * auto eventTypes = {dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type};
+     * auto sub = dxfcpp::DXFeedSubscription::create(eventTypes.begin(), eventTypes.end());
+     * ```
+     *
      * @tparam EventTypeIt The collection's iterator type
      * @param begin The beginning of the collection of event types.
      * @param end The end of event type collection.
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
     template <typename EventTypeIt>
+#if __cpp_concepts
+        requires requires(EventTypeIt iter) {
+            { *iter } -> std::convertible_to<EventTypeEnum>;
+        }
+#endif
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
@@ -128,6 +155,11 @@ class DXFeedSubscription : public SharedEntity {
     /**
      * Creates <i>detached</i> subscription for the given collection of event types.
      *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeedSubscription::create({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * ```
+     *
      * @param eventTypes The event type collection.
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
@@ -142,6 +174,11 @@ class DXFeedSubscription : public SharedEntity {
 
     /**
      * Creates <i>detached</i> subscription for the given collection of event types.
+     *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * ```
      *
      * @tparam EventTypesCollection The type of the collection of event types
      * @param eventTypes The event type collection.
@@ -202,6 +239,23 @@ class DXFeedSubscription : public SharedEntity {
      *
      * This method does nothing if this subscription is closed.
      *
+     * Example:
+     * ```cpp
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     *
+     * sub->addEventListener([](auto &&events) {
+     *     for (const auto &e : events) {
+     *         if (auto quote = e->template sharedAs<dxfcpp::Quote>(); quote) {
+     *             std::cout << "Q   : " + quote->toString() << std::endl;
+     *         } else if (auto tns = e->template sharedAs<dxfcpp::TimeAndSale>(); tns) {
+     *             std::cout << "TnS : " + tns->toString() << std::endl;
+     *         }
+     *     }
+     * });
+     *
+     * sub->addSymbols({"$TOP10L/Q", "$SP500#45", "$TICK", "SPX"});
+     * ```
+     *
      * @tparam EventListener The listener type. Listener can be callable with signature: `void(const
      * std::vector<std::shared_ptr<EventType>&)`
      * @param listener The event listener
@@ -219,7 +273,73 @@ class DXFeedSubscription : public SharedEntity {
     }
 
     /**
+     * Adds typed listener for events.
+     * Event lister can be added only when subscription is not producing any events.
+     * The subscription must be either empty
+     * (its set of @ref ::getSymbols() "symbols" is empty or not @ref ::attach() "attached" to any feed
+     * (its set of change listeners is empty).
+     *
+     * This method does nothing if this subscription is closed.
+     *
+     * Example:
+     * ```cpp
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     *
+     * sub->addEventListener(std::function([](const std::vector<std::shared_ptr<dxfcpp::Quotes>> &quotes) -> void {
+     *     for (const auto &q : quotes) {
+     *         std::cout << "Q    : " + q->toString() << std::endl;
+     *     }
+     * }));
+     *
+     * sub->addEventListener<dxfcpp::TimeAndSale>([](const auto &timeAndSales) -> void {
+     *     for (const auto &tns : timeAndSales) {
+     *         std::cout << "TnS : " + tns->toString() << std::endl;
+     *     }
+     * });
+     *
+     * sub->addSymbols({"$TOP10L/Q", "AAPL", "$TICK", "SPX"});
+     * ```
+     *
+     * @tparam EventT The event type (EventType's child with field Type, convertible to EventTypeEnum
+     * @param listener The listener. Listener can be callable with signature: `void(const std::vector<std::shared_ptr<EventT>&)`
+     * @return The listener id
+     */
+    template <typename EventT>
+    std::size_t addEventListener(std::function<void(const std::vector<std::shared_ptr<EventT>> &)> &&listener) noexcept
+#if __cpp_concepts
+        requires std::is_base_of_v<EventType, EventT> && requires {
+            { EventT::Type } -> std::convertible_to<EventTypeEnum>;
+        }
+#endif
+    {
+        if (!containsEventType(EventT::Type)) {
+            return onEvent_ += [](auto) {};
+        }
+
+        return onEvent_ += [l = listener](auto &&events) {
+            std::vector<std::shared_ptr<EventT>> filteredEvents{};
+
+            filteredEvents.reserve(events.size());
+
+            for (const auto &e : events) {
+                if (auto expected = e->template sharedAs<EventT>(); expected) {
+                    filteredEvents.emplace_back(expected);
+                }
+            }
+
+            l(filteredEvents);
+        };
+    }
+
+    /**
      * Removes listener for events.
+     *
+     * Example:
+     * ```cpp
+     * auto id = sub->addEventListener([](auto){});
+     *
+     * sub->removeEventListener(id);
+     * ```
      *
      * @param listenerId The listener id
      */
@@ -227,10 +347,28 @@ class DXFeedSubscription : public SharedEntity {
 
     /**
      * Returns a reference to an incoming events' handler (delegate), to which listeners can be added and removed.
+     * Listener can be callable with signature: `void(const std::vector<std::shared_ptr<EventType>&)`
+     *
+     * Example:
+     * ```cpp
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto id = sub->onEvent() += [](auto &&events) {
+     *     for (const auto &e : events) {
+     *         if (auto quote = e->template sharedAs<dxfcpp::Quote>(); quote) {
+     *             std::cout << "Q   : " + quote->toString() << std::endl;
+     *         } else if (auto tns = e->template sharedAs<dxfcpp::TimeAndSale>(); tns) {
+     *             std::cout << "TnS : " + tns->toString() << std::endl;
+     *         }
+     *     }
+     * };
+     *
+     * sub->addSymbols({"$TOP10L/Q", "$SP500#45", "$TICK", "SPX"});
+     * sub->onEvent() -= id;
+     * ```
      *
      * @return The incoming events' handler (delegate)
      */
-    const auto &onEvent() noexcept { return onEvent_; }
+    auto &onEvent() noexcept { return onEvent_; }
 
     /**
      * Adds the specified symbol to the set of subscribed symbols.
@@ -397,7 +535,8 @@ class DXFeedSubscription : public SharedEntity {
     }
 
     /**
-     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using iterators).
+     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using
+     * iterators).
      *
      * Example:
      * ```cpp
@@ -489,7 +628,7 @@ class DXFeedSubscription : public SharedEntity {
      *
      * @return A set of subscribed event types.
      */
-    std::unordered_set<EventTypeEnum> getEventTypes() noexcept;
+    const std::unordered_set<EventTypeEnum> &getEventTypes() const noexcept { return eventTypes_; }
 
     /**
      * Returns `true` if this subscription contains the corresponding event type.
@@ -498,7 +637,7 @@ class DXFeedSubscription : public SharedEntity {
      *
      * @see ::getEventTypes()
      */
-    bool containsEventType(const EventTypeEnum &eventType) noexcept;
+    bool containsEventType(const EventTypeEnum &eventType) const noexcept { return eventTypes_.contains(eventType); }
 
     /**
      * Returns a set of subscribed symbols. The resulting set maybe either a snapshot of the set of

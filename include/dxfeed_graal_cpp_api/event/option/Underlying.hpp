@@ -19,7 +19,32 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: doc
+/**
+ * Underlying event is a snapshot of computed values that are available for an option underlying
+ * symbol based on the option prices on the market.
+ * It represents the most recent information that is available about the corresponding values on
+ * the market at any given moment of time.
+ *
+ * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ *
+ * Some Underlying sources provide a consistent view of the set of known Underlying events.
+ * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The logic behind this property is detailed in IndexedEvent class documentation.
+ * Multiple event sources for the same symbol are not supported for Underlying, thus
+ * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ *
+ * <p>TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents
+ * a list current of time-series events order by their @ref ::getTime() "time".
+ *
+ * <h3>Publishing Underlying</h3>
+ *
+ * Publishing of Underlying events follows the general rules explained in TimeSeriesEvent class
+ * documentation.
+ *
+ * <h3>Implementation details</h3>
+ *
+ * This event is implemented on top of QDS record `Underlying`.
+ */
 class Underlying final: public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 

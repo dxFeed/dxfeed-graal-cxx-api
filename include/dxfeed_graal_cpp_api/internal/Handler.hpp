@@ -41,6 +41,7 @@ template<typename... ArgTypes>
 struct Handler<void(ArgTypes...)> final {
     /// The listener type
     using ListenerType = std::function<void(ArgTypes...)>;
+    static constexpr std::size_t FAKE_ID{static_cast<std::size_t>(-1)};
 
   private:
     static constexpr unsigned MAIN_FUTURES_DEFAULT_SIZE = 1024;
@@ -121,6 +122,10 @@ struct Handler<void(ArgTypes...)> final {
     std::size_t add(ListenerType &&listener) {
         std::lock_guard guard{listenersMutex_};
 
+        if (lastId_ >= FAKE_ID - 1) {
+            return FAKE_ID;
+        }
+
         lastId_++;
         listeners_.emplace(lastId_, std::forward<ListenerType>(listener));
 
@@ -136,6 +141,10 @@ struct Handler<void(ArgTypes...)> final {
      */
     std::size_t addLowPriority(ListenerType &&listener) {
         std::lock_guard guard{listenersMutex_};
+
+        if (lastId_ >= FAKE_ID - 1) {
+            return FAKE_ID;
+        }
 
         lastId_++;
         lowPriorityListeners_.emplace(lastId_, std::forward<ListenerType>(listener));
@@ -167,6 +176,10 @@ struct Handler<void(ArgTypes...)> final {
      */
     void remove(std::size_t id) {
         std::lock_guard guard{listenersMutex_};
+
+        if (id == FAKE_ID) {
+            return;
+        }
 
         if (listeners_.count(id) > 0) {
             listeners_.erase(id);
