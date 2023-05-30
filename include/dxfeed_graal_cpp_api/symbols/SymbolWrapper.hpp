@@ -102,7 +102,7 @@ struct SymbolWrapper final {
 
     bool operator==(const SymbolWrapper &symbolWrapper) const { return getData() == symbolWrapper.getData(); }
 
-    auto operator<=>(const SymbolWrapper &symbolWrapper) const { return getData() <=> symbolWrapper.getData(); }
+    auto operator<(const SymbolWrapper &symbolWrapper) const { return getData() < symbolWrapper.getData(); }
 };
 
 /**

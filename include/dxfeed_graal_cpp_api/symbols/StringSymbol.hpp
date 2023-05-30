@@ -62,7 +62,7 @@ struct StringSymbol final {
 
     bool operator==(const StringSymbol &stringSymbol) const { return getData() == stringSymbol.getData(); }
 
-    auto operator<=>(const StringSymbol &stringSymbol) const { return getData() <=> stringSymbol.getData(); }
+    bool operator<(const StringSymbol &stringSymbol) const { return getData() < stringSymbol.getData(); }
 };
 
 template <typename T>

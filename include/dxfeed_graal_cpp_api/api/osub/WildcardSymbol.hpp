@@ -33,7 +33,7 @@ struct WildcardSymbol final {
 
     bool operator==(const WildcardSymbol &wildcardSymbol) const { return getSymbol() == wildcardSymbol.getSymbol(); }
 
-    auto operator<=>(const WildcardSymbol &wildcardSymbol) const { return getSymbol() <=> wildcardSymbol.getSymbol(); }
+    auto operator<(const WildcardSymbol &wildcardSymbol) const { return getSymbol() < wildcardSymbol.getSymbol(); }
 };
 
 inline namespace literals {
