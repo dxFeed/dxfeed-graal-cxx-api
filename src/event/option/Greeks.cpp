@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 const EventTypeEnum &Greeks::Type = EventTypeEnum::GREEKS;
@@ -43,6 +48,14 @@ std::shared_ptr<Greeks> Greeks::fromGraalNative(void *graalNative) noexcept {
         // TODO: error handling
         return {};
     }
+}
+std::string Greeks::toString() const noexcept {
+    return fmt::format(
+        "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
+        "gamma={}, theta={}, rho={}, vega={}}}",
+        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(), getVolatility(),
+        getDelta(), getGamma(), getTheta(), getRho(), getVega());
 }
 
 } // namespace dxfcpp

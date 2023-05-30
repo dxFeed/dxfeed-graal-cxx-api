@@ -21,7 +21,23 @@ namespace dxfcpp {
 
 struct EventMapper;
 
-// TODO: implement
+/**
+ * Option Sale event represents a trade or another market event with the price
+ * (for example, market open/close price, etc.) for each option symbol listed under the specified Underlying.
+ * Option Sales are intended to provide information about option trades <b>in a continuous time slice</b> with
+ * the additional metrics, like Option Volatility, Option Delta, and Underlying Price.
+ *
+ * <p>Option Sale events have unique @ref ::getIndex() "index" which can be used for later
+ * correction/cancellation processing.
+ *
+ * Option sale data source provides a consistent view of the set of known option sales.
+ * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The logic behind this property is detailed in IndexedEvent class documentation.
+ * Multiple event sources for the same symbol are not supported for option sale events, thus
+ * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ *
+ * This event is implemented on top of QDS records `OptionSale`.
+ */
 class OptionSale final : public MarketEvent, public IndexedEvent {
     friend struct EventMapper;
 
@@ -500,26 +516,7 @@ class OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
-        return fmt::format(
-            "OptionSale{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, timeNanoPart={}, sequence={}, "
-            "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
-            "validTick={}, type={}, underlyingPrice={}, volatility={}, delta={}, optionSymbol='{}'}}",
-            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
-            getSequence(), string_util::encodeChar(getExchangeCode()), getPrice(), getSize(), getBidPrice(),
-            getAskPrice(), getExchangeSaleConditions(), string_util::encodeChar(getTradeThroughExempt()),
-            getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
-            getUnderlyingPrice(), getVolatility(), getDelta(), getOptionSymbol());
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const OptionSale &e) {
-        return os << e.toString();
-    }
-
-    template <typename OStream> friend OStream &operator<<(OStream &os, const std::shared_ptr<OptionSale> &e) {
-        return os << e->toString();
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

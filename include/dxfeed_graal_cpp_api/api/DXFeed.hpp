@@ -23,11 +23,11 @@ class EventTypeEnum;
 /**
  * Main entry class for dxFeed API (<b>read it first</b>).
  */
-struct DXFeed : std::enable_shared_from_this<DXFeed> {
+struct DXFeed : SharedEntity {
     friend struct DXEndpoint;
 
   private:
-    handler_utils::JavaObjectHandler<DXFeed> handler_;
+    JavaObjectHandler<DXFeed> handler_;
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 
@@ -35,15 +35,15 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
   protected:
     DXFeed() noexcept : handler_{} {
-        if constexpr (isDebug) {
-            debug("DXFeed()");
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXFeed()");
         }
     }
 
   public:
     virtual ~DXFeed() noexcept {
-        if constexpr (isDebug) {
-            debug("{}::~DXFeed()", toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXFeed{" + handler_.toString() + "}::~DXFeed()");
         }
     }
 
@@ -67,8 +67,8 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) noexcept {
-        if constexpr (isDebug) {
-            debug("{}::createSubscription(eventTypes = {})", namesToString(begin, end));
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
         auto sub = DXFeedSubscription::create(begin, end);
@@ -82,11 +82,13 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
 
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
-        requires requires { ElementTypeIs<EventTypesCollection, EventTypeEnum>; }
+#if __cpp_concepts
+        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
+#endif
     {
-        if constexpr (isDebug) {
-            debug("{}::createSubscription(eventTypes = {})", toString(),
-                  namesToString(std::begin(eventTypes), std::end(eventTypes)));
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(toString() + "::createSubscription(eventTypes = " +
+                            namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
         }
 
         auto sub = DXFeedSubscription::create(eventTypes);
@@ -96,9 +98,7 @@ struct DXFeed : std::enable_shared_from_this<DXFeed> {
         return sub;
     }
 
-    std::string toString() const {
-        return fmt::format("DXFeed{{{}}}", handler_.toString());
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

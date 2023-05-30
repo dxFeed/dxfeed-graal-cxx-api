@@ -14,33 +14,18 @@
 #include <mutex>
 #include <sstream>
 #include <type_traits>
+#include <utility>
 
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include "utils/debug/Debug.hpp"
 
 namespace dxfcpp {
+
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 
 struct DXFeedEventListener {};
 
 struct DXEndpointStateChangeListener {};
-
-#if defined(NDEBUG) && !defined(DXFCPP_DEBUG)
-constexpr bool isDebug = false;
-constexpr bool isDebugIsolates = false;
-#else
-constexpr bool isDebug = true;
-
-#    ifdef DXFCPP_DEBUG_ISOLATES
-constexpr bool isDebugIsolates = true;
-#    else
-constexpr bool isDebugIsolates = false;
-#    endif
-
-#endif
 
 #if defined(__clang__)
 constexpr bool isClangFlavouredCompiler = true;
@@ -62,7 +47,9 @@ constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept
 // Implementation of std::bit_cast for pre-C++20.
 template <typename To, typename From>
 constexpr To bit_cast(const From &from)
+#if __cpp_concepts
     requires(sizeof(To) == sizeof(From))
+#endif
 {
 #ifdef __cpp_lib_bit_cast
     if (is_constant_evaluated())
@@ -104,115 +91,6 @@ template <class F> [[nodiscard]] auto finally(F &&f) noexcept {
 inline auto now() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
         .count();
-}
-
-template <typename... Args> std::string vformat(std::string_view format, Args &&...args) {
-    return fmt::vformat(format, fmt::make_format_args(args...));
-}
-
-template <typename... Args> void vprint(std::ostream &os, std::string_view format, Args &&...args) {
-    fmt::vprint(os, format, fmt::make_format_args(args...));
-}
-
-inline std::string nowStr() {
-    auto now = std::chrono::system_clock::now();
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
-
-    return fmt::format("{:%y%m%d %H%M%S}.{:0>3}", std::chrono::floor<std::chrono::seconds>(now), ms);
-}
-
-inline std::string nowStrWithTimeZone() {
-    auto now = std::chrono::system_clock::now();
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
-
-    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", std::chrono::floor<std::chrono::seconds>(now), ms,
-                       std::chrono::floor<std::chrono::seconds>(now));
-}
-
-inline std::string formatTimeStamp(std::int64_t timestamp) {
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-
-    return fmt::format("{:%y%m%d-%H%M%S%z}", tm);
-}
-
-inline std::string formatTimeStampWithMillis(std::int64_t timestamp) {
-    auto ms = timestamp % 1000;
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-
-    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
-}
-
-inline std::string debugPrefixStr() {
-    std::ostringstream tid{};
-
-    tid << std::this_thread::get_id();
-
-    return fmt::format("D {} [{}]", nowStr(), tid.str());
-}
-
-template <typename... Args> inline void debug(std::string_view format, Args &&...args) {
-    vprint(std::cerr, "{} {}\n", debugPrefixStr(), vformat(format, std::forward<Args>(args)...));
-}
-
-namespace handler_utils {
-
-template <typename T> struct JavaObjectHandler {
-    using Type = T;
-    static void deleter(void *handler) noexcept;
-    explicit JavaObjectHandler(void *handler = nullptr) noexcept : impl_{handler, &deleter} {}
-
-    JavaObjectHandler(JavaObjectHandler &&) = default;
-    JavaObjectHandler &operator=(JavaObjectHandler &&) = default;
-    virtual ~JavaObjectHandler() noexcept = default;
-
-    [[nodiscard]] std::string toString() const noexcept {
-        if (impl_)
-            return fmt::format("{}", impl_.get());
-        else
-            return "nullptr";
-    }
-
-    [[nodiscard]] void *get() const noexcept { return impl_.get(); }
-
-    explicit operator bool() const noexcept { return static_cast<bool>(impl_); }
-
-  private:
-    std::unique_ptr<void, decltype(&deleter)> impl_;
-};
-
-struct EventClassList {
-    static std::unique_ptr<EventClassList> create(std::size_t size) noexcept;
-
-    void set(std::size_t index, std::uint32_t id) noexcept;
-
-    [[nodiscard]] bool isEmpty() const noexcept;
-
-    [[nodiscard]] std::size_t size() const noexcept;
-
-    void *getHandler() noexcept;
-
-    ~EventClassList() noexcept;
-
-  private:
-    EventClassList() noexcept;
-
-    struct Impl;
-
-    std::unique_ptr<Impl> impl_;
-};
-
-} // namespace handler_utils
-
-template <typename It>
-    requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }
-std::string namesToString(It begin, It end) {
-    std::string result{"["};
-
-    for (auto it = begin; it != end; it++) {
-        result += fmt::format("'{}'{}", it->getName(), std::next(it) == end ? "" : ", ");
-    }
-
-    return result + "]";
 }
 
 template <typename M, typename F, typename... Args> inline void callWithLock(M &mtx, F &&f, Args &&...args) noexcept {
@@ -338,23 +216,6 @@ static constexpr std::int32_t getSecondsFromTime(std::int64_t timeMillis) {
         std::max((timeMillis + 1) / SECOND - 1, static_cast<std::int64_t>(std::numeric_limits<std::int32_t>::min())));
 }
 } // namespace time_util
-
-namespace string_util {
-static std::string encodeChar(std::int16_t c) {
-    if (c >= 32 && c <= 126) {
-        return std::string{} + static_cast<char>(c);
-    }
-
-    if (c == 0) {
-        return "\\0";
-    }
-
-    return fmt::format("\\u{:04x}", c);
-}
-
-static std::string encodeChar(char c) { return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c))); }
-
-} // namespace string_util
 
 namespace math_util {
 
@@ -732,54 +593,4 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
     }
 }
 
-std::string toString(const char *chars);
-
-char utf16to8(std::int16_t in);
-
-std::int16_t utf8to16(char in);
-
-struct String {
-    inline static const std::string EMPTY{};
-};
-
-template <typename T> struct Id {
-    using ValueType = std::size_t;
-
-  private:
-    const ValueType value_{};
-
-    explicit Id(ValueType value) : value_{value} {}
-
-  public:
-    static Id<T> getNext() {
-        static std::atomic<ValueType> value{};
-
-        return Id<T>{value++};
-    }
-
-    [[nodiscard]] ValueType getValue() const { return value_; }
-
-    explicit operator ValueType() const { return value_; }
-
-    static Id<T> from(ValueType value) { return Id<T>{value}; }
-
-    template <typename U> bool operator==(const Id<U> &id) const { return getValue() == id.getValue(); }
-
-    template <typename U> auto operator<=>(const Id<U> &id) const { return getValue() <=> id.getValue(); }
-};
-
-template <class T> class NonCopyable {
-  public:
-    NonCopyable(const NonCopyable &) = delete;
-    T &operator=(const T &) = delete;
-
-  protected:
-    NonCopyable() = default;
-    ~NonCopyable() = default;
-};
-
 } // namespace dxfcpp
-
-template <typename T> struct std::hash<dxfcpp::Id<T>> {
-    std::size_t operator()(const dxfcpp::Id<T> &id) const noexcept { return id.getValue(); }
-};

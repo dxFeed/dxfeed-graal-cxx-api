@@ -285,15 +285,7 @@ class Quote final : public MarketEvent, public LastingEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override {
-        return fmt::format(
-            "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
-            "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
-            MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-            formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(), formatTimeStamp(getBidTime()),
-            string_util::encodeChar(getBidExchangeCode()), getBidPrice(), getBidSize(), formatTimeStamp(getAskTime()),
-            string_util::encodeChar(getAskExchangeCode()), getAskPrice(), getAskSize());
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

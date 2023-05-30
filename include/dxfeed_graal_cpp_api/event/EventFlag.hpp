@@ -200,9 +200,11 @@ class EventFlag final {
      */
     template <typename EventFlagsMask>
     bool in(const EventFlagsMask &eventFlagsMask) const
+#if __cpp_concepts
         requires requires {
-                     { eventFlagsMask.getMask() } -> std::same_as<std::uint32_t>;
-                 }
+            { eventFlagsMask.getMask() } -> std::same_as<std::uint32_t>;
+        }
+#endif
     {
         return in(eventFlagsMask.getMask());
     }

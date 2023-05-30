@@ -12,7 +12,7 @@ cmake_policy(SET CMP0135 NEW)
 
 add_executable(Tools src/main.cpp)
 target_include_directories(Tools PUBLIC ../../include/dxfeed_graal_cpp_api)
-target_link_libraries(Tools PUBLIC DxFeedGraalNativeApi dxFeedGraalCxxApi)
+target_link_libraries(Tools PUBLIC DxFeedGraalNativeSdk dxFeedGraalCxxApi dxFeedGraalCxxApi_Clang)
 
 add_custom_command(TARGET Tools POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:DxFeedGraalNativeApi> $<TARGET_FILE_DIR:Tools>)
+        $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:Tools>)

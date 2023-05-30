@@ -16,15 +16,15 @@ TEST_CASE("DXEndpoint::Builder") {
     auto endpoint = builder->build();
 
     endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        dxfcpp::debug("DXEndpoint::Builder Test: {}", std::string("State changed: ") +
+        std::cerr << "DXEndpoint::Builder Test: {}" + std::string("State changed: ") +
                                                           dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                                          dxfcpp::DXEndpoint::stateToString(newState));
+                                                          dxfcpp::DXEndpoint::stateToString(newState) << "\n";
     };
 
     endpoint->addStateChangeListener([](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        dxfcpp::debug("DXEndpoint::Builder Test: {}", std::string("State changed 2: ") +
-                                                          dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                                          dxfcpp::DXEndpoint::stateToString(newState));
+        std::cerr << "DXEndpoint::Builder Test: {}" + std::string("State changed 2: ") +
+                         dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                         dxfcpp::DXEndpoint::stateToString(newState) << "\n";
     });
 
     endpoint->connect("demo.dxfeed.com:7300");
@@ -76,7 +76,7 @@ TEST_CASE("dxfc_dxendpoint_builder_t bug") {
 //
 //    result = dxfc_dxendpoint_add_state_change_listener(
 //        endpoint, [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *) {
-//            dxfcpp::debug("dxfc_dxendpoint_builder_t Test: {}", std::string("State changed: ") +
+//            Debugger::debug("dxfc_dxendpoint_builder_t Test: {}", std::string("State changed: ") +
 //                                                                    cApiStateToString(oldState) + " -> " +
 //                                                                    cApiStateToString(newState));
 //        });

@@ -94,6 +94,7 @@ template <typename Child, typename Code> struct Enum {
             return found->second;
         }
 
+        //TODO: try to implement C++11-like code for this
         if constexpr (requires { Child::getDefault(); }) {
             return Child::getDefault();
         } else {

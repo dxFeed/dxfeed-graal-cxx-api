@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 const EventTypeEnum &Series::Type = EventTypeEnum::SERIES;
@@ -43,6 +48,16 @@ std::shared_ptr<Series> Series::fromGraalNative(void *graalNative) noexcept {
         // TODO: error handling
         return {};
     }
+}
+
+std::string Series::toString() const noexcept {
+    return fmt::format(
+        "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
+        "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
+        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+        getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getSequence(),
+        day_util::getYearMonthDayByDayId(getExpiration()), getVolatility(), getCallVolume(), getPutVolume(),
+        getPutCallRatio(), getForwardPrice(), getDividend(), getInterest());
 }
 
 } // namespace dxfcpp

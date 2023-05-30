@@ -6,36 +6,50 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <memory>
+#include <typeinfo>
+
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
 
 namespace dxfcpp {
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::attach(feed = {})", toString(), feed->toString());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::attach(feed = " + feed->toString() + ")");
     }
 
-    feed->attachSubscription(shared_from_this());
+    feed->attachSubscription(sharedAs<DXFeedSubscription>());
 }
 
 void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
-    if constexpr (isDebug) {
-        debug("{}::detach(feed = {})", toString(), feed->toString());
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::detach(feed = " + feed->toString() + ")");
     }
 
-    feed->detachSubscription(shared_from_this());
+    feed->detachSubscription(sharedAs<DXFeedSubscription>());
 }
 
-template <> void DXFeedSubscription::addSymbol(std::string &&symbol) noexcept {
+void DXFeedSubscription::addSymbolImpl(void *graalSymbol) const noexcept {
     runIsolatedOrElse(
-        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), symbol](auto threadHandle) {
-            dxfg_string_symbol_t s{{STRING}, symbol.c_str()};
-
-            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, (dxfg_symbol_t *)&s) == 0;
+        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), graalSymbol](auto threadHandle) {
+            return dxfg_DXFeedSubscription_addSymbol(threadHandle, handler, bit_cast<dxfg_symbol_t *>(graalSymbol)) ==
+                   0;
         },
         false);
 }
 
-void DXFeedSubscription::closeImpl() noexcept {
+void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) const noexcept {
+    runIsolatedOrElse(
+        [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), graalSymbol](auto threadHandle) {
+            return dxfg_DXFeedSubscription_removeSymbol(threadHandle, handler,
+                                                        bit_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
+        },
+        false);
+}
+
+void DXFeedSubscription::closeImpl() const noexcept {
     if (!handler_) {
         return;
     }
@@ -45,7 +59,7 @@ void DXFeedSubscription::closeImpl() noexcept {
                       false);
 }
 
-void DXFeedSubscription::clearImpl() noexcept {
+void DXFeedSubscription::clearImpl() const noexcept {
     if (!handler_) {
         return;
     }
@@ -55,7 +69,7 @@ void DXFeedSubscription::clearImpl() noexcept {
                       false);
 }
 
-bool DXFeedSubscription::isClosedImpl() noexcept {
+bool DXFeedSubscription::isClosedImpl() const noexcept {
     if (!handler_) {
         return false;
     }
@@ -68,21 +82,21 @@ bool DXFeedSubscription::isClosedImpl() noexcept {
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
-    : mtx_{}, handler_{}, eventListenerHandler_{}, onEvent_{} {
-    if constexpr (isDebug) {
-        debug("DXFeedSubscription(eventType = {})", eventType.getName());
+    : mtx_{}, eventTypes_{eventType}, handler_{}, eventListenerHandler_{}, onEvent_{} {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
 
-    handler_ = handler_utils::JavaObjectHandler<DXFeedSubscription>(runIsolatedOrElse(
+    handler_ = JavaObjectHandler<DXFeedSubscription>(runIsolatedOrElse(
         [eventType](auto threadHandle) {
             return dxfg_DXFeedSubscription_new(threadHandle, static_cast<dxfg_event_clazz_t>(eventType.getId()));
         },
         nullptr));
 }
 
-handler_utils::JavaObjectHandler<DXFeedSubscription> DXFeedSubscription::createSubscriptionHandlerFromEventClassList(
-    const std::unique_ptr<handler_utils::EventClassList> &list) noexcept {
-    return handler_utils::JavaObjectHandler<DXFeedSubscription>(
+JavaObjectHandler<DXFeedSubscription>
+DXFeedSubscription::createSubscriptionHandlerFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept {
+    return JavaObjectHandler<DXFeedSubscription>(
         runIsolatedOrElse([listHandler = bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](
                               auto threadHandle) { return dxfg_DXFeedSubscription_new2(threadHandle, listHandler); },
                           nullptr));
@@ -100,7 +114,7 @@ void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noex
         }
     };
 
-    eventListenerHandler_ = handler_utils::JavaObjectHandler<DXFeedEventListener>(runIsolatedOrElse(
+    eventListenerHandler_ = JavaObjectHandler<DXFeedEventListener>(runIsolatedOrElse(
         [idValue = id.getValue(), onEvents](auto threadHandle) {
             return dxfg_DXFeedEventListener_new(threadHandle, onEvents, bit_cast<void *>(idValue));
         },
@@ -111,13 +125,14 @@ void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noex
             [handler = bit_cast<dxfg_subscription_t *>(handler_.get()),
              eventListenerHandler =
                  bit_cast<dxfg_feed_event_listener_t *>(eventListenerHandler_.get())](auto threadHandle) {
-                // TODO: finalize function
-
-                return dxfg_DXFeedSubscription_addEventListener(
-                           threadHandle, handler, eventListenerHandler, [](auto, auto) {}, nullptr) == 0;
+                return dxfg_DXFeedSubscription_addEventListener(threadHandle, handler, eventListenerHandler) == 0;
             },
             false);
     }
+}
+
+std::string DXFeedSubscription::toString() const noexcept {
+    return fmt::format("DXFeedSubscription{{{}}}", handler_.toString());
 }
 
 } // namespace dxfcpp

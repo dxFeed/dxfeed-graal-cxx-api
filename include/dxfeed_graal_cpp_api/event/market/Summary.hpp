@@ -244,16 +244,7 @@ class Summary final : public MarketEvent, public LastingEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override {
-        return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
-                           "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
-                           "prevDayVolume={}, openInterest={}}}",
-                           MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                           day_util::getYearMonthDayByDayId(getDayId()), getDayOpenPrice(), getDayHighPrice(),
-                           getDayLowPrice(), getDayLowPrice(), getDayClosePrice(), getDayClosePriceType().toString(),
-                           day_util::getYearMonthDayByDayId(getPrevDayId()), getPrevDayClosePrice(),
-                           getPrevDayClosePriceType().toString(), getPrevDayVolume(), getOpenInterest());
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

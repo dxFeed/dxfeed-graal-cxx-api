@@ -10,60 +10,53 @@ set(CMAKE_C_STANDARD 11)
 
 cmake_policy(SET CMP0135 NEW)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(DXFC_IS_ROOT_PROJECT ON)
-else()
+else ()
     set(DXFC_ROOT_PROJECT OFF)
-endif()
+endif ()
 
 option(DXFC_BUILD_UNIT_TESTS "" ON)
 
-option(DXFC_USE_DXFEED_GRAAL_NATIVE_API_GITHUB "" OFF)
-set(DXFEED_GRAAL_NATIVE_API_GITHUB_VERSION "v1.0.5" CACHE STRING "")
-set(DXFEED_GRAAL_NATIVE_API_GITHUB_ARCHIVE_VERSION "1.0.0" CACHE STRING "")
-set(DXFEED_GRAAL_NATIVE_API_GITHUB_BASE_URL "https://github.com/ttldtor/dxfeed-graal-native-api/releases/download/" CACHE STRING "")
-
-option(DXFC_USE_DXFEED_GRAAL_NATIVE_API_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_API_VERSION "0.4.0" CACHE STRING "")
-set(DXFEED_GRAAL_NATIVE_API_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-api/" CACHE STRING "")
+option(DXFC_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.0" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
 include(FetchContent)
 
-if (DEFINED ENV{DXFEED_GRAAL_NATIVE_API_URL})
-    FetchContent_Declare(DxFeedGraalNativeApi URL $ENV{DXFEED_GRAAL_NATIVE_API_URL})
+if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+    FetchContent_Declare(DxFeedGraalNativeSdk URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
 else ()
-    if (DXFC_USE_DXFEED_GRAAL_NATIVE_API_GITHUB)
-        set(DXFEED_GRAAL_NATIVE_API_URL "${DXFEED_GRAAL_NATIVE_API_GITHUB_BASE_URL}${DXFEED_GRAAL_NATIVE_API_GITHUB_VERSION}/dxfeed-graal-native-api-${DXFEED_GRAAL_NATIVE_API_GITHUB_ARCHIVE_VERSION}")
-    elseif (DXFC_USE_DXFEED_GRAAL_NATIVE_API_JFROG)
-        set(DXFEED_GRAAL_NATIVE_API_URL "${DXFEED_GRAAL_NATIVE_API_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_API_VERSION}/graal-native-api-${DXFEED_GRAAL_NATIVE_API_VERSION}")
+    if (DXFC_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
+        set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
     endif ()
 
     if (WIN32)
-        set(DXFEED_GRAAL_NATIVE_API_URL ${DXFEED_GRAAL_NATIVE_API_URL}-amd64-windows.zip)
+        set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-amd64-windows.zip)
     elseif (APPLE)
         if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "arm64")
-            set(DXFEED_GRAAL_NATIVE_API_URL ${DXFEED_GRAAL_NATIVE_API_URL}-aarch64-osx.zip)
+            set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-aarch64-osx.zip)
         else ()
-            set(DXFEED_GRAAL_NATIVE_API_URL ${DXFEED_GRAAL_NATIVE_API_URL}-x86_64-osx.zip)
+            set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-x86_64-osx.zip)
         endif ()
     elseif (UNIX)
-        set(DXFEED_GRAAL_NATIVE_API_URL ${DXFEED_GRAAL_NATIVE_API_URL}-amd64-linux.zip)
+        set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-amd64-linux.zip)
     else ()
         message(ERROR "Unknown platform!")
     endif ()
 
-    FetchContent_Declare(DxFeedGraalNativeApi URL ${DXFEED_GRAAL_NATIVE_API_URL})
+    FetchContent_Declare(DxFeedGraalNativeSdk URL ${DXFEED_GRAAL_NATIVE_SDK_URL})
 endif ()
 
-FetchContent_MakeAvailable(DxFeedGraalNativeApi)
-# DxFeedGraalNativeApi_SOURCE_DIR
+FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
+# DxFeedGraalNativeSdk_SOURCE_DIR
 
 if (DXFC_USE_CONAN)
     include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 endif ()
 
 add_subdirectory(third_party/utfcpp-3.2.3)
-add_subdirectory(third_party/fmt-9.1.0)
+add_subdirectory(third_party/fmt-10.0.0)
 
 # find_package(utf8cpp)
 # find_package(fmt)
@@ -71,13 +64,34 @@ add_subdirectory(third_party/fmt-9.1.0)
 set(dxFeedNativeAPIInternalSources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp
+        src/internal/JavaObjectHandler.cpp
+        src/internal/EventClassList.cpp
+        src/internal/SymbolList.cpp
         src/internal/Common.cpp
+        )
+
+set(dxFeedNativeAPIInternalUtilsSources
+        src/internal/utils/StringUtils.cpp
+        )
+
+set(dxFeedNativeAPIInternalUtilsDebugSources
+        src/internal/utils/debug/Debug.cpp
         )
 
 set(dxFeedNativeAPIAPISources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
+        )
+
+set(dxFeedNativeAPIAPIOsubSources
+        src/api/osub/WildcardSymbol.cpp
+        )
+
+set(dxFeedNativeAPISymbolsSources
+        src/symbols/SymbolMapper.cpp
+        src/symbols/StringSymbol.cpp
+        src/symbols/SymbolWrapper.cpp
         )
 
 set(dxFeedNativeAPISystemSources
@@ -118,7 +132,11 @@ set(dxFeedNativeAPIEventOptionSources
 
 add_library(dxFeedGraalCxxApi
         ${dxFeedNativeAPIInternalSources}
+        ${dxFeedNativeAPIInternalUtilsSources}
+        ${dxFeedNativeAPIInternalUtilsDebugSources}
         ${dxFeedNativeAPIAPISources}
+        ${dxFeedNativeAPIAPIOsubSources}
+        ${dxFeedNativeAPISymbolsSources}
         ${dxFeedNativeAPISystemSources}
         ${dxFeedNativeAPIEventSources}
         ${dxFeedNativeAPIEventMarketSources}
@@ -126,11 +144,18 @@ add_library(dxFeedGraalCxxApi
         src/api.cpp
         )
 
+add_library(dxFeedGraalCxxApi_Clang INTERFACE)
+
+if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"))
+    # Ignore undefined template var warning
+    target_compile_options(dxFeedGraalCxxApi_Clang INTERFACE -Wno-undefined-var-template)
+endif ()
+
 target_include_directories(dxFeedGraalCxxApi PUBLIC include)
-target_link_libraries(dxFeedGraalCxxApi PUBLIC DxFeedGraalNativeApi utf8cpp fmt::fmt)
+target_link_libraries(dxFeedGraalCxxApi PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt PUBLIC dxFeedGraalCxxApi_Clang)
 
 add_custom_command(TARGET dxFeedGraalCxxApi POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:DxFeedGraalNativeApi> $<TARGET_FILE_DIR:dxFeedGraalCxxApi>)
+        $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:dxFeedGraalCxxApi>)
 
 if (DXFC_BUILD_UNIT_TESTS)
     include(CTest)

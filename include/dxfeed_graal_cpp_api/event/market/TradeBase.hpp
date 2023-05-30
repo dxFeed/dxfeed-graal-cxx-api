@@ -74,7 +74,9 @@ class TradeBase : public MarketEvent, public LastingEvent {
 
     template <typename ChildType, typename GraalNativeEventType, typename ChildGraalNativeEventType, auto clazz>
     static std::shared_ptr<ChildType> fromGraalNative(void *graalNative) noexcept
+#if __cpp_concepts
         requires(std::is_base_of_v<TradeBase, ChildType>)
+#endif
     {
         if (!graalNative) {
             return {};
@@ -360,16 +362,7 @@ class TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return string representation of this trade event's fields.
      */
-    std::string baseFieldsToString() const noexcept {
-        return fmt::format("{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, price={}, "
-                           "change={}, size={}, day={}, dayVolume={}, dayTurnover={}, "
-                           "direction={}, ETH={}",
-                           MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                           formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(),
-                           string_util::encodeChar(getExchangeCode()), getPrice(), getChange(), getSize(),
-                           day_util::getYearMonthDayByDayId(getDayId()), getDayVolume(), getDayTurnover(),
-                           getTickDirection().toString(), isExtendedTradingHours());
-    }
+    std::string baseFieldsToString() const noexcept;
 };
 
 } // namespace dxfcpp

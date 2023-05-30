@@ -19,7 +19,7 @@
 
 namespace dxfcpp {
 
-struct DXPublisher : std::enable_shared_from_this<DXPublisher> {
+struct DXPublisher : SharedEntity {
     virtual ~DXPublisher() = default;
 };
 
@@ -176,7 +176,7 @@ struct DXFeed;
  *
  * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html)
  */
-struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
+struct DXEndpoint : SharedEntity {
     /**
      * Defines property for endpoint name that is used to distinguish multiple endpoints
      * in the same process in logs and in other diagnostic means.
@@ -397,7 +397,7 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
         LOCAL_HUB
     };
 
-    static auto roleToString(Role role) {
+    static std::string roleToString(Role role) {
         switch (role) {
         case Role::FEED:
             return "FEED";
@@ -463,12 +463,12 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     static inline std::mutex MTX{};
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
-    handler_utils::JavaObjectHandler<DXEndpoint> handler_;
+    JavaObjectHandler<DXEndpoint> handler_;
     Role role_ = Role::FEED;
     std::string name_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
-    handler_utils::JavaObjectHandler<DXEndpointStateChangeListener> stateChangeListenerHandler_;
+    JavaObjectHandler<DXEndpointStateChangeListener> stateChangeListenerHandler_;
     Handler<void(State, State)> onStateChange_{};
 
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
@@ -480,15 +480,15 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
 
   protected:
     DXEndpoint() : handler_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandler_{}, onStateChange_{} {
-        if constexpr (isDebug) {
-            debug("DXEndpoint()");
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXEndpoint()");
         }
     }
 
   public:
     virtual ~DXEndpoint() {
-        if constexpr (isDebug) {
-            debug("DXEndpoint{{{}}}::~DXEndpoint()", handler_.toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXEndpoint{" + handler_.toString() + " }::~DXEndpoint()");
         }
     }
 
@@ -506,8 +506,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @see #getInstance(Role)
      */
     static std::shared_ptr<DXEndpoint> getInstance() {
-        if constexpr (isDebug) {
-            debug("DXEndpoint::getInstance()");
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXEndpoint::getInstance()");
         }
 
         return getInstance(Role::FEED);
@@ -533,8 +533,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return The DXEndpoint instance
      */
     static std::shared_ptr<DXEndpoint> getInstance(Role role) {
-        if constexpr (isDebug) {
-            debug("DXEndpoint::getInstance(role = {})", roleToString(role));
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXEndpoint::getInstance(role = " + roleToString(role) + ")");
         }
 
         std::lock_guard lock(MTX);
@@ -555,8 +555,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return the created endpoint.
      */
     static std::shared_ptr<DXEndpoint> create() {
-        if constexpr (isDebug) {
-            debug("DXEndpoint::create()");
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXEndpoint::create()");
         }
 
         return newBuilder()->build();
@@ -572,8 +572,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return the created endpoint.
      */
     static std::shared_ptr<DXEndpoint> create(Role role) {
-        if constexpr (isDebug) {
-            debug("DXEndpoint::create(role = {})", roleToString(role));
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXEndpoint::create(role = " + roleToString(role) + ")");
         }
 
         return newBuilder()->withRole(role)->build();
@@ -617,9 +617,11 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      */
     template <typename StateChangeListener>
     std::size_t addStateChangeListener(StateChangeListener &&listener) noexcept
+#if __cpp_concepts
         requires requires {
-                     { listener(State{}, State{}) } -> std::same_as<void>;
-                 }
+            { listener(State{}, State{}) } -> std::same_as<void>;
+        }
+#endif
     {
         return onStateChange_ += listener;
     }
@@ -746,8 +748,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#close--)
      */
     void close() {
-        if constexpr (isDebug) {
-            debug("DXEndpoint{{{}}}::close()", handler_.toString());
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXEndpoint{" + handler_.toString() + "}::close()");
         }
 
         closeImpl();
@@ -805,14 +807,14 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
     class Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
-//        mutable std::recursive_mutex mtx_{};
-        handler_utils::JavaObjectHandler<Builder> handler_;
+        //        mutable std::recursive_mutex mtx_{};
+        JavaObjectHandler<Builder> handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
         Builder() : handler_{}, properties_{} {
-            if constexpr (isDebug) {
-                debug("DXEndpoint::Builder::Builder()");
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("DXEndpoint::Builder::Builder()");
             }
         }
 
@@ -835,8 +837,8 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
       public:
         /// Releases the GraalVM handle
         virtual ~Builder() {
-            if constexpr (isDebug) {
-                debug("DXEndpoint::Builder{{{}}}::~Builder()", handler_.toString());
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::~Builder()");
             }
         }
 
@@ -850,9 +852,9 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          * @return `this` endpoint builder.
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
-            //TODO: check invalid utf-8
-            if constexpr (isDebug) {
-                debug("DXEndpoint::Builder{{{}}}::withName(name = {})", handler_.toString(), name);
+            // TODO: check invalid utf-8
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::withName(name = " + name + ")");
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -889,9 +891,9 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
          * @see ::withProperty(const std::string&, const std::string&)
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
-            if constexpr (isDebug) {
-                debug("DXEndpoint::Builder{{{}}}::withProperties(properties[{}])", handler_.toString(),
-                      properties.size());
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::withProperties(properties[" +
+                                std::to_string(properties.size()) + "])");
             }
 
             for (auto &&[k, v] : properties) {
@@ -926,15 +928,13 @@ struct DXEndpoint : std::enable_shared_from_this<DXEndpoint> {
      * @return the created endpoint builder.
      */
     static std::shared_ptr<Builder> newBuilder() noexcept {
-        if constexpr (isDebug) {
-            debug("DXEndpoint::newBuilder()");
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("DXEndpoint::newBuilder()");
         }
 
         return Builder::create();
     }
 
-    std::string toString() const {
-        return fmt::format("DXEndpoint{{{}}}", handler_.toString());
-    }
+    std::string toString() const noexcept override;
 };
 } // namespace dxfcpp

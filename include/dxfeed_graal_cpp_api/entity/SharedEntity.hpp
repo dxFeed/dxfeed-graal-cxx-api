@@ -50,6 +50,13 @@ struct SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> 
     template <typename T> std::shared_ptr<T> sharedAs() const noexcept {
         return std::dynamic_pointer_cast<T>(shared_from_this());
     }
+
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
+    virtual std::string toString() const noexcept { return "SharedEntity{}"; }
 };
 
 } // namespace dxfcpp

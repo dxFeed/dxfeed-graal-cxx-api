@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 const EventTypeEnum &Profile::Type = EventTypeEnum::PROFILE;
@@ -55,6 +60,19 @@ std::shared_ptr<Profile> Profile::fromGraalNative(void *graalNative) noexcept {
         // TODO: error handling
         return {};
     }
+}
+
+std::string Profile::toString() const noexcept {
+    return fmt::format("Profile{{{}, eventTime={}, description='{}', SSR={}, status={}, statusReason='{}', "
+                       "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
+                       "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
+                       "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
+                       MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                       getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(),
+                       getStatusReason(), formatTimeStamp(getHaltStartTime()), formatTimeStamp(getHaltEndTime()),
+                       getHighLimitPrice(), getLowLimitPrice(), getHigh52WeekPrice(), getLow52WeekPrice(),
+                       getBeta(), getEarningsPerShare(), getDividendFrequency(), getExDividendAmount(),
+                       day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
 }
 
 } // namespace dxfcpp

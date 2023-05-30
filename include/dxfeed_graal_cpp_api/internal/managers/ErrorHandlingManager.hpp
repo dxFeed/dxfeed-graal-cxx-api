@@ -39,7 +39,7 @@ struct Error {
 //TODO: implement retrieving, grouping methods
 class ErrorHandlingManager {
     static constexpr std::size_t DEFAULT_ERROR_COLLECTION_CAPACITY{1024ULL};
-    thread_local static inline const Error NO_ERROR{Error::UNKNOWN_ID, 0, "", "NO ERROR"};
+    static inline const Error NO_ERROR{Error::UNKNOWN_ID, 0, "", "NO ERROR"};
 
     std::mutex errorCollectionMutex_{};
     std::unordered_map<std::size_t, Error> errorCollection_{};

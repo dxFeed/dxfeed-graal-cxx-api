@@ -22,7 +22,6 @@ struct EventMapper;
  * Profile information snapshot that contains security instrument description.
  * It represents the most recent information that is available about the traded security
  * on the market at any given moment of time.
- *
  */
 class Profile final : public MarketEvent, public LastingEvent {
     friend struct EventMapper;
@@ -349,18 +348,7 @@ class Profile final : public MarketEvent, public LastingEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override {
-        return fmt::format("Profile{{{}, eventTime={}, description='{}', SSR={}, status={}, statusReason='{}', "
-                           "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
-                           "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
-                           "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
-                           MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                           getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(),
-                           getStatusReason(), formatTimeStamp(getHaltStartTime()), formatTimeStamp(getHaltEndTime()),
-                           getHighLimitPrice(), getLowLimitPrice(), getHigh52WeekPrice(), getLow52WeekPrice(),
-                           getBeta(), getEarningsPerShare(), getDividendFrequency(), getExDividendAmount(),
-                           day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
-    }
+    std::string toString() const noexcept override;
 };
 
 } // namespace dxfcpp

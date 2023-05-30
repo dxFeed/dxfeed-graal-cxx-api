@@ -11,24 +11,26 @@
 namespace dxfcpp {
 
 class ApiContext {
-    std::shared_ptr<DXEndpointManager> dxEndpointManager_;
-    std::shared_ptr<DXFeedSubscriptionManager> dxFeedSubscriptionManager_;
+    mutable std::shared_ptr<DXEndpointManager> dxEndpointManager_;
+    mutable std::shared_ptr<DXFeedSubscriptionManager> dxFeedSubscriptionManager_;
     std::atomic<bool> initialized{false};
 
-    ApiContext()
+    ApiContext() noexcept
         : dxEndpointManager_{std::make_shared<DXEndpointManager>()},
           dxFeedSubscriptionManager_{std::make_shared<DXFeedSubscriptionManager>()} {}
 
   public:
-    static std::shared_ptr<ApiContext> getInstance() {
-        static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new ApiContext{});
+    static std::shared_ptr<ApiContext> getInstance() noexcept {
+        static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new (std::nothrow) ApiContext{});
 
         return instance;
     }
 
-    std::shared_ptr<DXEndpointManager> getDxEndpointManager() { return dxEndpointManager_; }
+    std::shared_ptr<DXEndpointManager> getDxEndpointManager() const noexcept { return dxEndpointManager_; }
 
-    std::shared_ptr<DXFeedSubscriptionManager> getDxFeedSubscriptionManager() { return dxFeedSubscriptionManager_; }
+    std::shared_ptr<DXFeedSubscriptionManager> getDxFeedSubscriptionManager() const noexcept {
+        return dxFeedSubscriptionManager_;
+    }
 };
 
 } // namespace dxfcpp

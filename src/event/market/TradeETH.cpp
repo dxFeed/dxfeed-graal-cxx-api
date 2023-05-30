@@ -11,6 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp {
 
 const EventTypeEnum &TradeETH::Type = EventTypeEnum::TRADE_ETH;
@@ -19,5 +24,7 @@ std::shared_ptr<TradeETH> TradeETH::fromGraalNative(void *graalNative) noexcept 
     return TradeBase::fromGraalNative<TradeETH, dxfg_event_type_t, dxfg_trade_eth_t,
                                       dxfg_event_clazz_t::DXFG_EVENT_TRADE_ETH>(graalNative);
 }
+
+std::string TradeETH::toString() const noexcept { return fmt::format("TradeETH{{{}}}", baseFieldsToString()); }
 
 } // namespace dxfcpp
