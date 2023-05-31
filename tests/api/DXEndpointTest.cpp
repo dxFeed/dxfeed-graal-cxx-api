@@ -10,21 +10,22 @@
 #include <unordered_map>
 #include <vector>
 
-
 TEST_CASE("DXEndpoint::Builder") {
     auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
     auto endpoint = builder->build();
 
     endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
         std::cerr << "DXEndpoint::Builder Test: {}" + std::string("State changed: ") +
-                                                          dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                                                          dxfcpp::DXEndpoint::stateToString(newState) << "\n";
+                         dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
+                         dxfcpp::DXEndpoint::stateToString(newState)
+                  << "\n";
     };
 
     endpoint->addStateChangeListener([](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
         std::cerr << "DXEndpoint::Builder Test: {}" + std::string("State changed 2: ") +
                          dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
-                         dxfcpp::DXEndpoint::stateToString(newState) << "\n";
+                         dxfcpp::DXEndpoint::stateToString(newState)
+                  << "\n";
     });
 
     endpoint->connect("demo.dxfeed.com:7300");
@@ -76,9 +77,8 @@ TEST_CASE("dxfc_dxendpoint_builder_t bug") {
 //
 //    result = dxfc_dxendpoint_add_state_change_listener(
 //        endpoint, [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *) {
-//            Debugger::debug("dxfc_dxendpoint_builder_t Test: {}", std::string("State changed: ") +
-//                                                                    cApiStateToString(oldState) + " -> " +
-//                                                                    cApiStateToString(newState));
+//            std::cerr << "dxfc_dxendpoint_builder_t Test: {}" + std::string("State changed: ") +
+//                             cApiStateToString(oldState) + " -> " + cApiStateToString(newState) + "\n";
 //        });
 //
 //    if (result != DXFC_EC_SUCCESS) {
@@ -109,15 +109,13 @@ TEST_CASE("dxfc_dxendpoint_builder_t bug") {
 }
 
 TEST_CASE("DXFeedSubscription") {
-    //auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
-    //auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
-    //auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
+    auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
+    auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
+    auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
 
-    //dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
+    dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
 
-    //dxfcpp::DXFeed::getInstance();
+    dxfcpp::DXFeed::getInstance();
 }
 
-TEST_CASE("dxfcpp::DXFeed::getInstance() bug") {
-    //dxfcpp::DXFeed::getInstance();
-}
+TEST_CASE("dxfcpp::DXFeed::getInstance()") { dxfcpp::DXFeed::getInstance(); }
