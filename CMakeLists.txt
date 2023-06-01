@@ -11,7 +11,6 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
-
 project(dxFeedGraalCxxApi)
 
 set(CMAKE_CXX_STANDARD 20)

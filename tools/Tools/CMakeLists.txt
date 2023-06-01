@@ -3,12 +3,18 @@
 
 cmake_minimum_required(VERSION 3.15)
 
+if (POLICY CMP0092)
+    cmake_policy(SET CMP0092 NEW)
+endif ()
+
+if (POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+endif ()
+
 project(Tools LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
-
-cmake_policy(SET CMP0135 NEW)
 
 add_executable(Tools src/main.cpp)
 target_include_directories(Tools PRIVATE ../../include/dxfeed_graal_cpp_api)

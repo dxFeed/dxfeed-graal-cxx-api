@@ -3,6 +3,14 @@
 
 cmake_minimum_required(VERSION 3.15)
 
+if (POLICY CMP0092)
+    cmake_policy(SET CMP0092 NEW)
+endif ()
+
+if (POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+endif ()
+
 project(dxFeedGraalCXXAPITests LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
