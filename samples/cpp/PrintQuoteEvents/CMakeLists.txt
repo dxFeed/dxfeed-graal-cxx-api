@@ -19,7 +19,7 @@ set(CMAKE_C_STANDARD 11)
 add_executable(PrintQuoteEvents src/main.cpp)
 target_include_directories(PrintQuoteEvents PRIVATE ../../../include)
 
-target_link_libraries(PrintQuoteEvents PRIVATE DxFeedGraalNativeSdk dxFeedGraalCxxApi dxFeedGraalCxxApi_CompilerOptions)
+target_link_libraries(PrintQuoteEvents PRIVATE DxFeedGraalNativeSdk dxFeedGraalCxxApi dxFeedGraalCxxApi_CompilerOptions dxFeedGraalCxxApi_Shared)
 target_compile_definitions(PrintQuoteEvents PRIVATE DXFCPP_USE_DLLS)
 
 add_custom_command(TARGET PrintQuoteEvents POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different

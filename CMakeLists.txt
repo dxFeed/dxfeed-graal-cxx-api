@@ -175,19 +175,43 @@ if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID}
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-Wno-undefined-var-template" "-Wno-unused-private-field")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic" "-Werror")
-    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-fPIC")
+    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-fPIC" "-no-pie")
+    target_link_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-fPIC")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "/W4" "/WX")
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "/wd4996" "/wd4251")
 endif ()
 
+add_library(dxFeedGraalCxxApi_Shared INTERFACE)
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set_target_properties(dxFeedGraalCxxApi_Shared PROPERTIES
+            CMAKE_MACOSX_RPATH ON
+            CMAKE_SKIP_BUILD_RPATH ON
+            CMAKE_BUILD_WITH_INSTALL_RPATH ON
+            CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF
+            CMAKE_BUILD_RPATH_USE_ORIGIN ON
+            CMAKE_INSTALL_RPATH "@loader_path"
+            )
+elseif (UNIX)
+    set_target_properties(dxFeedGraalCxxApi_Shared PROPERTIES
+            CMAKE_SKIP_BUILD_RPATH ON
+            CMAKE_BUILD_WITH_INSTALL_RPATH ON
+            CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF
+            CMAKE_BUILD_RPATH_USE_ORIGIN ON
+            CMAKE_INSTALL_RPATH "$ORIGIN"
+            )
+endif()
+
 target_include_directories(dxFeedGraalCxxApi_static PUBLIC include)
+target_compile_definitions(dxFeedGraalCxxApi_static PRIVATE
+        FMT_HEADER_ONLY=1)
 target_include_directories(dxFeedGraalCxxApi PUBLIC include)
 target_compile_definitions(dxFeedGraalCxxApi PRIVATE
-        DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS)
+        DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1)
 
-target_link_libraries(dxFeedGraalCxxApi_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt PUBLIC dxFeedGraalCxxApi_CompilerOptions)
-target_link_libraries(dxFeedGraalCxxApi PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt PUBLIC dxFeedGraalCxxApi_CompilerOptions)
+target_link_libraries(dxFeedGraalCxxApi_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC dxFeedGraalCxxApi_CompilerOptions)
+target_link_libraries(dxFeedGraalCxxApi PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC dxFeedGraalCxxApi_CompilerOptions dxFeedGraalCxxApi_Shared)
 
 add_custom_command(TARGET dxFeedGraalCxxApi_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:dxFeedGraalCxxApi_static>)
