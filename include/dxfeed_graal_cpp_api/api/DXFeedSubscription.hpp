@@ -313,11 +313,11 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     std::size_t addEventListener(std::function<void(const std::vector<std::shared_ptr<EventT>> &)> &&listener) noexcept
 #if __cpp_concepts
         requires std::is_base_of_v<EventType, EventT> && requires {
-            { EventT::Type } -> std::convertible_to<EventTypeEnum>;
+            { EventT::TYPE } -> std::convertible_to<EventTypeEnum>;
         }
 #endif
     {
-        if (!containsEventType(EventT::Type)) {
+        if (!containsEventType(EventT::TYPE)) {
             return onEvent_ += [](auto) {};
         }
 

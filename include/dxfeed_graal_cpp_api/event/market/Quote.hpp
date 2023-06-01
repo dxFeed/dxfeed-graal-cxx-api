@@ -62,7 +62,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     static std::shared_ptr<Quote> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new quote event with default values.
     Quote() noexcept = default;

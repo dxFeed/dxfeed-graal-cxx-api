@@ -4,18 +4,37 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <iostream>
+
 int main() {
-    {
+    using namespace dxfcpp;
+
+    auto endpoint = DXEndpoint::newBuilder()->withProperty("dxfeed.address", "demo.dxfeed.com:7300")->build();
+
+    auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
+
+    subscription->addEventListener([](auto &&events) {
+        for (auto &&e : events) {
+            std::cout << e << "\n";
+        }
+    });
+
+    subscription->addSymbols({"AAPL"});
+
+    std::cin.get();
+
+    [] {
         using namespace std::string_literals;
         using namespace std::string_view_literals;
         using namespace dxfcpp::literals;
 
         std::vector<dxfcpp::EventTypeEnum> vi{};
 
-        auto eventTypes = {dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type};
+        auto eventTypes = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
 
         dxfcpp::DXFeedSubscription::create(eventTypes.begin(), eventTypes.end());
-        auto sub2 = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+        auto sub2 =
+            dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
 
         std::vector<dxfcpp::SymbolWrapper> symbols{{"123", "123123"sv, "123213123"s, "*"_wcs, "ZZZ"_s}};
 
@@ -29,7 +48,7 @@ int main() {
                            ->withProperty(dxfcpp::DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true");
         auto endpoint = builder->build();
 
-        auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+        auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
 
         //        sub->addEventListener([](auto &&events) {
         //            for (const auto &e : events) {
@@ -110,5 +129,5 @@ int main() {
         std::this_thread::sleep_for(std::chrono::seconds(5));
 
         endpoint->close();
-    }
+    };
 }

@@ -92,7 +92,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     static std::shared_ptr<Series> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new series event with default values.
     Series() noexcept = default;

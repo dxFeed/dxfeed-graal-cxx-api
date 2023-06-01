@@ -91,7 +91,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     static std::shared_ptr<TheoPrice> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new theoprice event with default values.
     TheoPrice() noexcept = default;

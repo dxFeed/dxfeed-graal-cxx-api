@@ -115,7 +115,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     static std::shared_ptr<TimeAndSale> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new time and sale event with default values.
     TimeAndSale() noexcept = default;

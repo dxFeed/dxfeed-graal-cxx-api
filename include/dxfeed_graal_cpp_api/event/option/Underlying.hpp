@@ -87,7 +87,7 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
     static std::shared_ptr<Underlying> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new underlying event with default values.
     Underlying() noexcept = default;

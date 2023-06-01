@@ -61,7 +61,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     static std::shared_ptr<Summary> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new summary event with default values.
     Summary() noexcept = default;

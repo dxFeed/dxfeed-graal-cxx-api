@@ -18,7 +18,7 @@
 
 namespace dxfcpp {
 
-const EventTypeEnum &Greeks::Type = EventTypeEnum::GREEKS;
+const EventTypeEnum &Greeks::TYPE = EventTypeEnum::GREEKS;
 
 std::shared_ptr<Greeks> Greeks::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {

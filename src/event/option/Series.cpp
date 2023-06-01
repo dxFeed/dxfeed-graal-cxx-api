@@ -18,7 +18,7 @@
 
 namespace dxfcpp {
 
-const EventTypeEnum &Series::Type = EventTypeEnum::SERIES;
+const EventTypeEnum &Series::TYPE = EventTypeEnum::SERIES;
 
 std::shared_ptr<Series> Series::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {

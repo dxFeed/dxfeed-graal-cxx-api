@@ -18,7 +18,7 @@
 
 namespace dxfcpp {
 
-const EventTypeEnum &Profile::Type = EventTypeEnum::PROFILE;
+const EventTypeEnum &Profile::TYPE = EventTypeEnum::PROFILE;
 
 std::shared_ptr<Profile> Profile::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {

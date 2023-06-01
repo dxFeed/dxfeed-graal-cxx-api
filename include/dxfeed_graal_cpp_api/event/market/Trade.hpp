@@ -74,7 +74,7 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
     static std::shared_ptr<Trade> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new trade event with default values.
     Trade() noexcept = default;

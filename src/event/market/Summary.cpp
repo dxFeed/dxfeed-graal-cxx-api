@@ -18,7 +18,7 @@
 
 namespace dxfcpp {
 
-const EventTypeEnum &Summary::Type = EventTypeEnum::SUMMARY;
+const EventTypeEnum &Summary::TYPE = EventTypeEnum::SUMMARY;
 
 std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {
