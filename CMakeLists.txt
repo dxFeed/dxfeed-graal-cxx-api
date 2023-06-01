@@ -175,6 +175,7 @@ if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID}
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-Wno-undefined-var-template" "-Wno-unused-private-field")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic" "-Werror")
+    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-fPIC")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "/W4" "/WX")
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "/wd4996" "/wd4251")
