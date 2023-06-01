@@ -488,7 +488,7 @@ struct DXEndpoint : SharedEntity {
   public:
     virtual ~DXEndpoint() {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint{" + handler_.toString() + " }::~DXEndpoint()");
+            Debugger::debug("DXEndpoint{" + handler_.toString() + "}::~DXEndpoint()");
         }
     }
 

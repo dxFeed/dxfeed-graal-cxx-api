@@ -2,11 +2,3 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxfeed_graal_cpp_api/api.hpp>
-
-namespace dxfcpp {
-
-thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
-
-const auto I = Isolate::getInstance();
-
-}
