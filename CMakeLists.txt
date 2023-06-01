@@ -1,7 +1,7 @@
 # Copyright (c) 2023 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
 
 project(dxFeedGraalCxxApi)
 
@@ -17,7 +17,7 @@ else ()
 endif ()
 
 option(DXFC_BUILD_UNIT_TESTS "" ON)
-
+option(DXFC_BUILD_SHARED "" ON)
 option(DXFC_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.0" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
@@ -130,7 +130,8 @@ set(dxFeedNativeAPIEventOptionSources
         src/event/option/Series.cpp
         )
 
-add_library(dxFeedGraalCxxApi
+
+add_library(dxFeedGraalCxxApi_static STATIC
         ${dxFeedNativeAPIInternalSources}
         ${dxFeedNativeAPIInternalUtilsSources}
         ${dxFeedNativeAPIInternalUtilsDebugSources}
@@ -144,16 +145,47 @@ add_library(dxFeedGraalCxxApi
         src/api.cpp
         )
 
-add_library(dxFeedGraalCxxApi_Clang INTERFACE)
+add_library(dxFeedGraalCxxApi SHARED
+        ${dxFeedNativeAPIInternalSources}
+        ${dxFeedNativeAPIInternalUtilsSources}
+        ${dxFeedNativeAPIInternalUtilsDebugSources}
+        ${dxFeedNativeAPIAPISources}
+        ${dxFeedNativeAPIAPIOsubSources}
+        ${dxFeedNativeAPISymbolsSources}
+        ${dxFeedNativeAPISystemSources}
+        ${dxFeedNativeAPIEventSources}
+        ${dxFeedNativeAPIEventMarketSources}
+        ${dxFeedNativeAPIEventOptionSources}
+        src/api.cpp
+        )
+
+#set_target_properties(dxFeedGraalCxxApi PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+add_library(dxFeedGraalCxxApi_CompilerOptions INTERFACE)
 
 if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"))
-    # Ignore undefined template var warning
-    target_compile_options(dxFeedGraalCxxApi_Clang INTERFACE -Wno-undefined-var-template)
+    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic" "-Werror")
+    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-Wno-undefined-var-template" "-Wno-unused-private-field")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic" "-Werror")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "/W4" "/WX")
+    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "/wd4996" "/wd4251")
+    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-D_SCL_SECURE_NO_WARNINGS" "-D_CRT_SECURE_NO_WARNINGS")
 endif ()
 
-target_include_directories(dxFeedGraalCxxApi PUBLIC include)
-target_link_libraries(dxFeedGraalCxxApi PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt PUBLIC dxFeedGraalCxxApi_Clang)
 
+target_include_directories(dxFeedGraalCxxApi_static PUBLIC include)
+target_include_directories(dxFeedGraalCxxApi PUBLIC include)
+target_compile_definitions(dxFeedGraalCxxApi PRIVATE
+        DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS)
+
+target_link_libraries(dxFeedGraalCxxApi_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt PUBLIC dxFeedGraalCxxApi_CompilerOptions)
+target_link_libraries(dxFeedGraalCxxApi PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt PUBLIC dxFeedGraalCxxApi_CompilerOptions)
+
+add_custom_command(TARGET dxFeedGraalCxxApi_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:dxFeedGraalCxxApi_static>)
 add_custom_command(TARGET dxFeedGraalCxxApi POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:dxFeedGraalCxxApi>)
 

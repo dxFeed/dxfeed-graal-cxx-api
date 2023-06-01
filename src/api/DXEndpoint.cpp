@@ -88,7 +88,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 
     auto id = ApiContext::getInstance()->getDxEndpointManager()->registerEntity(endpoint);
 
-    auto onPropertyChange = [](graal_isolatethread_t *thread, dxfg_endpoint_state_t oldState,
+    auto onPropertyChange = [](graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                dxfg_endpoint_state_t newState, void *userData) {
         auto id = Id<DXEndpoint>::from(bit_cast<Id<DXEndpoint>::ValueType>(userData));
         auto endpoint = ApiContext::getInstance()->getDxEndpointManager()->getEntity(id);
@@ -1081,13 +1081,13 @@ dxfc_error_code_t dxfc_dxendpoint_remove_state_change_listener(dxfc_dxendpoint_t
 }
 
 // TODO: implement
-dxfc_error_code_t dxfc_dxendpoint_get_feed(dxfc_dxendpoint_t endpointHandle, DXFC_OUT dxfc_dxfeed_t *feed) {
+dxfc_error_code_t dxfc_dxendpoint_get_feed(dxfc_dxendpoint_t /*endpointHandle*/, DXFC_OUT dxfc_dxfeed_t * /*feed*/) {
     return DXFC_EC_SUCCESS;
 }
 
 // TODO: implement
-dxfc_error_code_t dxfc_dxendpoint_get_publisher(dxfc_dxendpoint_t endpointHandle,
-                                                DXFC_OUT dxfc_dxpublisher_t *publisher) {
+dxfc_error_code_t dxfc_dxendpoint_get_publisher(dxfc_dxendpoint_t /*endpointHandle*/,
+                                                DXFC_OUT dxfc_dxpublisher_t * /*publisher*/) {
     return DXFC_EC_SUCCESS;
 }
 

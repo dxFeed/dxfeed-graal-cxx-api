@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <cstdint>
 #include <string>
 
@@ -13,7 +15,7 @@ namespace dxfcpp {
  *
  * See IndexedEvent::getSource().
  */
-class IndexedEventSource {
+class DXFCPP_EXPORT IndexedEventSource {
     std::uint32_t id_{};
     std::string name_{};
 

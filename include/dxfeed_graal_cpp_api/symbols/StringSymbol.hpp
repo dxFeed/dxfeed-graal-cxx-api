@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <utility>
@@ -15,7 +17,7 @@ namespace dxfcpp {
  *
  * The current implementation is suboptimal (by memory usage) and will be enhanced.
  */
-struct StringSymbol final {
+struct DXFCPP_EXPORT StringSymbol final {
   private:
     std::string data_;
 
@@ -104,11 +106,11 @@ inline StringSymbol operator""_s(const char *string, size_t length) noexcept {
 
 } // namespace literals
 
-std::string graalSymbolToString(void *graalSymbol);
+DXFCPP_EXPORT std::string graalSymbolToString(void *graalSymbol);
 
 } // namespace dxfcpp
 
-template <> struct std::hash<dxfcpp::StringSymbol> {
+template <> struct DXFCPP_EXPORT std::hash<dxfcpp::StringSymbol> {
     std::size_t operator()(const dxfcpp::StringSymbol &stringSymbol) const noexcept {
         return std::hash<std::string>{}(stringSymbol.getData());
     }

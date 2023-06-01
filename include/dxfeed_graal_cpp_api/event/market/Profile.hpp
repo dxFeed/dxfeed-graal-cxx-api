@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -23,7 +25,7 @@ struct EventMapper;
  * It represents the most recent information that is available about the traded security
  * on the market at any given moment of time.
  */
-class Profile final : public MarketEvent, public LastingEvent {
+class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     friend struct EventMapper;
 
     /*

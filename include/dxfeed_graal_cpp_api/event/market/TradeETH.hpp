@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -89,7 +91,7 @@ struct EventMapper;
  * @ref ::isExtendedTradingHours() "extendedTradingHours" property is internally represented as a last bit of the "Flags" field of the record.
  * Regional records do not explicitly store a field for @ref ::getExchangeCode() "exchangeCode" property.
  */
-class TradeETH final : public TradeBase {
+class DXFCPP_EXPORT TradeETH final : public TradeBase {
     friend struct EventMapper;
 
     static std::shared_ptr<TradeETH> fromGraalNative(void *graalNative) noexcept;

@@ -3,10 +3,12 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 namespace dxfcpp {
 
 /// Base abstract class for all dxFeed C++ API entities
-struct Entity {
+struct DXFCPP_EXPORT Entity {
     /// The default virtual d-tor
     virtual ~Entity() = default;
 };

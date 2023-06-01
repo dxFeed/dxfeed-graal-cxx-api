@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -49,7 +51,7 @@ struct EventMapper;
  *
  * This event is implemented on top of QDS records `TheoPrice`.
  */
-class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
+class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
     /**

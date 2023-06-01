@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -24,7 +26,7 @@ namespace dxfcpp {
  *
  * @see DXFeed
  */
-struct EventType : public SharedEntity {
+struct DXFCPP_EXPORT EventType : public SharedEntity {
     /// The alias to a type of shared pointer to the EventType's child object.
     using Ptr = std::shared_ptr<EventType>;
 
@@ -53,7 +55,7 @@ struct EventType : public SharedEntity {
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
      */
-    virtual void setEventTime(std::int64_t eventTime){
+    virtual void setEventTime(std::int64_t /*eventTime*/){
         // The default implementation is empty
     };
 
@@ -81,7 +83,7 @@ struct EventType : public SharedEntity {
  *
  * @tparam Symbol The type od symbol
  */
-template <typename Symbol> struct EventTypeWithSymbol : public EventType {
+template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public EventType {
     /// The alias to a type of shared pointer to the EventTypeWithSymbol's child object.
     using Ptr = std::shared_ptr<EventTypeWithSymbol<Symbol>>;
 

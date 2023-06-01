@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -16,7 +18,7 @@ namespace dxfcpp {
 /**
  * Trading status of an instrument.
  */
-struct TradingStatus : Enum<TradingStatus, std::uint32_t> {
+struct DXFCPP_EXPORT TradingStatus : Enum<TradingStatus, std::uint32_t> {
     using Enum::Enum;
 
     /**

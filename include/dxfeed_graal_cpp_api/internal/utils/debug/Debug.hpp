@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../Conf.hpp"
+
 #define DXFCPP_DEBUG 0
 //#define DXFCPP_TRACE_LISTS 1
 //#define DXFCPP_TRACE_ISOLATES 1
@@ -28,13 +30,13 @@ namespace dxfcpp {
 
 static inline std::string getDebugName() { return {}; }
 
-struct Debugger {
+struct DXFCPP_EXPORT Debugger {
     static constexpr bool isDebug = false;
     static constexpr bool traceIsolates = false;
     static constexpr bool traceLists = false;
 
-    static void debug(...) {}
-    static void trace(...) {}
+    static void debug(std::string) {}
+    static void trace(std::string) {}
 };
 
 #else
@@ -60,7 +62,7 @@ struct Debugger {
     static std::string tracePrefixStr();
     static void trace(std::string);
 #    else
-    static void trace(...);
+    static void trace(std::string);
 #    endif
 };
 

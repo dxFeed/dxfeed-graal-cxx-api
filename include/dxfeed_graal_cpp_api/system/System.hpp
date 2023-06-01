@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Isolate.hpp"
@@ -16,7 +18,7 @@ namespace dxfcpp {
 /**
  * A class that allows to set JVM system properties and get the values of JVM system properties.
  */
-struct System {
+struct DXFCPP_EXPORT System {
     /**
      * Sets the JVM system property indicated by the specified key.
      *

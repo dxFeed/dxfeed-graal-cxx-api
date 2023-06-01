@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -29,7 +31,7 @@ struct EventMapper;
  * <b>extended trading hours</b> (ETH, pre market and post market trading sessions). It represents last trade price
  * during ETH and also accumulated volume and turnover during ETH for current trading day.
  */
-class TradeBase : public MarketEvent, public LastingEvent {
+class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     friend struct EventMapper;
 
   protected:

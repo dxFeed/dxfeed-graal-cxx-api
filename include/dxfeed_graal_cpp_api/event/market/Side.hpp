@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -16,7 +18,7 @@ namespace dxfcpp {
 /**
  * Side of an order or a trade.
  */
-struct Side : Enum<Side, std::uint32_t> {
+struct DXFCPP_EXPORT Side : Enum<Side, std::uint32_t> {
     using Enum::Enum;
 
     /**

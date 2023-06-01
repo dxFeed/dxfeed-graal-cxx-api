@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <memory>
 
 namespace dxfcpp {
@@ -21,7 +23,7 @@ namespace dxfcpp {
  * Note, that subscription to all lasting events of a specific type via WildcardSymbol::ALL symbol object does not
  * benefit from the above advantages of lasting events.
  */
-struct LastingEvent {
+struct DXFCPP_EXPORT LastingEvent {
     /// The alias to a type of shared pointer to the LastingEvent object
     using Ptr = std::shared_ptr<LastingEvent>;
 };

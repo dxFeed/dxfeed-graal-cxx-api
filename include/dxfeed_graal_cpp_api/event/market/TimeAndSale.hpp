@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -44,7 +46,7 @@ class OptionSale;
  *
  * This event is implemented on top of QDS record `TimeAndSale`.
  */
-class TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
+class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
     friend struct EventMapper;
     friend class OptionSale;
 

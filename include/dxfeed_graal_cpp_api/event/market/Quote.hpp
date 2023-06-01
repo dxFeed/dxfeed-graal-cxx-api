@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -25,7 +27,7 @@ struct EventMapper;
  * Bid corresponds to the best (maximal price) order to buy,
  * ask corresponds to the best (minimal price) order to sell.
  */
-class Quote final : public MarketEvent, public LastingEvent {
+class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     friend struct EventMapper;
 
     /**

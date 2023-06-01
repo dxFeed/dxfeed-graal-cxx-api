@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #include <graal_isolate.h>
 
 #include "CEntryPointErrors.hpp"

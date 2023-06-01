@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #include <compare>
 #include <cstdint>
 #include <string>
@@ -22,7 +24,7 @@ namespace dxfcpp {
  *
  *  [Graal:CEntryPointErrors](https://github.com/oracle/graal/blob/96a1a66347bd4e5e00ae4e8e79812ebaf8cd5e33/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/c/function/CEntryPointErrors.java#L43)
  */
-struct CEntryPointErrors {
+struct DXFCPP_EXPORT CEntryPointErrors {
     using CodeType = std::uint32_t;
 
   private:

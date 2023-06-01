@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../Conf.hpp"
+
 #include <memory>
 #include <optional>
 #include <unordered_map>

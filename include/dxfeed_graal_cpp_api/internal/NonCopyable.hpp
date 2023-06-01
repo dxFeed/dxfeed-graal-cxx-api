@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 namespace dxfcpp {
 
 template <class T> class NonCopyable {

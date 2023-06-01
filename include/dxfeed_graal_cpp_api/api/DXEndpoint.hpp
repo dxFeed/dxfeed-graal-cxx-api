@@ -3,10 +3,13 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
+#include "../internal/JavaObjectHandler.hpp"
 #include "DXFeed.hpp"
 
 #include <filesystem>
@@ -19,7 +22,7 @@
 
 namespace dxfcpp {
 
-struct DXPublisher : SharedEntity {
+struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     virtual ~DXPublisher() = default;
 };
 
@@ -176,7 +179,7 @@ struct DXFeed;
  *
  * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html)
  */
-struct DXEndpoint : SharedEntity {
+struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     /**
      * Defines property for endpoint name that is used to distinguish multiple endpoints
      * in the same process in logs and in other diagnostic means.
@@ -804,7 +807,7 @@ struct DXEndpoint : SharedEntity {
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.
      */
-    class Builder : public std::enable_shared_from_this<Builder> {
+    class DXFCPP_EXPORT Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
         //        mutable std::recursive_mutex mtx_{};

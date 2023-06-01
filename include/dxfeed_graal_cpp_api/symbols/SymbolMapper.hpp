@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <utility>
@@ -10,7 +12,7 @@
 
 namespace dxfcpp {
 
-struct SymbolMapper {
+struct DXFCPP_EXPORT SymbolMapper {
     template <typename SymbolIt>
     static void* toNativeList(SymbolIt begin, SymbolIt end) noexcept;
 };

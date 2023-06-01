@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -47,7 +49,7 @@ struct EventMapper;
  *
  * This event is implemented on top of QDS records `Series`.
  */
-class Series final : public MarketEvent, public IndexedEvent {
+class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     friend struct EventMapper;
 
     /**

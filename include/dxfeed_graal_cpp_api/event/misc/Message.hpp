@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -17,6 +19,6 @@ struct EventMapper;
 
 // TODO: implement
 
-class Message {};
+class DXFCPP_EXPORT Message {};
 
 } // namespace dxfcpp

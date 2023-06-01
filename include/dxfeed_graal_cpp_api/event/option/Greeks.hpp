@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -41,7 +43,7 @@ struct EventMapper;
  *
  * Publishing of greeks events follows the general rules explained in TimeSeriesEvent class documentation.
  */
-class Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
+class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
     /**

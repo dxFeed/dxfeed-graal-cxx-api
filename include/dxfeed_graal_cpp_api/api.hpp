@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "internal/Conf.hpp"
+
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
 #include "internal/Enum.hpp"

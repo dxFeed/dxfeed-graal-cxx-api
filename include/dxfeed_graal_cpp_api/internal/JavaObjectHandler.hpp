@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #include "utils/StringUtils.hpp"
 
 #include <memory>
@@ -12,7 +14,7 @@ namespace dxfcpp {
 
 template <typename T> struct JavaObjectHandler {
     using Type = T;
-    static void deleter(void *handler) noexcept;
+    static DXFCPP_EXPORT void deleter(void *handler) noexcept;
     explicit JavaObjectHandler(void *handler = nullptr) noexcept : impl_{handler, &deleter} {}
 
     JavaObjectHandler(JavaObjectHandler &&) = default;

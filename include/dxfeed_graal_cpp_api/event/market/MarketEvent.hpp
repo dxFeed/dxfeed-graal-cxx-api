@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -17,7 +19,7 @@ namespace dxfcpp {
  * properties and minimal business logic. All market events have `eventSymbol` property that is
  * defined by this class.
  */
-struct MarketEvent : public EventTypeWithSymbol<std::string> {
+struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     /// The alias to a type of shared pointer to the MarketEvent object
     using Ptr = std::shared_ptr<MarketEvent>;
 
