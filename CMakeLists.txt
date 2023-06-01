@@ -179,9 +179,7 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "/W4" "/WX")
     target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "/wd4996" "/wd4251")
-    target_compile_options(dxFeedGraalCxxApi_CompilerOptions INTERFACE "-D_SCL_SECURE_NO_WARNINGS" "-D_CRT_SECURE_NO_WARNINGS")
 endif ()
-
 
 target_include_directories(dxFeedGraalCxxApi_static PUBLIC include)
 target_include_directories(dxFeedGraalCxxApi PUBLIC include)
