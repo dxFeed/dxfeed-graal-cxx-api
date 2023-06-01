@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #include <deque>
 #include <functional>
 #include <future>

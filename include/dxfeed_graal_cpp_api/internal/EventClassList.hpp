@@ -3,13 +3,15 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #include <memory>
 #include <utility>
 #include <cstdint>
 
 namespace dxfcpp {
 
-struct EventClassList {
+struct DXFCPP_EXPORT EventClassList {
     template <typename EventTypeIt>
     static std::unique_ptr<EventClassList> create(EventTypeIt begin, EventTypeIt end) noexcept {
         auto size = std::distance(begin, end);

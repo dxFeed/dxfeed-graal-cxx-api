@@ -22,7 +22,7 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
     std::vector<std::shared_ptr<EventType>> result{static_cast<std::size_t>(list->size)};
 
-    for (std::size_t i = 0; i < list->size; i++) {
+    for (std::size_t i = 0; i < static_cast<std::size_t>(list->size); i++) {
         auto *e = list->elements[i];
 
         // TODO: implement other types

@@ -15,12 +15,12 @@ struct StringSymbol::Impl final {
 
     Impl() noexcept : graalSymbol{{STRING}, nullptr} {}
 
-    Impl(const Impl &impl) noexcept {
+    Impl(const Impl &) noexcept {
         graalSymbol.supper = {STRING};
         graalSymbol.symbol = nullptr;
     }
 
-    Impl(Impl &&impl) noexcept {
+    Impl(Impl &&) noexcept {
         graalSymbol.supper = {STRING};
         graalSymbol.symbol = nullptr;
     }

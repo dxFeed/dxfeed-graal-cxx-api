@@ -3,23 +3,25 @@
 
 #pragma once
 
+#include "../Conf.hpp"
+
 #include <cstdint>
 #include <string>
 #include <thread>
 
 namespace dxfcpp {
 
-struct String {
+struct DXFCPP_EXPORT String {
     inline static const std::string EMPTY{};
 };
 
-std::string toString(bool b);
+DXFCPP_EXPORT std::string toString(bool b);
 
-std::string toString(const char *chars);
+DXFCPP_EXPORT std::string toString(const char *chars);
 
-std::string toString(std::thread::id theadId);
+DXFCPP_EXPORT std::string toString(std::thread::id theadId);
 
-std::string toString(void *ptr);
+DXFCPP_EXPORT std::string toString(void *ptr);
 
 template <typename T> std::string toStringAny(T &&t) {
     if constexpr (requires { t.toString(); }) {
@@ -37,13 +39,13 @@ template <typename T> std::string toStringAny(T &&t) {
     }
 }
 
-char utf16to8(std::int16_t in);
+DXFCPP_EXPORT char utf16to8(std::int16_t in);
 
-std::int16_t utf8to16(char in);
+DXFCPP_EXPORT std::int16_t utf8to16(char in);
 
-std::string formatTimeStamp(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp);
 
-std::string formatTimeStampWithMillis(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
 
 template <typename It>
 #if __cpp_concepts
@@ -70,7 +72,7 @@ std::string elementsToString(It begin, It end) {
     return result + "]";
 }
 
-std::string encodeChar(std::int16_t c);
+DXFCPP_EXPORT std::string encodeChar(std::int16_t c);
 
 inline std::string encodeChar(char c) { return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c))); }
 

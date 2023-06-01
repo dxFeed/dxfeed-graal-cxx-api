@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -47,7 +49,7 @@ struct EventMapper;
  *
  * This event is implemented on top of QDS records `Series`.
  */
-class Series final : public MarketEvent, public IndexedEvent {
+class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     friend struct EventMapper;
 
     /**
@@ -90,7 +92,7 @@ class Series final : public MarketEvent, public IndexedEvent {
     static std::shared_ptr<Series> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new series event with default values.
     Series() noexcept = default;

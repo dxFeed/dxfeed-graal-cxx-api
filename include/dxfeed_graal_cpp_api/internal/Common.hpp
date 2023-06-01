@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
@@ -478,7 +480,7 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
         return value;
     }
 
-    if (shift >= sizeof(V) * 8) {
+    if (static_cast<std::size_t>(shift) >= sizeof(V) * 8) {
         return 0;
     }
 
@@ -526,7 +528,7 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
         return value;
     }
 
-    if (shift >= sizeof(V) * 8) {
+    if (static_cast<std::size_t>(shift) >= sizeof(V) * 8) {
         return 0;
     }
 

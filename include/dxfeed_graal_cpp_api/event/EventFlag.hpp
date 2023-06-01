@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <algorithm>
 #include <cstdint>
 #include <numeric>
@@ -92,7 +94,7 @@ namespace dxfcpp {
  * and `snapshotEnd` or `snapshotSnip` flags. In case of an empty snapshot, `removeEvent` on this event is
  * also set to `true`.
  */
-class EventFlag final {
+class DXFCPP_EXPORT EventFlag final {
     std::uint32_t flag_;
     std::string name_;
 

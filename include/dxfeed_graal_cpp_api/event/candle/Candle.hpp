@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -22,17 +24,19 @@ struct EventMapper;
 
 // TODO: implement
 
-class Candle final : public EventTypeWithSymbol<CandleSymbol>, public TimeSeriesEvent, public LastingEvent {
+class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
+                                   public TimeSeriesEvent,
+                                   public LastingEvent {
     friend struct EventMapper;
 
     CandleSymbol candleSymbol_{};
 
   public:
     const CandleSymbol &getEventSymbol() const override { return candleSymbol_; }
-    void setEventSymbol(const CandleSymbol &eventSymbol) override {}
+    void setEventSymbol(const CandleSymbol & /*eventSymbol*/) override {}
     EventFlagsMask getEventFlags() const override { return EventFlagsMask(); }
-    void setEventFlags(const EventFlagsMask &eventFlags) override {}
-    void setIndex(std::int64_t index) override {}
+    void setEventFlags(const EventFlagsMask & /*eventFlags*/) override {}
+    void setIndex(std::int64_t /*index*/) override {}
     std::int64_t getTime() const override { return 0; }
 };
 

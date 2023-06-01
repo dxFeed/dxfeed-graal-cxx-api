@@ -165,11 +165,13 @@ Download zip bundle, add to CMake project.
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 int main() {
+    using namespace dxfcpp;
+    
     auto endpoint = DXEndpoint::newBuilder()
             ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
             ->build();
     
-    auto subscription = endpoint->getFeed()->createSubscription(Quote::type);
+    auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
     
     subscription->addEventListener([](auto&& events) {
         for (auto&& e : events) {
@@ -178,6 +180,8 @@ int main() {
     });
     
     subscription->addSymbols({"AAPL"});
+    
+    std::cin.get();
 }
 ```
 

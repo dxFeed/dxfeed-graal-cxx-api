@@ -3,8 +3,10 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 namespace dxfcpp {
 
-class CandleSymbol {};
+class DXFCPP_EXPORT CandleSymbol {};
 
 } // namespace dxfcpp

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <cstdint>
 #include <string>
 
@@ -12,7 +14,7 @@ namespace dxfcpp {
  * The enumeration type that provides additional information about the dxFeed C++-API event type.
  * Useful when used as a subscription parameter.
  */
-class EventTypeEnum {
+class DXFCPP_EXPORT EventTypeEnum {
     /// The dxFeed Graal Native C-API event class id corresponding to the current enum element.
     const std::uint32_t id_;
 
@@ -99,6 +101,6 @@ class EventTypeEnum {
 
 } // namespace dxfcpp
 
-template <> struct std::hash<dxfcpp::EventTypeEnum> {
+template <> struct DXFCPP_EXPORT std::hash<dxfcpp::EventTypeEnum> {
     std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept { return eventType.getId(); }
 };

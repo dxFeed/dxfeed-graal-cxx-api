@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -66,13 +68,13 @@ struct EventMapper;
  * for regional exchange trades.
  * Regional records do not explicitly store a field for @ref #getExchangeCode() "exchangeCode" property.
  */
-class Trade final : public TradeBase {
+class DXFCPP_EXPORT Trade final : public TradeBase {
     friend struct EventMapper;
 
     static std::shared_ptr<Trade> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new trade event with default values.
     Trade() noexcept = default;

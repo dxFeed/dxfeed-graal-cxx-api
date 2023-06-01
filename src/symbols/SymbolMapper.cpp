@@ -10,11 +10,9 @@
 
 namespace dxfcpp {
 
-template <typename SymbolIt>
-void* SymbolMapper::toNativeList(SymbolIt begin, SymbolIt end) noexcept {
-
+template <typename SymbolIt> void *SymbolMapper::toNativeList(SymbolIt /*begin*/, SymbolIt /*end*/) noexcept {
 
     return nullptr;
 }
 
-}
+} // namespace dxfcpp

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -16,7 +18,7 @@ namespace dxfcpp {
 /**
  * Short sale restriction on an instrument.
  */
-struct ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
+struct DXFCPP_EXPORT ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
     using Enum::Enum;
 
     /**

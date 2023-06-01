@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -16,7 +18,7 @@ namespace dxfcpp {
 /**
  * Direction of the price movement. For example tick direction for last trade price.
  */
-struct Direction : Enum<Direction, std::uint32_t> {
+struct DXFCPP_EXPORT Direction : Enum<Direction, std::uint32_t> {
     using Enum::Enum;
 
     /**

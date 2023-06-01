@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 
@@ -71,7 +73,7 @@ namespace dxfcpp {
  * sequence, then generation of an additional snapshot end event with the subscription
  * @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" and zero sequence is still required.
  */
-struct TimeSeriesEvent : public IndexedEvent {
+struct DXFCPP_EXPORT TimeSeriesEvent : public IndexedEvent {
     /// The alias to a type of shared pointer to the TimeSeriesEvent object
     using Ptr = std::shared_ptr<TimeSeriesEvent>;
 

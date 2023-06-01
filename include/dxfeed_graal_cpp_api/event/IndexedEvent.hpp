@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 
@@ -34,7 +36,7 @@ namespace dxfcpp {
  *
  * See also the <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
  */
-struct IndexedEvent {
+struct DXFCPP_EXPORT IndexedEvent {
     /// The alias to a type of shared pointer to the IndexedEvent object
     using Ptr = std::shared_ptr<IndexedEvent>;
 

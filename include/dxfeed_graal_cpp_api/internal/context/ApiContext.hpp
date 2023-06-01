@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../Conf.hpp"
+
 #include <memory>
 
 #include "../managers/DXEndpointManager.hpp"
@@ -10,7 +12,7 @@
 
 namespace dxfcpp {
 
-class ApiContext {
+class DXFCPP_EXPORT ApiContext {
     mutable std::shared_ptr<DXEndpointManager> dxEndpointManager_;
     mutable std::shared_ptr<DXFeedSubscriptionManager> dxFeedSubscriptionManager_;
     std::atomic<bool> initialized{false};

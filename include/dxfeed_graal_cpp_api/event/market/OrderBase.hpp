@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -19,7 +21,7 @@ namespace dxfcpp {
 struct EventMapper;
 
 // TODO: implement
-class OrderBase : public MarketEvent, public IndexedEvent {
+class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     friend struct EventMapper;
 
     /**

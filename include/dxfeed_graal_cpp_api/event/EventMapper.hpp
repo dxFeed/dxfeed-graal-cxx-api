@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <memory>
 #include <vector>
 
@@ -10,7 +12,7 @@
 
 namespace dxfcpp {
 
-struct EventMapper {
+struct DXFCPP_EXPORT EventMapper {
     static std::vector<std::shared_ptr<EventType>> fromGraalNativeList(void *graalNativeList);
 };
 

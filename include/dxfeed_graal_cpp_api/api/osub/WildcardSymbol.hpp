@@ -3,13 +3,15 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <utility>
 
 namespace dxfcpp {
 
-struct WildcardSymbol final {
+struct DXFCPP_EXPORT WildcardSymbol final {
     static const WildcardSymbol ALL;
 
   private:
@@ -38,15 +40,15 @@ struct WildcardSymbol final {
 
 inline namespace literals {
 
-inline WildcardSymbol operator""_ws(const char *string, size_t length) noexcept { return WildcardSymbol::ALL; }
+inline WildcardSymbol operator""_ws(const char *, size_t) noexcept { return WildcardSymbol::ALL; }
 
-inline WildcardSymbol operator""_wcs(const char *string, size_t length) noexcept { return WildcardSymbol::ALL; }
+inline WildcardSymbol operator""_wcs(const char *, size_t) noexcept { return WildcardSymbol::ALL; }
 
 } // namespace literals
 
 } // namespace dxfcpp
 
-template <> struct std::hash<dxfcpp::WildcardSymbol> {
+template <> struct DXFCPP_EXPORT std::hash<dxfcpp::WildcardSymbol> {
     std::size_t operator()(const dxfcpp::WildcardSymbol &wildcardSymbol) const noexcept {
         return std::hash<std::string>{}(wildcardSymbol.getSymbol());
     }

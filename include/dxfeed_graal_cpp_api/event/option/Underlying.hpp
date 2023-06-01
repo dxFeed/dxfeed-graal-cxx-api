@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -45,7 +47,7 @@ struct EventMapper;
  *
  * This event is implemented on top of QDS record `Underlying`.
  */
-class Underlying final: public MarketEvent, public TimeSeriesEvent, public LastingEvent {
+class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
     /**
@@ -85,7 +87,7 @@ class Underlying final: public MarketEvent, public TimeSeriesEvent, public Lasti
     static std::shared_ptr<Underlying> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new underlying event with default values.
     Underlying() noexcept = default;

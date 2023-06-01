@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -15,9 +17,10 @@
 namespace dxfcpp {
 
 /**
- * A helper wrapper class needed to pass heterogeneous symbols using a container and convert them to internal Graal representation.
+ * A helper wrapper class needed to pass heterogeneous symbols using a container and convert them to internal Graal
+ * representation.
  */
-struct SymbolWrapper final {
+struct DXFCPP_EXPORT SymbolWrapper final {
     using DataType = typename std::variant<WildcardSymbol, StringSymbol>;
 
   private:
@@ -132,14 +135,18 @@ concept ConvertibleToSymbolWrapper =
  * @tparam Collection The collection type
  */
 template <typename Collection>
-concept ConvertibleToSymbolWrapperCollection = requires(Collection c) {
-    std::begin(c);
-    std::end(c);
-} && requires(Collection c) {
-    { *std::begin(c) } -> std::convertible_to<SymbolWrapper>;
-} || requires(Collection c) {
-    { *std::begin(c) } -> ConvertibleToSymbolWrapper;
-};
+concept ConvertibleToSymbolWrapperCollection =
+    requires(Collection c) {
+        std::begin(c);
+        std::end(c);
+    } &&
+    (
+        requires(Collection c) {
+            { *std::begin(c) } -> std::convertible_to<SymbolWrapper>;
+        } ||
+        requires(Collection c) {
+            { *std::begin(c) } -> ConvertibleToSymbolWrapper;
+        });
 
 inline namespace literals {
 

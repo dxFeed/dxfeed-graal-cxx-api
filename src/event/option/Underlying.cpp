@@ -18,7 +18,7 @@
 
 namespace dxfcpp {
 
-const EventTypeEnum &Underlying::Type = EventTypeEnum::UNDERLYING;
+const EventTypeEnum &Underlying::TYPE = EventTypeEnum::UNDERLYING;
 
 std::shared_ptr<Underlying> Underlying::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {

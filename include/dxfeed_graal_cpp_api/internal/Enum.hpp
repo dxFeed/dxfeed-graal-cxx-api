@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -12,7 +14,7 @@
 
 namespace dxfcpp {
 
-template <typename Child, typename Code> struct Enum {
+template <typename Child, typename Code> struct DXFCPP_EXPORT Enum {
     using ParentType = Enum<Child, Code>;
     using ChildType = Child;
     using CodeType = Code;

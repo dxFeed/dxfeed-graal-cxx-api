@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -16,7 +18,7 @@ namespace dxfcpp {
 /**
  * Type of a time and sale event.
  */
-struct TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
+struct DXFCPP_EXPORT TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
     using Enum::Enum;
 
     /**

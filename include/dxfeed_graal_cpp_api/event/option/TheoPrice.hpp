@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -49,7 +51,7 @@ struct EventMapper;
  *
  * This event is implemented on top of QDS records `TheoPrice`.
  */
-class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
+class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
     /**
@@ -89,7 +91,7 @@ class TheoPrice final : public MarketEvent, public TimeSeriesEvent, public Lasti
     static std::shared_ptr<TheoPrice> fromGraalNative(void *graalNative) noexcept;
 
   public:
-    static const EventTypeEnum &Type;
+    static const EventTypeEnum &TYPE;
 
     /// Creates new theoprice event with default values.
     TheoPrice() noexcept = default;

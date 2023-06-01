@@ -3,10 +3,13 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
+#include "../internal/JavaObjectHandler.hpp"
 
 #include "../event/DXEvent.hpp"
 #include "DXFeedSubscription.hpp"
@@ -23,7 +26,7 @@ class EventTypeEnum;
 /**
  * Main entry class for dxFeed API (<b>read it first</b>).
  */
-struct DXFeed : SharedEntity {
+struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct DXEndpoint;
 
   private:

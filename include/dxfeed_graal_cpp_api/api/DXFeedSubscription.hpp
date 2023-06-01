@@ -3,10 +3,12 @@
 
 #pragma once
 
-#include <memory>
+#include "../internal/Conf.hpp"
 
 #include "../event/DXEvent.hpp"
 #include "../internal/Common.hpp"
+#include "../internal/Handler.hpp"
+#include "../internal/JavaObjectHandler.hpp"
 #include "../symbols/StringSymbol.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "dxfeed_graal_cpp_api/api/osub/WildcardSymbol.hpp"
@@ -15,6 +17,7 @@
 #    include <execution>
 #endif
 
+#include <memory>
 #include <unordered_set>
 
 namespace dxfcpp {
@@ -24,7 +27,7 @@ struct DXFeed;
 /**
  * Subscription for a set of symbols and event types.
  */
-class DXFeedSubscription : public SharedEntity {
+class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     friend struct DXFeed;
 
     mutable std::recursive_mutex mtx_{};
@@ -177,7 +180,8 @@ class DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::Type,
+     * dxfcpp::TimeAndSale::Type});
      * ```
      *
      * @tparam EventTypesCollection The type of the collection of event types
@@ -301,18 +305,19 @@ class DXFeedSubscription : public SharedEntity {
      * ```
      *
      * @tparam EventT The event type (EventType's child with field Type, convertible to EventTypeEnum
-     * @param listener The listener. Listener can be callable with signature: `void(const std::vector<std::shared_ptr<EventT>&)`
+     * @param listener The listener. Listener can be callable with signature: `void(const
+     * std::vector<std::shared_ptr<EventT>&)`
      * @return The listener id
      */
     template <typename EventT>
     std::size_t addEventListener(std::function<void(const std::vector<std::shared_ptr<EventT>> &)> &&listener) noexcept
 #if __cpp_concepts
         requires std::is_base_of_v<EventType, EventT> && requires {
-            { EventT::Type } -> std::convertible_to<EventTypeEnum>;
+            { EventT::TYPE } -> std::convertible_to<EventTypeEnum>;
         }
 #endif
     {
-        if (!containsEventType(EventT::Type)) {
+        if (!containsEventType(EventT::TYPE)) {
             return onEvent_ += [](auto) {};
         }
 

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../../internal/Conf.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -15,7 +17,7 @@
 namespace dxfcpp {
 
 // TODO: implement
-class OrderSource final : public IndexedEventSource {
+class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     static constexpr std::uint32_t PUB_ORDER = 0x0001U;
     static constexpr std::uint32_t PUB_ANALYTIC_ORDER = 0x0002U;
@@ -34,11 +36,9 @@ class OrderSource final : public IndexedEventSource {
     OrderSource(std::uint32_t id, std::string name, std::uint32_t pubFlags) noexcept
         : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {}
 
-    OrderSource(const std::string& name, std::uint32_t pubFlags): OrderSource(composeId(name), name, pubFlags) {}
+    OrderSource(const std::string &name, std::uint32_t pubFlags) : OrderSource(composeId(name), name, pubFlags) {}
 
-    static std::uint32_t composeId(const std::string& name) noexcept {
-        return {};
-    }
+    static std::uint32_t composeId(const std::string & /*name*/) noexcept { return {}; }
 };
 
 } // namespace dxfcpp

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <utility>

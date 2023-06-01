@@ -16,7 +16,7 @@
 
 namespace dxfcpp {
 
-const EventTypeEnum &Quote::Type = EventTypeEnum::QUOTE;
+const EventTypeEnum &Quote::TYPE = EventTypeEnum::QUOTE;
 
 std::int16_t Quote::getBidExchangeCode() const { return data_.bidExchangeCode; }
 

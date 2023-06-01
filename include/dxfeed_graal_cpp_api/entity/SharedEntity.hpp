@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "../internal/Conf.hpp"
+
 #include <memory>
 
 #include "Entity.hpp"
@@ -10,7 +12,7 @@
 namespace dxfcpp {
 
 /// Base abstract "shared entity" class. Has some helpers for dynamic polymorphism
-struct SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> {
+struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> {
     /// The simple type synonym for the SharedEntity type
     using Ptr = std::shared_ptr<SharedEntity>;
 

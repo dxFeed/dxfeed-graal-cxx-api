@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Conf.hpp"
+
 #include <memory>
 #include <string>
 #include <thread>
@@ -13,7 +15,7 @@
 namespace dxfcpp {
 
 //TODO: serialization
-struct Error {
+struct DXFCPP_EXPORT Error {
     static constexpr std::size_t UNKNOWN_ID{static_cast<std::size_t>(-1)};
 
     std::size_t id{UNKNOWN_ID};
@@ -37,7 +39,7 @@ struct Error {
 };
 
 //TODO: implement retrieving, grouping methods
-class ErrorHandlingManager {
+class DXFCPP_EXPORT ErrorHandlingManager {
     static constexpr std::size_t DEFAULT_ERROR_COLLECTION_CAPACITY{1024ULL};
     static inline const Error NO_ERROR{Error::UNKNOWN_ID, 0, "", "NO ERROR"};
 

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -54,7 +56,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
             return;
         }
 
-        if (index < list_.size) {
+        if (index < static_cast<std::size_t>(list_.size)) {
             if constexpr (Debugger::traceLists) {
                 Debugger::trace(getDebugName() + "::set(" + std::to_string(index) + ", " + std::to_string(value) +
                                 "): index < list_.size");

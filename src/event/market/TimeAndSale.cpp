@@ -20,7 +20,7 @@ namespace dxfcpp {
 
 void TimeAndSale::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
 
-const EventTypeEnum &TimeAndSale::Type = EventTypeEnum::TIME_AND_SALE;
+const EventTypeEnum &TimeAndSale::TYPE = EventTypeEnum::TIME_AND_SALE;
 
 std::shared_ptr<TimeAndSale> TimeAndSale::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {
