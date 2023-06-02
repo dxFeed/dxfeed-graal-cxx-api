@@ -96,7 +96,7 @@ ready to answer any questions and help with the transition.
 
 |  #  | Sample                                                                                                                            | Old Version                                                                                                                           | New Version                                              |
 |:---:|:----------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------|
-|  1  | How to subscribe to `Quote`, `Trade`, `TradeETH`, `Order`, `SpreadOrder`, `AnalyticOrder`, `TimeAndSale` events                   | [CommandLineSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CommandLineSample)                                     | [EventSample](samples/cpp/EventsSample)                  |
+|  1  | How to subscribe to `Quote`, `Trade`, `TradeETH`, `Order`, `SpreadOrder`, `AnalyticOrder`, `TimeAndSale` events                   | [CommandLineSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CommandLineSample)                                     | <!--[-->EventSample<!--](samples/cpp/EventsSample)-->    |
 |  2  | How to subscribe to `Candle` event                                                                                                | [CandleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CandleSample)                                               | *Q2’2023*, please see [TBD](#future-development) section |
 |  3  | How to subscribe to `Order`, `SpreadOrder`, `Candle`, `TimeAndSale`, `Greeks`, `Series` snapshots                                 | [SnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample)                             | *Q2’2023*, please see [TBD](#future-development) section |
 |  4  | How to subscribe to depth of market                                                                                               | [PriceLevelBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample)                               | *Q2’2023*, please see [TBD](#future-development) section |
@@ -207,6 +207,7 @@ Quote{AAPL, eventTime=0, time=20221219-223312.000, timeNanoPart=0, sequence=0, b
 
 ## Tools
 
+<!-- 
 [Tools](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/)
 is a collection of tools that allow you to subscribe to various market events for the specified symbols. The tools can
 be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases) (including self-contained versions)
@@ -217,22 +218,26 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 * [PerfTest](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/PerfTest/PerfTestTool.cpp)
   connects to the specified address(es) and calculates performance counters (events per second, memory usage, CPU usage,
   etc.)
+-->
 
 ## Samples
-
+<!--
 * [ConvertTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ConvertTapeFile/src/main.cpp)
   demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering
 * [DxFeedConnect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedConnect/src/main.cpp)
   demonstrates how to subscribe various market events for the specified symbols
 * [DxFeedFileParser](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedFileParser/src/main.cpp)
   is a simple demonstration of how events are read form a tape file
+-->
 * [DxFeedSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedSample/src/main.cpp)
   is a simple demonstration of how to create multiple event listeners and subscribe to `Quote` and `Trade` events
 * [PrintQuoteEvents](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PrintQuoteEvents/src/main.cpp)
   is a simple demonstration of how to subscribe to the `Quote` event, using a `DxFeed` instance singleton
   and `dxfeed.properties` file
+<!--
 * [WriteTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp)
   is a simple demonstration of how to write events to a tape file
+-->
 
 ## Current State
 
