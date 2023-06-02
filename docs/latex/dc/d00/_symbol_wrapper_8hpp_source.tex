@@ -1,0 +1,178 @@
+\doxysubsection{Symbol\+Wrapper.\+hpp}
+\hypertarget{_symbol_wrapper_8hpp_source}{}\label{_symbol_wrapper_8hpp_source}\index{SymbolWrapper.hpp@{SymbolWrapper.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../api/osub/WildcardSymbol.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_string_symbol_8hpp}{"{}StringSymbol.hpp"{}}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ A\ helper\ wrapper\ class\ needed\ to\ pass\ heterogeneous\ symbols\ using\ a\ container\ and\ convert\ them\ to\ internal\ Graal}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ representation.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ SymbolWrapper\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{using}\ DataType\ =\ \textcolor{keyword}{typename}\ std::variant<WildcardSymbol,\ StringSymbol>;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00027\ \ \ \ \ DataType\ data\_;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ SymbolWrapper(\textcolor{keyword}{const}\ SymbolWrapper\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00031\ \ \ \ \ SymbolWrapper(SymbolWrapper\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00032\ \ \ \ \ SymbolWrapper\ \&operator=(\textcolor{keyword}{const}\ SymbolWrapper\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00033\ \ \ \ \ SymbolWrapper\ \&operator=(SymbolWrapper\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00034\ \ \ \ \ SymbolWrapper()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00035\ \ \ \ \ \string~SymbolWrapper()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ symbol.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ Must\ be\ implicit\ to\ wrap\ symbols\ passed\ to\ collection\ or\ container}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ Symbol\ The\ symbol\ type}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ symbol}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{template}\ <ConvertibleToStringSymbol\ Symbol>}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_aa0c460f7b372d483d640ee6185151bb5}{SymbolWrapper}}(Symbol\ \&\&symbol)\ \textcolor{keyword}{noexcept}\ :\ SymbolWrapper(StringSymbol(std::forward<Symbol>(symbol)))\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Could\ be\ "{}perfectly"{}\ moved,\ so\ it\ won't\ show\ up\ in\ the\ logs}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(symbol\ =\ "{}}\ +\ toStringAny(symbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ string\ symbol.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ Must\ be\ implicit\ to\ wrap\ symbols\ passed\ to\ collection\ or\ container}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ @param\ stringSymbol\ The\ wrapped\ string\ (std::string,\ std::string\_view,\ const\ char*)\ symbol}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ae375f48ae03c0ca8ecefd74b3a453550}{SymbolWrapper}}(\textcolor{keyword}{const}\ StringSymbol\ \&stringSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(stringSymbol\ =\ "{}}\ +\ toStringAny(stringSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ data\_\ =\ stringSymbol;}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ wildcard\ (*)\ symbol.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ @param\ wildcardSymbol\ The\ wrapped\ wildcard\ symbl}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a4cfd220f2179f060b049c7d827c3ba75}{SymbolWrapper}}(\textcolor{keyword}{const}\ WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(wildcardSymbol\ =\ "{}}\ +\ toStringAny(wildcardSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ data\_\ =\ wildcardSymbol;}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ *toGraal()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::visit([](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&symbol)\ \{\ \textcolor{keywordflow}{return}\ symbol.toGraal();\ \},\ data\_);}
+\DoxyCodeLine{00081\ \ \ \ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00088\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a628e57fb22575fe2b3f6cf06c7d40f0d}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}SymbolWrapper\{"{}}\ +\ std::visit([](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&symbol)\ \{\ \textcolor{keywordflow}{return}\ toStringAny(symbol);\ \},\ data\_)\ +\ \textcolor{stringliteral}{"{}\}"{}};}
+\DoxyCodeLine{00090\ \ \ \ \ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ WildcardSymbol}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8f39830e71468fb50a80b5a56750db42}{isWildcardSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ std::holds\_alternative<WildcardSymbol>(data\_);\ \}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ @return\ WildcardSymbol\ (optional)\ or\ nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold\ WildcardSymbol}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{WildcardSymbol}}>\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{asWildcardSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isWildcardSymbol()\ ?\ std::make\_optional(WildcardSymbol::ALL)\ :\ std::nullopt;}
+\DoxyCodeLine{00102\ \ \ \ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ StringSymbol}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a0f66038aa88942094d6a34838e3bafa4}{isStringSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ std::holds\_alternative<StringSymbol>(data\_);\ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ @return\ String\ representation\ of\ StringSymbol\ or\ an\ empty\ string}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00112\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a9ed87465e80386fc45dcd1ffc3c5b6a6}{asStringSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isStringSymbol()\ ?\ std::get<StringSymbol>(data\_).getData()\ :\ String::EMPTY;}
+\DoxyCodeLine{00114\ \ \ \ \ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{const}\ DataType\ \&getData()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ data\_;\ \}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ getData()\ ==\ symbolWrapper.getData();\ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{auto}\ operator<(\textcolor{keyword}{const}\ SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ getData()\ <\ symbolWrapper.getData();\ \}}
+\DoxyCodeLine{00121\ \};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ *\ A\ concept\ describing\ a\ symbol\ that\ can\ be\ wrapped.}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ *\ @tparam\ T\ Probable\ symbol\ type}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00128\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00129\ concept\ ConvertibleToSymbolWrapper\ =}
+\DoxyCodeLine{00130\ \ \ \ \ ConvertibleToStringSymbol<std::decay\_t<T>>\ ||\ std::is\_same\_v<std::decay\_t<T>,\ WildcardSymbol>;}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ *\ A\ concept\ that\ defines\ a\ collection\ of\ wrapped\ or\ wrapping\ symbols.}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ *\ @tparam\ Collection\ The\ collection\ type}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00137\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Collection>}
+\DoxyCodeLine{00138\ concept\ ConvertibleToSymbolWrapperCollection\ =}
+\DoxyCodeLine{00139\ \ \ \ \ requires(Collection\ c)\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ std::begin(c);}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ std::end(c);}
+\DoxyCodeLine{00142\ \ \ \ \ \}\ \&\&}
+\DoxyCodeLine{00143\ \ \ \ \ (}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ requires(Collection\ c)\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ *std::begin(c)\ \}\ -\/>\ std::convertible\_to<SymbolWrapper>;}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \}\ ||}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ requires(Collection\ c)\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ *std::begin(c)\ \}\ -\/>\ ConvertibleToSymbolWrapper;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \textcolor{keyword}{inline}\ \textcolor{keyword}{namespace}\ literals\ \{}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ *\ String\ literal\ that\ helps\ to\ construct\ SymbolWrapper\ from\ a\ char\ array.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ *\ @param\ string\ The\ char\ array}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ *\ @param\ length\ Tha\ char\ array's\ length}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ *\ @return\ Wrapped\ string\ view\ built\ on\ char\ array}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00160\ \textcolor{keyword}{inline}\ SymbolWrapper\ operator\textcolor{stringliteral}{"{}"{}\_sw}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *string,\ size\_t\ length)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordflow}{return}\ \{std::string\_view\{string,\ length\}\};}
+\DoxyCodeLine{00162\ \}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \}\ \textcolor{comment}{//\ namespace\ literals}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::SymbolWrapper>\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<dxfcpp::SymbolWrapper::DataType>\{\}(symbolWrapper.getData());}
+\DoxyCodeLine{00171\ \ \ \ \ \}}
+\DoxyCodeLine{00172\ \};}
+
+\end{DoxyCode}

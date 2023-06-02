@@ -1,0 +1,77 @@
+\doxysubsection{Debug.\+hpp}
+\hypertarget{_debug_8hpp_source}{}\label{_debug_8hpp_source}\index{Debug.hpp@{Debug.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_DEBUG}\ 0}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\#define\ DXFCPP\_TRACE\_LISTS\ 1}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\#define\ DXFCPP\_TRACE\_ISOLATES\ 1}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \mbox{\hyperlink{_debug_8hpp_a6025368b5d52d392182828fbcc18a424}{DXFCPP\_DEBUG}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_DEBUG}\ 0}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DXFCPP\_TRACE\_ISOLATES}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_TRACE\_ISOLATES}\ 0}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DXFCPP\_TRACE\_LISTS}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_TRACE\_LISTS}\ 0}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \mbox{\hyperlink{_debug_8hpp_a0693ece322e0716a52e94c7d74825717}{DXFCPP\_TRACE\_ISOLATES}}\ \textcolor{preprocessor}{==}\ 1\ \textcolor{preprocessor}{||}\ \mbox{\hyperlink{_debug_8hpp_aa8e085a844cd91fc154fff2a752cf70b}{DXFCPP\_TRACE\_LISTS}}\ \textcolor{preprocessor}{==}\ 1}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_TRACE}\ \textcolor{preprocessor}{DXFCPP\_DEBUG}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \mbox{\hyperlink{_debug_8hpp_a6025368b5d52d392182828fbcc18a424}{DXFCPP\_DEBUG}}\ \textcolor{preprocessor}{==}\ 0}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ std::string\ getDebugName()\ \{\ \textcolor{keywordflow}{return}\ \{\};\ \}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Debugger\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isDebug\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ traceIsolates\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ traceLists\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ debug(std::string)\ \{\}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ trace(std::string)\ \{\}}
+\DoxyCodeLine{00040\ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{struct}\ Debugger\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isDebug\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{if}\ \textcolor{preprocessor}{DXFCPP\_TRACE\_ISOLATES}\ \textcolor{preprocessor}{==}\ 1}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ traceIsolates\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{else}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ traceIsolates\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{if}\ \textcolor{preprocessor}{DXFCPP\_TRACE\_LISTS}\ \textcolor{preprocessor}{==}\ 1}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ traceLists\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{else}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ traceLists\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ nowStr();}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ nowStrWithTimeZone();}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ debugPrefixStr();}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ debug(std::string);}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{if}\ \textcolor{preprocessor}{DXFCPP\_TRACE}\ \textcolor{preprocessor}{==}\ 1}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ tracePrefixStr();}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ trace(std::string);}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{else}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ trace(std::string);}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00067\ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

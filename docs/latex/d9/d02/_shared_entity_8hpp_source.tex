@@ -1,0 +1,70 @@
+\doxysubsection{Shared\+Entity.\+hpp}
+\hypertarget{_shared_entity_8hpp_source}{}\label{_shared_entity_8hpp_source}\index{SharedEntity.hpp@{SharedEntity.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_entity_8hpp}{"{}Entity.hpp"{}}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{///\ Base\ abstract\ "{}shared\ entity"{}\ class.\ Has\ some\ helpers\ for\ dynamic\ polymorphism}}
+\DoxyCodeLine{00015\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_entity}{Entity}},\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{enable\_shared\_from\_this}}<\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}>\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{///\ The\ simple\ type\ synonym\ for\ the\ SharedEntity\ type}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}>;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ \ *\ Checks\ that\ pointer\ to\ the\ current\ type\ could\ be\ converted\ to\ type\ T*}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ *\ In\ other\ words:\ whether\ type\ T\ belongs\ to\ the\ type\ hierarchy\ in\ which\ the\ current\ type\ resides.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ T\ The\ type\ to\ check}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ *\ @return\ true\ if\ type\ belongs\ to\ the\ type\ hierarchy\ in\ which\ the\ current\ type\ resides.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{p}}\ =\ \textcolor{keyword}{dynamic\_cast}<\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{T}}\ *>(\textcolor{keyword}{this});}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{void})(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{p}});}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{bad\_cast}}\ \&)\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ pointer\ to\ the\ current\ object\ wrapped\ in\ a\ smart\ pointer\ to\ type\ T}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ T\ The\ type\ to\ convert\ to\ a\ pointer\ to}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ smart\ pointer\ to\ type\ T}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ std::shared\_ptr<T>\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sharedAs}}()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dynamic\_pointer\_cast}}<\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{T}}>(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{shared\_from\_this}}());}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ pointer\ to\ the\ current\ object\ wrapped\ in\ a\ smart\ pointer\ to\ type\ T}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ T\ The\ type\ to\ convert\ to\ a\ pointer\ to}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ smart\ pointer\ to\ type\ T}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ std::shared\_ptr<T>\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{sharedAs}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dynamic\_pointer\_cast}}<\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{T}}>(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{shared\_from\_this}}());}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{virtual}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}SharedEntity\{\}"{}};\ \}}
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

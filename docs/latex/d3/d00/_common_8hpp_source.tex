@@ -1,0 +1,604 @@
+\doxysubsection{Common.\+hpp}
+\hypertarget{_common_8hpp_source}{}\label{_common_8hpp_source}\index{Common.hpp@{Common.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{\_\_cpp\_lib\_bit\_cast}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{bit}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstring}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{chrono}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cmath}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{sstream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}utils/debug/Debug.hpp"{}}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00026\ concept\ Integral\ =\ std::is\_integral\_v<T>;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{struct}\ DXFeedEventListener\ \{\};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{struct}\ DXEndpointStateChangeListener\ \{\};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\_\_clang\_\_\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00033\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isClangFlavouredCompiler\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00035\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isClangFlavouredCompiler\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ T>\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{void}\ ignore\_unused(\textcolor{keyword}{const}\ T\ \&...)\ \{\}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{auto}\ is\_constant\_evaluated(\textcolor{keywordtype}{bool}\ default\_value\ =\ \textcolor{keyword}{false})\ \textcolor{keyword}{noexcept}\ -\/>\ \textcolor{keywordtype}{bool}\ \{}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{\_\_cpp\_lib\_is\_constant\_evaluated}}
+\DoxyCodeLine{00042\ \ \ \ \ ignore\_unused(default\_value);}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordflow}{return}\ std::is\_constant\_evaluated();}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordflow}{return}\ default\_value;}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00047\ \}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{//\ Implementation\ of\ std::bit\_cast\ for\ pre-\/C++20.}}
+\DoxyCodeLine{00050\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ To,\ \textcolor{keyword}{typename}\ From>}
+\DoxyCodeLine{00051\ \textcolor{keyword}{constexpr}\ To\ bit\_cast(\textcolor{keyword}{const}\ From\ \&from)}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00053\ \ \ \ \ requires(\textcolor{keyword}{sizeof}(To)\ ==\ \textcolor{keyword}{sizeof}(From))}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00055\ \{}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{\_\_cpp\_lib\_bit\_cast}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_constant\_evaluated())}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::bit\_cast<To>(from);}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{auto}\ to\ =\ To();}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//\ The\ cast\ suppresses\ a\ bogus\ -\/Wclass-\/memaccess\ on\ GCC.}}
+\DoxyCodeLine{00062\ \ \ \ \ std::memcpy(\textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{void}\ *>(\&to),\ \&from,\ \textcolor{keyword}{sizeof}(to));}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordflow}{return}\ to;}
+\DoxyCodeLine{00064\ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{comment}{//\ final\_action\ allows\ you\ to\ ensure\ something\ gets\ run\ at\ the\ end\ of\ a\ scope}}
+\DoxyCodeLine{00067\ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ F>\ \textcolor{keyword}{class}\ final\_action\ \{}
+\DoxyCodeLine{00068\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{explicit}\ final\_action(\textcolor{keyword}{const}\ F\ \&ff)\ \textcolor{keyword}{noexcept}\ :\ f\{ff\}\ \{\}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{explicit}\ final\_action(F\ \&\&ff)\ \textcolor{keyword}{noexcept}\ :\ f\{std::move(ff)\}\ \{\}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \string~final\_action()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (invoke)}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ f();}
+\DoxyCodeLine{00075\ \ \ \ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ final\_action(final\_action\ \&\&other)\ \textcolor{keyword}{noexcept}\ :\ f(std::move(other.f)),\ invoke(std::exchange(other.invoke,\ \textcolor{keyword}{false}))\ \{\}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ final\_action(\textcolor{keyword}{const}\ final\_action\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\textcolor{keyword}{const}\ final\_action\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(final\_action\ \&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00084\ \ \ \ \ F\ f;}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{bool}\ invoke\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00086\ \};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{comment}{//\ finally()\ -\/\ convenience\ function\ to\ generate\ a\ final\_action}}
+\DoxyCodeLine{00089\ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ F>\ [[nodiscard]]\ \textcolor{keyword}{auto}\ finally(F\ \&\&f)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordflow}{return}\ final\_action<std::decay\_t<F>>\{std::forward<F>(f)\};}
+\DoxyCodeLine{00091\ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{keyword}{inline}\ \textcolor{keyword}{auto}\ now()\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordflow}{return}\ std::chrono::duration\_cast<std::chrono::milliseconds>(std::chrono::system\_clock::now().time\_since\_epoch())}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ .count();}
+\DoxyCodeLine{00096\ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ M,\ \textcolor{keyword}{typename}\ F,\ \textcolor{keyword}{typename}...\ Args>\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ callWithLock(M\ \&mtx,\ F\ \&\&f,\ Args\ \&\&...args)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ std::once\_flag\ once\{\};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{mtx\};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::call\_once(once,\ std::forward<F>(f),\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00105\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling}}
+\DoxyCodeLine{00107\ \ \ \ \ \}}
+\DoxyCodeLine{00108\ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ M,\ \textcolor{keyword}{typename}\ F,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00111\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ tryCallWithLock(M\ \&mtx,\ F\ \&\&f,\ Args\ \&\&...args)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ std::once\_flag\ once\{\};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{mtx\};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::call\_once(once,\ std::forward<F>(f),\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00118\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::call\_once(once,\ std::forward<F>(f),\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Collection,\ \textcolor{keyword}{typename}\ ElementType>}
+\DoxyCodeLine{00124\ concept\ ElementTypeIs\ =\ std::is\_same\_v<std::decay\_t<\textcolor{keyword}{decltype}(*std::begin(Collection\{\}))>,\ ElementType>;}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{keyword}{namespace}\ math\ \{}
+\DoxyCodeLine{00127\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int64\_t\ floorDiv(std::int64\_t\ x,\ std::int64\_t\ y)\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ std::int64\_t\ r\ =\ x\ /\ y;}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{//\ if\ the\ signs\ are\ different\ and\ modulo\ not\ zero,\ round\ down}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordflow}{if}\ ((x\ <\ 0)\ !=\ (y\ <\ 0)\ \&\&\ (r\ *\ y\ !=\ x))\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ r-\/-\/;}
+\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordflow}{return}\ r;}
+\DoxyCodeLine{00136\ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int64\_t\ floorMod(std::int64\_t\ x,\ std::int64\_t\ y)\ \{\ \textcolor{keywordflow}{return}\ x\ -\/\ (floorDiv(x,\ y)\ *\ y);\ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ NaN\ =\ std::numeric\_limits<\textcolor{keywordtype}{double}>::quiet\_NaN();}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \}\ \textcolor{comment}{//\ namespace\ math}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \textcolor{keyword}{namespace}\ time\_nanos\_util\ \{}
+\DoxyCodeLine{00145\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int64\_t\ NANOS\_IN\_MILLIS\ =\ 1'000'000LL;}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ *\ Returns\ time\ measured\ in\ nanoseconds\ since\ epoch\ from\ the\ time\ in\ milliseconds\ and\ its\ nano\ part.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ *\ The\ result\ of\ this\ method\ is\ \`{}timeMillis\ *\ 1'000'000\ +\ timeNanoPart`.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ *\ @param\ timeMillis\ time\ in\ milliseconds\ since\ epoch.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ *\ @param\ timeNanoPart\ nanoseconds\ part\ that\ shall\ lie\ within\ [0..999999]\ interval.}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ *\ @return\ time\ measured\ in\ nanoseconds\ since\ epoch.}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00155\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int64\_t\ getNanosFromMillisAndNanoPart(std::int64\_t\ timeMillis,\ std::int32\_t\ timeNanoPart)\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordflow}{return}\ (timeMillis\ *\ NANOS\_IN\_MILLIS)\ +\ timeNanoPart;}
+\DoxyCodeLine{00157\ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ *\ Returns\ time\ measured\ in\ milliseconds\ since\ Java\ epoch\ from\ the\ time\ in\ nanoseconds.}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ *\ Idea\ is\ that\ nano\ part\ of\ time\ shall\ be\ within\ [0..999999]\ interval}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ *\ so\ that\ the\ following\ equation\ always\ holds}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ *\ \`{}getMillisFromNanos(timeNanos)\ *\ 1'000'000\ +\ getNanoPartFromNanos(timeNanos)\ ==\ timeNanos`.}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ *\ @param\ timeNanos\ time\ measured\ in\ nanoseconds\ since\ epoch}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ *\ @return\ time\ measured\ in\ milliseconds\ since\ epoch.}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ *\ @see\ ::getNanoPartFromNanos()}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00169\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int64\_t\ getMillisFromNanos(std::int64\_t\ timeNanos)\ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordflow}{return}\ math::floorDiv(timeNanos,\ NANOS\_IN\_MILLIS);}
+\DoxyCodeLine{00171\ \}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ *\ Returns\ nano\ part\ of\ time.}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ *\ Idea\ is\ that\ nano\ part\ of\ time\ shall\ be\ within\ [0..999999]\ interval}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ *\ so\ that\ the\ following\ equation\ always\ holds}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ *\ \`{}getMillisFromNanos(timeNanos)\ *\ 1'000'000\ +\ getNanoPartFromNanos(timeNanos)\ ==\ timeNanos`.}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ *\ @param\ timeNanos\ time\ measured\ in\ nanoseconds\ since\ epoch}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ *\ @return\ time\ measured\ in\ milliseconds\ since\ epoch.}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ *\ @see\ ::getMillisFromNanos()}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00183\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int32\_t\ getNanoPartFromNanos(std::int64\_t\ timeNanos)\ \{}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(math::floorMod(timeNanos,\ NANOS\_IN\_MILLIS));}
+\DoxyCodeLine{00185\ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \}\ \textcolor{comment}{//\ namespace\ time\_nanos\_util}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \textcolor{keyword}{namespace}\ time\_util\ \{}
+\DoxyCodeLine{00190\ \textcolor{comment}{///\ Number\ of\ milliseconds\ in\ a\ second.}}
+\DoxyCodeLine{00191\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::int64\_t\ SECOND\ =\ 1000LL;}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ *\ Returns\ correct\ number\ of\ milliseconds\ with\ proper\ handling\ negative\ values.}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ *\ Idea\ is\ that\ number\ of\ milliseconds\ shall\ be\ within\ [0..999]\ interval}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ *\ @param\ timeMillis\ The\ timestamp\ in\ milliseconds}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ *\ @return\ a\ correct\ number\ of\ milliseconds}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00200\ \textcolor{keyword}{static}\ std::int32\_t\ getMillisFromTime(std::int64\_t\ timeMillis)\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(math::floorMod(timeMillis,\ SECOND));}
+\DoxyCodeLine{00202\ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ *\ Returns\ correct\ number\ of\ seconds\ with\ proper\ handling\ negative\ values\ and\ overflows.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ *\ Idea\ is\ that\ number\ of\ milliseconds\ shall\ be\ within\ [0..999]\ interval}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ *\ @param\ timeMillis\ The\ timestamp\ in\ milliseconds}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ *\ @return\ a\ correct\ number\ of\ second}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00211\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int32\_t\ getSecondsFromTime(std::int64\_t\ timeMillis)\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordflow}{if}\ (timeMillis\ >=\ 0)\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ std::min(timeMillis\ /\ SECOND,\ \textcolor{keyword}{static\_cast}<std::int64\_t>(std::numeric\_limits<std::int32\_t>::max())));}
+\DoxyCodeLine{00215\ \ \ \ \ \}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ std::max((timeMillis\ +\ 1)\ /\ SECOND\ -\/\ 1,\ \textcolor{keyword}{static\_cast}<std::int64\_t>(std::numeric\_limits<std::int32\_t>::min())));}
+\DoxyCodeLine{00219\ \}}
+\DoxyCodeLine{00220\ \}\ \textcolor{comment}{//\ namespace\ time\_util}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \textcolor{keyword}{namespace}\ math\_util\ \{}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ *\ Returns\ quotient\ according\ to\ number\ theory\ -\/\ i.e.\ when\ remainder\ is\ zero\ or\ positive.}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ *\ @tparam\ T\ The\ dividend's\ and\ divisor's\ type}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ *\ @param\ a\ dividend}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ *\ @param\ b\ divisor}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ *\ @return\ quotient\ according\ to\ number\ theory}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00232\ \textcolor{keyword}{template}\ <Integral\ T>\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ T\ div(T\ a,\ T\ b)\ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keywordflow}{if}\ (a\ >=\ 0)\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ a\ /\ b;}
+\DoxyCodeLine{00235\ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordflow}{if}\ (b\ >=\ 0)\ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ((a\ +\ 1)\ /\ b)\ -\/\ 1;}
+\DoxyCodeLine{00239\ \ \ \ \ \}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keywordflow}{return}\ ((a\ +\ 1)\ /\ b)\ +\ 1;}
+\DoxyCodeLine{00242\ \}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \textcolor{keyword}{template}\ <Integral\ T>\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ T\ abs(T\ a)\ \{\ \textcolor{keywordflow}{return}\ a\ <\ 0\ ?\ -\/a\ :\ a;\ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \}\ \textcolor{comment}{//\ namespace\ math\_util}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \textcolor{keyword}{namespace}\ day\_util\ \{}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \textcolor{keyword}{static}\ std::int32\_t\ DAY\_OF\_YEAR[]\ =\ \{0,\ 0,\ 31,\ 59,\ 90,\ 120,\ 151,\ 181,\ 212,\ 243,\ 273,\ 304,\ 334,\ 365\};}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ *\ Returns\ yyyymmdd\ integer\ in\ Gregorian\ calendar\ for\ a\ specified\ day\ identifier.}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ *\ The\ day\ identifier\ is\ defined\ as\ the\ number\ of\ days\ since\ Unix\ epoch\ of\ January\ 1,\ 1970.}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ *\ The\ result\ is\ equal\ to\ \`{}yearSign\ *\ (abs(year)\ *\ 10000\ +\ month\ *\ 100\ +\ day)`,\ where\ year,}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ *\ month,\ and\ day\ are\ in\ Gregorian\ calendar,\ month\ is\ between\ 1\ and\ 12\ inclusive,\ and\ day\ is\ counted\ from\ 1.}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ *\ @param\ dayId\ The\ day\ id}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ *\ @return\ integer\ date}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00261\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ std::int32\_t\ getYearMonthDayByDayId(std::int32\_t\ dayId)\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ std::int32\_t\ j\ =\ dayId\ +\ 2472632;\ \textcolor{comment}{//\ this\ shifts\ the\ epoch\ back\ to\ astronomical\ year\ -\/4800}}
+\DoxyCodeLine{00263\ \ \ \ \ std::int32\_t\ g\ =\ math\_util::div(j,\ 146097);}
+\DoxyCodeLine{00264\ \ \ \ \ std::int32\_t\ dg\ =\ j\ -\/\ g\ *\ 146097;}
+\DoxyCodeLine{00265\ \ \ \ \ std::int32\_t\ c\ =\ (dg\ /\ 36524\ +\ 1)\ *\ 3\ /\ 4;}
+\DoxyCodeLine{00266\ \ \ \ \ std::int32\_t\ dc\ =\ dg\ -\/\ c\ *\ 36524;}
+\DoxyCodeLine{00267\ \ \ \ \ std::int32\_t\ b\ =\ dc\ /\ 1461;}
+\DoxyCodeLine{00268\ \ \ \ \ std::int32\_t\ db\ =\ dc\ -\/\ b\ *\ 1461;}
+\DoxyCodeLine{00269\ \ \ \ \ std::int32\_t\ a\ =\ (db\ /\ 365\ +\ 1)\ *\ 3\ /\ 4;}
+\DoxyCodeLine{00270\ \ \ \ \ std::int32\_t\ da\ =\ db\ -\/\ a\ *\ 365;}
+\DoxyCodeLine{00271\ \ \ \ \ std::int32\_t\ y\ =\ g\ *\ 400\ +\ c\ *\ 100\ +\ b\ *\ 4\ +}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ a;\ \textcolor{comment}{//\ this\ is\ the\ integer\ number\ of\ full\ years\ elapsed\ since\ March\ 1,\ 4801\ BC\ at\ 00:00\ UTC}}
+\DoxyCodeLine{00273\ \ \ \ \ std::int32\_t\ m\ =\ (da\ *\ 5\ +\ 308)\ /\ 153\ -\/}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2;\ \textcolor{comment}{//\ this\ is\ the\ integer\ number\ of\ full\ months\ elapsed\ since\ the\ last\ March\ 1\ at\ 00:00\ UTC}}
+\DoxyCodeLine{00275\ \ \ \ \ std::int32\_t\ d\ =}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ da\ -\/\ (m\ +\ 4)\ *\ 153\ /\ 5\ +\ 122;\ \textcolor{comment}{//\ this\ is\ the\ number\ of\ days\ elapsed\ since\ day\ 1\ of\ the\ month\ at\ 00:00\ UTC}}
+\DoxyCodeLine{00277\ \ \ \ \ std::int32\_t\ yyyy\ =\ y\ -\/\ 4800\ +\ (m\ +\ 2)\ /\ 12;}
+\DoxyCodeLine{00278\ \ \ \ \ std::int32\_t\ mm\ =\ (m\ +\ 2)\ \%\ 12\ +\ 1;}
+\DoxyCodeLine{00279\ \ \ \ \ std::int32\_t\ dd\ =\ d\ +\ 1;}
+\DoxyCodeLine{00280\ \ \ \ \ std::int32\_t\ yyyymmdd\ =\ math\_util::abs(yyyy)\ *\ 10000\ +\ mm\ *\ 100\ +\ dd;}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordflow}{return}\ yyyy\ >=\ 0\ ?\ yyyymmdd\ :\ -\/yyyymmdd;}
+\DoxyCodeLine{00283\ \}}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ std::int32\_t\ getDayIdByYearMonthDay(std::int32\_t\ year,\ std::int32\_t\ month,\ std::int32\_t\ day)\ \{}
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling}}
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keywordflow}{if}\ (month\ <\ 1\ ||\ month\ >\ 12)\ \{}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00289\ \ \ \ \ \}}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \ \ \ \ std::int32\_t\ dayOfYear\ =\ DAY\_OF\_YEAR[month]\ +\ day\ -\/\ 1;}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keywordflow}{if}\ (month\ >\ 2\ \&\&\ year\ \%\ 4\ ==\ 0\ \&\&\ (year\ \%\ 100\ !=\ 0\ ||\ year\ \%\ 400\ ==\ 0))\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ dayOfYear++;}
+\DoxyCodeLine{00295\ \ \ \ \ \}}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keywordflow}{return}\ year\ *\ 365\ +\ math\_util::div(year\ -\/\ 1,\ 4)\ -\/\ math\_util::div(year\ -\/\ 1,\ 100)\ +\ math\_util::div(year\ -\/\ 1,\ 400)\ +}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ dayOfYear\ -\/\ 719527;}
+\DoxyCodeLine{00299\ \}}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \}\ \textcolor{comment}{//\ namespace\ day\_util}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \textcolor{keyword}{namespace}\ detail\ \{}
+\DoxyCodeLine{00304\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...>\ \textcolor{keyword}{struct}\ MaxImpl;}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct}\ MaxImpl<T>\ \{}
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keyword}{using}\ Type\ =\ T;}
+\DoxyCodeLine{00308\ \};}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U>\ \textcolor{keyword}{struct}\ MaxImpl<T,\ U>\ \{}
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keyword}{using}\ Type\ =\ std::conditional\_t<\textcolor{keyword}{sizeof}(T)\ >=\ \textcolor{keyword}{sizeof}(U),\ T,\ U>;}
+\DoxyCodeLine{00312\ \};}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U,\ \textcolor{keyword}{typename}\ V,\ \textcolor{keyword}{typename}...\ Ws>\ \textcolor{keyword}{struct}\ MaxImpl<T,\ U,\ V,\ Ws...>\ \{}
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keyword}{using}\ Type\ =\ \textcolor{keyword}{typename}\ MaxImpl<T,\ \textcolor{keyword}{typename}\ MaxImpl<U,\ \textcolor{keyword}{typename}\ MaxImpl<V,\ Ws...>::Type>::Type>::Type;}
+\DoxyCodeLine{00316\ \};}
+\DoxyCodeLine{00317\ \}\ \textcolor{comment}{//\ namespace\ detail}}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00320\ \textcolor{comment}{\ *\ Returns\ max\ type\ by\ size\ (first\ is\ better)}}
+\DoxyCodeLine{00321\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00322\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Ts>\ \textcolor{keyword}{using}\ Max\ =\ \textcolor{keyword}{typename}\ detail::MaxImpl<Ts...>::Type;}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ *\ Performs\ a\ right\ arithmetic\ bit\ shift\ operation.}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00328\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::sal()\ "{}left\ arithmetic\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00329\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ if\ the\ \`{}value`\ is}}
+\DoxyCodeLine{00330\ \textcolor{comment}{\ *\ negative\ (signed\ integer\ type),\ \`{}-\/1`\ will\ be\ returned,\ and\ if\ positive,\ then\ \`{}0`\ will\ be\ returned.}}
+\DoxyCodeLine{00331\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00332\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted.}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00338\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ sar(V\ value,\ S\ shift);}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ *\ Performs\ a\ left\ arithmetic\ bit\ shift\ operation.}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::sar()\ "{}right\ arithmetic\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00345\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ \`{}0`\ will\ be}}
+\DoxyCodeLine{00346\ \textcolor{comment}{\ *\ returned.}}
+\DoxyCodeLine{00347\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00348\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00349\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00350\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted}}
+\DoxyCodeLine{00351\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00354\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ leftArithmeticShift(V\ value,\ S\ shift)\ \{}
+\DoxyCodeLine{00355\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_signed\_v<S>)\ \{}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ <\ 0)\ \{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sar(value,\ -\/shift);}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00359\ \ \ \ \ \}}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ ==\ 0\ ||\ value\ ==\ 0)\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00363\ \ \ \ \ \}}
+\DoxyCodeLine{00364\ }
+\DoxyCodeLine{00365\ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ >=\ \textcolor{keyword}{sizeof}(V)\ *\ 8)\ \{}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00367\ \ \ \ \ \}}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{keywordflow}{return}\ value\ <<\ \textcolor{keyword}{static\_cast}<std::make\_unsigned\_t<S>>(shift);}
+\DoxyCodeLine{00370\ \}}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00373\ \textcolor{comment}{\ *\ Performs\ a\ left\ arithmetic\ bit\ shift\ operation.}}
+\DoxyCodeLine{00374\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00375\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00376\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::sar()\ "{}right\ arithmetic\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00377\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ \`{}0`\ will\ be}}
+\DoxyCodeLine{00378\ \textcolor{comment}{\ *\ returned.}}
+\DoxyCodeLine{00379\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00380\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00381\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00382\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted.}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00384\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00386\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ sal(V\ value,\ S\ shift)\ \{\ \textcolor{keywordflow}{return}\ leftArithmeticShift(value,\ shift);\ \}}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00389\ \textcolor{comment}{\ *\ Performs\ a\ right\ arithmetic\ bit\ shift\ operation.}}
+\DoxyCodeLine{00390\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00391\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00392\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::sal()\ "{}left\ arithmetic\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00393\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ if\ the\ \`{}value`\ is}}
+\DoxyCodeLine{00394\ \textcolor{comment}{\ *\ negative\ (signed\ integer\ type),\ \`{}-\/1`\ will\ be\ returned,\ and\ if\ positive,\ then\ \`{}0`\ will\ be\ returned.}}
+\DoxyCodeLine{00395\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00398\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00400\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00401\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00402\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ rightArithmeticShift(V\ value,\ S\ shift)\ \{}
+\DoxyCodeLine{00403\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_signed\_v<S>)\ \{}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ <\ 0)\ \{}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sal(value,\ -\/shift);}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00407\ \ \ \ \ \}}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ ==\ 0\ ||\ value\ ==\ 0)\ \{}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00411\ \ \ \ \ \}}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00413\ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ >=\ \textcolor{keyword}{sizeof}(V)\ *\ 8)\ \{}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ <\ 0)\ \{}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00419\ \ \ \ \ \}}
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \ \ \ \ \textcolor{keywordflow}{return}\ value\ >>\ \textcolor{keyword}{static\_cast}<std::make\_unsigned\_t<S>>(shift);}
+\DoxyCodeLine{00422\ \}}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ *\ Performs\ a\ right\ arithmetic\ bit\ shift\ operation.}}
+\DoxyCodeLine{00426\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00428\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::sal()\ "{}left\ arithmetic\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00429\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ if\ the\ \`{}value`\ is}}
+\DoxyCodeLine{00430\ \textcolor{comment}{\ *\ negative\ (signed\ integer\ type),\ \`{}-\/1`\ will\ be\ returned,\ and\ if\ positive,\ then\ \`{}0`\ will\ be\ returned.}}
+\DoxyCodeLine{00431\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00432\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00433\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00434\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted.}}
+\DoxyCodeLine{00435\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00436\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00437\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00438\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ sar(V\ value,\ S\ shift)\ \{}
+\DoxyCodeLine{00439\ \ \ \ \ \textcolor{keywordflow}{return}\ rightArithmeticShift(value,\ shift);}
+\DoxyCodeLine{00440\ \}}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00443\ \textcolor{comment}{\ *\ Performs\ a\ right\ logical\ bit\ shift\ operation.}}
+\DoxyCodeLine{00444\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00445\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00446\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::shl()\ "{}left\ logical\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00447\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ \`{}0`\ will\ be}}
+\DoxyCodeLine{00448\ \textcolor{comment}{\ *\ returned.}}
+\DoxyCodeLine{00449\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00450\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00451\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00452\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted.}}
+\DoxyCodeLine{00453\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00454\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00455\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00456\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ shr(V\ value,\ S\ shift);}
+\DoxyCodeLine{00457\ }
+\DoxyCodeLine{00458\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00459\ \textcolor{comment}{\ *\ Performs\ a\ left\ logical\ bit\ shift\ operation.}}
+\DoxyCodeLine{00460\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00461\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00462\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::shr()\ "{}right\ logical\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00463\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ \`{}0`\ will\ be}}
+\DoxyCodeLine{00464\ \textcolor{comment}{\ *\ returned.}}
+\DoxyCodeLine{00465\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00466\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00467\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00468\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted}}
+\DoxyCodeLine{00469\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00470\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00471\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00472\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ leftLogicalShift(V\ value,\ S\ shift)\ \{}
+\DoxyCodeLine{00473\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_signed\_v<S>)\ \{}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ <\ 0)\ \{}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shr(value,\ -\/shift);}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00477\ \ \ \ \ \}}
+\DoxyCodeLine{00478\ }
+\DoxyCodeLine{00479\ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ ==\ 0\ ||\ value\ ==\ 0)\ \{}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00481\ \ \ \ \ \}}
+\DoxyCodeLine{00482\ }
+\DoxyCodeLine{00483\ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{static\_cast}<std::size\_t>(shift)\ >=\ \textcolor{keyword}{sizeof}(V)\ *\ 8)\ \{}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00485\ \ \ \ \ \}}
+\DoxyCodeLine{00486\ }
+\DoxyCodeLine{00487\ \ \ \ \ \textcolor{keywordflow}{return}\ value\ <<\ \textcolor{keyword}{static\_cast}<std::make\_unsigned\_t<S>>(shift);}
+\DoxyCodeLine{00488\ \}}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00491\ \textcolor{comment}{\ *\ Performs\ a\ left\ logical\ bit\ shift\ operation.}}
+\DoxyCodeLine{00492\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00493\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00494\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::shr()\ "{}right\ logical\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00495\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ \`{}0`\ will\ be}}
+\DoxyCodeLine{00496\ \textcolor{comment}{\ *\ returned.}}
+\DoxyCodeLine{00497\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00498\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00499\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00500\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted.}}
+\DoxyCodeLine{00501\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00502\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00503\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00504\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ shl(V\ value,\ S\ shift)\ \{\ \textcolor{keywordflow}{return}\ leftLogicalShift(value,\ shift);\ \}}
+\DoxyCodeLine{00505\ }
+\DoxyCodeLine{00506\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00507\ \textcolor{comment}{\ *\ Performs\ a\ right\ logical\ bit\ shift\ operation.}}
+\DoxyCodeLine{00508\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00509\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00510\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::shl()\ "{}left\ logical\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00511\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ \`{}0`\ will\ be}}
+\DoxyCodeLine{00512\ \textcolor{comment}{\ *\ returned.}}
+\DoxyCodeLine{00513\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00514\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00515\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00516\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted}}
+\DoxyCodeLine{00517\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00518\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00519\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00520\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ rightLogicalShift(V\ value,\ S\ shift)\ \{}
+\DoxyCodeLine{00521\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_signed\_v<S>)\ \{}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ <\ 0)\ \{}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shl(value,\ -\/shift);}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00525\ \ \ \ \ \}}
+\DoxyCodeLine{00526\ }
+\DoxyCodeLine{00527\ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ ==\ 0\ ||\ value\ ==\ 0)\ \{}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00529\ \ \ \ \ \}}
+\DoxyCodeLine{00530\ }
+\DoxyCodeLine{00531\ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{static\_cast}<std::size\_t>(shift)\ >=\ \textcolor{keyword}{sizeof}(V)\ *\ 8)\ \{}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00533\ \ \ \ \ \}}
+\DoxyCodeLine{00534\ }
+\DoxyCodeLine{00535\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<V>(\textcolor{keyword}{static\_cast}<std::make\_unsigned\_t<V>>(value)\ >>\ \textcolor{keyword}{static\_cast}<std::make\_unsigned\_t<S>>(shift));}
+\DoxyCodeLine{00536\ \}}
+\DoxyCodeLine{00537\ }
+\DoxyCodeLine{00538\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00539\ \textcolor{comment}{\ *\ Performs\ a\ right\ logical\ bit\ shift\ operation.}}
+\DoxyCodeLine{00540\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00541\ \textcolor{comment}{\ *\ The\ result\ of\ the\ shift\ will\ be\ of\ the\ same\ type\ as\ the\ \`{}value`\ being\ shifted.}}
+\DoxyCodeLine{00542\ \textcolor{comment}{\ *\ If\ the\ shift\ is\ a\ negative\ number\ of\ bits,\ then\ a\ @ref\ ::shl()\ "{}left\ logical\ shift"{}\ will\ be\ performed.}}
+\DoxyCodeLine{00543\ \textcolor{comment}{\ *\ If\ the\ shift\ size\ is\ greater\ than\ or\ equal\ to\ the\ number\ of\ bits\ in\ the\ shifted\ \`{}value`,\ then\ \`{}0`\ will\ be}}
+\DoxyCodeLine{00544\ \textcolor{comment}{\ *\ returned.}}
+\DoxyCodeLine{00545\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00546\ \textcolor{comment}{\ *\ @tparam\ V\ The\ type\ of\ \`{}value`}}
+\DoxyCodeLine{00547\ \textcolor{comment}{\ *\ @tparam\ S\ The\ type\ of\ \`{}shift`}}
+\DoxyCodeLine{00548\ \textcolor{comment}{\ *\ @param\ value\ The\ value\ to\ be\ shifted.}}
+\DoxyCodeLine{00549\ \textcolor{comment}{\ *\ @param\ shift\ The\ shift\ in\ bits}}
+\DoxyCodeLine{00550\ \textcolor{comment}{\ *\ @return\ The\ shifted\ \`{}value`}}
+\DoxyCodeLine{00551\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00552\ \textcolor{keyword}{template}\ <Integral\ V,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ V\ shr(V\ value,\ S\ shift)\ \{\ \textcolor{keywordflow}{return}\ rightLogicalShift(value,\ shift);\ \}}
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ \textcolor{keyword}{template}\ <Integral\ A,\ Integral\ B>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ A\ andOp(A\ a,\ B\ b)\ \{}
+\DoxyCodeLine{00555\ \ \ \ \ \textcolor{keyword}{using}\ Common\ =\ std::make\_unsigned\_t<Max<A,\ B>>;}
+\DoxyCodeLine{00556\ }
+\DoxyCodeLine{00557\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<A>(\textcolor{keyword}{static\_cast}<Common>(a)\ \&\ \textcolor{keyword}{static\_cast}<Common>(b));}
+\DoxyCodeLine{00558\ \}}
+\DoxyCodeLine{00559\ }
+\DoxyCodeLine{00560\ \textcolor{keyword}{template}\ <Integral\ A,\ Integral\ B>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ A\ orOp(A\ a,\ B\ b)\ \{}
+\DoxyCodeLine{00561\ \ \ \ \ \textcolor{keyword}{using}\ Common\ =\ std::make\_unsigned\_t<Max<A,\ B>>;}
+\DoxyCodeLine{00562\ }
+\DoxyCodeLine{00563\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<A>(\textcolor{keyword}{static\_cast}<Common>(a)\ |\ \textcolor{keyword}{static\_cast}<Common>(b));}
+\DoxyCodeLine{00564\ \}}
+\DoxyCodeLine{00565\ }
+\DoxyCodeLine{00566\ \textcolor{keyword}{template}\ <Integral\ A,\ Integral\ B>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ A\ xorOp(A\ a,\ B\ b)\ \{}
+\DoxyCodeLine{00567\ \ \ \ \ \textcolor{keyword}{using}\ Common\ =\ std::make\_unsigned\_t<Max<A,\ B>>;}
+\DoxyCodeLine{00568\ }
+\DoxyCodeLine{00569\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<A>(\textcolor{keyword}{static\_cast}<Common>(a)\ \string^\ \textcolor{keyword}{static\_cast}<Common>(b));}
+\DoxyCodeLine{00570\ \}}
+\DoxyCodeLine{00571\ }
+\DoxyCodeLine{00572\ \textcolor{keyword}{template}\ <Integral\ F,\ Integral\ M,\ Integral\ S>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ F\ getBits(F\ flags,\ M\ mask,\ S\ shift)\ \{}
+\DoxyCodeLine{00573\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<F>(andOp(shr(flags,\ shift),\ mask));}
+\DoxyCodeLine{00574\ \}}
+\DoxyCodeLine{00575\ }
+\DoxyCodeLine{00576\ \textcolor{keyword}{template}\ <Integral\ T>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ setBits(T\ flags,\ T\ mask,\ T\ shift,\ T\ bits)\ \{}
+\DoxyCodeLine{00577\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_signed\_v<T>)\ \{}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using}\ U\ =\ std::make\_unsigned\_t<T>;}
+\DoxyCodeLine{00579\ }
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<T>((\textcolor{keyword}{static\_cast}<U>(flags)\ \&\ \string~(\textcolor{keyword}{static\_cast}<U>(mask)\ <<\ \textcolor{keyword}{static\_cast}<U>(shift)))\ |}
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((\textcolor{keyword}{static\_cast}<U>(bits)\ \&\ \textcolor{keyword}{static\_cast}<U>(mask))\ <<\ \textcolor{keyword}{static\_cast}<U>(shift)));}
+\DoxyCodeLine{00582\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (flags\ \&\ \string~(mask\ <<\ shift))\ |\ ((bits\ \&\ mask)\ <<\ shift);}
+\DoxyCodeLine{00584\ \ \ \ \ \}}
+\DoxyCodeLine{00585\ \}}
+\DoxyCodeLine{00586\ }
+\DoxyCodeLine{00587\ \textcolor{keyword}{template}\ <Integral\ F,\ Integral\ M,\ Integral\ S,\ Integral\ B>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ F\ setBits(F\ flags,\ M\ mask,\ S\ shift,\ B\ bits)\ \{}
+\DoxyCodeLine{00588\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_signed\_v<F>\ ||\ std::is\_signed\_v<M>\ ||\ std::is\_signed\_v<S>\ ||\ std::is\_signed\_v<B>)\ \{}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using}\ U\ =\ std::make\_unsigned\_t<Max<F,\ M,\ S,\ B>>;}
+\DoxyCodeLine{00590\ }
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<F>((\textcolor{keyword}{static\_cast}<U>(flags)\ \&\ \string~(\textcolor{keyword}{static\_cast}<U>(mask)\ <<\ \textcolor{keyword}{static\_cast}<U>(shift)))\ |}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((\textcolor{keyword}{static\_cast}<U>(bits)\ \&\ \textcolor{keyword}{static\_cast}<U>(mask))\ <<\ \textcolor{keyword}{static\_cast}<U>(shift)));}
+\DoxyCodeLine{00593\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (flags\ \&\ \string~(mask\ <<\ shift))\ |\ ((bits\ \&\ mask)\ <<\ shift);}
+\DoxyCodeLine{00595\ \ \ \ \ \}}
+\DoxyCodeLine{00596\ \}}
+\DoxyCodeLine{00597\ }
+\DoxyCodeLine{00598\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

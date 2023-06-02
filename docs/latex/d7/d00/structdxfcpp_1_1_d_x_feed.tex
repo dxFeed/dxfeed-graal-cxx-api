@@ -1,0 +1,76 @@
+\doxysubsection{dxfcpp\+::DXFeed Struct Reference}
+\hypertarget{structdxfcpp_1_1_d_x_feed}{}\label{structdxfcpp_1_1_d_x_feed}\index{dxfcpp::DXFeed@{dxfcpp::DXFeed}}
+
+
+{\ttfamily \#include $<$DXFeed.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::DXFeed\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d7/d00/structdxfcpp_1_1_d_x_feed}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed_ae2a23b92cf7a04d005c5766f2c3756b1}{to\+String}} () const noexcept override
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () const noexcept
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\item 
+virtual std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{to\+String}} () const noexcept
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} ()=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed_ace4eaf9e79186f44e989d97622e0dcf0}{get\+Instance}} () noexcept
+\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The simple type synonym for the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Main entry class for dx\+Feed API ({\bfseries{read it first}}). 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_d_x_feed_ace4eaf9e79186f44e989d97622e0dcf0}\label{structdxfcpp_1_1_d_x_feed_ace4eaf9e79186f44e989d97622e0dcf0} 
+\index{dxfcpp::DXFeed@{dxfcpp::DXFeed}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!dxfcpp::DXFeed@{dxfcpp::DXFeed}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}} $>$ dxfcpp\+::\+DXFeed\+::get\+Instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+Returns a default application-\/wide singleton instance of feed. Most applications use only a single data-\/source and should rely on this method to get one. This is a shortcut to \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}\+::\doxylink{structdxfcpp_1_1_d_x_endpoint_a6b190bf5c614f618a80ae359c6334cb6}{get\+Instance()}-\/\texorpdfstring{$>$}{>}\doxylink{structdxfcpp_1_1_d_x_endpoint_aadf6d4f1eeb73b91c4f7f1deca4bb61f}{get\+Feed()}.
+
+\begin{DoxyReturn}{Returns}
+The \doxylink{structdxfcpp_1_1_d_x_feed}{DXFeed} instance 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_d_x_feed_ae2a23b92cf7a04d005c5766f2c3756b1}\label{structdxfcpp_1_1_d_x_feed_ae2a23b92cf7a04d005c5766f2c3756b1} 
+\index{dxfcpp::DXFeed@{dxfcpp::DXFeed}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::DXFeed@{dxfcpp::DXFeed}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+DXFeed\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+Returns a string representation of the current object.
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{dxfcpp\+::\+Shared\+Entity}}.
+

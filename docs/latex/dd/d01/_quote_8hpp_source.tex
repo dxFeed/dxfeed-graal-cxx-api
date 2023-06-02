@@ -1,0 +1,299 @@
+\doxysubsection{Quote.\+hpp}
+\hypertarget{_quote_8hpp_source}{}\label{_quote_8hpp_source}\index{Quote.hpp@{Quote.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Quote\ event\ is\ a\ snapshot\ of\ the\ best\ bid\ and\ ask\ prices,\ and\ other\ fields\ that\ change\ with\ each\ quote.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ best\ quote\ on\ the\ market}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ at\ any\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Bid\ corresponds\ to\ the\ best\ (maximal\ price)\ order\ to\ buy,}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ ask\ corresponds\ to\ the\ best\ (minimal\ price)\ order\ to\ sell.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00030\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Quote\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ Maximum\ allowed\ sequence\ value.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::setSequence()}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ MAX\_SEQUENCE\ =\ (1U\ <<\ 22U)\ -\/\ 1U;}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_SHIFT\ =\ 22ULL;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ std::int32\_t\ timeMillisSequence\{\};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ std::int32\_t\ timeNanoPart\{\};}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ std::int64\_t\ bidTime\{\};}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ std::int16\_t\ bidExchangeCode\{\};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ bidPrice\ =\ math::NaN;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ bidSize\ =\ math::NaN;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ std::int64\_t\ askTime\{\};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::int16\_t\ askExchangeCode\{\};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ askPrice\ =\ math::NaN;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ askSize\ =\ math::NaN;}
+\DoxyCodeLine{00052\ \ \ \ \ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ Data\ data\_\{\};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ recomputeTimeMillisPart()\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ data\_.timeMillisSequence\ =}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ orOp(sal(time\_util::getMillisFromTime(std::max(data\_.askTime,\ data\_.bidTime)),\ MILLISECONDS\_SHIFT),}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_quote_a7a6f4fa78a24b56b35eab46d6470fb64}{getSequence}}\mbox{\hyperlink{classdxfcpp_1_1_quote_a7a6f4fa78a24b56b35eab46d6470fb64}{(}}\mbox{\hyperlink{classdxfcpp_1_1_quote_a7a6f4fa78a24b56b35eab46d6470fb64}{)}});}
+\DoxyCodeLine{00060\ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Quote>\ fromGraalNative(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&TYPE;}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ quote\ event\ with\ default\ values.}}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_quote_a19a1eec7c4dc03300771ce15da23a17d}{Quote}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ quote\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_aafab284549a0d091da0e12a91d87caa2}{Quote}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_quote_aafab284549a0d091da0e12a91d87caa2}{MarketEvent}}(\mbox{\hyperlink{classdxfcpp_1_1_quote_aafab284549a0d091da0e12a91d87caa2}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_quote_aafab284549a0d091da0e12a91d87caa2}{move}}(\mbox{\hyperlink{classdxfcpp_1_1_quote_aafab284549a0d091da0e12a91d87caa2}{eventSymbol}}))\ \{\}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ sequence\ number\ of\ this\ quote\ to\ distinguish\ quotes\ that\ have\ the\ same\ @ref\ ::getTime()\ "{}time"{}.\ This}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ sequence\ number\ does\ not\ have\ to\ be\ unique\ and\ does\ not\ need\ to\ be\ sequential.\ Sequence\ can\ range\ from\ 0\ to}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ ::MAX\_SEQUENCE.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ @return\ sequence\ of\ this\ quote.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00084\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a7a6f4fa78a24b56b35eab46d6470fb64}{getSequence}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ andOp(data\_.timeMillisSequence,\ MAX\_SEQUENCE);\ \}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ ::getSequence()\ "{}sequence\ number"{}\ of\ this\ quote.}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ The\ sequence.}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getSequence()}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ac2c41c2ccce9235dd8f030fb389717a9}{setSequence}}(std::int32\_t\ sequence)\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ sequence\ <=\ MAX\_SEQUENCE);}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ data\_.timeMillisSequence\ =\ orOp(andOp(data\_.timeMillisSequence,\ \string~MAX\_SEQUENCE),\ sequence);}
+\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ of\ the\ last\ bid\ or\ ask\ change.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ of\ the\ last\ bid\ or\ ask\ change.}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00106\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_quote_af69cae4b11fddae7f86d9151d2b797a6}{getTime}}()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ math::floorDiv(std::max(data\_.bidTime,\ data\_.askTime),\ 1000LL)\ *\ 1000LL\ +}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shr(data\_.timeMillisSequence,\ MILLISECONDS\_SHIFT);}
+\DoxyCodeLine{00109\ \ \ \ \ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ of\ the\ last\ bid\ or\ ask\ change\ in\ nanoseconds.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ of\ the\ last\ bid\ or\ ask\ change\ in\ nanoseconds.}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00117\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ab52ab7f8c436c1e10bdb5651ba7d54e5}{getTimeNanos}}()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ time\_nanos\_util::getNanosFromMillisAndNanoPart(\mbox{\hyperlink{classdxfcpp_1_1_quote_af69cae4b11fddae7f86d9151d2b797a6}{getTime}}\mbox{\hyperlink{classdxfcpp_1_1_quote_af69cae4b11fddae7f86d9151d2b797a6}{(}}\mbox{\hyperlink{classdxfcpp_1_1_quote_af69cae4b11fddae7f86d9151d2b797a6}{)}},\ data\_.timeNanoPart);}
+\DoxyCodeLine{00119\ \ \ \ \ \}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ microseconds\ and\ nanoseconds\ part\ of\ time\ of\ the\ last\ bid\ or\ ask\ change.}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ @return\ microseconds\ and\ nanoseconds\ part\ of\ time\ of\ the\ last\ bid\ or\ ask\ change.}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00126\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a94f35912bc29812a46e45b5a1ecdbc45}{getTimeNanoPart}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.timeNanoPart;\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ part\ of\ time\ of\ the\ last\ bid\ or\ ask\ change.}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ <b>This\ method\ changes\ ::getTimeNanos()\ result.</b>}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ The\ microseconds\ and\ nanoseconds\ part\ of\ time\ of\ the\ last\ bid\ or\ ask\ change.}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_abeb6b3a772bd69e9277ed15420e65668}{setTimeNanoPart}}(int32\_t\ timeNanoPart)\ \{\ data\_.timeNanoPart\ =\ timeNanoPart;\ \}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ of\ the\ last\ bid\ change.}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ <b>This\ time\ is\ always\ transmitted\ with\ seconds\ precision,\ so\ the\ result\ of\ this\ method\ is\ usually\ a\ multiple\ of}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ 1000.</b>}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ of\ the\ last\ bid\ change.}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00145\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ae90a39fb5d7f3a45a243b57418cd9b51}{getBidTime}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.bidTime;\ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ bid\ change.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ You\ can\ set\ the\ actual\ millisecond-\/precision\ time\ here\ to\ publish\ event\ and\ the\ millisecond\ part}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ will\ make\ the\ ::getTime()\ of\ this\ quote\ even\ precise\ up\ to\ a\ millisecond.}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidTime\ time\ of\ the\ last\ bid\ change.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ac6ebcd06e30750cc387dc81e526f8684}{setBidTime}}(std::int64\_t\ bidTime)\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ data\_.bidTime\ =\ bidTime;}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ recomputeTimeMillisPart();}
+\DoxyCodeLine{00160\ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ bid\ exchange\ code.}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @return\ bid\ exchange\ code.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00167\ \ \ \ \ std::int16\_t\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a29155a0195e4b28851ccbb199c512c20}{getBidExchangeCode}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ exchange\ code.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidExchangeCode\ bid\ exchange\ code.}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ae8a8f611f13235fc2ca768eef9197cc3}{setBidExchangeCode}}(\textcolor{keywordtype}{char}\ bidExchangeCode);}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ exchange\ code.}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidExchangeCode\ bid\ exchange\ code.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a629ed148e89859b061a340c66ab373d2}{setBidExchangeCode}}(std::int16\_t\ bidExchangeCode);}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ bid\ price.}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ @return\ bid\ price.}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ac6e6cce7d3633a9061997959c1fbd14f}{getBidPrice}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.bidPrice;\ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ price.}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidPrice\ bid\ price.}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a3e38b8fa0c5591fb0d506ef1bd1565d2}{setBidPrice}}(\textcolor{keywordtype}{double}\ bidPrice)\ \{\ data\_.bidPrice\ =\ bidPrice;\ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ bid\ size.}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ @return\ bid\ size}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a4c66e56778a19fdf1eb244a502217dec}{getBidSize}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.bidSize;\ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ size.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidSize\ bid\ size.}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a85f0db20718f98609f1bc053fdef5472}{setBidSize}}(\textcolor{keywordtype}{double}\ bidSize)\ \{\ data\_.bidSize\ =\ bidSize;\ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ of\ the\ last\ ask\ change.}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *\ <b>This\ time\ is\ always\ transmitted\ with\ seconds\ precision,\ so\ the\ result\ of\ this\ method\ is\ usually\ a\ multiple\ of}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ 1000.</b>}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ of\ the\ last\ ask\ change.}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00220\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ac43f9d7683ba89aa08fbc0605d792c1b}{getAskTime}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.askTime;\ \}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ ask\ change.}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ You\ can\ set\ the\ actual\ millisecond-\/precision\ time\ here\ to\ publish\ event\ and\ the\ millisecond\ part}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ will\ make\ the\ ::getTime()\ of\ this\ quote\ even\ precise\ up\ to\ a\ millisecond.}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askTime\ time\ of\ the\ last\ ask\ change.}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a0b1b84bbfc270e24d2de63fb14c45a3e}{setAskTime}}(std::int64\_t\ askTime)\ \{}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ data\_.askTime\ =\ askTime;}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ recomputeTimeMillisPart();}
+\DoxyCodeLine{00235\ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ask\ exchange\ code.}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ *\ @return\ ask\ exchange\ code.}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00242\ \ \ \ \ std::int16\_t\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ac1dc30fbb5bfce4d1a830bd494ceb9d4}{getAskExchangeCode}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ exchange\ code.}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askExchangeCode\ ask\ exchange\ code.}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ad0e33c2c51e19905dec7d218dc94acfa}{setAskExchangeCode}}(\textcolor{keywordtype}{char}\ askExchangeCode);}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ exchange\ code.}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askExchangeCode\ ask\ exchange\ code.}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a034b8cf275be6353fb9c20d8577724e0}{setAskExchangeCode}}(std::int16\_t\ askExchangeCode);}
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ask\ price.}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ *\ @return\ ask\ price.}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ac6a1f492385d6c4b48e9dd71a5ee8247}{getAskPrice}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.askPrice;\ \}}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ price.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askPrice\ ask\ price.}}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_afe4eb444569eac2e8ffbd43496ee0f4f}{setAskPrice}}(\textcolor{keywordtype}{double}\ askPrice)\ \{\ data\_.askPrice\ =\ askPrice;\ \}}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ask\ size.}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ *\ @return\ ask\ size}}
+\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a3e62311b4e1c9fc666f4249f15c51b08}{getAskSize}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ data\_.askSize;\ \}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ size.}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askSize\ ask\ size.}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_aff46f467cc6a8f167aa6ad6f81ff2bc6}{setAskSize}}(\textcolor{keywordtype}{double}\ askSize)\ \{\ data\_.askSize\ =\ askSize;\ \}}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00290\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a43c3ae1440afdc970e557002b96854a0}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a43c3ae1440afdc970e557002b96854a0}{override}};}
+\DoxyCodeLine{00291\ \};}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

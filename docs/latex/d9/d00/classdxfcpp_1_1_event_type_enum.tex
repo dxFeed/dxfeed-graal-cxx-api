@@ -1,0 +1,81 @@
+\doxysubsection{dxfcpp\+::Event\+Type\+Enum Class Reference}
+\hypertarget{classdxfcpp_1_1_event_type_enum}{}\label{classdxfcpp_1_1_event_type_enum}\index{dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}}
+
+
+{\ttfamily \#include $<$Event\+Type\+Enum.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::uint32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_adba12176ca67d0b4ba4c7fd30a39e515}{get\+Id}} () const
+\item 
+const std\+::string \& \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a29e438deea4595215fa9e767e92f926c}{get\+Name}} () const
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a9a8e0beb2ba8334ceea4c691f8fd0f84}{is\+Lasting}} () const
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a0e7e834c2fa0cf74208906f4a572930b}{is\+Indexed}} () const
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_adb2e3e73523a4ac256e48a64cfa6c06d}{is\+Time\+Series}} () const
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a0da22bded800f8802acaae16edec8e5f}{is\+Only\+Indexed}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+The enumeration type that provides additional information about the dx\+Feed C++-\/\+API event type. Useful when used as a subscription parameter. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_event_type_enum_adba12176ca67d0b4ba4c7fd30a39e515}\label{classdxfcpp_1_1_event_type_enum_adba12176ca67d0b4ba4c7fd30a39e515} 
+\index{dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}!getId@{getId}}
+\index{getId@{getId}!dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{getId()}{getId()}}
+{\footnotesize\ttfamily std\+::uint32\+\_\+t dxfcpp\+::\+Event\+Type\+Enum\+::get\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+The dx\+Feed Graal Native C-\/\+API event class id 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_event_type_enum_a29e438deea4595215fa9e767e92f926c}\label{classdxfcpp_1_1_event_type_enum_a29e438deea4595215fa9e767e92f926c} 
+\index{dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}!getName@{getName}}
+\index{getName@{getName}!dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily const std\+::string \& dxfcpp\+::\+Event\+Type\+Enum\+::get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+The current enum element name 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_event_type_enum_a0e7e834c2fa0cf74208906f4a572930b}\label{classdxfcpp_1_1_event_type_enum_a0e7e834c2fa0cf74208906f4a572930b} 
+\index{dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}!isIndexed@{isIndexed}}
+\index{isIndexed@{isIndexed}!dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isIndexed()}{isIndexed()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Event\+Type\+Enum\+::is\+Indexed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Indexed event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_event_type_enum_a9a8e0beb2ba8334ceea4c691f8fd0f84}\label{classdxfcpp_1_1_event_type_enum_a9a8e0beb2ba8334ceea4c691f8fd0f84} 
+\index{dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}!isLasting@{isLasting}}
+\index{isLasting@{isLasting}!dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isLasting()}{isLasting()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Event\+Type\+Enum\+::is\+Lasting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Lasting (TICKER) event 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_event_type_enum_a0da22bded800f8802acaae16edec8e5f}\label{classdxfcpp_1_1_event_type_enum_a0da22bded800f8802acaae16edec8e5f} 
+\index{dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}!isOnlyIndexed@{isOnlyIndexed}}
+\index{isOnlyIndexed@{isOnlyIndexed}!dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isOnlyIndexed()}{isOnlyIndexed()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Event\+Type\+Enum\+::is\+Only\+Indexed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Only\+Indexed (Indexed, but not Time\+Series) event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_event_type_enum_adb2e3e73523a4ac256e48a64cfa6c06d}\label{classdxfcpp_1_1_event_type_enum_adb2e3e73523a4ac256e48a64cfa6c06d} 
+\index{dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}!isTimeSeries@{isTimeSeries}}
+\index{isTimeSeries@{isTimeSeries}!dxfcpp::EventTypeEnum@{dxfcpp::EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isTimeSeries()}{isTimeSeries()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Event\+Type\+Enum\+::is\+Time\+Series (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Time\+Series (HISTORY) event. 
+\end{DoxyReturn}

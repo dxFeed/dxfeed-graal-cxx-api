@@ -1,0 +1,902 @@
+\doxysubsection{dxfcpp\+::Option\+Sale Class Reference}
+\hypertarget{classdxfcpp_1_1_option_sale}{}\label{classdxfcpp_1_1_option_sale}\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+
+
+{\ttfamily \#include $<$Option\+Sale.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Option\+Sale\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{de/d02/classdxfcpp_1_1_option_sale}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_option_sale_a7f9e70835c82a90dca2427326bf7b924}\label{classdxfcpp_1_1_option_sale_a7f9e70835c82a90dca2427326bf7b924} 
+{\bfseries Option\+Sale} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new option sale event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_option_sale_a2ba24b6d87ad9dfd3a757da3bc3ab336}{Option\+Sale}} (std\+::string event\+Symbol) noexcept
+\item 
+const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{classdxfcpp_1_1_option_sale_af2ab852e87718d4e703ddf169eb43d0c}{get\+Source}} () const \&override
+\item 
+Event\+Flags\+Mask \mbox{\hyperlink{classdxfcpp_1_1_option_sale_acade17b388636061a96a69aeab5cb785}{get\+Event\+Flags}} () const override
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_af6c681707d368a19424a645be769f87c}{set\+Event\+Flags}} (const Event\+Flags\+Mask \&event\+Flags) override
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_option_sale_ae8097922d7f01518786795c3709c9db6}{get\+Index}} () const override
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a0955ccb34c356ed391b703ebf30b9eea}{set\+Index}} (std\+::int64\+\_\+t index) override
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a364fb73d4c745c24da63190cedfd3d62}{get\+Time\+Sequence}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a4acd51acfa31c3a586a86941ecbdc7e9}{set\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence)
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a76cb79cde4413e576ecb3bb32ac8d317}{get\+Time}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a83784da0bd2a002d117a9dbc82adefd5}{set\+Time}} (std\+::int64\+\_\+t time)
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a412a82b4d7ff03a59bdea2ca9b390872}{get\+Time\+Nanos}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a83d240f545f2b378abc0aabbb863439e}{set\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos)
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a4cda0a5e94e17fc17a00bedf1273df25}{set\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part)
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_option_sale_aef0988cb62dfccf29e947247a4ffe6a5}{get\+Time\+Nano\+Part}} () const
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_option_sale_aa2a3852eb9cefd8c4854add7b31f34c5}{get\+Sequence}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_ac7b0af05f518fd97d0746f6110e7a24f}{set\+Sequence}} (int sequence)
+\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_option_sale_adc4a78cf17d81ef40c669df78d94b617}{get\+Exchange\+Code}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_ab88469f8ebafe9e6ff90ce90c306f0b9}{set\+Exchange\+Code}} (char exchange\+Code)
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a5d747355d2861b6241ed029b5125a6d3}{set\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code)
+\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_option_sale_ad98229dff0179862324fce96a9a6bb0a}{get\+Price}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_aaa2d61e7cc62ff21c6d710cec6e05a09}{set\+Price}} (double price)
+\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_option_sale_acc999ae58a71b91530c88b1069004dd1}{get\+Size}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a94f571b7449029d6d51191dde08e9bf5}{set\+Size}} (double size)
+\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_option_sale_aa0f3c89bbf18cee0954573ca6b80386e}{get\+Bid\+Price}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a06e432c3fd5e2696e967070b759d79de}{set\+Bid\+Price}} (double bid\+Price)
+\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a60edd1141396263bc227853b388fcd63}{get\+Ask\+Price}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a7a23af979e2c4df400a229980bcdbb0b}{set\+Ask\+Price}} (double ask\+Price)
+\item 
+const std\+::string \& \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a862b452b163a71cd24400039ed23e9b5}{get\+Exchange\+Sale\+Conditions}} () const \&
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a3c917ec07734d974a1bb75650c690779}{set\+Exchange\+Sale\+Conditions}} (std\+::string exchange\+Sale\+Conditions)
+\item 
+char \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a6de8298ff35e35e23c0fcd8692adb9bd}{get\+Trade\+Through\+Exempt}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_acbeb172a9a0f06f4b8b7d762e06a5bdd}{set\+Trade\+Through\+Exempt}} (char trade\+Through\+Exempt)
+\item 
+const \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}} \& \mbox{\hyperlink{classdxfcpp_1_1_option_sale_acbf7083b692180ff3439553a53b2a46b}{get\+Aggressor\+Side}} () const \&
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a7525690b8bc4688d378b8c7fa2b1fd4e}{set\+Aggressor\+Side}} (const \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}} \&side)
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_option_sale_aed068e896c22c3440476365c8639e429}{is\+Spread\+Leg}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a367a6fc23bd724b92e4251a701e7e43f}{set\+Spread\+Leg}} (bool spread\+Leg)
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a6d6a0032643c729fb148be5eec95ec99}{is\+Extended\+Trading\+Hours}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_ab7e8a2268cc8e03c652a9266ffc2fe42}{set\+Extended\+Trading\+Hours}} (bool extended\+Trading\+Hours)
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a30c4f60e40574532407e8149b953e85f}{is\+Valid\+Tick}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_ad0b8a70f98a98f2bcf082058da28ccb3}{set\+Valid\+Tick}} (bool valid\+Tick)
+\item 
+const \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{Time\+And\+Sale\+Type}} \& \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a1e7895745121313cbe9e83d8ffcc0341}{get\+Type}} () const \&
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a9e522a0233139f1f8534b25ef11b4a05}{set\+Type}} (const \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{Time\+And\+Sale\+Type}} \&type)
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a35f06093c59f6e06788209edd6f55215}{is\+New}} () const
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_option_sale_aaddaa4a45e4ab4457c02920c2ba42a08}{is\+Correction}} () const
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_option_sale_aab02b8f20bd89ce5e853e7b9f01795d4}{is\+Cancel}} () const
+\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a489cb90e143cf2f40a89ce61a5ee3198}{get\+Underlying\+Price}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a98f2a1671f42e2b2f3ad72fdaa80fec9}{set\+Underlying\+Price}} (double underlying\+Price)
+\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_option_sale_abb4e70640bd59158b010e063f6c75a45}{get\+Volatility}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a6871d3b95cc1769a29fc9bf4c9a1f89e}{set\+Volatility}} (double volatility)
+\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_option_sale_ac3d68d2f24e1933d9d03b170122e7956}{get\+Delta}} () const
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a0f3bce3bdd51a05ac6f9a7835eb030d6}{set\+Delta}} (double delta)
+\item 
+const std\+::string \& \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a8a2466c4e770abca96d356e89f2f7d00}{get\+Option\+Symbol}} () const \&
+\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_option_sale_aac49dca72980521a7cdfcd10a35be0f9}{set\+Option\+Symbol}} (std\+::string option\+Symbol)
+\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a0e1c169b11732f0d149b8cdd5a2684ba}{to\+String}} () const noexcept override
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_market_event_a6715bd98e78bd7ec7c0af2d1fb32635b}{get\+Event\+Symbol}} () const override
+\item 
+void \mbox{\hyperlink{structdxfcpp_1_1_market_event_aa192e63ef22ac5df3a2f5bbdc5fdc75e}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol) override
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_market_event_ad55afdaf751c1dc146f383c4a05471e1}{get\+Event\+Time}} () const override
+\item 
+void \mbox{\hyperlink{structdxfcpp_1_1_market_event_aae1c19db5428bc91c9461fb7d46e8274}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) override
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+virtual const std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_ae00c099cebda639adbecad51c2ff182b}{get\+Event\+Symbol}} () const=0
+\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a2dc47763bdaf6bf5a33d68b4fd8b34ba}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol)=0
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_event_type_a1c940fa37121d98bd99490c03553b99d}{get\+Event\+Time}} () const
+\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_event_type_a322dde6701934be714d008a0bb20e8fa}{set\+Event\+Time}} (std\+::int64\+\_\+t)
+\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_event_type_a54c84141d4eff181553b9064db6500e9}{to\+String}} () const noexcept override
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () const noexcept
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\item 
+virtual std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{to\+String}} () const noexcept
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} ()=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+virtual const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a7faa078d92c4dfa028ed282e57a44bbe}{get\+Source}} () const \&=0
+\item 
+virtual Event\+Flags\+Mask \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ab7b4f00787ca6ff4dfccb092780543d5}{get\+Event\+Flags}} () const =0
+\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a049e048fd9cbccd2e8895b94d9e6708d}{set\+Event\+Flags}} (const Event\+Flags\+Mask \&event\+Flags)=0
+\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aae9e9062b587619ae8b5e200a49c66c2}{get\+Index}} () const =0
+\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aaaa00c65f53ffe3d969514e2cb70226f}{set\+Index}} (std\+::int64\+\_\+t index)=0
+\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{Market\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_market_event}{Market\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{dxfcpp\+::\+Event\+Type\+With\+Symbol$<$ std\+::string $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ std\+::string $>$ $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type}{dxfcpp\+::\+Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type}{Event\+Type}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The simple type synonym for the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}{TX\+\_\+\+PENDING}} = Event\+Flag\+::\+TX\+\_\+\+PENDING
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{REMOVE\+\_\+\+EVENT}} = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{SNAPSHOT\+\_\+\+BEGIN}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{SNAPSHOT\+\_\+\+END}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}{SNAPSHOT\+\_\+\+SNIP}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829}{SNAPSHOT\+\_\+\+MODE}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE
+\end{DoxyCompactItemize}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{Market\+Event}} (std\+::string event\+Symbol) noexcept
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Option Sale event represents a trade or another market event with the price (for example, market open/close price, etc.) for each option symbol listed under the specified \doxylink{classdxfcpp_1_1_underlying}{Underlying}. Option Sales are intended to provide information about option trades {\bfseries{in a continuous time slice}} with the additional metrics, like Option Volatility, Option Delta, and \doxylink{classdxfcpp_1_1_underlying}{Underlying} Price.
+
+Option Sale events have unique \doxylink{classdxfcpp_1_1_option_sale_ae8097922d7f01518786795c3709c9db6}{index} which can be used for later correction/cancellation processing.
+
+Option sale data source provides a consistent view of the set of known option sales. The corresponding information is carried in \doxylink{classdxfcpp_1_1_option_sale_acade17b388636061a96a69aeab5cb785}{event\+Flags} property. The logic behind this property is detailed in \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} class documentation. Multiple event sources for the same symbol are not supported for option sale events, thus \doxylink{classdxfcpp_1_1_option_sale_af2ab852e87718d4e703ddf169eb43d0c}{source} property is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT}.
+
+This event is implemented on top of QDS records {\ttfamily \doxylink{classdxfcpp_1_1_option_sale}{Option\+Sale}}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdxfcpp_1_1_option_sale_a2ba24b6d87ad9dfd3a757da3bc3ab336}\label{classdxfcpp_1_1_option_sale_a2ba24b6d87ad9dfd3a757da3bc3ab336} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!OptionSale@{OptionSale}}
+\index{OptionSale@{OptionSale}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{OptionSale()}{OptionSale()}}
+{\footnotesize\ttfamily dxfcpp\+::\+Option\+Sale\+::\+Option\+Sale (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+Creates new option sale event with the specified event symbol.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_option_sale_acbf7083b692180ff3439553a53b2a46b}\label{classdxfcpp_1_1_option_sale_acbf7083b692180ff3439553a53b2a46b} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getAggressorSide@{getAggressorSide}}
+\index{getAggressorSide@{getAggressorSide}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getAggressorSide()}{getAggressorSide()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}} \& dxfcpp\+::\+Option\+Sale\+::get\+Aggressor\+Side (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns aggressor side of this option sale event.
+
+\begin{DoxyReturn}{Returns}
+aggressor side of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a60edd1141396263bc227853b388fcd63}\label{classdxfcpp_1_1_option_sale_a60edd1141396263bc227853b388fcd63} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getAskPrice@{getAskPrice}}
+\index{getAskPrice@{getAskPrice}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getAskPrice()}{getAskPrice()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Option\+Sale\+::get\+Ask\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the current ask price on the market when this option sale event had occurred.
+
+\begin{DoxyReturn}{Returns}
+the current ask price on the market when this option sale event had occurred. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_aa0f3c89bbf18cee0954573ca6b80386e}\label{classdxfcpp_1_1_option_sale_aa0f3c89bbf18cee0954573ca6b80386e} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getBidPrice@{getBidPrice}}
+\index{getBidPrice@{getBidPrice}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getBidPrice()}{getBidPrice()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Option\+Sale\+::get\+Bid\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the current bid price on the market when this option sale event had occurred.
+
+\begin{DoxyReturn}{Returns}
+the current bid price on the market when this option sale event had occurred. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_ac3d68d2f24e1933d9d03b170122e7956}\label{classdxfcpp_1_1_option_sale_ac3d68d2f24e1933d9d03b170122e7956} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getDelta@{getDelta}}
+\index{getDelta@{getDelta}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getDelta()}{getDelta()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Option\+Sale\+::get\+Delta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return option delta at the time of this option sale event. Delta is the first derivative of an option price by an underlying price.
+
+\begin{DoxyReturn}{Returns}
+option delta at the time of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_acade17b388636061a96a69aeab5cb785}\label{classdxfcpp_1_1_option_sale_acade17b388636061a96a69aeab5cb785} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily Event\+Flags\+Mask dxfcpp\+::\+Option\+Sale\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Returns transactional event flags. See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ \"{}\+Event Flags\"{} section}}
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ab7b4f00787ca6ff4dfccb092780543d5}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_option_sale_adc4a78cf17d81ef40c669df78d94b617}\label{classdxfcpp_1_1_option_sale_adc4a78cf17d81ef40c669df78d94b617} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getExchangeCode@{getExchangeCode}}
+\index{getExchangeCode@{getExchangeCode}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getExchangeCode()}{getExchangeCode()}}
+{\footnotesize\ttfamily std\+::int16\+\_\+t dxfcpp\+::\+Option\+Sale\+::get\+Exchange\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns exchange code of this option sale event.
+
+\begin{DoxyReturn}{Returns}
+exchange code of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a862b452b163a71cd24400039ed23e9b5}\label{classdxfcpp_1_1_option_sale_a862b452b163a71cd24400039ed23e9b5} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getExchangeSaleConditions@{getExchangeSaleConditions}}
+\index{getExchangeSaleConditions@{getExchangeSaleConditions}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getExchangeSaleConditions()}{getExchangeSaleConditions()}}
+{\footnotesize\ttfamily const std\+::string \& dxfcpp\+::\+Option\+Sale\+::get\+Exchange\+Sale\+Conditions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns sale conditions provided for this event by data feed. This field format is specific for every particular data feed.
+
+\begin{DoxyReturn}{Returns}
+sale conditions. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_ae8097922d7f01518786795c3709c9db6}\label{classdxfcpp_1_1_option_sale_ae8097922d7f01518786795c3709c9db6} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Option\+Sale\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Returns unique per-\/symbol index of this event. The index is composed of \doxylink{classdxfcpp_1_1_option_sale_a76cb79cde4413e576ecb3bb32ac8d317}{time} and \doxylink{classdxfcpp_1_1_option_sale_aa2a3852eb9cefd8c4854add7b31f34c5}{sequence}. Changing either time or sequence changes event index.
+
+\begin{DoxyReturn}{Returns}
+unique index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aae9e9062b587619ae8b5e200a49c66c2}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_option_sale_a8a2466c4e770abca96d356e89f2f7d00}\label{classdxfcpp_1_1_option_sale_a8a2466c4e770abca96d356e89f2f7d00} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getOptionSymbol@{getOptionSymbol}}
+\index{getOptionSymbol@{getOptionSymbol}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getOptionSymbol()}{getOptionSymbol()}}
+{\footnotesize\ttfamily const std\+::string \& dxfcpp\+::\+Option\+Sale\+::get\+Option\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns option symbol of this event.
+
+\begin{DoxyReturn}{Returns}
+option symbol of this event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_ad98229dff0179862324fce96a9a6bb0a}\label{classdxfcpp_1_1_option_sale_ad98229dff0179862324fce96a9a6bb0a} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Option\+Sale\+::get\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns price of this option sale event.
+
+\begin{DoxyReturn}{Returns}
+price of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_aa2a3852eb9cefd8c4854add7b31f34c5}\label{classdxfcpp_1_1_option_sale_aa2a3852eb9cefd8c4854add7b31f34c5} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Option\+Sale\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the sequence number of this event to distinguish events that have the same \doxylink{classdxfcpp_1_1_option_sale_a76cb79cde4413e576ecb3bb32ac8d317}{time}. This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to MAX\+\_\+\+SEQUENCE.
+
+\begin{DoxyReturn}{Returns}
+The sequence number of this event 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_acc999ae58a71b91530c88b1069004dd1}\label{classdxfcpp_1_1_option_sale_acc999ae58a71b91530c88b1069004dd1} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getSize@{getSize}}
+\index{getSize@{getSize}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getSize()}{getSize()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Option\+Sale\+::get\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns size of this option sale event.
+
+\begin{DoxyReturn}{Returns}
+size of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_af2ab852e87718d4e703ddf169eb43d0c}\label{classdxfcpp_1_1_option_sale_af2ab852e87718d4e703ddf169eb43d0c} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getSource@{getSource}}
+\index{getSource@{getSource}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& dxfcpp\+::\+Option\+Sale\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Returns the source of this event.
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a7faa078d92c4dfa028ed282e57a44bbe}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_option_sale_a76cb79cde4413e576ecb3bb32ac8d317}\label{classdxfcpp_1_1_option_sale_a76cb79cde4413e576ecb3bb32ac8d317} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getTime@{getTime}}
+\index{getTime@{getTime}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Option\+Sale\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns time of this event. Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+time of this event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_aef0988cb62dfccf29e947247a4ffe6a5}\label{classdxfcpp_1_1_option_sale_aef0988cb62dfccf29e947247a4ffe6a5} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getTimeNanoPart@{getTimeNanoPart}}
+\index{getTimeNanoPart@{getTimeNanoPart}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getTimeNanoPart()}{getTimeNanoPart()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Option\+Sale\+::get\+Time\+Nano\+Part (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns microseconds and nanoseconds time part of the original event.
+
+\begin{DoxyReturn}{Returns}
+microseconds and nanoseconds time part of the original event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a412a82b4d7ff03a59bdea2ca9b390872}\label{classdxfcpp_1_1_option_sale_a412a82b4d7ff03a59bdea2ca9b390872} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getTimeNanos@{getTimeNanos}}
+\index{getTimeNanos@{getTimeNanos}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getTimeNanos()}{getTimeNanos()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Option\+Sale\+::get\+Time\+Nanos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns time of the original event in nanoseconds. Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+time of the original event in nanoseconds. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a364fb73d4c745c24da63190cedfd3d62}\label{classdxfcpp_1_1_option_sale_a364fb73d4c745c24da63190cedfd3d62} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getTimeSequence@{getTimeSequence}}
+\index{getTimeSequence@{getTimeSequence}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getTimeSequence()}{getTimeSequence()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Option\+Sale\+::get\+Time\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns time and sequence of this event packaged into single long value.
+
+\begin{DoxyReturn}{Returns}
+time and sequence of this event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a6de8298ff35e35e23c0fcd8692adb9bd}\label{classdxfcpp_1_1_option_sale_a6de8298ff35e35e23c0fcd8692adb9bd} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getTradeThroughExempt@{getTradeThroughExempt}}
+\index{getTradeThroughExempt@{getTradeThroughExempt}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getTradeThroughExempt()}{getTradeThroughExempt()}}
+{\footnotesize\ttfamily char dxfcpp\+::\+Option\+Sale\+::get\+Trade\+Through\+Exempt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns Trade\+Through\+Exempt flag of this option sale event.
+
+\begin{DoxyReturn}{Returns}
+Trade\+Through\+Exempt flag of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a1e7895745121313cbe9e83d8ffcc0341}\label{classdxfcpp_1_1_option_sale_a1e7895745121313cbe9e83d8ffcc0341} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getType@{getType}}
+\index{getType@{getType}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{Time\+And\+Sale\+Type}} \& dxfcpp\+::\+Option\+Sale\+::get\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns type of this option sale event.
+
+\begin{DoxyReturn}{Returns}
+type of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a489cb90e143cf2f40a89ce61a5ee3198}\label{classdxfcpp_1_1_option_sale_a489cb90e143cf2f40a89ce61a5ee3198} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getUnderlyingPrice@{getUnderlyingPrice}}
+\index{getUnderlyingPrice@{getUnderlyingPrice}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getUnderlyingPrice()}{getUnderlyingPrice()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Option\+Sale\+::get\+Underlying\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns underlying price at the time of this option sale event.
+
+\begin{DoxyReturn}{Returns}
+underlying price at the time of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_abb4e70640bd59158b010e063f6c75a45}\label{classdxfcpp_1_1_option_sale_abb4e70640bd59158b010e063f6c75a45} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!getVolatility@{getVolatility}}
+\index{getVolatility@{getVolatility}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{getVolatility()}{getVolatility()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Option\+Sale\+::get\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns Black-\/\+Scholes implied volatility of the option at the time of this option sale event.
+
+\begin{DoxyReturn}{Returns}
+Black-\/\+Scholes implied volatility of the option at the time of this option sale event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_aab02b8f20bd89ce5e853e7b9f01795d4}\label{classdxfcpp_1_1_option_sale_aab02b8f20bd89ce5e853e7b9f01795d4} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!isCancel@{isCancel}}
+\index{isCancel@{isCancel}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{isCancel()}{isCancel()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Option\+Sale\+::is\+Cancel (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether this is a cancellation of a previous event. It is {\ttfamily false} for newly created option sale event. \begin{DoxyReturn}{Returns}
+{\ttfamily true} if this is a cancellation of a previous event 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_aaddaa4a45e4ab4457c02920c2ba42a08}\label{classdxfcpp_1_1_option_sale_aaddaa4a45e4ab4457c02920c2ba42a08} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!isCorrection@{isCorrection}}
+\index{isCorrection@{isCorrection}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{isCorrection()}{isCorrection()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Option\+Sale\+::is\+Correction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether this is a correction of a previous event. It is {\ttfamily false} for newly created option sale event.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this is a correction of a previous event 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a6d6a0032643c729fb148be5eec95ec99}\label{classdxfcpp_1_1_option_sale_a6d6a0032643c729fb148be5eec95ec99} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!isExtendedTradingHours@{isExtendedTradingHours}}
+\index{isExtendedTradingHours@{isExtendedTradingHours}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{isExtendedTradingHours()}{isExtendedTradingHours()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Option\+Sale\+::is\+Extended\+Trading\+Hours (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether this event represents an extended trading hours sale.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event represents an extended trading hours sale. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a35f06093c59f6e06788209edd6f55215}\label{classdxfcpp_1_1_option_sale_a35f06093c59f6e06788209edd6f55215} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!isNew@{isNew}}
+\index{isNew@{isNew}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{isNew()}{isNew()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Option\+Sale\+::is\+New (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether this is a new event (not cancellation or correction). It is {\ttfamily true} for newly created option sale event.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this is a new event (not cancellation or correction). 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_aed068e896c22c3440476365c8639e429}\label{classdxfcpp_1_1_option_sale_aed068e896c22c3440476365c8639e429} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!isSpreadLeg@{isSpreadLeg}}
+\index{isSpreadLeg@{isSpreadLeg}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{isSpreadLeg()}{isSpreadLeg()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Option\+Sale\+::is\+Spread\+Leg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether this event represents a spread leg.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event represents a spread leg. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a30c4f60e40574532407e8149b953e85f}\label{classdxfcpp_1_1_option_sale_a30c4f60e40574532407e8149b953e85f} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!isValidTick@{isValidTick}}
+\index{isValidTick@{isValidTick}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{isValidTick()}{isValidTick()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Option\+Sale\+::is\+Valid\+Tick (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether this event represents a valid intraday tick. Note, that a correction for a previously distributed valid tick represents a new valid tick itself, but a cancellation of a previous valid tick does not.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event represents a valid intraday tick. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_option_sale_a7525690b8bc4688d378b8c7fa2b1fd4e}\label{classdxfcpp_1_1_option_sale_a7525690b8bc4688d378b8c7fa2b1fd4e} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setAggressorSide@{setAggressorSide}}
+\index{setAggressorSide@{setAggressorSide}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setAggressorSide()}{setAggressorSide()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Aggressor\+Side (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}} \&}]{side }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes aggressor side of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em side} & aggressor side of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a7a23af979e2c4df400a229980bcdbb0b}\label{classdxfcpp_1_1_option_sale_a7a23af979e2c4df400a229980bcdbb0b} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setAskPrice@{setAskPrice}}
+\index{setAskPrice@{setAskPrice}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setAskPrice()}{setAskPrice()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Ask\+Price (\begin{DoxyParamCaption}\item[{double}]{ask\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes price of this time and sale event.\+the current ask price on the market when this option sale event had occurred.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Price} & the current ask price on the market when this option sale event had occurred. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a06e432c3fd5e2696e967070b759d79de}\label{classdxfcpp_1_1_option_sale_a06e432c3fd5e2696e967070b759d79de} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setBidPrice@{setBidPrice}}
+\index{setBidPrice@{setBidPrice}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setBidPrice()}{setBidPrice()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Bid\+Price (\begin{DoxyParamCaption}\item[{double}]{bid\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes the current bid price on the market when this option sale event had occurred.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Price} & the current bid price on the market when this option sale event had occurred. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a0f3bce3bdd51a05ac6f9a7835eb030d6}\label{classdxfcpp_1_1_option_sale_a0f3bce3bdd51a05ac6f9a7835eb030d6} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setDelta@{setDelta}}
+\index{setDelta@{setDelta}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setDelta()}{setDelta()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Delta (\begin{DoxyParamCaption}\item[{double}]{delta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes option delta at the time of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta} & option delta at the time of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_af6c681707d368a19424a645be769f87c}\label{classdxfcpp_1_1_option_sale_af6c681707d368a19424a645be769f87c} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{const Event\+Flags\+Mask \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Changes transactional event flags. See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ \"{}\+Event Flags\"{} section}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a049e048fd9cbccd2e8895b94d9e6708d}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_option_sale_ab88469f8ebafe9e6ff90ce90c306f0b9}\label{classdxfcpp_1_1_option_sale_ab88469f8ebafe9e6ff90ce90c306f0b9} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setExchangeCode@{setExchangeCode}}
+\index{setExchangeCode@{setExchangeCode}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setExchangeCode()}{setExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{exchange\+Code }\end{DoxyParamCaption})}
+
+Changes exchange code of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & exchange code of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a5d747355d2861b6241ed029b5125a6d3}\label{classdxfcpp_1_1_option_sale_a5d747355d2861b6241ed029b5125a6d3} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setExchangeCode@{setExchangeCode}}
+\index{setExchangeCode@{setExchangeCode}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setExchangeCode()}{setExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes exchange code of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & exchange code of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a3c917ec07734d974a1bb75650c690779}\label{classdxfcpp_1_1_option_sale_a3c917ec07734d974a1bb75650c690779} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setExchangeSaleConditions@{setExchangeSaleConditions}}
+\index{setExchangeSaleConditions@{setExchangeSaleConditions}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setExchangeSaleConditions()}{setExchangeSaleConditions()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Exchange\+Sale\+Conditions (\begin{DoxyParamCaption}\item[{std\+::string}]{exchange\+Sale\+Conditions }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes sale conditions provided for this event by data feed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Sale\+Conditions} & sale conditions. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_ab7e8a2268cc8e03c652a9266ffc2fe42}\label{classdxfcpp_1_1_option_sale_ab7e8a2268cc8e03c652a9266ffc2fe42} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setExtendedTradingHours@{setExtendedTradingHours}}
+\index{setExtendedTradingHours@{setExtendedTradingHours}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setExtendedTradingHours()}{setExtendedTradingHours()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Extended\+Trading\+Hours (\begin{DoxyParamCaption}\item[{bool}]{extended\+Trading\+Hours }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes whether this event represents an extended trading hours sale.
+
+
+\begin{DoxyParams}{Parameters}
+{\em extended\+Trading\+Hours} & {\ttfamily true} if this event represents an extended trading hours sale. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a0955ccb34c356ed391b703ebf30b9eea}\label{classdxfcpp_1_1_option_sale_a0955ccb34c356ed391b703ebf30b9eea} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Changes unique per-\/symbol index of this event. The index is composed of \doxylink{classdxfcpp_1_1_option_sale_a76cb79cde4413e576ecb3bb32ac8d317}{time} and \doxylink{classdxfcpp_1_1_option_sale_aa2a3852eb9cefd8c4854add7b31f34c5}{sequence} and invocation of this method changes time and sequence. {\bfseries{Do not use this method directly.}} Change \doxylink{classdxfcpp_1_1_option_sale_a83784da0bd2a002d117a9dbc82adefd5}{time} and/or \doxylink{classdxfcpp_1_1_option_sale_ac7b0af05f518fd97d0746f6110e7a24f}{sequence}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the event index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_option_sale_ae8097922d7f01518786795c3709c9db6}{get\+Index()} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aaaa00c65f53ffe3d969514e2cb70226f}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_option_sale_aac49dca72980521a7cdfcd10a35be0f9}\label{classdxfcpp_1_1_option_sale_aac49dca72980521a7cdfcd10a35be0f9} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setOptionSymbol@{setOptionSymbol}}
+\index{setOptionSymbol@{setOptionSymbol}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setOptionSymbol()}{setOptionSymbol()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Option\+Symbol (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes option symbol of this event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em option\+Symbol} & option symbol of this event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_aaa2d61e7cc62ff21c6d710cec6e05a09}\label{classdxfcpp_1_1_option_sale_aaa2d61e7cc62ff21c6d710cec6e05a09} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setPrice@{setPrice}}
+\index{setPrice@{setPrice}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setPrice()}{setPrice()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Price (\begin{DoxyParamCaption}\item[{double}]{price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes price of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & price of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_ac7b0af05f518fd97d0746f6110e7a24f}\label{classdxfcpp_1_1_option_sale_ac7b0af05f518fd97d0746f6110e7a24f} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Sequence (\begin{DoxyParamCaption}\item[{int}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes \doxylink{classdxfcpp_1_1_option_sale_aa2a3852eb9cefd8c4854add7b31f34c5}{sequence number} of this event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_option_sale_aa2a3852eb9cefd8c4854add7b31f34c5}{get\+Sequence()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_option_sale_a94f571b7449029d6d51191dde08e9bf5}\label{classdxfcpp_1_1_option_sale_a94f571b7449029d6d51191dde08e9bf5} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setSize@{setSize}}
+\index{setSize@{setSize}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setSize()}{setSize()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Size (\begin{DoxyParamCaption}\item[{double}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes size of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & size of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a367a6fc23bd724b92e4251a701e7e43f}\label{classdxfcpp_1_1_option_sale_a367a6fc23bd724b92e4251a701e7e43f} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setSpreadLeg@{setSpreadLeg}}
+\index{setSpreadLeg@{setSpreadLeg}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setSpreadLeg()}{setSpreadLeg()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Spread\+Leg (\begin{DoxyParamCaption}\item[{bool}]{spread\+Leg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes whether this event represents a spread leg.
+
+
+\begin{DoxyParams}{Parameters}
+{\em spread\+Leg} & {\ttfamily true} if this event represents a spread leg. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a83784da0bd2a002d117a9dbc82adefd5}\label{classdxfcpp_1_1_option_sale_a83784da0bd2a002d117a9dbc82adefd5} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setTime@{setTime}}
+\index{setTime@{setTime}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes time of this event. Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time of this event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a4cda0a5e94e17fc17a00bedf1273df25}\label{classdxfcpp_1_1_option_sale_a4cda0a5e94e17fc17a00bedf1273df25} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setTimeNanoPart@{setTimeNanoPart}}
+\index{setTimeNanoPart@{setTimeNanoPart}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setTimeNanoPart()}{setTimeNanoPart()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes microseconds and nanoseconds time part of the original event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & microseconds and nanoseconds time part of the original event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a83d240f545f2b378abc0aabbb863439e}\label{classdxfcpp_1_1_option_sale_a83d240f545f2b378abc0aabbb863439e} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setTimeNanos@{setTimeNanos}}
+\index{setTimeNanos@{setTimeNanos}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setTimeNanos()}{setTimeNanos()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Time\+Nanos (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Nanos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes time of the original event. Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nanos} & time of the original event in nanoseconds. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a4acd51acfa31c3a586a86941ecbdc7e9}\label{classdxfcpp_1_1_option_sale_a4acd51acfa31c3a586a86941ecbdc7e9} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setTimeSequence@{setTimeSequence}}
+\index{setTimeSequence@{setTimeSequence}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setTimeSequence()}{setTimeSequence()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Time\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes time and sequence of this event. {\bfseries{Do not use this method directly.}} Change \doxylink{classdxfcpp_1_1_option_sale_a83784da0bd2a002d117a9dbc82adefd5}{time} and/or \doxylink{classdxfcpp_1_1_option_sale_ac7b0af05f518fd97d0746f6110e7a24f}{sequence}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Sequence} & the time and sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_option_sale_a364fb73d4c745c24da63190cedfd3d62}{get\+Time\+Sequence()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_option_sale_acbeb172a9a0f06f4b8b7d762e06a5bdd}\label{classdxfcpp_1_1_option_sale_acbeb172a9a0f06f4b8b7d762e06a5bdd} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setTradeThroughExempt@{setTradeThroughExempt}}
+\index{setTradeThroughExempt@{setTradeThroughExempt}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setTradeThroughExempt()}{setTradeThroughExempt()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Trade\+Through\+Exempt (\begin{DoxyParamCaption}\item[{char}]{trade\+Through\+Exempt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes Trade\+Through\+Exempt flag of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trade\+Through\+Exempt} & Trade\+Through\+Exempt flag of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a9e522a0233139f1f8534b25ef11b4a05}\label{classdxfcpp_1_1_option_sale_a9e522a0233139f1f8534b25ef11b4a05} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setType@{setType}}
+\index{setType@{setType}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setType()}{setType()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{Time\+And\+Sale\+Type}} \&}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes type of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & type of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a98f2a1671f42e2b2f3ad72fdaa80fec9}\label{classdxfcpp_1_1_option_sale_a98f2a1671f42e2b2f3ad72fdaa80fec9} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setUnderlyingPrice@{setUnderlyingPrice}}
+\index{setUnderlyingPrice@{setUnderlyingPrice}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setUnderlyingPrice()}{setUnderlyingPrice()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Underlying\+Price (\begin{DoxyParamCaption}\item[{double}]{underlying\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes underlying price at the time of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em underlying\+Price} & underlying price at the time of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_ad0b8a70f98a98f2bcf082058da28ccb3}\label{classdxfcpp_1_1_option_sale_ad0b8a70f98a98f2bcf082058da28ccb3} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setValidTick@{setValidTick}}
+\index{setValidTick@{setValidTick}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setValidTick()}{setValidTick()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Valid\+Tick (\begin{DoxyParamCaption}\item[{bool}]{valid\+Tick }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes whether this event represents a valid intraday tick.
+
+
+\begin{DoxyParams}{Parameters}
+{\em valid\+Tick} & {\ttfamily true} if this event represents a valid intraday tick. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a6871d3b95cc1769a29fc9bf4c9a1f89e}\label{classdxfcpp_1_1_option_sale_a6871d3b95cc1769a29fc9bf4c9a1f89e} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!setVolatility@{setVolatility}}
+\index{setVolatility@{setVolatility}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{setVolatility()}{setVolatility()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Option\+Sale\+::set\+Volatility (\begin{DoxyParamCaption}\item[{double}]{volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes Black-\/\+Scholes implied volatility of the option at the time of this option sale event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em volatility} & Black-\/\+Scholes implied volatility of the option at the time of this option sale event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_option_sale_a0e1c169b11732f0d149b8cdd5a2684ba}\label{classdxfcpp_1_1_option_sale_a0e1c169b11732f0d149b8cdd5a2684ba} 
+\index{dxfcpp::OptionSale@{dxfcpp::OptionSale}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::OptionSale@{dxfcpp::OptionSale}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Option\+Sale\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+Returns a string representation of the current object.
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_event_type_a54c84141d4eff181553b9064db6500e9}{dxfcpp\+::\+Event\+Type}}.
+

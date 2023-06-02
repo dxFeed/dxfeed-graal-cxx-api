@@ -1,0 +1,142 @@
+\doxysubsection{dxfcpp\+::DXEndpoint\+::Builder Class Reference}
+\hypertarget{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{}\label{classdxfcpp_1_1_d_x_endpoint_1_1_builder}\index{dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}}
+
+
+{\ttfamily \#include $<$DXEndpoint.\+hpp$>$}
+
+
+
+Inherits std\+::enable\+\_\+shared\+\_\+from\+\_\+this$<$ Builder $>$.
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_d_x_endpoint_1_1_builder_abc9c35e76c8fcc848f7ef3f37f9d7ce4}\label{classdxfcpp_1_1_d_x_endpoint_1_1_builder_abc9c35e76c8fcc848f7ef3f37f9d7ce4} 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Builder} ()
+\begin{DoxyCompactList}\small\item\em Releases the Graal\+VM handle. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ab4eba04d0142dcd63d24fe7a1d3cae5a}{with\+Name}} (const std\+::string \&name)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a78a4d67260b04c965ed28419637066a9}{with\+Role}} (\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}} role)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a06466a9c8a88df62c32c20e17788f4a4}{with\+Property}} (const std\+::string \&key, const std\+::string \&value)
+\item 
+{\footnotesize template$<$typename Properties $>$ }\\std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a73a17565b146393ae7a7d4ff39a1301f}{with\+Properties}} (Properties \&\&properties)
+\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ad5a7fb14a7d2bc422155fc2df54591f5}{supports\+Property}} (const std\+::string \&key)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a963b99c59a3721dab1472e47789e434f}{build}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder} class for \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} that supports additional configuration properties. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a963b99c59a3721dab1472e47789e434f}\label{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a963b99c59a3721dab1472e47789e434f} 
+\index{dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}!build@{build}}
+\index{build@{build}!dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{build()}{build()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}} $>$ dxfcpp\+::\+DXEndpoint\+::\+Builder\+::build (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Builds \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} instance.
+
+\begin{DoxyReturn}{Returns}
+the created endpoint. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ad5a7fb14a7d2bc422155fc2df54591f5}\label{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ad5a7fb14a7d2bc422155fc2df54591f5} 
+\index{dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}!supportsProperty@{supportsProperty}}
+\index{supportsProperty@{supportsProperty}!dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{supportsProperty()}{supportsProperty()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+DXEndpoint\+::\+Builder\+::supports\+Property (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key }\end{DoxyParamCaption})}
+
+Checks if a property is supported
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The property\textquotesingle{}s key to be checked for support \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the corresponding property key is supported.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a06466a9c8a88df62c32c20e17788f4a4}{with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ab4eba04d0142dcd63d24fe7a1d3cae5a}\label{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ab4eba04d0142dcd63d24fe7a1d3cae5a} 
+\index{dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}!withName@{withName}}
+\index{withName@{withName}!dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{withName()}{withName()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}} $>$ dxfcpp\+::\+DXEndpoint\+::\+Builder\+::with\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Changes name that is used to distinguish multiple endpoints in the same process (Graal\+VM Isolate) in logs and in other diagnostic means. This is a shortcut for \doxylink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a06466a9c8a88df62c32c20e17788f4a4}{with\+Property}(\doxylink{structdxfcpp_1_1_d_x_endpoint_afe2a64464bb98673d09087043e5b2ff8}{NAME\+\_\+\+PROPERTY}, {\ttfamily name})
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The endpoint\textquotesingle{}s name\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} endpoint builder. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a73a17565b146393ae7a7d4ff39a1301f}\label{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a73a17565b146393ae7a7d4ff39a1301f} 
+\index{dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}!withProperties@{withProperties}}
+\index{withProperties@{withProperties}!dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{withProperties()}{withProperties()}}
+{\footnotesize\ttfamily template$<$typename Properties $>$ \\
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}} $>$ dxfcpp\+::\+DXEndpoint\+::\+Builder\+::with\+Properties (\begin{DoxyParamCaption}\item[{Properties \&\&}]{properties }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets all supported properties from the provided properties object.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Properties} & The properties\textquotesingle{} type (std\+::map, std\+::unordered\+\_\+map etc) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em properties} & The endpoint\textquotesingle{}s properties \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} endpoint builder.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a06466a9c8a88df62c32c20e17788f4a4}{with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a06466a9c8a88df62c32c20e17788f4a4}\label{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a06466a9c8a88df62c32c20e17788f4a4} 
+\index{dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}!withProperty@{withProperty}}
+\index{withProperty@{withProperty}!dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{withProperty()}{withProperty()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{DXEndpoint\+::\+Builder}} $>$ dxfcpp\+::\+DXEndpoint\+::\+Builder\+::with\+Property (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key,  }\item[{const std\+::string \&}]{value }\end{DoxyParamCaption})}
+
+Sets the specified property. Unsupported properties are ignored.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The endpoint\textquotesingle{}s property key \\
+\hline
+{\em value} & The endpoint\textquotesingle{}s property value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} endpoint builder.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ad5a7fb14a7d2bc422155fc2df54591f5}{supports\+Property(const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a78a4d67260b04c965ed28419637066a9}\label{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a78a4d67260b04c965ed28419637066a9} 
+\index{dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}!withRole@{withRole}}
+\index{withRole@{withRole}!dxfcpp::DXEndpoint::Builder@{dxfcpp::DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{withRole()}{withRole()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{DXEndpoint\+::\+Builder}} $>$ dxfcpp\+::\+DXEndpoint\+::\+Builder\+::with\+Role (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{DXEndpoint\+::\+Role}}}]{role }\end{DoxyParamCaption})}
+
+Sets role for the created \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}. Default role is \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em role} & The endpoint\textquotesingle{}s role\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} endpoint builder. 
+\end{DoxyReturn}

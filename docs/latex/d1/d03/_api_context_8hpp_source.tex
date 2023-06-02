@@ -1,0 +1,44 @@
+\doxysubsection{Api\+Context.\+hpp}
+\hypertarget{_api_context_8hpp_source}{}\label{_api_context_8hpp_source}\index{ApiContext.hpp@{ApiContext.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../managers/DXEndpointManager.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../managers/DXFeedSubscriptionManager.hpp"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ ApiContext\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{mutable}\ std::shared\_ptr<DXEndpointManager>\ dxEndpointManager\_;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{mutable}\ std::shared\_ptr<DXFeedSubscriptionManager>\ dxFeedSubscriptionManager\_;}
+\DoxyCodeLine{00018\ \ \ \ \ std::atomic<\textcolor{keywordtype}{bool}>\ initialized\{\textcolor{keyword}{false}\};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ ApiContext()\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ :\ dxEndpointManager\_\{std::make\_shared<DXEndpointManager>()\},}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ dxFeedSubscriptionManager\_\{std::make\_shared<DXFeedSubscriptionManager>()\}\ \{\}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<ApiContext>\ getInstance()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<ApiContext>\ instance\ =\ std::shared\_ptr<ApiContext>(\textcolor{keyword}{new}\ (std::nothrow)\ ApiContext\{\});}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{00029\ \ \ \ \ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ std::shared\_ptr<DXEndpointManager>\ getDxEndpointManager()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ dxEndpointManager\_;\ \}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ std::shared\_ptr<DXFeedSubscriptionManager>\ getDxFeedSubscriptionManager()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxFeedSubscriptionManager\_;}
+\DoxyCodeLine{00035\ \ \ \ \ \}}
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

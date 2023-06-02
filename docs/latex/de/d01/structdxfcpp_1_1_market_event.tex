@@ -1,0 +1,172 @@
+\doxysubsection{dxfcpp\+::Market\+Event Struct Reference}
+\hypertarget{structdxfcpp_1_1_market_event}{}\label{structdxfcpp_1_1_market_event}\index{dxfcpp::MarketEvent@{dxfcpp::MarketEvent}}
+
+
+{\ttfamily \#include $<$Market\+Event.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Market\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=12.000000cm]{de/d01/structdxfcpp_1_1_market_event}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_market_event_aea54ff4b7f575e893b4f80d9d51e968b}\label{structdxfcpp_1_1_market_event_aea54ff4b7f575e893b4f80d9d51e968b} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{Market\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_market_event}{Market\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{dxfcpp\+::\+Event\+Type\+With\+Symbol$<$ std\+::string $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ std\+::string $>$ $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type}{dxfcpp\+::\+Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type}{Event\+Type}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The simple type synonym for the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_market_event_a6715bd98e78bd7ec7c0af2d1fb32635b}{get\+Event\+Symbol}} () const override
+\item 
+void \mbox{\hyperlink{structdxfcpp_1_1_market_event_aa192e63ef22ac5df3a2f5bbdc5fdc75e}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol) override
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_market_event_ad55afdaf751c1dc146f383c4a05471e1}{get\+Event\+Time}} () const override
+\item 
+void \mbox{\hyperlink{structdxfcpp_1_1_market_event_aae1c19db5428bc91c9461fb7d46e8274}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) override
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+virtual const std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_ae00c099cebda639adbecad51c2ff182b}{get\+Event\+Symbol}} () const=0
+\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a2dc47763bdaf6bf5a33d68b4fd8b34ba}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol)=0
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type}{dxfcpp\+::\+Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_event_type_a1c940fa37121d98bd99490c03553b99d}{get\+Event\+Time}} () const
+\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_event_type_a322dde6701934be714d008a0bb20e8fa}{set\+Event\+Time}} (std\+::int64\+\_\+t)
+\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_event_type_a54c84141d4eff181553b9064db6500e9}{to\+String}} () const noexcept override
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () const noexcept
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\item 
+virtual std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{to\+String}} () const noexcept
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} ()=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{Market\+Event}} (std\+::string event\+Symbol) noexcept
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Base class for all market events. All market events are POCO that extend this class. Market event classes are simple beans with setter and getter methods for their properties and minimal business logic. All market events have {\ttfamily event\+Symbol} property that is defined by this class. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}\label{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf} 
+\index{dxfcpp::MarketEvent@{dxfcpp::MarketEvent}!MarketEvent@{MarketEvent}}
+\index{MarketEvent@{MarketEvent}!dxfcpp::MarketEvent@{dxfcpp::MarketEvent}}
+\doxyparagraph{\texorpdfstring{MarketEvent()}{MarketEvent()}}
+{\footnotesize\ttfamily dxfcpp\+::\+Market\+Event\+::\+Market\+Event (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [protected]}, {\ttfamily [noexcept]}}
+
+Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_market_event_a6715bd98e78bd7ec7c0af2d1fb32635b}\label{structdxfcpp_1_1_market_event_a6715bd98e78bd7ec7c0af2d1fb32635b} 
+\index{dxfcpp::MarketEvent@{dxfcpp::MarketEvent}!getEventSymbol@{getEventSymbol}}
+\index{getEventSymbol@{getEventSymbol}!dxfcpp::MarketEvent@{dxfcpp::MarketEvent}}
+\doxyparagraph{\texorpdfstring{getEventSymbol()}{getEventSymbol()}}
+{\footnotesize\ttfamily const std\+::string \& dxfcpp\+::\+Market\+Event\+::get\+Event\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Returns symbol of this event.
+
+\begin{DoxyReturn}{Returns}
+symbol of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_ae00c099cebda639adbecad51c2ff182b}{dxfcpp\+::\+Event\+Type\+With\+Symbol$<$ std\+::string $>$}}.
+
+\Hypertarget{structdxfcpp_1_1_market_event_ad55afdaf751c1dc146f383c4a05471e1}\label{structdxfcpp_1_1_market_event_ad55afdaf751c1dc146f383c4a05471e1} 
+\index{dxfcpp::MarketEvent@{dxfcpp::MarketEvent}!getEventTime@{getEventTime}}
+\index{getEventTime@{getEventTime}!dxfcpp::MarketEvent@{dxfcpp::MarketEvent}}
+\doxyparagraph{\texorpdfstring{getEventTime()}{getEventTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Market\+Event\+::get\+Event\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Returns time when event was created or zero when time is not available.
+
+This event time is available only when the corresponding \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} is created with \doxylink{structdxfcpp_1_1_d_x_endpoint_ade95bc0b10e58f612fd4355aa915ade9}{DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY} and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from On\+Demand\+Service. Events that are coming from a network connections do not have an embedded event time information and this method will return zero for them, meaning that event was received just now.
+
+Default implementation returns 0.
+
+\begin{DoxyReturn}{Returns}
+The difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC or zero when time is not available. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_event_type_a1c940fa37121d98bd99490c03553b99d}{dxfcpp\+::\+Event\+Type}}.
+
+\Hypertarget{structdxfcpp_1_1_market_event_aa192e63ef22ac5df3a2f5bbdc5fdc75e}\label{structdxfcpp_1_1_market_event_aa192e63ef22ac5df3a2f5bbdc5fdc75e} 
+\index{dxfcpp::MarketEvent@{dxfcpp::MarketEvent}!setEventSymbol@{setEventSymbol}}
+\index{setEventSymbol@{setEventSymbol}!dxfcpp::MarketEvent@{dxfcpp::MarketEvent}}
+\doxyparagraph{\texorpdfstring{setEventSymbol()}{setEventSymbol()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Market\+Event\+::set\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Changes symbol of this event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a2dc47763bdaf6bf5a33d68b4fd8b34ba}{dxfcpp\+::\+Event\+Type\+With\+Symbol$<$ std\+::string $>$}}.
+
+\Hypertarget{structdxfcpp_1_1_market_event_aae1c19db5428bc91c9461fb7d46e8274}\label{structdxfcpp_1_1_market_event_aae1c19db5428bc91c9461fb7d46e8274} 
+\index{dxfcpp::MarketEvent@{dxfcpp::MarketEvent}!setEventTime@{setEventTime}}
+\index{setEventTime@{setEventTime}!dxfcpp::MarketEvent@{dxfcpp::MarketEvent}}
+\doxyparagraph{\texorpdfstring{setEventTime()}{setEventTime()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Market\+Event\+::set\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Changes event creation time.
+
+Default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_event_type_a322dde6701934be714d008a0bb20e8fa}{dxfcpp\+::\+Event\+Type}}.
+

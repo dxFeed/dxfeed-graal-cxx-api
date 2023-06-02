@@ -1,0 +1,949 @@
+\doxysubsection{DXEndpoint.\+hpp}
+\hypertarget{_d_x_endpoint_8hpp_source}{}\label{_d_x_endpoint_8hpp_source}\index{DXEndpoint.hpp@{DXEndpoint.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/CEntryPointErrors.hpp"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Handler.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Isolate.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/JavaObjectHandler.hpp"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_d_x_feed_8hpp}{"{}DXFeed.hpp"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{filesystem}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ DXPublisher\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~DXPublisher()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ Manages\ network\ connections\ to\ @ref\ DXFeed\ "{}feed"{}\ or}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ @ref\ DXPublisher\ "{}publisher"{}.\ There\ are\ per-\/process\ (per\ GraalVM\ Isolate\ for\ now)\ ready-\/to-\/use\ singleton\ instances}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ that\ are\ available\ with\ ::getInstance()\ and\ ::getInstance(Role)\ methods\ as\ well\ as}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ factory\ methods\ ::create()\ and\ ::create(Role),\ and\ a\ number\ of\ configuration\ methods.\ Advanced}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ properties\ can\ be\ configured\ using}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ @ref\ ::newBuilder()\ "{}newBuilder()"{}.@ref\ Builder\#withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ "{}withProperty(key,\ value)"{}.@ref\ Builder::build()\ "{}build()"{}.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ See\ DXFeed\ for\ details\ on\ how\ to\ subscribe\ to\ symbols\ and\ receive\ events.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ <h3>Endpoint\ role</h3>}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ Each\ endpoint\ has\ a\ role\ that\ is\ specified\ on\ its\ creation\ and\ cannot\ be\ changed\ afterwards.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ The\ default\ factory\ method\ ::create()\ creates\ an\ endpoint\ with\ a\ @ref\ Role::FEED\ "{}FEED"{}\ role.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ Endpoints\ with\ other\ roles\ are\ created\ with\ ::create(Role)\ factory\ method.\ Endpoint\ role\ is}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ represented\ by\ @ref\ Role\ "{}DXEndpoint::Role"{}\ enumeration.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ Endpoint\ role\ defines\ the\ behavior\ of\ its\ @ref\ \#connect(const\ std::string\&)\ "{}connect"{}\ method:}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ -\/\ @ref\ Role::FEED\ "{}FEED"{}\ connects\ to\ the\ remote\ data\ feed\ provider\ and\ is\ optimized\ for\ real-\/time\ or}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ \ \ delayed\ data\ processing\ (<b>this\ is\ a\ default\ role</b>).}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ \ \ ::getFeed()\ method\ returns\ a\ feed\ object\ that\ subscribes\ to\ this\ remote\ data\ feed\ provider\ and\ receives\ events}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ \ \ from\ it.\ When\ event\ processing\ threads\ cannot\ keep\ up\ (don't\ have\ enough\ CPU\ time),\ data\ is\ dynamically\ conflated}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ \ \ to\ minimize\ latency\ between\ received\ events\ and\ their\ processing\ time.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ \ \ For\ example:}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ \ \ -\/\ <b>`DXEndpoint::create()-\/>connect("{}demo.dxfeed.com:7300"{})-\/>getFeed()`</b>\ returns\ a\ demo\ feed\ from\ dxFeed\ with}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ \ \ \ \ sample\ market\ quotes.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ \ \ -\/\ <b>`DXEndpoint::create()-\/>connect("{}localhost:7400"{})-\/>getFeed()`</b>\ returns\ a\ feed\ that\ is\ connected\ to\ a}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ \ \ \ \ publisher\ that\ is\ running\ on\ the\ same\ host.\ See\ example\ below.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ \ \ -\/\ <b>`DXEndpoint::create()-\/>connect("{}file:demo-\/sample.data"{})-\/>getFeed()`</b>\ returns\ a\ feed\ that\ is\ connected\ to}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ \ \ \ \ a\ "{}demo-\/sample.data"{}\ file\ and\ plays\ back\ it\ as\ if\ it\ was\ received\ in\ real\ time.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ \ \ This\ endpoint\ is\ automatically\ connected\ to\ the\ configured\ data\ feed\ as\ explained\ in}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ \ \ <a\ href="{}\#defaultPropertiesSection"{}>default\ properties\ section</a>.}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ -\/\ @ref\ Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}\ is\ similar\ to\ @ref\ Role::FEED\ "{}FEED"{},\ but\ it\ is\ designed\ to\ be\ used\ with}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ \ \ OnDemandService\ for\ historical\ data\ replay\ only.\ It\ is\ configured\ with\ <a\ href="{}\#defaultPropertiesSection"{}>default}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ properties</a>,\ but\ is\ not\ connected\ automatically\ to\ the\ data\ provider\ until\ @ref\ OnDemandService\#replay(Date,}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ double)\ "{}OnDemandService.replay"{}\ method\ is\ invoked.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ -\/\ @ref\ Role::STREAM\_FEED\ "{}STREAM\_FEED"{}\ is\ similar\ to\ @ref\ Role::FEED\ "{}FEED"{}\ and\ also\ connects\ to\ the\ remote\ data}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *\ \ \ feed\ provider,\ but\ is\ designed\ for\ bulk\ parsing\ of\ data\ from\ files.\ DXEndpoint::getFeed()\ method\ returns\ feed}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ *\ \ \ object\ that\ subscribes\ to\ the\ data\ from\ the\ opened\ files\ and\ receives\ events\ from\ them.\ Events\ from\ the\ files\ are}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ *\ \ \ not\ conflated\ and\ are\ processed\ as\ fast\ as\ possible.\ Note,\ that\ in\ this\ role,\ DXFeed::getLastEvent\ method\ does\ not}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ *\ \ \ work\ and\ time-\/series\ subscription\ is\ not\ supported.}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ *\ \ \ For\ example:}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ *\ \ \ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ \ \ auto\ endpoint\ =\ DXEndpoint::create(DXEndpoint::Role::STREAM\_FEED);}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ \ \ auto\ feed\ =\ endpoint-\/>getFeed();}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ \ \ \`{}\`{}\`{}}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ \ \ creates\ a\ feed\ that\ is\ ready\ to\ read\ data\ from\ file\ as\ soon\ as\ the\ following\ code\ is\ invoked:}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ \ \ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ *\ \ \ endpoint-\/>connect("{}file:demo-\/sample.data[speed=max]"{});}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ *\ \ \ \`{}\`{}\`{}}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ *\ \ \ "{}[speed=max]"{}\ clause\ forces\ to\ the\ file\ reader\ to\ play\ back\ all\ the\ data\ from\ "{}demo-\/sample.data"{}\ file\ as\ fast\ as}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ *\ \ \ data\ subscribers\ are\ processing\ it.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ -\/\ @ref\ Role::PUBLISHER\ "{}PUBLISHER"{}\ connects\ to\ the\ remote\ publisher\ hub\ (also\ known\ as\ multiplexor)\ or\ creates\ a}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ *\ \ \ publisher\ on\ the\ local\ host.\ ::getPublisher()\ method\ returns\ a\ publisher\ object\ that\ publishes\ events\ to\ all}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ *\ \ \ connected\ feeds.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ *\ \ \ For\ example:\ <b>`DXEndpoint-\/>create(DXEndpoint::Role::PUBLISHER)-\/>connect("{}:7400"{})-\/>getPublisher()`</b>}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ *\ \ \ returns\ a\ publisher\ that\ is\ waiting\ for\ connections\ on\ TCP/IP\ port\ 7400.\ The\ published\ events\ will\ be\ delivered\ to}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ *\ \ \ all\ feeds\ that\ are\ connected\ to\ this\ publisher.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ *\ \ \ This\ endpoint\ is\ automatically\ connected\ to\ the\ configured\ data\ feed\ as\ explained\ in\ <a}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ *\ href="{}\#defaultPropertiesSection"{}>default\ properties\ section</a>.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ *\ -\/\ @ref\ Role::LOCAL\_HUB\ "{}LOCAL\_HUB"{}\ creates\ a\ local\ hub\ without\ ability\ to\ establish\ network\ connections.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ *\ \ \ Events\ that\ are\ published\ via\ \{@link\ \#getPublisher()\ publisher\}\ are\ delivered\ to\ local\ @ref\ ::getFeed()\ "{}feed"{}}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ *\ only.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ *\ <h3>Endpoint\ state</h3>}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ *\ Each\ endpoint\ has\ a\ state\ that\ can\ be\ retrieved\ with\ ::getState()\ method.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ *\ When\ endpoint\ is\ created\ with\ any\ role\ and\ default\ address\ is\ not\ specified\ in}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ *\ <a\ href="{}\#defaultPropertiesSection"{}>default\ properties</a>,\ then\ it\ is\ not\ connected\ to\ any\ remote\ endpoint.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ *\ Its\ state\ is\ @ref\ State::NOT\_CONNECTED\ "{}NOT\_CONNECTED"{}.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ *\ @ref\ Role\#FEED\ "{}Feed"{}\ and\ @ref\ Role\#PUBLISHER\ "{}publisher"{}\ endpoints\ can\ connect\ to\ remote\ endpoints\ of\ the\ opposite}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ *\ role.\ Connection\ is\ initiated\ by\ @ref\ ::connect(const\ std::string\&)\ "{}connect"{}\ method.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ *\ The\ endpoint\ state\ becomes\ @ref\ State::CONNECTING\ "{}CONNECTING"{}.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ *\ When\ the\ actual\ connection\ to\ the\ remote\ endpoint\ is\ established,\ the\ endpoint\ state\ becomes}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ *\ @ref\ State::CONNECTED\ "{}CONNECTED"{}.}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ *\ Network\ connections\ can\ temporarily\ break\ and\ return\ endpoint\ back\ into\ @ref\ State::CONNECTING\ "{}CONNECTING"{}\ state.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ *\ File\ connections\ can\ be\ completed\ and\ return\ endpoint\ into\ @ref\ State::NOT\_CONNECTED\ "{}NOT\_CONNECTED"{}\ state.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ *\ Connection\ to\ the\ remote\ endpoint\ can\ be\ terminated\ with\ ::disconnect()\ method.}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ *\ The\ endpoint\ state\ becomes\ @ref\ State::NOT\_CONNECTED\ "{}NOT\_CONNECTED"{}.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ *\ Endpoint\ can\ be\ closed\ with\ ::close()\ method.\ The\ endpoint\ state\ becomes\ @ref\ State::CLOSED\ "{}CLOSED"{}.\ This\ is\ a}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ *\ final\ state.\ All\ connection\ are\ terminated\ and\ all\ internal\ resources\ that\ are\ held\ by\ this\ endpoint\ are\ freed.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ *\ No\ further\ connections\ can\ be\ initiated.}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ *\ <h3>Event\ times</h3>}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ *\ The\ EventType::getEventTime()\ on\ received\ events\ is\ available\ only\ when\ the\ endpoint\ is\ created\ with}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ *\ ::DXENDPOINT\_EVENT\_TIME\_PROPERTY\ property\ and\ the\ data\ source\ has\ embedded\ event\ times.\ This\ is\ typically\ true\ only}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ *\ for\ data\ events\ that\ are\ read\ from\ historical\ tape\ files\ (see\ above)\ and\ from\ OnDemandService.}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ *\ Events\ that\ are\ coming\ from\ a\ network\ connections\ do\ not\ have\ an\ embedded\ event\ time\ information\ and}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ *\ event\ time\ is\ not\ available\ for\ them\ anyway.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ *\ <h3><a\ name="{}defaultPropertiesSection"{}>Default\ properties</a></h3>}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ *\ Default\ properties\ are\ loaded\ from\ "{}dxfeed.properties"{}\ or\ "{}dxpublisher.properties"{}\ file\ depending\ on}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ *\ the\ @ref\ Role\ "{}role"{}\ of\ created\ endpoint.\ "{}dxfeed.properties"{}\ is\ used\ for}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ *\ @ref\ Role::FEED\ "{}FEED"{}\ and\ @ref\ Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{},}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ *\ "{}dxpublisher.properties"{}\ is\ used\ for\ @ref\ Role::PUBLISHER\ "{}PUBLISHER"{}\}.}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ *\ @ref\ Role::STREAM\_FEED\ "{}STREAM\_FEED"{}\ and\ @ref\ Role::LOCAL\_HUB\ "{}LOCAL\_HUB"{}\ do\ not\ support\ properties\ file.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ *\ The\ location\ of\ this\ file\ can\ be\ specified\ using}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ *\ @ref\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)\ "{}withProperty"{}(::DXFEED\_PROPERTIES\_PROPERTY,\ path)}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ *\ or}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ *\ @ref\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)\ "{}withProperty"{}(::DXPUBLISHER\_PROPERTIES\_PROPERTY,}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ *\ path)\ correspondingly.\ When\ the\ location\ of\ this\ file\ is\ not\ explicitly\ specified\ using}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ *\ @ref\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)\ "{}withProperty"{}\ method,\ then\ the\ file\ path\ is\ taken}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ *\ from\ a\ system\ property\ with\ the\ corresponding\ name.}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ *\ When\ the\ path\ to\ the\ above\ properties\ file\ is\ not\ provided,\ then\ a\ resource\ named\ "{}dxfeed.properties"{}\ or}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ *\ "{}dxpublisher.properties"{}\ is\ loaded\ from\ classpath.\ When\ classpath\ is\ set\ to\ "{}."{}\ (current\ directory),}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ *\ it\ means\ that\ the\ corresponding\ file\ can\ be\ placed\ into\ the\ current\ directory\ with\ any\ need\ to\ specify\ additional}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ *\ properties.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ *\ Defaults\ for\ individual\ properties\ can\ be\ also\ provided\ using\ system\ properties\ when\ they\ are\ not\ specified}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ *\ in\ the\ configuration\ file.\ System\ properties\ override\ configuration\ loaded\ from\ classpath\ resource,\ but\ don't}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ *\ override\ configuration\ from\ the\ user-\/specified\ configuration\ file.}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ *\ The\ ::NAME\_PROPERTY\ is\ the\ exception\ from\ the\ above\ rule.\ It\ is\ never\ loaded\ from\ system\ properties.}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ *\ It\ can\ be\ only\ specified\ in\ configuration\ file\ or\ programmatically.\ There\ is\ a\ convenience}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ *\ @ref\ Builder::withName(const\ std::string\&)\ "{}Builder.withName"{}\ method\ for\ it.\ It\ is\ recommended\ to\ assign\ short\ and}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ *\ meaningful\ endpoint\ names\ when\ multiple\ endpoints\ are\ used\ in\ the\ same\ process\ (one\ GraalVM\ Isolate\ for\ now).}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ *\ The\ name\ of\ the\ endpoint\ shall\ describe\ its\ role\ in\ the\ particular\ application.}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ *\ Note,\ that\ individual\ properties\ that\ are\ programmatically\ set\ using\ @ref\ Builder::withProperty(const\ std::string\&,}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ *\ const\ std::string\&)\ "{}withProperty"{}\ method\ always\ take\ precedence.}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ *\ @ref\ Role::FEED\ "{}FEED"{}\ and\ @ref\ Role::PUBLISHER\ "{}PUBLISHER"{}\ automatically\ establish\ connection\ on\ creation}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ *\ when\ the\ corresponding\ ::DXFEED\_ADDRESS\_PROPERTY\ or\ ::DXPUBLISHER\_ADDRESS\_PROPERTY\ is\ specified.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ *\ <h3>Permanent\ subscription</h3>}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ *\ Endpoint\ properties\ can\ define\ permanent\ subscription\ for\ specific\ sets\ of\ symbols\ and\ event\ types\ in}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ *\ the\ data\ feed,\ so\ that\ DXFeed\ methods\ like\ @ref\ DXFeed::getLastEventIfSubscribed\ "{}getLastEventIfSubscribed"{},}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ *\ @ref\ DXFeed::getIndexedEventsIfSubscribed\ "{}getIndexedEventsIfSubscribed"{},\ and}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ *\ @ref\ DXFeed::getTimeSeriesIfSubscribed\ "{}getTimeSeriesIfSubscribed"{}\ can\ be\ used\ without\ a\ need\ to\ create\ a}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ *\ separate\ DXFeedSubscription\ object.\ Please,\ contact\ dxFeed\ support\ for\ details}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ *\ on\ the\ required\ configuration.}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ *\ <h3>Threads\ and\ locks</h3>}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ *\ This\ class\ is\ thread-\/safe\ and\ can\ be\ used\ concurrently\ from\ multiple\ threads\ without\ external\ synchronization.}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html)}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00182\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ property\ for\ endpoint\ name\ that\ is\ used\ to\ distinguish\ multiple\ endpoints}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *\ in\ the\ same\ process\ in\ logs\ and\ in\ other\ diagnostic\ means.}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ Use\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)\ method.}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ This\ property\ is\ also\ changed\ by\ Builder::withName(const\ std::string\&)\ method.}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_afe2a64464bb98673d09087043e5b2ff8}{NAME\_PROPERTY}};}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ path\ to\ a\ file\ with\ properties\ for\ an\ endpoint\ with\ role\ @ref\ Role::FEED\ "{}FEED"{}\ or}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}.}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ properties\ a\ loaded\ from\ a\ path\ resource\ named\ "{}dxfeed.properties"{}.}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac491fee2f147e882e63dc61fcf9e2d3b}{DXFEED\_PROPERTIES\_PROPERTY}};}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ default\ connection\ address\ for\ an\ endpoint\ with\ role\ @ref\ Role::FEED\ "{}FEED"{}}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *\ or\ @ref\ Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}.}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ Connection\ is\ established\ to\ this\ address\ by\ role\ @ref\ Role::FEED\ "{}FEED"{}\ as\ soon\ as\ endpoint\ is\ created,\ while}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ role\ @ref\ Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}\ waits\ until\ OnDemandService::replay(Date,\ double)\ is\ invoked}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ before\ connecting.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ without\ this\ property,\ connection\ is\ not\ established\ until\ @ref\ ::connect(const\ std::string\&)}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ "{}connect(address)"{}\ is\ invoked.}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ *\ Credentials\ for\ access\ to\ premium\ services\ may\ be\ configured\ with}}
+\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ *\ ::DXFEED\_USER\_PROPERTY\ and\ ::DXFEED\_PASSWORD\_PROPERTY.}}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a6ad96851a0a4d3bd1453bdb2bc3a8c00}{DXFEED\_ADDRESS\_PROPERTY}};}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ default\ user\ name\ for\ an\ endpoint\ with\ role\ @ref\ Role::FEED\ "{}FEED"{}\ or\ @ref\ Role::ON\_DEMAND\_FEED}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ "{}ON\_DEMAND\_FEED"{}.}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::user(const\ std::string\&)}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a20d2105822bb09efccafc1ab03019e40}{DXFEED\_USER\_PROPERTY}};}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ default\ password\ for\ an\ endpoint\ with\ role\ @ref\ Role::FEED\ "{}FEED"{}\ or\ @ref\ Role::ON\_DEMAND\_FEED}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ "{}ON\_DEMAND\_FEED"{}.}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::password(const\ std::string\&)}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a83df0e5afc81e1b35c314f738e81d5b6}{DXFEED\_PASSWORD\_PROPERTY}};}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ thread\ pool\ size\ for\ an\ endpoint\ with\ role\ @ref\ Role::FEED\ "{}FEED"{}.}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ the\ thread\ pool\ size\ is\ equal\ to\ the\ number\ of\ available\ processors.}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_adcc7e3483228a4d3da855789e7e5d338}{DXFEED\_THREAD\_POOL\_SIZE\_PROPERTY}};}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ data\ aggregation\ period\ an\ endpoint\ with\ role\ @ref\ Role::FEED\ "{}FEED"{}\ that}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ *\ limits\ the\ rate\ of\ data\ notifications.\ For\ example,\ setting\ the\ value\ of\ this\ property}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *\ to\ "{}0.1s"{}\ limits\ notification\ to\ once\ every\ 100ms\ (at\ most\ 10\ per\ second).}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a6db87042baf9b38a0451e363e47b5f1e}{DXFEED\_AGGREGATION\_PERIOD\_PROPERTY}};}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *\ Set\ this\ property\ to\ \`{}true`\ to\ turns\ on\ wildcard\ support.}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ the\ endpoint\ does\ not\ support\ wildcards.\ This\ property\ is\ needed\ for}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ WildcardSymbol\ support\ and\ for\ the\ use\ of\ "{}tape:..."{}\ address\ in\ DXPublisher.}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a744037b3ae1e5fdc750b41568503af7a}{DXFEED\_WILDCARD\_ENABLE\_PROPERTY}};}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ path\ to\ a\ file\ with\ properties\ for\ an\ endpoint\ with\ role\ @ref\ Role::PUBLISHER\ "{}PUBLISHER"{}.}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ properties\ a\ loaded\ from\ a\ classpath\ resource\ named\ "{}dxpublisher.properties"{}.}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a200a1641fd464f782b6715fc7d1c1d69}{DXPUBLISHER\_PROPERTIES\_PROPERTY}};}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ default\ connection\ address\ for\ an\ endpoint\ with\ role\ @ref\ Role::PUBLISHER\ "{}PUBLISHER"{}.}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ Connection\ is\ established\ to\ this\ address\ as\ soon\ as\ endpoint\ is\ created.}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ connection\ is\ not\ established\ until\ ::connect(const\ std::string\&)\ is\ invoked.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Builder::withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a7494f59e150133d36b87c0184c2179eb}{DXPUBLISHER\_ADDRESS\_PROPERTY}};}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ thread\ pool\ size\ for\ an\ endpoint\ with\ role\ @ref\ Role::PUBLISHER\ "{}PUBLISHER"{}.}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ the\ thread\ pool\ size\ is\ equal\ to\ the\ number\ of\ available\ processors.}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Builder\#withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a05e1051d4c622e4a4d451906cf49ed23}{DXPUBLISHER\_THREAD\_POOL\_SIZE\_PROPERTY}};}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ Set\ this\ property\ to\ \`{}true`\ to\ enable\ @ref\ EventType::getEventTime()\ "{}event\ time"{}\ support.}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ the\ endpoint\ does\ not\ support\ event\ time.}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ The\ event\ time\ is\ available\ only\ when\ the\ corresponding\ DXEndpoint\ is\ created\ with\ this\ property\ and}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ *\ the\ data\ source\ has\ embedded\ event\ times.\ This\ is\ typically\ true\ only\ for\ data\ events}}
+\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ *\ that\ are\ read\ from\ historical\ tape\ files\ and\ from\ OnDemandService.}}
+\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ \ *\ Events\ that\ are\ coming\ from\ a\ network\ connections\ do\ not\ have\ an\ embedded\ event\ time\ information\ and}}
+\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ *\ event\ time\ is\ not\ available\ for\ them\ anyway.}}
+\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *\ Use\ this\ property\ if\ you\ need\ to\ work\ with\ historical\ data\ coming\ from\ files}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ or\ from\ OnDemandService\ or\ writing\ data\ with\ times\ to\ file\ via\ DXPublisher\ using\ "{}tape:..."{}\ address.}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ade95bc0b10e58f612fd4355aa915ade9}{DXENDPOINT\_EVENT\_TIME\_PROPERTY}};}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ *\ Set\ this\ property\ to\ \ to\ store\ all\ @ref\ LastingEvent\ "{}lasting"{}\ and\ @ref\ IndexedEvent\ "{}indexed"{}\ events\ even\ when}}
+\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ *\ there\ is\ no\ subscription\ on\ them.\ By\ default,\ the\ endpoint\ stores\ only\ events\ from\ subscriptions.\ It\ works\ in}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ the\ same\ way\ both\ for\ DXFeed\ and\ DXPublisher.}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ Use\ this\ property\ with\ extreme\ care,}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *\ since\ API\ does\ not\ currently\ provide\ any\ means\ to\ remove\ those\ events\ from\ the\ storage\ and\ there\ might}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ be\ an\ effective\ memory\ leak\ if\ the\ spaces\ of\ symbols\ on\ which\ events\ are\ published\ grows\ without\ bound.}}
+\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a728c91286a3036e3242eaef51d4a27fc}{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}};}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ *\ Set\ this\ property\ to\ \`{}true`\ to\ turn\ on\ nanoseconds\ precision\ business\ time.}}
+\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ *\ By\ default,\ this\ feature\ is\ turned\ off.}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ Business\ time\ in\ most\ events\ is\ available\ with}}
+\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *\ millisecond\ precision\ by\ default,\ while\ Quote\ events\ business\ @ref\ Quote::getTime()\ "{}time"{}\ is\ available\ with}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ seconds\ precision.}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ provides\ a\ higher-\/level\ control\ than\ turning\ on\ individual\ properties\ that\ are\ responsible}}
+\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ for\ nano-\/time\ via\ ::DXSCHEME\_ENABLED\_PROPERTY\_PREFIX.\ The\ later\ can\ be\ used\ to\ override\ of\ fine-\/time}}
+\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ nano-\/time\ support\ for\ individual\ fields.\ Setting\ this\ property\ to\ \`{}true`\ is\ essentially}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ equivalent\ to\ setting:}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}ini}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *\ dxscheme.enabled.Sequence=*}}
+\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ *\ dxscheme.enabled.TimeNanoPart=*}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a65b730c6660eb3ad126e982f3b827dac}{DXSCHEME\_NANO\_TIME\_PROPERTY}};}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ Defines\ whether\ a\ specified\ field\ from\ the\ scheme\ should\ be\ enabled\ instead\ of\ it's\ default\ behaviour.}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *\ Use\ it\ according\ to\ following\ format:<br>}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ <b>`dxscheme.enabled.<field\_property\_name>=<event\_name\_mask\_glob>`</b>}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ For\ example,\ <b>`dxscheme.enabled.TimeNanoPart=Trade`</b>\ enables\ \`{}NanoTimePart`\ internal\ field}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ *\ only\ in\ Trade\ events.}}
+\DoxyCodeLine{00328\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00329\ \textcolor{comment}{\ \ \ \ \ *\ There\ is\ a\ shortcut\ for\ turning\ on\ nano-\/time\ support\ using\ ::DXSCHEME\_NANO\_TIME\_PROPERTY.}}
+\DoxyCodeLine{00330\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a5597919e7e7827db3f0cfe89a64dd590}{DXSCHEME\_ENABLED\_PROPERTY\_PREFIX}};}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ the\ role\ of\ endpoint\ that\ was\ specified\ during\ its\ @ref\ DXEndpoint::create()\ "{}creation"{}.}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *\ @see\ DXEndpoint}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00338\ \ \ \ \ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{int32\_t}}\ \{}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \`{}FEED`\ endpoint\ connects\ to\ the\ remote\ data\ feed\ provider\ and\ is\ optimized\ for\ real-\/time\ or}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ delayed\ data\ processing\ (<b>this\ is\ a\ default\ role</b>).\ DXEndpoint::getFeed()\ method}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ returns\ feed\ object\ that\ subscribes\ to\ the\ remote\ data\ feed\ provider\ and\ receives\ events\ from\ it.}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ When\ event\ processing\ threads\ cannot\ keep\ up\ (don't\ have\ enough\ CPU\ time),\ data\ is\ dynamically\ conflated\ to}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ minimize\ latency\ between\ received\ events\ and\ their\ processing\ time.}}
+\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ This\ endpoint\ is\ automatically\ connected\ to\ the\ configured\ data\ feed\ as\ explained\ in}}
+\DoxyCodeLine{00347\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ <a\ href="{}\#defaultPropertiesSection"{}>default\ properties\ section</a>.}}
+\DoxyCodeLine{00348\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED}},}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \`{}ON\_DEMAND\_FEED`\ endpoint\ is\ similar\ to\ ::FEED,\ but\ it\ is\ designed\ to\ be\ used\ with\ OnDemandService\ for}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ historical\ data\ replay\ only.\ It\ is\ configured\ with}}
+\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ <a\ href="{}\#defaultPropertiesSection"{}>default\ properties</a>,\ but\ is\ not\ connected\ automatically}}
+\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ to\ the\ data\ provider\ until\ @ref\ OnDemandService::replay(Date,\ double)\ "{}OnDemandService.replay"{}}}
+\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ method\ is\ invoked.}}
+\DoxyCodeLine{00357\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00358\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \`{}ON\_DEMAND\_FEED`\ endpoint\ cannot\ be\ connected\ to\ an\ ordinary\ data\ feed\ at\ all.}}
+\DoxyCodeLine{00359\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ OnDemandService::stopAndResume()\ will\ have\ a\ similar\ effect\ to\ OnDemandService::stopAndClear().}}
+\DoxyCodeLine{00360\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00361\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @see\ OnDemandService}}
+\DoxyCodeLine{00362\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\_DEMAND\_FEED}},}
+\DoxyCodeLine{00364\ }
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00366\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \`{}STREAM\_FEED`\ endpoint\ is\ similar\ to\ ::FEED\ and\ also\ connects\ to\ the\ remote\ data\ feed\ provider,}}
+\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ but\ is\ designed\ for\ bulk\ parsing\ of\ data\ from\ files.\ DXEndpoint::getFeed()\ method}}
+\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ returns\ feed\ object\ that\ subscribes\ to\ the\ data\ from\ the\ opened\ files\ and\ receives\ events\ from\ them.}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Events\ from\ the\ files\ are\ not\ conflated,\ are\ not\ skipped,\ and\ are\ processed\ as\ fast\ as\ possible.}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Note,\ that\ in\ this\ role,\ DXFeed::getLastEvent\ method\ does\ not\ work.}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da08e8da2638e7a4a4dfb3d29ab5afb751}{STREAM\_FEED}},}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \`{}PUBLISHER`\ endpoint\ connects\ to\ the\ remote\ publisher\ hub\ (also\ known\ as\ multiplexor)\ or}}
+\DoxyCodeLine{00376\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ creates\ a\ publisher\ on\ the\ local\ host.\ DXEndpoint\#getPublisher()\ method\ returns}}
+\DoxyCodeLine{00377\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ a\ publisher\ object\ that\ publishes\ events\ to\ all\ connected\ feeds.}}
+\DoxyCodeLine{00378\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Note,\ that\ in\ this\ role,\ DXFeed::getLastEvent\ method\ does\ not\ work\ and}}
+\DoxyCodeLine{00379\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ time-\/series\ subscription\ is\ not\ supported.}}
+\DoxyCodeLine{00380\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ This\ endpoint\ is\ automatically\ connected\ to\ the\ configured\ data\ feed\ as\ explained\ in}}
+\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ <a\ href="{}\#defaultPropertiesSection"{}>default\ properties\ section</a>.}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da02c25714ac6e2973dfb530a7520c80ae}{PUBLISHER}},}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \`{}STREAM\_PUBLISHER`\ endpoint\ is\ similar\ to\ ::PUBLISHER\ and\ also\ connects\ to\ the\ remote\ publisher}}
+\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ hub,\ but\ is\ designed\ for\ bulk\ publishing\ of\ data.\ DXEndpoint::getPublisher()\ method\ returns\ a}}
+\DoxyCodeLine{00389\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ publisher\ object\ that\ publishes\ events\ to\ all\ connected\ feeds.\ Published\ events\ are\ not\ conflated,\ are\ not}}
+\DoxyCodeLine{00390\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ skipped,\ and\ are\ processed\ as\ fast\ as\ possible.\ Note,\ that\ in\ this\ role,\ DXFeed::getLastEvent\ method}}
+\DoxyCodeLine{00391\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ does\ not\ work\ and\ time-\/series\ subscription\ is\ not\ supported.}}
+\DoxyCodeLine{00392\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da511c10e349c1261b726f4bf830c8a0e2}{STREAM\_PUBLISHER}},}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \`{}LOCAL\_HUB`\ endpoint\ is\ a\ local\ hub\ without\ ability\ to\ establish\ network\ connections.}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Events\ that\ are\ published\ via\ @ref\ DXEndpoint::getPublisher()\ "{}publisher"{}\ are\ delivered\ to\ local}}
+\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @ref\ DXEndpoint::getFeed()\ "{}feed"{}\ only.}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da16722a7e83ac68f9bc32cae5242046f5}{LOCAL\_HUB}}}
+\DoxyCodeLine{00401\ \ \ \ \ \};}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ roleToString(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ role)\ \{}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (role)\ \{}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Role::FEED:}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}FEED"{}};}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Role::ON\_DEMAND\_FEED:}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}ON\_DEMAND\_FEED"{}};}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Role::STREAM\_FEED:}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}STREAM\_FEED"{}};}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Role::PUBLISHER:}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}PUBLISHER"{}};}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Role::STREAM\_PUBLISHER:}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}STREAM\_PUBLISHER"{}};}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Role::LOCAL\_HUB:}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}LOCAL\_HUB"{}};}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00418\ }
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00420\ \ \ \ \ \}}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00423\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ the\ current\ state\ of\ endpoint.}}
+\DoxyCodeLine{00424\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ @see\ DXEndpoint}}
+\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00427\ \ \ \ \ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{int32\_t}}\ \{}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00429\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Endpoint\ was\ created\ by\ is\ not\ connected\ to\ remote\ endpoints.}}
+\DoxyCodeLine{00430\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\_CONNECTED}},}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00434\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ The\ @ref\ DXEndpoint::connect(const\ std::string\&)\ "{}connect"{}\ method\ was\ called\ to\ establish\ connection\ to}}
+\DoxyCodeLine{00435\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ remove\ endpoint,\ but\ connection\ is\ not\ actually\ established\ yet\ or\ was\ lost.}}
+\DoxyCodeLine{00436\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6a9a14f95e151eec641316e7c784ce832d}{CONNECTING}},}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00440\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ The\ connection\ to\ remote\ endpoint\ is\ established.}}
+\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6aa5afd6edd5336d91316964e493936858}{CONNECTED}},}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Endpoint\ was\ @ref\ DXEndpoint::close()\ "{}closed"{}.}}
+\DoxyCodeLine{00446\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}}}
+\DoxyCodeLine{00448\ \ \ \ \ \};}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00450\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{auto}\ stateToString(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\ state)\ \{}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (state)\ \{}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6ad91be9b5ceb9fe0af02b9b02413eccf8}{::}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\_CONNECTED}}:}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}NOT\_CONNECTED"{}};}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6a9a14f95e151eec641316e7c784ce832d}{::}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6a9a14f95e151eec641316e7c784ce832d}{CONNECTING}}:}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CONNECTING"{}};}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6aa5afd6edd5336d91316964e493936858}{::}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6aa5afd6edd5336d91316964e493936858}{CONNECTED}}:}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CONNECTED"{}};}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6a110ccf2f5d2ff4eda1fd1a494293467d}{::}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}}:}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CLOSED"{}};}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00463\ \ \ \ \ \}}
+\DoxyCodeLine{00464\ }
+\DoxyCodeLine{00465\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00466\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ std::mutex\ MTX\{\};}
+\DoxyCodeLine{00467\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<Role,\ std::shared\_ptr<DXEndpoint>>\ INSTANCES;}
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \ \ \ \ JavaObjectHandler<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ handler\_;}
+\DoxyCodeLine{00470\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ role\_\ =\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{::}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED}};}
+\DoxyCodeLine{00471\ \ \ \ \ std::string\ name\_\{\};}
+\DoxyCodeLine{00472\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}}>\ feed\_\{\};}
+\DoxyCodeLine{00473\ \ \ \ \ std::shared\_ptr<DXPublisher>\ publisher\_\{\};}
+\DoxyCodeLine{00474\ \ \ \ \ JavaObjectHandler<DXEndpointStateChangeListener>\ stateChangeListenerHandler\_;}
+\DoxyCodeLine{00475\ \ \ \ \ Handler<\textcolor{keywordtype}{void}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}},\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}})>\ onStateChange\_\{\};}
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00477\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ create(\textcolor{keywordtype}{void}\ *endpointHandle,\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ role,}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::string>\ \&properties);}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \ \ \ \ \textcolor{keywordtype}{void}\ setStateChangeListenerImpl();}
+\DoxyCodeLine{00481\ }
+\DoxyCodeLine{00482\ \ \ \ \ \textcolor{keywordtype}{void}\ closeImpl();}
+\DoxyCodeLine{00483\ }
+\DoxyCodeLine{00484\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00485\ \ \ \ \ DXEndpoint()\ :\ handler\_\{\},\ role\_\{\},\ feed\_\{\},\ publisher\_\{\},\ stateChangeListenerHandler\_\{\},\ onStateChange\_\{\}\ \{}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint()"{}});}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00489\ \ \ \ \ \}}
+\DoxyCodeLine{00490\ }
+\DoxyCodeLine{00491\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00492\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~DXEndpoint()\ \{}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint\{"{}}\ +\ handler\_.toString()\ +\ \textcolor{stringliteral}{"{}\}::\string~DXEndpoint()"{}});}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00496\ \ \ \ \ \}}
+\DoxyCodeLine{00497\ }
+\DoxyCodeLine{00498\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00499\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ default\ application-\/wide\ singleton\ instance\ of\ DXEndpoint\ with\ a\ @ref\ Role::FEED\ "{}FEED"{}\ role.}}
+\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ *\ Most\ applications\ use\ only\ a\ single\ data-\/source\ and\ should\ rely\ on\ this\ method\ to\ get\ one.}}
+\DoxyCodeLine{00501\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ creates\ an\ endpoint\ on\ the\ first\ use\ with\ a\ default}}
+\DoxyCodeLine{00502\ \textcolor{comment}{\ \ \ \ \ *\ configuration\ as\ explained\ in}}
+\DoxyCodeLine{00503\ \textcolor{comment}{\ \ \ \ \ *\ <a\ href="{}\#defaultPropertiesSection"{}>default\ properties\ section</a>\ of\ DXEndpoint\ class\ documentation.}}
+\DoxyCodeLine{00504\ \textcolor{comment}{\ \ \ \ \ *\ You\ can\ provide\ configuration\ via\ system\ properties\ as\ explained\ there.}}
+\DoxyCodeLine{00505\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00506\ \textcolor{comment}{\ \ \ \ \ *\ This\ is\ a\ shortcut\ to}}
+\DoxyCodeLine{00507\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ ::getInstance(Role)\ "{}getInstance"{}(@ref\ DXEndpoint\ "{}DXEndpoint"{}::@ref\ DXEndpoint::Role\ "{}Role"{}::@ref}}
+\DoxyCodeLine{00508\ \textcolor{comment}{\ \ \ \ \ *\ DXEndpoint.Role::FEED\ "{}FEED"{}).}}
+\DoxyCodeLine{00509\ \textcolor{comment}{\ \ \ \ \ *\ @see\ \#getInstance(Role)}}
+\DoxyCodeLine{00510\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00511\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a6b190bf5c614f618a80ae359c6334cb6}{getInstance}}()\ \{}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint::getInstance()"{}});}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac78d872789ab90a1d47865810d942a36}{getInstance}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{::}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED}});}
+\DoxyCodeLine{00517\ \ \ \ \ \}}
+\DoxyCodeLine{00518\ }
+\DoxyCodeLine{00519\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00520\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ default\ application-\/wide\ singleton\ instance\ of\ DXEndpoint\ for\ a\ specific\ role.}}
+\DoxyCodeLine{00521\ \textcolor{comment}{\ \ \ \ \ *\ Most\ applications\ use\ only\ a\ single\ data-\/source\ and\ should\ rely\ on\ this\ method\ to\ get\ one.}}
+\DoxyCodeLine{00522\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ creates\ an\ endpoint\ with\ the\ corresponding\ role\ on\ the\ first\ use\ with\ a\ default}}
+\DoxyCodeLine{00523\ \textcolor{comment}{\ \ \ \ \ *\ configuration\ as\ explained\ in}}
+\DoxyCodeLine{00524\ \textcolor{comment}{\ \ \ \ \ *\ <a\ href="{}\#defaultPropertiesSection"{}>default\ properties\ section</a>\ of\ DXEndpoint\ class\ documentation.}}
+\DoxyCodeLine{00525\ \textcolor{comment}{\ \ \ \ \ *\ You\ can\ provide\ configuration\ via\ system\ properties\ as\ explained\ there.}}
+\DoxyCodeLine{00526\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00527\ \textcolor{comment}{\ \ \ \ \ *\ The\ configuration\ does\ not\ have\ to\ include\ an\ address.\ You\ can\ use\ @ref\ ::connect(const\ std::string\&)}}
+\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ *\ "{}connect(address)"{}\ and\ ::disconnect()\ methods\ on\ the\ instance\ that\ is\ returned\ by\ this\ method\ to\ programmatically}}
+\DoxyCodeLine{00529\ \textcolor{comment}{\ \ \ \ \ *\ establish\ and\ tear-\/down\ connection\ to\ a\ user-\/provided\ address.}}
+\DoxyCodeLine{00530\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00531\ \textcolor{comment}{\ \ \ \ \ *\ If\ you\ need\ a\ fully\ programmatic\ configuration\ and/or\ multiple\ endpoints\ of\ the\ same\ role\ in\ your}}
+\DoxyCodeLine{00532\ \textcolor{comment}{\ \ \ \ \ *\ application,\ then\ create\ a\ custom\ instance\ of\ DXEndpoint\ with\ DXEndpoint::newBuilder()\ method,\ configure\ it,}}
+\DoxyCodeLine{00533\ \textcolor{comment}{\ \ \ \ \ *\ and\ use\ Builder::build()\ method.}}
+\DoxyCodeLine{00534\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00535\ \textcolor{comment}{\ \ \ \ \ *\ @param\ role\ The\ role\ of\ DXEndpoint\ instance}}
+\DoxyCodeLine{00536\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ DXEndpoint\ instance}}
+\DoxyCodeLine{00537\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00538\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac78d872789ab90a1d47865810d942a36}{getInstance}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ role)\ \{}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint::getInstance(role\ =\ "{}}\ +\ roleToString(role)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00542\ }
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ std::lock\_guard\ lock(MTX);}
+\DoxyCodeLine{00544\ }
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (INSTANCES.contains(role))\ \{}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ INSTANCES[role];}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00548\ }
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ INSTANCES[role]\ =\ newBuilder()-\/>withRole(role)-\/>build();}
+\DoxyCodeLine{00550\ \ \ \ \ \}}
+\DoxyCodeLine{00551\ }
+\DoxyCodeLine{00552\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00553\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ endpoint\ with\ @ref\ Role::FEED\ "{}FEED"{}\ role.}}
+\DoxyCodeLine{00554\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ of\ this\ method\ is\ the\ same\ as\ <b>`create(DXEndpoint::Role::FEED)`</b>.}}
+\DoxyCodeLine{00555\ \textcolor{comment}{\ \ \ \ \ *\ This\ is\ a\ shortcut\ to}}
+\DoxyCodeLine{00556\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ ::newBuilder()\ "{}newBuilder()"{}-\/>@ref\ Builder::build()\ "{}build()"{}}}
+\DoxyCodeLine{00557\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00558\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ created\ endpoint.}}
+\DoxyCodeLine{00559\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00560\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a4933409731472ca5aa39d0c83d542428}{create}}()\ \{}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint::create()"{}});}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00564\ }
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a4fd9e984ae1cc206b6ccf9e7d528af29}{newBuilder}}()-\/>build();}
+\DoxyCodeLine{00566\ \ \ \ \ \}}
+\DoxyCodeLine{00567\ }
+\DoxyCodeLine{00568\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00569\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ endpoint\ with\ a\ specified\ role.}}
+\DoxyCodeLine{00570\ \textcolor{comment}{\ \ \ \ \ *\ This\ is\ a\ shortcut\ to}}
+\DoxyCodeLine{00571\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ ::newBuilder()\ "{}newBuilder()"{}-\/>@ref\ Builder::withRole(Role)\ "{}withRole(role)"{}-\/>@ref\ Builder::build()}}
+\DoxyCodeLine{00572\ \textcolor{comment}{\ \ \ \ \ *\ "{}build()"{}}}
+\DoxyCodeLine{00573\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00574\ \textcolor{comment}{\ \ \ \ \ *\ @param\ role\ the\ role.}}
+\DoxyCodeLine{00575\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ created\ endpoint.}}
+\DoxyCodeLine{00576\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00577\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a230f7841ff2da5b2da3d6d72bd5fb8a0}{create}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ role)\ \{}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint::create(role\ =\ "{}}\ +\ roleToString(role)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00581\ }
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a4fd9e984ae1cc206b6ccf9e7d528af29}{newBuilder}}()-\/>withRole(role)-\/>build();}
+\DoxyCodeLine{00583\ \ \ \ \ \}}
+\DoxyCodeLine{00584\ }
+\DoxyCodeLine{00585\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00586\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ role\ of\ this\ endpoint.}}
+\DoxyCodeLine{00587\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00588\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ role.}}
+\DoxyCodeLine{00589\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00590\ \textcolor{comment}{\ \ \ \ \ *\ @see\ DXEndpoint}}
+\DoxyCodeLine{00591\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00592\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a8532cb77e64847d745d727a6ef5f2751}{getRole}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ role\_;\ \}}
+\DoxyCodeLine{00593\ }
+\DoxyCodeLine{00594\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00595\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ state\ of\ this\ endpoint.}}
+\DoxyCodeLine{00596\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ state.}}
+\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00599\ \textcolor{comment}{\ \ \ \ \ *\ @see\ DXEndpoint}}
+\DoxyCodeLine{00600\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00601\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_aaac4bccb8c818c9a3edfb59d98fe8b7c}{getState}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00602\ }
+\DoxyCodeLine{00603\ \ \ \ \ \textcolor{comment}{///\ @return\ \`{}true`\ if\ the\ endpoint\ is\ closed}}
+\DoxyCodeLine{00604\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a8513eebf380d198002fc62b142f251cf}{isClosed}}()\ \textcolor{keyword}{const}\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_aaac4bccb8c818c9a3edfb59d98fe8b7c}{getState}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_aaac4bccb8c818c9a3edfb59d98fe8b7c}{(}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_aaac4bccb8c818c9a3edfb59d98fe8b7c}{)}}\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6a110ccf2f5d2ff4eda1fd1a494293467d}{::}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}};\ \}}
+\DoxyCodeLine{00605\ }
+\DoxyCodeLine{00606\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00607\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ user\ defined\ endpoint's\ name}}
+\DoxyCodeLine{00608\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00609\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a390f2befe2ffa56dbc9cccca5956a359}{getName}}()\ \textcolor{keyword}{const}\ \&\ \{\ \textcolor{keywordflow}{return}\ name\_;\ \}}
+\DoxyCodeLine{00610\ }
+\DoxyCodeLine{00611\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00612\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ listener\ that\ is\ notified\ about\ changes\ in\ @ref\ ::getState()\ "{}state"{}\ property.}}
+\DoxyCodeLine{00613\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00614\ \textcolor{comment}{\ \ \ \ \ *\ <p>Installed\ listener\ can\ be\ removed\ by\ \`{}id`\ with\ ::removeStateChangeListener\ method\ or\ by\ call}}
+\DoxyCodeLine{00615\ \textcolor{comment}{\ \ \ \ \ *\ \`{}::onStateChange()\ -\/=\ id`;}}
+\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00617\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ StateChangeListener\ The\ listener\ type.\ It\ can\ be\ any\ callable\ with\ signature:\ \`{}void(State,\ State)`}}
+\DoxyCodeLine{00618\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener\ to\ add}}
+\DoxyCodeLine{00619\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ listener\ id}}
+\DoxyCodeLine{00620\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00621\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ StateChangeListener>}
+\DoxyCodeLine{00622\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a619cb80fb1de10040705be2ce9a20068}{addStateChangeListener}}(StateChangeListener\ \&\&listener)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00623\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{requires}}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{requires}}\ \{}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{listener}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{State}}\{\},\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{State}}\{\})\ \}\ -\/>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{same\_as}}<\textcolor{keywordtype}{void}>;}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00627\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00628\ \ \ \ \ \{}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{onStateChange\_}}\ +=\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{listener}};}
+\DoxyCodeLine{00630\ \ \ \ \ \}}
+\DoxyCodeLine{00631\ }
+\DoxyCodeLine{00632\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00633\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ listener\ that\ is\ notified\ about\ changes\ in\ @ref\ ::getState()\ "{}state"{}\ property.}}
+\DoxyCodeLine{00634\ \textcolor{comment}{\ \ \ \ \ *\ It\ removes\ the\ listener\ that\ was\ previously\ installed\ with\ ::addStateChangeListener\ method.}}
+\DoxyCodeLine{00635\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00636\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listenerId\ The\ listener\ id\ to\ remove}}
+\DoxyCodeLine{00637\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00638\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ae89268e0bca1746a67cb322882535c3a}{removeStateChangeListener}}(std::size\_t\ listenerId)\ \textcolor{keyword}{noexcept}\ \{\ onStateChange\_\ -\/=\ listenerId;\ \}}
+\DoxyCodeLine{00639\ }
+\DoxyCodeLine{00640\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00641\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ onStateChange\ @ref\ Handler<void(ArgTypes...)>\ "{}handler"{}\ that\ can\ be\ used\ to\ add\ or\ remove}}
+\DoxyCodeLine{00642\ \textcolor{comment}{\ \ \ \ \ *\ listeners.}}
+\DoxyCodeLine{00643\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00644\ \textcolor{comment}{\ \ \ \ \ *\ @return\ onStateChange\ handler\ with\ \`{}void(State,\ State)`\ signature}}
+\DoxyCodeLine{00645\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00646\ \ \ \ \ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a85142bbe29a101b1f0b2fa39d0c174d0}{onStateChange}}()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ onStateChange\_;\ \}}
+\DoxyCodeLine{00647\ }
+\DoxyCodeLine{00648\ \ \ \ \ \textcolor{comment}{//\ TODO:\ implement}}
+\DoxyCodeLine{00649\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Executor>\ \textcolor{keywordtype}{void}\ executor(Executor\ \&\&)\ \{\}}
+\DoxyCodeLine{00650\ }
+\DoxyCodeLine{00651\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00652\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ user\ name\ for\ this\ endpoint.}}
+\DoxyCodeLine{00653\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ shall\ be\ called\ before\ @ref\ ::connect(const\ std::string\&)\ "{}connect"{}\ together}}
+\DoxyCodeLine{00654\ \textcolor{comment}{\ \ \ \ \ *\ with\ @ref\ ::password(const\ std::string\&)\ "{}password"{}\ to\ configure\ service\ access\ credentials.}}
+\DoxyCodeLine{00655\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00656\ \textcolor{comment}{\ \ \ \ \ *\ @param\ user\ The\ user\ name.}}
+\DoxyCodeLine{00657\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00658\ \textcolor{comment}{\ \ \ \ \ *\ @return\ this\ DXEndpoint.}}
+\DoxyCodeLine{00659\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00660\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a6d1ed418821c52412fa9b5153c1db4a5}{user}}(\textcolor{keyword}{const}\ std::string\ \&user);}
+\DoxyCodeLine{00661\ }
+\DoxyCodeLine{00662\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00663\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ password\ for\ this\ endpoint.}}
+\DoxyCodeLine{00664\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ shall\ be\ called\ before\ @ref\ ::connect(const\ std::string\&)\ "{}connect"{}\ together}}
+\DoxyCodeLine{00665\ \textcolor{comment}{\ \ \ \ \ *\ with\ @ref\ ::user(const\ std::string\&)\ "{}user"{}\ to\ configure\ service\ access\ credentials.}}
+\DoxyCodeLine{00666\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00667\ \textcolor{comment}{\ \ \ \ \ *\ @param\ password\ The\ password.}}
+\DoxyCodeLine{00668\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00669\ \textcolor{comment}{\ \ \ \ \ *\ @return\ this\ DXEndpoint.}}
+\DoxyCodeLine{00670\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00671\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a7afc1644a3e88289801bcec710cc3b91}{password}}(\textcolor{keyword}{const}\ std::string\ \&password);}
+\DoxyCodeLine{00672\ }
+\DoxyCodeLine{00673\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00674\ \textcolor{comment}{\ \ \ \ \ *\ Connects\ to\ the\ specified\ remote\ address.\ Previously\ established\ connections\ are\ closed\ if}}
+\DoxyCodeLine{00675\ \textcolor{comment}{\ \ \ \ \ *\ the\ new\ address\ is\ different\ from\ the\ old\ one.}}
+\DoxyCodeLine{00676\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ does\ nothing\ if\ address\ does\ not\ change\ or\ if\ this\ endpoint\ is\ @ref\ State::CLOSED\ "{}CLOSED"{}.}}
+\DoxyCodeLine{00677\ \textcolor{comment}{\ \ \ \ \ *\ The\ endpoint\ @ref\ ::getState()\ "{}state"{}\ immediately\ becomes\ @ref\ State::CONNECTING\ "{}CONNECTING"{}\ otherwise.}}
+\DoxyCodeLine{00678\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00679\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ The\ address\ string\ is\ provided\ with\ the\ market\ data\ vendor\ agreement.}}
+\DoxyCodeLine{00680\ \textcolor{comment}{\ \ \ \ \ *\ Use\ "{}demo.dxfeed.com:7300"{}\ for\ a\ demo\ quote\ feed.}}
+\DoxyCodeLine{00681\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00682\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ The\ simplest\ address\ strings\ have\ the\ following\ format:}}
+\DoxyCodeLine{00683\ \textcolor{comment}{\ \ \ \ \ *\ *\ \`{}host:port`\ to\ establish\ a\ TCP/IP\ connection.}}
+\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *\ *\ \`{}:port`\ to\ listen\ for\ a\ TCP/IP\ connection\ with\ a\ plain\ socket\ connector\ (good\ for\ up\ to\ a}}
+\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *\ few\ hundred\ of\ connections).}}
+\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00687\ \textcolor{comment}{\ \ \ \ \ *\ <p>For\ premium\ services\ access\ credentials\ must\ be\ configured\ before\ invocation\ of\ \`{}connect`\ method}}
+\DoxyCodeLine{00688\ \textcolor{comment}{\ \ \ \ \ *\ using\ @ref\ ::user(const\ std::string\&)\ "{}user"{}\ and\ @ref\ ::password(const\ std::string\&)\ "{}password"{}\ methods.}}
+\DoxyCodeLine{00689\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00690\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ <b>This\ method\ does\ not\ wait\ until\ connection\ actually\ gets\ established</b>.\ The\ actual\ connection}}
+\DoxyCodeLine{00691\ \textcolor{comment}{\ \ \ \ \ *\ establishment\ happens\ asynchronously\ after\ the\ invocation\ of\ this\ method.\ However,\ this\ method\ waits\ until}}
+\DoxyCodeLine{00692\ \textcolor{comment}{\ \ \ \ \ *\ notification\ about\ state\ transition\ from\ State::NOT\_CONNECTED\ to\ State::CONNECTING\ gets\ processed\ by\ all}}
+\DoxyCodeLine{00693\ \textcolor{comment}{\ \ \ \ \ *\ listeners.}}
+\DoxyCodeLine{00694\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00695\ \textcolor{comment}{\ \ \ \ \ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#connect-\/java.lang.String-\/)}}
+\DoxyCodeLine{00696\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00697\ \textcolor{comment}{\ \ \ \ \ *\ @param\ address\ The\ data\ source\ address.}}
+\DoxyCodeLine{00698\ \textcolor{comment}{\ \ \ \ \ *\ @return\ this\ DXEndpoint.}}
+\DoxyCodeLine{00699\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00700\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a26dc7548a792c0e3eb0b47a90ff7771c}{connect}}(\textcolor{keyword}{const}\ std::string\ \&address);}
+\DoxyCodeLine{00701\ }
+\DoxyCodeLine{00702\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00703\ \textcolor{comment}{\ \ \ \ \ *\ Terminates\ all\ established\ network\ connections\ and\ initiates\ connecting\ again\ with\ the\ same\ address.}}
+\DoxyCodeLine{00704\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00705\ \textcolor{comment}{\ \ \ \ \ *\ <p>The\ effect\ of\ the\ method\ is\ alike\ to\ invoking\ ::disconnect()\ and\ ::connect(const\ std::string\&)}}
+\DoxyCodeLine{00706\ \textcolor{comment}{\ \ \ \ \ *\ with\ the\ current\ address,\ but\ internal\ resources\ used\ for\ connections\ may\ be\ reused\ by\ implementation.}}
+\DoxyCodeLine{00707\ \textcolor{comment}{\ \ \ \ \ *\ TCP\ connections\ with\ multiple\ target\ addresses\ will\ try\ switch\ to\ an\ alternative\ address,\ configured}}
+\DoxyCodeLine{00708\ \textcolor{comment}{\ \ \ \ \ *\ reconnect\ timeouts\ will\ apply.}}
+\DoxyCodeLine{00709\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00710\ \textcolor{comment}{\ \ \ \ \ *\ <p><b>Note:</b>\ The\ method\ will\ not\ connect\ endpoint\ that\ was\ not\ initially\ connected\ with}}
+\DoxyCodeLine{00711\ \textcolor{comment}{\ \ \ \ \ *\ ::connect(const\ std::string\&)\ method\ or\ was\ disconnected\ with\ ::disconnect()\ method.}}
+\DoxyCodeLine{00712\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00713\ \textcolor{comment}{\ \ \ \ \ *\ <p>The\ method\ initiates\ a\ short-\/path\ way\ for\ reconnecting,\ so\ whether\ observers\ will\ have\ a\ chance\ to\ see}}
+\DoxyCodeLine{00714\ \textcolor{comment}{\ \ \ \ \ *\ an\ intermediate\ state\ State\#NOT\_CONNECTED\ depends\ on\ the\ implementation.}}
+\DoxyCodeLine{00715\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00716\ \textcolor{comment}{\ \ \ \ \ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#reconnect-\/-\/)}}
+\DoxyCodeLine{00717\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00718\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a7ad6212704e2f6a8fbfdb2912342587e}{reconnect}}();}
+\DoxyCodeLine{00719\ }
+\DoxyCodeLine{00720\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00721\ \textcolor{comment}{\ \ \ \ \ *\ Terminates\ all\ remote\ network\ connections.}}
+\DoxyCodeLine{00722\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ does\ nothing\ if\ this\ endpoint\ is\ @ref\ State\#CLOSED\ "{}CLOSED"{}.}}
+\DoxyCodeLine{00723\ \textcolor{comment}{\ \ \ \ \ *\ The\ endpoint\ @ref\ ::getState()\ "{}state"{}\ immediately\ becomes\ @ref\ State::NOT\_CONNECTED\ "{}NOT\_CONNECTED"{}\ otherwise.}}
+\DoxyCodeLine{00724\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00725\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ method\ does\ not\ release\ all\ resources\ that\ are\ associated\ with\ this\ endpoint.}}
+\DoxyCodeLine{00726\ \textcolor{comment}{\ \ \ \ \ *\ Use\ ::close()\ method\ to\ release\ all\ resources.}}
+\DoxyCodeLine{00727\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00728\ \textcolor{comment}{\ \ \ \ \ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#disconnect-\/-\/)}}
+\DoxyCodeLine{00729\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00730\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a3cd3eb1eef171e3cc16e8a811e7c276e}{disconnect}}();}
+\DoxyCodeLine{00731\ }
+\DoxyCodeLine{00732\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00733\ \textcolor{comment}{\ \ \ \ \ *\ Terminates\ all\ remote\ network\ connections\ and\ clears\ stored\ data.}}
+\DoxyCodeLine{00734\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ does\ nothing\ if\ this\ endpoint\ is\ @ref\ State::CLOSED\ "{}CLOSED"{}.}}
+\DoxyCodeLine{00735\ \textcolor{comment}{\ \ \ \ \ *\ The\ endpoint\ @ref\ ::getState()\ "{}state"{}\ immediately\ becomes\ @ref\ State::NOT\_CONNECTED\ "{}NOT\_CONNECTED"{}\ otherwise.}}
+\DoxyCodeLine{00736\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00737\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ method\ does\ not\ release\ all\ resources\ that\ are\ associated\ with\ this\ endpoint.}}
+\DoxyCodeLine{00738\ \textcolor{comment}{\ \ \ \ \ *\ Use\ close()\ method\ to\ release\ all\ resources.}}
+\DoxyCodeLine{00739\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00740\ \textcolor{comment}{\ \ \ \ \ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#disconnectAndClear-\/-\/)}}
+\DoxyCodeLine{00741\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00742\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a54870cea9e9e4b541549f183c76fda4d}{disconnectAndClear}}();}
+\DoxyCodeLine{00743\ }
+\DoxyCodeLine{00744\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00745\ \textcolor{comment}{\ \ \ \ \ *\ Closes\ this\ endpoint.\ All\ network\ connection\ are\ terminated\ as\ with\ ::disconnect()\ method\ and\ no\ further}}
+\DoxyCodeLine{00746\ \textcolor{comment}{\ \ \ \ \ *\ connections\ can\ be\ established.}}
+\DoxyCodeLine{00747\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00748\ \textcolor{comment}{\ \ \ \ \ *\ The\ endpoint\ @ref\ ::getState()\ "{}state"{}\ immediately\ becomes\ @ref\ State::CLOSED\ "{}CLOSED"{}.}}
+\DoxyCodeLine{00749\ \textcolor{comment}{\ \ \ \ \ *\ All\ resources\ associated\ with\ this\ endpoint\ are\ released.}}
+\DoxyCodeLine{00750\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00751\ \textcolor{comment}{\ \ \ \ \ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#close-\/-\/)}}
+\DoxyCodeLine{00752\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00753\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a06b70688f7aa279e0a905099cb7cb4c9}{close}}()\ \{}
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint\{"{}}\ +\ handler\_.toString()\ +\ \textcolor{stringliteral}{"{}\}::close()"{}});}
+\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00757\ }
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ closeImpl();}
+\DoxyCodeLine{00759\ \ \ \ \ \}}
+\DoxyCodeLine{00760\ }
+\DoxyCodeLine{00761\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00762\ \textcolor{comment}{\ \ \ \ \ *\ Waits\ while\ this\ endpoint\ @ref\ ::getState()\ "{}state"{}\ becomes\ @ref\ State::NOT\_CONNECTED\ "{}NOT\_CONNECTED"{}\ or}}
+\DoxyCodeLine{00763\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ State::CLOSED\ "{}CLOSED"{}.\ It\ is\ a\ signal\ that\ any\ files\ that\ were\ opened\ with}}
+\DoxyCodeLine{00764\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ connect(const\ std::string\&)\ "{}connect(\(\backslash\)"{}file:...\(\backslash\)"{})"{}\ method\ were\ finished\ reading,\ but\ not\ necessary\ were}}
+\DoxyCodeLine{00765\ \textcolor{comment}{\ \ \ \ \ *\ completely\ processed\ by\ the\ corresponding\ subscription\ listeners.\ Use\ closeAndAwaitTermination()\ after\ this}}
+\DoxyCodeLine{00766\ \textcolor{comment}{\ \ \ \ \ *\ method\ returns\ to\ make\ sure\ that\ all\ processing\ has\ completed.}}
+\DoxyCodeLine{00767\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00768\ \textcolor{comment}{\ \ \ \ \ *\ <p><b>This\ method\ is\ blocking.</b>}}
+\DoxyCodeLine{00769\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00770\ \textcolor{comment}{\ \ \ \ \ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#awaitNotConnected-\/-\/)}}
+\DoxyCodeLine{00771\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00772\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a82ec4a2efd7f8c976cd3874a31aaacb8}{awaitNotConnected}}();}
+\DoxyCodeLine{00773\ }
+\DoxyCodeLine{00774\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00775\ \textcolor{comment}{\ \ \ \ \ *\ Waits\ until\ this\ endpoint\ stops\ processing\ data\ (becomes\ quiescent).}}
+\DoxyCodeLine{00776\ \textcolor{comment}{\ \ \ \ \ *\ This\ is\ important\ when\ writing\ data\ to\ file\ via\ "{}tape:..."{}\ connector\ to\ make\ sure\ that}}
+\DoxyCodeLine{00777\ \textcolor{comment}{\ \ \ \ \ *\ all\ published\ data\ was\ written\ before\ closing\ this\ endpoint.}}
+\DoxyCodeLine{00778\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00779\ \textcolor{comment}{\ \ \ \ \ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#awaitProcessed-\/-\/)}}
+\DoxyCodeLine{00780\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00781\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a1facf9c56758e1dee75b278d9271ef62}{awaitProcessed}}();}
+\DoxyCodeLine{00782\ }
+\DoxyCodeLine{00783\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00784\ \textcolor{comment}{\ \ \ \ \ *\ Closes\ this\ endpoint\ and\ wait\ until\ all\ pending\ data\ processing\ tasks\ are\ completed.}}
+\DoxyCodeLine{00785\ \textcolor{comment}{\ \ \ \ \ *\ This\ \ method\ performs\ the\ same\ actions\ as\ close\ ::close(),\ but\ also\ awaits}}
+\DoxyCodeLine{00786\ \textcolor{comment}{\ \ \ \ \ *\ termination\ of\ all\ outstanding\ data\ processing\ tasks.\ It\ is\ designed\ to\ be\ used}}
+\DoxyCodeLine{00787\ \textcolor{comment}{\ \ \ \ \ *\ with\ @ref\ Role::STREAM\_FEED\ "{}STREAM\_FEED"{}\ role\ after\ ::awaitNotConnected()\ method\ returns}}
+\DoxyCodeLine{00788\ \textcolor{comment}{\ \ \ \ \ *\ to\ make\ sure\ that\ file\ was\ completely\ processed.}}
+\DoxyCodeLine{00789\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00790\ \textcolor{comment}{\ \ \ \ \ *\ <p><b>This\ method\ is\ blocking.</b>}}
+\DoxyCodeLine{00791\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00792\ \textcolor{comment}{\ \ \ \ \ *\ [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#closeAndAwaitTermination-\/-\/)}}
+\DoxyCodeLine{00793\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00794\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a80ef90ad7bf0e92968c4379a53d90ea5}{closeAndAwaitTermination}}();}
+\DoxyCodeLine{00795\ }
+\DoxyCodeLine{00796\ \ \ \ \ \textcolor{comment}{//\ TODO:\ implement}}
+\DoxyCodeLine{00797\ \ \ \ \ std::unordered\_set<EventTypeEnum>\ getEventTypes()\ \{\ \textcolor{keywordflow}{return}\ \{\};\ \}}
+\DoxyCodeLine{00798\ }
+\DoxyCodeLine{00799\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00800\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ feed\ that\ is\ associated\ with\ this\ endpoint.}}
+\DoxyCodeLine{00801\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00802\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_aadf6d4f1eeb73b91c4f7f1deca4bb61f}{getFeed}}();}
+\DoxyCodeLine{00803\ }
+\DoxyCodeLine{00804\ \ \ \ \ \textcolor{comment}{//\ TODO:\ implement}}
+\DoxyCodeLine{00805\ \ \ \ \ std::shared\_ptr<DXPublisher>\ getPublisher()\ \{\ \textcolor{keywordflow}{return}\ \{\};\ \}}
+\DoxyCodeLine{00806\ }
+\DoxyCodeLine{00807\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00808\ \textcolor{comment}{\ \ \ \ \ *\ Builder\ class\ for\ DXEndpoint\ that\ supports\ additional\ configuration\ properties.}}
+\DoxyCodeLine{00809\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00810\ \ \ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{enable\_shared\_from\_this}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}>\ \{}
+\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}};}
+\DoxyCodeLine{00812\ }
+\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ mutable\ std::recursive\_mutex\ mtx\_\{\};}}
+\DoxyCodeLine{00814\ \ \ \ \ \ \ \ \ JavaObjectHandler<\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}>\ handler\_;}
+\DoxyCodeLine{00815\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ role\_\ =\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{::}}\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED}};}
+\DoxyCodeLine{00816\ \ \ \ \ \ \ \ \ std::unordered\_map<std::string,\ std::string>\ properties\_;}
+\DoxyCodeLine{00817\ }
+\DoxyCodeLine{00818\ \ \ \ \ \ \ \ \ Builder()\ :\ handler\_\{\},\ properties\_\{\}\ \{}
+\DoxyCodeLine{00819\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00820\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint::Builder::Builder()"{}});}
+\DoxyCodeLine{00821\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00822\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00823\ }
+\DoxyCodeLine{00824\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}>\ create()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00825\ }
+\DoxyCodeLine{00826\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00827\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Tries\ to\ load\ the\ default\ properties\ file\ for\ Role::FEED,\ Role::ON\_DEMAND\_FEED\ or\ Role::PUBLISHER\ role.}}
+\DoxyCodeLine{00828\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00829\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ The\ default\ properties\ file\ is\ loaded\ only\ if\ there\ are\ no\ system\ properties\ or\ user\ properties\ set\ with\ the}}
+\DoxyCodeLine{00830\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ same\ key\ and\ the\ file\ itself\ exists\ and\ is\ readable.}}
+\DoxyCodeLine{00831\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00832\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ This\ file\ must\ be\ in\ the\ <a\ href="{}https://en.wikipedia.org/wiki/.properties"{}>Java\ properties\ file\ format</a>.}}
+\DoxyCodeLine{00833\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ File\ be\ named\ "{}dxfeed.properties"{}\ for\ Role::FEED\ and\ Role::ON\_DEMAND\_FEED\ roles}}
+\DoxyCodeLine{00834\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ or\ "{}dxpublisher.properties"{}\ for\ the\ Role::PUBLISHER\ role.}}
+\DoxyCodeLine{00835\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00836\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Non\ thread-\/safe.}}
+\DoxyCodeLine{00837\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ loadDefaultPropertiesImpl();}
+\DoxyCodeLine{00839\ }
+\DoxyCodeLine{00840\ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00841\ \ \ \ \ \ \ \ \ \textcolor{comment}{///\ Releases\ the\ GraalVM\ handle}}
+\DoxyCodeLine{00842\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \string~\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_abc9c35e76c8fcc848f7ef3f37f9d7ce4}{Builder}}()\ \{}
+\DoxyCodeLine{00843\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00844\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint::Builder\{"{}}\ +\ handler\_.toString()\ +\ \textcolor{stringliteral}{"{}\}::\string~Builder()"{}});}
+\DoxyCodeLine{00845\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00846\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00847\ }
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00849\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Changes\ name\ that\ is\ used\ to\ distinguish\ multiple\ endpoints}}
+\DoxyCodeLine{00850\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ in\ the\ same\ process\ (GraalVM\ Isolate)\ in\ logs\ and\ in\ other\ diagnostic\ means.}}
+\DoxyCodeLine{00851\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ This\ is\ a\ shortcut\ for\ @ref\ ::withProperty\ "{}withProperty"{}(::NAME\_PROPERTY,\ \`{}name`)}}
+\DoxyCodeLine{00852\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00853\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param\ name\ The\ endpoint's\ name}}
+\DoxyCodeLine{00854\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00855\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @return\ \`{}this`\ endpoint\ builder.}}
+\DoxyCodeLine{00856\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00857\ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ab4eba04d0142dcd63d24fe7a1d3cae5a}{withName}}(\textcolor{keyword}{const}\ std::string\ \&name)\ \{}
+\DoxyCodeLine{00858\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ check\ invalid\ utf-\/8}}
+\DoxyCodeLine{00859\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00860\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint::Builder\{"{}}\ +\ handler\_.toString()\ +\ \textcolor{stringliteral}{"{}\}::withName(name\ =\ "{}}\ +\ name\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00861\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00862\ }
+\DoxyCodeLine{00863\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ withProperty(NAME\_PROPERTY,\ name);}
+\DoxyCodeLine{00864\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00865\ }
+\DoxyCodeLine{00866\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00867\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Sets\ role\ for\ the\ created\ DXEndpoint.}}
+\DoxyCodeLine{00868\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Default\ role\ is\ @ref\ Role::FEED\ "{}FEED"{}.}}
+\DoxyCodeLine{00869\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00870\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param\ role\ The\ endpoint's\ role}}
+\DoxyCodeLine{00871\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00872\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @return\ \`{}this`\ endpoint\ builder.}}
+\DoxyCodeLine{00873\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00874\ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a78a4d67260b04c965ed28419637066a9}{withRole}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d}{Role}}\ role);}
+\DoxyCodeLine{00875\ }
+\DoxyCodeLine{00876\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00877\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Sets\ the\ specified\ property.\ Unsupported\ properties\ are\ ignored.}}
+\DoxyCodeLine{00878\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00879\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param\ key\ The\ endpoint's\ property\ key}}
+\DoxyCodeLine{00880\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param\ value\ The\ endpoint's\ property\ value}}
+\DoxyCodeLine{00881\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @return\ \`{}this`\ endpoint\ builder.}}
+\DoxyCodeLine{00882\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00883\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @see\ ::supportsProperty(const\ std::string\&)}}
+\DoxyCodeLine{00884\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00885\ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a06466a9c8a88df62c32c20e17788f4a4}{withProperty}}(\textcolor{keyword}{const}\ std::string\ \&key,\ \textcolor{keyword}{const}\ std::string\ \&value);}
+\DoxyCodeLine{00886\ }
+\DoxyCodeLine{00887\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00888\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Sets\ all\ supported\ properties\ from\ the\ provided\ properties\ object.}}
+\DoxyCodeLine{00889\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00890\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @tparam\ Properties\ The\ properties'\ type\ (std::map,\ std::unordered\_map\ etc)}}
+\DoxyCodeLine{00891\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param\ properties\ The\ endpoint's\ properties}}
+\DoxyCodeLine{00892\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @return\ \`{}this`\ endpoint\ builder.}}
+\DoxyCodeLine{00893\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00894\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @see\ ::withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00895\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00896\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Properties>\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a73a17565b146393ae7a7d4ff39a1301f}{withProperties}}(Properties\ \&\&properties)\ \{}
+\DoxyCodeLine{00897\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{isDebug}})\ \{}
+\DoxyCodeLine{00898\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{debug}}(\textcolor{stringliteral}{"{}DXEndpoint::Builder\{"{}}\ +\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{handler\_}}.\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{toString}}()\ +\ \textcolor{stringliteral}{"{}\}::withProperties(properties["{}}\ +}
+\DoxyCodeLine{00899\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{to\_string}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{properties}}.\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{size}}())\ +\ \textcolor{stringliteral}{"{}])"{}});}
+\DoxyCodeLine{00900\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00901\ }
+\DoxyCodeLine{00902\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&\&[\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{k}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{v}}]\ :\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{properties}})\ \{}
+\DoxyCodeLine{00903\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{withProperty}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{k}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{v}});}
+\DoxyCodeLine{00904\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00905\ }
+\DoxyCodeLine{00906\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{shared\_from\_this}}();}
+\DoxyCodeLine{00907\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00908\ }
+\DoxyCodeLine{00909\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00910\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Checks\ if\ a\ property\ is\ supported}}
+\DoxyCodeLine{00911\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00912\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param\ key\ The\ property's\ key\ to\ be\ checked\ for\ support}}
+\DoxyCodeLine{00913\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ corresponding\ property\ key\ is\ supported.}}
+\DoxyCodeLine{00914\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00915\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @see\ ::withProperty(const\ std::string\&,\ const\ std::string\&)}}
+\DoxyCodeLine{00916\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00917\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_ad5a7fb14a7d2bc422155fc2df54591f5}{supportsProperty}}(\textcolor{keyword}{const}\ std::string\ \&key);}
+\DoxyCodeLine{00918\ }
+\DoxyCodeLine{00919\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00920\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Builds\ DXEndpoint\ instance.}}
+\DoxyCodeLine{00921\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{00922\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @return\ the\ created\ endpoint.}}
+\DoxyCodeLine{00923\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00924\ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder_a963b99c59a3721dab1472e47789e434f}{build}}();}
+\DoxyCodeLine{00925\ \ \ \ \ \};}
+\DoxyCodeLine{00926\ }
+\DoxyCodeLine{00927\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00928\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ Builder\ instance.}}
+\DoxyCodeLine{00929\ \textcolor{comment}{\ \ \ \ \ *\ Use\ Builder::build()\ to\ build\ an\ instance\ of\ DXEndpoint\ when\ all\ configuration\ properties\ were\ set.}}
+\DoxyCodeLine{00930\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00931\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ created\ endpoint\ builder.}}
+\DoxyCodeLine{00932\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00933\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a4fd9e984ae1cc206b6ccf9e7d528af29}{newBuilder}}()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00934\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00935\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXEndpoint::newBuilder()"{}});}
+\DoxyCodeLine{00936\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00937\ }
+\DoxyCodeLine{00938\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_endpoint_1_1_builder}{Builder}}::create();}
+\DoxyCodeLine{00939\ \ \ \ \ \}}
+\DoxyCodeLine{00940\ }
+\DoxyCodeLine{00941\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a7db13b173219d96358bde62b441e023c}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00942\ \};}
+\DoxyCodeLine{00943\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}
