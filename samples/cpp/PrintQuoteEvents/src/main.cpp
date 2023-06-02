@@ -22,9 +22,9 @@ int main(int argc, char *argv[]) {
     auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
 
     // Listener must be attached before symbols are added.
-    subscription->addEventListener([](auto &&events) {
+    subscription->addEventListener([](const auto &events) {
         // Prints all received events.
-        for (auto &&e : events) {
+        for (const auto &e : events) {
             std::cout << e << "\n";
         }
     });

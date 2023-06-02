@@ -15,6 +15,7 @@ project(dxFeedGraalCXXAPITests LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
+set(CXX_EXTENSIONS OFF)
 
 set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-2.4.11)
 

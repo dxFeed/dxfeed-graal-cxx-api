@@ -15,6 +15,8 @@ project(dxFeedGraalCxxApi)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
+set(CXX_EXTENSIONS OFF)
+set(C_EXTENSIONS OFF)
 
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(DXFC_IS_ROOT_PROJECT ON)
@@ -224,4 +226,5 @@ if (DXFC_BUILD_UNIT_TESTS)
 endif ()
 
 add_subdirectory(samples/cpp/PrintQuoteEvents)
+add_subdirectory(samples/cpp/DxFeedSample)
 add_subdirectory(tools/Tools)
