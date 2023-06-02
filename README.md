@@ -156,9 +156,16 @@ Find useful information in our self-service dxFeed Knowledge Base or .NET API do
 
 ## Installation
 
-Download zip bundle, add to CMake project.
+Download zip bundle or full project and add to CMake or VS project.
+- Option 1: add the API git source directory as a CMake subproject. [Example](https://github.com/AnatolyKalin/dxFeedGraalCxxApiSample)
+- Option 2: add the zip bundle as a CMake or VS dependency. [Example](https://github.com/AnatolyKalin/dxFeedGraalCxxApiSampleVS)
+
+The API is delivered as a dynamic library (`[lib]dxFeedGraalCxxApi.so|dll|dylib`) and a static one (`[lib]dxFeedGraalCxxApi.a|lib`).
+Also it depends on `[lib]DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH`.
 
 ## Usage
+
+To use the dynamic library define the `DXFCPP_USE_DLLS` preprocessor directive.
 
 ```cpp
 #include <iostream>
