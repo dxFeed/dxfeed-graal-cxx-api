@@ -42,3 +42,5 @@ cmake-build-*/
 
 .PVS-Studio/
 *.PVS-Studio.*
+
+build-*/
