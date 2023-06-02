@@ -35,7 +35,7 @@ jobs:
 
       - name: Pack
         working-directory: ${{github.workspace}}/build-${{matrix.buildType}}
-        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Upload
         uses: actions/upload-artifact@v3
