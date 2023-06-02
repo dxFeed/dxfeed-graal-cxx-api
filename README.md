@@ -142,7 +142,7 @@ Below is a scheme of this process:
 
 Find useful information in our self-service dxFeed Knowledge Base or .NET API documentation:
 
-- [dxFeed Graal C/C++ API documentation]()
+- [dxFeed Graal C/C++ API documentation](https://dxfeed.github.io/dxfeed-graal-cxx-api/)
 - [dxFeed Knowledge Base](https://kb.dxfeed.com/index.html?lang=en)
     * [Getting Started](https://kb.dxfeed.com/en/getting-started.html)
     * [Troubleshooting](https://kb.dxfeed.com/en/troubleshooting-guidelines.html)
