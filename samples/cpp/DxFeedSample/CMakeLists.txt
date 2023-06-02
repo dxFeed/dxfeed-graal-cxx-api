@@ -21,11 +21,11 @@ set(C_EXTENSIONS OFF)
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE ../../../include)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE dxFeedGraalCxxApi dxFeedGraalCxxApi_CompilerOptions dxFeedGraalCxxApi_Shared)
+target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
 target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE:dxFeedGraalCxxApi> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/dxfeed.properties $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+        $<TARGET_FILE:dxfcxx::graal>
+        $<TARGET_FILE:dxfcxx>
+        ${CMAKE_CURRENT_SOURCE_DIR}/dxfeed.properties
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
