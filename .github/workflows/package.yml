@@ -1,0 +1,44 @@
+# Copyright (c) 2023 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+name: package
+
+on:
+  workflow_dispatch:
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: 'Release'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        #        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [ windows-latest, macos-latest, ubuntu-22.04 ]
+        buildType: [ Release, Debug ]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Prepare build
+        run: |
+          ls
+          mkdir ${{github.workspace}}/build-${{matrix.buildType}}    
+
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}}
+
+      - name: Pack
+        working-directory: ${{github.workspace}}/build-${{matrix.buildType}}
+        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: dxFeedGraalCxxApi
+          path: build-${{matrix.buildType}}/*.zip

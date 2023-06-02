@@ -5,10 +5,9 @@
 
 #include "Conf.hpp"
 
-#include <graal_isolate.h>
-
 #include "CEntryPointErrors.hpp"
 #include "Common.hpp"
+#include "utils/StringUtils.hpp"
 
 #include <functional>
 #include <iostream>
@@ -22,8 +21,9 @@
 #endif
 
 namespace dxfcpp {
-using GraalIsolateHandle = std::add_pointer_t<graal_isolate_t>;
-using GraalIsolateThreadHandle = std::add_pointer_t<graal_isolatethread_t>;
+using GraalIsolateHandle = void *;
+using GraalIsolateThreadHandle = void *;
+using ConstGraalIsolateThreadHandle = const void *;
 
 class Isolate final {
     struct IsolateThread final {
@@ -43,60 +43,9 @@ class Isolate final {
             }
         }
 
-        CEntryPointErrors detach() noexcept {
-            if constexpr (Debugger::traceIsolates) {
-                Debugger::trace(toString() + "::detach()");
-            }
+        CEntryPointErrors detach() noexcept;
 
-            // OK if nothing is attached.
-            if (!handle) {
-                if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace(toString() + "::detach(): !handle => Not attached");
-                }
-
-                return CEntryPointErrors::NO_ERROR;
-            }
-
-            auto result = CEntryPointErrors::valueOf(graal_detach_thread(handle));
-
-            if (result == CEntryPointErrors::NO_ERROR) {
-                if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace(toString() + "::detach(): result == CEntryPointErrors::NO_ERROR => Detached");
-                }
-
-                handle = nullptr;
-            }
-
-            return result;
-        }
-
-        CEntryPointErrors detachAllThreadsAndTearDownIsolate() noexcept {
-            if constexpr (Debugger::traceIsolates) {
-                Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate()");
-            }
-
-            if (!handle) {
-                if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate(): !handle => Not attached");
-                }
-
-                return CEntryPointErrors::NO_ERROR;
-            }
-
-            auto result = CEntryPointErrors::valueOf(graal_detach_all_threads_and_tear_down_isolate(handle));
-
-            if (result == CEntryPointErrors::NO_ERROR) {
-                if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace(toString() +
-                                    "::detachAllThreadsAndTearDownIsolate(): CEntryPointErrors::NO_ERROR => All "
-                                    "threads have been detached. The isolate has been teared down.");
-                }
-
-                handle = nullptr;
-            }
-
-            return result;
-        }
+        CEntryPointErrors detachAllThreadsAndTearDownIsolate() noexcept;
 
         ~IsolateThread() noexcept {
             if constexpr (Debugger::traceIsolates) {
@@ -122,7 +71,7 @@ class Isolate final {
     };
 
     mutable std::recursive_mutex mtx_{};
-    const GraalIsolateHandle handle_;
+    ConstGraalIsolateThreadHandle handle_;
     IsolateThread mainIsolateThread_;
     static thread_local IsolateThread currentIsolateThread_;
 
@@ -138,79 +87,11 @@ class Isolate final {
         }
     }
 
-    static std::shared_ptr<Isolate> create() noexcept {
-        if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("Isolate::create()");
-        }
+    static std::shared_ptr<Isolate> create() noexcept;
 
-        GraalIsolateHandle graalIsolateHandle{};
-        GraalIsolateThreadHandle graalIsolateThreadHandle{};
+    CEntryPointErrors attach() noexcept;
 
-        if (CEntryPointErrors::valueOf(graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) ==
-            CEntryPointErrors::NO_ERROR) {
-
-            auto result = std::shared_ptr<Isolate>{new (std::nothrow) Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
-
-            if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("Isolate::create() -> *" + result->toString());
-            }
-
-            return result;
-        }
-
-        if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("Isolate::create() -> nullptr");
-        }
-
-        return nullptr;
-    }
-
-    CEntryPointErrors attach() noexcept {
-        if constexpr (Debugger::traceIsolates) {
-            Debugger::trace(toString() + "::attach()");
-        }
-
-        // We will not re-attach.
-        if (!currentIsolateThread_.handle) {
-            if constexpr (Debugger::traceIsolates) {
-                Debugger::trace(toString() + "::attach(): !currentIsolateThread_.handle => Needs to be attached.");
-            }
-
-            GraalIsolateThreadHandle newIsolateThreadHandle{};
-
-            if (auto result = CEntryPointErrors::valueOf(graal_attach_thread(handle_, &newIsolateThreadHandle));
-                result != CEntryPointErrors::NO_ERROR) {
-
-                if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace(toString() + "::attach(): result != CEntryPointErrors::NO_ERROR [" +
-                                    std::to_string(result.getCode()) + "] " + result.getDescription());
-                }
-
-                return result;
-            }
-
-            currentIsolateThread_.handle = newIsolateThreadHandle;
-            currentIsolateThread_.isMain = mainIsolateThread_.handle == newIsolateThreadHandle;
-
-            if constexpr (Debugger::traceIsolates) {
-                Debugger::trace(toString() + "::attach(): Attached: " + currentIsolateThread_.toString());
-            }
-        } else {
-            if constexpr (Debugger::traceIsolates) {
-                Debugger::trace(toString() + "::attach(): Cached: " + currentIsolateThread_.toString());
-            }
-        }
-
-        return CEntryPointErrors::NO_ERROR;
-    }
-
-    GraalIsolateThreadHandle get() noexcept {
-        if constexpr (Debugger::traceIsolates) {
-            Debugger::trace(toString() + "::get()");
-        }
-
-        return graal_get_current_thread(handle_);
-    }
+    GraalIsolateThreadHandle get() noexcept;
 
   public:
     Isolate() = delete;

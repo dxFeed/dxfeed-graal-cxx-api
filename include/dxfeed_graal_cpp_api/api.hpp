@@ -10,6 +10,7 @@
 #include "internal/Enum.hpp"
 #include "internal/EventClassList.hpp"
 #include "internal/Id.hpp"
+#include "internal/Isolate.hpp"
 #include "internal/JavaObjectHandler.hpp"
 #include "internal/NonCopyable.hpp"
 #include "internal/RawListWrapper.hpp"
