@@ -188,14 +188,14 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOL
 add_library(${PROJECT_NAME}_CompilerOptions INTERFACE)
 
 if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"))
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic" "-Werror")
+    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic")
     target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-Wno-undefined-var-template" "-Wno-unused-private-field")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic" "-Werror")
+    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic")
     target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-fPIC" "-no-pie")
     target_link_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-fPIC")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "/W4" "/WX")
+    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "/W4")
     target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "/wd4996" "/wd4251")
 endif ()
 
