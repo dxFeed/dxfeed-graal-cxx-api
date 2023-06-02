@@ -36,7 +36,8 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     if (runIsolatedOrElse(
             [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
              subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
-                return dxfg_DXFeed_attachSubscription(threadHandle, handler, subHandler) == 0;
+                return dxfg_DXFeed_attachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handler,
+                                                      subHandler) == 0;
             },
             false)) {
 
@@ -56,7 +57,8 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     if (runIsolatedOrElse(
             [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
              subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscription(threadHandle, handler, subHandler) == 0;
+                return dxfg_DXFeed_detachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handler,
+                                                      subHandler) == 0;
             },
             false)) {
 
@@ -76,7 +78,8 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     if (runIsolatedOrElse(
             [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
              subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscriptionAndClear(threadHandle, handler, subHandler) == 0;
+                return dxfg_DXFeed_detachSubscriptionAndClear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                              handler, subHandler) == 0;
             },
             false)) {
 
@@ -117,7 +120,7 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
 
     std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
 
-    //TODO: error handling
+    // TODO: error handling
 
     if (feed) {
         feed->handler_ = JavaObjectHandler<DXFeed>(feedHandle);

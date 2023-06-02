@@ -12,7 +12,7 @@ template <typename T> void JavaObjectHandler<T>::deleter(void *handler) noexcept
     runIsolatedOrElse(
         [handler = handler](auto threadHandle) {
             if (handler) {
-                return dxfg_JavaObjectHandler_release(threadHandle, bit_cast<dxfg_java_object_handler *>(handler)) == 0;
+                return dxfg_JavaObjectHandler_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), bit_cast<dxfg_java_object_handler *>(handler)) == 0;
             }
 
             return true;
