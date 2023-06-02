@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['clear_0',['clear',['../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html#a887783cf364e0c2e95e20ea2376be8ba',1,'dxfcpp::DXFeedSubscription']]],
+  ['close_1',['close',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#a06b70688f7aa279e0a905099cb7cb4c9',1,'dxfcpp::DXEndpoint::close()'],['../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html#a3843aa7e4d0eefddbcdc695909566c45',1,'dxfcpp::DXFeedSubscription::close()']]],
+  ['closeandawaittermination_2',['closeAndAwaitTermination',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#a80ef90ad7bf0e92968c4379a53d90ea5',1,'dxfcpp::DXEndpoint']]],
+  ['connect_3',['connect',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#a26dc7548a792c0e3eb0b47a90ff7771c',1,'dxfcpp::DXEndpoint']]],
+  ['containseventtype_4',['containsEventType',['../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html#aca0ef67ba62822be7cbedfc8cab5680a',1,'dxfcpp::DXFeedSubscription']]],
+  ['create_5',['create',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#a4933409731472ca5aa39d0c83d542428',1,'dxfcpp::DXEndpoint::create()'],['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#a230f7841ff2da5b2da3d6d72bd5fb8a0',1,'dxfcpp::DXEndpoint::create(Role role)'],['../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html#a49b2bc2cb75f94bf9c49920a7cf94286',1,'dxfcpp::DXFeedSubscription::create(const EventTypeEnum &amp;eventType) noexcept'],['../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html#ad29cf904c88e2c175b7dd0c980d36a2b',1,'dxfcpp::DXFeedSubscription::create(EventTypeIt begin, EventTypeIt end) noexcept'],['../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html#accf30348917f797b43ed401bcc521202',1,'dxfcpp::DXFeedSubscription::create(std::initializer_list&lt; EventTypeEnum &gt; eventTypes) noexcept'],['../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html#ac630f6080ba186e6aea9862e1581584f',1,'dxfcpp::DXFeedSubscription::create(EventTypesCollection &amp;&amp;eventTypes) noexcept']]]
+];
