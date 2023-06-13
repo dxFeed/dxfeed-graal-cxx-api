@@ -12,6 +12,8 @@
 #include <variant>
 
 #include "../api/osub/WildcardSymbol.hpp"
+#include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
+#include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
 #include "StringSymbol.hpp"
 
 namespace dxfcpp {
@@ -21,7 +23,7 @@ namespace dxfcpp {
  * representation.
  */
 struct DXFCPP_EXPORT SymbolWrapper final {
-    using DataType = typename std::variant<WildcardSymbol, StringSymbol>;
+    using DataType = typename std::variant<WildcardSymbol, StringSymbol, IndexedEventSubscriptionSymbol, TimeSeriesSubscriptionSymbol>;
 
   private:
     DataType data_;
@@ -66,7 +68,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     /**
      * Constructor for any wrapped wildcard (*) symbol.
      *
-     * @param wildcardSymbol The wrapped wildcard symbl
+     * @param wildcardSymbol The wrapped wildcard symbol
      */
     SymbolWrapper(const WildcardSymbol &wildcardSymbol) noexcept {
         if constexpr (Debugger::isDebug) {
@@ -74,6 +76,32 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         }
 
         data_ = wildcardSymbol;
+    }
+
+    /**
+     * Constructor for IndexedEventSubscriptionSymbol.
+     *
+     * @param indexedEventSubscriptionSymbol The IndexedEventSubscriptionSymbol
+     */
+    SymbolWrapper(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("SymbolWrapper(indexedEventSubscriptionSymbol = " + toStringAny(indexedEventSubscriptionSymbol) + ")");
+        }
+
+        data_ = indexedEventSubscriptionSymbol;
+    }
+
+    /**
+     * Constructor for TimeSeriesSubscriptionSymbol.
+     *
+     * @param timeSeriesSubscriptionSymbol The TimeSeriesSubscriptionSymbol
+     */
+    SymbolWrapper(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("SymbolWrapper(timeSeriesSubscriptionSymbol = " + toStringAny(timeSeriesSubscriptionSymbol) + ")");
+        }
+
+        data_ = timeSeriesSubscriptionSymbol;
     }
 
     void *toGraal() const noexcept {
@@ -90,6 +118,18 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
+     * @return `true` if current SymbolWrapper holds a StringSymbol
+     */
+    bool isStringSymbol() const noexcept { return std::holds_alternative<StringSymbol>(data_); }
+
+    /**
+     * @return String representation of StringSymbol or an empty string
+     */
+    std::string asStringSymbol() const noexcept {
+        return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
+    }
+
+    /**
      * @return `true` if current SymbolWrapper holds a WildcardSymbol
      */
     bool isWildcardSymbol() const noexcept { return std::holds_alternative<WildcardSymbol>(data_); }
@@ -102,15 +142,27 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
-     * @return `true` if current SymbolWrapper holds a StringSymbol
+     * @return `true` if current SymbolWrapper holds a IndexedEventSubscriptionSymbol
      */
-    bool isStringSymbol() const noexcept { return std::holds_alternative<StringSymbol>(data_); }
+    bool isIndexedEventSubscriptionSymbol() const noexcept { return std::holds_alternative<IndexedEventSubscriptionSymbol>(data_); }
 
     /**
-     * @return String representation of StringSymbol or an empty string
+     * @return IndexedEventSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold IndexedEventSubscriptionSymbol
      */
-    std::string asStringSymbol() const noexcept {
-        return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
+    std::optional<IndexedEventSubscriptionSymbol> asIndexedEventSubscriptionSymbol() const noexcept {
+        return isIndexedEventSubscriptionSymbol() ? std::get<IndexedEventSubscriptionSymbol>(data_).getData() : std::nullopt;
+    }
+
+    /**
+     * @return `true` if current SymbolWrapper holds a TimeSeriesSubscriptionSymbol
+     */
+    bool isTimeSeriesSubscriptionSymbol() const noexcept { return std::holds_alternative<TimeSeriesSubscriptionSymbol>(data_); }
+
+    /**
+     * @return TimeSeriesSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold TimeSeriesSubscriptionSymbol
+     */
+    std::optional<TimeSeriesSubscriptionSymbol> asTimeSeriesSubscriptionSymbol() const noexcept {
+        return isTimeSeriesSubscriptionSymbol() ? std::get<TimeSeriesSubscriptionSymbol>(data_).getData() : std::nullopt;
     }
 
     const DataType &getData() const noexcept { return data_; }

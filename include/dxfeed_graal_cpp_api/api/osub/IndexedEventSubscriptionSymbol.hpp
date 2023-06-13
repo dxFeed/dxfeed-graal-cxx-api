@@ -29,9 +29,9 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol final {
 
     std::string toString() const noexcept;
 
-    bool operator==(const IndexedEventSubscriptionSymbol &wildcardSymbol);
+    bool operator==(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
 
-    bool operator<(const IndexedEventSubscriptionSymbol &wildcardSymbol);
+    bool operator<(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
 };
 
 } // namespace dxfcpp
