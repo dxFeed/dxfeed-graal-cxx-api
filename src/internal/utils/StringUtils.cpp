@@ -44,6 +44,17 @@ std::string toString(void *ptr) {
     return result.str();
 }
 
+std::string toString(double d) {
+    if (std::isnan(d)) {
+        return "NaN";
+    }
+
+    auto x = fmt::format("{}", d);
+    auto y = fmt::format("{}", std::round(d));
+
+    return x.size() == y.size() ? x + ".0" : x;
+}
+
 std::string encodeChar(std::int16_t c) {
     if (c >= 32 && c <= 126) {
         return std::string{} + static_cast<char>(c);
@@ -85,16 +96,45 @@ std::int16_t utf8to16(char in) {
 }
 
 std::string formatTimeStamp(std::int64_t timestamp) {
+    if (timestamp == 0) {
+        return "0";
+    }
+
     auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
 
-    return fmt::format("{:%y%m%d-%H%M%S%z}", tm);
+    return fmt::format("{:%Y%m%d-%H%M%S}", tm);
+}
+
+std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
+    if (timestamp == 0) {
+        return "0";
+    }
+
+    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+
+    return fmt::format("{:%Y%m%d-%H%M%S%z}", tm);
 }
 
 std::string formatTimeStampWithMillis(std::int64_t timestamp) {
+    if (timestamp == 0) {
+        return "0";
+    }
+
     auto ms = timestamp % 1000;
     auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
 
-    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
+    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}", tm, ms);
 }
 
+std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
+    if (timestamp == 0) {
+        return "0";
+    }
+
+    auto ms = timestamp % 1000;
+    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+
+    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
 }
+
+} // namespace dxfcpp

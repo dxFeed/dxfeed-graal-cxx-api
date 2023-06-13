@@ -53,6 +53,16 @@ class DXFCPP_EXPORT IndexedEventSource {
      * @return The string representation of the object.
      */
     std::string toString() const noexcept { return name_; }
+
+    bool operator==(const IndexedEventSource &indexedEventSource) const { return id_ == indexedEventSource.id_; }
+
+    auto operator<(const IndexedEventSource &indexedEventSource) const { return id_ < indexedEventSource.id_; }
 };
 
 } // namespace dxfcpp
+
+template <> struct std::hash<dxfcpp::IndexedEventSource> {
+    std::size_t operator()(const dxfcpp::IndexedEventSource &indexedEventSource) const noexcept {
+        return indexedEventSource.id();
+    }
+};

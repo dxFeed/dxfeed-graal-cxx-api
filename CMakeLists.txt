@@ -105,6 +105,8 @@ set(dxFeedNativeAPIAPISources
 
 set(dxFeedNativeAPIAPIOsubSources
         src/api/osub/WildcardSymbol.cpp
+        src/api/osub/TimeSeriesSubscriptionSymbol.cpp
+        src/api/osub/IndexedEventSubscriptionSymbol.cpp
         )
 
 set(dxFeedNativeAPISymbolsSources

@@ -69,11 +69,12 @@ std::string OptionSale::toString() const noexcept {
         "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
         "validTick={}, type={}, underlyingPrice={}, volatility={}, delta={}, optionSymbol='{}'}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
-        getSequence(), encodeChar(getExchangeCode()), getPrice(), getSize(), getBidPrice(),
-        getAskPrice(), getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()),
-        getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
-        getUnderlyingPrice(), getVolatility(), getDelta(), getOptionSymbol());
+        getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(),
+        encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()),
+        dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()), getExchangeSaleConditions(),
+        encodeChar(getTradeThroughExempt()), getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(),
+        isValidTick(), getType().toString(), dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getVolatility()),
+        dxfcpp::toString(getDelta()), getOptionSymbol());
 }
 
 } // namespace dxfcpp

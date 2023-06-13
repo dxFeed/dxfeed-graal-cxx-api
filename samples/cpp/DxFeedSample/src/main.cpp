@@ -36,9 +36,9 @@ void testQuoteAndTradeListener(const std::string &symbol) {
         for (const auto &e : events) {
             //An example of using is<T> and sharedAs<T> (may return empty shared_ptr)
             if (const auto& q = e-> template sharedAs<Quote>(); q) {
-                std::cout << "Q: " + q->toString() + "\n";
+                std::cout << q->toString() + "\n";
             } else if (e-> template is<Trade>()) {
-                std::cout << "T: " + e-> template sharedAs<Trade>()->toString() + "\n";
+                std::cout << e-> template sharedAs<Trade>()->toString() + "\n";
             }
         }
     });

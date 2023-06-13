@@ -54,8 +54,10 @@ std::string Underlying::toString() const noexcept {
         "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
         "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getVolatility(),
-        getFrontVolatility(), getBackVolatility(), getCallVolume(), getPutVolume(), getPutCallRatio());
+        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(),
+        dxfcpp::toString(getVolatility()), dxfcpp::toString(getFrontVolatility()),
+        dxfcpp::toString(getBackVolatility()), dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()),
+        dxfcpp::toString(getPutCallRatio()));
 }
 
 } // namespace dxfcpp
