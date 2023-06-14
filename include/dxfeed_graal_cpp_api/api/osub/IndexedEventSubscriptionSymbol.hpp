@@ -20,6 +20,8 @@ struct SymbolWrapper;
 class DXFCPP_EXPORT IndexedEventSubscriptionSymbol final {
     std::unique_ptr<SymbolWrapper> eventSymbol_;
     IndexedEventSource source_;
+    struct Impl;
+    std::unique_ptr<Impl> impl_;
 
   public:
     IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol, const IndexedEventSource &source) noexcept;
@@ -28,8 +30,8 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol final {
     IndexedEventSubscriptionSymbol &
     operator=(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept;
     IndexedEventSubscriptionSymbol &operator=(IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept;
-    IndexedEventSubscriptionSymbol() noexcept = default;
-    virtual ~IndexedEventSubscriptionSymbol() noexcept = default;
+    IndexedEventSubscriptionSymbol() noexcept;
+    virtual ~IndexedEventSubscriptionSymbol() noexcept;
 
     const std::unique_ptr<SymbolWrapper> &getEventSymbol() const;
 

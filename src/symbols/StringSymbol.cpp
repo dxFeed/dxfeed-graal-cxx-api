@@ -85,8 +85,6 @@ StringSymbol::~StringSymbol() noexcept = default;
 void *StringSymbol::toGraal() const noexcept {
     if (impl_->graalSymbol.symbol == nullptr) {
         impl_->graalSymbol.symbol = data_.c_str();
-
-        // std::visit([this](auto symbol) { impl_->graalSymbol.symbol = symbol.data(); }, data_);
     }
 
     return bit_cast<void *>(&impl_->graalSymbol);

@@ -9,6 +9,45 @@
 
 namespace dxfcpp {
 
+//TODO: implement recursive construction\destruction
+struct IndexedEventSubscriptionSymbol::Impl final {
+    dxfg_indexed_event_subscription_symbol_t graalSymbol;
+
+    Impl() noexcept : graalSymbol{{INDEXED_EVENT_SUBSCRIPTION}, nullptr} {}
+
+    Impl(const Impl &) noexcept {
+        graalSymbol.supper = {INDEXED_EVENT_SUBSCRIPTION};
+        graalSymbol.symbol = nullptr;
+    }
+
+    Impl(Impl &&) noexcept {
+        graalSymbol.supper = {INDEXED_EVENT_SUBSCRIPTION};
+        graalSymbol.symbol = nullptr;
+    }
+
+    Impl &operator=(const Impl &impl) noexcept {
+        if (this == &impl) {
+            return *this;
+        }
+
+        graalSymbol.supper = {INDEXED_EVENT_SUBSCRIPTION};
+        graalSymbol.symbol = nullptr;
+
+        return *this;
+    }
+
+    Impl &operator=(Impl &&impl) noexcept {
+        if (this == &impl) {
+            return *this;
+        }
+
+        graalSymbol.supper = {INDEXED_EVENT_SUBSCRIPTION};
+        graalSymbol.symbol = nullptr;
+
+        return *this;
+    }
+};
+
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol,
                                                                const IndexedEventSource &source) noexcept
     : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), source_(source) {}
@@ -63,5 +102,10 @@ IndexedEventSubscriptionSymbol::operator=(IndexedEventSubscriptionSymbol &&index
 
     return *this;
 }
+
+IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol() noexcept
+    : impl_{std::make_unique<IndexedEventSubscriptionSymbol::Impl>()} {}
+
+IndexedEventSubscriptionSymbol::~IndexedEventSubscriptionSymbol() noexcept = default;
 
 } // namespace dxfcpp
