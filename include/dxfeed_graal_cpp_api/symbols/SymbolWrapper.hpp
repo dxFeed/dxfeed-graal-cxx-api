@@ -11,9 +11,10 @@
 #include <utility>
 #include <variant>
 
-#include "../api/osub/WildcardSymbol.hpp"
+#include "../internal/Common.hpp"
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
+#include "../api/osub/WildcardSymbol.hpp"
 #include "StringSymbol.hpp"
 
 namespace dxfcpp {
@@ -23,18 +24,19 @@ namespace dxfcpp {
  * representation.
  */
 struct DXFCPP_EXPORT SymbolWrapper final {
-    using DataType = typename std::variant<WildcardSymbol, StringSymbol, IndexedEventSubscriptionSymbol, TimeSeriesSubscriptionSymbol>;
+    using DataType = typename std::variant<WildcardSymbol, StringSymbol, IndexedEventSubscriptionSymbol,
+                                           TimeSeriesSubscriptionSymbol>;
 
   private:
     DataType data_;
 
   public:
     SymbolWrapper(const SymbolWrapper &) noexcept = default;
-    SymbolWrapper(SymbolWrapper &&) noexcept = delete;
+    SymbolWrapper(SymbolWrapper &&) noexcept = default;
     SymbolWrapper &operator=(const SymbolWrapper &) noexcept = default;
-    SymbolWrapper &operator=(SymbolWrapper &&) noexcept = delete;
+    SymbolWrapper &operator=(SymbolWrapper &&) noexcept = default;
     SymbolWrapper() noexcept = default;
-    ~SymbolWrapper() noexcept = default;
+    virtual ~SymbolWrapper() noexcept = default;
 
     /**
      * Constructor for any wrapped symbol.
@@ -85,7 +87,8 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      */
     SymbolWrapper(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("SymbolWrapper(indexedEventSubscriptionSymbol = " + toStringAny(indexedEventSubscriptionSymbol) + ")");
+            Debugger::debug(
+                "SymbolWrapper(indexedEventSubscriptionSymbol = " + toStringAny(indexedEventSubscriptionSymbol) + ")");
         }
 
         data_ = indexedEventSubscriptionSymbol;
@@ -98,7 +101,8 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      */
     SymbolWrapper(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("SymbolWrapper(timeSeriesSubscriptionSymbol = " + toStringAny(timeSeriesSubscriptionSymbol) + ")");
+            Debugger::debug(
+                "SymbolWrapper(timeSeriesSubscriptionSymbol = " + toStringAny(timeSeriesSubscriptionSymbol) + ")");
         }
 
         data_ = timeSeriesSubscriptionSymbol;
@@ -144,25 +148,35 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     /**
      * @return `true` if current SymbolWrapper holds a IndexedEventSubscriptionSymbol
      */
-    bool isIndexedEventSubscriptionSymbol() const noexcept { return std::holds_alternative<IndexedEventSubscriptionSymbol>(data_); }
+    bool isIndexedEventSubscriptionSymbol() const noexcept {
+        return std::holds_alternative<IndexedEventSubscriptionSymbol>(data_);
+    }
 
     /**
-     * @return IndexedEventSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold IndexedEventSubscriptionSymbol
+     * @return IndexedEventSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold
+     * IndexedEventSubscriptionSymbol
      */
     std::optional<IndexedEventSubscriptionSymbol> asIndexedEventSubscriptionSymbol() const noexcept {
-        return isIndexedEventSubscriptionSymbol() ? std::get<IndexedEventSubscriptionSymbol>(data_).getData() : std::nullopt;
+        return isIndexedEventSubscriptionSymbol()
+                   ? std::make_optional<IndexedEventSubscriptionSymbol>(std::get<IndexedEventSubscriptionSymbol>(data_))
+                   : std::nullopt;
     }
 
     /**
      * @return `true` if current SymbolWrapper holds a TimeSeriesSubscriptionSymbol
      */
-    bool isTimeSeriesSubscriptionSymbol() const noexcept { return std::holds_alternative<TimeSeriesSubscriptionSymbol>(data_); }
+    bool isTimeSeriesSubscriptionSymbol() const noexcept {
+        return std::holds_alternative<TimeSeriesSubscriptionSymbol>(data_);
+    }
 
     /**
-     * @return TimeSeriesSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold TimeSeriesSubscriptionSymbol
+     * @return TimeSeriesSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold
+     * TimeSeriesSubscriptionSymbol
      */
     std::optional<TimeSeriesSubscriptionSymbol> asTimeSeriesSubscriptionSymbol() const noexcept {
-        return isTimeSeriesSubscriptionSymbol() ? std::get<TimeSeriesSubscriptionSymbol>(data_).getData() : std::nullopt;
+        return isTimeSeriesSubscriptionSymbol()
+                   ? std::make_optional<TimeSeriesSubscriptionSymbol>(std::get<TimeSeriesSubscriptionSymbol>(data_))
+                   : std::nullopt;
     }
 
     const DataType &getData() const noexcept { return data_; }
@@ -179,7 +193,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
  */
 template <typename T>
 concept ConvertibleToSymbolWrapper =
-    ConvertibleToStringSymbol<std::decay_t<T>> || std::is_same_v<std::decay_t<T>, WildcardSymbol>;
+    ConvertibleToStringSymbol<std::decay_t<T>> || std::is_same_v<std::decay_t<T>, WildcardSymbol> ||
+    std::is_same_v<std::decay_t<T>, IndexedEventSubscriptionSymbol> ||
+    std::is_same_v<std::decay_t<T>, TimeSeriesSubscriptionSymbol>;
 
 /**
  * A concept that defines a collection of wrapped or wrapping symbols.

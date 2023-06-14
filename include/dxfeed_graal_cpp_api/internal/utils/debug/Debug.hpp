@@ -41,7 +41,7 @@ struct DXFCPP_EXPORT Debugger {
 
 #else
 
-struct Debugger {
+struct DXFCPP_EXPORT Debugger {
     static constexpr bool isDebug = true;
 #    if DXFCPP_TRACE_ISOLATES == 1
     static constexpr bool traceIsolates = true;
@@ -62,7 +62,7 @@ struct Debugger {
     static std::string tracePrefixStr();
     static void trace(std::string);
 #    else
-    static void trace(std::string);
+    static void trace(std::string) {}
 #    endif
 };
 

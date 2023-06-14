@@ -25,6 +25,8 @@ class DXFCPP_EXPORT IndexedEventSource {
      */
     static const IndexedEventSource DEFAULT;
 
+    IndexedEventSource() noexcept = default;
+
     /**
      * Creates the new IndexedEvent's source by id and name.
      *
