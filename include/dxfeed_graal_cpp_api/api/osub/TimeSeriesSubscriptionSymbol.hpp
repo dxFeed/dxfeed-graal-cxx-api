@@ -20,7 +20,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final {
     std::int64_t fromTime_;
 
   public:
-    TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, int64_t fromTime);
+    TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, std::int64_t fromTime);
     TimeSeriesSubscriptionSymbol(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept;
     TimeSeriesSubscriptionSymbol(TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept;
     TimeSeriesSubscriptionSymbol &operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept;
@@ -30,9 +30,13 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final {
 
     const std::unique_ptr<SymbolWrapper> &getEventSymbol() const;
 
-    int64_t getFromTime() const;
+    std::int64_t getFromTime() const;
 
     void *toGraal() const noexcept;
+
+    static void freeGraal(void* graal) noexcept;
+
+    static TimeSeriesSubscriptionSymbol fromGraal(void* graal) noexcept;
 
     std::string toString() const noexcept;
 

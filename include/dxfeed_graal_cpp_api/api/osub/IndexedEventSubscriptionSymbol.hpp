@@ -39,6 +39,10 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol final {
 
     void *toGraal() const noexcept;
 
+    static void freeGraal(void* graal) noexcept;
+
+    static IndexedEventSubscriptionSymbol fromGraal(void* graal) noexcept;
+
     std::string toString() const noexcept;
 
     bool operator==(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept;

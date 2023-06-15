@@ -11,9 +11,30 @@ namespace dxfcpp {
 const WildcardSymbol WildcardSymbol::ALL{"*"};
 
 void *WildcardSymbol::toGraal() const noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(
+            "WildcardSymbol::toGraal()");
+    }
+
     static const dxfg_wildcard_symbol_t wildcardGraalSymbol{{WILDCARD}};
 
     return bit_cast<void *>(&wildcardGraalSymbol);
+}
+
+void WildcardSymbol::freeGraal(void *) noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(
+            "WildcardSymbol::freeGraal()");
+    }
+}
+
+const WildcardSymbol &WildcardSymbol::fromGraal(void *) noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(
+            "WildcardSymbol::fromGraal()");
+    }
+
+    return WildcardSymbol::ALL;
 }
 
 } // namespace dxfcpp

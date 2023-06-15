@@ -53,6 +53,8 @@ DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
 
 DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
 
+DXFCPP_EXPORT char *createCString(const std::string &s) noexcept;
+
 template <typename It>
 #if __cpp_concepts
     requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }

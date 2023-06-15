@@ -137,4 +137,13 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
     return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
 }
 
+char *createCString(const std::string &s) noexcept {
+    char *cString = new (std::nothrow) char[s.size() + 1];
+
+    std::copy(s.begin(), s.end(), cString);
+    cString[s.size()] = '\0';
+
+    return cString;
+}
+
 } // namespace dxfcpp

@@ -31,6 +31,10 @@ struct DXFCPP_EXPORT WildcardSymbol final {
 
     void *toGraal() const noexcept;
 
+    static void freeGraal(void* graal) noexcept;
+
+    static const WildcardSymbol& fromGraal(void* graal) noexcept;
+
     std::string toString() const noexcept {
         if constexpr (Debugger::isDebug) {
             return "WildcardSymbol{" + symbol_ + "}";

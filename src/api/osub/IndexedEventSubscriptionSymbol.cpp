@@ -9,7 +9,7 @@
 
 namespace dxfcpp {
 
-//TODO: implement recursive construction\destruction
+// TODO: implement recursive construction\destruction
 struct IndexedEventSubscriptionSymbol::Impl final {
     dxfg_indexed_event_subscription_symbol_t graalSymbol;
 
@@ -56,8 +56,52 @@ const std::unique_ptr<SymbolWrapper> &IndexedEventSubscriptionSymbol::getEventSy
 
 const IndexedEventSource &IndexedEventSubscriptionSymbol::getSource() const { return source_; }
 
-// TODO: Implement
-void *IndexedEventSubscriptionSymbol::toGraal() const noexcept { return nullptr; }
+void *IndexedEventSubscriptionSymbol::toGraal() const noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(
+            "IndexedEventSubscriptionSymbol::toGraal()");
+    }
+
+    auto *graalSymbol = new (std::nothrow)
+        dxfg_indexed_event_subscription_symbol_t{{INDEXED_EVENT_SUBSCRIPTION},
+                                                 dxfcpp::bit_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()),
+                                                 dxfcpp::bit_cast<dxfg_indexed_event_source_t *>(source_.toGraal())};
+
+    return dxfcpp::bit_cast<void *>(graalSymbol);
+}
+
+void IndexedEventSubscriptionSymbol::freeGraal(void *graal) noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(
+            "IndexedEventSubscriptionSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
+    }
+
+    if (graal == nullptr) {
+        return;
+    }
+
+    auto *graalSymbol = dxfcpp::bit_cast<dxfg_indexed_event_subscription_symbol_t *>(graal);
+
+    SymbolWrapper::freeGraal(graalSymbol->symbol);
+    IndexedEventSource::freeGraal(graalSymbol->source);
+
+    delete graalSymbol;
+}
+
+IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *graal) noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(
+            "IndexedEventSubscriptionSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
+    }
+
+    if (graal == nullptr) {
+        return {};
+    }
+
+    auto *graalSymbol = dxfcpp::bit_cast<dxfg_indexed_event_subscription_symbol_t *>(graal);
+
+    return {SymbolWrapper::fromGraal(graalSymbol->symbol), IndexedEventSource::fromGraal(graalSymbol->source)};
+}
 
 std::string IndexedEventSubscriptionSymbol::toString() const noexcept {
     return eventSymbol_->toString() + "{source=" + source_.toString() + "}";

@@ -11,10 +11,10 @@
 #include <utility>
 #include <variant>
 
-#include "../internal/Common.hpp"
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
 #include "../api/osub/WildcardSymbol.hpp"
+#include "../internal/Common.hpp"
 #include "StringSymbol.hpp"
 
 namespace dxfcpp {
@@ -108,8 +108,16 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         data_ = timeSeriesSubscriptionSymbol;
     }
 
+    static void freeGraal(void *graal) noexcept;
+
+    static SymbolWrapper fromGraal(void *graal) noexcept;
+
     void *toGraal() const noexcept {
         return std::visit([](const auto &symbol) { return symbol.toGraal(); }, data_);
+    }
+
+    std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const noexcept {
+        return {toGraal(), SymbolWrapper::freeGraal};
     }
 
     /**
@@ -184,6 +192,8 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     bool operator==(const SymbolWrapper &symbolWrapper) const { return getData() == symbolWrapper.getData(); }
 
     auto operator<(const SymbolWrapper &symbolWrapper) const { return getData() < symbolWrapper.getData(); }
+
+    using GraalPtr = std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)>;
 };
 
 /**

@@ -396,7 +396,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::addSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
 
-        addSymbolImpl(symbolWrapper.toGraal());
+        auto graal = symbolWrapper.toGraalUnique();
+
+        addSymbolImpl(graal.get());
     }
 
     /**
@@ -418,7 +420,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::removeSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
 
-        removeSymbolImpl(symbolWrapper.toGraal());
+        auto graal = symbolWrapper.toGraalUnique();
+
+        removeSymbolImpl(graal.get());
     }
 
     /**
@@ -444,7 +448,11 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 #if __cpp_lib_parallel_algorithm
             std::execution::par,
 #endif
-            begin, end, [this](const SymbolWrapper &wrapper) { addSymbolImpl(wrapper.toGraal()); });
+            begin, end, [this](const SymbolWrapper &wrapper) {
+                auto graal = wrapper.toGraalUnique();
+
+                addSymbolImpl(graal.get());
+            });
     }
 
     /**
@@ -503,7 +511,11 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 #if __cpp_lib_parallel_algorithm
             std::execution::par,
 #endif
-            begin, end, [this](const SymbolWrapper &wrapper) { removeSymbolImpl(wrapper.toGraal()); });
+            begin, end, [this](const SymbolWrapper &wrapper) {
+                auto graal = wrapper.toGraalUnique();
+
+                removeSymbolImpl(graal.get());
+            });
     }
 
     /**
