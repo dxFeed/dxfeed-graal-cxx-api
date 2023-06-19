@@ -70,9 +70,12 @@ std::string Profile::toString() const noexcept {
                        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
                        getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(),
                        getStatusReason(), formatTimeStamp(getHaltStartTime()), formatTimeStamp(getHaltEndTime()),
-                       getHighLimitPrice(), getLowLimitPrice(), getHigh52WeekPrice(), getLow52WeekPrice(),
-                       getBeta(), getEarningsPerShare(), getDividendFrequency(), getExDividendAmount(),
-                       day_util::getYearMonthDayByDayId(getExDividendDayId()), getShares(), getFreeFloat());
+                       dxfcpp::toString(getHighLimitPrice()), dxfcpp::toString(getLowLimitPrice()),
+                       dxfcpp::toString(getHigh52WeekPrice()), dxfcpp::toString(getLow52WeekPrice()),
+                       dxfcpp::toString(getBeta()), dxfcpp::toString(getEarningsPerShare()),
+                       dxfcpp::toString(getDividendFrequency()), dxfcpp::toString(getExDividendAmount()),
+                       day_util::getYearMonthDayByDayId(getExDividendDayId()), dxfcpp::toString(getShares()),
+                       dxfcpp::toString(getFreeFloat()));
 }
 
 } // namespace dxfcpp

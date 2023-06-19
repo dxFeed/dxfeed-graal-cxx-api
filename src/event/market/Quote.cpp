@@ -73,8 +73,9 @@ std::string Quote::toString() const noexcept {
         "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
         formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(), formatTimeStamp(getBidTime()),
-        encodeChar(getBidExchangeCode()), getBidPrice(), getBidSize(), formatTimeStamp(getAskTime()),
-        encodeChar(getAskExchangeCode()), getAskPrice(), getAskSize());
+        encodeChar(getBidExchangeCode()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getBidSize()),
+        formatTimeStamp(getAskTime()), encodeChar(getAskExchangeCode()), dxfcpp::toString(getAskPrice()),
+        dxfcpp::toString(getAskSize()));
 }
 
 } // namespace dxfcpp

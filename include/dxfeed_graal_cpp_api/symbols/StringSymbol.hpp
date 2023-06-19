@@ -21,16 +21,13 @@ struct DXFCPP_EXPORT StringSymbol final {
   private:
     std::string data_;
 
-    struct Impl;
-    std::unique_ptr<Impl> impl_;
-
   public:
     StringSymbol(const StringSymbol &stringSymbol) noexcept;
     StringSymbol(StringSymbol &&) noexcept;
     StringSymbol &operator=(const StringSymbol &stringSymbol) noexcept;
     StringSymbol &operator=(StringSymbol &&) noexcept;
     StringSymbol() noexcept;
-    ~StringSymbol() noexcept;
+    virtual ~StringSymbol() noexcept;
 
     /**
      * Constructs StringSymbol from a char array
@@ -68,12 +65,22 @@ struct DXFCPP_EXPORT StringSymbol final {
 
     void *toGraal() const noexcept;
 
+    static void freeGraal(void* graal) noexcept;
+
+    static StringSymbol fromGraal(void* graal) noexcept;
+
     /**
      * Returns a string representation of the current object.
      *
      * @return a string representation
      */
-    std::string toString() const noexcept { return "StringSymbol{" + data_ + "}"; }
+    std::string toString() const noexcept {
+        if constexpr (Debugger::isDebug) {
+            return "StringSymbol{" + data_ + "}";
+        } else {
+            return data_;
+        }
+    }
 
     const std::string &getData() const;
 
@@ -105,8 +112,6 @@ inline StringSymbol operator""_s(const char *string, size_t length) noexcept {
 }
 
 } // namespace literals
-
-DXFCPP_EXPORT std::string graalSymbolToString(void *graalSymbol);
 
 } // namespace dxfcpp
 

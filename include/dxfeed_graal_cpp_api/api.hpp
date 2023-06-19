@@ -26,6 +26,8 @@
 #include "api/DXEndpoint.hpp"
 #include "api/DXFeed.hpp"
 #include "api/DXFeedSubscription.hpp"
+#include "api/osub/IndexedEventSubscriptionSymbol.hpp"
+#include "api/osub/TimeSeriesSubscriptionSymbol.hpp"
 #include "api/osub/WildcardSymbol.hpp"
 #include "event/DXEvent.hpp"
 #include "symbols/StringSymbol.hpp"

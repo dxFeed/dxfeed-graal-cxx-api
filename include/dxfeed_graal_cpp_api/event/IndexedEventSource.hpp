@@ -25,13 +25,15 @@ class DXFCPP_EXPORT IndexedEventSource {
      */
     static const IndexedEventSource DEFAULT;
 
+    IndexedEventSource() noexcept = default;
+
     /**
      * Creates the new IndexedEvent's source by id and name.
      *
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(unsigned id, std::string name) noexcept : id_{id}, name_{std::move(name)} {}
+    IndexedEventSource(std::uint32_t id, std::string name) noexcept : id_{id}, name_{std::move(name)} {}
 
     /**
      * Returns the source identifier. Source identifier is non-negative.
@@ -53,6 +55,22 @@ class DXFCPP_EXPORT IndexedEventSource {
      * @return The string representation of the object.
      */
     std::string toString() const noexcept { return name_; }
+
+    bool operator==(const IndexedEventSource &indexedEventSource) const { return id_ == indexedEventSource.id_; }
+
+    auto operator<(const IndexedEventSource &indexedEventSource) const { return id_ < indexedEventSource.id_; }
+
+    void *toGraal() const noexcept;
+
+    static void freeGraal(void* graal) noexcept;
+
+    static IndexedEventSource fromGraal(void* graal) noexcept;
 };
 
 } // namespace dxfcpp
+
+template <> struct std::hash<dxfcpp::IndexedEventSource> {
+    std::size_t operator()(const dxfcpp::IndexedEventSource &indexedEventSource) const noexcept {
+        return indexedEventSource.id();
+    }
+};

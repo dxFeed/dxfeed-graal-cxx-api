@@ -59,10 +59,12 @@ std::string Summary::toString() const noexcept {
                        "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
                        "prevDayVolume={}, openInterest={}}}",
                        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                       day_util::getYearMonthDayByDayId(getDayId()), getDayOpenPrice(), getDayHighPrice(),
-                       getDayLowPrice(), getDayLowPrice(), getDayClosePrice(), getDayClosePriceType().toString(),
-                       day_util::getYearMonthDayByDayId(getPrevDayId()), getPrevDayClosePrice(),
-                       getPrevDayClosePriceType().toString(), getPrevDayVolume(), getOpenInterest());
+                       day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
+                       dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()),
+                       dxfcpp::toString(getDayLowPrice()), dxfcpp::toString(getDayClosePrice()),
+                       getDayClosePriceType().toString(), day_util::getYearMonthDayByDayId(getPrevDayId()),
+                       dxfcpp::toString(getPrevDayClosePrice()), getPrevDayClosePriceType().toString(),
+                       dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
 }
 
 } // namespace dxfcpp

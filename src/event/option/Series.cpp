@@ -56,8 +56,9 @@ std::string Series::toString() const noexcept {
         "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
         getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getSequence(),
-        day_util::getYearMonthDayByDayId(getExpiration()), getVolatility(), getCallVolume(), getPutVolume(),
-        getPutCallRatio(), getForwardPrice(), getDividend(), getInterest());
+        day_util::getYearMonthDayByDayId(getExpiration()), dxfcpp::toString(getVolatility()),
+        dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()), dxfcpp::toString(getPutCallRatio()),
+        dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
 } // namespace dxfcpp

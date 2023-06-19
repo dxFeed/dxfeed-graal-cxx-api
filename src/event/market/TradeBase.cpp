@@ -26,8 +26,9 @@ std::string TradeBase::baseFieldsToString() const noexcept {
                        "direction={}, ETH={}",
                        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
                        formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(),
-                       encodeChar(getExchangeCode()), getPrice(), getChange(), getSize(),
-                       day_util::getYearMonthDayByDayId(getDayId()), getDayVolume(), getDayTurnover(),
+                       encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getChange()),
+                       dxfcpp::toString(getSize()), day_util::getYearMonthDayByDayId(getDayId()),
+                       dxfcpp::toString(getDayVolume()), dxfcpp::toString(getDayTurnover()),
                        getTickDirection().toString(), isExtendedTradingHours());
 }
 

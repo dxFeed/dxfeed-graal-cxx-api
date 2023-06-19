@@ -11,7 +11,10 @@
 #include <utility>
 #include <variant>
 
+#include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
+#include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
 #include "../api/osub/WildcardSymbol.hpp"
+#include "../internal/Common.hpp"
 #include "StringSymbol.hpp"
 
 namespace dxfcpp {
@@ -21,18 +24,19 @@ namespace dxfcpp {
  * representation.
  */
 struct DXFCPP_EXPORT SymbolWrapper final {
-    using DataType = typename std::variant<WildcardSymbol, StringSymbol>;
+    using DataType = typename std::variant<WildcardSymbol, StringSymbol, IndexedEventSubscriptionSymbol,
+                                           TimeSeriesSubscriptionSymbol>;
 
   private:
     DataType data_;
 
   public:
     SymbolWrapper(const SymbolWrapper &) noexcept = default;
-    SymbolWrapper(SymbolWrapper &&) noexcept = delete;
+    SymbolWrapper(SymbolWrapper &&) noexcept = default;
     SymbolWrapper &operator=(const SymbolWrapper &) noexcept = default;
-    SymbolWrapper &operator=(SymbolWrapper &&) noexcept = delete;
+    SymbolWrapper &operator=(SymbolWrapper &&) noexcept = default;
     SymbolWrapper() noexcept = default;
-    ~SymbolWrapper() noexcept = default;
+    virtual ~SymbolWrapper() noexcept = default;
 
     /**
      * Constructor for any wrapped symbol.
@@ -66,7 +70,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     /**
      * Constructor for any wrapped wildcard (*) symbol.
      *
-     * @param wildcardSymbol The wrapped wildcard symbl
+     * @param wildcardSymbol The wrapped wildcard symbol
      */
     SymbolWrapper(const WildcardSymbol &wildcardSymbol) noexcept {
         if constexpr (Debugger::isDebug) {
@@ -76,8 +80,49 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         data_ = wildcardSymbol;
     }
 
+    /**
+     * Constructor for IndexedEventSubscriptionSymbol.
+     *
+     * @param indexedEventSubscriptionSymbol The IndexedEventSubscriptionSymbol
+     */
+    SymbolWrapper(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(
+                "SymbolWrapper(indexedEventSubscriptionSymbol = " + toStringAny(indexedEventSubscriptionSymbol) + ")");
+        }
+
+        data_ = indexedEventSubscriptionSymbol;
+    }
+
+    /**
+     * Constructor for TimeSeriesSubscriptionSymbol.
+     *
+     * @param timeSeriesSubscriptionSymbol The TimeSeriesSubscriptionSymbol
+     */
+    SymbolWrapper(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(
+                "SymbolWrapper(timeSeriesSubscriptionSymbol = " + toStringAny(timeSeriesSubscriptionSymbol) + ")");
+        }
+
+        data_ = timeSeriesSubscriptionSymbol;
+    }
+
+    static void freeGraal(void *graal) noexcept;
+
+    static SymbolWrapper fromGraal(void *graal) noexcept;
+
     void *toGraal() const noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(
+                "SymbolWrapper::toGraal()");
+        }
+
         return std::visit([](const auto &symbol) { return symbol.toGraal(); }, data_);
+    }
+
+    std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const noexcept {
+        return {toGraal(), SymbolWrapper::freeGraal};
     }
 
     /**
@@ -87,6 +132,18 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      */
     std::string toString() const noexcept {
         return "SymbolWrapper{" + std::visit([](const auto &symbol) { return toStringAny(symbol); }, data_) + "}";
+    }
+
+    /**
+     * @return `true` if current SymbolWrapper holds a StringSymbol
+     */
+    bool isStringSymbol() const noexcept { return std::holds_alternative<StringSymbol>(data_); }
+
+    /**
+     * @return String representation of StringSymbol or an empty string
+     */
+    std::string asStringSymbol() const noexcept {
+        return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
     }
 
     /**
@@ -102,15 +159,37 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
-     * @return `true` if current SymbolWrapper holds a StringSymbol
+     * @return `true` if current SymbolWrapper holds a IndexedEventSubscriptionSymbol
      */
-    bool isStringSymbol() const noexcept { return std::holds_alternative<StringSymbol>(data_); }
+    bool isIndexedEventSubscriptionSymbol() const noexcept {
+        return std::holds_alternative<IndexedEventSubscriptionSymbol>(data_);
+    }
 
     /**
-     * @return String representation of StringSymbol or an empty string
+     * @return IndexedEventSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold
+     * IndexedEventSubscriptionSymbol
      */
-    std::string asStringSymbol() const noexcept {
-        return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
+    std::optional<IndexedEventSubscriptionSymbol> asIndexedEventSubscriptionSymbol() const noexcept {
+        return isIndexedEventSubscriptionSymbol()
+                   ? std::make_optional<IndexedEventSubscriptionSymbol>(std::get<IndexedEventSubscriptionSymbol>(data_))
+                   : std::nullopt;
+    }
+
+    /**
+     * @return `true` if current SymbolWrapper holds a TimeSeriesSubscriptionSymbol
+     */
+    bool isTimeSeriesSubscriptionSymbol() const noexcept {
+        return std::holds_alternative<TimeSeriesSubscriptionSymbol>(data_);
+    }
+
+    /**
+     * @return TimeSeriesSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold
+     * TimeSeriesSubscriptionSymbol
+     */
+    std::optional<TimeSeriesSubscriptionSymbol> asTimeSeriesSubscriptionSymbol() const noexcept {
+        return isTimeSeriesSubscriptionSymbol()
+                   ? std::make_optional<TimeSeriesSubscriptionSymbol>(std::get<TimeSeriesSubscriptionSymbol>(data_))
+                   : std::nullopt;
     }
 
     const DataType &getData() const noexcept { return data_; }
@@ -118,6 +197,8 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     bool operator==(const SymbolWrapper &symbolWrapper) const { return getData() == symbolWrapper.getData(); }
 
     auto operator<(const SymbolWrapper &symbolWrapper) const { return getData() < symbolWrapper.getData(); }
+
+    using GraalPtr = std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)>;
 };
 
 /**
@@ -127,7 +208,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
  */
 template <typename T>
 concept ConvertibleToSymbolWrapper =
-    ConvertibleToStringSymbol<std::decay_t<T>> || std::is_same_v<std::decay_t<T>, WildcardSymbol>;
+    ConvertibleToStringSymbol<std::decay_t<T>> || std::is_same_v<std::decay_t<T>, WildcardSymbol> ||
+    std::is_same_v<std::decay_t<T>, IndexedEventSubscriptionSymbol> ||
+    std::is_same_v<std::decay_t<T>, TimeSeriesSubscriptionSymbol>;
 
 /**
  * A concept that defines a collection of wrapped or wrapping symbols.

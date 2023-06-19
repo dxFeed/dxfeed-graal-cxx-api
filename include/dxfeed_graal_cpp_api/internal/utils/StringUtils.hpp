@@ -23,6 +23,8 @@ DXFCPP_EXPORT std::string toString(std::thread::id theadId);
 
 DXFCPP_EXPORT std::string toString(void *ptr);
 
+DXFCPP_EXPORT std::string toString(double d);
+
 template <typename T> std::string toStringAny(T &&t) {
     if constexpr (requires { t.toString(); }) {
         return t.toString();
@@ -45,7 +47,13 @@ DXFCPP_EXPORT std::int16_t utf8to16(char in);
 
 DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp);
 
+DXFCPP_EXPORT std::string formatTimeStampWithTimeZone(std::int64_t timestamp);
+
 DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
+
+DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
+
+DXFCPP_EXPORT char *createCString(const std::string &s) noexcept;
 
 template <typename It>
 #if __cpp_concepts

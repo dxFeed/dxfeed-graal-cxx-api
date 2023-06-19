@@ -56,7 +56,6 @@ void Debugger::trace(std::string str) {
     vprint(std::cerr, "{} ~~ {}\n", tracePrefixStr(), std::move(str));
 }
 #    else
-inline void Debugger::trace(...) {}
 #    endif
 
 #endif

@@ -54,8 +54,9 @@ std::string TheoPrice::toString() const noexcept {
         "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
         "delta={}, gamma={}, dividend={}, interest={}}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
-        getUnderlyingPrice(), getDelta(), getGamma(), getDividend(), getInterest());
+        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), dxfcpp::toString(getPrice()),
+        dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getDelta()), dxfcpp::toString(getGamma()),
+        dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
 } // namespace dxfcpp
