@@ -8,7 +8,7 @@
 
 namespace dxfcpp {
 
-TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, int64_t fromTime)
+TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, int64_t fromTime) noexcept
     : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), fromTime_(fromTime) {}
 
 const std::unique_ptr<SymbolWrapper> &TimeSeriesSubscriptionSymbol::getEventSymbol() const { return eventSymbol_; }
@@ -17,8 +17,7 @@ int64_t TimeSeriesSubscriptionSymbol::getFromTime() const { return fromTime_; }
 
 void *TimeSeriesSubscriptionSymbol::toGraal() const noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "TimeSeriesSubscriptionSymbol::toGraal()");
+        Debugger::debug("TimeSeriesSubscriptionSymbol::toGraal()");
     }
 
     auto *graalSymbol = new (std::nothrow) dxfg_time_series_subscription_symbol_t{
@@ -29,8 +28,7 @@ void *TimeSeriesSubscriptionSymbol::toGraal() const noexcept {
 
 void TimeSeriesSubscriptionSymbol::freeGraal(void *graal) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "TimeSeriesSubscriptionSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("TimeSeriesSubscriptionSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
     }
 
     if (graal == nullptr) {
@@ -46,8 +44,7 @@ void TimeSeriesSubscriptionSymbol::freeGraal(void *graal) noexcept {
 
 TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "TimeSeriesSubscriptionSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("TimeSeriesSubscriptionSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
     }
 
     if (graal == nullptr) {
@@ -60,7 +57,12 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
 }
 
 std::string TimeSeriesSubscriptionSymbol::toString() const noexcept {
-    return eventSymbol_->toString() + "{fromTime=" + formatTimeStampWithMillis(fromTime_) + "}";
+    if constexpr (Debugger::isDebug) {
+        return "TimeSeriesSubscriptionSymbol{" + eventSymbol_->toString() +
+               ", fromTime = " + formatTimeStampWithMillis(fromTime_) + "}";
+    } else {
+        return eventSymbol_->toString() + "{fromTime=" + formatTimeStampWithMillis(fromTime_) + "}";
+    }
 }
 
 bool TimeSeriesSubscriptionSymbol::operator==(

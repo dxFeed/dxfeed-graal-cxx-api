@@ -74,7 +74,13 @@ struct DXFCPP_EXPORT StringSymbol final {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept { return "StringSymbol{" + data_ + "}"; }
+    std::string toString() const noexcept {
+        if constexpr (Debugger::isDebug) {
+            return "StringSymbol{" + data_ + "}";
+        } else {
+            return data_;
+        }
+    }
 
     const std::string &getData() const;
 

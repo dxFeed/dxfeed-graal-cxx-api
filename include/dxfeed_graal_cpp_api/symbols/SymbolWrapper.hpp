@@ -113,6 +113,11 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     static SymbolWrapper fromGraal(void *graal) noexcept;
 
     void *toGraal() const noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(
+                "SymbolWrapper::toGraal()");
+        }
+
         return std::visit([](const auto &symbol) { return symbol.toGraal(); }, data_);
     }
 

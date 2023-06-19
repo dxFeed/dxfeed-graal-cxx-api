@@ -11,7 +11,32 @@
 
 namespace dxfcpp {
 
+/**
+ * Represents [wildcard] subscription to all events of the specific event type.
+ * The @ref WildcardSymbol::ALL constant can be added to any DXFeedSubscription instance with @ref
+ * DXFeedSubscription::addSymbols() "addSymbols" method to the effect of subscribing to all possible event symbols. The
+ * corresponding subscription will start receiving all published events of the corresponding types.
+ */
 struct DXFCPP_EXPORT WildcardSymbol final {
+    /**
+     * Symbol prefix that is reserved for wildcard subscriptions.
+     * Any subscription starting with "*" is ignored with the exception of WildcardSymbol subscription.
+     */
+    static const std::string RESERVED_PREFIX;
+
+    /**
+     * Represents [wildcard] subscription to all events of the specific event type.
+     *
+     * <p><b>NOTE:</b> Wildcard subscription can create extremely high network and CPU load for certain kinds of
+     * high-frequency events like quotes. It requires a special arrangement on the side of upstream data provider and
+     * is disabled by default in upstream feed configuration. Make that sure you have adequate resources and understand
+     * the impact before using it. It can be used for low-frequency events only (like Forex quotes), because each instance
+     * of DXFeedSubscription processes events in a single thread and there is no provision to load-balance wildcard
+     * subscription amongst multiple threads.
+     * Contact your data provider for the corresponding configuration arrangement if needed.
+     *
+     * @see WildcardSymbol
+     */
     static const WildcardSymbol ALL;
 
   private:
@@ -31,10 +56,15 @@ struct DXFCPP_EXPORT WildcardSymbol final {
 
     void *toGraal() const noexcept;
 
-    static void freeGraal(void* graal) noexcept;
+    static void freeGraal(void *graal) noexcept;
 
-    static const WildcardSymbol& fromGraal(void* graal) noexcept;
+    static const WildcardSymbol &fromGraal(void *graal) noexcept;
 
+    /**
+     * Returns string representation of this wildcard subscription symbol.
+     *
+     * @return string representation of this wildcard subscription symbol.
+     */
     std::string toString() const noexcept {
         if constexpr (Debugger::isDebug) {
             return "WildcardSymbol{" + symbol_ + "}";

@@ -9,45 +9,6 @@
 
 namespace dxfcpp {
 
-// TODO: implement recursive construction\destruction
-struct IndexedEventSubscriptionSymbol::Impl final {
-    dxfg_indexed_event_subscription_symbol_t graalSymbol;
-
-    Impl() noexcept : graalSymbol{{INDEXED_EVENT_SUBSCRIPTION}, nullptr} {}
-
-    Impl(const Impl &) noexcept {
-        graalSymbol.supper = {INDEXED_EVENT_SUBSCRIPTION};
-        graalSymbol.symbol = nullptr;
-    }
-
-    Impl(Impl &&) noexcept {
-        graalSymbol.supper = {INDEXED_EVENT_SUBSCRIPTION};
-        graalSymbol.symbol = nullptr;
-    }
-
-    Impl &operator=(const Impl &impl) noexcept {
-        if (this == &impl) {
-            return *this;
-        }
-
-        graalSymbol.supper = {INDEXED_EVENT_SUBSCRIPTION};
-        graalSymbol.symbol = nullptr;
-
-        return *this;
-    }
-
-    Impl &operator=(Impl &&impl) noexcept {
-        if (this == &impl) {
-            return *this;
-        }
-
-        graalSymbol.supper = {INDEXED_EVENT_SUBSCRIPTION};
-        graalSymbol.symbol = nullptr;
-
-        return *this;
-    }
-};
-
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol,
                                                                const IndexedEventSource &source) noexcept
     : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), source_(source) {}
@@ -58,8 +19,7 @@ const IndexedEventSource &IndexedEventSubscriptionSymbol::getSource() const { re
 
 void *IndexedEventSubscriptionSymbol::toGraal() const noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "IndexedEventSubscriptionSymbol::toGraal()");
+        Debugger::debug("IndexedEventSubscriptionSymbol::toGraal()");
     }
 
     auto *graalSymbol = new (std::nothrow)
@@ -72,8 +32,7 @@ void *IndexedEventSubscriptionSymbol::toGraal() const noexcept {
 
 void IndexedEventSubscriptionSymbol::freeGraal(void *graal) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "IndexedEventSubscriptionSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("IndexedEventSubscriptionSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
     }
 
     if (graal == nullptr) {
@@ -90,8 +49,7 @@ void IndexedEventSubscriptionSymbol::freeGraal(void *graal) noexcept {
 
 IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *graal) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "IndexedEventSubscriptionSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("IndexedEventSubscriptionSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
     }
 
     if (graal == nullptr) {
@@ -104,7 +62,11 @@ IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *g
 }
 
 std::string IndexedEventSubscriptionSymbol::toString() const noexcept {
-    return eventSymbol_->toString() + "{source=" + source_.toString() + "}";
+    if constexpr (Debugger::isDebug) {
+        return "IndexedEventSubscriptionSymbol{" + eventSymbol_->toString() + ", source = " + source_.toString() + "}";
+    } else {
+        return eventSymbol_->toString() + "{source=" + source_.toString() + "}";
+    }
 }
 
 bool IndexedEventSubscriptionSymbol::operator==(
@@ -146,10 +108,5 @@ IndexedEventSubscriptionSymbol::operator=(IndexedEventSubscriptionSymbol &&index
 
     return *this;
 }
-
-IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol() noexcept
-    : impl_{std::make_unique<IndexedEventSubscriptionSymbol::Impl>()} {}
-
-IndexedEventSubscriptionSymbol::~IndexedEventSubscriptionSymbol() noexcept = default;
 
 } // namespace dxfcpp

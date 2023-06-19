@@ -10,8 +10,7 @@ namespace dxfcpp {
 
 void SymbolWrapper::freeGraal(void *graal) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "SymbolWrapper::freeGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("SymbolWrapper::freeGraal(graal = " + toStringAny(graal) + ")");
     }
 
     if (graal == nullptr) {
@@ -48,8 +47,7 @@ void SymbolWrapper::freeGraal(void *graal) noexcept {
 
 SymbolWrapper SymbolWrapper::fromGraal(void *graal) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "SymbolWrapper::fromGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("SymbolWrapper::fromGraal(graal = " + toStringAny(graal) + ")");
     }
 
     if (graal == nullptr) {
@@ -74,6 +72,8 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graal) noexcept {
     case TIME_SERIES_SUBSCRIPTION:
         return TimeSeriesSubscriptionSymbol::fromGraal(graal);
     }
+
+    return {};
 }
 
 } // namespace dxfcpp
