@@ -84,6 +84,10 @@ TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(
 
 TimeSeriesSubscriptionSymbol &
 TimeSeriesSubscriptionSymbol::operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
+    if (this == &timeSeriesSubscriptionSymbol) {
+        return *this;
+    }
+
     IndexedEventSubscriptionSymbol::operator=(timeSeriesSubscriptionSymbol);
     fromTime_ = timeSeriesSubscriptionSymbol.fromTime_;
 
@@ -92,6 +96,10 @@ TimeSeriesSubscriptionSymbol::operator=(const TimeSeriesSubscriptionSymbol &time
 
 TimeSeriesSubscriptionSymbol &
 TimeSeriesSubscriptionSymbol::operator=(TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept {
+    if (this == &timeSeriesSubscriptionSymbol) {
+        return *this;
+    }
+
     IndexedEventSubscriptionSymbol::operator=(std::move(timeSeriesSubscriptionSymbol));
     fromTime_ = timeSeriesSubscriptionSymbol.fromTime_;
 
