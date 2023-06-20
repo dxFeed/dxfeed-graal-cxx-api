@@ -6,6 +6,7 @@
 #include "../../internal/Conf.hpp"
 
 #include "../../symbols/SymbolWrapper.hpp"
+#include "../FilteredSubscriptionSymbol.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -14,6 +15,7 @@
 namespace dxfcpp {
 
 struct SymbolWrapper;
+class IndexedEventSubscriptionSymbol;
 
 /**
  * Represents subscription to time-series of events.
@@ -36,8 +38,8 @@ struct SymbolWrapper;
  * It means, that a set of time-series subscription symbols can contain at most one time-series subscription
  * for each event symbol.
  */
-class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final {
-    std::unique_ptr<SymbolWrapper> eventSymbol_;
+class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubscriptionSymbol,
+                                                         public FilteredSubscriptionSymbol {
     std::int64_t fromTime_;
 
   public:
@@ -56,20 +58,13 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final {
     virtual ~TimeSeriesSubscriptionSymbol() noexcept = default;
 
     /**
-     * Returns the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
-     *
-     * @return the wrapped event symbol.
-     */
-    const std::unique_ptr<SymbolWrapper> &getEventSymbol() const;
-
-    /**
      * Returns the subscription time.
      *
      * @return the subscription time.
      */
     std::int64_t getFromTime() const;
 
-    void *toGraal() const noexcept;
+    void *toGraal() const noexcept override;
 
     static void freeGraal(void *graal) noexcept;
 
@@ -80,7 +75,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final {
      *
      * @return string representation of this time-series subscription symbol.
      */
-    std::string toString() const noexcept;
+    std::string toString() const noexcept override;
 
     bool operator==(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept;
 

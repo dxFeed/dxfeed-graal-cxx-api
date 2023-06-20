@@ -9,9 +9,7 @@
 namespace dxfcpp {
 
 TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, int64_t fromTime) noexcept
-    : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), fromTime_(fromTime) {}
-
-const std::unique_ptr<SymbolWrapper> &TimeSeriesSubscriptionSymbol::getEventSymbol() const { return eventSymbol_; }
+    : IndexedEventSubscriptionSymbol(eventSymbol, IndexedEventSource::DEFAULT), fromTime_(fromTime) {}
 
 int64_t TimeSeriesSubscriptionSymbol::getFromTime() const { return fromTime_; }
 
@@ -21,7 +19,7 @@ void *TimeSeriesSubscriptionSymbol::toGraal() const noexcept {
     }
 
     auto *graalSymbol = new (std::nothrow) dxfg_time_series_subscription_symbol_t{
-        {TIME_SERIES_SUBSCRIPTION}, dxfcpp::bit_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()), fromTime_};
+        {TIME_SERIES_SUBSCRIPTION}, dxfcpp::bit_cast<dxfg_symbol_t *>(getEventSymbol()->toGraal()), fromTime_};
 
     return dxfcpp::bit_cast<void *>(graalSymbol);
 }
@@ -58,38 +56,39 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
 
 std::string TimeSeriesSubscriptionSymbol::toString() const noexcept {
     if constexpr (Debugger::isDebug) {
-        return "TimeSeriesSubscriptionSymbol{" + eventSymbol_->toString() +
+        return "TimeSeriesSubscriptionSymbol{" + getEventSymbol()->toString() +
                ", fromTime = " + formatTimeStampWithMillis(fromTime_) + "}";
     } else {
-        return eventSymbol_->toString() + "{fromTime=" + formatTimeStampWithMillis(fromTime_) + "}";
+        return getEventSymbol()->toString() + "{fromTime=" + formatTimeStampWithMillis(fromTime_) + "}";
     }
 }
 
 bool TimeSeriesSubscriptionSymbol::operator==(
     const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept {
-    return *eventSymbol_ == *timeSeriesSubscriptionSymbol.eventSymbol_;
+    return *getEventSymbol() == *timeSeriesSubscriptionSymbol.getEventSymbol();
 }
 
 bool TimeSeriesSubscriptionSymbol::operator<(
     const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept {
-    return *eventSymbol_ < *timeSeriesSubscriptionSymbol.eventSymbol_;
+    return *getEventSymbol() < *timeSeriesSubscriptionSymbol.getEventSymbol();
 }
 
 TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(
-    const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
-    eventSymbol_ = std::make_unique<SymbolWrapper>(*timeSeriesSubscriptionSymbol.eventSymbol_);
-    fromTime_ = timeSeriesSubscriptionSymbol.fromTime_;
-}
+    const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept
+    : IndexedEventSubscriptionSymbol(timeSeriesSubscriptionSymbol), fromTime_{timeSeriesSubscriptionSymbol.fromTime_} {}
 
 TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(
-    TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept {
-    eventSymbol_ = std::move(timeSeriesSubscriptionSymbol.eventSymbol_);
-    fromTime_ = timeSeriesSubscriptionSymbol.fromTime_;
-}
+    TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept
+    : IndexedEventSubscriptionSymbol(std::move(timeSeriesSubscriptionSymbol)),
+      fromTime_{timeSeriesSubscriptionSymbol.fromTime_} {}
 
 TimeSeriesSubscriptionSymbol &
 TimeSeriesSubscriptionSymbol::operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
-    eventSymbol_ = std::make_unique<SymbolWrapper>(*timeSeriesSubscriptionSymbol.eventSymbol_);
+    if (this == &timeSeriesSubscriptionSymbol) {
+        return *this;
+    }
+
+    IndexedEventSubscriptionSymbol::operator=(timeSeriesSubscriptionSymbol);
     fromTime_ = timeSeriesSubscriptionSymbol.fromTime_;
 
     return *this;
@@ -97,7 +96,11 @@ TimeSeriesSubscriptionSymbol::operator=(const TimeSeriesSubscriptionSymbol &time
 
 TimeSeriesSubscriptionSymbol &
 TimeSeriesSubscriptionSymbol::operator=(TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept {
-    eventSymbol_ = std::move(timeSeriesSubscriptionSymbol.eventSymbol_);
+    if (this == &timeSeriesSubscriptionSymbol) {
+        return *this;
+    }
+
+    IndexedEventSubscriptionSymbol::operator=(std::move(timeSeriesSubscriptionSymbol));
     fromTime_ = timeSeriesSubscriptionSymbol.fromTime_;
 
     return *this;

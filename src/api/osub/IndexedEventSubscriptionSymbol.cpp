@@ -95,6 +95,10 @@ IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(
 
 IndexedEventSubscriptionSymbol &IndexedEventSubscriptionSymbol::operator=(
     const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
+    if (this == &indexedEventSubscriptionSymbol) {
+        return *this;
+    }
+
     eventSymbol_ = std::make_unique<SymbolWrapper>(*indexedEventSubscriptionSymbol.eventSymbol_);
     source_ = indexedEventSubscriptionSymbol.source_;
 
@@ -103,6 +107,10 @@ IndexedEventSubscriptionSymbol &IndexedEventSubscriptionSymbol::operator=(
 
 IndexedEventSubscriptionSymbol &
 IndexedEventSubscriptionSymbol::operator=(IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept {
+    if (this == &indexedEventSubscriptionSymbol) {
+        return *this;
+    }
+
     eventSymbol_ = std::move(indexedEventSubscriptionSymbol.eventSymbol_);
     source_ = indexedEventSubscriptionSymbol.source_;
 
