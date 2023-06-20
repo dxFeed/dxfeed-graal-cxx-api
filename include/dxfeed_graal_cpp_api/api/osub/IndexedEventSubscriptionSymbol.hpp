@@ -33,7 +33,7 @@ struct SymbolWrapper;
  * Indexed event subscription symbols are compared based on their @ref ::getEventSymbol() "eventSymbol" and
  * @ref ::getSource() "source".
  */
-class DXFCPP_EXPORT IndexedEventSubscriptionSymbol final {
+class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     std::unique_ptr<SymbolWrapper> eventSymbol_;
     IndexedEventSource source_;
 
@@ -59,16 +59,16 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol final {
      *
      * @return the wrapped event symbol.
      */
-    const std::unique_ptr<SymbolWrapper> &getEventSymbol() const;
+    virtual const std::unique_ptr<SymbolWrapper> &getEventSymbol() const;
 
     /**
      * Returns indexed event source.
      *
      * @return indexed event source.
      */
-    const IndexedEventSource &getSource() const;
+    virtual const IndexedEventSource &getSource() const;
 
-    void *toGraal() const noexcept;
+    virtual void *toGraal() const noexcept;
 
     static void freeGraal(void* graal) noexcept;
 
@@ -79,7 +79,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol final {
      *
      * @return string representation of this indexed event subscription symbol.
      */
-    std::string toString() const noexcept;
+    virtual std::string toString() const noexcept;
 
     bool operator==(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept;
 
