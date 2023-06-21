@@ -1,7 +1,7 @@
 # Copyright (c) 2023 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
 
 if (POLICY CMP0092)
     cmake_policy(SET CMP0092 NEW)
@@ -34,6 +34,9 @@ option(DXFCXX_BUILD_UNIT_TESTS "Build tests" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_BUILD_SAMPLES "Build samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_BUILD_TOOLS "Build tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL "Prepare install" ON)
+option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
+option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
+option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.0" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
@@ -151,6 +154,20 @@ set(dxFeedNativeAPIEventOptionSources
         src/event/option/Series.cpp
         )
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(CMAKE_MACOSX_RPATH ON)
+    set(CMAKE_SKIP_BUILD_RPATH ON)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF)
+    set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+    set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path;@executable_path;@executable_path/../Frameworks")
+elseif (UNIX)
+    set(CMAKE_SKIP_BUILD_RPATH ON)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF)
+    set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
+endif ()
 
 add_library(${PROJECT_NAME}_static STATIC
         ${dxFeedNativeAPIInternalSources}
@@ -185,42 +202,8 @@ add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
 add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-# set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_library(${PROJECT_NAME}_CompilerOptions INTERFACE)
-
-if ((${CMAKE_CXX_COMPILER_ID} MATCHES "AppleClang") OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"))
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic")
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-Wno-undefined-var-template" "-Wno-unused-private-field")
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-Wall" "-Wextra" "-Wpedantic")
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-fPIC" "-no-pie")
-    target_link_options(${PROJECT_NAME}_CompilerOptions INTERFACE "-fPIC")
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "/W4")
-    target_compile_options(${PROJECT_NAME}_CompilerOptions INTERFACE "/wd4996" "/wd4251")
-endif ()
-
-add_library(${PROJECT_NAME}_Shared INTERFACE)
-
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set_target_properties(${PROJECT_NAME}_Shared PROPERTIES
-            CMAKE_MACOSX_RPATH ON
-            CMAKE_SKIP_BUILD_RPATH ON
-            CMAKE_BUILD_WITH_INSTALL_RPATH ON
-            CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF
-            CMAKE_BUILD_RPATH_USE_ORIGIN ON
-            CMAKE_INSTALL_RPATH "@loader_path"
-            )
-elseif (UNIX)
-    set_target_properties(${PROJECT_NAME}_Shared PROPERTIES
-            CMAKE_SKIP_BUILD_RPATH ON
-            CMAKE_BUILD_WITH_INSTALL_RPATH ON
-            CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF
-            CMAKE_BUILD_RPATH_USE_ORIGIN ON
-            CMAKE_INSTALL_RPATH "$ORIGIN"
-            )
-endif ()
 
 target_include_directories(${PROJECT_NAME}_static PUBLIC include)
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
@@ -230,7 +213,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
         DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1)
 
 target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
-target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions ${PROJECT_NAME}_Shared)
+target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
 
 add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}_static>)
@@ -252,6 +235,7 @@ if (DXFCXX_BUILD_TOOLS)
 endif ()
 
 if (DXFCXX_INSTALL)
+    include(GNUInstallDirs)
     set(CPACK_OUTPUT_CONFIG_FILE "${CMAKE_BINARY_DIR}/${PROJECT_NAME}PackConfig.cmake")
     set(CPACK_SOURCE_GENERATOR ZIP)
     set(CPACK_PACKAGE_VENDOR "Devexperts LLC")
@@ -260,8 +244,10 @@ if (DXFCXX_INSTALL)
     set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${DXFCXX_VERSION}-${DXFCXX_TARGET_PLATFORM}${DXFCXX_PACKAGE_SUFFIX}")
     include(CPack)
 
-    install(TARGETS ${PROJECT_NAME} DESTINATION "bin")
-    install(TARGETS ${PROJECT_NAME}_static DESTINATION "bin")
-    install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
-    install(FILES "LICENSE" "README.md" DESTINATION ".")
+    if (DXFCXX_INSTALL_LIB)
+        install(TARGETS ${PROJECT_NAME})
+        install(TARGETS ${PROJECT_NAME}_static)
+        install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
+        install(FILES "LICENSE" "README.md" DESTINATION ".")
+    endif ()
 endif ()
