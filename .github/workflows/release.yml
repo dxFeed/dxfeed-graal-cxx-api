@@ -16,11 +16,17 @@ on:
         default: 'false'
         required: true
         type: boolean
+  push:
+    tags:
+      - "v*.*.*"        
 
 jobs:
   get_version:
     name: Get Version
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+      tag_name: ${{ steps.set_version.outputs.tag_name }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions-ecosystem/action-get-latest-tag@v1
@@ -28,15 +34,16 @@ jobs:
         with:
           semver_only: false
       
-      - if: ${{ !inputs.use_latest_tag && startsWith(github.ref, 'refs/tags/') }}
+      - id: set_version
         run: |
-          echo "version=${{github.ref_name}}" >> $GITHUB_OUTPUT
-          echo "tag_name=${{github.ref}}" >> $GITHUB_OUTPUT
-        
-      - if: ${{ inputs.use_latest_tag }}
-        run: |
-          echo "version=${{ steps.get-latest-tag.outputs.tag }}" >> $GITHUB_OUTPUT
-          echo "tag_name=${{ format('refs/tags/{0}', steps.get-latest-tag.outputs.tag) }}" >> $GITHUB_OUTPUT
+          if [[ "${{ !inputs.use_latest_tag && startsWith(github.ref, 'refs/tags/') }}" == "true" ]]
+          then
+            echo "version=${{github.ref_name}}" >> $GITHUB_OUTPUT
+            echo "tag_name=${{github.ref}}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ steps.get-latest-tag.outputs.tag }}" >> $GITHUB_OUTPUT
+            echo "tag_name=${{ format('refs/tags/{0}', steps.get-latest-tag.outputs.tag) }}" >> $GITHUB_OUTPUT            
+          fi
                 
   build_package_and_upload:
     name: Build, Package & Upload
