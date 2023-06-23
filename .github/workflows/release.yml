@@ -29,7 +29,7 @@ jobs:
       tag_name: ${{ steps.set_version.outputs.tag_name }}
     steps:
       - uses: actions/checkout@v3
-      - id: get-latest-tag
+      - id: get_latest_tag
         run: |
           echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
       
@@ -40,8 +40,8 @@ jobs:
             echo "version=${{github.ref_name}}" >> $GITHUB_OUTPUT
             echo "tag_name=${{github.ref}}" >> $GITHUB_OUTPUT
           else
-            echo "version=${{ steps.get-latest-tag.outputs.tag }}" >> $GITHUB_OUTPUT
-            echo "tag_name=${{ format('refs/tags/{0}', steps.get-latest-tag.outputs.tag) }}" >> $GITHUB_OUTPUT            
+            echo "version=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
+            echo "tag_name=${{ format('refs/tags/{0}', steps.get_latest_tag.outputs.tag) }}" >> $GITHUB_OUTPUT            
           fi
                 
   build_package_and_upload:
@@ -66,7 +66,7 @@ jobs:
 
       - name: Configure CMake (Win)
         if: ${{ contains(matrix.os, 'windows') }}
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -G Ninja -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
 
       - name: Configure CMake (!Win)
         if: ${{ !contains(matrix.os, 'windows') }}
