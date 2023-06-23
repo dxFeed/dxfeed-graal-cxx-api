@@ -66,11 +66,11 @@ jobs:
 
       - name: Configure CMake (Win)
         if: ${{ contains(matrix.os, 'windows') }}
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -G Ninja -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
 
       - name: Configure CMake (!Win)
         if: ${{ !contains(matrix.os, 'windows') }}
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -G Ninja -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}}
@@ -86,7 +86,7 @@ jobs:
           path: build-${{matrix.buildType}}/*.zip
 
   publish_release:
-    if: ${{ inputs.publish }}
+    if: ${{ inputs.publish || contains(github.event_name, 'push')}}
     runs-on: ubuntu-latest
     name: Publish Release
     needs: [get_version, build_package_and_upload]
