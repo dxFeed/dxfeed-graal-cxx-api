@@ -63,7 +63,11 @@ jobs:
           ls
           mkdir ${{github.workspace}}/build-${{matrix.buildType}}    
 
-      - name: Configure CMake
+      - name: Configure CMake (Win)
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
+
+      - name: Configure CMake (!Win)
         run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
 
       - name: Build
@@ -99,7 +103,7 @@ jobs:
           files: |
             artifacts/*.zip
           prerelease: ${{ contains(needs.get_version.outputs.version, 'alpha') || contains(needs.get_version.outputs.version, 'beta') || contains(needs.get_version.outputs.version, 'pre') }}
-          tag_name: ${{ needs.get_version.outputs.tag_name }}
+          tag_name: ${{ needs.get_version.outputs.version }}
           name: ${{ needs.get_version.outputs.version }}
           draft: ${{ contains(needs.get_version.outputs.version, 'draft') }}
           
