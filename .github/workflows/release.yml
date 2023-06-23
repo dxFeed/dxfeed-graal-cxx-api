@@ -12,7 +12,7 @@ on:
         required: true
         type: boolean
       use_latest_tag:
-        description: 'Try To Use Latest GitHub Tag'
+        description: 'Try To Use The Latest Git Tag'
         default: 'false'
         required: true
         type: boolean
