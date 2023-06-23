@@ -22,6 +22,7 @@ jobs:
     name: Get Version
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
         with:
