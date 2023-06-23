@@ -7,15 +7,17 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        default: '${{github.ref_name}}'
-        description: 'Package version'
+        default: "${{github.ref_name}}"
+        description: 'Package Version'
         required: false
         type: string
       publish:
+        description: 'Publish The Release'
         default: 'true'
         required: true
         type: boolean
       use_latest_tag:
+        description: 'Try To Use Latest GitHub Tag'
         default: 'false'
         required: true
         type: boolean
