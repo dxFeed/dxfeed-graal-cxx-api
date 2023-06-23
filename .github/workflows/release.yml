@@ -6,10 +6,6 @@ name: release
 on:
   workflow_dispatch:
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: 'Release'
-
 jobs:
   build_package_and_upload:
     name: Build, Package & Upload
@@ -32,7 +28,7 @@ jobs:
         id: get-latest-tag
 
       - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{steps.get-latest-tag.outputs.tag}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{github.ref_name}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}}
@@ -44,7 +40,7 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: dxFeedGraalCxxApi
+          name: ${{github.ref_name}}
           path: build-${{matrix.buildType}}/*.zip
 
   publish_release:
