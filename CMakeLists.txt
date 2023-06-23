@@ -13,8 +13,7 @@ endif ()
 
 project(dxFeedGraalCxxApi)
 
-set(DXFCXX_VERSION "0.0.0-ALPHA")
-set(DXFCXX_PACKAGE_VERSION "0.0.0")
+set(DXFCXX_VERSION "0.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
