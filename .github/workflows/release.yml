@@ -6,11 +6,6 @@ name: release
 on:
   workflow_dispatch:
     inputs:
-      version:
-        default: "${{github.ref_name}}"
-        description: 'Package Version'
-        required: false
-        type: string
       publish:
         description: 'Publish The Release'
         default: 'true'
@@ -23,8 +18,8 @@ on:
         type: boolean
 
 jobs:
-  get_latest_tag:
-    name: Get Latest Tag
+  get_version:
+    name: Get Version
     runs-on: ubuntu-latest
     steps:
       - uses: actions-ecosystem/action-get-latest-tag@v1
@@ -32,12 +27,19 @@ jobs:
         with:
           semver_only: false
       
-      - name: Populate Latest Tag
-        run: echo "latest_tag=${{steps.get-latest-tag.outputs.tag }}" >> $GITHUB_OUTPUT
+      - if: ${{ !inputs.use_latest_tag && startsWith(github.ref, 'refs/tags/') }}
+        run: |
+          echo "version=${{github.ref_name}}" >> $GITHUB_OUTPUT
+          echo "tag_name=${{github.ref}}" >> $GITHUB_OUTPUT
         
+      - if: ${{ inputs.use_latest_tag }}
+        run: |
+          echo "version=${{ steps.get-latest-tag.outputs.tag }}" >> $GITHUB_OUTPUT
+          echo "tag_name=${{ format('refs/tags/{0}', steps.get-latest-tag.outputs.tag) }}" >> $GITHUB_OUTPUT
+                
   build_package_and_upload:
     name: Build, Package & Upload
-    needs: [get_latest_tag]
+    needs: [get_version]
     strategy:
       matrix:
         #        os: [windows-latest, macos-latest, ubuntu-latest]
@@ -53,13 +55,8 @@ jobs:
           ls
           mkdir ${{github.workspace}}/build-${{matrix.buildType}}    
 
-      - name: Configure CMake (by tag)
-        if: ${{ !inputs.use_latest_tag && startsWith(github.ref, 'refs/tags/') }}
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{github.ref_name}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
-
-      - name: Configure CMake (by latest tag)
-        if: ${{ inputs.use_latest_tag }}
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_latest_tag.outputs.latest_tag}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}}
@@ -78,7 +75,7 @@ jobs:
     if: ${{ inputs.publish }}
     runs-on: ubuntu-latest
     name: Publish Release
-    needs: [get_latest_tag, build_package_and_upload]
+    needs: [get_version, build_package_and_upload]
     steps:
       - uses: actions/checkout@v3
 
@@ -93,4 +90,8 @@ jobs:
         with:
           files: |
             artifacts/*.zip
-          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
+          prerelease: ${{ contains(needs.get_version.outputs.version, 'alpha') || contains(needs.get_version.outputs.version, 'beta') || contains(needs.get_version.outputs.version, 'pre') }          
+          tag_name: ${{ needs.get_version.outputs.tag_name }}
+          name: ${{ needs.get_version.outputs.version }}
+          draft: ${{ contains(needs.get_version.outputs.version, 'draft') }}
+          
