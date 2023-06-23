@@ -70,7 +70,7 @@ jobs:
 
       - name: Configure CMake (!Win)
         if: ${{ !contains(matrix.os, 'windows') }}
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -G Ninja -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}}
