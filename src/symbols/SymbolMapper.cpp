@@ -13,7 +13,7 @@ namespace dxfcpp {
 template <typename SymbolIt> void *SymbolMapper::toNativeList(SymbolIt begin, SymbolIt end) noexcept {
     using ListType = dxfg_symbol_list;
     using SizeType = decltype(dxfg_symbol_list::size);
-    using ElelemntType = RemoveAllPointers<decltype(dxfg_symbol_list::elements)>;
+    using ElementType = RemoveAllPointers<decltype(dxfg_symbol_list::elements)>;
 
     auto size = std::distance(begin, end);
 
@@ -31,6 +31,10 @@ template <typename SymbolIt> void *SymbolMapper::toNativeList(SymbolIt begin, Sy
     if (!list) {
         // TODO: error handling
         return list;
+    }
+
+    if (size > 0) {
+        list->elements = new (std::nothrow) ElementType*[size]{nullptr};
     }
 
     return list;
