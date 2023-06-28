@@ -9,12 +9,19 @@
 #include <memory>
 #include <utility>
 #include <variant>
+#include <vector>
+
+#include "SymbolWrapper.hpp"
 
 namespace dxfcpp {
 
 struct DXFCPP_EXPORT SymbolMapper {
     template <typename SymbolIt>
-    static void* toNativeList(SymbolIt begin, SymbolIt end) noexcept;
+    static void* toGraalList(SymbolIt begin, SymbolIt end) noexcept;
+
+    static void freeGraalList(void *graalList) noexcept;
+
+    static std::vector<SymbolWrapper> fromGraal(void *graalList) noexcept;
 };
 
 }
