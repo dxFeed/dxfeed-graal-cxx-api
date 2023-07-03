@@ -32,6 +32,5 @@
 #include "api/osub/WildcardSymbol.hpp"
 #include "event/DXEvent.hpp"
 #include "symbols/StringSymbol.hpp"
-#include "symbols/SymbolMapper.hpp"
 #include "symbols/SymbolWrapper.hpp"
 #include "system/System.hpp"
