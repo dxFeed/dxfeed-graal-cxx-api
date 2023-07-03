@@ -85,7 +85,17 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 
     void addSymbolImpl(void *graalSymbol) const noexcept;
 
+    void addSymbolsImpl(void *graalSymbolList) const noexcept;
+
     void removeSymbolImpl(void *graalSymbol) const noexcept;
+
+    void removeSymbolsImpl(void *graalSymbolList) const noexcept;
+
+    void setSymbolsImpl(void *graalSymbolList) const noexcept;
+
+    std::vector<SymbolWrapper> getSymbolsImpl() const noexcept;
+
+    std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const noexcept;
 
   public:
     ///
@@ -391,7 +401,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param symbolWrapper The symbol.
      */
-    void addSymbols(const SymbolWrapper &symbolWrapper) noexcept {
+    void addSymbols(const SymbolWrapper &symbolWrapper) const noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::addSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
@@ -415,7 +425,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param symbolWrapper The symbol.
      */
-    void removeSymbols(const SymbolWrapper &symbolWrapper) noexcept {
+    void removeSymbols(const SymbolWrapper &symbolWrapper) const noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::removeSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
@@ -439,20 +449,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) noexcept {
+    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        std::for_each(
-#if __cpp_lib_parallel_algorithm
-            std::execution::par,
-#endif
-            begin, end, [this](const SymbolWrapper &wrapper) {
-                auto graal = wrapper.toGraalUnique();
+        auto* list = SymbolWrapper::toGraalList(begin, end);
 
-                addSymbolImpl(graal.get());
-            });
+        addSymbolsImpl(list);
+        SymbolWrapper::freeGraalList(list);
     }
 
     /**
@@ -470,7 +475,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param collection The symbols collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void addSymbols(const SymbolsCollection &collection) noexcept {
+    void addSymbols(const SymbolsCollection &collection) const noexcept {
         addSymbols(std::begin(collection), std::end(collection));
     }
 
@@ -484,7 +489,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param collection The symbols collection
      */
-    void addSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
+    void addSymbols(std::initializer_list<SymbolWrapper> collection) const noexcept {
         addSymbols(collection.begin(), collection.end());
     }
 
@@ -502,20 +507,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) noexcept {
+    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        std::for_each(
-#if __cpp_lib_parallel_algorithm
-            std::execution::par,
-#endif
-            begin, end, [this](const SymbolWrapper &wrapper) {
-                auto graal = wrapper.toGraalUnique();
+        auto* list = SymbolWrapper::toGraalList(begin, end);
 
-                removeSymbolImpl(graal.get());
-            });
+        removeSymbolsImpl(list);
+        SymbolWrapper::freeGraalList(list);
     }
 
     /**
@@ -533,7 +533,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param collection The symbols collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void removeSymbols(SymbolsCollection &&collection) noexcept {
+    void removeSymbols(SymbolsCollection &&collection) const noexcept {
         removeSymbols(std::begin(collection), std::end(collection));
     }
 
@@ -547,7 +547,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param collection The symbols collection
      */
-    void removeSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
+    void removeSymbols(std::initializer_list<SymbolWrapper> collection) const noexcept {
         removeSymbols(collection.begin(), collection.end());
     }
 
@@ -566,14 +566,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) noexcept {
-        // TODO: implement using the native implementation
+    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        clearImpl();
-        addSymbols(begin, end);
+        auto* list = SymbolWrapper::toGraalList(begin, end);
+
+        setSymbolsImpl(list);
+        SymbolWrapper::freeGraalList(list);
     }
 
     /**
@@ -591,7 +592,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param collection The symbols collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void setSymbols(SymbolsCollection &&collection) noexcept {
+    void setSymbols(SymbolsCollection &&collection) const noexcept {
         setSymbols(std::begin(collection), std::end(collection));
     }
 
@@ -606,19 +607,17 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param collection The symbols collection
      */
-    void setSymbols(std::initializer_list<SymbolWrapper> collection) noexcept {
+    void setSymbols(std::initializer_list<SymbolWrapper> collection) const noexcept {
         setSymbols(collection.begin(), collection.end());
     }
 
     /**
      * Clears the set of subscribed symbols.
      */
-    void clear() noexcept {
+    void clear() const noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::clear()");
         }
-
-        std::lock_guard lock(mtx_);
 
         clearImpl();
     }
@@ -630,12 +629,10 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @see ::close
      */
-    bool isClosed() noexcept {
+    bool isClosed() const noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::isClosed()");
         }
-
-        std::lock_guard lock(mtx_);
 
         return isClosedImpl();
     }
@@ -657,20 +654,36 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     bool containsEventType(const EventTypeEnum &eventType) const noexcept { return eventTypes_.contains(eventType); }
 
     /**
-     * Returns a set of subscribed symbols. The resulting set maybe either a snapshot of the set of
-     * the subscribed symbols at the time of invocation or a weakly consistent view of the set.
+     * Returns a set of subscribed symbols (depending on the actual implementation of subscription).
+     *
+     * The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
+     * weakly consistent view of the set.
      *
      * @return A set of subscribed symbols.
      */
-    auto getSymbols() noexcept;
+    std::vector<SymbolWrapper> getSymbols() const noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(toString() + "::getSymbols()");
+        }
+
+        return getSymbolsImpl();
+    }
 
     /**
      * Returns a set of decorated symbols (depending on the actual implementation of subscription).
      *
-     * The resulting set maybe either a snapshot of the set of
-     * the subscribed symbols at the time of invocation or a weakly consistent view of the set.
+     * The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
+     * weakly consistent view of the set.
+     *
+     * @return A set of decorated subscribed symbols.
      */
-    auto getDecoratedSymbols() noexcept;
+    std::vector<SymbolWrapper> getDecoratedSymbols() noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(toString() + "::getDecoratedSymbols()");
+        }
+
+        return getDecoratedSymbolsImpl();
+    }
 
     auto getExecutor() noexcept;
 

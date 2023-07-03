@@ -25,6 +25,16 @@ namespace dxfcpp {
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 
+#include <type_traits>
+
+namespace detail {
+template <typename T>
+struct RemoveAllPointers
+    : std::conditional_t<std::is_pointer_v<T>, RemoveAllPointers<std::remove_pointer_t<T>>, std::type_identity<T>> {};
+} // namespace detail
+
+template <typename T> using RemoveAllPointers = typename detail::RemoveAllPointers<T>::type;
+
 struct DXFeedEventListener {};
 
 struct DXEndpointStateChangeListener {};

@@ -119,3 +119,26 @@ TEST_CASE("DXFeedSubscription") {
 }
 
 TEST_CASE("dxfcpp::DXFeed::getInstance()") { dxfcpp::DXFeed::getInstance(); }
+
+TEST_CASE("dxfcpp::SymbolWrapper::toGraalList") {
+    using namespace std::literals;
+
+    auto* list = dxfcpp::SymbolWrapper::toGraalList({"AAPL", "IBM"s, "TSLA"sv});
+    auto* list2 = dxfcpp::SymbolWrapper::toGraalList(std::vector<std::string>{"XXX", "YYY", "ZZZ"});
+
+    auto set = std::set<dxfcpp::SymbolWrapper>{"111", "222"sv, "333"s};
+
+    auto* list3 = dxfcpp::SymbolWrapper::toGraalList(set.begin(), set.end());
+
+    auto sl = dxfcpp::SymbolWrapper::fromGraalList(list);
+
+
+    std::cout << "Symbols:\n";
+    for (auto s : sl) {
+        std::cout << s.toString() << "\n";
+    }
+
+    dxfcpp::SymbolWrapper::freeGraalList(list);
+    dxfcpp::SymbolWrapper::freeGraalList(list2);
+    dxfcpp::SymbolWrapper::freeGraalList(list3);
+}

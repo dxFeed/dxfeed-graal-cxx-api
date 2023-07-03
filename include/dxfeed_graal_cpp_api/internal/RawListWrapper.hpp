@@ -23,8 +23,8 @@ concept RawGraalList = requires(T list) {
 };
 
 template <RawGraalList List> struct RawGraalListTraits {
-    using SizeType = typename std::decay_t<decltype(List{}.size)>;
-    using ElementType = typename std::decay_t<std::remove_pointer_t<std::remove_pointer_t<decltype(List{}.elements)>>>;
+    using SizeType = typename std::decay_t<decltype(List::size)>;
+    using ElementType = typename std::decay_t<RemoveAllPointers<decltype(List::elements)>>;
 };
 
 template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
@@ -42,7 +42,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
         }
     }
 
-    void set(std::size_t index, const auto& value) const noexcept {
+    void set(std::size_t index, const auto &value) const noexcept {
         if constexpr (Debugger::traceLists) {
             Debugger::trace(getDebugName() + "::set(" + std::to_string(index) + ", " + std::to_string(value) + ")");
         }

@@ -112,7 +112,6 @@ set(dxFeedNativeAPIAPIOsubSources
         )
 
 set(dxFeedNativeAPISymbolsSources
-        src/symbols/SymbolMapper.cpp
         src/symbols/StringSymbol.cpp
         src/symbols/SymbolWrapper.cpp
         )
