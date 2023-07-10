@@ -52,8 +52,8 @@ jobs:
         #        os: [windows-latest, macos-latest, ubuntu-latest]
         os: [ windows-latest, macos-latest, ubuntu-22.04 ]
         #os: [ ubuntu-22.04 ]
-        #buildType: [ Release, Debug ]
-        buildType: [ Release ]
+        buildType: [ Release, Debug ]
+        #buildType: [ Release ]
     runs-on: ${{ matrix.os }}
 
     steps:
