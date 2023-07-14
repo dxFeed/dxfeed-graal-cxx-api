@@ -60,7 +60,7 @@ class DXFCPP_EXPORT IndexedEventSource {
 
     auto operator<(const IndexedEventSource &indexedEventSource) const { return id_ < indexedEventSource.id_; }
 
-    void *toGraal() const noexcept;
+    virtual void *toGraal() const noexcept;
 
     static void freeGraal(void* graal) noexcept;
 

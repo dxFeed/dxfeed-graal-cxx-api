@@ -28,7 +28,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const std::unordered_map<std::uint32_t, std::reference_wrapper<const OrderSource>> INTERNAL_;
 
     static inline std::mutex MTX_{};
-    const std::unordered_map<std::uint32_t, std::reference_wrapper<const OrderSource>> USER_;
+    static std::unordered_map<std::uint32_t, std::reference_wrapper<const OrderSource>> USER_;
 
     std::uint32_t pubFlags_{};
     bool builtin_{};
@@ -39,6 +39,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     OrderSource(const std::string &name, std::uint32_t pubFlags) : OrderSource(composeId(name), name, pubFlags) {}
 
     static std::uint32_t composeId(const std::string & /*name*/) noexcept { return {}; }
+
+    void *toGraal() const noexcept override;
 };
 
 } // namespace dxfcpp

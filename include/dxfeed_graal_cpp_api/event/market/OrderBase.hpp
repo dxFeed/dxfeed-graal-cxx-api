@@ -101,6 +101,17 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     };
 
     Data data_{};
+
+  public:
+    /// Creates new order event with default values.
+    OrderBase() noexcept = default;
+
+    /**
+     * Creates new order event with the specified event symbol.
+     *
+     * @param eventSymbol The event symbol.
+     */
+    explicit OrderBase(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {}
 };
 
 } // namespace dxfcpp
