@@ -16,7 +16,7 @@ namespace dxfcpp {
  * See IndexedEvent::getSource().
  */
 class DXFCPP_EXPORT IndexedEventSource {
-    std::uint32_t id_{};
+    std::int32_t id_{};
     std::string name_{};
 
   public:
@@ -33,14 +33,14 @@ class DXFCPP_EXPORT IndexedEventSource {
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(std::uint32_t id, std::string name) noexcept : id_{id}, name_{std::move(name)} {}
+    IndexedEventSource(std::int32_t id, std::string name) noexcept : id_{id}, name_{std::move(name)} {}
 
     /**
      * Returns the source identifier. Source identifier is non-negative.
      *
      * @return The source identifier.
      */
-    std::uint32_t id() const noexcept { return id_; }
+    std::int32_t id() const noexcept { return id_; }
 
     /**
      * Returns the string representation of the object.
