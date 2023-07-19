@@ -28,7 +28,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const std::unordered_map<std::int32_t, std::reference_wrapper<const OrderSource>> INTERNAL_;
 
     static inline std::mutex MTX_{};
-    static inline std::unordered_map<std::int32_t, std::reference_wrapper<const OrderSource>> USER_{};
+    static inline std::unordered_map<std::int32_t, OrderSource> USER_{};
 
     std::uint32_t pubFlags_{};
     bool builtin_{};
@@ -36,7 +36,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept
         : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {}
 
-    static OrderSource create(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept {
+    static const OrderSource &create(std::int32_t id, const std::string &name, std::uint32_t pubFlags) noexcept {
         static const OrderSource INVALID(-1, "INVALID", 0);
 
         // Below are sanity and integrity checks for special and builtin pre-defined sources.
@@ -57,22 +57,14 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
             return INVALID;
         }
-//
-//        if (!SOURCES_BY_ID.add(this))
-//            throw new IllegalArgumentException("duplicate id");
-//        if (!SOURCES_BY_NAME.add(this))
-//            throw new IllegalArgumentException("duplicate name");
-//
-//        // Flag FULL_ORDER_BOOK requires that source must be publishable
-//        if ((pubFlags & FULL_ORDER_BOOK) != 0 && (pubFlags & (PUB_ORDER | PUB_ANALYTIC_ORDER | PUB_SPREAD_ORDER)) == 0)
-//            throw new IllegalArgumentException("unpublishable full order book order");
-//
-//        CACHE_SIZE = Math.max(CACHE_SIZE, SOURCES_BY_ID.size() * 4);
-//
-//        for (int i = 0; i < FLAGS_SIZE; i++) {
-//            if ((pubFlags & (1 << i)) != 0)
-//                PUBLISHABLE_LISTS[i].add(this);
-//        }
+
+        if (INTERNAL_.contains(id) || USER_.contains(id)) {
+            // TODO: error handling: throw IllegalArgumentException("duplicate id and name");
+
+            return INVALID;
+        }
+
+        return USER_.emplace(id, OrderSource{id, name, pubFlags}).first->second;
     }
 
     OrderSource(const std::string &name, std::uint32_t pubFlags) : OrderSource(composeId(name), name, pubFlags) {}
