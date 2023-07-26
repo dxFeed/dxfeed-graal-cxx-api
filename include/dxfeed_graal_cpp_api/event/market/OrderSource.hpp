@@ -12,6 +12,7 @@
 #include <unordered_map>
 
 #include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 
 namespace dxfcpp {
@@ -36,40 +37,36 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept
         : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {}
 
-    static const OrderSource &create(std::int32_t id, const std::string &name, std::uint32_t pubFlags) noexcept {
-        static const OrderSource INVALID(-1, "INVALID", 0);
-
-        // Below are sanity and integrity checks for special and builtin pre-defined sources.
-        // They also guard against uncoordinated changes of id/name with other methods.
-        if (id < 0) {
-            // TODO: error handling: throw IllegalArgumentException("id is negative");
-            return INVALID;
-        }
-
-        if (id > 0 && id < 0x20 && !isSpecialSourceId(id)) {
-            // TODO: error handling: throw IllegalArgumentException("id is not marked as special");
-
-            return INVALID;
-        }
-
-        if (id >= 0x20 && (id != composeId(name) || name != decodeName(id))) {
-            // TODO: error handling: throw IllegalArgumentException("id does not match name");
-
-            return INVALID;
-        }
-
-        if (INTERNAL_.contains(id) || USER_.contains(id)) {
-            // TODO: error handling: throw IllegalArgumentException("duplicate id and name");
-
-            return INVALID;
-        }
-
-        return USER_.emplace(id, OrderSource{id, name, pubFlags}).first->second;
-    }
-
     OrderSource(const std::string &name, std::uint32_t pubFlags) : OrderSource(composeId(name), name, pubFlags) {}
 
-    static std::int32_t composeId(const std::string & /*name*/) noexcept { return -1; }
+    OrderSource(std::int32_t id, const std::string &name)
+        : IndexedEventSource(id, decodeName(id)), builtin_{false}, pubFlags_{0} {}
+
+    static std::int32_t composeId(const std::string &name) noexcept {
+        std::int32_t sourceId = 0;
+
+        auto n = name.length();
+
+        if (n == 0 || n > 4) {
+            // TODO: error handling: IllegalArgumentException("Source name must contain from 1 to 4 characters");
+
+            return -1;
+        }
+
+        for (int i = 0; i < n; i++) {
+            auto c = name[i];
+
+            if (!checkChar(c)) {
+                // TODO: error handling
+
+                return -1;
+            }
+
+            sourceId = dxfcpp::orOp(dxfcpp::shl(sourceId, 8), c);
+        }
+
+        return sourceId;
+    }
 
     static bool checkChar(char c) noexcept {
         if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9') {
@@ -107,6 +104,24 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         }
 
         return name.substr(0, n);
+    }
+
+    static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType) {
+        if (eventType == EventTypeEnum::ORDER) {
+            return PUB_ORDER;
+        }
+
+        if (eventType == EventTypeEnum::ANALYTIC_ORDER) {
+            return PUB_ANALYTIC_ORDER;
+        }
+
+        if (eventType == EventTypeEnum::SPREAD_ORDER) {
+            return PUB_SPREAD_ORDER;
+        }
+
+        // TODO: error handling: throw IllegalArgumentException("Invalid order event type: " + eventType);
+
+        return 0;
     }
 
     void *toGraal() const noexcept override;
@@ -433,6 +448,49 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      */
     static bool isSpecialSourceId(std::int32_t sourceId) noexcept {
         return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE_ASK.id();
+    }
+
+    /**
+     * Returns order source for the specified source identifier.
+     *
+     * @param sourceId the source identifier.
+     * @return order source.
+     */
+    static const OrderSource &valueOf(std::int32_t sourceId) {
+        if (auto found = INTERNAL_.find(sourceId); found != INTERNAL_.end()) {
+            return found->second;
+        }
+
+        std::lock_guard lock(MTX_);
+
+        if (auto found = USER_.find(sourceId); found != USER_.end()) {
+            return found->second;
+        }
+
+        return USER_.try_emplace(sourceId, OrderSource(sourceId, decodeName(sourceId))).first->second;
+    }
+
+    /**
+     * Returns order source for the specified source name.
+     * The name must be either predefined, or contain at most 4 alphanumeric characters.
+     *
+     * @param name the name of the source.
+     * @return order source.
+     */
+    static const OrderSource &valueOf(const std::string &name) {
+        auto sourceId = composeId(name);
+
+        if (auto found = INTERNAL_.find(sourceId); found != INTERNAL_.end()) {
+            return found->second;
+        }
+
+        std::lock_guard lock(MTX_);
+
+        if (auto found = USER_.find(sourceId); found != USER_.end()) {
+            return found->second;
+        }
+
+        return USER_.try_emplace(sourceId, OrderSource(sourceId, name)).first->second;
     }
 };
 
