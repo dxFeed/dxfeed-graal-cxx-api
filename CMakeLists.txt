@@ -144,6 +144,7 @@ set(dxFeedNativeAPIEventMarketSources
         src/event/market/TimeAndSale.cpp
         src/event/market/OptionSale.cpp
         src/event/market/OrderSource.cpp
+        src/event/market/OrderAction.cpp
         )
 
 set(dxFeedNativeAPIEventOptionSources
