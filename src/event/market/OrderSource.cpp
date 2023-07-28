@@ -51,7 +51,7 @@ const OrderSource OrderSource::iex("iex", PUB_ORDER);
 const OrderSource OrderSource::MEMX("MEMX", PUB_ORDER);
 const OrderSource OrderSource::memx("memx", PUB_ORDER);
 
-const std::unordered_map<std::int32_t, std::reference_wrapper<const OrderSource>> OrderSource::INTERNAL_{
+const std::unordered_map<std::int32_t, std::reference_wrapper<const OrderSource>> OrderSource::INTERNAL_SOURCES_{
     {COMPOSITE_BID.id(), std::cref(COMPOSITE_BID)},
     {COMPOSITE_ASK.id(), std::cref(COMPOSITE_ASK)},
     {REGIONAL_BID.id(), std::cref(REGIONAL_BID)},
@@ -94,6 +94,8 @@ const std::unordered_map<std::int32_t, std::reference_wrapper<const OrderSource>
     {MEMX.id(), std::cref(MEMX)},
     {memx.id(), std::cref(memx)},
 };
+
+std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 
 void *OrderSource::toGraal() const noexcept {
     auto *graalSource = new (std::nothrow) dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
