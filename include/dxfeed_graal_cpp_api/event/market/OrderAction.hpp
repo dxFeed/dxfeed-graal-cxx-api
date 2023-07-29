@@ -10,6 +10,10 @@
 
 #include <cstdint>
 
+#ifdef _WINNT_
+#error Please, include windows.h or winnt.h after dxFeed Graal CXX API headers
+#endif
+
 namespace dxfcpp {
 
 /**

@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest.h>
 
 #include "dxfeed_graal_c_api/api.h"
 #include "dxfeed_graal_cpp_api/api.hpp"
 #include <thread>
 #include <unordered_map>
 #include <vector>
+
+#include <doctest.h>
 
 TEST_CASE("System properties can be set, as well as get their values") {
     REQUIRE(dxfc_system_set_property("PropertyName", "123") == DXFC_EC_SUCCESS);
