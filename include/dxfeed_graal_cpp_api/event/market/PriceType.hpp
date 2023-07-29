@@ -5,13 +5,10 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <cstdint>
-#include <string>
-#include <type_traits>
-#include <unordered_map>
-
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
+
+#include <cstdint>
 
 namespace dxfcpp {
 
