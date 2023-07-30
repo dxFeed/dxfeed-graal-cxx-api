@@ -9,7 +9,7 @@ the [dxFeed Graal Native](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxf
 which was compiled with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/)
 and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) (our flagman API).
 
-:information_source: If you already use [dxFeed C  API](https://github.com/dxFeed/dxfeed-c-api), please see
+:information_source: If you already use [dxFeed C API](https://github.com/dxFeed/dxfeed-c-api), please see
 the [Overview](#overview) section.<br>
 :warning: It’s an **alpha** version and still under active development. **Don’t use it in a production environment.**
 
@@ -29,6 +29,7 @@ the [Overview](#overview) section.<br>
     * [Implementation Details](#implementation-details)
     * [Architectural Restrictions and Other Limitations in the Old Version](#architectural-restrictions-and-other-limitations-of-the-old-version)
 - [Documentation](#documentation)
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Samples](#samples)
@@ -154,12 +155,18 @@ Find useful information in our self-service dxFeed Knowledge Base or .NET API do
     * [Order Book reconstruction](https://kb.dxfeed.com/en/data-model/dxfeed-order-book/order-book-reconstruction.html)
     * [Symbology Guide](https://kb.dxfeed.com/en/data-model/symbology-guide.html)
 
+## Requirements
+
+### Windows
+
+[Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=52685)
+
 ## Installation
 
 Examples of how to install the library can be found [here](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples).
 
-The API is delivered as a dynamic library (`[lib]dxFeedGraalCxxApi.so|dll|dylib`) and a static one (`[lib]dxFeedGraalCxxApi.a|lib`).
-Also it depends on `[lib]DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH`.
+The API is delivered as a dynamic library (`dxFeedGraalCxxApi.so|dll|dylib`) and a static one (`dxFeedGraalCxxApi.a|lib`).
+Also it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH`.
 
 ## Usage
 
@@ -248,124 +255,213 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 
 ### Event Types
 
-- [ ] [Order](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Order.html) is a snapshot of the full available
+- [Order](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Order.html) is a snapshot of the full available
   market depth for a symbol
-- [ ] [SpreadOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/SpreadOrder.html) is a snapshot of the
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [SpreadOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/SpreadOrder.html) is a snapshot of the
   full available market depth for all spreads
-- [ ] [AnalyticOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/AnalyticOrder.html) represents an
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [AnalyticOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/AnalyticOrder.html) represents an
   extension of Order introducing analytic information, e.g., adding iceberg-related
   information to this order
-- [x] [Trade](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Trade.html) is a snapshot of the price and size
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [Trade](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Trade.html) is a snapshot of the price and size
   of the last trade during regular trading hours and an overall day
   volume and day turnover
-- [x] [TradeETH](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TradeETH.html) is a snapshot of the price
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [TradeETH](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TradeETH.html) is a snapshot of the price
   and size of the last trade during extended trading hours and the extended
   trading hours day volume and day turnover
-- [ ] [Candle](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html) - event with open, high, low, and
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [Candle](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html) - event with open, high, low, and
   close prices and other information for a specific period
-- [x] [Quote](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Quote.html) is a snapshot of the best bid and
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [Quote](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Quote.html) is a snapshot of the best bid and
   ask prices and other fields that change with each quote
-- [x] [Profile](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Profile.html) is a snapshot that contains the
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [Profile](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Profile.html) is a snapshot that contains the
   security instrument description
-- [x] [Summary](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Summary.html) is a snapshot of the trading
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [Summary](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Summary.html) is a snapshot of the trading
   session, including session highs, lows, etc.
-- [x] [TimeAndSale](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TimeAndSale.html) - represents a trade or
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [TimeAndSale](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TimeAndSale.html) - represents a trade or
   other market event with price, like market open/close price, etc.
-- [x] [Greeks](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Greeks.html) is a snapshot of the option
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [Greeks](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Greeks.html) is a snapshot of the option
   price, Black-Scholes volatility, and Greeks
-- [x] [Series](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Series.html) is a snapshot of computed values
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [Series](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Series.html) is a snapshot of computed values
   available for all options series for a given underlying symbol based on options market prices
-- [x] [TheoPrice](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/TheoPrice.html) is a snapshot of the
-  theoretical option price computation that is periodically performed
-  by [dxPrice](http://www.devexperts.com/en/products/price.html) model-free computation
-- [x] [Underlying](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Underlying.html) is a snapshot of computed
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [TheoPrice](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/TheoPrice.html) is a snapshot of the
+  theoretical option price computation that is periodically performed by [dxPrice](http://www.devexperts.com/en/products/price.html) model-free computation
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API 
+- [Underlying](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Underlying.html) is a snapshot of computed
   values available for an option underlying symbol based on the market’s option prices
-- [ ] [Configuration](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Configuration.html) is an event with an
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [Configuration](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Configuration.html) is an event with an
   application-specific attachment
-- [ ] [Message](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Message.html) is an event with an
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [Message](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Message.html) is an event with an
   application-specific attachment
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
 
 ### Subscription Symbols
 
-- [x] String
-- [x] [TimeSeriesSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/TimeSeriesSubscriptionSymbol.html) -
+- String
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [TimeSeriesSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/TimeSeriesSubscriptionSymbol.html) -
   represents subscription to time-series events
-- [x] [IndexedSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/IndexedEventSubscriptionSymbol.html) -
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [IndexedSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/IndexedEventSubscriptionSymbol.html) -
   represents subscription to a specific source of indexed events
-- [x] [WildcardSymbol.ALL](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/WildcardSymbol.html) - represents a
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [WildcardSymbol.ALL](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/WildcardSymbol.html) - represents a
   *wildcard* subscription to all events of the specific event type
-- [ ] [CandleSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/CandleSymbol.html) - symbol used
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [CandleSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/CandleSymbol.html) - symbol used
   with [DXFeedSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html) class to
   subscribe for [Candle](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html) events
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
 
 ### Subscriptions & Models
 
-- [x] [CreateSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html) creates a new
+- [CreateSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html) creates a new
   subscription for multiple event types *attached* to a specified feed
-- [ ] [CreateTimeSeriesSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedTimeSeriesSubscription.html)
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [CreateTimeSeriesSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedTimeSeriesSubscription.html)
   extends DXFeedSubscription to conveniently subscribe to time series of events for a set of symbols and event
   types ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/api/DXFeedConnect.java))
-- [ ] [GetLastEvent](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEvent-E-) returns the last
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetLastEvent](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEvent-E-) returns the last
   event for the specified event
   instance ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/api/DXFeedSample.java))
-- [ ] [GetLastEvents](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEvents-java.util.Collection-)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetLastEvents](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEvents-java.util.Collection-)
   returns the last events for the specified event instances list
-- [ ] [GetLastEventPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEventPromise-java.lang.Class-java.lang.Object-)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetLastEventPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEventPromise-java.lang.Class-java.lang.Object-)
   requests the last event for the specified event type and
   symbol ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/console/LastEventsConsole.java))
-- [ ] [GetLastEventsPromises](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEventsPromises-java.lang.Class-java.util.Collection-)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetLastEventsPromises](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEventsPromises-java.lang.Class-java.util.Collection-)
   requests the last events for the specified event type and symbol collection
-- [ ] [GetLastEventIfSubscribed](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEventIfSubscribed-java.lang.Class-java.lang.Object-)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetLastEventIfSubscribed](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEventIfSubscribed-java.lang.Class-java.lang.Object-)
   returns the last event for the specified event type and symbol if there’s a subscription for it
-- [ ] [GetIndexedEventsPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getIndexedEventsPromise-java.lang.Class-java.lang.Object-com.dxfeed.event.IndexedEventSource-)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetIndexedEventsPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getIndexedEventsPromise-java.lang.Class-java.lang.Object-com.dxfeed.event.IndexedEventSource-)
   requests an indexed events list for the specified event type, symbol, and source
-- [ ] [GetIndexedEventsIfSubscribed](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getIndexedEventsIfSubscribed-java.lang.Class-java.lang.Object-com.dxfeed.event.IndexedEventSource-)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetIndexedEventsIfSubscribed](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getIndexedEventsIfSubscribed-java.lang.Class-java.lang.Object-com.dxfeed.event.IndexedEventSource-)
   requests an indexed events list for the specified event type, symbol, and source if there’s a subscription for it
-- [ ] [GetTimeSeriesPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getTimeSeriesPromise-java.lang.Class-java.lang.Object-long-long-)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetTimeSeriesPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getTimeSeriesPromise-java.lang.Class-java.lang.Object-long-long-)
   requests time series of events for the specified event type, symbol, and time
   range ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/FetchDailyCandles.java))
-- [ ] [GetTimeSeriesIfSubscribed](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getTimeSeriesIfSubscribed-java.lang.Class-java.lang.Object-long-long-)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [GetTimeSeriesIfSubscribed](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getTimeSeriesIfSubscribed-java.lang.Class-java.lang.Object-long-long-)
   requests time series of events for the specified event type, symbol, and time range if there’s a subscription for it
-- [ ] [TimeSeriesEventModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/TimeSeriesEventModel.html) - is a model
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [TimeSeriesEventModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/TimeSeriesEventModel.html) - is a model
   of a list of time series
   events ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ui/swing/DXFeedCandleChart.java))
-- [ ] [IndexedEventModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/IndexedEventModel.html) is a model of a
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [IndexedEventModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/IndexedEventModel.html) is a model of a
   list of indexed
   events ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ui/swing/DXFeedTimeAndSales.java))
-- [ ] [OrderBookModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/market/OrderBookModel.html) is a model of
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [OrderBookModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/market/OrderBookModel.html) is a model of
   convenient Order Book
   management ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ui/swing/DXFeedMarketDepth.java))
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
 
 ### IPF & Schedule
 
-- [ ] [InstrumentProfile](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html) represents basic
+- [InstrumentProfile](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html) represents basic
   profile information about a market
   instrument ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedIpfConnect.java))
-- [ ] [InstrumentProfileCollector](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileCollector.html)
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [InstrumentProfileCollector](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileCollector.html)
   collects instrument profile updates and provides the live instrument profiles
   list ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedLiveIpfSample.java))
-- [ ] [Schedule](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/schedule/Schedule.html) provides API to retrieve and
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [Schedule](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/schedule/Schedule.html) provides API to retrieve and
   explore various exchanges’ trading schedules and different financial instrument
   classes ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/schedule/ScheduleSample.java))
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
 
 ### Services
 
-- [ ] [OnDemandService](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ondemand/OnDemandService.html) provides on-demand
+- [OnDemandService](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ondemand/OnDemandService.html) provides on-demand
   historical tick data replay
   controls ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ondemand/OnDemandSample.java))
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
 
 ### Endpoint Roles
 
-- [x] [FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#FEED) connects to the remote data
+- [FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#FEED) connects to the remote data
   feed provider and is optimized for real-time or delayed data processing (**this is a default role**)
-- [x] [STREAM_FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_FEED) is similar to
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [STREAM_FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_FEED) is similar to
   FEED and also connects to the remote data feed provider but is designed for bulk data parsing from files
-- [ ] [LOCAL_HUB](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#LOCAL_HUB) is a local hub
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [LOCAL_HUB](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#LOCAL_HUB) is a local hub
   without the ability to establish network connections. Events published via publisher are delivered to local feed only.
-- [ ] [PUBLISHER](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#PUBLISHER) connects to the
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [PUBLISHER](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#PUBLISHER) connects to the
   remote publisher hub (also known as multiplexor) or creates a publisher on the local
   host ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/WriteTapeFile.java))
-- [ ] [STREAM_PUBLISHER](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_PUBLISHER) is
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [STREAM_PUBLISHER](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_PUBLISHER) is
   similar to PUBLISHER and also connects to the remote publisher hub, but is designed for bulk data publishing
-- [ ] [ON_DEMAND_FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#ON_DEMAND_FEED) is similar
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
+- [ON_DEMAND_FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#ON_DEMAND_FEED) is similar
   to FEED, but it is designed to be used with OnDemandService for historical data replay only
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
