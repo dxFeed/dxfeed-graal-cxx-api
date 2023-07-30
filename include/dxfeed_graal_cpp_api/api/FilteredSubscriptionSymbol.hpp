@@ -10,8 +10,9 @@ namespace dxfcpp {
 /**
  * This marker interface marks subscription symbol classes (like TimeSeriesSubscriptionSymbol)
  * that attach "filters" to the actual symbols. Filtered subscription symbols implement their `operator ==`
- * and `std::hash<>` based on their symbol only, without considering their "filter" part (for example, a TimeSeriesSubscriptionSymbol has
- * a @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" filter on a time range of events).
+ * and `std::hash<>` based on their symbol only, without considering their "filter" part (for example, a
+ * TimeSeriesSubscriptionSymbol has a @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" filter on a time range
+ * of events).
  *
  * <p>DXFeedSubscription has the following behavior for filtered symbols. There can be only one
  * active filter per symbol. Adding new filtered symbol with the same symbol but different filter
@@ -21,8 +22,6 @@ namespace dxfcpp {
  * symbols (like StringSymbol, for example) there is no notification when replacing one symbol with the other that
  * is "equal" to the first one.
  */
-struct FilteredSubscriptionSymbol {
+struct FilteredSubscriptionSymbol {};
 
-};
-
-}
+} // namespace dxfcpp

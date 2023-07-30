@@ -61,7 +61,9 @@ std::shared_ptr<OptionSale> OptionSale::fromGraalNative(void *graalNative) noexc
     }
 }
 
-void OptionSale::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
+void OptionSale::setExchangeCode(char exchangeCode) noexcept {
+    data_.exchangeCode = utf8to16(exchangeCode);
+}
 
 std::string OptionSale::toString() const noexcept {
     return fmt::format(

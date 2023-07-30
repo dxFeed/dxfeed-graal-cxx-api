@@ -7,9 +7,9 @@
 
 #include <compare>
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <unordered_map>
-#include <functional>
 
 #include "Common.hpp"
 
@@ -33,7 +33,8 @@ struct DXFCPP_EXPORT CEntryPointErrors {
 
     template <Integral Code>
     CEntryPointErrors(Code code, std::string description) noexcept
-        : code_{static_cast<CodeType>(code)}, description_{std::move(description)} {}
+        : code_{static_cast<CodeType>(code)}, description_{std::move(description)} {
+    }
 
   public:
     /// 0 - No error occurred.
@@ -122,11 +123,17 @@ struct DXFCPP_EXPORT CEntryPointErrors {
     }
 
     /// Returns the code
-    [[nodiscard]] CodeType getCode() const { return code_; }
+    [[nodiscard]] CodeType getCode() const {
+        return code_;
+    }
 
     /// Returns the description
-    [[nodiscard]] const std::string &getDescription() const & { return description_; }
+    [[nodiscard]] const std::string &getDescription() const & {
+        return description_;
+    }
 
-    bool operator==(const CEntryPointErrors &errors) const { return this->getCode() == errors.getCode(); }
+    bool operator==(const CEntryPointErrors &errors) const {
+        return this->getCode() == errors.getCode();
+    }
 };
 } // namespace dxfcpp

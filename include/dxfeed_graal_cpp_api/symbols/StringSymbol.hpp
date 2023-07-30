@@ -13,7 +13,8 @@
 namespace dxfcpp {
 
 /**
- * A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal Graal representation.
+ * A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal
+ * Graal representation.
  *
  * The current implementation is suboptimal (by memory usage) and will be enhanced.
  */
@@ -65,9 +66,9 @@ struct DXFCPP_EXPORT StringSymbol final {
 
     void *toGraal() const noexcept;
 
-    static void freeGraal(void* graal) noexcept;
+    static void freeGraal(void *graal) noexcept;
 
-    static StringSymbol fromGraal(void* graal) noexcept;
+    static StringSymbol fromGraal(void *graal) noexcept;
 
     /**
      * Returns a string representation of the current object.
@@ -84,9 +85,13 @@ struct DXFCPP_EXPORT StringSymbol final {
 
     const std::string &getData() const;
 
-    bool operator==(const StringSymbol &stringSymbol) const { return getData() == stringSymbol.getData(); }
+    bool operator==(const StringSymbol &stringSymbol) const {
+        return getData() == stringSymbol.getData();
+    }
 
-    bool operator<(const StringSymbol &stringSymbol) const { return getData() < stringSymbol.getData(); }
+    bool operator<(const StringSymbol &stringSymbol) const {
+        return getData() < stringSymbol.getData();
+    }
 };
 
 /**

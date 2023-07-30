@@ -37,4 +37,4 @@ struct DXFCPP_EXPORT Side : Enum<Side, std::uint32_t> {
     static const Side SELL;
 };
 
-}
+} // namespace dxfcpp

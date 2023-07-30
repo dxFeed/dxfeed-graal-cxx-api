@@ -35,7 +35,8 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit MarketEvent(std::string eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {}
+    explicit MarketEvent(std::string eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
+    }
 
   public:
     /**
@@ -43,23 +44,29 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
      *
      * @return symbol of this event.
      */
-    const std::string &getEventSymbol() const override { return eventSymbol_; }
+    const std::string &getEventSymbol() const noexcept override {
+        return eventSymbol_;
+    }
 
     /**
      * Changes symbol of this event.
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const std::string &eventSymbol) override {
-        //TODO: check invalid utf-8
+    void setEventSymbol(const std::string &eventSymbol) noexcept override {
+        // TODO: check invalid utf-8
         eventSymbol_ = eventSymbol;
     }
 
     ///
-    std::int64_t getEventTime() const override { return eventTime_; }
+    std::int64_t getEventTime() const noexcept override {
+        return eventTime_;
+    }
 
     ///
-    void setEventTime(std::int64_t eventTime) override { eventTime_ = eventTime; }
+    void setEventTime(std::int64_t eventTime) noexcept override {
+        eventTime_ = eventTime;
+    }
 };
 
 } // namespace dxfcpp

@@ -16,7 +16,9 @@ namespace dxfcpp {
 
 template <typename EntityType> struct EntityManager : private NonCopyable<EntityManager<EntityType>> {
 #if DXFCPP_DEBUG == 1
-    static auto getDebugName() { return std::string("EntityManager<") + typeid(EntityType).name() + ">"; }
+    static auto getDebugName() {
+        return std::string("EntityManager<") + typeid(EntityType).name() + ">";
+    }
 #endif
 
     // TODO: Boost.Bimap

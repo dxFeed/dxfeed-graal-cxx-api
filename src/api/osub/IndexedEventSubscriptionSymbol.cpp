@@ -11,11 +11,16 @@ namespace dxfcpp {
 
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol,
                                                                const IndexedEventSource &source) noexcept
-    : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), source_(source) {}
+    : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), source_(source) {
+}
 
-const std::unique_ptr<SymbolWrapper> &IndexedEventSubscriptionSymbol::getEventSymbol() const { return eventSymbol_; }
+const std::unique_ptr<SymbolWrapper> &IndexedEventSubscriptionSymbol::getEventSymbol() const {
+    return eventSymbol_;
+}
 
-const IndexedEventSource &IndexedEventSubscriptionSymbol::getSource() const { return source_; }
+const IndexedEventSource &IndexedEventSubscriptionSymbol::getSource() const {
+    return source_;
+}
 
 void *IndexedEventSubscriptionSymbol::toGraal() const noexcept {
     if constexpr (Debugger::isDebug) {

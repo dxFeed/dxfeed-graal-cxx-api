@@ -18,7 +18,9 @@
 
 namespace dxfcpp {
 
-void TradeBase::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
+void TradeBase::setExchangeCode(char exchangeCode) noexcept {
+    tradeBaseData_.exchangeCode = utf8to16(exchangeCode);
+}
 
 std::string TradeBase::baseFieldsToString() const noexcept {
     return fmt::format("{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, price={}, "

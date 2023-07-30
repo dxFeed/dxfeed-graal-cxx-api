@@ -10,9 +10,11 @@
 
 namespace dxfcpp {
 
-StringSymbol::StringSymbol(const StringSymbol &stringSymbol) noexcept : data_{stringSymbol.data_} {}
+StringSymbol::StringSymbol(const StringSymbol &stringSymbol) noexcept : data_{stringSymbol.data_} {
+}
 
-StringSymbol::StringSymbol(StringSymbol &&stringSymbol) noexcept : data_{std::move(stringSymbol.data_)} {}
+StringSymbol::StringSymbol(StringSymbol &&stringSymbol) noexcept : data_{std::move(stringSymbol.data_)} {
+}
 
 StringSymbol &StringSymbol::operator=(const StringSymbol &stringSymbol) noexcept {
     if (this == &stringSymbol) {
@@ -34,14 +36,14 @@ StringSymbol &StringSymbol::operator=(StringSymbol &&stringSymbol) noexcept {
     return *this;
 }
 
-StringSymbol::StringSymbol() noexcept {}
+StringSymbol::StringSymbol() noexcept {
+}
 
 StringSymbol::~StringSymbol() noexcept = default;
 
 void *StringSymbol::toGraal() const noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "StringSymbol::toGraal()");
+        Debugger::debug("StringSymbol::toGraal()");
     }
 
     auto *graalSymbol = new (std::nothrow) dxfg_string_symbol_t{{STRING}, createCString(data_)};
@@ -51,8 +53,7 @@ void *StringSymbol::toGraal() const noexcept {
 
 void StringSymbol::freeGraal(void *graal) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "StringSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("StringSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
     }
 
     if (graal == nullptr) {
@@ -67,8 +68,7 @@ void StringSymbol::freeGraal(void *graal) noexcept {
 
 StringSymbol StringSymbol::fromGraal(void *graal) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(
-            "StringSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("StringSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
     }
 
     if (graal == nullptr) {
@@ -80,6 +80,8 @@ StringSymbol StringSymbol::fromGraal(void *graal) noexcept {
     return {graalSymbol->symbol};
 }
 
-const std::string &StringSymbol::getData() const { return data_; }
+const std::string &StringSymbol::getData() const {
+    return data_;
+}
 
 } // namespace dxfcpp

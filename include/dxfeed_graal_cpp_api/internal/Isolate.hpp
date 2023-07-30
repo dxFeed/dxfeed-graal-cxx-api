@@ -166,7 +166,9 @@ class Isolate final {
     }
 };
 
-template <typename F> auto runIsolated(F &&f) { return Isolate::getInstance()->runIsolated(std::forward<F>(f)); }
+template <typename F> auto runIsolated(F &&f) {
+    return Isolate::getInstance()->runIsolated(std::forward<F>(f));
+}
 
 template <typename F, typename R>
 #if __cpp_concepts

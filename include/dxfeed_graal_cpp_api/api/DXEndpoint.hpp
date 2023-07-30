@@ -589,7 +589,9 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @see DXEndpoint
      */
-    Role getRole() const { return role_; }
+    Role getRole() const {
+        return role_;
+    }
 
     /**
      * Returns the state of this endpoint.
@@ -601,12 +603,16 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     State getState() const;
 
     /// @return `true` if the endpoint is closed
-    bool isClosed() const { return getState() == State::CLOSED; }
+    bool isClosed() const {
+        return getState() == State::CLOSED;
+    }
 
     /**
      * @return The user defined endpoint's name
      */
-    const std::string &getName() const & { return name_; }
+    const std::string &getName() const & {
+        return name_;
+    }
 
     /**
      * Adds listener that is notified about changes in @ref ::getState() "state" property.
@@ -635,7 +641,9 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @param listenerId The listener id to remove
      */
-    void removeStateChangeListener(std::size_t listenerId) noexcept { onStateChange_ -= listenerId; }
+    void removeStateChangeListener(std::size_t listenerId) noexcept {
+        onStateChange_ -= listenerId;
+    }
 
     /**
      * Returns the onStateChange @ref Handler<void(ArgTypes...)> "handler" that can be used to add or remove
@@ -643,10 +651,13 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @return onStateChange handler with `void(State, State)` signature
      */
-    auto &onStateChange() noexcept { return onStateChange_; }
+    auto &onStateChange() noexcept {
+        return onStateChange_;
+    }
 
     // TODO: implement
-    template <typename Executor> void executor(Executor &&) {}
+    template <typename Executor> void executor(Executor &&) {
+    }
 
     /**
      * Changes user name for this endpoint.
@@ -794,7 +805,9 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     void closeAndAwaitTermination();
 
     // TODO: implement
-    std::unordered_set<EventTypeEnum> getEventTypes() { return {}; }
+    std::unordered_set<EventTypeEnum> getEventTypes() {
+        return {};
+    }
 
     /**
      * @return The feed that is associated with this endpoint.
@@ -802,7 +815,9 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     std::shared_ptr<DXFeed> getFeed();
 
     // TODO: implement
-    std::shared_ptr<DXPublisher> getPublisher() { return {}; }
+    std::shared_ptr<DXPublisher> getPublisher() {
+        return {};
+    }
 
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.

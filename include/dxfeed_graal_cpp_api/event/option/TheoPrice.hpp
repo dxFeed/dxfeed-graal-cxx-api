@@ -54,12 +54,6 @@ struct EventMapper;
 class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
-    /**
-     * Maximum allowed sequence value.
-     *
-     * @see ::setSequence()
-     */
-    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
@@ -91,6 +85,13 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     static std::shared_ptr<TheoPrice> fromGraalNative(void *graalNative) noexcept;
 
   public:
+    /**
+     * Maximum allowed sequence value.
+     *
+     * @see ::setSequence()
+     */
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+
     static const EventTypeEnum &TYPE;
 
     /// Creates new theoprice event with default values.
@@ -101,16 +102,21 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TheoPrice(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {}
+    explicit TheoPrice(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    }
 
     ///
-    const IndexedEventSource &getSource() const & override { return IndexedEventSource::DEFAULT; }
+    const IndexedEventSource &getSource() const & noexcept override {
+        return IndexedEventSource::DEFAULT;
+    }
 
     ///
-    EventFlagsMask getEventFlags() const override { return EventFlagsMask(data_.eventFlags); }
+    EventFlagsMask getEventFlags() const noexcept override {
+        return EventFlagsMask(data_.eventFlags);
+    }
 
     ///
-    void setEventFlags(const EventFlagsMask &eventFlags) override {
+    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
         data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
     }
 
@@ -121,7 +127,9 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @return unique index of this event.
      */
-    std::int64_t getIndex() const override { return data_.index; }
+    std::int64_t getIndex() const noexcept override {
+        return data_.index;
+    }
 
     /**
      * Changes unique per-symbol index of this event.
@@ -133,14 +141,16 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      * @param index the event index.
      * @see ::getIndex()
      */
-    void setIndex(std::int64_t index) override { data_.index = index; }
+    void setIndex(std::int64_t index) noexcept override {
+        data_.index = index;
+    }
 
     /**
      * Returns timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
-    std::int64_t getTime() const override {
+    std::int64_t getTime() const noexcept override {
         return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
     }
 
@@ -150,7 +160,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      * @param time timestamp of the event in milliseconds.
      * @see ::getTime()
      */
-    void setTime(std::int64_t time) {
+    void setTime(std::int64_t time) noexcept {
         data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
                                 sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
                            getSequence());
@@ -163,14 +173,16 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const { return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE)); }
+    std::int32_t getSequence() const noexcept {
+        return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
+    }
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
      * @param sequence the sequence.
      * @see ::getSequence()
      */
-    void setSequence(int sequence) {
+    void setSequence(int sequence) noexcept {
         // TODO: Improve error handling
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
@@ -182,28 +194,36 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @return theoretical option price.
      */
-    double getPrice() const { return data_.price; }
+    double getPrice() const noexcept {
+        return data_.price;
+    }
 
     /**
      * Changes theoretical option price.
      *
      * @param price theoretical option price.
      */
-    void setPrice(double price) { data_.price = price; }
+    void setPrice(double price) noexcept {
+        data_.price = price;
+    }
 
     /**
      * Returns underlying price at the time of theo price computation.
      *
      * @return underlying price at the time of theo price computation.
      */
-    double getUnderlyingPrice() const { return data_.underlyingPrice; }
+    double getUnderlyingPrice() const noexcept {
+        return data_.underlyingPrice;
+    }
 
     /**
      * Changes underlying price at the time of theo price computation.
      *
      * @param underlyingPrice underlying price at the time of theo price computation.
      */
-    void setUnderlyingPrice(double underlyingPrice) { data_.underlyingPrice = underlyingPrice; }
+    void setUnderlyingPrice(double underlyingPrice) noexcept {
+        data_.underlyingPrice = underlyingPrice;
+    }
 
     /**
      * Returns delta of the theoretical price.
@@ -211,14 +231,18 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @return delta of the theoretical price.
      */
-    double getDelta() const { return data_.delta; }
+    double getDelta() const noexcept {
+        return data_.delta;
+    }
 
     /**
      * Changes delta of the theoretical price.
      *
      * @param delta delta of the theoretical price.
      */
-    void setDelta(double delta) { data_.delta = delta; }
+    void setDelta(double delta) noexcept {
+        data_.delta = delta;
+    }
 
     /**
      * Returns gamma of the theoretical price.
@@ -226,42 +250,54 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @return gamma of the theoretical price.
      */
-    double getGamma() const { return data_.gamma; }
+    double getGamma() const noexcept {
+        return data_.gamma;
+    }
 
     /**
      * Changes gamma of the theoretical price.
      *
      * @param gamma gamma of the theoretical price.
      */
-    void setGamma(double gamma) { data_.gamma = gamma; }
+    void setGamma(double gamma) noexcept {
+        data_.gamma = gamma;
+    }
 
     /**
      * Returns implied simple dividend return of the corresponding option series.
      *
      * @return implied simple dividend return of the corresponding option series.
      */
-    double getDividend() const { return data_.dividend; }
+    double getDividend() const noexcept {
+        return data_.dividend;
+    }
 
     /**
      * Changes implied simple dividend return of the corresponding option series.
      *
      * @param dividend implied simple dividend return of the corresponding option series.
      */
-    void setDividend(double dividend) { data_.dividend = dividend; }
+    void setDividend(double dividend) noexcept {
+        data_.dividend = dividend;
+    }
 
     /**
      * Returns implied simple interest return of the corresponding option series.
      *
      * @return implied simple interest return of the corresponding option series.
      */
-    double getInterest() const { return data_.interest; }
+    double getInterest() const noexcept {
+        return data_.interest;
+    }
 
     /**
      * Changes implied simple interest return of the corresponding option series.
      *
      * @param interest implied simple interest return of the corresponding option series.
      */
-    void setInterest(double interest) { data_.interest = interest; }
+    void setInterest(double interest) noexcept {
+        data_.interest = interest;
+    }
 
     /**
      * Returns a string representation of the current object.

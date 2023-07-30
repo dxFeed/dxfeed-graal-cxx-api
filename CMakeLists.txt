@@ -139,6 +139,7 @@ set(dxFeedNativeAPIEventMarketSources
         src/event/market/TradeBase.cpp
         src/event/market/Trade.cpp
         src/event/market/TradeETH.cpp
+        src/event/market/Scope.cpp
         src/event/market/Side.cpp
         src/event/market/TimeAndSaleType.cpp
         src/event/market/TimeAndSale.cpp

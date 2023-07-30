@@ -476,7 +476,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     return DXEndpoint::create(endpointHandle, role_, properties_);
 }
 
-std::string DXEndpoint::toString() const noexcept { return fmt::format("DXEndpoint{{{}}}", handler_.toString()); }
+std::string DXEndpoint::toString() const noexcept {
+    return fmt::format("DXEndpoint{{{}}}", handler_.toString());
+}
 
 struct BuilderHandle {};
 
@@ -524,7 +526,8 @@ struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
     std::unordered_map<dxfc_dxendpoint_state_change_listener, std::size_t> listeners{};
 
     EndpointWrapper(std::shared_ptr<dxfcpp::DXEndpoint> endpoint, void *userData)
-        : endpoint{std::move(endpoint)}, userData{userData}, listeners{} {}
+        : endpoint{std::move(endpoint)}, userData{userData}, listeners{} {
+    }
 };
 
 struct EndpointWrapperRegistry {

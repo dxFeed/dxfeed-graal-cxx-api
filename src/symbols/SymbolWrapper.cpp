@@ -105,7 +105,9 @@ void *SymbolWrapper::newGraalList(std::ptrdiff_t size) noexcept {
         return bit_cast<void *>(list);
     }
 
-    list->elements = new (std::nothrow) ElementType *[size] { nullptr };
+    list->elements = new (std::nothrow) ElementType *[size] {
+        nullptr
+    };
 
     if (!list->elements) {
         // TODO: error handling

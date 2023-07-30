@@ -37,4 +37,4 @@ struct DXFCPP_EXPORT TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
     static const TimeAndSaleType CANCEL;
 };
 
-}
+} // namespace dxfcpp

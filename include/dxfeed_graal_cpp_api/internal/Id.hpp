@@ -16,7 +16,8 @@ template <typename T> struct Id {
   private:
     const ValueType value_{};
 
-    explicit Id(ValueType value) : value_{value} {}
+    explicit Id(ValueType value) : value_{value} {
+    }
 
   public:
     static Id<T> getNext() {
@@ -25,18 +26,30 @@ template <typename T> struct Id {
         return Id<T>{value++};
     }
 
-    [[nodiscard]] ValueType getValue() const { return value_; }
+    [[nodiscard]] ValueType getValue() const {
+        return value_;
+    }
 
-    explicit operator ValueType() const { return value_; }
+    explicit operator ValueType() const {
+        return value_;
+    }
 
-    static Id<T> from(ValueType value) { return Id<T>{value}; }
+    static Id<T> from(ValueType value) {
+        return Id<T>{value};
+    }
 
-    template <typename U> bool operator==(const Id<U> &id) const { return getValue() == id.getValue(); }
+    template <typename U> bool operator==(const Id<U> &id) const {
+        return getValue() == id.getValue();
+    }
 
-    template <typename U> auto operator<=>(const Id<U> &id) const { return getValue() <=> id.getValue(); }
+    template <typename U> auto operator<=>(const Id<U> &id) const {
+        return getValue() <=> id.getValue();
+    }
 };
 } // namespace dxfcpp
 
 template <typename T> struct std::hash<dxfcpp::Id<T>> {
-    std::size_t operator()(const dxfcpp::Id<T> &id) const noexcept { return id.getValue(); }
+    std::size_t operator()(const dxfcpp::Id<T> &id) const noexcept {
+        return id.getValue();
+    }
 };

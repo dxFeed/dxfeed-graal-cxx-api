@@ -25,8 +25,7 @@ namespace dxfcpp {
  *
  * @tparam Signature The arguments "signature" (example: `void(int, int)`)
  */
-template<typename Signature>
-struct Handler;
+template <typename Signature> struct Handler;
 
 /**
  * A thread-safe class that allows to asynchronously notify listeners with a given signature.
@@ -39,8 +38,7 @@ struct Handler;
  *
  * @tparam ArgTypes The arguments "signature" (example: `void(int, int)`)
  */
-template<typename... ArgTypes>
-struct Handler<void(ArgTypes...)> final {
+template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
     /// The listener type
     using ListenerType = std::function<void(ArgTypes...)>;
     static constexpr std::size_t FAKE_ID{static_cast<std::size_t>(-1)};
@@ -58,17 +56,17 @@ struct Handler<void(ArgTypes...)> final {
     std::size_t mainFuturesCurrentIndex_{};
     const std::size_t mainFuturesSize_{};
 
-    std::shared_future<void> handleImpl(ArgTypes...args) {
+    std::shared_future<void> handleImpl(ArgTypes... args) {
         return std::async(
             std::launch::async,
-            [this](ArgTypes...args) {
+            [this](ArgTypes... args) {
                 std::lock_guard guard{listenersMutex_};
 
-                for (auto &listener: listeners_) {
+                for (auto &listener : listeners_) {
                     listener.second(args...);
                 }
 
-                for (auto &listener: lowPriorityListeners_) {
+                for (auto &listener : lowPriorityListeners_) {
                     listener.second(args...);
                 }
             },
@@ -91,7 +89,7 @@ struct Handler<void(ArgTypes...)> final {
      *
      * @param args The listeners arguments
      */
-    void handle(ArgTypes...args) {
+    void handle(ArgTypes... args) {
         auto f = handleImpl(args...);
 
         {
@@ -113,7 +111,9 @@ struct Handler<void(ArgTypes...)> final {
      *
      * @param args The listeners arguments
      */
-    void operator()(ArgTypes...args) { return handle(args...); }
+    void operator()(ArgTypes... args) {
+        return handle(args...);
+    }
 
     /**
      * Adds the listener to "main" group
@@ -160,7 +160,9 @@ struct Handler<void(ArgTypes...)> final {
      * @param listener The listener
      * @return The listener id
      */
-    std::size_t operator+=(ListenerType &&listener) { return add(std::forward<ListenerType>(listener)); }
+    std::size_t operator+=(ListenerType &&listener) {
+        return add(std::forward<ListenerType>(listener));
+    }
 
     /**
      * Adds the low priority listener (to the "low priority" group).
@@ -169,7 +171,9 @@ struct Handler<void(ArgTypes...)> final {
      * @param listener The listener
      * @return The listener id
      */
-    std::size_t operator%=(ListenerType &&listener) { return addLowPriority(std::forward<ListenerType>(listener)); }
+    std::size_t operator%=(ListenerType &&listener) {
+        return addLowPriority(std::forward<ListenerType>(listener));
+    }
 
     /**
      * Removes a listener by the id
@@ -195,7 +199,9 @@ struct Handler<void(ArgTypes...)> final {
      *
      * @param id The listener id
      */
-    void operator-=(std::size_t id) { return remove(id); }
+    void operator-=(std::size_t id) {
+        return remove(id);
+    }
 };
 
 } // namespace dxfcpp

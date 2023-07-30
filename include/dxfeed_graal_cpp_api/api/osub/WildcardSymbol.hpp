@@ -7,8 +7,8 @@
 
 #include <cstdint>
 #include <memory>
-#include <utility>
 #include <string>
+#include <utility>
 
 namespace dxfcpp {
 
@@ -31,10 +31,10 @@ struct DXFCPP_EXPORT WildcardSymbol final {
      * <p><b>NOTE:</b> Wildcard subscription can create extremely high network and CPU load for certain kinds of
      * high-frequency events like quotes. It requires a special arrangement on the side of upstream data provider and
      * is disabled by default in upstream feed configuration. Make that sure you have adequate resources and understand
-     * the impact before using it. It can be used for low-frequency events only (like Forex quotes), because each instance
-     * of DXFeedSubscription processes events in a single thread and there is no provision to load-balance wildcard
-     * subscription amongst multiple threads.
-     * Contact your data provider for the corresponding configuration arrangement if needed.
+     * the impact before using it. It can be used for low-frequency events only (like Forex quotes), because each
+     * instance of DXFeedSubscription processes events in a single thread and there is no provision to load-balance
+     * wildcard subscription amongst multiple threads. Contact your data provider for the corresponding configuration
+     * arrangement if needed.
      *
      * @see WildcardSymbol
      */
@@ -43,7 +43,8 @@ struct DXFCPP_EXPORT WildcardSymbol final {
   private:
     std::string symbol_;
 
-    WildcardSymbol(const std::string &symbol) noexcept : symbol_{symbol} {}
+    WildcardSymbol(const std::string &symbol) noexcept : symbol_{symbol} {
+    }
 
   public:
     WildcardSymbol(const WildcardSymbol &) noexcept = default;
@@ -53,7 +54,9 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     WildcardSymbol() noexcept = default;
     virtual ~WildcardSymbol() noexcept = default;
 
-    const std::string &getSymbol() const noexcept { return symbol_; }
+    const std::string &getSymbol() const noexcept {
+        return symbol_;
+    }
 
     void *toGraal() const noexcept;
 
@@ -74,16 +77,24 @@ struct DXFCPP_EXPORT WildcardSymbol final {
         }
     }
 
-    bool operator==(const WildcardSymbol &wildcardSymbol) const { return symbol_ == wildcardSymbol.symbol_; }
+    bool operator==(const WildcardSymbol &wildcardSymbol) const {
+        return symbol_ == wildcardSymbol.symbol_;
+    }
 
-    bool operator<(const WildcardSymbol &wildcardSymbol) const { return symbol_ < wildcardSymbol.symbol_; }
+    bool operator<(const WildcardSymbol &wildcardSymbol) const {
+        return symbol_ < wildcardSymbol.symbol_;
+    }
 };
 
 inline namespace literals {
 
-inline WildcardSymbol operator""_ws(const char *, size_t) noexcept { return WildcardSymbol::ALL; }
+inline WildcardSymbol operator""_ws(const char *, size_t) noexcept {
+    return WildcardSymbol::ALL;
+}
 
-inline WildcardSymbol operator""_wcs(const char *, size_t) noexcept { return WildcardSymbol::ALL; }
+inline WildcardSymbol operator""_wcs(const char *, size_t) noexcept {
+    return WildcardSymbol::ALL;
+}
 
 } // namespace literals
 

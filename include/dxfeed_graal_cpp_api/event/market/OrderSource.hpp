@@ -35,12 +35,16 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     bool builtin_{};
 
     OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept
-        : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {}
+        : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {
+    }
 
-    OrderSource(const std::string &name, std::uint32_t pubFlags) : OrderSource(composeId(name), name, pubFlags) {}
+    OrderSource(const std::string &name, std::uint32_t pubFlags) noexcept
+        : OrderSource(composeId(name), name, pubFlags) {
+    }
 
-    OrderSource(std::int32_t id, const std::string &name)
-        : IndexedEventSource(id, decodeName(id)), builtin_{false}, pubFlags_{0} {}
+    OrderSource(std::int32_t id, const std::string &name) noexcept
+        : IndexedEventSource(id, name), builtin_{false}, pubFlags_{0} {
+    }
 
     static std::int32_t composeId(const std::string &name) noexcept {
         std::int32_t sourceId = 0;
@@ -62,7 +66,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
                 return -1;
             }
 
-            sourceId = dxfcpp::orOp(dxfcpp::shl(sourceId, 8), c);
+            sourceId = orOp(sal(sourceId, 8), c);
         }
 
         return sourceId;
@@ -78,7 +82,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         return false;
     }
 
-    static std::string decodeName(int id) {
+    static std::string decodeName(int id) noexcept {
         if (id == 0) {
             // TODO: error handling: throw IllegalArgumentException("Source name must contain from 1 to 4 characters");
 
@@ -90,11 +94,11 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         std::size_t n = 0;
 
         for (int i = 24; i >= 0; i -= 8) {
-            if (dxfcpp::shr(id, i) == 0) { // skip highest contiguous zeros
+            if (sar(id, i) == 0) { // skip highest contiguous zeros
                 continue;
             }
 
-            char c = static_cast<char>(dxfcpp::andOp(dxfcpp::shr(id, i), 0xff));
+            char c = static_cast<char>(andOp(sar(id, i), 0xff));
 
             if (!checkChar(c)) {
                 return "";
@@ -106,7 +110,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         return name.substr(0, n);
     }
 
-    static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType) {
+    static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType) noexcept {
         if (eventType == EventTypeEnum::ORDER) {
             return PUB_ORDER;
         }
@@ -456,7 +460,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @param sourceId the source identifier.
      * @return order source.
      */
-    static const OrderSource &valueOf(std::int32_t sourceId) {
+    static const OrderSource &valueOf(std::int32_t sourceId) noexcept {
         if (auto found = INTERNAL_SOURCES_.find(sourceId); found != INTERNAL_SOURCES_.end()) {
             return found->second;
         }
@@ -477,7 +481,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @param name the name of the source.
      * @return order source.
      */
-    static const OrderSource &valueOf(const std::string &name) {
+    static const OrderSource &valueOf(const std::string &name) noexcept {
         auto sourceId = composeId(name);
 
         if (auto found = INTERNAL_SOURCES_.find(sourceId); found != INTERNAL_SOURCES_.end()) {

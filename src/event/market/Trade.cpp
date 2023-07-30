@@ -25,6 +25,8 @@ std::shared_ptr<Trade> Trade::fromGraalNative(void *graalNative) noexcept {
         graalNative);
 }
 
-std::string Trade::toString() const noexcept { return fmt::format("Trade{{{}}}", baseFieldsToString()); }
+std::string Trade::toString() const noexcept {
+    return fmt::format("Trade{{{}}}", baseFieldsToString());
+}
 
 } // namespace dxfcpp

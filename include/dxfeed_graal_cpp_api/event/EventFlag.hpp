@@ -98,7 +98,8 @@ class DXFCPP_EXPORT EventFlag final {
     std::uint32_t flag_;
     std::string name_;
 
-    EventFlag(std::uint32_t flag, std::string name) : flag_{flag}, name_{std::move(name)} {}
+    EventFlag(std::uint32_t flag, std::string name) : flag_{flag}, name_{std::move(name)} {
+    }
 
   public:
     /**
@@ -176,12 +177,15 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Creates the invalid event flag
      */
-    explicit EventFlag() : flag_{unsigned(-1)}, name_{"INVALID"} {}
+    explicit EventFlag() noexcept : flag_{unsigned(-1)}, name_{"INVALID"} {
+    }
 
     /**
      * @return The event flag's value
      */
-    std::uint32_t getFlag() const { return flag_; }
+    std::uint32_t getFlag() const noexcept {
+        return flag_;
+    }
 
     /**
      * Determines if the given flag is in the mask.
@@ -190,7 +194,9 @@ class DXFCPP_EXPORT EventFlag final {
      *
      * @return `true` the given flag is in the mask.
      */
-    bool in(std::uint32_t eventFlagsMask) const { return (eventFlagsMask & flag_) != 0; }
+    bool in(std::uint32_t eventFlagsMask) const noexcept {
+        return (eventFlagsMask & flag_) != 0;
+    }
 
     /**
      * Determines if the given flag is in the mask.
@@ -201,7 +207,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return `true` the given flag is in the mask.
      */
     template <typename EventFlagsMask>
-    bool in(const EventFlagsMask &eventFlagsMask) const
+    bool in(const EventFlagsMask &eventFlagsMask) const noexcept
 #if __cpp_concepts
         requires requires {
             { eventFlagsMask.getMask() } -> std::same_as<std::uint32_t>;
@@ -212,17 +218,23 @@ class DXFCPP_EXPORT EventFlag final {
     }
 
     ///
-    [[nodiscard]] const std::string &getName() const { return name_; }
+    [[nodiscard]] const std::string &getName() const noexcept {
+        return name_;
+    }
 
     ///
-    std::string toString() const { return name_; }
+    std::string toString() const noexcept {
+        return name_;
+    }
 };
 
 } // namespace dxfcpp
 
 ///
 template <> struct std::hash<dxfcpp::EventFlag> {
-    std::size_t operator()(const dxfcpp::EventFlag &eventFlag) const noexcept { return eventFlag.getFlag(); }
+    std::size_t operator()(const dxfcpp::EventFlag &eventFlag) const noexcept {
+        return eventFlag.getFlag();
+    }
 };
 
 namespace dxfcpp {
@@ -235,7 +247,8 @@ class EventFlagsMask final {
     /**
      * Creates an empty event flags mask
      */
-    explicit EventFlagsMask() : mask_{0u} {}
+    explicit EventFlagsMask() : mask_{0u} {
+    }
 
     /**
      * Create event flags mask by integer value
@@ -243,7 +256,8 @@ class EventFlagsMask final {
      * @tparam MaskType The type of integer mask
      * @param mask The integer mask value
      */
-    template <Integral MaskType> explicit EventFlagsMask(MaskType mask) : mask_{static_cast<std::uint32_t>(mask)} {}
+    template <Integral MaskType> explicit EventFlagsMask(MaskType mask) : mask_{static_cast<std::uint32_t>(mask)} {
+    }
 
     /**
      * Creates event flags mask by iterators of container with flags
@@ -253,8 +267,9 @@ class EventFlagsMask final {
      * @param end The end position
      */
     template <typename EventFlagIt> EventFlagsMask(EventFlagIt begin, EventFlagIt end) {
-        mask_ =
-            std::accumulate(begin, end, 0u, [](unsigned mask, const EventFlag &flag) { return mask | flag.getFlag(); });
+        mask_ = std::accumulate(begin, end, 0u, [](unsigned mask, const EventFlag &flag) {
+            return mask | flag.getFlag();
+        });
     }
 
     /**
@@ -262,15 +277,17 @@ class EventFlagsMask final {
      *
      * @param eventTypes The list with flags
      */
-    EventFlagsMask(std::initializer_list<EventFlag> eventTypes)
-        : EventFlagsMask(eventTypes.begin(), eventTypes.end()) {}
+    EventFlagsMask(std::initializer_list<EventFlag> eventTypes) : EventFlagsMask(eventTypes.begin(), eventTypes.end()) {
+    }
 
     /**
      * Returns an integer representation of event mask
      *
      * @return an integer representation
      */
-    constexpr std::uint32_t getMask() const { return mask_; }
+    constexpr std::uint32_t getMask() const {
+        return mask_;
+    }
 
     /**
      *

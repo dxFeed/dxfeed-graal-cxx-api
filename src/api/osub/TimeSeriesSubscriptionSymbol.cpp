@@ -9,9 +9,12 @@
 namespace dxfcpp {
 
 TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, int64_t fromTime) noexcept
-    : IndexedEventSubscriptionSymbol(eventSymbol, IndexedEventSource::DEFAULT), fromTime_(fromTime) {}
+    : IndexedEventSubscriptionSymbol(eventSymbol, IndexedEventSource::DEFAULT), fromTime_(fromTime) {
+}
 
-int64_t TimeSeriesSubscriptionSymbol::getFromTime() const { return fromTime_; }
+int64_t TimeSeriesSubscriptionSymbol::getFromTime() const {
+    return fromTime_;
+}
 
 void *TimeSeriesSubscriptionSymbol::toGraal() const noexcept {
     if constexpr (Debugger::isDebug) {
@@ -75,12 +78,14 @@ bool TimeSeriesSubscriptionSymbol::operator<(
 
 TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(
     const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept
-    : IndexedEventSubscriptionSymbol(timeSeriesSubscriptionSymbol), fromTime_{timeSeriesSubscriptionSymbol.fromTime_} {}
+    : IndexedEventSubscriptionSymbol(timeSeriesSubscriptionSymbol), fromTime_{timeSeriesSubscriptionSymbol.fromTime_} {
+}
 
 TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(
     TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept
     : IndexedEventSubscriptionSymbol(std::move(timeSeriesSubscriptionSymbol)),
-      fromTime_{timeSeriesSubscriptionSymbol.fromTime_} {}
+      fromTime_{timeSeriesSubscriptionSymbol.fromTime_} {
+}
 
 TimeSeriesSubscriptionSymbol &
 TimeSeriesSubscriptionSymbol::operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {

@@ -7,3 +7,8 @@ IndentPPDirectives: AfterHash
 TabWidth: 4
 IndentWidth: 4
 UseTab: Never
+AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: None
+AllowShortLoopsOnASingleLine: false

@@ -45,7 +45,9 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      * @return The difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC or zero when time is not available.
      */
-    virtual std::int64_t getEventTime() const { return 0; }
+    virtual std::int64_t getEventTime() const noexcept {
+        return 0;
+    }
 
     /**
      * Changes event creation time.
@@ -55,14 +57,18 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
      */
-    virtual void setEventTime(std::int64_t /*eventTime*/){
+    virtual void setEventTime(std::int64_t /*eventTime*/) noexcept {
         // The default implementation is empty
     };
 
     ///
-    std::string toString() const noexcept override { return "EventType{}"; }
+    std::string toString() const noexcept override {
+        return "EventType{}";
+    }
 
-    friend std::ostream &operator<<(std::ostream &os, const EventType &e) { return os << e.toString(); }
+    friend std::ostream &operator<<(std::ostream &os, const EventType &e) {
+        return os << e.toString();
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const std::shared_ptr<EventType> &e) {
         return os << e->toString();
@@ -94,14 +100,14 @@ template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public Eve
      *
      * @return The event symbol.
      */
-    virtual const Symbol &getEventSymbol() const = 0;
+    virtual const Symbol &getEventSymbol() const noexcept = 0;
 
     /**
      * Changes event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
      *
      * @param eventSymbol event symbol.
      */
-    virtual void setEventSymbol(const Symbol &eventSymbol) = 0;
+    virtual void setEventSymbol(const Symbol &eventSymbol) noexcept = 0;
 };
 
 } // namespace dxfcpp

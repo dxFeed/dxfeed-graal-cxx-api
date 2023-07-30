@@ -18,17 +18,29 @@ namespace dxfcpp {
 
 const EventTypeEnum &Quote::TYPE = EventTypeEnum::QUOTE;
 
-std::int16_t Quote::getBidExchangeCode() const { return data_.bidExchangeCode; }
+std::int16_t Quote::getBidExchangeCode() const noexcept {
+    return data_.bidExchangeCode;
+}
 
-void Quote::setBidExchangeCode(char bidExchangeCode) { data_.bidExchangeCode = utf8to16(bidExchangeCode); }
+void Quote::setBidExchangeCode(char bidExchangeCode) noexcept {
+    data_.bidExchangeCode = utf8to16(bidExchangeCode);
+}
 
-void Quote::setBidExchangeCode(std::int16_t bidExchangeCode) { data_.bidExchangeCode = bidExchangeCode; }
+void Quote::setBidExchangeCode(std::int16_t bidExchangeCode) noexcept {
+    data_.bidExchangeCode = bidExchangeCode;
+}
 
-std::int16_t Quote::getAskExchangeCode() const { return data_.askExchangeCode; }
+std::int16_t Quote::getAskExchangeCode() const noexcept {
+    return data_.askExchangeCode;
+}
 
-void Quote::setAskExchangeCode(char askExchangeCode) { data_.askExchangeCode = utf8to16(askExchangeCode); }
+void Quote::setAskExchangeCode(char askExchangeCode) noexcept {
+    data_.askExchangeCode = utf8to16(askExchangeCode);
+}
 
-void Quote::setAskExchangeCode(std::int16_t askExchangeCode) { data_.askExchangeCode = askExchangeCode; }
+void Quote::setAskExchangeCode(std::int16_t askExchangeCode) noexcept {
+    data_.askExchangeCode = askExchangeCode;
+}
 
 std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
     if (!graalNative) {

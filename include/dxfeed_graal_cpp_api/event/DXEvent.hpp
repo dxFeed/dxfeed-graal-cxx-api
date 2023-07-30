@@ -31,6 +31,7 @@
 #include "market/PriceType.hpp"
 #include "market/Profile.hpp"
 #include "market/Quote.hpp"
+#include "market/Scope.hpp"
 #include "market/ShortSaleRestriction.hpp"
 #include "market/Side.hpp"
 #include "market/Summary.hpp"
