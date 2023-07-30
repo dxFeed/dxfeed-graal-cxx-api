@@ -82,7 +82,7 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
             break;
         case DXFG_EVENT_SPREAD_ORDER:
-
+            result[i] = SpreadOrder::fromGraalNative(e);
 
             break;
         case DXFG_EVENT_SERIES:
