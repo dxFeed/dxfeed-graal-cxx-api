@@ -33,9 +33,11 @@ class DXFCPP_EXPORT EventTypeEnum {
     // TimeSeries) event.
     const bool isOnlyIndexed_;
 
-    EventTypeEnum(std::uint32_t id, std::string name, bool isLasting, bool isIndexed = false, bool isTimeSeries = false)
+    EventTypeEnum(std::uint32_t id, std::string name, bool isLasting, bool isIndexed = false,
+                  bool isTimeSeries = false) noexcept
         : id_{id}, name_{std::move(name)}, isLasting_{isLasting}, isIndexed_{isIndexed || isTimeSeries},
-          isTimeSeries_{isTimeSeries}, isOnlyIndexed_{isIndexed && !isTimeSeries} {}
+          isTimeSeries_{isTimeSeries}, isOnlyIndexed_{isIndexed && !isTimeSeries} {
+    }
 
   public:
     static const EventTypeEnum QUOTE;
@@ -62,45 +64,64 @@ class DXFCPP_EXPORT EventTypeEnum {
     static const EventTypeEnum SERIES;
     static const EventTypeEnum OPTION_SALE;
 
-    explicit EventTypeEnum() : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", false} {}
+    explicit EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", false} {
+    }
 
     /**
      * @return The dxFeed Graal Native C-API event class id
      */
-    std::uint32_t getId() const { return id_; }
+    std::uint32_t getId() const noexcept {
+        return id_;
+    }
 
     /**
      * @return The current enum element name
      */
-    const std::string &getName() const { return name_; }
+    const std::string &getName() const noexcept {
+        return name_;
+    }
 
-    bool operator==(const EventTypeEnum &eventTypeEnum) const { return id_ == eventTypeEnum.id_; }
+    bool operator==(const EventTypeEnum &eventTypeEnum) const noexcept {
+        return id_ == eventTypeEnum.id_;
+    }
 
-    bool operator<(const EventTypeEnum &eventTypeEnum) const { return id_ < eventTypeEnum.id_; }
+    bool operator<(const EventTypeEnum &eventTypeEnum) const noexcept {
+        return id_ < eventTypeEnum.id_;
+    }
 
     /**
      * @return `true` if the current enum element is characterizing the Lasting (TICKER) event
      */
-    bool isLasting() const { return isLasting_; }
+    bool isLasting() const noexcept {
+        return isLasting_;
+    }
 
     /**
      * @return `true` if the current enum element is characterizing the Indexed event.
      */
-    bool isIndexed() const { return isIndexed_; }
+    bool isIndexed() const noexcept {
+        return isIndexed_;
+    }
 
     /**
      * @return `true` if the current enum element is characterizing the TimeSeries (HISTORY) event.
      */
-    bool isTimeSeries() const { return isTimeSeries_; }
+    bool isTimeSeries() const noexcept {
+        return isTimeSeries_;
+    }
 
     /**
      * @return `true` if the current enum element is characterizing the OnlyIndexed (Indexed, but not TimeSeries) event.
      */
-    bool isOnlyIndexed() const { return isOnlyIndexed_; }
+    bool isOnlyIndexed() const noexcept {
+        return isOnlyIndexed_;
+    }
 };
 
 } // namespace dxfcpp
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::EventTypeEnum> {
-    std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept { return eventType.getId(); }
+    std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept {
+        return eventType.getId();
+    }
 };

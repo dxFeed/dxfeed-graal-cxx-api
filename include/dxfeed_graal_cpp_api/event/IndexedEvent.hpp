@@ -63,7 +63,7 @@ struct DXFCPP_EXPORT IndexedEvent {
      *
      * @return The source of this event.
      */
-    virtual const IndexedEventSource &getSource() const & = 0;
+    virtual const IndexedEventSource &getSource() const & noexcept = 0;
 
     /**
      * Returns transactional event flags.
@@ -71,7 +71,7 @@ struct DXFCPP_EXPORT IndexedEvent {
      *
      * @return The transactional event flags.
      */
-    virtual EventFlagsMask getEventFlags() const = 0;
+    virtual EventFlagsMask getEventFlags() const noexcept = 0;
 
     /**
      * Changes transactional event flags.
@@ -79,21 +79,21 @@ struct DXFCPP_EXPORT IndexedEvent {
      *
      * @param eventFlags transactional event flags.
      */
-    virtual void setEventFlags(const EventFlagsMask &eventFlags) = 0;
+    virtual void setEventFlags(const EventFlagsMask &eventFlags) noexcept = 0;
 
     /**
      * Returns unique per-symbol index of this event.
      *
      * @return unique per-symbol index of this event.
      */
-    virtual std::int64_t getIndex() const = 0;
+    virtual std::int64_t getIndex() const noexcept = 0;
 
     /**
      * Changes unique per-symbol index of this event.
      *
      * @param index unique per-symbol index of this event.
      */
-    virtual void setIndex(std::int64_t index) = 0;
+    virtual void setIndex(std::int64_t index) noexcept = 0;
 };
 
 } // namespace dxfcpp

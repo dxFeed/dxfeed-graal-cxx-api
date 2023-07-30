@@ -129,20 +129,29 @@ set(dxFeedNativeAPIEventSources
         )
 
 set(dxFeedNativeAPIEventMarketSources
-        src/event/market/Quote.cpp
-        src/event/market/ShortSaleRestriction.cpp
-        src/event/market/TradingStatus.cpp
-        src/event/market/Profile.cpp
-        src/event/market/PriceType.cpp
-        src/event/market/Summary.cpp
+        src/event/market/AnalyticOrder.cpp
         src/event/market/Direction.cpp
-        src/event/market/TradeBase.cpp
-        src/event/market/Trade.cpp
-        src/event/market/TradeETH.cpp
-        src/event/market/Side.cpp
-        src/event/market/TimeAndSaleType.cpp
-        src/event/market/TimeAndSale.cpp
+        src/event/market/IcebergType.cpp
+        src/event/market/MarketEvent.cpp
         src/event/market/OptionSale.cpp
+        src/event/market/Order.cpp
+        src/event/market/OrderAction.cpp
+        src/event/market/OrderBase.cpp
+        src/event/market/OrderSource.cpp
+        src/event/market/PriceType.cpp
+        src/event/market/Profile.cpp
+        src/event/market/Quote.cpp
+        src/event/market/Scope.cpp
+        src/event/market/ShortSaleRestriction.cpp
+        src/event/market/Side.cpp
+        src/event/market/SpreadOrder.cpp
+        src/event/market/Summary.cpp
+        src/event/market/TimeAndSale.cpp
+        src/event/market/TimeAndSaleType.cpp
+        src/event/market/Trade.cpp
+        src/event/market/TradeBase.cpp
+        src/event/market/TradeETH.cpp
+        src/event/market/TradingStatus.cpp
         )
 
 set(dxFeedNativeAPIEventOptionSources

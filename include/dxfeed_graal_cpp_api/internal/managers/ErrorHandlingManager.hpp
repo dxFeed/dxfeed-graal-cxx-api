@@ -3,9 +3,9 @@
 #include "../Conf.hpp"
 
 #include <memory>
+#include <mutex>
 #include <string>
 #include <thread>
-#include <mutex>
 #include <unordered_map>
 
 #ifdef NO_ERROR
@@ -14,7 +14,7 @@
 
 namespace dxfcpp {
 
-//TODO: serialization
+// TODO: serialization
 struct DXFCPP_EXPORT Error {
     static constexpr std::size_t UNKNOWN_ID{static_cast<std::size_t>(-1)};
 
@@ -35,10 +35,11 @@ struct DXFCPP_EXPORT Error {
 
     Error(std::size_t causeId, std::size_t groupId, std::string location, std::string message) noexcept
         : causeId{causeId}, threadId{std::this_thread::get_id()}, groupId{groupId}, location{std::move(location)},
-          message{std::move(message)} {}
+          message{std::move(message)} {
+    }
 };
 
-//TODO: implement retrieving, grouping methods
+// TODO: implement retrieving, grouping methods
 class DXFCPP_EXPORT ErrorHandlingManager {
     static constexpr std::size_t DEFAULT_ERROR_COLLECTION_CAPACITY{1024ULL};
     static inline const Error NO_ERROR{Error::UNKNOWN_ID, 0, "", "NO ERROR"};
@@ -76,7 +77,7 @@ class DXFCPP_EXPORT ErrorHandlingManager {
         return errorCollection_[id];
     }
 
-    const Error& getLastError() noexcept {
+    const Error &getLastError() noexcept {
         return errorCollection_[nextId - 1];
     }
 };

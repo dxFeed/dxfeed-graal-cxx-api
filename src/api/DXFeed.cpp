@@ -129,6 +129,8 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
     return feed;
 }
 
-std::string DXFeed::toString() const noexcept { return fmt::format("DXFeed{{{}}}", handler_.toString()); }
+std::string DXFeed::toString() const noexcept {
+    return fmt::format("DXFeed{{{}}}", handler_.toString());
+}
 
 } // namespace dxfcpp

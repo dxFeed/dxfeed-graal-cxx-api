@@ -15,7 +15,8 @@ namespace dxfcpp {
 template <typename T> struct JavaObjectHandler {
     using Type = T;
     static DXFCPP_EXPORT void deleter(void *handler) noexcept;
-    explicit JavaObjectHandler(void *handler = nullptr) noexcept : impl_{handler, &deleter} {}
+    explicit JavaObjectHandler(void *handler = nullptr) noexcept : impl_{handler, &deleter} {
+    }
 
     JavaObjectHandler(JavaObjectHandler &&) = default;
     JavaObjectHandler &operator=(JavaObjectHandler &&) = default;
@@ -28,9 +29,13 @@ template <typename T> struct JavaObjectHandler {
             return "nullptr";
     }
 
-    [[nodiscard]] void *get() const noexcept { return impl_.get(); }
+    [[nodiscard]] void *get() const noexcept {
+        return impl_.get();
+    }
 
-    explicit operator bool() const noexcept { return static_cast<bool>(impl_); }
+    explicit operator bool() const noexcept {
+        return static_cast<bool>(impl_);
+    }
 
   private:
     std::unique_ptr<void, decltype(&deleter)> impl_;

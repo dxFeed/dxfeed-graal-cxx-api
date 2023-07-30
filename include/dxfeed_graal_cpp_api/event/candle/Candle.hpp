@@ -32,12 +32,21 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     CandleSymbol candleSymbol_{};
 
   public:
-    const CandleSymbol &getEventSymbol() const override { return candleSymbol_; }
-    void setEventSymbol(const CandleSymbol & /*eventSymbol*/) override {}
-    EventFlagsMask getEventFlags() const override { return EventFlagsMask(); }
-    void setEventFlags(const EventFlagsMask & /*eventFlags*/) override {}
-    void setIndex(std::int64_t /*index*/) override {}
-    std::int64_t getTime() const override { return 0; }
+    const CandleSymbol &getEventSymbol() const noexcept override {
+        return candleSymbol_;
+    }
+    void setEventSymbol(const CandleSymbol & /*eventSymbol*/) noexcept override {
+    }
+    EventFlagsMask getEventFlags() const noexcept override {
+        return EventFlagsMask();
+    }
+    void setEventFlags(const EventFlagsMask & /*eventFlags*/) noexcept override {
+    }
+    void setIndex(std::int64_t /*index*/) noexcept override {
+    }
+    std::int64_t getTime() const noexcept override {
+        return 0;
+    }
 };
 
 } // namespace dxfcpp

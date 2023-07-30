@@ -3,6 +3,10 @@
 
 #pragma once
 
+#ifdef _WINNT_
+#    error Please, include windows.h or winnt.h after dxFeed Graal CXX API headers
+#endif
+
 #ifdef DXFCPP_EXPORT
 #    error DXFCPP_EXPORT was previously defined
 #endif

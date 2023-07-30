@@ -47,9 +47,9 @@ struct EventMapper;
  *
  * <p>The volume and turnover are included into the Trade event instead
  * of Summary event, because both volume and turnover typically update with each trade.
- * The @ref ::getDayId() "dayId" field identifies current trading day for which volume and turnover statistics are computed.
- * This solution avoids generation of multiple events on each trade during regular trading hours.
- * Summary event is generated during the trading day only when new highs or lows are reached or other properties change.
+ * The @ref ::getDayId() "dayId" field identifies current trading day for which volume and turnover statistics are
+ * computed. This solution avoids generation of multiple events on each trade during regular trading hours. Summary
+ * event is generated during the trading day only when new highs or lows are reached or other properties change.
  *
  * <p>Note that one can compute volume-weighted average price (VWAP) for a day by this formula:
  * <br><code>vwap = @ref ::getDayTurnover() "dayTurnover" / @ref ::getDayVolume() "dayVolume";</code>
@@ -58,9 +58,9 @@ struct EventMapper;
  *
  * Daily reset procedure that happens on a schedule during non-trading hours resets Trade
  * @ref ::getDayVolume() "dayVolume" and @ref ::getDayTurnover() "dayTurnover" to math::NaN
- * and sets @ref ::getDayId() "dayId" to the next trading day in preparation to the next day's pre-market trading session
- * (or for regular trading if there is no pre-market) while leaving all other properties intact.
- * They reflect information about the last known RTH trade until the next RTH trade happens.
+ * and sets @ref ::getDayId() "dayId" to the next trading day in preparation to the next day's pre-market trading
+ * session (or for regular trading if there is no pre-market) while leaving all other properties intact. They reflect
+ * information about the last known RTH trade until the next RTH trade happens.
  *
  * <h3>Implementation details</h3>
  *
@@ -84,7 +84,8 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Trade(std::string eventSymbol) noexcept : TradeBase(std::move(eventSymbol)) {}
+    explicit Trade(std::string eventSymbol) noexcept : TradeBase(std::move(eventSymbol)) {
+    }
 
     /**
      * Returns a string representation of the current object.

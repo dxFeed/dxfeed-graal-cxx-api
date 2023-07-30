@@ -6,10 +6,8 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <cstring>
-#include <memory>
-#include <utf8.h>
-#include <utility>
+#include <functional>
+#include <unordered_map>
 
 namespace dxfcpp {
 
@@ -26,4 +24,4 @@ const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const Price
     {PriceType::FINAL.getCode(), std::cref(PriceType::FINAL)},
 };
 
-}
+} // namespace dxfcpp

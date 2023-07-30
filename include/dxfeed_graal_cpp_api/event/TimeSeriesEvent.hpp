@@ -84,7 +84,9 @@ struct DXFCPP_EXPORT TimeSeriesEvent : public IndexedEvent {
      * @return The source identifier for this event, which is always @ref IndexedEventSource::DEFAULT "DEFAULT" for
      * time-series events.
      */
-    const IndexedEventSource &getSource() const & override { return IndexedEventSource::DEFAULT; }
+    const IndexedEventSource &getSource() const & noexcept override {
+        return IndexedEventSource::DEFAULT;
+    }
 
     /**
      * Returns unique per-symbol index of this event.
@@ -103,7 +105,9 @@ struct DXFCPP_EXPORT TimeSeriesEvent : public IndexedEvent {
      *
      * @return unique per-symbol index of this event.
      */
-    std::int64_t getIndex() const override { return 0; }
+    std::int64_t getIndex() const noexcept override {
+        return 0;
+    }
 
     /**
      * Returns unique per-symbol index of this event.
@@ -111,7 +115,9 @@ struct DXFCPP_EXPORT TimeSeriesEvent : public IndexedEvent {
      * @return unique per-symbol index of this event.
      * @deprecated Use ::getIndex()
      */
-    virtual std::int64_t getEventId() const { return getIndex(); }
+    virtual std::int64_t getEventId() const noexcept {
+        return getIndex();
+    }
 
     /**
      * Returns timestamp of the event.
@@ -119,7 +125,7 @@ struct DXFCPP_EXPORT TimeSeriesEvent : public IndexedEvent {
      *
      * @return timestamp of the event.
      */
-    virtual std::int64_t getTime() const = 0;
+    virtual std::int64_t getTime() const noexcept = 0;
 };
 
 } // namespace dxfcpp

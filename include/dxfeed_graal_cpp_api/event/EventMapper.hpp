@@ -13,7 +13,7 @@
 namespace dxfcpp {
 
 struct DXFCPP_EXPORT EventMapper {
-    static std::vector<std::shared_ptr<EventType>> fromGraalNativeList(void *graalNativeList);
+    static std::vector<std::shared_ptr<EventType>> fromGraalNativeList(void *graalNativeList) noexcept;
 };
 
 } // namespace dxfcpp

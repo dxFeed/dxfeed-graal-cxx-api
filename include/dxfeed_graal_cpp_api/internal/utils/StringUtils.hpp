@@ -41,9 +41,9 @@ template <typename T> std::string toStringAny(T &&t) {
     }
 }
 
-DXFCPP_EXPORT char utf16to8(std::int16_t in);
+DXFCPP_EXPORT char utf16to8(std::int16_t in) noexcept;
 
-DXFCPP_EXPORT std::int16_t utf8to16(char in);
+DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept;
 
 DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp);
 
@@ -69,8 +69,7 @@ std::string namesToString(It begin, It end) {
     return result + "]";
 }
 
-template <typename It>
-std::string elementsToString(It begin, It end) {
+template <typename It> std::string elementsToString(It begin, It end) {
     std::string result{"["};
 
     for (auto it = begin; it != end; it++) {
@@ -82,6 +81,8 @@ std::string elementsToString(It begin, It end) {
 
 DXFCPP_EXPORT std::string encodeChar(std::int16_t c);
 
-inline std::string encodeChar(char c) { return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c))); }
+inline std::string encodeChar(char c) {
+    return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c)));
+}
 
 } // namespace dxfcpp

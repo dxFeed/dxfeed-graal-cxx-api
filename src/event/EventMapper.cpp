@@ -13,7 +13,7 @@
 
 namespace dxfcpp {
 
-std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) {
+std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) noexcept {
     auto list = bit_cast<dxfg_event_type_list *>(graalNativeList);
 
     if (list->size <= 0) {
@@ -74,10 +74,16 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
         case DXFG_EVENT_ORDER_BASE:
             break;
         case DXFG_EVENT_ORDER:
+            result[i] = Order::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_ANALYTIC_ORDER:
+            result[i] = AnalyticOrder::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_SPREAD_ORDER:
+            result[i] = SpreadOrder::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_SERIES:
             result[i] = Series::fromGraalNative(e);

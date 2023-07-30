@@ -71,7 +71,8 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Summary(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {}
+    explicit Summary(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    }
 
     /**
      * Returns identifier of the day that this summary represents.
@@ -79,7 +80,9 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @return identifier of the day that this summary represents.
      */
-    std::int32_t getDayId() const { return data_.dayId; }
+    std::int32_t getDayId() const noexcept {
+        return data_.dayId;
+    }
 
     /**
      * Changes identifier of the day that this summary represents.
@@ -87,70 +90,88 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @param dayId identifier of the day that this summary represents.
      */
-    void setDayId(std::int32_t dayId) { data_.dayId = dayId; }
+    void setDayId(std::int32_t dayId) noexcept {
+        data_.dayId = dayId;
+    }
 
     /**
      * Returns the first (open) price for the day.
      *
      * @return the first (open) price for the day.
      */
-    double getDayOpenPrice() const { return data_.dayOpenPrice; }
+    double getDayOpenPrice() const noexcept {
+        return data_.dayOpenPrice;
+    }
 
     /**
      * Changes the first (open) price for the day.
      *
      * @param dayOpenPrice the first (open) price for the day.
      */
-    void setDayOpenPrice(double dayOpenPrice) { data_.dayOpenPrice = dayOpenPrice; }
+    void setDayOpenPrice(double dayOpenPrice) noexcept {
+        data_.dayOpenPrice = dayOpenPrice;
+    }
 
     /**
      * Returns the maximal (high) price for the day.
      *
      * @return the maximal (high) price for the day.
      */
-    double getDayHighPrice() const { return data_.dayHighPrice; }
+    double getDayHighPrice() const noexcept {
+        return data_.dayHighPrice;
+    }
 
     /**
      * Changes the maximal (high) price for the day.
      *
      * @param dayHighPrice the maximal (high) price for the day.
      */
-    void setDayHighPrice(double dayHighPrice) { data_.dayHighPrice = dayHighPrice; }
+    void setDayHighPrice(double dayHighPrice) noexcept {
+        data_.dayHighPrice = dayHighPrice;
+    }
 
     /**
      * Returns the minimal (low) price for the day.
      *
      * @return the minimal (low) price for the day.
      */
-    double getDayLowPrice() const { return data_.dayLowPrice; }
+    double getDayLowPrice() const noexcept {
+        return data_.dayLowPrice;
+    }
 
     /**
      * Changes the minimal (low) price for the day.
      *
      * @param dayLowPrice the minimal (low) price for the day.
      */
-    void setDayLowPrice(double dayLowPrice) { data_.dayLowPrice = dayLowPrice; }
+    void setDayLowPrice(double dayLowPrice) noexcept {
+        data_.dayLowPrice = dayLowPrice;
+    }
 
     /**
      * Returns the last (close) price for the day.
      *
      * @return the last (close) price for the day.
      */
-    double getDayClosePrice() const { return data_.dayClosePrice; }
+    double getDayClosePrice() const noexcept {
+        return data_.dayClosePrice;
+    }
 
     /**
      * Changes the last (close) price for the day.
      *
      * @param dayClosePrice the last (close) price for the day.
      */
-    void setDayClosePrice(double dayClosePrice) { data_.dayClosePrice = dayClosePrice; }
+    void setDayClosePrice(double dayClosePrice) noexcept {
+        data_.dayClosePrice = dayClosePrice;
+    }
 
     /**
      * Returns the price type of the last (close) price for the day.
      *
      * @return the price type of the last (close) price for the day.
      */
-    const PriceType &getDayClosePriceType() const & {
+    const PriceType &getDayClosePriceType() const & noexcept {
         return PriceType::valueOf(getBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT));
     }
 
@@ -159,7 +180,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @param type the price type of the last (close) price for the day.
      */
-    void setDayClosePriceType(const PriceType &type) {
+    void setDayClosePriceType(const PriceType &type) noexcept {
         data_.flags = setBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
     }
 
@@ -169,7 +190,9 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @return identifier of the previous day that this summary represents.
      */
-    std::int32_t getPrevDayId() const { return data_.prevDayId; }
+    std::int32_t getPrevDayId() const noexcept {
+        return data_.prevDayId;
+    }
 
     /**
      * Changes identifier of the previous day that this summary represents.
@@ -177,28 +200,34 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @param prevDayId identifier of the previous day that this summary represents.
      */
-    void setPrevDayId(std::int32_t prevDayId) { data_.prevDayId = prevDayId; }
+    void setPrevDayId(std::int32_t prevDayId) noexcept {
+        data_.prevDayId = prevDayId;
+    }
 
     /**
      * Returns the last (close) price for the previous day.
      *
      * @return the last (close) price for the previous day.
      */
-    double getPrevDayClosePrice() const { return data_.prevDayClosePrice; }
+    double getPrevDayClosePrice() const noexcept {
+        return data_.prevDayClosePrice;
+    }
 
     /**
      * Changes the last (close) price for the previous day.
      *
      * @param prevDayClosePrice the last (close) price for the previous day.
      */
-    void setPrevDayClosePrice(double prevDayClosePrice) { data_.prevDayClosePrice = prevDayClosePrice; }
+    void setPrevDayClosePrice(double prevDayClosePrice) noexcept {
+        data_.prevDayClosePrice = prevDayClosePrice;
+    }
 
     /**
      * Returns the price type of the last (close) price for the previous day.
      *
      * @return the price type of the last (close) price for the previous day.
      */
-    const PriceType &getPrevDayClosePriceType() const & {
+    const PriceType &getPrevDayClosePriceType() const & noexcept {
         return PriceType::valueOf(
             getBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK, PREV_DAY_CLOSE_PRICE_TYPE_SHIFT));
     }
@@ -208,7 +237,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @param type the price type of the last (close) price for the previous day.
      */
-    void setPrevDayClosePriceType(const PriceType &type) {
+    void setPrevDayClosePriceType(const PriceType &type) noexcept {
         data_.flags =
             setBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK, PREV_DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
     }
@@ -218,28 +247,36 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @return total volume traded for the previous day.
      */
-    double getPrevDayVolume() const { return data_.prevDayVolume; }
+    double getPrevDayVolume() const noexcept {
+        return data_.prevDayVolume;
+    }
 
     /**
      * Changes total volume traded for the previous day.
      *
      * @param prevDayVolume total volume traded for the previous day.
      */
-    void setPrevDayVolume(double prevDayVolume) { data_.prevDayVolume = prevDayVolume; }
+    void setPrevDayVolume(double prevDayVolume) noexcept {
+        data_.prevDayVolume = prevDayVolume;
+    }
 
     /**
      * Returns open interest of the symbol as the number of open contracts.
      *
      * @return open interest of the symbol as the number of open contracts.
      */
-    std::int64_t getOpenInterest() const { return data_.openInterest; }
+    std::int64_t getOpenInterest() const noexcept {
+        return data_.openInterest;
+    }
 
     /**
      * Changes open interest of the symbol as the number of open contracts.
      *
      * @param openInterest open interest of the symbol as the number of open contracts.
      */
-    void setOpenInterest(std::int64_t openInterest) { data_.openInterest = openInterest; }
+    void setOpenInterest(std::int64_t openInterest) noexcept {
+        data_.openInterest = openInterest;
+    }
 
     /**
      * Returns a string representation of the current object.

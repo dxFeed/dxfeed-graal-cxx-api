@@ -152,7 +152,11 @@ struct DXFCPP_EXPORT SymbolWrapper final {
             Debugger::debug("SymbolWrapper::toGraal()");
         }
 
-        return std::visit([](const auto &symbol) { return symbol.toGraal(); }, data_);
+        return std::visit(
+            [](const auto &symbol) {
+                return symbol.toGraal();
+            },
+            data_);
     }
 
     template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) noexcept {
@@ -217,13 +221,21 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      * @return a string representation
      */
     std::string toString() const noexcept {
-        return "SymbolWrapper{" + std::visit([](const auto &symbol) { return toStringAny(symbol); }, data_) + "}";
+        return "SymbolWrapper{" +
+               std::visit(
+                   [](const auto &symbol) {
+                       return toStringAny(symbol);
+                   },
+                   data_) +
+               "}";
     }
 
     /**
      * @return `true` if current SymbolWrapper holds a StringSymbol
      */
-    bool isStringSymbol() const noexcept { return std::holds_alternative<StringSymbol>(data_); }
+    bool isStringSymbol() const noexcept {
+        return std::holds_alternative<StringSymbol>(data_);
+    }
 
     /**
      * @return String representation of StringSymbol or an empty string
@@ -235,7 +247,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     /**
      * @return `true` if current SymbolWrapper holds a WildcardSymbol
      */
-    bool isWildcardSymbol() const noexcept { return std::holds_alternative<WildcardSymbol>(data_); }
+    bool isWildcardSymbol() const noexcept {
+        return std::holds_alternative<WildcardSymbol>(data_);
+    }
 
     /**
      * @return WildcardSymbol (optional) or nullopt if current SymbolWrapper doesn't hold WildcardSymbol
@@ -278,11 +292,17 @@ struct DXFCPP_EXPORT SymbolWrapper final {
                    : std::nullopt;
     }
 
-    const DataType &getData() const noexcept { return data_; }
+    const DataType &getData() const noexcept {
+        return data_;
+    }
 
-    bool operator==(const SymbolWrapper &symbolWrapper) const { return getData() == symbolWrapper.getData(); }
+    bool operator==(const SymbolWrapper &symbolWrapper) const {
+        return getData() == symbolWrapper.getData();
+    }
 
-    auto operator<(const SymbolWrapper &symbolWrapper) const { return getData() < symbolWrapper.getData(); }
+    auto operator<(const SymbolWrapper &symbolWrapper) const {
+        return getData() < symbolWrapper.getData();
+    }
 
     using GraalPtr = std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)>;
 };

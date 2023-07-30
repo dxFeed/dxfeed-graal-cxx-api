@@ -16,7 +16,7 @@ namespace dxfcpp {
  * See IndexedEvent::getSource().
  */
 class DXFCPP_EXPORT IndexedEventSource {
-    std::uint32_t id_{};
+    std::int32_t id_{};
     std::string name_{};
 
   public:
@@ -33,38 +33,49 @@ class DXFCPP_EXPORT IndexedEventSource {
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(std::uint32_t id, std::string name) noexcept : id_{id}, name_{std::move(name)} {}
+    IndexedEventSource(std::int32_t id, std::string name) noexcept : id_{id}, name_{std::move(name)} {
+    }
 
     /**
      * Returns the source identifier. Source identifier is non-negative.
      *
      * @return The source identifier.
      */
-    std::uint32_t id() const noexcept { return id_; }
+    std::int32_t id() const noexcept {
+        return id_;
+    }
 
     /**
      * Returns the string representation of the object.
      *
      * @return The string representation of the object.
      */
-    const std::string &name() const noexcept { return name_; }
+    const std::string &name() const noexcept {
+        return name_;
+    }
 
     /**
      * Returns the string representation of the object.
      *
      * @return The string representation of the object.
      */
-    std::string toString() const noexcept { return name_; }
+    std::string toString() const noexcept {
+        return name_;
+    }
 
-    bool operator==(const IndexedEventSource &indexedEventSource) const { return id_ == indexedEventSource.id_; }
+    bool operator==(const IndexedEventSource &indexedEventSource) const {
+        return id_ == indexedEventSource.id_;
+    }
 
-    auto operator<(const IndexedEventSource &indexedEventSource) const { return id_ < indexedEventSource.id_; }
+    auto operator<(const IndexedEventSource &indexedEventSource) const {
+        return id_ < indexedEventSource.id_;
+    }
 
-    void *toGraal() const noexcept;
+    virtual void *toGraal() const noexcept;
 
-    static void freeGraal(void* graal) noexcept;
+    static void freeGraal(void *graal) noexcept;
 
-    static IndexedEventSource fromGraal(void* graal) noexcept;
+    static IndexedEventSource fromGraal(void *graal) noexcept;
 };
 
 } // namespace dxfcpp

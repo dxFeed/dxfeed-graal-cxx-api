@@ -19,7 +19,8 @@ class DXFCPP_EXPORT ApiContext {
 
     ApiContext() noexcept
         : dxEndpointManager_{std::make_shared<DXEndpointManager>()},
-          dxFeedSubscriptionManager_{std::make_shared<DXFeedSubscriptionManager>()} {}
+          dxFeedSubscriptionManager_{std::make_shared<DXFeedSubscriptionManager>()} {
+    }
 
   public:
     static std::shared_ptr<ApiContext> getInstance() noexcept {
@@ -28,7 +29,9 @@ class DXFCPP_EXPORT ApiContext {
         return instance;
     }
 
-    std::shared_ptr<DXEndpointManager> getDxEndpointManager() const noexcept { return dxEndpointManager_; }
+    std::shared_ptr<DXEndpointManager> getDxEndpointManager() const noexcept {
+        return dxEndpointManager_;
+    }
 
     std::shared_ptr<DXFeedSubscriptionManager> getDxFeedSubscriptionManager() const noexcept {
         return dxFeedSubscriptionManager_;

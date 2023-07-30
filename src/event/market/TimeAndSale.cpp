@@ -18,7 +18,9 @@
 
 namespace dxfcpp {
 
-void TimeAndSale::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
+void TimeAndSale::setExchangeCode(char exchangeCode) noexcept {
+    data_.exchangeCode = utf8to16(exchangeCode);
+}
 
 const EventTypeEnum &TimeAndSale::TYPE = EventTypeEnum::TIME_AND_SALE;
 

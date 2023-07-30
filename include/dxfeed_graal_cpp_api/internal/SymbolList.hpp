@@ -5,10 +5,10 @@
 
 #include "Conf.hpp"
 
+#include "../symbols/SymbolWrapper.hpp"
 #include <cstdint>
 #include <memory>
 #include <utility>
-#include "../symbols/SymbolWrapper.hpp"
 
 namespace dxfcpp {
 
@@ -35,7 +35,7 @@ struct SymbolList {
         return list;
     }
 
-    void set(std::size_t index, const SymbolWrapper& symbolWrapper) noexcept;
+    void set(std::size_t index, const SymbolWrapper &symbolWrapper) noexcept;
 
     [[nodiscard]] bool isEmpty() const noexcept;
 
@@ -57,4 +57,4 @@ struct SymbolList {
     std::unique_ptr<Impl> impl_;
 };
 
-}
+} // namespace dxfcpp

@@ -17,4 +17,4 @@ template <class T> class NonCopyable {
     ~NonCopyable() = default;
 };
 
-}
+} // namespace dxfcpp

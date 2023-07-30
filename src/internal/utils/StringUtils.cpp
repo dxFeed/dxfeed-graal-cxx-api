@@ -18,7 +18,9 @@
 
 namespace dxfcpp {
 
-std::string toString(bool b) { return b ? "true" : "false"; }
+std::string toString(bool b) {
+    return b ? "true" : "false";
+}
 
 std::string toString(const char *chars) {
     if (chars == nullptr) {
@@ -67,7 +69,7 @@ std::string encodeChar(std::int16_t c) {
     return fmt::format("\\u{:04x}", c);
 }
 
-char utf16to8(std::int16_t in) {
+char utf16to8(std::int16_t in) noexcept {
     try {
         std::string out{};
         auto utf16in = {in};
@@ -81,7 +83,7 @@ char utf16to8(std::int16_t in) {
     }
 }
 
-std::int16_t utf8to16(char in) {
+std::int16_t utf8to16(char in) noexcept {
     try {
         std::u16string out{};
         auto utf8in = {in};

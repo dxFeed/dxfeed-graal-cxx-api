@@ -45,7 +45,8 @@ constexpr bool isClangFlavouredCompiler = true;
 constexpr bool isClangFlavouredCompiler = false;
 #endif
 
-template <typename... T> constexpr void ignore_unused(const T &...) {}
+template <typename... T> constexpr void ignore_unused(const T &...) {
+}
 
 constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept -> bool {
 #ifdef __cpp_lib_is_constant_evaluated
@@ -76,15 +77,18 @@ constexpr To bit_cast(const From &from)
 // final_action allows you to ensure something gets run at the end of a scope
 template <class F> class final_action {
   public:
-    explicit final_action(const F &ff) noexcept : f{ff} {}
-    explicit final_action(F &&ff) noexcept : f{std::move(ff)} {}
+    explicit final_action(const F &ff) noexcept : f{ff} {
+    }
+    explicit final_action(F &&ff) noexcept : f{std::move(ff)} {
+    }
 
     ~final_action() noexcept {
         if (invoke)
             f();
     }
 
-    final_action(final_action &&other) noexcept : f(std::move(other.f)), invoke(std::exchange(other.invoke, false)) {}
+    final_action(final_action &&other) noexcept : f(std::move(other.f)), invoke(std::exchange(other.invoke, false)) {
+    }
 
     final_action(const final_action &) = delete;
     void operator=(const final_action &) = delete;
@@ -145,7 +149,9 @@ static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
     return r;
 }
 
-static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) { return x - (floorDiv(x, y) * y); }
+static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
+    return x - (floorDiv(x, y) * y);
+}
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
 
@@ -251,7 +257,9 @@ template <Integral T> constexpr static T div(T a, T b) {
     return ((a + 1) / b) + 1;
 }
 
-template <Integral T> constexpr static T abs(T a) { return a < 0 ? -a : a; }
+template <Integral T> constexpr static T abs(T a) {
+    return a < 0 ? -a : a;
+}
 
 } // namespace math_util
 
@@ -332,7 +340,8 @@ template <typename T, typename U, typename V, typename... Ws> struct MaxImpl<T, 
 template <typename... Ts> using Max = typename detail::MaxImpl<Ts...>::Type;
 
 /**
- * Performs a right arithmetic bit shift operation.
+ * Performs a right arithmetic bit shift operation (>> in Java, C, etc). The sign bit is extended to preserve the
+ * signedness of the number.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
@@ -348,7 +357,7 @@ template <typename... Ts> using Max = typename detail::MaxImpl<Ts...>::Type;
 template <Integral V, Integral S> static constexpr V sar(V value, S shift);
 
 /**
- * Performs a left arithmetic bit shift operation.
+ * Performs a left arithmetic bit shift operation (<< in Java, C, etc).
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sar() "right arithmetic shift" will be performed.
@@ -380,7 +389,7 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
 }
 
 /**
- * Performs a left arithmetic bit shift operation.
+ * Performs a left arithmetic bit shift operation (<< in Java, C, etc).
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sar() "right arithmetic shift" will be performed.
@@ -393,10 +402,13 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V sal(V value, S shift) { return leftArithmeticShift(value, shift); }
+template <Integral V, Integral S> static constexpr V sal(V value, S shift) {
+    return leftArithmeticShift(value, shift);
+}
 
 /**
- * Performs a right arithmetic bit shift operation.
+ * Performs a right arithmetic bit shift operation (>> in Java, C, etc). The sign bit is extended to preserve the
+ * signedness of the number.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
@@ -432,7 +444,8 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
 }
 
 /**
- * Performs a right arithmetic bit shift operation.
+ * Performs a right arithmetic bit shift operation (>> in Java, C, etc). The sign bit is extended to preserve the
+ * signedness of the number.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
@@ -450,7 +463,7 @@ template <Integral V, Integral S> static constexpr V sar(V value, S shift) {
 }
 
 /**
- * Performs a right logical bit shift operation.
+ * Performs a right logical bit shift operation (>>> in Java). Fills the left bits by zero.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
@@ -511,10 +524,12 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V shl(V value, S shift) { return leftLogicalShift(value, shift); }
+template <Integral V, Integral S> static constexpr V shl(V value, S shift) {
+    return leftLogicalShift(value, shift);
+}
 
 /**
- * Performs a right logical bit shift operation.
+ * Performs a right logical bit shift operation (>>> in Java). Fills the left bits by zero.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
@@ -546,7 +561,7 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
 }
 
 /**
- * Performs a right logical bit shift operation.
+ * Performs a right logical bit shift operation (>>> in Java). Fills the left bits by zero.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
@@ -559,7 +574,9 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V shr(V value, S shift) { return rightLogicalShift(value, shift); }
+template <Integral V, Integral S> static constexpr V shr(V value, S shift) {
+    return rightLogicalShift(value, shift);
+}
 
 template <Integral A, Integral B> static constexpr A andOp(A a, B b) {
     using Common = std::make_unsigned_t<Max<A, B>>;

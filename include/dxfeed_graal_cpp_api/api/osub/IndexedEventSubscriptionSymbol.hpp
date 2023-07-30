@@ -70,9 +70,9 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
 
     virtual void *toGraal() const noexcept;
 
-    static void freeGraal(void* graal) noexcept;
+    static void freeGraal(void *graal) noexcept;
 
-    static IndexedEventSubscriptionSymbol fromGraal(void* graal) noexcept;
+    static IndexedEventSubscriptionSymbol fromGraal(void *graal) noexcept;
 
     /**
      * Returns string representation of this indexed event subscription symbol.

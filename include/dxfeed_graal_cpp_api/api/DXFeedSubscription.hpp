@@ -66,7 +66,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     }
 
     DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
-        : DXFeedSubscription(eventTypes.begin(), eventTypes.end()) {}
+        : DXFeedSubscription(eventTypes.begin(), eventTypes.end()) {
+    }
 
     template <typename EventTypesCollection>
     explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
@@ -106,7 +107,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug("DXFeedSubscription{" + handler_.toString() + "}::~DXFeedSubscription()");
         }
 
-        tryCallWithLock(mtx_, [this] { closeImpl(); });
+        tryCallWithLock(mtx_, [this] {
+            closeImpl();
+        });
     }
 
     /**
@@ -328,7 +331,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 #endif
     {
         if (!containsEventType(EventT::TYPE)) {
-            return onEvent_ += [](auto) {};
+            return onEvent_ += [](auto) {
+            };
         }
 
         return onEvent_ += [l = listener](auto &&events) {
@@ -358,7 +362,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param listenerId The listener id
      */
-    void removeEventListener(std::size_t listenerId) noexcept { onEvent_ -= listenerId; }
+    void removeEventListener(std::size_t listenerId) noexcept {
+        onEvent_ -= listenerId;
+    }
 
     /**
      * Returns a reference to an incoming events' handler (delegate), to which listeners can be added and removed.
@@ -383,7 +389,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return The incoming events' handler (delegate)
      */
-    auto &onEvent() noexcept { return onEvent_; }
+    auto &onEvent() noexcept {
+        return onEvent_;
+    }
 
     /**
      * Adds the specified symbol to the set of subscribed symbols.
@@ -454,7 +462,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto* list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::toGraalList(begin, end);
 
         addSymbolsImpl(list);
         SymbolWrapper::freeGraalList(list);
@@ -512,7 +520,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto* list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::toGraalList(begin, end);
 
         removeSymbolsImpl(list);
         SymbolWrapper::freeGraalList(list);
@@ -571,7 +579,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto* list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::toGraalList(begin, end);
 
         setSymbolsImpl(list);
         SymbolWrapper::freeGraalList(list);
@@ -642,7 +650,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return A set of subscribed event types.
      */
-    const std::unordered_set<EventTypeEnum> &getEventTypes() const noexcept { return eventTypes_; }
+    const std::unordered_set<EventTypeEnum> &getEventTypes() const noexcept {
+        return eventTypes_;
+    }
 
     /**
      * Returns `true` if this subscription contains the corresponding event type.
@@ -651,7 +661,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @see ::getEventTypes()
      */
-    bool containsEventType(const EventTypeEnum &eventType) const noexcept { return eventTypes_.contains(eventType); }
+    bool containsEventType(const EventTypeEnum &eventType) const noexcept {
+        return eventTypes_.contains(eventType);
+    }
 
     /**
      * Returns a set of subscribed symbols (depending on the actual implementation of subscription).

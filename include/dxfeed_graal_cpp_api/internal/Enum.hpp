@@ -24,14 +24,13 @@ template <typename Child, typename Code> struct DXFCPP_EXPORT Enum {
     const std::string name_;
 
   protected:
-    template <Integral OtherCodeType>
-    static constexpr CodeType convertToInnerCodeType(OtherCodeType code) noexcept {
+    template <Integral OtherCodeType> static constexpr CodeType convertToInnerCodeType(OtherCodeType code) noexcept {
         return static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code));
     }
 
     template <Integral OtherCodeType>
-    Enum(OtherCodeType code, std::string name) noexcept
-        : code_{convertToInnerCodeType(code)}, name_{std::move(name)} {}
+    Enum(OtherCodeType code, std::string name) noexcept : code_{convertToInnerCodeType(code)}, name_{std::move(name)} {
+    }
 
     static const std::unordered_map<CodeType, std::reference_wrapper<const Child>> ALL;
 
@@ -41,21 +40,27 @@ template <typename Child, typename Code> struct DXFCPP_EXPORT Enum {
      *
      * @return code.
      */
-    [[nodiscard]] Code getCode() const { return code_; }
+    [[nodiscard]] Code getCode() const {
+        return code_;
+    }
 
     /**
      * Returns the enum element name
      *
      * @return name
      */
-    [[nodiscard]] const std::string &getName() const &noexcept { return name_; }
+    [[nodiscard]] const std::string &getName() const & noexcept {
+        return name_;
+    }
 
     /**
      * Returns a string representation of an enum element.
      *
      * @return a string representation
      */
-    [[nodiscard]] const std::string &toString() const &noexcept { return name_; }
+    [[nodiscard]] const std::string &toString() const & noexcept {
+        return name_;
+    }
 
     /**
      * Compares two elements of an enum.
@@ -96,7 +101,7 @@ template <typename Child, typename Code> struct DXFCPP_EXPORT Enum {
             return found->second;
         }
 
-        //TODO: try to implement C++11-like code for this
+        // TODO: try to implement C++11-like code for this
         if constexpr (requires { Child::getDefault(); }) {
             return Child::getDefault();
         } else {

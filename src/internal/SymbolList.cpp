@@ -16,10 +16,13 @@ struct SymbolList::Impl : public RawListWrapper<dxfg_symbol_list, [](dxfg_symbol
                                                                      const SymbolWrapper &symbolWrapper) {
     *list.elements[index] = *bit_cast<dxfg_symbol_t *>(symbolWrapper.toGraal());
 }> {
-    std::string toString() const noexcept { return "SymbolList::Impl{list = " + dxfcpp::toString(list_) + "}"; }
+    std::string toString() const noexcept {
+        return "SymbolList::Impl{list = " + dxfcpp::toString(list_) + "}";
+    }
 };
 
-SymbolList::SymbolList() noexcept : impl_(std::make_unique<SymbolList::Impl>()) {}
+SymbolList::SymbolList() noexcept : impl_(std::make_unique<SymbolList::Impl>()) {
+}
 
 std::unique_ptr<SymbolList> SymbolList::create(std::size_t size) noexcept {
     auto result = std::unique_ptr<SymbolList>(new SymbolList{});
@@ -33,15 +36,23 @@ void SymbolList::set(std::size_t index, const SymbolWrapper &symbolWrapper) noex
     impl_->set(index, symbolWrapper);
 }
 
-bool SymbolList::isEmpty() const noexcept { return impl_->isEmpty(); }
+bool SymbolList::isEmpty() const noexcept {
+    return impl_->isEmpty();
+}
 
-std::size_t SymbolList::size() const noexcept { return impl_->size(); }
+std::size_t SymbolList::size() const noexcept {
+    return impl_->size();
+}
 
-void *SymbolList::getHandler() noexcept { return impl_->getHandler(); }
+void *SymbolList::getHandler() noexcept {
+    return impl_->getHandler();
+}
 
 SymbolList::~SymbolList() noexcept = default;
 
-std::string SymbolList::toString() const noexcept { return "SymbolList{impl = " + impl_->toString() + "}"; }
+std::string SymbolList::toString() const noexcept {
+    return "SymbolList{impl = " + impl_->toString() + "}";
+}
 
 std::string toString(const dxfg_indexed_event_source_t &graalEventSource) {
     std::string result = "dxfg_indexed_event_source_t{";

@@ -67,13 +67,14 @@ std::shared_ptr<Isolate> Isolate::create() noexcept {
         Debugger::trace("Isolate::create()");
     }
 
-    graal_isolate_t* graalIsolateHandle{};
-    graal_isolatethread_t* graalIsolateThreadHandle{};
+    graal_isolate_t *graalIsolateHandle{};
+    graal_isolatethread_t *graalIsolateThreadHandle{};
 
     if (CEntryPointErrors::valueOf(graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) ==
         CEntryPointErrors::NO_ERROR) {
 
-        auto result = std::shared_ptr<Isolate>{new (std::nothrow) Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
+        auto result =
+            std::shared_ptr<Isolate>{new (std::nothrow) Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
 
         if constexpr (Debugger::traceIsolates) {
             Debugger::trace("Isolate::create() -> *" + result->toString());
@@ -100,9 +101,10 @@ CEntryPointErrors Isolate::attach() noexcept {
             Debugger::trace(toString() + "::attach(): !currentIsolateThread_.handle => Needs to be attached.");
         }
 
-        graal_isolatethread_t* newIsolateThreadHandle{};
+        graal_isolatethread_t *newIsolateThreadHandle{};
 
-        if (auto result = CEntryPointErrors::valueOf(graal_attach_thread(dxfcpp::bit_cast<graal_isolate_t*>(handle_), &newIsolateThreadHandle));
+        if (auto result = CEntryPointErrors::valueOf(
+                graal_attach_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_), &newIsolateThreadHandle));
             result != CEntryPointErrors::NO_ERROR) {
 
             if constexpr (Debugger::traceIsolates) {
@@ -133,7 +135,7 @@ GraalIsolateThreadHandle Isolate::get() noexcept {
         Debugger::trace(toString() + "::get()");
     }
 
-    return dxfcpp::bit_cast<void*>(graal_get_current_thread(dxfcpp::bit_cast<graal_isolate_t*>(handle_)));
+    return dxfcpp::bit_cast<void *>(graal_get_current_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_)));
 }
 
 } // namespace dxfcpp

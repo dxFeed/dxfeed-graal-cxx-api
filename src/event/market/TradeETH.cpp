@@ -25,6 +25,8 @@ std::shared_ptr<TradeETH> TradeETH::fromGraalNative(void *graalNative) noexcept 
                                       dxfg_event_clazz_t::DXFG_EVENT_TRADE_ETH>(graalNative);
 }
 
-std::string TradeETH::toString() const noexcept { return fmt::format("TradeETH{{{}}}", baseFieldsToString()); }
+std::string TradeETH::toString() const noexcept {
+    return fmt::format("TradeETH{{{}}}", baseFieldsToString());
+}
 
 } // namespace dxfcpp
