@@ -13,6 +13,20 @@
 
 namespace dxfcpp {
 
+void OrderBase::fillData(void *graalNative) noexcept {
+    MarketEvent::fillData(graalNative);
+
+    auto graalOrderBase = bit_cast<dxfg_order_base_t *>(graalNative);
+
+    orderBaseData_ = {
+        graalOrderBase->event_flags,    graalOrderBase->index,       graalOrderBase->time_sequence,
+        graalOrderBase->time_nano_part, graalOrderBase->action_time, graalOrderBase->order_id,
+        graalOrderBase->aux_order_id,   graalOrderBase->price,       graalOrderBase->size,
+        graalOrderBase->executed_size,  graalOrderBase->count,       graalOrderBase->flags,
+        graalOrderBase->trade_id,       graalOrderBase->trade_price, graalOrderBase->trade_size,
+    };
+}
+
 std::string OrderBase::baseFieldsToString() const noexcept {
     return fmt::format(
         "{}, eventTime={}, source={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, "
