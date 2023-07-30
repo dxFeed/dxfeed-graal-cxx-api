@@ -83,20 +83,20 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
         }
 
         try {
-            auto graalTrade = bit_cast<ChildGraalNativeEventType *>(graalNative);
-            auto trade =
-                std::make_shared<ChildType>(dxfcpp::toString(graalTrade->trade_base.market_event.event_symbol));
+            auto graalTradeBaseChild = bit_cast<ChildGraalNativeEventType *>(graalNative);
+            auto tradeBaseChild =
+                std::make_shared<ChildType>(dxfcpp::toString(graalTradeBaseChild->trade_base.market_event.event_symbol));
 
-            trade->setEventTime(graalTrade->trade_base.market_event.event_time);
-            trade->tradeBaseData_ = {
-                graalTrade->trade_base.time_sequence, graalTrade->trade_base.time_nano_part,
-                graalTrade->trade_base.exchange_code, graalTrade->trade_base.price,
-                graalTrade->trade_base.change,        graalTrade->trade_base.size,
-                graalTrade->trade_base.day_id,        graalTrade->trade_base.day_volume,
-                graalTrade->trade_base.day_turnover,  graalTrade->trade_base.flags,
+            tradeBaseChild->setEventTime(graalTradeBaseChild->trade_base.market_event.event_time);
+            tradeBaseChild->tradeBaseData_ = {
+                graalTradeBaseChild->trade_base.time_sequence, graalTradeBaseChild->trade_base.time_nano_part,
+                graalTradeBaseChild->trade_base.exchange_code, graalTradeBaseChild->trade_base.price,
+                graalTradeBaseChild->trade_base.change,        graalTradeBaseChild->trade_base.size,
+                graalTradeBaseChild->trade_base.day_id,        graalTradeBaseChild->trade_base.day_volume,
+                graalTradeBaseChild->trade_base.day_turnover,  graalTradeBaseChild->trade_base.flags,
             };
 
-            return trade;
+            return tradeBaseChild;
         } catch (...) {
             // TODO: error handling
             return {};
@@ -243,7 +243,9 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @param exchangeCode exchange code of the last trade.
      */
-    void setExchangeCode(char exchangeCode) noexcept;
+    void setExchangeCode(char exchangeCode) noexcept {
+        tradeBaseData_.exchangeCode = utf8to16(exchangeCode);
+    }
 
     /**
      * Changes exchange code of the last trade.

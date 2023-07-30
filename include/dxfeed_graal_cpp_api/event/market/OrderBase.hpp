@@ -23,9 +23,64 @@ namespace dxfcpp {
 struct EventMapper;
 
 // TODO: implement
+/**
+ * Base class for common fields of {@link Order}, {@link AnalyticOrder} and {@link SpreadOrder} events.
+ * Order events represent a snapshot for a full available market depth for a symbol.
+ * The collection of order events of a symbol represents the most recent information that is
+ * available about orders on the market at any given moment of time.
+ *
+ * <p>{@link Order} event represents market depth for a <b>specific symbol</b>.
+ *
+ * <p>{@link AnalyticOrder} event represents market depth for a <b>specific symbol</b> extended with an analytic
+ * information, for example, whether particular order represent an iceberg or not.
+ *
+ * <p>{@link SpreadOrder} event represents market depth for
+ *    <b>all spreads on a given underlying symbol</b>.
+ *
+ * <p> Order events arrive from
+ * multiple sources for the same market symbol and are distinguished by their
+ * {@link #getIndex index}. Index is a unique per symbol identifier of the event.
+ * It is unique across all the sources of depth information for the symbol.
+ * The event with {@link #getSizeAsDouble() sizeAsDouble} either {@code 0} or {@link Double#NaN NaN}
+ * is a signal to remove previously received order for the corresponding index.
+ * The method {@link #hasSize() hasSize} is a convenient method to test for size presence.
+ *
+ * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ *
+ * Some order event sources provide a consistent view of the price-level or detailed order book. Their updates
+ * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
+ * The corresponding information is carried in {@link #getEventFlags() eventFlags} property.
+ * The logic behind this property is detailed in {@link IndexedEvent} class documentation.
+ *
+ * <p> The event {@link #getSource() source} identifier for an order is a part of the unique event {@link #getIndex()
+ * index}. It occupies highest bits of the {@link #getIndex() index} (index is not-negative). The lowest bits of
+ * {@link #getIndex() index} contain source-specific event index which is always zero in
+ * an event that is marked with {@link #SNAPSHOT_END} bit in {@link #getEventFlags() eventFlags}.
+ *
+ * <p> Note that for an order with {@link #REMOVE_EVENT} bit in {@link #getEventFlags() eventFlags}
+ * it is always the case that {@link #getSizeAsDouble() sizeAsDouble} is either {@code 0} or {@link Double#NaN NaN},
+ * so no additional logic to process this bit is required for orders.
+ * Transactions and snapshots may include orders with {@link #getSizeAsDouble() sizeAsDouble} of {@code 0}.
+ * The filtering that distinguishes those events as removals of orders shall be performed after
+ * all transactions and snapshot processing.
+ *
+ * <p> Some aggregated feeds (like CME market depth) are mapped into two distinct source ids (one for
+ * buy orders and one for sell orders), but updates and transactions may span both. It is important to keep a
+ * separate track of transactional state for each source id, but, at the same time, when
+ * {@link DXFeedEventListener#eventsReceived(List) DXFeedEventListener.eventsReceived} method is called for a list
+ * of events, the order book shall be considered complete and consistent only when all events from the given
+ * list are processed.
+ *
+ * <p> {@link OrderBookModel} class contains all the appropriate logic to deal with transactions and snapshots
+ * for {@link Order} events. The client-visible changes to the model are reported only when the snapshot for the
+ * specific source id is received completely and when there is no ongoing transaction for the specific source id.
+ * It relies on the code of {@link AbstractIndexedEventModel} to handle this logic.
+ * Use the source code of {@link AbstractIndexedEventModel} for clarification on transactions and snapshot logic.
+ */
 class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     friend struct EventMapper;
 
+  protected:
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
@@ -101,6 +156,44 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     OrderBaseData orderBaseData_{};
 
+    template <typename ChildType, typename GraalNativeEventType, typename ChildGraalNativeEventType, auto clazz>
+    static std::shared_ptr<ChildType> fromGraalNative(void *graalNative) noexcept
+#if __cpp_concepts
+        requires(std::is_base_of_v<OrderBase, ChildType>)
+#endif
+    {
+        if (!graalNative) {
+            return {};
+        }
+
+        if (bit_cast<GraalNativeEventType *>(graalNative)->clazz != clazz) {
+            return {};
+        }
+
+        try {
+            auto graalOrderBaseChild = bit_cast<ChildGraalNativeEventType *>(graalNative);
+            auto orderBaseChild = std::make_shared<ChildType>(
+                dxfcpp::toString(graalOrderBaseChild->order_base.market_event.event_symbol));
+
+            orderBaseChild->setEventTime(graalOrderBaseChild->order_base.market_event.event_time);
+            orderBaseChild->orderBaseData_ = {
+                graalOrderBaseChild->order_base.event_flags,   graalOrderBaseChild->order_base.index,
+                graalOrderBaseChild->order_base.time_sequence, graalOrderBaseChild->order_base.time_nano_part,
+                graalOrderBaseChild->order_base.action_time,   graalOrderBaseChild->order_base.order_id,
+                graalOrderBaseChild->order_base.aux_order_id,  graalOrderBaseChild->order_base.price,
+                graalOrderBaseChild->order_base.size,          graalOrderBaseChild->order_base.executed_size,
+                graalOrderBaseChild->order_base.count,         graalOrderBaseChild->order_base.flags,
+                graalOrderBaseChild->order_base.trade_id,      graalOrderBaseChild->order_base.trade_price,
+                graalOrderBaseChild->order_base.trade_size,
+            };
+
+            return orderBaseChild;
+        } catch (...) {
+            // TODO: error handling
+            return {};
+        }
+    }
+
   public:
     /**
      * Maximum allowed sequence value.
@@ -144,11 +237,12 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      */
     void setSource(const OrderSource &source) noexcept {
         auto shift = OrderSource::isSpecialSourceId(source.id()) ? SPECIAL_SOURCE_ID_SHIFT : NONSPECIAL_SOURCE_ID_SHIFT;
-        std::int64_t mask =
-            OrderSource::isSpecialSourceId(static_cast<std::int32_t>(sar(orderBaseData_.index, SPECIAL_SOURCE_ID_SHIFT)))
-                ? ~sal(std::int64_t{-1}, SPECIAL_SOURCE_ID_SHIFT)
-                : ~sal(std::int64_t{-1}, NONSPECIAL_SOURCE_ID_SHIFT);
-        orderBaseData_.index = andOp(sal(static_cast<std::int64_t>(source.id()), shift), andOp(orderBaseData_.index, mask));
+        std::int64_t mask = OrderSource::isSpecialSourceId(
+                                static_cast<std::int32_t>(sar(orderBaseData_.index, SPECIAL_SOURCE_ID_SHIFT)))
+                                ? ~sal(std::int64_t{-1}, SPECIAL_SOURCE_ID_SHIFT)
+                                : ~sal(std::int64_t{-1}, NONSPECIAL_SOURCE_ID_SHIFT);
+        orderBaseData_.index =
+            andOp(sal(static_cast<std::int64_t>(source.id()), shift), andOp(orderBaseData_.index, mask));
     }
 
     ///
@@ -215,7 +309,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @return time of this order.
      */
     std::int64_t getTime() const noexcept {
-        return sar(orderBaseData_.index, SECONDS_SHIFT) * 1000 + andOp(sar(orderBaseData_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+        return sar(orderBaseData_.index, SECONDS_SHIFT) * 1000 +
+               andOp(sar(orderBaseData_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
     }
 
     /**
@@ -226,8 +321,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      */
     void setTime(std::int64_t time) noexcept {
         orderBaseData_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
-                                sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
-                           getSequence());
+                                         sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
+                                    getSequence());
     }
 
     /**
@@ -524,8 +619,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @return exchange code of this order.
      */
     std::int16_t getExchangeCode() const noexcept {
-        return utf8to16(
-            static_cast<char>(static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
+        return utf8to16(static_cast<char>(
+            static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
     }
 
     /**
@@ -536,7 +631,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     void setExchangeCode(char exchangeCode) noexcept {
         // TODO: error handling: Util.checkChar(exchangeCode, EXCHANGE_MASK, "exchangeCode");
 
-        orderBaseData_.flags = setBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT, static_cast<unsigned char>(exchangeCode));
+        orderBaseData_.flags =
+            setBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT, static_cast<unsigned char>(exchangeCode));
     }
 
     /**
@@ -580,9 +676,16 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @param scope scope of this order.
      */
-    void setScope(const Scope& scope) noexcept {
+    void setScope(const Scope &scope) noexcept {
         orderBaseData_.flags = setBits(orderBaseData_.flags, SCOPE_MASK, SCOPE_SHIFT, scope.getCode());
     }
-};
+
+    /**
+     * Returns string representation of this order event's fields.
+     *
+     * @return string representation of this order event's fields.
+     */
+    std::string baseFieldsToString() const noexcept;
+}; // namespace dxfcpp
 
 } // namespace dxfcpp
