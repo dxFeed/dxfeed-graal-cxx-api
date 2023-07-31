@@ -16,7 +16,7 @@ namespace dxfcpp {
 const Scope Scope::COMPOSITE{0, "COMPOSITE"};
 const Scope Scope::REGIONAL{1, "REGIONAL"};
 const Scope Scope::AGGREGATE{2, "AGGREGATE"};
-const Scope Scope::ORDER{2, "ORDER"};
+const Scope Scope::ORDER{3, "ORDER"};
 
 template <>
 const std::unordered_map<Scope::CodeType, std::reference_wrapper<const Scope>> Scope::ParentType::ALL{
