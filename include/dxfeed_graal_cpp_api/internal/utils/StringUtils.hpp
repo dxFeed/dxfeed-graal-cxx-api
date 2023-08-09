@@ -15,9 +15,9 @@ struct DXFCPP_EXPORT String {
     inline static const std::string EMPTY{};
 };
 
-DXFCPP_EXPORT std::string toString(bool b);
+DXFCPP_EXPORT std::string toString(bool b) noexcept;
 
-DXFCPP_EXPORT std::string toString(const char *chars);
+DXFCPP_EXPORT std::string toString(const char *chars) noexcept;
 
 DXFCPP_EXPORT std::string toString(std::thread::id theadId);
 

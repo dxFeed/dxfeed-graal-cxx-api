@@ -40,7 +40,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param key attribute key.
      * @return new symbol without the specified key and everything else from the old symbol.
      */
-    static constexpr std::string removeAttributeStringByKey(const std::string &symbol,
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string removeAttributeStringByKey(const std::string &symbol,
                                                             const std::string &key) noexcept {
         return removeAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
     }
@@ -51,7 +51,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
     static constexpr char ATTRIBUTES_SEPARATOR = ',';
     static constexpr char ATTRIBUTE_VALUE = '=';
 
-    static constexpr bool hasAttributesInternal(const std::string &symbol) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING bool hasAttributesInternal(const std::string &symbol) noexcept {
         if (symbol.length() >= 3 /* ATTRIBUTES_OPEN + ATTRIBUTES_CLOSE + ATTRIBUTE */ &&
             symbol[symbol.length() - 1] == ATTRIBUTES_CLOSE) {
             auto attributesOpenPos = symbol.find_last_of(ATTRIBUTES_OPEN, symbol.length() - 2);
@@ -62,39 +62,47 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return false;
     }
 
-    static constexpr std::size_t getLengthWithoutAttributesInternal(const std::string &symbol) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::size_t getLengthWithoutAttributesInternal(const std::string &symbol) noexcept {
         return hasAttributesInternal(symbol) ? symbol.find_last_of(ATTRIBUTES_OPEN) : symbol.length();
     }
 
-    static constexpr std::optional<std::string> getKeyInternal(const std::string &symbol, std::size_t i) noexcept {
-        if (auto found = symbol.find_first_of(ATTRIBUTE_VALUE, i); found != std::string::npos) {
-            return symbol.substr(i, found - i);
-        }
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string> getKeyInternal(const std::string &symbol, std::size_t i) noexcept {
+        try {
+            if (auto found = symbol.find_first_of(ATTRIBUTE_VALUE, i); found != std::string::npos) {
+                return symbol.substr(i, found - i);
+            }
 
-        return std::nullopt;
+            return std::nullopt;
+        } catch (...) {
+            return std::nullopt;
+        }
     }
 
-    static constexpr std::size_t getNextKeyInternal(const std::string &symbol, std::size_t i) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::size_t getNextKeyInternal(const std::string &symbol, std::size_t i) noexcept {
         auto valuePos = symbol.find_first_of(ATTRIBUTE_VALUE, i) + 1;
         auto separatorPos = symbol.find_first_of(ATTRIBUTES_SEPARATOR, valuePos);
 
         return separatorPos == std::string::npos ? symbol.length() : separatorPos + 1;
     }
 
-    static constexpr std::string dropKeyAndValueInternal(const std::string &symbol, std::size_t length, std::size_t i,
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string dropKeyAndValueInternal(const std::string &symbol, std::size_t length, std::size_t i,
                                                          std::size_t j) noexcept {
-        if (j == symbol.length()) {
-            if (i == length + 1) {
-                return symbol.substr(0, length);
-            } else {
-                return symbol.substr(0, i - 1) + symbol.substr(j - 1);
+        try {
+            if (j == symbol.length()) {
+                if (i == length + 1) {
+                    return symbol.substr(0, length);
+                } else {
+                    return symbol.substr(0, i - 1) + symbol.substr(j - 1);
+                }
             }
-        }
 
-        return symbol.substr(0, i) + symbol.substr(j);
+            return symbol.substr(0, i) + symbol.substr(j);
+        } catch (...) {
+            return symbol;
+        }
     }
 
-    static constexpr std::string removeAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes,
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string removeAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes,
                                                          const std::string &key) noexcept {
         if (lengthWithoutAttributes == symbol.length()) {
             return symbol;
