@@ -1,0 +1,12 @@
+// Copyright (c) 2023 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
+
+#pragma once
+
+#include "../internal/Conf.hpp"
+
+#include "osub/OsubModule.hpp"
+#include "DXEndpoint.hpp"
+#include "DXFeed.hpp"
+#include "DXFeedSubscription.hpp"
+#include "FilteredSubscriptionSymbol.hpp"

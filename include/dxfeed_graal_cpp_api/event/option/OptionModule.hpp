@@ -5,10 +5,7 @@
 
 #include "../../internal/Conf.hpp"
 
-namespace dxfcpp {
-
-struct DXFCPP_EXPORT CandleSession {
-
-};
-
-}
+#include "Greeks.hpp"
+#include "Series.hpp"
+#include "TheoPrice.hpp"
+#include "Underlying.hpp"

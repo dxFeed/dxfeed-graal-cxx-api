@@ -9,7 +9,7 @@
 #include <memory>
 #include <string>
 
-#include "../entity/SharedEntity.hpp"
+#include "../entity/EntityModule.hpp"
 
 namespace dxfcpp {
 

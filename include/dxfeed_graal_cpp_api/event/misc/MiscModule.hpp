@@ -5,10 +5,5 @@
 
 #include "../../internal/Conf.hpp"
 
-namespace dxfcpp {
-
-struct DXFCPP_EXPORT CandleSession {
-
-};
-
-}
+#include "Configuration.hpp"
+#include "Message.hpp"

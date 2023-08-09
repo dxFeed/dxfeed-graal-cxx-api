@@ -5,10 +5,6 @@
 
 #include "../../internal/Conf.hpp"
 
-namespace dxfcpp {
-
-struct DXFCPP_EXPORT CandleSession {
-
-};
-
-}
+#include "IndexedEventSubscriptionSymbol.hpp"
+#include "TimeSeriesSubscriptionSymbol.hpp"
+#include "WildcardSymbol.hpp"

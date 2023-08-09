@@ -7,8 +7,6 @@
 
 namespace dxfcpp {
 
-struct DXFCPP_EXPORT CandleSession {
+struct DXFCPP_EXPORT MarketEventSymbols {};
 
-};
-
-}
+} // namespace dxfcpp
