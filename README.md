@@ -161,6 +161,14 @@ Find useful information in our self-service dxFeed Knowledge Base or .NET API do
 
 [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=52685)
 
+### Linux
+
+gcc 12.1+
+
+### MacOS
+
+Xcode 14.3+
+
 ## Installation
 
 Examples of how to install the library can be found [here](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples).
