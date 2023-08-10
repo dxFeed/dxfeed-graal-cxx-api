@@ -19,7 +19,7 @@ set(CXX_EXTENSIONS OFF)
 
 set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-2.4.11)
 
-set(DXFC_TEST_SOURCES system/SystemTest.cpp api/DXEndpointTest.cpp)
+set(DXFC_TEST_SOURCES system/SystemTest.cpp api/DXEndpointTest.cpp api/MarketEventSymbolsTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
 foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
