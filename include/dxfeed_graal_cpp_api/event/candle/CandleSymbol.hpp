@@ -7,6 +7,17 @@
 
 namespace dxfcpp {
 
-class DXFCPP_EXPORT CandleSymbol {};
+class DXFCPP_EXPORT CandleSymbol {
+  private final String symbol;
+
+  private transient String baseSymbol;
+
+    transient CandleExchange exchange;
+    transient CandlePrice price;
+    transient CandleSession session;
+    transient CandlePeriod period;
+    transient CandleAlignment alignment;
+    transient CandlePriceLevel priceLevel;
+};
 
 } // namespace dxfcpp

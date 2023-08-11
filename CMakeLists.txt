@@ -130,6 +130,10 @@ set(dxFeedNativeAPIEventSources
         src/event/EventMapper.cpp
         )
 
+set(dxFeedNativeAPIEventCandleSources
+        src/event/candle/CandleAlignment.cpp
+        )
+
 set(dxFeedNativeAPIEventMarketSources
         src/event/market/AnalyticOrder.cpp
         src/event/market/Direction.cpp
@@ -187,6 +191,7 @@ add_library(${PROJECT_NAME}_static STATIC
         ${dxFeedNativeAPISymbolsSources}
         ${dxFeedNativeAPISystemSources}
         ${dxFeedNativeAPIEventSources}
+        ${dxFeedNativeAPIEventCandleSources}
         ${dxFeedNativeAPIEventMarketSources}
         ${dxFeedNativeAPIEventOptionSources}
         src/api.cpp
@@ -201,6 +206,7 @@ add_library(${PROJECT_NAME} SHARED
         ${dxFeedNativeAPISymbolsSources}
         ${dxFeedNativeAPISystemSources}
         ${dxFeedNativeAPIEventSources}
+        ${dxFeedNativeAPIEventCandleSources}
         ${dxFeedNativeAPIEventMarketSources}
         ${dxFeedNativeAPIEventOptionSources}
         src/api.cpp

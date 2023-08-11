@@ -9,6 +9,15 @@
 
 namespace dxfcpp {
 
+enum class CandleSymbolAttributeType {
+    CANDLE_EXCHANGE,
+    CANDLE_PRICE,
+    CANDLE_SESSION,
+    CANDLE_PERIOD,
+    CANDLE_ALIGNMENT,
+    CANDLE_PRICE_LEVEL,
+};
+
 class CandleSymbol;
 
 /**
