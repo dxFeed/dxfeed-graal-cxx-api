@@ -7,6 +7,8 @@
 
 #include "CandleSymbolAttribute.hpp"
 
+#include "../market/MarketEventSymbols.hpp"
+
 namespace dxfcpp {
 
 struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute<CandleAlignment> {
@@ -16,21 +18,27 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute<CandleAlignm
     static const std::string ATTRIBUTE_KEY;
 
   private:
-
     std::string string_;
 
-    CandleAlignment(const std::string& string): string_{string} {}
+    CandleAlignment(const std::string &string) : string_{string} {
+    }
 
   public:
-
     std::string changeAttributeForSymbol(const std::string &symbol) const noexcept override {
-        return std::string();
+        return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
+                                : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
     }
 
     void checkInAttributeImpl(const CandleSymbol &candleSymbol) const noexcept override {
     }
 
+    std::string toString() const noexcept {
+        return string_;
+    }
 
+    bool operator==(const CandleAlignment &candleAlignment) const {
+        return string_ == candleAlignment.string_;
+    }
 };
 
-}
+} // namespace dxfcpp

@@ -34,6 +34,24 @@ namespace dxfcpp {
 struct DXFCPP_EXPORT MarketEventSymbols {
 
     /**
+     * Changes value of one attribute value while leaving exchange code and other attributes intact.
+     *
+     * @param symbol old symbol.
+     * @param key attribute key.
+     * @param value attribute value.
+     *
+     * @return new symbol with key attribute with the specified value and everything else from the old symbol.
+     */
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
+    changeAttributeStringByKey(const std::string &symbol, const std::string &key, const std::string &value) {
+        auto i = getLengthWithoutAttributesInternal(symbol);
+
+        if (i == symbol.length())
+            return symbol + ATTRIBUTES_OPEN + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_CLOSE;
+        return addAttributeInternal(symbol, i, key, value);
+    }
+
+    /**
      * Removes one attribute with the specified key while leaving exchange code and other attributes intact.
      *
      * @param symbol old symbol.
@@ -41,7 +59,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @return new symbol without the specified key and everything else from the old symbol.
      */
     static DXFCPP_CXX20_CONSTEXPR_STRING std::string removeAttributeStringByKey(const std::string &symbol,
-                                                            const std::string &key) noexcept {
+                                                                                const std::string &key) noexcept {
         return removeAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
     }
 
@@ -62,11 +80,13 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return false;
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::size_t getLengthWithoutAttributesInternal(const std::string &symbol) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::size_t
+    getLengthWithoutAttributesInternal(const std::string &symbol) noexcept {
         return hasAttributesInternal(symbol) ? symbol.find_last_of(ATTRIBUTES_OPEN) : symbol.length();
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string> getKeyInternal(const std::string &symbol, std::size_t i) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string> getKeyInternal(const std::string &symbol,
+                                                                                   std::size_t i) noexcept {
         try {
             if (auto found = symbol.find_first_of(ATTRIBUTE_VALUE, i); found != std::string::npos) {
                 return symbol.substr(i, found - i);
@@ -78,15 +98,16 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         }
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::size_t getNextKeyInternal(const std::string &symbol, std::size_t i) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::size_t getNextKeyInternal(const std::string &symbol,
+                                                                        std::size_t i) noexcept {
         auto valuePos = symbol.find_first_of(ATTRIBUTE_VALUE, i) + 1;
         auto separatorPos = symbol.find_first_of(ATTRIBUTES_SEPARATOR, valuePos);
 
         return separatorPos == std::string::npos ? symbol.length() : separatorPos + 1;
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string dropKeyAndValueInternal(const std::string &symbol, std::size_t length, std::size_t i,
-                                                         std::size_t j) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
+    dropKeyAndValueInternal(const std::string &symbol, std::size_t length, std::size_t i, std::size_t j) noexcept {
         try {
             if (j == symbol.length()) {
                 if (i == length + 1) {
@@ -102,13 +123,13 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         }
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string removeAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes,
-                                                         const std::string &key) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
+    removeAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes, const std::string &key) noexcept {
         if (lengthWithoutAttributes == symbol.length()) {
             return symbol;
         }
 
-        std::size_t i = lengthWithoutAttributes + 1;
+        auto i = lengthWithoutAttributes + 1;
 
         while (i < symbol.length()) {
             auto currentKey = getKeyInternal(symbol, i);
@@ -127,6 +148,52 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         }
 
         return symbol;
+    }
+
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string addAttributeInternal(std::string symbol,
+                                                                          std::size_t lengthWithoutAttributes,
+                                                                          const std::string &key,
+                                                                          const std::string &value) {
+        if (lengthWithoutAttributes == symbol.length()) {
+            return symbol + ATTRIBUTES_OPEN + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_CLOSE;
+        }
+
+        auto i = lengthWithoutAttributes + 1;
+        bool added = false;
+
+        while (i < symbol.length()) {
+            auto currentKey = getKeyInternal(symbol, i);
+
+            if (!currentKey) {
+                break;
+            }
+
+            auto j = getNextKeyInternal(symbol, i);
+            auto cmp = currentKey.value().compare(key);
+
+            if (cmp == 0) {
+                if (added) {
+                    // drop, since we've already added this key
+                    symbol = dropKeyAndValueInternal(symbol, lengthWithoutAttributes, i, j);
+                } else {
+                    // replace value
+                    symbol = symbol.substr(0, i) + key + ATTRIBUTE_VALUE + value + symbol.substr(j - 1);
+                    added = true;
+                    i += key.length() + value.length() + 2;
+                }
+            } else if (cmp > 0 && !added) {
+                // insert value here
+                symbol = symbol.substr(0, i) + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_SEPARATOR + symbol.substr(i);
+                added = true;
+                i += key.length() + value.length() + 2;
+            } else {
+                i = j;
+            }
+        }
+
+        return added ? symbol
+                     : symbol.substr(0, i - 1) + ATTRIBUTES_SEPARATOR + key + ATTRIBUTE_VALUE + value +
+                           symbol.substr(i - 1);
     }
 };
 
