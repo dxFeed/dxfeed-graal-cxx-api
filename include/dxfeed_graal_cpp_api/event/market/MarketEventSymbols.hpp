@@ -33,6 +33,41 @@ namespace dxfcpp {
  */
 struct DXFCPP_EXPORT MarketEventSymbols {
     /**
+     * Returns `true` is the specified symbol has the exchange code specification.
+     *
+     * @param symbol The symbol.
+     * @return `true` is the specified symbol has the exchange code specification.
+     */
+    static bool hasExchangeCode(const std::string &symbol) noexcept {
+        return hasExchangeCodeInternal(symbol, getLengthWithoutAttributesInternal(symbol));
+    }
+
+    /**
+     * Returns exchange code of the specified symbol or `'\0'` if none is defined.
+     *
+     * @param symbol The symbol.
+     * @return exchange code of the specified symbol or `'\0'` if none is defined.
+     */
+    static char getExchangeCode(const std::string &symbol) noexcept {
+        return hasExchangeCode(symbol) ? symbol[getLengthWithoutAttributesInternal(symbol) - 1] : 0;
+    }
+
+    /**
+     * Changes exchange code of the specified symbol or removes it if new exchange code is `'\0'`.
+     *
+     * @param symbol The old symbol.
+     * @param exchangeCode The new exchange code.
+     * @return new symbol with the changed exchange code.
+     */
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string changeExchangeCode(const std::string &symbol,
+                                                                        char exchangeCode) noexcept {
+        auto i = getLengthWithoutAttributesInternal(symbol);
+        auto result = exchangeCode == 0 ? getBaseSymbolInternal(symbol, i)
+                                        : getBaseSymbolInternal(symbol, i) + EXCHANGE_SEPARATOR + exchangeCode;
+        return i == symbol.length() ? result : result + symbol.substr(i);
+    }
+
+    /**
      * Returns value of the attribute with the specified key.
      * The result is std::nullopt if attribute with the specified key is not found.
      *
@@ -41,8 +76,8 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @return value of the attribute with the specified key | std::nullopt if attribute with the specified key is not
      * found.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string> getAttributeStringByKey(const std::string &symbol,
-                                                                                            const std::string &key) {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string>
+    getAttributeStringByKey(const std::string &symbol, const std::string &key) noexcept {
         return getAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
     }
 
@@ -56,7 +91,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @return new symbol with key attribute with the specified value and everything else from the old symbol.
      */
     static DXFCPP_CXX20_CONSTEXPR_STRING std::string
-    changeAttributeStringByKey(const std::string &symbol, const std::string &key, const std::string &value) {
+    changeAttributeStringByKey(const std::string &symbol, const std::string &key, const std::string &value) noexcept {
         auto i = getLengthWithoutAttributesInternal(symbol);
 
         if (i == symbol.length())
@@ -77,10 +112,19 @@ struct DXFCPP_EXPORT MarketEventSymbols {
     }
 
   private:
+    static constexpr char EXCHANGE_SEPARATOR = '&';
     static constexpr char ATTRIBUTES_OPEN = '{';
     static constexpr char ATTRIBUTES_CLOSE = '}';
     static constexpr char ATTRIBUTES_SEPARATOR = ',';
     static constexpr char ATTRIBUTE_VALUE = '=';
+
+    static bool hasExchangeCodeInternal(const std::string &symbol, std::size_t length) {
+        return length >= 2 && symbol[length - 2] == EXCHANGE_SEPARATOR;
+    }
+
+    static std::string getBaseSymbolInternal(const std::string &symbol, std::size_t length) {
+        return hasExchangeCodeInternal(symbol, length) ? symbol.substr(0, length - 2) : symbol.substr(0, length);
+    }
 
     static DXFCPP_CXX20_CONSTEXPR_STRING bool hasAttributesInternal(const std::string &symbol) noexcept {
         if (symbol.length() >= 3 /* ATTRIBUTES_OPEN + ATTRIBUTES_CLOSE + ATTRIBUTE */ &&

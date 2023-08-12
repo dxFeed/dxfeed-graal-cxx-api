@@ -18,10 +18,10 @@ using stringOpt = std::optional<std::string>;
 void checkNonAttributedSymbol(const std::string &s) {
     // REQUIRE(s == MarketEventSymbols::getBaseSymbol(s));
     // REQUIRE("MSFT" == MarketEventSymbols::changeBaseSymbol(s, "MSFT"));
-    // REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
-    // REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
-    // REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
-    // REQUIRE(s + "&C" == MarketEventSymbols::changeExchangeCode(s, 'C'));
+    REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
+    REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
+    REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
+    REQUIRE(s + "&C" == MarketEventSymbols::changeExchangeCode(s, 'C'));
 
     REQUIRE(std::nullopt == MarketEventSymbols::getAttributeStringByKey(s, "key"));
     REQUIRE(s == MarketEventSymbols::removeAttributeStringByKey(s, "key"));
@@ -58,10 +58,10 @@ TEST_CASE("Test regional") {
 
     // REQUIRE("GE" == MarketEventSymbols::getBaseSymbol(s));
     // REQUIRE("F&N" == MarketEventSymbols::changeBaseSymbol(s, "F"));
-    // REQUIRE(true == MarketEventSymbols::hasExchangeCode(s));
-    // REQUIRE('N' == MarketEventSymbols::getExchangeCode(s));
-    // REQUIRE("GE" == MarketEventSymbols::changeExchangeCode(s, '\0'));
-    // REQUIRE("GE&Q" == MarketEventSymbols::changeExchangeCode(s, 'Q'));
+    REQUIRE(true == MarketEventSymbols::hasExchangeCode(s));
+    REQUIRE('N' == MarketEventSymbols::getExchangeCode(s));
+    REQUIRE("GE" == MarketEventSymbols::changeExchangeCode(s, '\0'));
+    REQUIRE("GE&Q" == MarketEventSymbols::changeExchangeCode(s, 'Q'));
 
     REQUIRE(std::nullopt == MarketEventSymbols::getAttributeStringByKey(s, "tho"));
     REQUIRE(s == MarketEventSymbols::removeAttributeStringByKey(s, "tho"));
@@ -78,10 +78,10 @@ TEST_CASE("Test one attribute") {
 
     // REQUIRE("/ES" == MarketEventSymbols::getBaseSymbol(s));
     // REQUIRE("/NQ{tho=true}" == MarketEventSymbols::changeBaseSymbol(s, "/NQ"));
-    // REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
-    // REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
-    // REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
-    // REQUIRE("/ES&G{tho=true}" == MarketEventSymbols::changeExchangeCode(s, 'G'));
+    REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
+    REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
+    REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
+    REQUIRE("/ES&G{tho=true}" == MarketEventSymbols::changeExchangeCode(s, 'G'));
 
     REQUIRE(stringOpt{"true"} == MarketEventSymbols::getAttributeStringByKey(s, "tho"));
     REQUIRE("/ES" == MarketEventSymbols::removeAttributeStringByKey(s, "tho"));
@@ -107,10 +107,10 @@ TEST_CASE("Test two attributes") {
 
     // REQUIRE("A" == MarketEventSymbols::getBaseSymbol(s));
     // REQUIRE("B{c=1,e=3}" == MarketEventSymbols::changeBaseSymbol(s, "B"));
-    // REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
-    // REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
-    // REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
-    // REQUIRE("A&D{c=1,e=3}" == MarketEventSymbols::changeExchangeCode(s, 'D'));
+    REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
+    REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
+    REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
+    REQUIRE("A&D{c=1,e=3}" == MarketEventSymbols::changeExchangeCode(s, 'D'));
 
     REQUIRE(std::nullopt == MarketEventSymbols::getAttributeStringByKey(s, "b"));
     REQUIRE(s == MarketEventSymbols::removeAttributeStringByKey(s, "b"));

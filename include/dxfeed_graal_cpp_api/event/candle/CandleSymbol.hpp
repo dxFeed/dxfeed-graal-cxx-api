@@ -14,16 +14,26 @@
 #include "CandleSymbolAttribute.hpp"
 
 #include <variant>
+#include <unordered_map>
+#include <string>
 
 namespace dxfcpp {
 
-class DXFCPP_EXPORT CandleSymbol {
+struct DXFCPP_EXPORT CandleSymbol {
     using CandleSymbolAttributeT =
         std::variant<CandleExchange, CandlePrice, CandleSession, CandlePeriod, CandleAlignment, CandlePriceLevel>;
 
-    std::string symbol_;
-    std::string baseSymbol_;
-    std::unordered_map<CandleSymbolAttributeType, CandleSymbolAttributeT> attributes_;
+  private:
+
+    std::string symbol_{};
+    std::string baseSymbol_{};
+    //std::unordered_map<CandleSymbolAttributeType, CandleSymbolAttributeT> attributes_{};
+
+  public:
+
+    CandleSymbol() noexcept = default;
+
+    virtual ~CandleSymbol() = default;
 };
 
 } // namespace dxfcpp

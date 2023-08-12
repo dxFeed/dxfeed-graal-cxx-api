@@ -37,12 +37,14 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
     static const CandleExchange DEFAULT;
 
   private:
-    const char exchangeCode_;
+    const char exchangeCode_{};
 
     explicit CandleExchange(char exchangeCode) noexcept : exchangeCode_{exchangeCode} {
     }
 
   public:
+    CandleExchange() noexcept = default;
+
     /**
      * Returns exchange code. It is `'\0'` for ::COMPOSITE exchange.
      * @return exchange code.
@@ -52,9 +54,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
     }
 
     std::string changeAttributeForSymbol(const std::string &symbol) const noexcept override {
-        // TODO: implement
-        //  return MarketEventSymbols::changeExchangeCode(symbol, exchangeCode);
-        return std::string();
+        return MarketEventSymbols::changeExchangeCode(symbol, exchangeCode_);
     }
 
     /**
@@ -84,14 +84,13 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
 
     /**
      * Returns exchange attribute object of the given candle symbol string.
-     * The result is {@link #DEFAULT} if the symbol does not have exchange attribute.
+     * The result is ::DEFAULT if the symbol does not have exchange attribute.
+     *
      * @param symbol candle symbol string.
      * @return exchange attribute object of the given candle symbol string.
      */
     static CandleExchange getAttributeForSymbol(const std::string &symbol) noexcept {
-        // TODO: implement
-        // return valueOf(MarketEventSymbols::getExchangeCode(symbol));
-        return COMPOSITE;
+        return valueOf(MarketEventSymbols::getExchangeCode(symbol));
     }
 };
 

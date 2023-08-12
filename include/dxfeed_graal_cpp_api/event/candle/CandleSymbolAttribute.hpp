@@ -18,7 +18,7 @@ enum class CandleSymbolAttributeType {
     CANDLE_PRICE_LEVEL,
 };
 
-class CandleSymbol;
+struct CandleSymbol;
 
 /**
  * Attribute of the {@link CandleSymbol}.

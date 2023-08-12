@@ -56,12 +56,14 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
   private:
     static const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>> BY_STRING_;
 
-    std::string string_;
+    std::string string_{};
 
     explicit CandleAlignment(const std::string &string) noexcept : string_{string} {
     }
 
   public:
+    CandleAlignment() noexcept = default;
+
     /**
      * Returns candle event symbol string with this candle alignment set.
      *
