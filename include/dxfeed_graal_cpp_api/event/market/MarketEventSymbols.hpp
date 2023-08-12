@@ -32,6 +32,19 @@ namespace dxfcpp {
  * The methods in this class always maintain attribute keys in alphabetic order.
  */
 struct DXFCPP_EXPORT MarketEventSymbols {
+    /**
+     * Returns value of the attribute with the specified key.
+     * The result is std::nullopt if attribute with the specified key is not found.
+     *
+     * @param symbol symbol.
+     * @param key attribute key.
+     * @return value of the attribute with the specified key | std::nullopt if attribute with the specified key is not
+     * found.
+     */
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string> getAttributeStringByKey(const std::string &symbol,
+                                                                                            const std::string &key) {
+        return getAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
+    }
 
     /**
      * Changes value of one attribute value while leaving exchange code and other attributes intact.
@@ -106,6 +119,13 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return separatorPos == std::string::npos ? symbol.length() : separatorPos + 1;
     }
 
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string getValueInternal(const std::string &symbol, std::size_t i,
+                                                                      std::size_t j) {
+        auto valueOffset = symbol.find_first_of(ATTRIBUTE_VALUE, i) + 1;
+
+        return symbol.substr(valueOffset, j - 1 - valueOffset);
+    }
+
     static DXFCPP_CXX20_CONSTEXPR_STRING std::string
     dropKeyAndValueInternal(const std::string &symbol, std::size_t length, std::size_t i, std::size_t j) noexcept {
         try {
@@ -121,6 +141,33 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         } catch (...) {
             return symbol;
         }
+    }
+
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string>
+    getAttributeInternal(const std::string &symbol, std::size_t lengthWithoutAttributes, const std::string &key) {
+        if (lengthWithoutAttributes == symbol.length()) {
+            return std::nullopt;
+        }
+
+        auto i = lengthWithoutAttributes + 1;
+
+        while (i < symbol.length()) {
+            auto currentKey = getKeyInternal(symbol, i);
+
+            if (!currentKey) {
+                break;
+            }
+
+            auto j = getNextKeyInternal(symbol, i);
+
+            if (key == currentKey.value()) {
+                return getValueInternal(symbol, i, j);
+            }
+
+            i = j;
+        }
+
+        return std::nullopt;
     }
 
     static DXFCPP_CXX20_CONSTEXPR_STRING std::string
