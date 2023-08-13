@@ -9,6 +9,7 @@
 #    include <bit>
 #endif
 #include <cstring>
+#include <climits>
 
 #include <chrono>
 #include <cmath>
