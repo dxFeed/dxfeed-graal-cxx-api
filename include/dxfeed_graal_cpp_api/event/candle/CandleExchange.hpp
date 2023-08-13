@@ -53,6 +53,12 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
         return exchangeCode_;
     }
 
+    /**
+     * Returns candle event symbol string with this exchange set.
+     *
+     * @param symbol The original candle event symbol.
+     * @return candle event symbol string with this exchange set.
+     */
     std::string changeAttributeForSymbol(const std::string &symbol) const noexcept override {
         return MarketEventSymbols::changeExchangeCode(symbol, exchangeCode_);
     }

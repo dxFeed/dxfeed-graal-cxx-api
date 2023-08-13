@@ -24,10 +24,8 @@ namespace dxfcpp {
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via
- * CandleAlignment::ATTRIBUTE_KEY constant.
- * The value that this key shall be set to is equal to
- * the corresponding CandleAlignment::toString()
+ * The key to use with these methods is available via CandleAlignment::ATTRIBUTE_KEY constant.
+ * The value that this key shall be set to is equal to the corresponding CandleAlignment::toString()
  */
 struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
     /**
@@ -120,7 +118,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * supported attribute's value.
      *
      * @param symbol The candle symbol string.
-     * @return candle alignment of the given candle symbol string | std::nullopt if there is no supported attribute's
+     * @return candle alignment of the given candle symbol string or std::nullopt if there is no supported attribute's
      * value.
      */
     static std::optional<std::reference_wrapper<const CandleAlignment>>
