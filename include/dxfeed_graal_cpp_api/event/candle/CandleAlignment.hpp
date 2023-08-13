@@ -94,7 +94,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * Any string that was returned by ::toString() can be parsed and case is ignored for parsing.
      *
      * @param s The string representation of candle alignment.
-     * @return The candle alignment (reference) | std::nullopt if there is no supported attribute's value.
+     * @return The candle alignment (reference) or std::nullopt if there is no supported attribute's value.
      */
     static std::optional<std::reference_wrapper<const CandleAlignment>> parse(const std::string &s) noexcept {
         auto found = BY_STRING_.find(s);
@@ -109,7 +109,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
             }
         }
 
-        // TODO: error handling throw IllegalArgumentException("Unknown candle alignment: " + s);
+        //TODO: error handling throw IllegalArgumentException("Unknown candle alignment: " + s);
 
         return std::nullopt;
     }

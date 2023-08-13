@@ -5,10 +5,203 @@
 
 #include "../../internal/Conf.hpp"
 
+#include "../../internal/utils/StringUtils.hpp"
+#include "../market/MarketEventSymbols.hpp"
+#include "CandleSymbolAttribute.hpp"
+
+#include <string>
+#include <type_traits>
+#include <unordered_map>
+#include <utility>
+
 namespace dxfcpp {
 
 struct DXFCPP_EXPORT CandleType {
+    /**
+     * Certain number of ticks.
+     */
+    static const CandleType TICK;
 
+    /**
+     * Certain number of seconds.
+     */
+    static const CandleType SECOND;
+
+    /**
+     * Certain number of minutes.
+     */
+    static const CandleType MINUTE;
+
+    /**
+     * Certain number of hours.
+     */
+    static const CandleType HOUR;
+
+    /**
+     * Certain number of days.
+     */
+    static const CandleType DAY;
+
+    /**
+     * Certain number of weeks.
+     */
+    static const CandleType WEEK;
+
+    /**
+     * Certain number of months.
+     */
+    static const CandleType MONTH;
+
+    /**
+     * Certain number of option expirations.
+     */
+    static const CandleType OPTEXP;
+
+    /**
+     * Certain number of years.
+     */
+    static const CandleType YEAR;
+
+    /**
+     * Certain volume of trades.
+     */
+    static const CandleType VOLUME;
+
+    /**
+     * Certain price change, calculated according to the following rules:
+     * <ol>
+     *     <li>high(n) - low(n) = price range</li>
+     *     <li>close(n) = high(n) or close(n) = low(n)</li>
+     *     <li>open(n+1) = close(n)</li>
+     * </ol>
+     * where n is the number of the bar.
+     */
+    static const CandleType PRICE;
+
+    /**
+     * Certain price change, calculated according to the following rules:
+     * <ol>
+     *     <li>high(n) - low(n) = price range</li>
+     *     <li>close(n) = high(n) or close(n) = low(n)</li>
+     *     <li>open(n+1) = close(n) + tick size, if close(n) = high(n)</li>
+     *     <li>open(n+1) = close(n) - tick size, if close(n) = low(n)</li>
+     * </ol>
+     * where n is the number of the bar.
+     */
+    static const CandleType PRICE_MOMENTUM;
+
+    /**
+     * Certain price change, calculated according to the following rules:
+     * <ol>
+     *     <li>high(n+1) - high(n) = price range or low(n) - low(n+1) = price range</li>
+     *     <li>close(n) = high(n) or close(n) = low(n)</li>
+     *     <li>open(n+1) = high(n), if high(n+1) - high(n) = price range</li>
+     *     <li>open(n+1) = low(n), if low(n) - low(n+1) = price range</li>
+     * </ol>
+     * where n is the number of the bar.
+     */
+    static const CandleType PRICE_RENKO;
+
+  private:
+    std::string name_{};
+    std::string string_{};
+    std::int64_t periodIntervalMillis_{};
+
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>> BY_STRING_;
+
+    CandleType(std::string name, std::string string, std::int64_t periodIntervalMillis) noexcept
+        : name_{std::move(name)}, string_{std::move(string)}, periodIntervalMillis_{periodIntervalMillis} {
+    }
+
+  public:
+    CandleType() noexcept = default;
+    virtual ~CandleType() noexcept = default;
+
+    /**
+     * Returns candle type period in milliseconds as closely as possible.
+     * Certain types like ::SECOND and ::DAY span a specific number of milliseconds.
+     * ::MONTH, ::OPTEXP and ::YEAR are approximate. Candle type period of ::TICK, ::VOLUME, ::PRICE,
+     * ::PRICE_MOMENTUM and ::PRICE_RENKO is not defined and this method returns `0`.
+     *
+     * @return aggregation period in milliseconds.
+     */
+    std::int64_t getPeriodIntervalMillis() const noexcept {
+        return periodIntervalMillis_;
+    }
+
+    /**
+     * Returns a name of this candle type
+     *
+     * @return A name of this candle type
+     */
+    const std::string &getName() const & noexcept {
+        return name_;
+    }
+
+    /**
+     * Returns string representation of this candle type.
+     * The string representation of candle type is the shortest unique prefix of the lower case string that corresponds
+     * to its @ref ::getName() "name".
+     * For example, ::TICK is represented as `"t"`, while ::MONTH is represented as `"mo"` to distinguish it from
+     * ::MINUTE that is represented as `"m"`.
+     *
+     * @return string representation of this candle price type.
+     */
+    const std::string &toString() const & noexcept {
+        return string_;
+    }
+
+    /**
+     * Parses string representation of candle type into object.
+     * Any string that that is a prefix of candle type ::getName() can be parsed
+     * (including the one that was returned by ::toString()) and case is ignored for parsing.
+     *
+     * @param s The string representation of candle type.
+     * @return A candle type or std::nullopt if the string representation is invalid.
+     */
+    static std::optional<std::reference_wrapper<const CandleType>> parse(const std::string &s) noexcept {
+        auto n = s.length();
+
+        if (n == 0) {
+            // TODO: error handling throw IllegalArgumentException("Missing candle type");
+
+            return std::nullopt;
+        }
+
+        auto result = BY_STRING_.find(s);
+
+        if (result != BY_STRING_.end()) {
+            return result->second;
+        }
+
+        for (const auto &type : BY_STRING_) {
+            const auto &name = type.second.get().getName();
+
+            // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc
+            if (name.length() >= n && iEquals(name.substr(0, n), s)) {
+                return type.second;
+            }
+
+            // Ticks, Minutes, Seconds, etc
+            if (s.ends_with("s") && iEquals(name, s.substr(0, n - 1))) {
+                return type.second;
+            }
+        }
+
+        // TODO: error handling throw IllegalArgumentException("Unknown candle type: " + s);
+
+        return std::nullopt;
+    }
+
+    bool operator==(const CandleType &candleType) const noexcept {
+        return string_ == candleType.string_;
+    }
 };
 
-}
+} // namespace dxfcpp
+
+template <> struct std::hash<dxfcpp::CandleType> {
+    std::size_t operator()(const dxfcpp::CandleType &candleType) const noexcept {
+        return std::hash<std::string>{}(candleType.toString());
+    }
+};

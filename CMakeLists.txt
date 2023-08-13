@@ -133,6 +133,8 @@ set(dxFeedNativeAPIEventSources
 set(dxFeedNativeAPIEventCandleSources
         src/event/candle/CandleAlignment.cpp
         src/event/candle/CandleExchange.cpp
+        src/event/candle/CandlePeriod.cpp
+        src/event/candle/CandleType.cpp
         )
 
 set(dxFeedNativeAPIEventMarketSources

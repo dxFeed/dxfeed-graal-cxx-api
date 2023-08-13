@@ -155,6 +155,23 @@ static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
 
+static inline bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
+    if (std::isnan(a) || std::isnan(b)) {
+        return false;
+    }
+
+    return std::abs(a - b) < eps;
+}
+
+template <typename T, typename U>
+static inline bool equals(T a, U b, double eps = std::numeric_limits<double>::epsilon()) {
+    if (std::isnan(static_cast<double>(a)) || std::isnan(static_cast<double>(b))) {
+        return false;
+    }
+
+    return std::abs(static_cast<double>(a) - static_cast<double>(b)) < eps;
+}
+
 } // namespace math
 
 namespace time_nanos_util {
@@ -620,6 +637,45 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
     } else {
         return (flags & ~(mask << shift)) | ((bits & mask) << shift);
     }
+}
+
+template <std::size_t Bits> struct hashMixImpl;
+
+template <> struct hashMixImpl<64> {
+    constexpr static std::uint64_t fn(std::uint64_t x) noexcept {
+        std::uint64_t const m = (std::uint64_t(0xe9846af) << 32) + 0x9b1a615d;
+
+        x ^= x >> 32;
+        x *= m;
+        x ^= x >> 32;
+        x *= m;
+        x ^= x >> 28;
+
+        return x;
+    }
+};
+
+template <> struct hashMixImpl<32> {
+    constexpr static std::uint32_t fn(std::uint32_t x) noexcept {
+        std::uint32_t const m1 = 0x21f0aaad;
+        std::uint32_t const m2 = 0x735a2d97;
+
+        x ^= x >> 16;
+        x *= m1;
+        x ^= x >> 15;
+        x *= m2;
+        x ^= x >> 15;
+
+        return x;
+    }
+};
+
+constexpr static std::size_t hashMix(std::size_t v) noexcept {
+    return hashMixImpl<sizeof(std::size_t) * CHAR_BIT>::fn(v);
+}
+
+template <class T> constexpr void hashCombine(std::size_t &seed, const T& v) noexcept {
+    seed = hashMix(seed + 0x9e3779b9 + std::hash<T>()(v));
 }
 
 } // namespace dxfcpp
