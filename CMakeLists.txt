@@ -135,6 +135,7 @@ set(dxFeedNativeAPIEventCandleSources
         src/event/candle/CandleExchange.cpp
         src/event/candle/CandlePeriod.cpp
         src/event/candle/CandlePrice.cpp
+        src/event/candle/CandlePriceLevel.cpp
         src/event/candle/CandleType.cpp
         )
 
