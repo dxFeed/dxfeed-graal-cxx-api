@@ -26,6 +26,7 @@
 #include "api/ApiModule.hpp"
 #include "entity/EntityModule.hpp"
 #include "event/EventModule.hpp"
+#include "schedule/ScheduleModule.hpp"
 #include "symbols/StringSymbol.hpp"
 #include "symbols/SymbolWrapper.hpp"
 #include "system/System.hpp"

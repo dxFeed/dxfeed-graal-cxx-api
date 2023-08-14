@@ -137,6 +137,8 @@ set(dxFeedNativeAPIEventCandleSources
         src/event/candle/CandlePrice.cpp
         src/event/candle/CandlePriceLevel.cpp
         src/event/candle/CandleType.cpp
+        src/event/candle/CandleSession.cpp
+        src/event/candle/CandleSymbol.cpp
         )
 
 set(dxFeedNativeAPIEventMarketSources
@@ -172,6 +174,11 @@ set(dxFeedNativeAPIEventOptionSources
         src/event/option/Series.cpp
         )
 
+set(dxFeedNativeAPIScheduleSources
+        src/schedule/SessionFilter.cpp
+        src/schedule/SessionType.cpp
+        )
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_MACOSX_RPATH ON)
     set(CMAKE_SKIP_BUILD_RPATH ON)
@@ -199,6 +206,7 @@ add_library(${PROJECT_NAME}_static STATIC
         ${dxFeedNativeAPIEventCandleSources}
         ${dxFeedNativeAPIEventMarketSources}
         ${dxFeedNativeAPIEventOptionSources}
+        ${dxFeedNativeAPIScheduleSources}
         src/api.cpp
         )
 
@@ -214,6 +222,7 @@ add_library(${PROJECT_NAME} SHARED
         ${dxFeedNativeAPIEventCandleSources}
         ${dxFeedNativeAPIEventMarketSources}
         ${dxFeedNativeAPIEventOptionSources}
+        ${dxFeedNativeAPIScheduleSources}
         src/api.cpp
         )
 

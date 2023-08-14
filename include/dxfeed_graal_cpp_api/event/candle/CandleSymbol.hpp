@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+#include "../../symbols/SymbolWrapper.hpp"
+
 #include "CandleAlignment.hpp"
 #include "CandleExchange.hpp"
 #include "CandlePeriod.hpp"
@@ -16,12 +18,18 @@
 #include <variant>
 #include <unordered_map>
 #include <string>
+#include <cstdint>
+#include <memory>
+#include <utility>
 
 namespace dxfcpp {
 
+using CandleSymbolAttributeVariant =
+    std::variant<CandleExchange, CandlePrice, CandleSession, CandlePeriod, CandleAlignment, CandlePriceLevel>;
+
+struct SymbolWrapper;
+
 struct DXFCPP_EXPORT CandleSymbol {
-    using CandleSymbolAttributeT =
-        std::variant<CandleExchange, CandlePrice, CandleSession, CandlePeriod, CandleAlignment, CandlePriceLevel>;
 
   private:
 
@@ -34,6 +42,12 @@ struct DXFCPP_EXPORT CandleSymbol {
     CandleSymbol() noexcept = default;
 
     virtual ~CandleSymbol() = default;
+
+    virtual void *toGraal() const noexcept;
+
+    static void freeGraal(void *graal) noexcept;
+
+    static CandleSymbol fromGraal(void *graal) noexcept;
 };
 
 } // namespace dxfcpp
