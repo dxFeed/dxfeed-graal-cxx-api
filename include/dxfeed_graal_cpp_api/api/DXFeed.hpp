@@ -43,7 +43,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
   public:
-    virtual ~DXFeed() noexcept {
+    ~DXFeed() noexcept override {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeed{" + handler_.toString() + "}::~DXFeed()");
         }

@@ -11,6 +11,7 @@
 #include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandler.hpp"
 #include "DXFeed.hpp"
+#include "DXPublisher.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -22,10 +23,7 @@
 
 namespace dxfcpp {
 
-struct DXFCPP_EXPORT DXPublisher : SharedEntity {
-    virtual ~DXPublisher() = default;
-};
-
+struct DXPublisher;
 struct DXFeed;
 
 /**
@@ -489,7 +487,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     }
 
   public:
-    virtual ~DXEndpoint() {
+    ~DXEndpoint() noexcept override {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXEndpoint{" + handler_.toString() + "}::~DXEndpoint()");
         }
