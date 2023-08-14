@@ -16,7 +16,9 @@ project(dxFeedGraalCxxApi)
 set(DXFCXX_VERSION "0.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CXX_EXTENSIONS OFF)
 set(C_EXTENSIONS OFF)
 
@@ -128,6 +130,18 @@ set(dxFeedNativeAPIEventSources
         src/event/EventMapper.cpp
         )
 
+set(dxFeedNativeAPIEventCandleSources
+        src/event/candle/Candle.cpp
+        src/event/candle/CandleAlignment.cpp
+        src/event/candle/CandleExchange.cpp
+        src/event/candle/CandlePeriod.cpp
+        src/event/candle/CandlePrice.cpp
+        src/event/candle/CandlePriceLevel.cpp
+        src/event/candle/CandleType.cpp
+        src/event/candle/CandleSession.cpp
+        src/event/candle/CandleSymbol.cpp
+        )
+
 set(dxFeedNativeAPIEventMarketSources
         src/event/market/AnalyticOrder.cpp
         src/event/market/Direction.cpp
@@ -161,6 +175,11 @@ set(dxFeedNativeAPIEventOptionSources
         src/event/option/Series.cpp
         )
 
+set(dxFeedNativeAPIScheduleSources
+        src/schedule/SessionFilter.cpp
+        src/schedule/SessionType.cpp
+        )
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_MACOSX_RPATH ON)
     set(CMAKE_SKIP_BUILD_RPATH ON)
@@ -185,8 +204,10 @@ add_library(${PROJECT_NAME}_static STATIC
         ${dxFeedNativeAPISymbolsSources}
         ${dxFeedNativeAPISystemSources}
         ${dxFeedNativeAPIEventSources}
+        ${dxFeedNativeAPIEventCandleSources}
         ${dxFeedNativeAPIEventMarketSources}
         ${dxFeedNativeAPIEventOptionSources}
+        ${dxFeedNativeAPIScheduleSources}
         src/api.cpp
         )
 
@@ -199,8 +220,10 @@ add_library(${PROJECT_NAME} SHARED
         ${dxFeedNativeAPISymbolsSources}
         ${dxFeedNativeAPISystemSources}
         ${dxFeedNativeAPIEventSources}
+        ${dxFeedNativeAPIEventCandleSources}
         ${dxFeedNativeAPIEventMarketSources}
         ${dxFeedNativeAPIEventOptionSources}
+        ${dxFeedNativeAPIScheduleSources}
         src/api.cpp
         )
 

@@ -18,11 +18,11 @@
 
 namespace dxfcpp {
 
-std::string toString(bool b) {
+std::string toString(bool b) noexcept {
     return b ? "true" : "false";
 }
 
-std::string toString(const char *chars) {
+std::string toString(const char *chars) noexcept {
     if (chars == nullptr) {
         return "";
     }

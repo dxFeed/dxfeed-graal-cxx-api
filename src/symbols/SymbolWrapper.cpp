@@ -24,7 +24,7 @@ void SymbolWrapper::freeGraal(void *graal) noexcept {
         break;
 
     case CANDLE:
-        // TODO: implement
+        CandleSymbol::freeGraal(graal);
 
         break;
 
@@ -59,9 +59,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graal) noexcept {
         return StringSymbol::fromGraal(graal);
 
     case CANDLE:
-        // TODO: implement
-
-        return {};
+        return CandleSymbol::fromGraal(graal);
 
     case WILDCARD:
         return WildcardSymbol::fromGraal(graal);

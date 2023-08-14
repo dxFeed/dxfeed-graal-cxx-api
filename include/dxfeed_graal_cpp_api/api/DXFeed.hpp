@@ -11,7 +11,6 @@
 #include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandler.hpp"
 
-#include "../event/DXEvent.hpp"
 #include "DXFeedSubscription.hpp"
 
 #include <memory>

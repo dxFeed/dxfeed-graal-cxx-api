@@ -5,13 +5,15 @@
 
 #include "../internal/Conf.hpp"
 
-#include "../event/DXEvent.hpp"
+#include "../entity/EntityModule.hpp"
+#include "../event/EventType.hpp"
+#include "../event/EventTypeEnum.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/JavaObjectHandler.hpp"
 #include "../symbols/StringSymbol.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-#include "dxfeed_graal_cpp_api/api/osub/WildcardSymbol.hpp"
+#include "osub/WildcardSymbol.hpp"
 
 #if __cpp_lib_parallel_algorithm
 #    include <execution>

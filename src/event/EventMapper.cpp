@@ -44,6 +44,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
 
             break;
         case DXFG_EVENT_CANDLE:
+            result[i] = Candle::fromGraalNative(e);
+
             break;
         case DXFG_EVENT_DAILY_CANDLE:
             break;

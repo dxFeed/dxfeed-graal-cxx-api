@@ -14,6 +14,7 @@
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
 #include "../api/osub/WildcardSymbol.hpp"
+#include "../event/candle/CandleSymbol.hpp"
 #include "../internal/Common.hpp"
 #include "StringSymbol.hpp"
 
@@ -28,7 +29,7 @@ template <typename T>
 concept ConvertibleToSymbolWrapper =
     ConvertibleToStringSymbol<std::decay_t<T>> || std::is_same_v<std::decay_t<T>, WildcardSymbol> ||
     std::is_same_v<std::decay_t<T>, IndexedEventSubscriptionSymbol> ||
-    std::is_same_v<std::decay_t<T>, TimeSeriesSubscriptionSymbol>;
+    std::is_same_v<std::decay_t<T>, TimeSeriesSubscriptionSymbol> || std::is_same_v<std::decay_t<T>, CandleSymbol>;
 
 /**
  * A concept that defines a collection of wrapped or wrapping symbols.
@@ -55,7 +56,7 @@ concept ConvertibleToSymbolWrapperCollection =
  */
 struct DXFCPP_EXPORT SymbolWrapper final {
     using DataType = typename std::variant<WildcardSymbol, StringSymbol, IndexedEventSubscriptionSymbol,
-                                           TimeSeriesSubscriptionSymbol>;
+                                           TimeSeriesSubscriptionSymbol, CandleSymbol>;
 
   private:
     DataType data_;
@@ -141,6 +142,19 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         }
 
         data_ = timeSeriesSubscriptionSymbol;
+    }
+
+    /**
+     * Constructor for CandleSymbol.
+     *
+     * @param candleSymbol The CandleSymbol
+     */
+    SymbolWrapper(const CandleSymbol &candleSymbol) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("SymbolWrapper(candleSymbol = " + toStringAny(candleSymbol) + ")");
+        }
+
+        data_ = candleSymbol;
     }
 
     static void freeGraal(void *graal) noexcept;
@@ -252,7 +266,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
-     * @return WildcardSymbol (optional) or nullopt if current SymbolWrapper doesn't hold WildcardSymbol
+     * @return WildcardSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold WildcardSymbol
      */
     std::optional<WildcardSymbol> asWildcardSymbol() const noexcept {
         return isWildcardSymbol() ? std::make_optional(WildcardSymbol::ALL) : std::nullopt;
@@ -266,7 +280,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
-     * @return IndexedEventSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold
+     * @return IndexedEventSubscriptionSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
      * IndexedEventSubscriptionSymbol
      */
     std::optional<IndexedEventSubscriptionSymbol> asIndexedEventSubscriptionSymbol() const noexcept {
@@ -283,13 +297,28 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
-     * @return TimeSeriesSubscriptionSymbol (optional) or nullopt if current SymbolWrapper doesn't hold
+     * @return TimeSeriesSubscriptionSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
      * TimeSeriesSubscriptionSymbol
      */
     std::optional<TimeSeriesSubscriptionSymbol> asTimeSeriesSubscriptionSymbol() const noexcept {
         return isTimeSeriesSubscriptionSymbol()
                    ? std::make_optional<TimeSeriesSubscriptionSymbol>(std::get<TimeSeriesSubscriptionSymbol>(data_))
                    : std::nullopt;
+    }
+
+    /**
+     * @return `true` if current SymbolWrapper holds a CandleSymbol
+     */
+    bool isCandleSymbol() const noexcept {
+        return std::holds_alternative<CandleSymbol>(data_);
+    }
+
+    /**
+     * @return CandleSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
+     * CandleSymbol
+     */
+    std::optional<CandleSymbol> asCandleSymbol() const noexcept {
+        return isCandleSymbol() ? std::make_optional<CandleSymbol>(std::get<CandleSymbol>(data_)) : std::nullopt;
     }
 
     const DataType &getData() const noexcept {

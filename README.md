@@ -161,12 +161,20 @@ Find useful information in our self-service dxFeed Knowledge Base or .NET API do
 
 [Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=52685)
 
+### Linux
+
+gcc 12.1+
+
+### MacOS
+
+Xcode 14.3+
+
 ## Installation
 
 Examples of how to install the library can be found [here](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples).
 
 The API is delivered as a dynamic library (`dxFeedGraalCxxApi.so|dll|dylib`) and a static one (`dxFeedGraalCxxApi.a|lib`).
-Also it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH`.
+Also, it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH`.
 
 ## Usage
 
@@ -281,7 +289,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 - [Candle](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html) - event with open, high, low, and
   close prices and other information for a specific period
   - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+  - [x] dxFeed Graal C++ API
 - [Quote](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Quote.html) is a snapshot of the best bid and
   ask prices and other fields that change with each quote
   - [ ] dxFeed Graal C API
@@ -344,7 +352,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   with [DXFeedSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html) class to
   subscribe for [Candle](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html) events
   - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+  - [x] dxFeed Graal C++ API
 
 ### Subscriptions & Models
 

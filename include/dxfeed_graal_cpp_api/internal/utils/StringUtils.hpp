@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <string>
 #include <thread>
+#include <locale>
 
 namespace dxfcpp {
 
@@ -15,9 +16,9 @@ struct DXFCPP_EXPORT String {
     inline static const std::string EMPTY{};
 };
 
-DXFCPP_EXPORT std::string toString(bool b);
+DXFCPP_EXPORT std::string toString(bool b) noexcept;
 
-DXFCPP_EXPORT std::string toString(const char *chars);
+DXFCPP_EXPORT std::string toString(const char *chars) noexcept;
 
 DXFCPP_EXPORT std::string toString(std::thread::id theadId);
 
@@ -83,6 +84,41 @@ DXFCPP_EXPORT std::string encodeChar(std::int16_t c);
 
 inline std::string encodeChar(char c) {
     return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c)));
+}
+
+namespace detail {
+
+class IsIEqual {
+    std::locale locale_;
+
+  public:
+    explicit IsIEqual(const std::locale &locale = std::locale()) : locale_{locale} {
+    }
+
+    template <typename T, typename U> bool operator()(const T &t, const U &u) const {
+        return std::tolower<T>(t, locale_) == std::tolower<U>(u, locale_);
+    }
+};
+
+} // namespace detail
+
+template <typename Range1, typename Range2, typename Predicate>
+inline bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
+    auto firstIt = std::begin(first);
+    auto secondIt = std::begin(second);
+
+    for (; firstIt != std::end(first) && secondIt != std::end(second); ++firstIt, secondIt++) {
+        if (!cmp(*firstIt, *secondIt)) {
+            return false;
+        }
+    }
+
+    return (secondIt == std::end(second)) && (firstIt == std::end(first));
+}
+
+template <typename Range1, typename Range2>
+inline bool iEquals(const Range1 &first, const Range2 &second, const std::locale &locale = std::locale()) {
+    return equals(first, second, detail::IsIEqual(locale));
 }
 
 } // namespace dxfcpp

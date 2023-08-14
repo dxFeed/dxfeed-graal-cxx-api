@@ -50,14 +50,27 @@ jobs:
     strategy:
       matrix:
         #        os: [windows-latest, macos-latest, ubuntu-latest]
-        os: [ windows-latest, macos-latest, ubuntu-22.04 ]
+        os: [ windows-latest, macos-13, ubuntu-22.04 ]
         #os: [ ubuntu-22.04 ]
         buildType: [ Release, Debug ]
         #buildType: [ Release ]
     runs-on: ${{ matrix.os }}
+    env:
+      XCODE_VERSION: '15.0'
+      GCC_VERSION: '12'
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Select Xcode version
+        if: ${{ contains(matrix.os, 'macos') }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{env.XCODE_VERSION}}.app/Contents/Developer'
+
+      - name: Select gcc version
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: |
+          export CC=gcc-${{env.GCC_VERSION}}
+          export CXX=g++-${{env.GCC_VERSION}}
 
       - name: Prepare build
         run: |
