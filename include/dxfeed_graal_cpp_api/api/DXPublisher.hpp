@@ -56,7 +56,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     static std::shared_ptr<DXPublisher> getInstance() noexcept;
 
 
-    virtual void publishEvents() noexcept;
+    virtual void publishEvents() noexcept {}
 
     std::string toString() const noexcept override;
 };
