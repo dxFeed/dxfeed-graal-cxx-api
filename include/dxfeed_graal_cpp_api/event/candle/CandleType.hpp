@@ -102,12 +102,12 @@ struct DXFCPP_EXPORT CandleType {
      */
     static const CandleType PRICE_RENKO;
 
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>> ALL;
+
   private:
     std::string name_{};
     std::string string_{};
     std::int64_t periodIntervalMillis_{};
-
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>> BY_STRING_;
 
     CandleType(std::string name, std::string string, std::int64_t periodIntervalMillis) noexcept
         : name_{std::move(name)}, string_{std::move(string)}, periodIntervalMillis_{periodIntervalMillis} {
@@ -168,13 +168,13 @@ struct DXFCPP_EXPORT CandleType {
             return std::nullopt;
         }
 
-        auto result = BY_STRING_.find(s);
+        auto result = ALL.find(s);
 
-        if (result != BY_STRING_.end()) {
+        if (result != ALL.end()) {
             return result->second;
         }
 
-        for (const auto &type : BY_STRING_) {
+        for (const auto &type : ALL) {
             const auto &name = type.second.get().getName();
 
             // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc

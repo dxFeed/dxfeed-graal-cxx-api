@@ -22,7 +22,7 @@ const CandleType CandleType::PRICE("PRICE", "p", 0LL);
 const CandleType CandleType::PRICE_MOMENTUM("PRICE_MOMENTUM", "pm", 0LL);
 const CandleType CandleType::PRICE_RENKO("PRICE_RENKO", "pr", 0LL);
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandleType>> CandleType::BY_STRING_{
+const std::unordered_map<std::string, std::reference_wrapper<const CandleType>> CandleType::ALL{
     {CandleType::TICK.toString(), std::cref(CandleType::TICK)},
     {CandleType::SECOND.toString(), std::cref(CandleType::SECOND)},
     {CandleType::MINUTE.toString(), std::cref(CandleType::MINUTE)},
