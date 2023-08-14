@@ -9,4 +9,5 @@
 #include "DXEndpoint.hpp"
 #include "DXFeed.hpp"
 #include "DXFeedSubscription.hpp"
+#include "DXPublisher.hpp"
 #include "FilteredSubscriptionSymbol.hpp"

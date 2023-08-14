@@ -105,6 +105,7 @@ set(dxFeedNativeAPIAPISources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
+        src/api/DXPublisher.cpp
         )
 
 set(dxFeedNativeAPIAPIOsubSources

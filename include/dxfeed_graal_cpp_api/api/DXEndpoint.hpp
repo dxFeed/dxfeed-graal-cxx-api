@@ -812,10 +812,10 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      */
     std::shared_ptr<DXFeed> getFeed();
 
-    // TODO: implement
-    std::shared_ptr<DXPublisher> getPublisher() {
-        return {};
-    }
+    /**
+     * @return The publisher that is associated with this endpoint.
+     */
+    std::shared_ptr<DXPublisher> getPublisher();
 
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.
