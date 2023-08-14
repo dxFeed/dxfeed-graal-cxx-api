@@ -17,12 +17,17 @@ const CandlePrice CandlePrice::DEFAULT = LAST;
 
 const std::string CandlePrice::ATTRIBUTE_KEY{"price"};
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>> CandlePrice::BY_STRING_{
+const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>> CandlePrice::BY_STRING{
     {CandlePrice::LAST.toString(), std::cref(CandlePrice::LAST)},
     {CandlePrice::BID.toString(), std::cref(CandlePrice::BID)},
     {CandlePrice::ASK.toString(), std::cref(CandlePrice::ASK)},
     {CandlePrice::MARK.toString(), std::cref(CandlePrice::MARK)},
     {CandlePrice::SETTLEMENT.toString(), std::cref(CandlePrice::SETTLEMENT)},
+};
+
+const std::vector<std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES{
+    std::cref(CandlePrice::LAST), std::cref(CandlePrice::BID),        std::cref(CandlePrice::ASK),
+    std::cref(CandlePrice::MARK), std::cref(CandlePrice::SETTLEMENT),
 };
 
 } // namespace dxfcpp

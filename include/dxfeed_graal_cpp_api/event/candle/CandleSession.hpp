@@ -14,6 +14,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace dxfcpp {
 
@@ -56,8 +57,10 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
      */
     static const std::string ATTRIBUTE_KEY;
 
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> BY_STRING;
+    static const std::vector<std::reference_wrapper<const CandleSession>> VALUES;
+
   private:
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> BY_STRING_;
 
     SessionFilter sessionFilter_;
     std::string string_;
@@ -119,17 +122,17 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
             return std::nullopt;
         }
 
-        auto found = BY_STRING_.find(s);
+        auto found = BY_STRING.find(s);
 
-        if (found != BY_STRING_.end()) {
+        if (found != BY_STRING.end()) {
             return found->second;
         }
 
-        for (const auto &stringAndSession : BY_STRING_) {
-            const auto &price = stringAndSession.first;
+        for (const auto &sessionRef : VALUES) {
+            const auto& sessionStr = sessionRef.get().toString();
 
-            if (price.length() >= n && iEquals(price.substr(0, n), s)) {
-                return stringAndSession.second;
+            if (sessionStr.length() >= n && iEquals(sessionStr.substr(0, n), s)) {
+                return sessionRef;
             }
         }
 

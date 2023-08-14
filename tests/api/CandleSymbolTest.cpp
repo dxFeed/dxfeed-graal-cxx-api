@@ -41,8 +41,10 @@ TEST_CASE("Candle Periods") {
     std::unordered_set set = std::unordered_set<CandlePeriod>{};
 
     for (double val = 0; val <= 5; val += 0.25) {
-        for (const auto &stringAndCandleType : CandleType::ALL) {
-            CandlePeriod p = CandlePeriod::valueOf(val, stringAndCandleType.second);
+        for (const auto &candleTypeRef : CandleType::VALUES) {
+            const auto &type = candleTypeRef.get();
+
+            CandlePeriod p = CandlePeriod::valueOf(val, type);
 
             REQUIRE(set.emplace(p).second == true); //"All should be different"
 
@@ -50,7 +52,11 @@ TEST_CASE("Candle Periods") {
 
             REQUIRE(CandlePeriodOpt{p} == CandlePeriod::parse(s1));
 
-            auto s2 = std::to_string(val) + stringAndCandleType.second.get().getName();
+            auto s2 = std::to_string(val) + type.getName();
+
+            INFO("val = ", val, ", type.getName() = ", type.getName(), ", type.toString() = ", type.toString(),
+                 ", p.toString() = ", p.toString(), ", s2 = ", s2,
+                 ", CandlePeriod::parse(s2)->toString() = ", CandlePeriod::parse(s2)->toString());
 
             REQUIRE(CandlePeriodOpt{p} == CandlePeriod::parse(s2));
         }

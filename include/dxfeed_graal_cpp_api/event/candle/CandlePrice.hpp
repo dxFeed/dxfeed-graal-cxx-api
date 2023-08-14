@@ -12,6 +12,7 @@
 #include <string>
 #include <type_traits>
 #include <unordered_map>
+#include <vector>
 
 namespace dxfcpp {
 
@@ -68,8 +69,10 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      */
     static const std::string ATTRIBUTE_KEY;
 
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>> BY_STRING;
+    static const std::vector<std::reference_wrapper<const CandlePrice>> VALUES;
+
   private:
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>> BY_STRING_;
 
     std::string string_;
 
@@ -121,17 +124,17 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
             return std::nullopt;
         }
 
-        auto found = BY_STRING_.find(s);
+        auto found = BY_STRING.find(s);
 
-        if (found != BY_STRING_.end()) {
+        if (found != BY_STRING.end()) {
             return found->second;
         }
 
-        for (const auto &stringAndPrice : BY_STRING_) {
-            const auto &price = stringAndPrice.first;
+        for (const auto &priceRef : VALUES) {
+            const auto &priceStr = priceRef.get().toString();
 
-            if (price.length() >= n && iEquals(price.substr(0, n), s)) {
-                return stringAndPrice.second;
+            if (priceStr.length() >= n && iEquals(priceStr.substr(0, n), s)) {
+                return priceRef;
             }
         }
 

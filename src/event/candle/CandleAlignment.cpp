@@ -13,9 +13,14 @@ const CandleAlignment CandleAlignment::SESSION{"s"};
 const CandleAlignment CandleAlignment::DEFAULT = MIDNIGHT;
 const std::string CandleAlignment::ATTRIBUTE_KEY{"a"};
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>> CandleAlignment::BY_STRING_{
-    {MIDNIGHT.toString(), std::cref(MIDNIGHT)},
-    {SESSION.toString(), std::cref(SESSION)},
+const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>> CandleAlignment::BY_STRING{
+    {CandleAlignment::MIDNIGHT.toString(), std::cref(CandleAlignment::MIDNIGHT)},
+    {CandleAlignment::SESSION.toString(), std::cref(CandleAlignment::SESSION)},
+};
+
+const std::vector<std::reference_wrapper<const CandleAlignment>> CandleAlignment::VALUES{
+    std::cref(CandleAlignment::MIDNIGHT),
+    std::cref(CandleAlignment::SESSION),
 };
 
 } // namespace dxfcpp

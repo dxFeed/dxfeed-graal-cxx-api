@@ -13,6 +13,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace dxfcpp {
 
@@ -102,7 +103,8 @@ struct DXFCPP_EXPORT CandleType {
      */
     static const CandleType PRICE_RENKO;
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>> ALL;
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>> BY_STRING;
+    static const std::vector<std::reference_wrapper<const CandleType>> VALUES;
 
   private:
     std::string name_{};
@@ -168,23 +170,23 @@ struct DXFCPP_EXPORT CandleType {
             return std::nullopt;
         }
 
-        auto result = ALL.find(s);
+        auto result = BY_STRING.find(s);
 
-        if (result != ALL.end()) {
+        if (result != BY_STRING.end()) {
             return result->second;
         }
 
-        for (const auto &type : ALL) {
-            const auto &name = type.second.get().getName();
+        for (const auto &typeRef : VALUES) {
+            const auto &name = typeRef.get().getName();
 
             // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc
             if (name.length() >= n && iEquals(name.substr(0, n), s)) {
-                return type.second;
+                return typeRef;
             }
 
             // Ticks, Minutes, Seconds, etc
             if (s.ends_with("s") && iEquals(name, s.substr(0, n - 1))) {
-                return type.second;
+                return typeRef;
             }
         }
 

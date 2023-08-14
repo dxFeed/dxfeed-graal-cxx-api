@@ -12,6 +12,7 @@
 #include <string>
 #include <type_traits>
 #include <unordered_map>
+#include <vector>
 
 namespace dxfcpp {
 
@@ -51,8 +52,10 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      */
     static const std::string ATTRIBUTE_KEY;
 
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>> BY_STRING;
+    static const std::vector<std::reference_wrapper<const CandleAlignment>> VALUES;
+
   private:
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>> BY_STRING_;
 
     std::string string_{};
 
@@ -95,15 +98,17 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @return The candle alignment (reference) or std::nullopt if there is no supported attribute's value.
      */
     static std::optional<std::reference_wrapper<const CandleAlignment>> parse(const std::string &s) noexcept {
-        auto found = BY_STRING_.find(s);
+        auto found = BY_STRING.find(s);
 
-        if (found != BY_STRING_.end()) {
+        if (found != BY_STRING.end()) {
             return found->second;
         }
 
-        for (const auto &a : BY_STRING_) {
-            if (iEquals(a.first, s)) {
-                return a.second;
+        for (const auto &alignmentRef : VALUES) {
+            const auto& alignmentStr = alignmentRef.get().toString();
+
+            if (iEquals(alignmentStr, s)) {
+                return alignmentRef;
             }
         }
 
