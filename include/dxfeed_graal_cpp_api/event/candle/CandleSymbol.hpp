@@ -57,25 +57,25 @@ struct SymbolWrapper;
  *     not be available on the demo system which is limited to a subset of symbols and aggregation periods.
  * <li>"price" key corresponds to {@link #getPrice() price} &mdash; price type attribute of this symbol.
  *     The {@link CandlePrice} enum defines possible values with {@link CandlePrice#LAST LAST} being default.
- *     For legacy backwards-compatibility purposes, most of the price values cannot be abbreviated, so a one-minute candle
- *     of "EUR/USD" bid price shall be specified with "EUR/USD{=m,price=bid}" candle symbol string. However,
- *     the {@link CandlePrice#SETTLEMENT SETTLEMENT} can be abbreviated to "s", so a daily candle on
+ *     For legacy backwards-compatibility purposes, most of the price values cannot be abbreviated, so a one-minute
+ * candle of "EUR/USD" bid price shall be specified with "EUR/USD{=m,price=bid}" candle symbol string. However, the
+ * {@link CandlePrice#SETTLEMENT SETTLEMENT} can be abbreviated to "s", so a daily candle on
  *     "/ES" futures settlement prices can be specified with "/ES{=d,price=s}" string.
- * <li>"tho" key with a value of "true" corresponds to {@link #getSession() session} set to {@link CandleSession#REGULAR}
- *     which limits the candle to trading hours only, so a 133 tick candles on "GOOG" base symbol collected over
- *     trading hours only can be specified with "GOOG{=133t,tho=true}" string. Note, that the default daily candles for
- *     US equities are special for historical reasons and correspond to the way US equity exchange report their
+ * <li>"tho" key with a value of "true" corresponds to {@link #getSession() session} set to {@link
+ * CandleSession#REGULAR} which limits the candle to trading hours only, so a 133 tick candles on "GOOG" base symbol
+ * collected over trading hours only can be specified with "GOOG{=133t,tho=true}" string. Note, that the default daily
+ * candles for US equities are special for historical reasons and correspond to the way US equity exchange report their
  *     daily summary data. The volume the US equity default daily candle corresponds to the total daily traded volume,
  *     while open, high, low, and close correspond to the regular trading hours only.
  * <li>"a" key corresponds to {@link #getAlignment() alignment} &mdash; alignment attribute of this symbol.
- *     The {@link CandleAlignment} enum defines possible values with {@link CandleAlignment#MIDNIGHT MIDNIGHT} being default.
- *     The alignment values can be abbreviated to the first letter. So, a 1 hour candle on a symbol "AAPL" that starts
- *     at the regular trading session at 9:30 am ET can be specified with "AAPL{=h,a=s,tho=true}". Contrast that
- *     to the "AAPL{=h,tho=true}" candle that is aligned at midnight and thus starts at 9:00 am.
- * <li>"pl" key corresponds to {@link #getPriceLevel() price level} &mdash; price level attribute of this symbol.
- *     The {@link CandlePriceLevel} defines additional axis to split candles within particular price corridor in
- *     addition to {@link CandlePeriod} attribute with the default value {@code Double.NaN}. So a one-minute candles
- *     of "AAPL" with price level 0.1 shall be specified with "AAPL{=m,pl=0.1}".
+ *     The {@link CandleAlignment} enum defines possible values with {@link CandleAlignment#MIDNIGHT MIDNIGHT} being
+ * default. The alignment values can be abbreviated to the first letter. So, a 1 hour candle on a symbol "AAPL" that
+ * starts at the regular trading session at 9:30 am ET can be specified with "AAPL{=h,a=s,tho=true}". Contrast that to
+ * the "AAPL{=h,tho=true}" candle that is aligned at midnight and thus starts at 9:00 am. <li>"pl" key corresponds to
+ * {@link #getPriceLevel() price level} &mdash; price level attribute of this symbol. The {@link CandlePriceLevel}
+ * defines additional axis to split candles within particular price corridor in addition to {@link CandlePeriod}
+ * attribute with the default value {@code Double.NaN}. So a one-minute candles of "AAPL" with price level 0.1 shall be
+ * specified with "AAPL{=m,pl=0.1}".
  * </ul>
  *
  * Keys in the candle symbol are case-sensitive, while values are not. The {@link #valueOf(String)} method parses
@@ -123,30 +123,30 @@ struct DXFCPP_EXPORT CandleSymbol {
         return symbol;
     }
 
-    void initTransientFields() noexcept {
+    void initTransientFields(bool force = false) noexcept {
         baseSymbol_ = MarketEventSymbols::getBaseSymbol(symbol_);
 
-        if (!exchange_) {
+        if (!exchange_ || force) {
             exchange_.emplace(CandleExchange::getAttributeForSymbol(symbol_));
         }
 
-        if (!price_) {
+        if (!price_ || force) {
             price_ = CandlePrice::getAttributeForSymbol(symbol_);
         }
 
-        if (!session_) {
+        if (!session_ || force) {
             session_ = CandleSession::getAttributeForSymbol(symbol_);
         }
 
-        if (!period_) {
+        if (!period_ || force) {
             period_ = CandlePeriod::getAttributeForSymbol(symbol_);
         }
 
-        if (!alignment_) {
+        if (!alignment_ || force) {
             alignment_ = CandleAlignment::getAttributeForSymbol(symbol_);
         }
 
-        if (!priceLevel_) {
+        if (!priceLevel_ || force) {
             priceLevel_ = CandlePriceLevel::getAttributeForSymbol(symbol_);
         }
     }
@@ -246,6 +246,14 @@ struct DXFCPP_EXPORT CandleSymbol {
         return symbol_ == candleSymbol.symbol_;
     }
 
+    bool operator<(const CandleSymbol &candleSymbol) const noexcept {
+        return symbol_ < candleSymbol.symbol_;
+    }
+
+    CandleSymbol(const CandleSymbol &candleSymbol) noexcept;
+    CandleSymbol(CandleSymbol &&candleSymbol) noexcept;
+    CandleSymbol &operator=(const CandleSymbol &candleSymbol) noexcept;
+    CandleSymbol &operator=(CandleSymbol &&candleSymbol) noexcept;
     CandleSymbol() noexcept = default;
 
     virtual ~CandleSymbol() = default;
@@ -289,6 +297,21 @@ struct DXFCPP_EXPORT CandleSymbol {
         return {std::move(symbol), attributes};
     }
 };
+
+inline namespace literals {
+
+/**
+ * String literal that helps to construct CandleSymbol from a char array.
+ *
+ * @param string The char array
+ * @param length Tha char array's length
+ * @return Wrapped string view built on char array
+ */
+inline CandleSymbol operator""_c(const char *string, size_t length) noexcept {
+    return CandleSymbol::valueOf(std::string{string, length});
+}
+
+} // namespace literals
 
 } // namespace dxfcpp
 

@@ -47,4 +47,36 @@ CandleSymbol CandleSymbol::fromGraal(void *graal) noexcept {
     return CandleSymbol{graalSymbol->symbol};
 }
 
+CandleSymbol::CandleSymbol(const CandleSymbol &candleSymbol) noexcept {
+    symbol_ = candleSymbol.symbol_;
+    initTransientFields(true);
 }
+
+CandleSymbol::CandleSymbol(CandleSymbol &&candleSymbol) noexcept {
+    symbol_ = std::move(candleSymbol.symbol_);
+    initTransientFields(true);
+}
+
+CandleSymbol &CandleSymbol::operator=(const CandleSymbol &candleSymbol) noexcept {
+    if (this == &candleSymbol) {
+        return *this;
+    }
+
+    symbol_ = candleSymbol.symbol_;
+    initTransientFields(true);
+
+    return *this;
+}
+
+CandleSymbol &CandleSymbol::operator=(CandleSymbol &&candleSymbol) noexcept {
+    if (this == &candleSymbol) {
+        return *this;
+    }
+
+    symbol_ = std::move(candleSymbol.symbol_);
+    initTransientFields(true);
+
+    return *this;
+}
+
+} // namespace dxfcpp
