@@ -13,14 +13,9 @@ void *CandleSymbol::toGraal() const noexcept {
         Debugger::debug("CandleSymbol::toGraal()");
     }
 
-//    auto *graalSymbol = new (std::nothrow)
-//        dxfg_indexed_event_subscription_symbol_t{{INDEXED_EVENT_SUBSCRIPTION},
-//                                                 dxfcpp::bit_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()),
-//                                                 dxfcpp::bit_cast<dxfg_indexed_event_source_t *>(source_.toGraal())};
-//
-//    return dxfcpp::bit_cast<void *>(graalSymbol);
+    auto *graalSymbol = new (std::nothrow) dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_)};
 
-    return nullptr;
+    return dxfcpp::bit_cast<void *>(graalSymbol);
 }
 
 void CandleSymbol::freeGraal(void *graal) noexcept {
@@ -32,12 +27,10 @@ void CandleSymbol::freeGraal(void *graal) noexcept {
         return;
     }
 
-//    auto *graalSymbol = dxfcpp::bit_cast<dxfg_indexed_event_subscription_symbol_t *>(graal);
-//
-//    SymbolWrapper::freeGraal(graalSymbol->symbol);
-//    IndexedEventSource::freeGraal(graalSymbol->source);
-//
-//    delete graalSymbol;
+    auto *graalSymbol = dxfcpp::bit_cast<dxfg_candle_symbol_t *>(graal);
+
+    delete[] graalSymbol->symbol;
+    delete graalSymbol;
 }
 
 CandleSymbol CandleSymbol::fromGraal(void *graal) noexcept {
@@ -49,11 +42,9 @@ CandleSymbol CandleSymbol::fromGraal(void *graal) noexcept {
         return {};
     }
 
-//    auto *graalSymbol = dxfcpp::bit_cast<dxfg_indexed_event_subscription_symbol_t *>(graal);
-//
-//    return {SymbolWrapper::fromGraal(graalSymbol->symbol), IndexedEventSource::fromGraal(graalSymbol->source)};
+    auto *graalSymbol = dxfcpp::bit_cast<dxfg_candle_symbol_t *>(graal);
 
-    return {};
+    return CandleSymbol{graalSymbol->symbol};
 }
 
 }

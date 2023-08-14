@@ -68,6 +68,31 @@ struct DXFCPP_EXPORT MarketEventSymbols {
     }
 
     /**
+     * Returns base symbol without exchange code and attributes.
+     *
+     * @param symbol symbol.
+     * @return base symbol without exchange code and attributes.
+     */
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string getBaseSymbol(const std::string &symbol) noexcept {
+        return getBaseSymbolInternal(symbol, getLengthWithoutAttributesInternal(symbol));
+    }
+
+    /**
+     * Changes base symbol while leaving exchange code and attributes intact.
+     * @param symbol old symbol.
+     * @param baseSymbol new base symbol.
+     * @return new symbol with new base symbol and old symbol's exchange code and attributes.
+     */
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string changeBaseSymbol(const std::string &symbol,
+                                                                      const std::string &baseSymbol) noexcept {
+        auto i = getLengthWithoutAttributesInternal(symbol);
+
+        return hasExchangeCodeInternal(symbol, i) ? baseSymbol + EXCHANGE_SEPARATOR + symbol[i - 1] + symbol.substr(i)
+               : i == symbol.length()             ? baseSymbol
+                                                  : baseSymbol + symbol.substr(i);
+    }
+
+    /**
      * Returns value of the attribute with the specified key.
      * The result is std::nullopt if attribute with the specified key is not found.
      *
@@ -118,11 +143,11 @@ struct DXFCPP_EXPORT MarketEventSymbols {
     static constexpr char ATTRIBUTES_SEPARATOR = ',';
     static constexpr char ATTRIBUTE_VALUE = '=';
 
-    static bool hasExchangeCodeInternal(const std::string &symbol, std::size_t length) {
+    static constexpr bool hasExchangeCodeInternal(const std::string &symbol, std::size_t length) noexcept {
         return length >= 2 && symbol[length - 2] == EXCHANGE_SEPARATOR;
     }
 
-    static std::string getBaseSymbolInternal(const std::string &symbol, std::size_t length) {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string getBaseSymbolInternal(const std::string &symbol, std::size_t length) noexcept {
         return hasExchangeCodeInternal(symbol, length) ? symbol.substr(0, length - 2) : symbol.substr(0, length);
     }
 

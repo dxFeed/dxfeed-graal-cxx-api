@@ -16,8 +16,8 @@ using namespace dxfcpp;
 using stringOpt = std::optional<std::string>;
 
 void checkNonAttributedSymbol(const std::string &s) {
-    // REQUIRE(s == MarketEventSymbols::getBaseSymbol(s));
-    // REQUIRE("MSFT" == MarketEventSymbols::changeBaseSymbol(s, "MSFT"));
+    REQUIRE(s == MarketEventSymbols::getBaseSymbol(s));
+    REQUIRE("MSFT" == MarketEventSymbols::changeBaseSymbol(s, "MSFT"));
     REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
     REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
     REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
@@ -56,8 +56,8 @@ TEST_CASE("Test a broken symbol") {
 TEST_CASE("Test regional") {
     auto s = "GE&N";
 
-    // REQUIRE("GE" == MarketEventSymbols::getBaseSymbol(s));
-    // REQUIRE("F&N" == MarketEventSymbols::changeBaseSymbol(s, "F"));
+    REQUIRE("GE" == MarketEventSymbols::getBaseSymbol(s));
+    REQUIRE("F&N" == MarketEventSymbols::changeBaseSymbol(s, "F"));
     REQUIRE(true == MarketEventSymbols::hasExchangeCode(s));
     REQUIRE('N' == MarketEventSymbols::getExchangeCode(s));
     REQUIRE("GE" == MarketEventSymbols::changeExchangeCode(s, '\0'));
@@ -76,8 +76,8 @@ TEST_CASE("Test regional") {
 TEST_CASE("Test one attribute") {
     auto s = "/ES{tho=true}";
 
-    // REQUIRE("/ES" == MarketEventSymbols::getBaseSymbol(s));
-    // REQUIRE("/NQ{tho=true}" == MarketEventSymbols::changeBaseSymbol(s, "/NQ"));
+    REQUIRE("/ES" == MarketEventSymbols::getBaseSymbol(s));
+    REQUIRE("/NQ{tho=true}" == MarketEventSymbols::changeBaseSymbol(s, "/NQ"));
     REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
     REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
     REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
@@ -105,8 +105,8 @@ TEST_CASE("Test one attribute") {
 TEST_CASE("Test two attributes") {
     auto s = "A{c=1,e=3}";
 
-    // REQUIRE("A" == MarketEventSymbols::getBaseSymbol(s));
-    // REQUIRE("B{c=1,e=3}" == MarketEventSymbols::changeBaseSymbol(s, "B"));
+    REQUIRE("A" == MarketEventSymbols::getBaseSymbol(s));
+    REQUIRE("B{c=1,e=3}" == MarketEventSymbols::changeBaseSymbol(s, "B"));
     REQUIRE(false == MarketEventSymbols::hasExchangeCode(s));
     REQUIRE('\0' == MarketEventSymbols::getExchangeCode(s));
     REQUIRE(s == MarketEventSymbols::changeExchangeCode(s, '\0'));
