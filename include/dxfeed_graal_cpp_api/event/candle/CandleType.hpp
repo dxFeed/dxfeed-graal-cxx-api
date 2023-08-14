@@ -17,6 +17,10 @@
 
 namespace dxfcpp {
 
+/**
+ * Type of the candle aggregation period constitutes CandlePeriod type together its actual
+ * @ref CandlePeriod::getValue() "value".
+ */
 struct DXFCPP_EXPORT CandleType {
     /**
      * Certain number of ticks.

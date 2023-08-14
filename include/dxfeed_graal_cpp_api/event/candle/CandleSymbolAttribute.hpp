@@ -9,19 +9,8 @@
 
 namespace dxfcpp {
 
-enum class CandleSymbolAttributeType {
-    CANDLE_EXCHANGE,
-    CANDLE_PRICE,
-    CANDLE_SESSION,
-    CANDLE_PERIOD,
-    CANDLE_ALIGNMENT,
-    CANDLE_PRICE_LEVEL,
-};
-
-struct CandleSymbol;
-
 /**
- * Attribute of the {@link CandleSymbol}.
+ * Attribute of the CandleSymbol.
  */
 struct DXFCPP_EXPORT CandleSymbolAttribute {
     /**

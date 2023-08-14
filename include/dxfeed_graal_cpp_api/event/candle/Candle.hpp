@@ -25,68 +25,38 @@ struct EventMapper;
 
 /**
  * Candle event with open, high, low, close prices and other information for a specific period.
- * Candles are build with a specified {@link CandlePeriod} using a specified {@link CandlePrice} type
- * with a data taken from the specified {@link CandleExchange} from the specified {@link CandleSession}
- * with further details of aggregation provided by {@link CandleAlignment}.
+ * Candles are build with a specified CandlePeriod using a specified CandlePrice type with a data taken from the
+ * specified CandleExchange from the specified CandleSession with further details of aggregation provided by
+ * CandleAlignment.
  *
- * <p> Event symbol of the candle is represented with {@link CandleSymbol} class.
- * Since the {@code Candle} is a time-series event, it is typically subscribed to using
- * {@link DXFeedTimeSeriesSubscription} class that handles the necessarily wrapping
- * of the symbol into {@link TimeSeriesSubscriptionSymbol} to specify a subscription
+ * <p> Event symbol of the candle is represented with CandleSymbol class.
+ * Since the `Candle is a time-series event, it is typically subscribed to using DXFeedTimeSeriesSubscription class
+ * that handles the necessarily wrapping of the symbol into TimeSeriesSubscriptionSymbol to specify a subscription
  * time range.
- *
- * <h3>Properties</h3>
- *
- * {@code Candle} event has the following properties:
- *
- * <ul>
- * <li>{@link #getEventSymbol() eventSymbol} - candle event symbol;
- * <li>{@link #getEventFlags() eventFlags} - transactional event flags;
- * <li>{@link #getIndex() index} - unique per-symbol index of this candle;
- * <li>{@link #getTime() time} - timestamp of this candle in milliseconds;
- * <li>{@link #getSequence() sequence} - sequence number of this candle; distinguishes candles with same {@link
- * #getTime() time}; <li>{@link #getCount() count} - total number of original trade (or quote) events in this candle;
- * <li>{@link #getOpen() open} - the first (open) price of this candle;
- * <li>{@link #getHigh() high} - the maximal (high) price of this candle;
- * <li>{@link #getLow() low} - the minimal (low) price of this candle;
- * <li>{@link #getClose() close} - the last (close) price of this candle;
- * <li>{@link #getVolume() volume} - total volume in this candle;
- * <li>{@link #getVolumeAsDouble() volumeAsDouble} - total volume in this candle as floating number with fractions;
- * <li>{@link #getVWAP() vwap} - volume-weighted average price (VWAP) in this candle;
- * <li>{@link #getBidVolume() bidVolume} - bid volume in this candle;
- * <li>{@link #getBidVolumeAsDouble() bidVolumeAsDouble} - bid volume in this candle as floating number with fractions;
- * <li>{@link #getAskVolume() askVolume} - bid volume in this candle;
- * <li>{@link #getAskVolumeAsDouble() askVolumeAsDouble} - bid volume in this candle as floating number with fractions;
- * <li>{@link #getImpVolatility() impVolatility} - implied volatility;
- * <li>{@link #getOpenInterest() openInterest} - open interest;
- * <li>{@link #getOpenInterestAsDouble()} () openInterestAsDouble} - open interest as floating number with fractions;
- * </ul>
  *
  * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some candle sources provide a consistent view of the set of known candles.
- * The corresponding information is carried in {@link #getEventFlags() eventFlags} property.
- * The logic behind this property is detailed in {@link IndexedEvent} class documentation.
- * Multiple event sources for the same symbol are not supported for candles, thus
- * {@link #getSource() source} property is always {@link IndexedEventSource#DEFAULT DEFAULT}.
+ * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The logic behind this property is detailed in IndexedEvent class documentation.
+ * Multiple event sources for the same symbol are not supported for candles, thus @ref ::getSource() "source" property
+ * is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
- * <p>{@link TimeSeriesEventModel} class handles all the snapshot and transaction logic and conveniently represents
- * a list current of time-series events order by their {@link #getTime() time}.
- * It relies on the code of {@link AbstractIndexedEventModel} to handle this logic.
- * Use the source code of {@link AbstractIndexedEventModel} for clarification on transactions and snapshot logic.
+ * <p>TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents a list
+ * current of time-series events order by their @ref ::getTime() "time".
+ * It relies on the code of AbstractIndexedEventModel to handle this logic.
+ * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
  * <h3>Publishing Candles</h3>
  *
- * Publishing of candle events follows the general rules explained in {@link TimeSeriesEvent} class
- * documentation.
+ * Publishing of candle events follows the general rules explained in TimeSeriesEvent class documentation.
  *
  * <h3>Implementation details</h3>
  *
- * This event is implemented on top of QDS record {@code TradeHistory} for tick candles
- * with {@link CandlePeriod#TICK CandlePeriod.TICK}, records {@code Trade.<period>} for
- * a certain set of popular periods, and QDS record {@code Candle} for arbitrary custom
- * periods, with a set of {@code Candle{<attributes>}} records for a popular combinations of custom
- * candle symbol attributes like {@link CandlePrice} for an efficient support of bid-ask charting.
+ * This event is implemented on top of QDS record `TradeHistory` for tick candles with CandlePeriod::TICK,
+ * records `Trade.<period>` for a certain set of popular periods, and QDS record `Candle` for arbitrary custom
+ * periods, with a set of `Candle{<attributes>}` records for a popular combinations of custom candle symbol attributes
+ * like CandlePrice for an efficient support of bid-ask charting.
  */
 class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
                                    public TimeSeriesEvent,
