@@ -23,7 +23,7 @@ void SpreadOrder::fillData(void *graalNative) noexcept {
     spreadOrderData_ = {dxfcpp::toString(graalSpreadOrder->spread_symbol)};
 }
 
-std::shared_ptr<SpreadOrder> SpreadOrder::fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }

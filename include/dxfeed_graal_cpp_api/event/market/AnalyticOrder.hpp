@@ -69,7 +69,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
 
     void fillData(void *graalNative) noexcept override;
 
-    static std::shared_ptr<AnalyticOrder> fromGraalNative(void *graalNative) noexcept;
+    static std::shared_ptr<AnalyticOrder> fromGraal(void *graalNative) noexcept;
 
   public:
     static const EventTypeEnum &TYPE;

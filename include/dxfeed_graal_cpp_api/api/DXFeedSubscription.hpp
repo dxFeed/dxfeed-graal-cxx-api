@@ -464,10 +464,10 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto *list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
 
         addSymbolsImpl(list);
-        SymbolWrapper::freeGraalList(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
     }
 
     /**
@@ -522,10 +522,10 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto *list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
 
         removeSymbolsImpl(list);
-        SymbolWrapper::freeGraalList(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
     }
 
     /**
@@ -581,10 +581,10 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto *list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
 
         setSymbolsImpl(list);
-        SymbolWrapper::freeGraalList(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
     }
 
     /**

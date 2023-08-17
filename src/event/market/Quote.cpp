@@ -42,7 +42,7 @@ void Quote::setAskExchangeCode(std::int16_t askExchangeCode) noexcept {
     data_.askExchangeCode = askExchangeCode;
 }
 
-std::shared_ptr<Quote> Quote::fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }

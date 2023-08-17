@@ -65,7 +65,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
 
     Data data_{};
 
-    static std::shared_ptr<Profile> fromGraalNative(void *graalNative) noexcept;
+    static std::shared_ptr<Profile> fromGraal(void *graalNative) noexcept;
 
   public:
     static const EventTypeEnum &TYPE;

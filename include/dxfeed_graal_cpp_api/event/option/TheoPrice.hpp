@@ -82,7 +82,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
 
     Data data_{};
 
-    static std::shared_ptr<TheoPrice> fromGraalNative(void *graalNative) noexcept;
+    static std::shared_ptr<TheoPrice> fromGraal(void *graalNative) noexcept;
 
   public:
     /**

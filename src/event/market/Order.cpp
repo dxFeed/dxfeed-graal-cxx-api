@@ -23,7 +23,7 @@ void Order::fillData(void *graalNative) noexcept {
     orderData_ = {dxfcpp::toString(graalOrder->market_maker)};
 }
 
-std::shared_ptr<Order> Order::fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<Order> Order::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }

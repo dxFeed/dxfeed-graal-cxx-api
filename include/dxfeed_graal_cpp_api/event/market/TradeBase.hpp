@@ -69,7 +69,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     TradeBaseData tradeBaseData_{};
 
     template <typename ChildType, typename GraalNativeEventType, typename ChildGraalNativeEventType, auto clazz>
-    static std::shared_ptr<ChildType> fromGraalNative(void *graalNative) noexcept
+    static std::shared_ptr<ChildType> fromGraal(void *graalNative) noexcept
 #if __cpp_concepts
         requires(std::is_base_of_v<TradeBase, ChildType>)
 #endif

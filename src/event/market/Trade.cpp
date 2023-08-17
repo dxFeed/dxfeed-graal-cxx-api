@@ -20,8 +20,8 @@ namespace dxfcpp {
 
 const EventTypeEnum &Trade::TYPE = EventTypeEnum::TRADE;
 
-std::shared_ptr<Trade> Trade::fromGraalNative(void *graalNative) noexcept {
-    return TradeBase::fromGraalNative<Trade, dxfg_event_type_t, dxfg_trade_t, dxfg_event_clazz_t::DXFG_EVENT_TRADE>(
+std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) noexcept {
+    return TradeBase::fromGraal<Trade, dxfg_event_type_t, dxfg_trade_t, dxfg_event_clazz_t::DXFG_EVENT_TRADE>(
         graalNative);
 }
 

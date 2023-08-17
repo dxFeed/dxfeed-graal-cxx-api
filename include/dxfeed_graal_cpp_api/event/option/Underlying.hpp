@@ -78,7 +78,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
 
     Data data_{};
 
-    static std::shared_ptr<Underlying> fromGraalNative(void *graalNative) noexcept;
+    static std::shared_ptr<Underlying> fromGraal(void *graalNative) noexcept;
 
   public:
     /**

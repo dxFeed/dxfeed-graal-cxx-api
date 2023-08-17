@@ -106,7 +106,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
 
     Data data_{};
 
-    static std::shared_ptr<TimeAndSale> fromGraalNative(void *graalNative) noexcept;
+    static std::shared_ptr<TimeAndSale> fromGraal(void *graalNative) noexcept;
 
   public:
     /**

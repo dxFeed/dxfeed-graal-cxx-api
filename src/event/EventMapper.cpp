@@ -13,7 +13,7 @@
 
 namespace dxfcpp {
 
-std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *graalNativeList) noexcept {
+std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) noexcept {
     auto list = bit_cast<dxfg_event_type_list *>(graalNativeList);
 
     if (list->size <= 0) {
@@ -28,41 +28,41 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
         // TODO: implement other types
         switch (e->clazz) {
         case DXFG_EVENT_QUOTE:
-            result[i] = Quote::fromGraalNative(e);
+            result[i] = Quote::fromGraal(e);
 
             break;
         case DXFG_EVENT_PROFILE:
-            result[i] = Profile::fromGraalNative(e);
+            result[i] = Profile::fromGraal(e);
 
             break;
         case DXFG_EVENT_SUMMARY:
-            result[i] = Summary::fromGraalNative(e);
+            result[i] = Summary::fromGraal(e);
 
             break;
         case DXFG_EVENT_GREEKS:
-            result[i] = Greeks::fromGraalNative(e);
+            result[i] = Greeks::fromGraal(e);
 
             break;
         case DXFG_EVENT_CANDLE:
-            result[i] = Candle::fromGraalNative(e);
+            result[i] = Candle::fromGraal(e);
 
             break;
         case DXFG_EVENT_DAILY_CANDLE:
             break;
         case DXFG_EVENT_UNDERLYING:
-            result[i] = Underlying::fromGraalNative(e);
+            result[i] = Underlying::fromGraal(e);
 
             break;
         case DXFG_EVENT_THEO_PRICE:
-            result[i] = TheoPrice::fromGraalNative(e);
+            result[i] = TheoPrice::fromGraal(e);
 
             break;
         case DXFG_EVENT_TRADE:
-            result[i] = Trade::fromGraalNative(e);
+            result[i] = Trade::fromGraal(e);
 
             break;
         case DXFG_EVENT_TRADE_ETH:
-            result[i] = TradeETH::fromGraalNative(e);
+            result[i] = TradeETH::fromGraal(e);
 
             break;
         case DXFG_EVENT_CONFIGURATION:
@@ -70,29 +70,29 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalNativeList(void *g
         case DXFG_EVENT_MESSAGE:
             break;
         case DXFG_EVENT_TIME_AND_SALE:
-            result[i] = TimeAndSale::fromGraalNative(e);
+            result[i] = TimeAndSale::fromGraal(e);
 
             break;
         case DXFG_EVENT_ORDER_BASE:
             break;
         case DXFG_EVENT_ORDER:
-            result[i] = Order::fromGraalNative(e);
+            result[i] = Order::fromGraal(e);
 
             break;
         case DXFG_EVENT_ANALYTIC_ORDER:
-            result[i] = AnalyticOrder::fromGraalNative(e);
+            result[i] = AnalyticOrder::fromGraal(e);
 
             break;
         case DXFG_EVENT_SPREAD_ORDER:
-            result[i] = SpreadOrder::fromGraalNative(e);
+            result[i] = SpreadOrder::fromGraal(e);
 
             break;
         case DXFG_EVENT_SERIES:
-            result[i] = Series::fromGraalNative(e);
+            result[i] = Series::fromGraal(e);
 
             break;
         case DXFG_EVENT_OPTION_SALE:
-            result[i] = OptionSale::fromGraalNative(e);
+            result[i] = OptionSale::fromGraal(e);
 
             break;
         }

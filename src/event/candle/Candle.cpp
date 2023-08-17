@@ -20,7 +20,7 @@ namespace dxfcpp {
 
 const EventTypeEnum &Candle::TYPE = EventTypeEnum::CANDLE;
 
-std::shared_ptr<Candle> Candle::fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }

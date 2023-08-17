@@ -20,7 +20,7 @@ namespace dxfcpp {
 
 const EventTypeEnum &Summary::TYPE = EventTypeEnum::SUMMARY;
 
-std::shared_ptr<Summary> Summary::fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }

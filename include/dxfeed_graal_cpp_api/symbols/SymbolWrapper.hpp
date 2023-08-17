@@ -58,13 +58,68 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     using DataType = typename std::variant<WildcardSymbol, StringSymbol, IndexedEventSubscriptionSymbol,
                                            TimeSeriesSubscriptionSymbol, CandleSymbol>;
 
+    class SymbolListUtils final {
+        static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
+        static void *newGraalList(std::ptrdiff_t size) noexcept;
+        static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
+        static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
+
+      public:
+        template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) noexcept {
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("SymbolWrapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
+            }
+
+            auto size = calculateGraalListSize(std::distance(begin, end));
+
+            // Zero size is needed, for example, to clear the list of symbols.
+            auto *list = newGraalList(size);
+
+            if (!list || size == 0) {
+                return list;
+            }
+
+            std::ptrdiff_t elementIdx = 0;
+            bool needToFree = false;
+
+            for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
+                if constexpr (requires { it->toGraal(); }) {
+                    needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
+                } else if constexpr (std::is_convertible_v<decltype(*it), SymbolWrapper> ||
+                                     dxfcpp::ConvertibleToSymbolWrapper<decltype(*it)>) {
+                    needToFree = setGraalListElement(list, elementIdx, SymbolWrapper(*it).toGraal()) == false;
+                }
+
+                if (needToFree) {
+                    break;
+                }
+            }
+
+            if (needToFree) {
+                freeGraalListElements(list, elementIdx);
+
+                return nullptr;
+            }
+
+            return list;
+        }
+
+        template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+        static void *toGraalList(const SymbolsCollection &collection) noexcept {
+            return SymbolListUtils::toGraalList(std::begin(collection), std::end(collection));
+        }
+
+        static void *toGraalList(std::initializer_list<SymbolWrapper> collection) noexcept {
+            return SymbolListUtils::toGraalList(collection.begin(), collection.end());
+        }
+
+        static void freeGraalList(void *graalList) noexcept;
+
+        static std::vector<SymbolWrapper> fromGraalList(void *graalList) noexcept;
+    };
+
   private:
     DataType data_;
-
-    static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
-    static void *newGraalList(std::ptrdiff_t size) noexcept;
-    static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
-    static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
 
   public:
     SymbolWrapper(const SymbolWrapper &) noexcept = default;
@@ -172,58 +227,6 @@ struct DXFCPP_EXPORT SymbolWrapper final {
             },
             data_);
     }
-
-    template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("SymbolWrapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
-        }
-
-        auto size = calculateGraalListSize(std::distance(begin, end));
-
-        // Zero size is needed, for example, to clear the list of symbols.
-        auto *list = newGraalList(size);
-
-        if (!list || size == 0) {
-            return list;
-        }
-
-        std::ptrdiff_t elementIdx = 0;
-        bool needToFree = false;
-
-        for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
-            if constexpr (requires { it->toGraal(); }) {
-                needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
-            } else if constexpr (std::is_convertible_v<decltype(*it), SymbolWrapper> ||
-                                 ConvertibleToSymbolWrapper<decltype(*it)>) {
-                needToFree = setGraalListElement(list, elementIdx, SymbolWrapper(*it).toGraal()) == false;
-            }
-
-            if (needToFree) {
-                break;
-            }
-        }
-
-        if (needToFree) {
-            freeGraalListElements(list, elementIdx);
-
-            return nullptr;
-        }
-
-        return list;
-    }
-
-    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    static void *toGraalList(const SymbolsCollection &collection) noexcept {
-        return toGraalList(std::begin(collection), std::end(collection));
-    }
-
-    static void *toGraalList(std::initializer_list<SymbolWrapper> collection) noexcept {
-        return toGraalList(collection.begin(), collection.end());
-    }
-
-    static void freeGraalList(void *graalList) noexcept;
-
-    static std::vector<SymbolWrapper> fromGraalList(void *graalList) noexcept;
 
     std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const noexcept {
         return {toGraal(), SymbolWrapper::freeGraal};

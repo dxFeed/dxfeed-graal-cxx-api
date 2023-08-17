@@ -83,7 +83,7 @@ std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const noexcept {
         },
         nullptr);
 
-    auto result = SymbolWrapper::fromGraalList(bit_cast<void *>(list));
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(bit_cast<void *>(list));
 
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), list](auto threadHandle) {
@@ -102,7 +102,7 @@ std::vector<SymbolWrapper> DXFeedSubscription::getDecoratedSymbolsImpl() const n
         },
         nullptr);
 
-    auto result = SymbolWrapper::fromGraalList(bit_cast<void *>(list));
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(bit_cast<void *>(list));
 
     runIsolatedOrElse(
         [handler = bit_cast<dxfg_subscription_t *>(handler_.get()), list](auto threadHandle) {
@@ -179,7 +179,7 @@ void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noex
         auto sub = ApiContext::getInstance()->getDxFeedSubscriptionManager()->getEntity(id);
 
         if (sub) {
-            auto &&events = EventMapper::fromGraalNativeList(bit_cast<void *>(graalNativeEvents));
+            auto &&events = EventMapper::fromGraalList(bit_cast<void *>(graalNativeEvents));
 
             sub->onEvent_(events);
         }

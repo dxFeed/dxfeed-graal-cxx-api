@@ -24,7 +24,7 @@ void TimeAndSale::setExchangeCode(char exchangeCode) noexcept {
 
 const EventTypeEnum &TimeAndSale::TYPE = EventTypeEnum::TIME_AND_SALE;
 
-std::shared_ptr<TimeAndSale> TimeAndSale::fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }

@@ -24,7 +24,7 @@ void AnalyticOrder::fillData(void *graalNative) noexcept {
                           graalAnalyticOrder->iceberg_executed_size, graalAnalyticOrder->iceberg_flags};
 }
 
-std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }

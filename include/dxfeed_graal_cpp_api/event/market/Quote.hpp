@@ -53,7 +53,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
                  getSequence());
     }
 
-    static std::shared_ptr<Quote> fromGraalNative(void *graalNative) noexcept;
+    static std::shared_ptr<Quote> fromGraal(void *graalNative) noexcept;
 
   public:
     /**

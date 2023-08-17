@@ -83,7 +83,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     Data data_{};
 
-    static std::shared_ptr<Series> fromGraalNative(void *graalNative) noexcept;
+    static std::shared_ptr<Series> fromGraal(void *graalNative) noexcept;
 
   public:
     /**

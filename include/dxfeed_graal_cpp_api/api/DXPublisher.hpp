@@ -61,7 +61,15 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @tparam C The Collection type
      */
     template <typename C>
-    virtual void publishEvents(C&&) noexcept {}
+    void publishEvents(C&& c) noexcept {
+
+    }
+
+    template <typename EventIt>
+    void publishEvents(EventIt begin, EventIt end) noexcept {
+
+    }
+
 
     std::string toString() const noexcept override;
 };

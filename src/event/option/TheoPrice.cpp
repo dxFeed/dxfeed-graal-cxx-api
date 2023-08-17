@@ -20,7 +20,7 @@ namespace dxfcpp {
 
 const EventTypeEnum &TheoPrice::TYPE = EventTypeEnum::THEO_PRICE;
 
-std::shared_ptr<TheoPrice> TheoPrice::fromGraalNative(void *graalNative) noexcept {
+std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }
