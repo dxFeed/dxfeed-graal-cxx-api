@@ -79,4 +79,28 @@ std::string OptionSale::toString() const noexcept {
         dxfcpp::toString(getDelta()), getOptionSymbol());
 }
 
+void *OptionSale::toGraal() const noexcept {
+    return nullptr;
+}
+
+void OptionSale::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_OPTION_SALE) {
+        return;
+    }
+
+    auto graalOptionSale = bit_cast<dxfg_option_sale_t *>(graalNative);
+
+    delete[] graalOptionSale->market_event.event_symbol;
+    delete[] graalOptionSale->exchange_sale_conditions;
+    delete[] graalOptionSale->option_symbol;
+
+    delete graalOptionSale;
+}
+
 } // namespace dxfcpp

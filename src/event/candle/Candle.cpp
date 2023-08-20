@@ -15,6 +15,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include "dxfeed_graal_cpp_api/event/candle/Candle.hpp"
 
 namespace dxfcpp {
 
@@ -58,6 +59,28 @@ std::string Candle::toString() const noexcept {
         dxfcpp::toString(getHigh()), dxfcpp::toString(getLow()), dxfcpp::toString(getClose()),
         dxfcpp::toString(getVolume()), dxfcpp::toString(getVWAP()), dxfcpp::toString(getBidVolume()),
         dxfcpp::toString(getAskVolume()), dxfcpp::toString(getImpVolatility()), dxfcpp::toString(getOpenInterest()));
+}
+
+void *Candle::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Candle::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_CANDLE) {
+        return;
+    }
+
+    auto graalCandle = bit_cast<dxfg_candle_t *>(graalNative);
+
+    delete[] graalCandle->event_symbol;
+
+    delete graalCandle;
 }
 
 } // namespace dxfcpp

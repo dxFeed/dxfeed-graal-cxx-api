@@ -72,6 +72,9 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
     friend struct EventMapper;
 
     static std::shared_ptr<Trade> fromGraal(void *graalNative) noexcept;
+    //TODO: implement
+    void* toGraal() const noexcept;
+    static void freeGraal(void* graalNative) noexcept;
 
   public:
     static const EventTypeEnum &TYPE;

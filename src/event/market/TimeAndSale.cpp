@@ -76,4 +76,29 @@ std::string TimeAndSale::toString() const noexcept {
                        getSeller().empty() ? std::string{} : fmt::format(", seller='{}'", getSeller()));
 }
 
+void *TimeAndSale::toGraal() const noexcept {
+    return nullptr;
+}
+
+void TimeAndSale::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_TIME_AND_SALE) {
+        return;
+    }
+
+    auto graalTimeAndSale = bit_cast<dxfg_time_and_sale_t *>(graalNative);
+
+    delete[] graalTimeAndSale->market_event.event_symbol;
+    delete[] graalTimeAndSale->exchange_sale_conditions;
+    delete[] graalTimeAndSale->buyer;
+    delete[] graalTimeAndSale->seller;
+
+    delete graalTimeAndSale;
+}
+
 } // namespace dxfcpp

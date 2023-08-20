@@ -29,4 +29,26 @@ std::string Trade::toString() const noexcept {
     return fmt::format("Trade{{{}}}", baseFieldsToString());
 }
 
+void *Trade::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Trade::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_TRADE) {
+        return;
+    }
+
+    auto graalTrade = bit_cast<dxfg_trade_t *>(graalNative);
+
+    delete[] graalTrade->trade_base.market_event.event_symbol;
+
+    delete graalTrade;
+}
+
 } // namespace dxfcpp

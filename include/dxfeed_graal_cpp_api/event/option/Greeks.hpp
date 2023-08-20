@@ -76,6 +76,9 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     Data data_{};
 
     static std::shared_ptr<Greeks> fromGraal(void *graalNative) noexcept;
+    //TODO: implement
+    void* toGraal() const noexcept;
+    static void freeGraal(void* graalNative) noexcept;
 
   public:
     /**

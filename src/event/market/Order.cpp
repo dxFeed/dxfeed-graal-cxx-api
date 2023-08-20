@@ -10,6 +10,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include "dxfeed_graal_cpp_api/event/market/Order.hpp"
 
 namespace dxfcpp {
 
@@ -46,6 +47,29 @@ std::shared_ptr<Order> Order::fromGraal(void *graalNative) noexcept {
 
 std::string Order::toString() const noexcept {
     return fmt::format("Order{{{}, marketMaker={}}}", baseFieldsToString(), getMarketMaker());
+}
+
+void *Order::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Order::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_ORDER) {
+        return;
+    }
+
+    auto graalOrder = bit_cast<dxfg_order_t *>(graalNative);
+
+    delete[] graalOrder->order_base.market_event.event_symbol;
+    delete[] graalOrder->market_maker;
+
+    delete graalOrder;
 }
 
 } // namespace dxfcpp

@@ -78,4 +78,28 @@ std::string Profile::toString() const noexcept {
                        dxfcpp::toString(getFreeFloat()));
 }
 
+void *Profile::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Profile::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_PROFILE) {
+        return;
+    }
+
+    auto graalProfile = bit_cast<dxfg_profile_t *>(graalNative);
+
+    delete[] graalProfile->market_event.event_symbol;
+    delete[] graalProfile->description;
+    delete[] graalProfile->status_reason;
+
+    delete graalProfile;
+}
+
 } // namespace dxfcpp

@@ -83,6 +83,9 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     Data data_{};
 
     static std::shared_ptr<TheoPrice> fromGraal(void *graalNative) noexcept;
+    //TODO: implement
+    void* toGraal() const noexcept;
+    static void freeGraal(void* graalNative) noexcept;
 
   public:
     /**

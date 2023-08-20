@@ -13,6 +13,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include "dxfeed_graal_cpp_api/api/DXPublisher.hpp"
 
 namespace dxfcpp {
 
@@ -42,6 +43,11 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *feedHandle) noexcept {
 
 std::string DXPublisher::toString() const noexcept {
     return fmt::format("DXPublisher{{{}}}", handler_.toString());
+}
+
+//TODO: implement
+void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
+
 }
 
 }

@@ -102,6 +102,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
     void fillData(void *graalNative) noexcept override;
 
     static std::shared_ptr<Order> fromGraal(void *graalNative) noexcept;
+    //TODO: implement (virtual?)
+    void* toGraal() const noexcept;
+    static void freeGraal(void* graalNative) noexcept;
 
   public:
     static const EventTypeEnum &TYPE;

@@ -61,4 +61,26 @@ std::string Series::toString() const noexcept {
         dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
+void *Series::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Series::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_SERIES) {
+        return;
+    }
+
+    auto graalSeries = bit_cast<dxfg_series_t *>(graalNative);
+
+    delete[] graalSeries->market_event.event_symbol;
+
+    delete graalSeries;
+}
+
 } // namespace dxfcpp

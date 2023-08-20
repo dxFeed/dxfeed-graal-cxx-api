@@ -5,7 +5,6 @@
 
 #include "internal/Conf.hpp"
 
-#include "dxfeed_graal_cpp_api/internal/utils/EventListUtils.hpp"
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
 #include "internal/Enum.hpp"

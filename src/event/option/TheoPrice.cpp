@@ -59,4 +59,26 @@ std::string TheoPrice::toString() const noexcept {
         dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
+void *TheoPrice::toGraal() const noexcept {
+    return nullptr;
+}
+
+void TheoPrice::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_THEO_PRICE) {
+        return;
+    }
+
+    auto graalTheoPrice = bit_cast<dxfg_theo_price_t *>(graalNative);
+
+    delete[] graalTheoPrice->market_event.event_symbol;
+
+    delete graalTheoPrice;
+}
+
 } // namespace dxfcpp

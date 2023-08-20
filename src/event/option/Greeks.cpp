@@ -49,6 +49,7 @@ std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) noexcept {
         return {};
     }
 }
+
 std::string Greeks::toString() const noexcept {
     return fmt::format(
         "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
@@ -57,6 +58,28 @@ std::string Greeks::toString() const noexcept {
         getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), dxfcpp::toString(getPrice()),
         dxfcpp::toString(getVolatility()), dxfcpp::toString(getDelta()), dxfcpp::toString(getGamma()),
         dxfcpp::toString(getTheta()), dxfcpp::toString(getRho()), dxfcpp::toString(getVega()));
+}
+
+void *Greeks::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Greeks::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_GREEKS) {
+        return;
+    }
+
+    auto graalGreeks = bit_cast<dxfg_greeks_t *>(graalNative);
+
+    delete[] graalGreeks->market_event.event_symbol;
+
+    delete graalGreeks;
 }
 
 } // namespace dxfcpp

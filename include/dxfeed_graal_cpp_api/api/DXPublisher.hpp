@@ -13,6 +13,8 @@
 
 #include "DXFeedSubscription.hpp"
 
+#include "../event/EventMapper.hpp"
+
 #include <memory>
 #include <mutex>
 #include <unordered_set>
@@ -32,6 +34,9 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     JavaObjectHandler<DXPublisher> handler_;
 
     static std::shared_ptr<DXPublisher> create(void *feedHandle) noexcept;
+
+    //TODO: implement
+    void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
     DXPublisher() noexcept : handler_{} {
@@ -55,19 +60,25 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      */
     static std::shared_ptr<DXPublisher> getInstance() noexcept;
 
-
     /**
      *
      * @tparam C The Collection type
      */
     template <typename C>
-    void publishEvents(C&& c) noexcept {
-
+    void publishEvents(C&& collection) noexcept {
+        publishEvents(std::begin(collection), std::end(collection));
     }
 
     template <typename EventIt>
     void publishEvents(EventIt begin, EventIt end) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(toString() + "::publishEvents(events = " + elementsToString(begin, end) + ")");
+        }
 
+        auto *list = EventMapper::toGraalList(begin, end);
+
+        publishEventsImpl(list);
+        EventMapper::freeGraalList(list);
     }
 
 

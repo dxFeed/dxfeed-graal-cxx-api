@@ -60,4 +60,26 @@ std::string Underlying::toString() const noexcept {
         dxfcpp::toString(getPutCallRatio()));
 }
 
+void *Underlying::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Underlying::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_UNDERLYING) {
+        return;
+    }
+
+    auto graalUnderlying = bit_cast<dxfg_underlying_t *>(graalNative);
+
+    delete[] graalUnderlying->market_event.event_symbol;
+
+    delete graalUnderlying;
+}
+
 } // namespace dxfcpp

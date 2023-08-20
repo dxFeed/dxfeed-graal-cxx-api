@@ -67,4 +67,26 @@ std::string Summary::toString() const noexcept {
                        dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
 }
 
+void *Summary::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Summary::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_SUMMARY) {
+        return;
+    }
+
+    auto graalSummary = bit_cast<dxfg_summary_t *>(graalNative);
+
+    delete[] graalSummary->market_event.event_symbol;
+
+    delete graalSummary;
+}
+
 } // namespace dxfcpp

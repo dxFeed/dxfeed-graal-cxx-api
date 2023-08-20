@@ -29,4 +29,26 @@ std::string TradeETH::toString() const noexcept {
     return fmt::format("TradeETH{{{}}}", baseFieldsToString());
 }
 
+void *TradeETH::toGraal() const noexcept {
+    return nullptr;
+}
+
+void TradeETH::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_TRADE_ETH) {
+        return;
+    }
+
+    auto graalTradeEth = bit_cast<dxfg_trade_eth_t *>(graalNative);
+
+    delete[] graalTradeEth->trade_base.market_event.event_symbol;
+
+    delete graalTradeEth;
+}
+
 } // namespace dxfcpp

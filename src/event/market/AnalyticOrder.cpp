@@ -10,6 +10,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include "dxfeed_graal_cpp_api/event/market/AnalyticOrder.hpp"
 
 namespace dxfcpp {
 
@@ -50,6 +51,29 @@ std::string AnalyticOrder::toString() const noexcept {
         "AnalyticOrder{{{}, icebergPeakSize={}, icebergHiddenSize={}, icebergExecutedSize={}, icebergType={}}}",
         baseFieldsToString(), dxfcpp::toString(getIcebergPeakSize()), dxfcpp::toString(getIcebergHiddenSize()),
         dxfcpp::toString(getIcebergExecutedSize()), getIcebergType().toString());
+}
+
+void *AnalyticOrder::toGraal() const noexcept {
+    return Order::toGraal();
+}
+
+void AnalyticOrder::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
+        return;
+    }
+
+    auto graalAnalyticOrder = bit_cast<dxfg_analytic_order_t *>(graalNative);
+
+    delete[] graalAnalyticOrder->order_base.order_base.market_event.event_symbol;
+    delete[] graalAnalyticOrder->order_base.market_maker;
+
+    delete graalAnalyticOrder;
 }
 
 } // namespace dxfcpp

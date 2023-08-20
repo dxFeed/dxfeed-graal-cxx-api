@@ -13,6 +13,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include "dxfeed_graal_cpp_api/event/market/Quote.hpp"
 
 namespace dxfcpp {
 
@@ -88,6 +89,28 @@ std::string Quote::toString() const noexcept {
         encodeChar(getBidExchangeCode()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getBidSize()),
         formatTimeStamp(getAskTime()), encodeChar(getAskExchangeCode()), dxfcpp::toString(getAskPrice()),
         dxfcpp::toString(getAskSize()));
+}
+
+void *Quote::toGraal() const noexcept {
+    return nullptr;
+}
+
+void Quote::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_QUOTE) {
+        return;
+    }
+
+    auto graalQuote = bit_cast<dxfg_quote_t *>(graalNative);
+
+    delete[] graalQuote->market_event.event_symbol;
+
+    delete graalQuote;
 }
 
 } // namespace dxfcpp

@@ -79,6 +79,9 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     Data data_{};
 
     static std::shared_ptr<OptionSale> fromGraal(void *graalNative) noexcept;
+    //TODO: implement
+    void* toGraal() const noexcept;
+    static void freeGraal(void* graalNative) noexcept;
 
   public:
     /**

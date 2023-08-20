@@ -10,6 +10,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include "dxfeed_graal_cpp_api/event/market/SpreadOrder.hpp"
 
 namespace dxfcpp {
 
@@ -46,6 +47,29 @@ std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) noexcept 
 
 std::string SpreadOrder::toString() const noexcept {
     return fmt::format("SpreadOrder{{{}, spreadSymbol={}}}", baseFieldsToString(), getSpreadSymbol());
+}
+
+void *SpreadOrder::toGraal() const noexcept {
+    return nullptr;
+}
+
+void SpreadOrder::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+
+    if (eventType->clazz != DXFG_EVENT_SPREAD_ORDER) {
+        return;
+    }
+
+    auto graalSpreadOrder = bit_cast<dxfg_spread_order_t *>(graalNative);
+
+    delete[] graalSpreadOrder->order_base.market_event.event_symbol;
+    delete[] graalSpreadOrder->spread_symbol;
+
+    delete graalSpreadOrder;
 }
 
 } // namespace dxfcpp
