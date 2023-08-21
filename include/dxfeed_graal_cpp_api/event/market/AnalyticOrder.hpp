@@ -68,10 +68,10 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     AnalyticOrderData analyticOrderData_{};
 
     void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
 
     static std::shared_ptr<AnalyticOrder> fromGraal(void *graalNative) noexcept;
-    //TODO: implement (virtual?)
-    void* toGraal() const noexcept;
+    void* toGraal() const noexcept override;
     static void freeGraal(void* graalNative) noexcept;
 
   public:

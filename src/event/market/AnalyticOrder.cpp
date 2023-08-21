@@ -6,23 +6,44 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "dxfeed_graal_cpp_api/event/market/AnalyticOrder.hpp"
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
-#include "dxfeed_graal_cpp_api/event/market/AnalyticOrder.hpp"
 
 namespace dxfcpp {
 
 const EventTypeEnum &AnalyticOrder::TYPE = EventTypeEnum::ANALYTIC_ORDER;
 
 void AnalyticOrder::fillData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
     Order::fillData(graalNative);
 
-    auto graalAnalyticOrder = bit_cast<dxfg_analytic_order_t *>(graalNative);
+    auto graalAnalyticOrder = static_cast<dxfg_analytic_order_t *>(graalNative);
 
-    analyticOrderData_ = {graalAnalyticOrder->iceberg_peak_size, graalAnalyticOrder->iceberg_hidden_size,
-                          graalAnalyticOrder->iceberg_executed_size, graalAnalyticOrder->iceberg_flags};
+    analyticOrderData_ = {.icebergPeakSize = graalAnalyticOrder->iceberg_peak_size,
+                          .icebergHiddenSize = graalAnalyticOrder->iceberg_hidden_size,
+                          .icebergExecutedSize = graalAnalyticOrder->iceberg_executed_size,
+                          .icebergFlags = graalAnalyticOrder->iceberg_flags};
+}
+
+void AnalyticOrder::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    Order::fillGraalData(graalNative);
+
+    auto graalAnalyticOrder = static_cast<dxfg_analytic_order_t *>(graalNative);
+
+    graalAnalyticOrder->iceberg_peak_size = analyticOrderData_.icebergPeakSize;
+    graalAnalyticOrder->iceberg_hidden_size = analyticOrderData_.icebergHiddenSize;
+    graalAnalyticOrder->iceberg_executed_size = analyticOrderData_.icebergExecutedSize;
+    graalAnalyticOrder->iceberg_flags = analyticOrderData_.icebergFlags;
 }
 
 std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) noexcept {
@@ -30,7 +51,7 @@ std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) noexc
         return {};
     }
 
-    if (bit_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER) {
         return {};
     }
 
@@ -54,7 +75,21 @@ std::string AnalyticOrder::toString() const noexcept {
 }
 
 void *AnalyticOrder::toGraal() const noexcept {
-    return Order::toGraal();
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalAnalyticOrder = new (std::nothrow) dxfg_analytic_order_t{
+        .order_base = {
+            .order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER}}}}};
+
+    if (!graalAnalyticOrder) {
+        // TODO: error handling
+    }
+
+    fillGraalData(static_cast<void *>(graalAnalyticOrder));
+
+    return static_cast<void *>(graalAnalyticOrder);
 }
 
 void AnalyticOrder::freeGraal(void *graalNative) noexcept {
@@ -62,16 +97,15 @@ void AnalyticOrder::freeGraal(void *graalNative) noexcept {
         return;
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = static_cast<dxfg_event_type_t *>(graalNative);
 
-    if (eventType->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
+    if (eventType->clazz != dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER) {
         return;
     }
 
-    auto graalAnalyticOrder = bit_cast<dxfg_analytic_order_t *>(graalNative);
+    auto graalAnalyticOrder = static_cast<dxfg_analytic_order_t *>(graalNative);
 
-    delete[] graalAnalyticOrder->order_base.order_base.market_event.event_symbol;
-    delete[] graalAnalyticOrder->order_base.market_maker;
+    Order::freeGraalData(graalNative);
 
     delete graalAnalyticOrder;
 }

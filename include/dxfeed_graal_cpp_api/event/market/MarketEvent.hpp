@@ -39,6 +39,8 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     }
 
     virtual void fillData(void *graalNative) noexcept;
+    virtual void fillGraalData(void *graalNative) const noexcept;
+    static void freeGraalData(void *graalNative) noexcept;
 
   public:
     /**

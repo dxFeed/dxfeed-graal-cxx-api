@@ -14,17 +14,57 @@
 namespace dxfcpp {
 
 void OrderBase::fillData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
     MarketEvent::fillData(graalNative);
 
-    auto graalOrderBase = bit_cast<dxfg_order_base_t *>(graalNative);
+    auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
 
     orderBaseData_ = {
-        graalOrderBase->event_flags,    graalOrderBase->index,       graalOrderBase->time_sequence,
-        graalOrderBase->time_nano_part, graalOrderBase->action_time, graalOrderBase->order_id,
-        graalOrderBase->aux_order_id,   graalOrderBase->price,       graalOrderBase->size,
-        graalOrderBase->executed_size,  graalOrderBase->count,       graalOrderBase->flags,
-        graalOrderBase->trade_id,       graalOrderBase->trade_price, graalOrderBase->trade_size,
+        .eventFlags = graalOrderBase->event_flags,
+        .index = graalOrderBase->index,
+        .timeSequence = graalOrderBase->time_sequence,
+        .timeNanoPart = graalOrderBase->time_nano_part,
+        .actionTime = graalOrderBase->action_time,
+        .orderId = graalOrderBase->order_id,
+        .auxOrderId = graalOrderBase->aux_order_id,
+        .price = graalOrderBase->price,
+        .size = graalOrderBase->size,
+        .executedSize = graalOrderBase->executed_size,
+        .count = graalOrderBase->count,
+        .flags = graalOrderBase->flags,
+        .tradeId = graalOrderBase->trade_id,
+        .tradePrice = graalOrderBase->trade_price,
+        .tradeSize = graalOrderBase->trade_size,
     };
+}
+
+void OrderBase::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillGraalData(graalNative);
+
+    auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
+
+    graalOrderBase->event_flags = orderBaseData_.eventFlags;
+    graalOrderBase->index = orderBaseData_.index;
+    graalOrderBase->time_sequence = orderBaseData_.timeSequence;
+    graalOrderBase->time_nano_part = orderBaseData_.timeNanoPart;
+    graalOrderBase->action_time = orderBaseData_.actionTime;
+    graalOrderBase->order_id = orderBaseData_.orderId;
+    graalOrderBase->aux_order_id = orderBaseData_.auxOrderId;
+    graalOrderBase->price = orderBaseData_.price;
+    graalOrderBase->size = orderBaseData_.size;
+    graalOrderBase->executed_size = orderBaseData_.executedSize;
+    graalOrderBase->count = orderBaseData_.count;
+    graalOrderBase->flags = orderBaseData_.flags;
+    graalOrderBase->trade_id = orderBaseData_.tradeId;
+    graalOrderBase->trade_price = orderBaseData_.tradePrice;
+    graalOrderBase->trade_size = orderBaseData_.tradeSize;
 }
 
 std::string OrderBase::baseFieldsToString() const noexcept {

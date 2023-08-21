@@ -100,10 +100,11 @@ class DXFCPP_EXPORT Order : public OrderBase {
     OrderData orderData_{};
 
     void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+    static void freeGraalData(void *graalNative) noexcept;
 
     static std::shared_ptr<Order> fromGraal(void *graalNative) noexcept;
-    //TODO: implement (virtual?)
-    void* toGraal() const noexcept;
+    virtual void* toGraal() const noexcept;
     static void freeGraal(void* graalNative) noexcept;
 
   public:

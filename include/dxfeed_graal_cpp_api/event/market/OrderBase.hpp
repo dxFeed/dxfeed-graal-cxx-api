@@ -152,6 +152,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     OrderBaseData orderBaseData_{};
 
     void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
 
   public:
     /**

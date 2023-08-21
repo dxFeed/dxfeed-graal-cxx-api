@@ -112,11 +112,13 @@ void *Quote::toGraal() const noexcept {
         .ask_size = data_.askSize,
     };
 
+    MarketEvent::fillGraalData(static_cast<void*>(graalQuote));
+
     if (!graalQuote) {
         // TODO: error handling
     }
 
-    return dxfcpp::bit_cast<void *>(graalQuote);
+    return static_cast<void *>(graalQuote);
 }
 
 void Quote::freeGraal(void *graalNative) noexcept {

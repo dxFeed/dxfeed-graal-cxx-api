@@ -455,11 +455,11 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 - [STREAM_FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_FEED) is similar to
   FEED and also connects to the remote data feed provider but is designed for bulk data parsing from files
   - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+  - [x] dxFeed Graal C++ API
 - [LOCAL_HUB](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#LOCAL_HUB) is a local hub
   without the ability to establish network connections. Events published via publisher are delivered to local feed only.
   - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+  - [x] dxFeed Graal C++ API
 - [PUBLISHER](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#PUBLISHER) connects to the
   remote publisher hub (also known as multiplexor) or creates a publisher on the local
   host ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/WriteTapeFile.java))

@@ -119,7 +119,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription(Quote::Type);
+     * auto sub = dxfcpp::DXFeedSubscription(Quote::TYPE);
      * ```
      *
      * @param eventType the event type.
@@ -142,7 +142,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto eventTypes = {dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type};
+     * auto eventTypes = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
      * auto sub = dxfcpp::DXFeedSubscription::create(eventTypes.begin(), eventTypes.end());
      * ```
      *
@@ -175,7 +175,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription::create({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = dxfcpp::DXFeedSubscription::create({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      * ```
      *
      * @param eventTypes The event type collection.
@@ -195,8 +195,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::Type,
-     * dxfcpp::TimeAndSale::Type});
+     * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::TYPE,
+     * dxfcpp::TimeAndSale::TYPE});
      * ```
      *
      * @tparam EventTypesCollection The type of the collection of event types
@@ -260,7 +260,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      *
      * sub->addEventListener([](auto &&events) {
      *     for (const auto &e : events) {
@@ -302,7 +302,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      *
      * sub->addEventListener(std::function([](const std::vector<std::shared_ptr<dxfcpp::Quotes>> &quotes) -> void {
      *     for (const auto &q : quotes) {
@@ -374,7 +374,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      * auto id = sub->onEvent() += [](auto &&events) {
      *     for (const auto &e : events) {
      *         if (auto quote = e->template sharedAs<dxfcpp::Quote>(); quote) {

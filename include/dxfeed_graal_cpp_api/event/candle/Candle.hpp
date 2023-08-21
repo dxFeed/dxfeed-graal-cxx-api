@@ -98,6 +98,10 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     Data data_{};
 
+    void fillData(void *graalNative) noexcept;
+    void fillGraalData(void *graalNative) const noexcept;
+    static void freeGraalData(void *graalNative) noexcept;
+
     static std::shared_ptr<Candle> fromGraal(void *graalNative) noexcept;
     void* toGraal() const noexcept;
     static void freeGraal(void* graalNative) noexcept;

@@ -9,10 +9,35 @@
 namespace dxfcpp {
 
 void MarketEvent::fillData(void *graalNative) noexcept {
-    auto graalMarketEvent = bit_cast<dxfg_market_event_t *>(graalNative);
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
 
     setEventSymbol(dxfcpp::toString(graalMarketEvent->event_symbol));
     setEventTime(graalMarketEvent->event_time);
+}
+
+void MarketEvent::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
+
+    graalMarketEvent->event_symbol = dxfcpp::createCString(getEventSymbol());
+    graalMarketEvent->event_time = getEventTime();
+}
+
+void MarketEvent::freeGraalData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
+
+    delete[] graalMarketEvent->event_symbol;
 }
 
 } // namespace dxfcpp
