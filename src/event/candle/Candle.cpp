@@ -11,11 +11,11 @@
 #include <utf8.h>
 #include <utility>
 
+#include "dxfeed_graal_cpp_api/event/candle/Candle.hpp"
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
-#include "dxfeed_graal_cpp_api/event/candle/Candle.hpp"
 
 namespace dxfcpp {
 
@@ -28,7 +28,7 @@ std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) noexcept {
 
     auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
 
-    if (eventType->clazz != DXFG_EVENT_CANDLE) {
+    if (eventType->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
         return {};
     }
 
@@ -37,10 +37,20 @@ std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) noexcept {
         auto candle = std::make_shared<Candle>(CandleSymbol::valueOf(dxfcpp::toString(graalCandle->event_symbol)));
 
         candle->data_ = {
-            graalCandle->event_time,     graalCandle->event_flags,   graalCandle->index,      graalCandle->count,
-            graalCandle->open,           graalCandle->high,          graalCandle->low,        graalCandle->close,
-            graalCandle->volume,         graalCandle->vwap,          graalCandle->bid_volume, graalCandle->ask_volume,
-            graalCandle->imp_volatility, graalCandle->open_interest,
+            .eventTime = graalCandle->event_time,
+            .eventFlags = graalCandle->event_flags,
+            .index = graalCandle->index,
+            .count = graalCandle->count,
+            .open = graalCandle->open,
+            .high = graalCandle->high,
+            .low = graalCandle->low,
+            .close = graalCandle->close,
+            .volume = graalCandle->volume,
+            .vwap = graalCandle->vwap,
+            .bidVolume = graalCandle->bid_volume,
+            .askVolume = graalCandle->ask_volume,
+            .impVolatility = graalCandle->imp_volatility,
+            .openInterest = graalCandle->open_interest,
         };
 
         return candle;
@@ -62,7 +72,34 @@ std::string Candle::toString() const noexcept {
 }
 
 void *Candle::toGraal() const noexcept {
-    return nullptr;
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalCandle = new (std::nothrow) dxfg_candle_t{
+        .event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_QUOTE},
+        .event_symbol = createCString(eventSymbol_.toString()),
+        .event_time = data_.eventTime,
+        .event_flags = data_.eventFlags,
+        .index = data_.index,
+        .count = data_.count,
+        .open = data_.open,
+        .high = data_.high,
+        .low = data_.low,
+        .close = data_.close,
+        .volume = data_.volume,
+        .vwap = data_.vwap,
+        .bid_volume = data_.bidVolume,
+        .ask_volume = data_.askVolume,
+        .imp_volatility = data_.impVolatility,
+        .open_interest = data_.openInterest,
+    };
+
+    if (!graalCandle) {
+        // TODO: error handling
+    }
+
+    return dxfcpp::bit_cast<void *>(graalCandle);
 }
 
 void Candle::freeGraal(void *graalNative) noexcept {
@@ -72,14 +109,13 @@ void Candle::freeGraal(void *graalNative) noexcept {
 
     auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
 
-    if (eventType->clazz != DXFG_EVENT_CANDLE) {
+    if (eventType->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
         return;
     }
 
     auto graalCandle = bit_cast<dxfg_candle_t *>(graalNative);
 
     delete[] graalCandle->event_symbol;
-
     delete graalCandle;
 }
 

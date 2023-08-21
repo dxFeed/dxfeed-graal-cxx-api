@@ -9,11 +9,11 @@
 #include <cstdint>
 #include <memory>
 
+#include "dxfeed_graal_cpp_api/event/market/Quote.hpp"
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
-#include "dxfeed_graal_cpp_api/event/market/Quote.hpp"
 
 namespace dxfcpp {
 
@@ -48,29 +48,29 @@ std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {
         return {};
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNative);
 
-    if (eventType->clazz != DXFG_EVENT_QUOTE) {
+    if (eventType->clazz != dxfg_event_clazz_t::DXFG_EVENT_QUOTE) {
         return {};
     }
 
     try {
-        auto graalQuote = bit_cast<dxfg_quote_t *>(graalNative);
+        auto graalQuote = dxfcpp::bit_cast<dxfg_quote_t *>(graalNative);
         auto quote = std::make_shared<Quote>(dxfcpp::toString(graalQuote->market_event.event_symbol));
 
         quote->setEventTime(graalQuote->market_event.event_time);
 
         quote->data_ = {
-            graalQuote->time_millis_sequence,
-            graalQuote->time_nano_part,
-            graalQuote->bid_time,
-            graalQuote->bid_exchange_code,
-            graalQuote->bid_price,
-            graalQuote->bid_size,
-            graalQuote->ask_time,
-            graalQuote->ask_exchange_code,
-            graalQuote->ask_price,
-            graalQuote->ask_size,
+            .timeMillisSequence = graalQuote->time_millis_sequence,
+            .timeNanoPart = graalQuote->time_nano_part,
+            .bidTime = graalQuote->bid_time,
+            .bidExchangeCode = graalQuote->bid_exchange_code,
+            .bidPrice = graalQuote->bid_price,
+            .bidSize = graalQuote->bid_size,
+            .askTime = graalQuote->ask_time,
+            .askExchangeCode = graalQuote->ask_exchange_code,
+            .askPrice = graalQuote->ask_price,
+            .askSize = graalQuote->ask_size,
         };
 
         return quote;
@@ -92,7 +92,31 @@ std::string Quote::toString() const noexcept {
 }
 
 void *Quote::toGraal() const noexcept {
-    return nullptr;
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalQuote = new (std::nothrow) dxfg_quote_t{
+        .market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_QUOTE},
+                         .event_symbol = createCString(MarketEvent::getEventSymbol()),
+                         .event_time = MarketEvent::getEventTime()},
+        .time_millis_sequence = data_.timeMillisSequence,
+        .time_nano_part = data_.timeNanoPart,
+        .bid_time = data_.bidTime,
+        .bid_exchange_code = data_.bidExchangeCode,
+        .bid_price = data_.bidPrice,
+        .bid_size = data_.bidSize,
+        .ask_time = data_.askTime,
+        .ask_exchange_code = data_.askExchangeCode,
+        .ask_price = data_.askPrice,
+        .ask_size = data_.askSize,
+    };
+
+    if (!graalQuote) {
+        // TODO: error handling
+    }
+
+    return dxfcpp::bit_cast<void *>(graalQuote);
 }
 
 void Quote::freeGraal(void *graalNative) noexcept {
@@ -100,16 +124,15 @@ void Quote::freeGraal(void *graalNative) noexcept {
         return;
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
+    auto eventType = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNative);
 
-    if (eventType->clazz != DXFG_EVENT_QUOTE) {
+    if (eventType->clazz != dxfg_event_clazz_t::DXFG_EVENT_QUOTE) {
         return;
     }
 
-    auto graalQuote = bit_cast<dxfg_quote_t *>(graalNative);
+    auto graalQuote = dxfcpp::bit_cast<dxfg_quote_t *>(graalNative);
 
     delete[] graalQuote->market_event.event_symbol;
-
     delete graalQuote;
 }
 

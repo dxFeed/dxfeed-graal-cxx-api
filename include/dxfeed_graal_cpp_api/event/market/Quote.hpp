@@ -54,7 +54,6 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     }
 
     static std::shared_ptr<Quote> fromGraal(void *graalNative) noexcept;
-    //TODO: implement
     void* toGraal() const noexcept;
     static void freeGraal(void* graalNative) noexcept;
 
