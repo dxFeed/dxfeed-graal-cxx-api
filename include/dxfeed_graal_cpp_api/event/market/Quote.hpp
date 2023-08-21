@@ -53,6 +53,9 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
                  getSequence());
     }
 
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+
     static std::shared_ptr<Quote> fromGraal(void *graalNative) noexcept;
     void* toGraal() const noexcept;
     static void freeGraal(void* graalNative) noexcept;
