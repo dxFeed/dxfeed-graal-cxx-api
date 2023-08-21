@@ -34,8 +34,6 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     JavaObjectHandler<DXPublisher> handler_;
 
     static std::shared_ptr<DXPublisher> create(void *feedHandle) noexcept;
-
-    //TODO: implement
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
