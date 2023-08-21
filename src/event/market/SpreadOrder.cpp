@@ -17,11 +17,39 @@ namespace dxfcpp {
 const EventTypeEnum &SpreadOrder::TYPE = EventTypeEnum::SPREAD_ORDER;
 
 void SpreadOrder::fillData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
     OrderBase::fillData(graalNative);
 
-    auto graalSpreadOrder = bit_cast<dxfg_spread_order_t *>(graalNative);
+    auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
 
-    spreadOrderData_ = {dxfcpp::toString(graalSpreadOrder->spread_symbol)};
+    spreadOrderData_ = {.spreadSymbol = dxfcpp::toString(graalSpreadOrder->spread_symbol)};
+}
+
+void SpreadOrder::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    OrderBase::fillGraalData(graalNative);
+
+    auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
+
+    graalSpreadOrder->spread_symbol = createCString(getSpreadSymbol());
+}
+
+void SpreadOrder::freeGraalData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::freeGraalData(graalNative);
+
+    auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
+
+    delete[] graalSpreadOrder->spread_symbol;
 }
 
 std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) noexcept {
@@ -29,7 +57,7 @@ std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) noexcept 
         return {};
     }
 
-    if (bit_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SPREAD_ORDER) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SPREAD_ORDER) {
         return {};
     }
 
@@ -50,7 +78,20 @@ std::string SpreadOrder::toString() const noexcept {
 }
 
 void *SpreadOrder::toGraal() const noexcept {
-    return nullptr;
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalSpreadOrder = new (std::nothrow)
+        dxfg_spread_order_t{.order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER}}}};
+
+    if (!graalSpreadOrder) {
+        // TODO: error handling
+    }
+
+    fillGraalData(static_cast<void *>(graalSpreadOrder));
+
+    return static_cast<void *>(graalSpreadOrder);
 }
 
 void SpreadOrder::freeGraal(void *graalNative) noexcept {
@@ -58,16 +99,13 @@ void SpreadOrder::freeGraal(void *graalNative) noexcept {
         return;
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_SPREAD_ORDER) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SPREAD_ORDER) {
         return;
     }
 
-    auto graalSpreadOrder = bit_cast<dxfg_spread_order_t *>(graalNative);
+    auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
 
-    delete[] graalSpreadOrder->order_base.market_event.event_symbol;
-    delete[] graalSpreadOrder->spread_symbol;
+    freeGraalData(graalNative);
 
     delete graalSpreadOrder;
 }

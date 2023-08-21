@@ -97,9 +97,7 @@ void AnalyticOrder::freeGraal(void *graalNative) noexcept {
         return;
     }
 
-    auto eventType = static_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER) {
         return;
     }
 

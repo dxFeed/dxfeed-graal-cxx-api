@@ -32,9 +32,10 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     SpreadOrderData spreadOrderData_{};
 
     void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+    static void freeGraalData(void *graalNative) noexcept;
 
     static std::shared_ptr<SpreadOrder> fromGraal(void *graalNative) noexcept;
-    //TODO: implement
     void* toGraal() const noexcept;
     static void freeGraal(void* graalNative) noexcept;
 
