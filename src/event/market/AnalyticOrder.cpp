@@ -85,6 +85,8 @@ void *AnalyticOrder::toGraal() const noexcept {
 
     if (!graalAnalyticOrder) {
         // TODO: error handling
+
+        return nullptr;
     }
 
     fillGraalData(static_cast<void *>(graalAnalyticOrder));

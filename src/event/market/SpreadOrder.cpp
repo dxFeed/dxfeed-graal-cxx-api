@@ -87,6 +87,8 @@ void *SpreadOrder::toGraal() const noexcept {
 
     if (!graalSpreadOrder) {
         // TODO: error handling
+
+        return nullptr;
     }
 
     fillGraalData(static_cast<void *>(graalSpreadOrder));

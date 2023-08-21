@@ -131,6 +131,8 @@ void *Quote::toGraal() const noexcept {
 
     if (!graalQuote) {
         // TODO: error handling
+
+        return nullptr;
     }
 
     fillGraalData(static_cast<void *>(graalQuote));

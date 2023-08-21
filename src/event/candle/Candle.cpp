@@ -122,6 +122,8 @@ void *Candle::toGraal() const noexcept {
 
     if (!graalCandle) {
         // TODO: error handling
+
+        return nullptr;
     }
 
     fillGraalData(static_cast<void *>(graalCandle));
