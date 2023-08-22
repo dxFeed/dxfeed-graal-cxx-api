@@ -20,32 +20,63 @@ namespace dxfcpp {
 
 const EventTypeEnum &Summary::TYPE = EventTypeEnum::SUMMARY;
 
+void Summary::fillData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillData(graalNative);
+
+    auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
+
+    data_ = {
+        .dayId = graalSummary->day_id,
+        .dayOpenPrice = graalSummary->day_open_price,
+        .dayHighPrice = graalSummary->day_high_price,
+        .dayLowPrice = graalSummary->day_low_price,
+        .dayClosePrice = graalSummary->day_close_price,
+        .prevDayId = graalSummary->prev_day_id,
+        .prevDayClosePrice = graalSummary->prev_day_close_price,
+        .prevDayVolume = graalSummary->prev_day_volume,
+        .openInterest = graalSummary->open_interest,
+        .flags = graalSummary->flags,
+    };
+}
+
+void Summary::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillGraalData(graalNative);
+
+    auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
+
+    graalSummary->day_id = data_.dayId;
+    graalSummary->day_open_price = data_.dayOpenPrice;
+    graalSummary->day_high_price = data_.dayHighPrice;
+    graalSummary->day_low_price = data_.dayLowPrice;
+    graalSummary->day_close_price = data_.dayClosePrice;
+    graalSummary->prev_day_id = data_.prevDayId;
+    graalSummary->prev_day_close_price = data_.prevDayClosePrice;
+    graalSummary->prev_day_volume = data_.prevDayVolume;
+    graalSummary->open_interest = data_.openInterest;
+    graalSummary->flags = data_.flags;
+}
+
 std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_SUMMARY) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SUMMARY) {
         return {};
     }
 
     try {
-        auto graalSummary = bit_cast<dxfg_summary_t *>(graalNative);
-        auto summary = std::make_shared<Summary>(dxfcpp::toString(graalSummary->market_event.event_symbol));
+        auto summary = std::make_shared<Summary>();
 
-        summary->setEventTime(graalSummary->market_event.event_time);
-        summary->data_ = {graalSummary->day_id,
-                          graalSummary->day_open_price,
-                          graalSummary->day_high_price,
-                          graalSummary->day_low_price,
-                          graalSummary->day_close_price,
-                          graalSummary->prev_day_id,
-                          graalSummary->prev_day_close_price,
-                          graalSummary->prev_day_volume,
-                          graalSummary->open_interest,
-                          graalSummary->flags};
+        summary->fillData(graalNative);
 
         return summary;
     } catch (...) {
@@ -68,7 +99,22 @@ std::string Summary::toString() const noexcept {
 }
 
 void *Summary::toGraal() const noexcept {
-    return nullptr;
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalSummary = new (std::nothrow)
+        dxfg_summary_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SUMMARY}}};
+
+    if (!graalSummary) {
+        // TODO: error handling
+
+        return nullptr;
+    }
+
+    fillGraalData(static_cast<void *>(graalSummary));
+
+    return static_cast<void *>(graalSummary);
 }
 
 void Summary::freeGraal(void *graalNative) noexcept {
@@ -76,15 +122,13 @@ void Summary::freeGraal(void *graalNative) noexcept {
         return;
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_SUMMARY) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SUMMARY) {
         return;
     }
 
-    auto graalSummary = bit_cast<dxfg_summary_t *>(graalNative);
+    auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
 
-    delete[] graalSummary->market_event.event_symbol;
+    MarketEvent::freeGraalData(graalNative);
 
     delete graalSummary;
 }

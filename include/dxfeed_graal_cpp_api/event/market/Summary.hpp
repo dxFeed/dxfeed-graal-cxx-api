@@ -58,6 +58,9 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
 
     Data data_{};
 
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+
     static std::shared_ptr<Summary> fromGraal(void *graalNative) noexcept;
     //TODO: implement
     void* toGraal() const noexcept;

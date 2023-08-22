@@ -94,7 +94,7 @@ std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) noexcept {
         return {};
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_PROFILE) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_PROFILE) {
         return {};
     }
 
@@ -150,7 +150,7 @@ void Profile::freeGraal(void *graalNative) noexcept {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_PROFILE) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_PROFILE) {
         return;
     }
 
