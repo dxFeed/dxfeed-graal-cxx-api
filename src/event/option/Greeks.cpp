@@ -20,28 +20,61 @@ namespace dxfcpp {
 
 const EventTypeEnum &Greeks::TYPE = EventTypeEnum::GREEKS;
 
+void Greeks::fillData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillData(graalNative);
+
+    auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
+
+    data_ = {
+        .eventFlags = graalGreeks->event_flags,
+        .index = graalGreeks->index,
+        .price = graalGreeks->price,
+        .volatility = graalGreeks->volatility,
+        .delta = graalGreeks->delta,
+        .gamma = graalGreeks->gamma,
+        .theta = graalGreeks->theta,
+        .rho = graalGreeks->rho,
+        .vega = graalGreeks->vega,
+    };
+}
+
+void Greeks::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillGraalData(graalNative);
+
+    auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
+
+    graalGreeks->event_flags = data_.eventFlags;
+    graalGreeks->index = data_.index;
+    graalGreeks->price = data_.price;
+    graalGreeks->volatility = data_.volatility;
+    graalGreeks->delta = data_.delta;
+    graalGreeks->gamma = data_.gamma;
+    graalGreeks->theta = data_.theta;
+    graalGreeks->rho = data_.rho;
+    graalGreeks->vega = data_.vega;
+}
+
 std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_GREEKS) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_GREEKS) {
         return {};
     }
 
     try {
-        auto graalGreeks = bit_cast<dxfg_greeks_t *>(graalNative);
-        auto greeks = std::make_shared<Greeks>(dxfcpp::toString(graalGreeks->market_event.event_symbol));
+        auto greeks = std::make_shared<Greeks>();
 
-        greeks->setEventTime(graalGreeks->market_event.event_time);
-
-        greeks->data_ = {
-            graalGreeks->event_flags, graalGreeks->index, graalGreeks->price,
-            graalGreeks->volatility,  graalGreeks->delta, graalGreeks->gamma,
-            graalGreeks->theta,       graalGreeks->rho,   graalGreeks->vega,
-        };
+        greeks->fillData(graalNative);
 
         return greeks;
     } catch (...) {
@@ -61,7 +94,22 @@ std::string Greeks::toString() const noexcept {
 }
 
 void *Greeks::toGraal() const noexcept {
-    return nullptr;
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalGreeks = new (std::nothrow)
+        dxfg_greeks_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_GREEKS}}};
+
+    if (!graalGreeks) {
+        // TODO: error handling
+
+        return nullptr;
+    }
+
+    fillGraalData(static_cast<void *>(graalGreeks));
+
+    return static_cast<void *>(graalGreeks);
 }
 
 void Greeks::freeGraal(void *graalNative) noexcept {
@@ -69,15 +117,13 @@ void Greeks::freeGraal(void *graalNative) noexcept {
         return;
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_GREEKS) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_GREEKS) {
         return;
     }
 
-    auto graalGreeks = bit_cast<dxfg_greeks_t *>(graalNative);
+    auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
 
-    delete[] graalGreeks->market_event.event_symbol;
+    MarketEvent::freeGraalData(graalNative);
 
     delete graalGreeks;
 }
