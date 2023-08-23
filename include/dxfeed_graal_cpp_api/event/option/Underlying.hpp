@@ -78,8 +78,10 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
 
     Data data_{};
 
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+
     static std::shared_ptr<Underlying> fromGraal(void *graalNative) noexcept;
-    //TODO: implement
     void* toGraal() const noexcept;
     static void freeGraal(void* graalNative) noexcept;
 

@@ -83,8 +83,10 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     Data data_{};
 
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+
     static std::shared_ptr<Series> fromGraal(void *graalNative) noexcept;
-    //TODO: implement
     void* toGraal() const noexcept;
     static void freeGraal(void* graalNative) noexcept;
 
