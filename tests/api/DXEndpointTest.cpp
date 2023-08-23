@@ -115,6 +115,10 @@ TEST_CASE("DXFeedSubscription") {
 
     dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
 
+    std::vector types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
+
+    auto s3 = dxfcpp::DXFeed::getInstance()->createSubscription(types);
+
     dxfcpp::DXFeed::getInstance();
 }
 
