@@ -74,7 +74,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     template <typename EventTypesCollection>
     explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
 #if __cpp_concepts
-        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
+        requires requires {
+            {
+                DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
+                                   std::end(std::forward<EventTypesCollection>(eventTypes)))
+            };
+        }
 #endif
         : DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
                              std::end(std::forward<EventTypesCollection>(eventTypes))) {
@@ -204,11 +209,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
     template <typename EventTypesCollection>
-    static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept
-#if __cpp_concepts
-        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
-#endif
-    {
+    static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept {
         auto sub =
             std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
         auto id = ApiContext::getInstance()->getDxFeedSubscriptionManager()->registerEntity(sub);

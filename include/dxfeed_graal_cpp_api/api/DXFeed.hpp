@@ -145,15 +145,12 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
      * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
      *
-     * @tparam EventTypesCollection The class of the collection of event types which satisfy the following concept `requires ElementTypeIs<EventTypesCollection, EventTypeEnum>`
+     * @tparam EventTypesCollection The class of the collection of event types
      * @param eventTypes The collection of event types
      * @return The new subscription
      */
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
-#if __cpp_concepts
-        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
-#endif
     {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::createSubscription(eventTypes = " +
