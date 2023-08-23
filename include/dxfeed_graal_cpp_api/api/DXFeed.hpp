@@ -105,6 +105,11 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.
      * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
      *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription(dxfcpp::Quote::TYPE);
+     * ```
+     *
      * @param eventType The type of event
      * @return The new subscription
      */
@@ -113,6 +118,27 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
      * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
+     *
+     * Example:
+     * ```cpp
+     * auto eventTypes = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
+     *
+     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription(eventTypes.begin(), eventTypes.end());
+     * ```
+     *
+     * ```cpp
+     * std::vector types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
+     *
+     * auto sub = dxfcpp::DXFeedSubscription::create(types.begin(), types.end());
+     * ```
+     *
+     * ```cpp
+     * std::set types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
+     * auto endpoint = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED)->build();
+     * auto sub = endpoint->getFeed()->createSubscription(eventTypes.begin(), eventTypes.end());
+     *
+     * endpoint->connect("demo.dxfeed.com:7300");
+     * ```
      *
      * @tparam EventTypeIt The iterator type of the collection of event types
      * @param begin The start iterator
@@ -136,6 +162,11 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
      * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
      *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
+     * ```
+     *
      * @param eventTypes The initializer list of event types
      * @return The new subscription
      */
@@ -144,6 +175,17 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
      * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
+     *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription(std::unordered_set{dxfcpp::Quote::TYPE,
+     * dxfcpp::TimeAndSale::TYPE});
+     * ```
+     *
+     * ```cpp
+     * std::vector types = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
+     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription(types);
+     * ```
      *
      * @tparam EventTypesCollection The class of the collection of event types
      * @param eventTypes The collection of event types

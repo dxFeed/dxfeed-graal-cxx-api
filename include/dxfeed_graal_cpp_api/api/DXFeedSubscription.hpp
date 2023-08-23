@@ -124,7 +124,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription(Quote::TYPE);
+     * auto sub = dxfcpp::DXFeedSubscription::create(dxfcpp::Quote::TYPE);
      * ```
      *
      * @param eventType the event type.
@@ -148,7 +148,14 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * Example:
      * ```cpp
      * auto eventTypes = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
+     *
      * auto sub = dxfcpp::DXFeedSubscription::create(eventTypes.begin(), eventTypes.end());
+     * ```
+     *
+     * ```cpp
+     * std::vector types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
+     *
+     * auto sub = dxfcpp::DXFeedSubscription::create(types.begin(), types.end());
      * ```
      *
      * @tparam EventTypeIt The collection's iterator type
@@ -202,6 +209,11 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * ```cpp
      * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::TYPE,
      * dxfcpp::TimeAndSale::TYPE});
+     * ```
+     *
+     * ```cpp
+     * std::vector types = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
+     * auto sub = dxfcpp::DXFeedSubscription::create(types);
      * ```
      *
      * @tparam EventTypesCollection The type of the collection of event types
