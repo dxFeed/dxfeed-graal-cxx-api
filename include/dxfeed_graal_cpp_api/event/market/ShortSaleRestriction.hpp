@@ -37,4 +37,8 @@ struct DXFCPP_EXPORT ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint
     static const ShortSaleRestriction INACTIVE;
 };
 
+template <>
+const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<const ShortSaleRestriction>>
+    ShortSaleRestriction::ParentType::ALL;
+
 } // namespace dxfcpp

@@ -134,4 +134,7 @@ struct DXFCPP_EXPORT OrderAction : Enum<OrderAction, std::uint32_t> {
     static const OrderAction BUST;
 };
 
+template <>
+const std::unordered_map<OrderAction::CodeType, std::reference_wrapper<const OrderAction>> OrderAction::ParentType::ALL;
+
 } // namespace dxfcpp

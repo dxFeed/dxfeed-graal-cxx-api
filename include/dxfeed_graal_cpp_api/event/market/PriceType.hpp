@@ -39,4 +39,7 @@ struct DXFCPP_EXPORT PriceType : Enum<PriceType, std::uint32_t> {
     static const PriceType FINAL;
 };
 
+template <>
+const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const PriceType>> PriceType::ParentType::ALL;
+
 } // namespace dxfcpp

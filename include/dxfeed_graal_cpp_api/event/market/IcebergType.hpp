@@ -34,4 +34,7 @@ struct DXFCPP_EXPORT IcebergType : Enum<IcebergType, std::uint32_t> {
     static const IcebergType SYNTHETIC;
 };
 
+template <>
+const std::unordered_map<IcebergType::CodeType, std::reference_wrapper<const IcebergType>> IcebergType::ParentType::ALL;
+
 } // namespace dxfcpp
