@@ -39,69 +39,70 @@ class EventTypeEnum;
  * you can provide a default address to connect and credentials  using
  * "@ref DXEndpoint::DXFEED_ADDRESS_PROPERTY "dxfeed.address"",
  * "@ref DXEndpoint::DXFEED_USER_PROPERTY "dxfeed.user"", and
- * "{@link DXEndpoint#DXFEED_PASSWORD_PROPERTY dxfeed.password}"
+ * "@ref DXEndpoint::DXFEED_PASSWORD_PROPERTY "dxfeed.password""
  * system properties or by putting them into
- * "{@link DXEndpoint#DXFEED_PROPERTIES_PROPERTY dxfeed.properties}"
- * file on JVM classpath. dxFeed API samples come with a ready-to-use "<b>dxfeed.properties</b>"
+ * "@ref DXEndpoint::DXFEED_PROPERTIES_PROPERTY "dxfeed.properties""
+ * file in the same directory. dxFeed API samples come with a ready-to-use "<b>dxfeed.properties</b>"
  * file that contains an address of dxFeed demo feed at "<b>demo.dxfeed.com:7300</b>" and
  * demo access credentials.
  *
  * <h4>Subscribe for single event type</h4>
  *
  * The following code creates listener that prints mid price for each quote
- * and subscribes for quotes on SPDR S&amp;P 500 ETF symbol:
+ * and subscribes for quotes on SPDR S&P 500 ETF symbol:
  * <pre><tt>
- * {@link DXFeedSubscription DXFeedSubscription}&lt;{@link Quote Quote}&gt; sub = {@link DXFeed DXFeed}.{@link #getInstance() getInstance}().{@link #createSubscription(Class) createSubscription}({@link Quote Quote.class});
- * sub.{@link DXFeedSubscription#addEventListener addEventListener}(new {@link DXFeedEventListener DXFeedEventListener}&lt;{@link Quote Quote}&gt;() {
- *     public void eventsReceived({@link List List}&lt;{@link Quote Quote}&gt; quotes) {
- *         for ({@link Quote Quote} quote : quotes)
- *             System.out.println("Mid = " + (quote.{@link Quote#getBidPrice getBidPrice}() + quote.{@link Quote#getAskPrice getAskPrice}()) / 2);
+ * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription() "createSubscription"(Quote::TYPE);
+ *
+ * sub->@ref DXFeedSubscription::addEventListener() "addEventListener"<Quote>([](const auto& quotes) {
+ *     for (const auto& quote : quotes) {
+ *         std::cout << "Mid = " + (quote->@ref Quote::getBidPrice() "getBidPrice"() + quote->@ref Quote::getAskPrice() "getAskPrice"()) / 2) << std::endl;
  *     }
  * });
- * sub.{@link DXFeedSubscription#addSymbols(Object...) addSymbols}("SPY");</tt></pre>
+ *
+ * sub->@ref DXFeedSubscription::addSymbols() "addSymbols"("SPY");</tt></pre>
  *
  * Note, that order of calls is important here. By attaching listeners first and then setting
- * subscription we ensure that the current quote gets received by the listener. See
- * {@link DXFeedSubscription#addSymbols(Object...) DXFeedSubscription.addSymbols} for details.
- * If a set of symbols is changed first, then {@link DXFeedSubscription#addEventListener(DXFeedEventListener) sub.addEventListener}
- * raises an {@link IllegalStateException} to protected from hard-to-catch bugs with potentially missed events.
+ * subscription we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols() for details.
+ * If a set of symbols is changed first, then @ref DXFeedSubscription::addEventListener() "sub->addEventListener"
+ * raises an IllegalStateException in JVM to protected from hard-to-catch bugs with potentially missed events.
  *
  * <h4>Subscribe for multiple event types</h4>
  *
  * The following code creates listener that prints each received event and
- * subscribes for quotes and trades on SPDR S&amp;P 500 ETF symbol:
+ * subscribes for quotes and trades on SPDR S&P 500 ETF symbol:
  * <pre><tt>
- * {@link DXFeedSubscription DXFeedSubscription}&lt;{@link MarketEvent MarketEvent}&gt; sub = {@link DXFeed DXFeed}.{@link #getInstance() getInstance}().&lt;{@link MarketEvent MarketEvent}&gt;{@link #createSubscription(Class[]) createSubscription}({@link Quote Quote.class}, {@link Trade Trade.class});
- * sub.{@link DXFeedSubscription#addEventListener addEventListener}(new {@link DXFeedEventListener DXFeedEventListener}&lt;{@link MarketEvent MarketEvent}&gt;() {
- *     public void eventsReceived({@link List List}&lt;{@link MarketEvent MarketEvent}&gt; events) {
- *         for ({@link MarketEvent MarketEvent} event : events)
- *             System.out.println(event);
+ * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription() "createSubscription"({Quote::TYPE, Trade::TYPE});
+ *
+ * sub->@ref DXFeedSubscription::addEventListener() "addEventListener"([](auto&& events) {
+ *     for (const auto& event : events) {
+ *         std::cout << event << std::endl;
  *     }
  * });
- * sub.{@link DXFeedSubscription#addSymbols(Object...) addSymbols}("SPY");</tt></pre>
+ *
+ * sub->@ref DXFeedSubscription::addSymbols() "addSymbols"("SPY");</tt></pre>
  *
  * <h4>Subscribe for event and query periodically its last value</h4>
  *
- * The following code subscribes for trades on SPDR S&amp;P 500 ETF symbol and
+ * The following code subscribes for trades on SPDR S&P 500 ETF symbol and
  * prints last trade every second.
  *
  * <pre><tt>
- * {@link DXFeedSubscription DXFeedSubscription}&lt;{@link Trade Trade}&gt; sub = {@link DXFeed DXFeed}.{@link #getInstance() getInstance}().{@link #createSubscription(Class) createSubscription}({@link Trade Trade.class});
- * sub.{@link DXFeedSubscription#addSymbols(Object...) addSymbols}("SPY");
+ * using namespace std::chrono_literals;
+ *
+ * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription() "createSubscription"({Trade::TYPE});
+ *
+ * sub->@ref DXFeedSubscription::addSymbols() "addSymbols"("SPY");
+ *
+ * auto feed = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"();
+ *
  * while (true) {
- *     System.out.println(feed.{@link #getLastEvent getLastEvent}(new Trade("SPY")));
- *     Thread.sleep(1000);
+ *     std::cout << System.out.println(feed->@ref DXFeed::getLastEvent() "getLastEvent"(Trade::create("SPY")));
+ *     std::this_thread::sleep_for(1000ms);
  * }</tt></pre>
  *
  * <h3>Threads and locks</h3>
  *
  * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
- *
- * <h3>Implementation details</h3>
- *
- * dxFeed API is implemented on top of QDS. dxFeed API classes itself are in "<b>dxfeed-api.jar</b>", but
- * their implementation is in "<b>qds.jar</b>". You need have "<b>qds.jar</b>" in your classpath
- * in order to use dxFeed API.
  */
 struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct DXEndpoint;
