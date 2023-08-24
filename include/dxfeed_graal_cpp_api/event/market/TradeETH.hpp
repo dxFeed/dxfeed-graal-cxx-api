@@ -98,8 +98,10 @@ struct EventMapper;
 class DXFCPP_EXPORT TradeETH final : public TradeBase {
     friend struct EventMapper;
 
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+
     static std::shared_ptr<TradeETH> fromGraal(void *graalNative) noexcept;
-    //TODO: implement
     void* toGraal() const noexcept;
     static void freeGraal(void* graalNative) noexcept;
 

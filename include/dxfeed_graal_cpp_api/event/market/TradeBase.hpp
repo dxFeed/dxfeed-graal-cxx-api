@@ -68,6 +68,9 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
 
     TradeBaseData tradeBaseData_{};
 
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+
     template <typename ChildType, typename GraalNativeEventType, typename ChildGraalNativeEventType, auto clazz>
     static std::shared_ptr<ChildType> fromGraal(void *graalNative) noexcept
 #if __cpp_concepts
