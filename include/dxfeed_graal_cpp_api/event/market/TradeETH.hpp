@@ -61,7 +61,7 @@ struct EventMapper;
  * <h3>Daily reset</h3>
  *
  * Daily reset procedure that happens on a schedule during non-trading hours resets TradeETH
- * @ref #getDayVolume() "dayVolume" and @ref ::getDayTurnover() "dayTurnover" to math::NaN
+ * @ref TradeETH::getDayVolume() "dayVolume" and @ref TradeETH::getDayTurnover() "dayTurnover" to math::NaN
  * and sets @ref ::getDayId() "dayId" to the next trading day in preparation to the next day's pre-market trading
  * session (or for regular trading if there is no pre-market) while leaving all other properties intact. They reflect
  * information about the last known ETH trade until the next ETH trade happens.

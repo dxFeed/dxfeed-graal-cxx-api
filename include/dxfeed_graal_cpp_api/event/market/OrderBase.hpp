@@ -40,28 +40,28 @@ struct EventMapper;
  *
  * <p> Order events arrive from
  * multiple sources for the same market symbol and are distinguished by their
- * @ref ::getIndex "index". Index is a unique per symbol identifier of the event.
+ * @ref OrderBase::getIndex "index". Index is a unique per symbol identifier of the event.
  * It is unique across all the sources of depth information for the symbol.
- * The event with @ref #getSize() "size" either `0` or `NaN` is a signal to remove previously received order
+ * The event with @ref OrderBase::getSize() "size" either `0` or `NaN` is a signal to remove previously received order
  * for the corresponding index.
- * The method @ref ::hasSize() "hasSize" is a convenient method to test for size presence.
+ * The method @ref OrderBase::hasSize() "hasSize" is a convenient method to test for size presence.
  *
  * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some order event sources provide a consistent view of the price-level or detailed order book. Their updates
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref OrderBase::getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
  *
- * <p> The event @ref ::getSource() "source" identifier for an order is a part of the unique event @ref ::getIndex() "index".
- * It occupies highest bits of the @ref ::getIndex() "index" (index is not-negative). The lowest bits of
- * @ref ::getIndex() "index" contain source-specific event index which is always zero in
- * an event that is marked with EventFlag::SNAPSHOT_END bit in @ref ::getEventFlags() "eventFlags".
+ * <p> The event @ref OrderBase::getSource() "source" identifier for an order is a part of the unique event @ref OrderBase::getIndex() "index".
+ * It occupies highest bits of the @ref OrderBase::getIndex() "index" (index is not-negative). The lowest bits of
+ * @ref OrderBase::getIndex() "index" contain source-specific event index which is always zero in
+ * an event that is marked with EventFlag::SNAPSHOT_END bit in @ref OrderBase::getEventFlags() "eventFlags".
  *
- * <p> Note that for an order with EventFlag::REMOVE_EVENT bit in @ref ::getEventFlags() "eventFlags"
+ * <p> Note that for an order with EventFlag::REMOVE_EVENT bit in @ref OrderBase::getEventFlags() "eventFlags"
  * it is always the case that @ref #getSize() "size" is either `0` or `NaN`,
  * so no additional logic to process this bit is required for orders.
- * Transactions and snapshots may include orders with @ref #getSize() "size" of `0`.
+ * Transactions and snapshots may include orders with @ref OrderBase::getSize() "size" of `0`.
  * The filtering that distinguishes those events as removals of orders shall be performed after
  * all transactions and snapshot processing.
  *
@@ -158,7 +158,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     /**
      * Maximum allowed sequence value.
      *
-     * @see ::setSequence()
+     * @see OrderBase::setSequence()
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
@@ -191,7 +191,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes source of this event.
-     * This method changes highest bits of the @ref ::getIndex() "index" of this event.
+     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
      *
      * @param source source of this event.
      */
@@ -227,8 +227,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes unique per-symbol index of this order. Note, that this method also changes
-     * @ref ::getSource() "source", whose id occupies highest bits of index.
-     * Use ::setSource() after invocation of this method to set the desired value of source.
+     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
+     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
      *
      * @param index unique per-symbol index of this order.
      */
@@ -263,10 +263,10 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     /**
      * Changes time and sequence of this order.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref OrderBase::setTime() "time" and/or @ref OrderBase::setSequence() "sequence".
      *
      * @param timeSequence the time and sequence.
-     * @see ::getTimeSequence()
+     * @see OrderBase::getTimeSequence()
      */
     void setTimeSequence(std::int64_t timeSequence) noexcept {
         orderBaseData_.timeSequence = timeSequence;
@@ -314,9 +314,9 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns sequence number of this order to distinguish orders that have the same @ref ::getTime() "time".
+     * Returns sequence number of this order to distinguish orders that have the same @ref OrderBase::getTime() "time".
      * This sequence number does not have to be unique and does not need to be sequential.
-     * Sequence can range from 0 to MAX_SEQUENCE.
+     * Sequence can range from 0 to OrderBase::MAX_SEQUENCE.
      *
      * @return sequence of this order.
      */
@@ -325,11 +325,11 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of this order.
+     * Changes @ref OrderBase::getSequence() "sequence number" of this order.
      *
      * @param sequence the sequence.
      *
-     * @see #getSequence()
+     * @see OrderBase::getSequence()
      */
     void setSequence(std::int32_t sequence) noexcept {
         if (sequence < 0 || sequence > MAX_SEQUENCE) {

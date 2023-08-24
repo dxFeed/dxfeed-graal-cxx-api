@@ -29,9 +29,9 @@ struct EventMapper;
  * <p>Series is an IndexedEvent with multiple instances of event available for
  * each underlying symbol. Each series event instance corresponds to an OptionSeries
  * of the corresponding underlying. The correspondence between a series event instance and
- * an OptionSeries is established via @ref ::getExpiration() "expiration" property.
+ * an OptionSeries is established via @ref Series::getExpiration() "expiration" property.
  * If case where there are multiple series at the same expiration day id, then series events are
- * are ordered by their @ref #getIndex() "index" in the same order as the corresponding
+ * are ordered by their @ref Series::getIndex() "index" in the same order as the corresponding
  * OptionSeries are @ref OptionSeries::compareTo(OptionSeries) "ordered" by their attributes.
  *
  * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>

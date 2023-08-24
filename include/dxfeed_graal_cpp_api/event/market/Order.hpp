@@ -24,15 +24,15 @@ struct EventMapper;
  * The collection of order events of a symbol represents the most recent information
  * that is available about orders on the market at any given moment of time.
  * Order events give information on several levels of details, called scopes - see Scope.
- * Scope of an order is available via @ref ::getScope "scope" property.
+ * Scope of an order is available via @ref Order::getScope "scope" property.
  *
  * <p> Order events arrive from
- * multiple sources for the same market symbol and are distinguished by their @ref ::getIndex "index". Index is a
+ * multiple sources for the same market symbol and are distinguished by their @ref Order::getIndex "index". Index is a
  * unique per symbol identifier of the event.
  * It is unique across all the sources of depth information for the symbol.
- * The event with @ref #getSize() "size" either `0` or `NaN` is a signal to remove previously received order for the
+ * The event with @ref Order::getSize() "size" either `0` or `NaN` is a signal to remove previously received order for the
  * corresponding index.
- * The method ::hasSize() is a convenient method to test for size presence.
+ * The method Order::hasSize() is a convenient method to test for size presence.
  *
  * <p> Events from finer-grained Scope of detail give more information and include events
  * from coarse-grained Scope of detail. For a consistent representation of the market depth
@@ -43,24 +43,24 @@ struct EventMapper;
  *
  * Some order event sources provide a consistent view of the price-level or detailed order book. Their updates
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref Order::getEventFlags() "eventFlags" property.
  *
  * <p> See `Event Flags` section of OrderBase class documentation for details.
  *
  * <p> The composite quotes with Scope::COMPOSITE and regional quotes with Scope::REGIONAL come
  * individually from different venues and are not related to each other in any transactional way. The result of
- * ::getEventFlags method for them is always zero.
+ * Order::getEventFlags method for them is always zero.
  *
  * <h3>Publishing order books</h3>
  *
  * When publishing an order event with DXPublisher::publishEvents() method, least significant 32 bits of
- * order @ref ::getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()` inclusive.
- * Use ::setSource() method after ::setIndex() to properly include source identifier into the index.
+ * order @ref Order::getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()` inclusive.
+ * Use Order::setSource() method after Order::setIndex() to properly include source identifier into the index.
  *
- * A snapshot has to be published in the <em>descending</em> order of @ref ::getIndex() "index", starting with
- * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref ::getEventFlags() "eventFlags",
+ * A snapshot has to be published in the <em>descending</em> order of @ref Order::getIndex() "index", starting with
+ * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref Order::getEventFlags() "eventFlags",
  * and finishing the snapshot with an event that has zero 32 least significant bits of index.
- * EventFlag::SNAPSHOT_END bit in @ref ::getEventFlags() "eventFlags" is optional during publishing.
+ * EventFlag::SNAPSHOT_END bit in @ref Order::getEventFlags() "eventFlags" is optional during publishing.
  * It will be properly set on receiving end anyway.
  *
  * <h3>Limitations</h3>
@@ -71,13 +71,13 @@ struct EventMapper;
  *
  * Some feeds provide support for "Full Order Book" (FOB) where additional fields will be available:
  * <ul>
- * <li>@ref ::getAction() "action" - event business meaning (see OrderAction for more details)</li>
- * <li>@ref ::getActionTime() "actionTime" - time of the last action</li>
- * <li>@ref ::getOrderId() "orderId" - ID of this order</li>
- * <li>@ref ::getAuxOrderId() "auxOrderId" - additional ID for this order</li>
- * <li>@ref ::getTradeId() "tradeId" - trade (order execution) ID</li>
- * <li>@ref ::getTradePrice() "tradePrice" - price of the trade</li>
- * <li>@ref ::getTradeSize() "tradeSize" - size of the trade</li>
+ * <li>@ref Order::getAction() "action" - event business meaning (see OrderAction for more details)</li>
+ * <li>@ref Order::getActionTime() "actionTime" - time of the last action</li>
+ * <li>@ref Order::getOrderId() "orderId" - ID of this order</li>
+ * <li>@ref Order::getAuxOrderId() "auxOrderId" - additional ID for this order</li>
+ * <li>@ref Order::getTradeId() "tradeId" - trade (order execution) ID</li>
+ * <li>@ref Order::getTradePrice() "tradePrice" - price of the trade</li>
+ * <li>@ref Order::getTradeSize() "tradeSize" - size of the trade</li>
  * </ul>
  *
  * <h3>Implementation details</h3>

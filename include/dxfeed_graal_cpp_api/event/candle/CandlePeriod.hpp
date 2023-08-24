@@ -18,7 +18,7 @@ namespace dxfcpp {
 
 /**
  * Period attribute of CandleSymbol defines aggregation period of the candles.
- * Aggregation period is defined as pair of a @ref ::getValue() "value" and @ref ::getType() "type".
+ * Aggregation period is defined as pair of a @ref CandlePeriod::getValue() "value" and @ref CandlePeriod::getType() "type".
  *
  * <h3>Implementation details</h3>
  *
@@ -26,8 +26,8 @@ namespace dxfcpp {
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via ::ATTRIBUTE_KEY constant.
- * The value that this key shall be set to is equal to the corresponding ::toString() "CandlePeriod.toString()"
+ * The key to use with these methods is available via CandlePeriod::ATTRIBUTE_KEY constant.
+ * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString() "CandlePeriod.toString()"
  */
 struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     /**
@@ -41,7 +41,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     static const CandlePeriod DAY;
 
     /**
-     * Default period is ::TICK.
+     * Default period is CandlePeriod::TICK.
      */
     static const CandlePeriod DEFAULT;
 
@@ -50,7 +50,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * MarketEventSymbols class.
      * The value of this constant is an empty string, because this is the main attribute that every CandleSymbol must
      * have.
-     * The value that this key shall be set to is equal to the corresponding ::toString()
+     * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString()
      */
     static const std::string ATTRIBUTE_KEY; // empty string as attribute key is allowed!
 
@@ -95,8 +95,8 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     }
 
     /**
-     * Returns aggregation period value. For example, the value of {@code 5} with
-     * the candle type of {@link CandleType#MINUTE MINUTE} represents 5 minute
+     * Returns aggregation period value. For example, the value of `5` with
+     * the candle type of @ref CandleType::MINUTE "MINUTE" represents `5` minute
      * aggregation period.
      *
      * @return aggregation period value.
@@ -116,11 +116,11 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     /**
      * Returns string representation of this aggregation period.
      * The string representation is composed of value and type string.
-     * For example, 5 minute aggregation is represented as {@code "5m"}.
-     * The value of {@code 1} is omitted in the string representation, so
-     * {@link #DAY} (one day) is represented as {@code "d"}.
-     * This string representation can be converted back into object
-     * with {@link #parse(String)} method.
+     * For example, 5 minute aggregation is represented as `"5m"`.
+     * The value of `1` is omitted in the string representation, so
+     * CandlePeriod::DAY (one day) is represented as `"d"`.
+     * This string representation can be converted back into object with CandlePeriod::parse() method.
+     *
      * @return string representation of this aggregation period.
      */
     const std::string &toString() const & noexcept {
@@ -140,7 +140,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
 
     /**
      * Parses string representation of aggregation period into object.
-     * Any string that was returned by ::toString() can be parsed.
+     * Any string that was returned by CandlePeriod::toString() can be parsed.
      * This method is flexible in the way candle types can be specified.
      * See CandleType::parse() for details.
      *

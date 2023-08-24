@@ -34,7 +34,7 @@ namespace dxfcpp {
  * Time-series events are a more specific subtype of IndexedEvent.
  * All general documentation and <a href="IndexedEvent.html#eventFlagsSection">Event Flags</a> section, in particular,
  * applies to time-series events. However, the time-series events never come from multiple sources for the same symbol
- * and their @ref #getSource() "source" is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ * and their @ref TimeSeriesEvent::getSource() "source" is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * Unlike a general IndexedEvent that is subscribed to via DXFeedSubscription} using a plain symbol to receive all
  * events for all indices, time-series events are typically subscribed to using TimeSeriesSubscriptionSymbol class to
@@ -42,7 +42,7 @@ namespace dxfcpp {
  * to simplify the task of subscribing for time-series events.
  *
  * TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents a list of
- * current time-series events ordered by their @ref ::getTime() "time". It relies on the code
+ * current time-series events ordered by their @ref TimeSeriesEvent::getTime() "time". It relies on the code
  * of AbstractIndexedEventModel to handle this logic.
  * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
@@ -54,14 +54,14 @@ namespace dxfcpp {
  * When publishing time-series event with DXPublisher::publishEvents() method on incoming TimeSeriesSubscriptionSymbol
  * the snapshot of currently known events for the requested time range has to be published first.
  *
- * A snapshot is published in the <em>descending</em> order of @ref ::getIndex() "index" (which is the same as the
- * descending order of @ref ::getTime() "time"), starting with an event with the largest index and marking it
- * with ::SNAPSHOT_BEGIN bit in @ref ::getEventFlags "eventFlags". All other event follow with default, zero
- * @ref ::getEventFlags() "eventFlags". If there is no actual event at the time that was specified in subscription
+ * A snapshot is published in the <em>descending</em> order of @ref TimeSeriesEvent::getIndex() "index" (which is the same as the
+ * descending order of @ref TimeSeriesEvent::getTime() "time"), starting with an event with the largest index and marking it
+ * with TimeSeriesEvent::SNAPSHOT_BEGIN bit in @ref TimeSeriesEvent::getEventFlags "eventFlags". All other event follow with default, zero
+ * @ref TimeSeriesEvent::getEventFlags() "eventFlags". If there is no actual event at the time that was specified in subscription
  * @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" property, then event with the corresponding time
  * has to be created anyway and published. To distinguish it from the actual event, it has to be marked with
- * ::REMOVE_EVENT bit in @ref ::getEventFlags() "eventFlags". ::SNAPSHOT_END bit in this event's
- * @ref #getEventFlags() "eventFlags" s optional during publishing. It will be properly set on receiving end anyway.
+ * TimeSeriesEvent::REMOVE_EVENT bit in @ref TimeSeriesEvent::getEventFlags() "eventFlags". TimeSeriesEvent::SNAPSHOT_END bit in this event's
+ * @ref TimeSeriesEvent::getEventFlags() "eventFlags" s optional during publishing. It will be properly set on receiving end anyway.
  * Note, that publishing any event with time that is below subscription
  * @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" also works as a legal indicator for the end of the
  * snapshot.

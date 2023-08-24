@@ -34,7 +34,7 @@ class IndexedEventSubscriptionSymbol;
  * <h3>Equality and hash codes</h3>
  *
  * This is a FilteredSubscriptionSymbol.
- * Time-series subscription symbols are compared based on their @ref ::getEventSymbol() "eventSymbol" only.
+ * Time-series subscription symbols are compared based on their @ref TimeSeriesSubscriptionSymbol::getEventSymbol() "eventSymbol" only.
  * It means, that a set of time-series subscription symbols can contain at most one time-series subscription
  * for each event symbol.
  */

@@ -40,11 +40,11 @@ struct DXFeed;
  * <h3>Endpoint role</h3>
  *
  * Each endpoint has a role that is specified on its creation and cannot be changed afterwards.
- * The default factory method ::create() creates an endpoint with a @ref Role::FEED "FEED" role.
- * Endpoints with other roles are created with ::create(Role) factory method. Endpoint role is
+ * The default factory method DXEndpoint::create() creates an endpoint with a @ref Role::FEED "FEED" role.
+ * Endpoints with other roles are created with DXEndpoint::create(Role) factory method. Endpoint role is
  * represented by @ref Role "DXEndpoint::Role" enumeration.
  *
- * Endpoint role defines the behavior of its @ref #connect(const std::string&) "connect" method:
+ * Endpoint role defines the behavior of its @ref DXEndpoint::connect(const std::string&) "connect" method:
  *
  * - @ref Role::FEED "FEED" connects to the remote data feed provider and is optimized for real-time or
  *   delayed data processing (<b>this is a default role</b>).
@@ -59,16 +59,14 @@ struct DXFeed;
  *   - <b>`DXEndpoint::create()->connect("file:demo-sample.data")->getFeed()`</b> returns a feed that is connected to
  *     a "demo-sample.data" file and plays back it as if it was received in real time.
  *
- *   This endpoint is automatically connected to the configured data feed as explained in
- *   <a href="#defaultPropertiesSection">default properties section</a>.
+ *   This endpoint is automatically connected to the configured data feed as explained in default properties section.
  * - @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" is similar to @ref Role::FEED "FEED", but it is designed to be used with
- *   OnDemandService for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default
- * properties</a>, but is not connected automatically to the data provider until @ref OnDemandService#replay(Date,
- * double) "OnDemandService.replay" method is invoked.
+ *   OnDemandService for historical data replay only. It is configured with default properties, but is not connected
+ *   automatically to the data provider until @ref OnDemandService::replay(Date, double) "OnDemandService->replay" method is invoked.
  * - @ref Role::STREAM_FEED "STREAM_FEED" is similar to @ref Role::FEED "FEED" and also connects to the remote data
  *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
  *   object that subscribes to the data from the opened files and receives events from them. Events from the files are
- *   not conflated and are processed as fast as possible. Note, that in this role, DXFeed::getLastEvent method does not
+ *   not conflated and are processed as fast as possible. Note, that in this role, DXFeed::getLastEvent() method does not
  *   work and time-series subscription is not supported.
  *   For example:
  *   ```cpp
@@ -82,22 +80,21 @@ struct DXFeed;
  *   "[speed=max]" clause forces to the file reader to play back all the data from "demo-sample.data" file as fast as
  *   data subscribers are processing it.
  * - @ref Role::PUBLISHER "PUBLISHER" connects to the remote publisher hub (also known as multiplexor) or creates a
- *   publisher on the local host. ::getPublisher() method returns a publisher object that publishes events to all
+ *   publisher on the local host. DXEndpoint::getPublisher() method returns a publisher object that publishes events to all
  *   connected feeds.
  *   For example: <b>`DXEndpoint->create(DXEndpoint::Role::PUBLISHER)->connect(":7400")->getPublisher()`</b>
  *   returns a publisher that is waiting for connections on TCP/IP port 7400. The published events will be delivered to
  *   all feeds that are connected to this publisher.
- *   This endpoint is automatically connected to the configured data feed as explained in <a
- * href="#defaultPropertiesSection">default properties section</a>.
+ *   This endpoint is automatically connected to the configured data feed as explained in default properties section.
  * - @ref Role::LOCAL_HUB "LOCAL_HUB" creates a local hub without ability to establish network connections.
- *   Events that are published via {@link #getPublisher() publisher} are delivered to local @ref ::getFeed() "feed"
+ *   Events that are published via @ref DXEndpoint::getPublisher() "publisher" are delivered to local @ref DXEndpoint::getFeed() "feed"
  * only.
  *
  * <h3>Endpoint state</h3>
  *
- * Each endpoint has a state that can be retrieved with ::getState() method.
- * When endpoint is created with any role and default address is not specified in
- * <a href="#defaultPropertiesSection">default properties</a>, then it is not connected to any remote endpoint.
+ * Each endpoint has a state that can be retrieved with DXEndpoint::getState() method.
+ * When endpoint is created with any role and default address is not specified in default properties, then it is not
+ * connected to any remote endpoint.
  * Its state is @ref State::NOT_CONNECTED "NOT_CONNECTED".
  *
  * @ref Role#FEED "Feed" and @ref Role#PUBLISHER "publisher" endpoints can connect to remote endpoints of the opposite

@@ -66,7 +66,7 @@ struct EventMapper;
  *
  * This event is implemented on top of QDS records `Trade` and `Trade&X`
  * for regional exchange trades.
- * Regional records do not explicitly store a field for @ref #getExchangeCode() "exchangeCode" property.
+ * Regional records do not explicitly store a field for @ref Trade::getExchangeCode() "exchangeCode" property.
  */
 class DXFCPP_EXPORT Trade final : public TradeBase {
     friend struct EventMapper;

@@ -32,7 +32,7 @@ namespace dxfcpp {
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via ::ATTRIBUTE_KEY constant.
+ * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding ::toString()
  */
 struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {

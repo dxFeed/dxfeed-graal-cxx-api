@@ -31,7 +31,7 @@ class EventTypeEnum;
  *
  * <h4>Default singleton instance</h4>
  *
- * There is a singleton instance of the feed that is returned by ::getInstance() method.
+ * There is a singleton instance of the feed that is returned by DXFeed::getInstance() method.
  * It is created on the first use with default configuration properties that are explained in detail in
  * documentation for DXEndpoint class in the "Default properties" section.
  *
@@ -175,13 +175,13 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * corresponding subscription is not attached to this feed.
      *
      * @param subscription The subscription.
-     * @see ::detachSubscription()
+     * @see DXFeed::detachSubscription()
      */
     void detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) noexcept;
 
     /**
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
+     * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
      *
      * Example:
      * ```cpp
@@ -195,7 +195,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
+     * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
      *
      * Example:
      * ```cpp
@@ -238,7 +238,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
+     * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
      *
      * Example:
      * ```cpp
@@ -252,7 +252,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes @link ::attachSubscription.
+     * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
      *
      * Example:
      * ```cpp

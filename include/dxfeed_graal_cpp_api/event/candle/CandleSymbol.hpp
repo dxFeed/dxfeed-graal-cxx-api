@@ -38,8 +38,8 @@ struct SymbolWrapper;
  *
  * <h3>String representation</h3>
  *
- * The string representation of the candle symbol consist of a @ref ::getBaseSymbol() "baseSymbol" followed by
- * an optional '&' with an @ref ::getExchange() "exchange" code letter and followed by an optional list of
+ * The string representation of the candle symbol consist of a @ref CandleSymbol::getBaseSymbol() "baseSymbol" followed by
+ * an optional '&' with an @ref CandleSymbol::getExchange() "exchange" code letter and followed by an optional list of
  * comma-separated key=value pairs in curly braces:
  *
  * <p>`<baseSymbol> [ '&' <exchange> ] [ '{' <key1>=<value1> [ ',' <key2>=<value2> ] ... '}' ]`
@@ -47,7 +47,7 @@ struct SymbolWrapper;
  * <p>Properties of the candle symbol correspond to the keys in the string representation in the following way:
  *
  * <ul>
- * <li>Empty key corresponds to @ref ::getPeriod() "period" &mdash; aggregation period of this symbol.
+ * <li>Empty key corresponds to @ref CandleSymbol::getPeriod() "period" &mdash; aggregation period of this symbol.
  *     The period value is composed of an optional @ref CandlePeriod::getValue() "value" which defaults to 1 when not
  *     specified, followed by a @ref CandlePeriod::getType() "type" string which is defined by one of the CandleType
  *     values and can be abbreviated to first letters. For example, a daily candle of "IBM" base symbol can be
@@ -55,32 +55,32 @@ struct SymbolWrapper;
  *     CandleType::MONTH is "mo", so the monthly candle can be specified as "IBM{=mo}". When period is not specified,
  *     then the CandlePeriod::TICK aggregation period is assumed as default. Note, that tick aggregation may not be
  *     available on the demo system which is limited to a subset of symbols and aggregation periods.
- * <li>"price" key corresponds to @ref ::getPrice() "price" &mdash; price type attribute of this symbol.
+ * <li>"price" key corresponds to @ref CandleSymbol::getPrice() "price" &mdash; price type attribute of this symbol.
  *     The CandlePrice defines possible values with CandlePrice::LAST being default.
  *     For legacy backwards-compatibility purposes, most of the price values cannot be abbreviated, so a one-minute
  *     candle of "EUR/USD" bid price shall be specified with "EUR/USD{=m,price=bid}" candle symbol string. However, the
  *     CandlePrice::SETTLEMENT can be abbreviated to "s", so a daily candle on "/ES" futures settlement prices can be
  *     specified with "/ES{=d,price=s}" string.
- * <li>"tho" key with a value of "true" corresponds to @ref ::getSession() "session" set to CandleSession::REGULAR
+ * <li>"tho" key with a value of "true" corresponds to @ref CandleSymbol::getSession() "session" set to CandleSession::REGULAR
  *     which limits the candle to trading hours only, so a 133 tick candles on "GOOG" base symbol collected over
  *     trading hours only can be specified with "GOOG{=133t,tho=true}" string. Note, that the default daily candles
  *     for US equities are special for historical reasons and correspond to the way US equity exchange report their
  *     daily summary data. The volume the US equity default daily candle corresponds to the total daily traded volume,
  *     while open, high, low, and close correspond to the regular trading hours only.
- * <li>"a" key corresponds to @ref ::getAlignment() "alignment" &mdash; alignment attribute of this symbol.
+ * <li>"a" key corresponds to @ref CandleSymbol::getAlignment() "alignment" &mdash; alignment attribute of this symbol.
  *     The CandleAlignment defines possible values with CandleAlignment::MIDNIGHT being default. The alignment values
  *     can be abbreviated to the first letter. So, a 1 hour candle on a symbol "AAPL" that starts at the regular
  *     trading session at 9:30 am ET can be specified with "AAPL{=h,a=s,tho=true}". Contrast that to
  *     the "AAPL{=h,tho=true}" candle that is aligned at midnight and thus starts at 9:00 am.
- * <li>"pl" key corresponds to @ref ::getPriceLevel() "price level" &mdash; price level attribute of this symbol.
+ * <li>"pl" key corresponds to @ref CandleSymbol::getPriceLevel() "price level" &mdash; price level attribute of this symbol.
  *     The CandlePriceLevel defines additional axis to split candles within particular price corridor in addition to
  *     CandlePeriod attribute with the default value `NaN`. So a one-minute candles of "AAPL" with price level 0.1
  *     shall be specified with "AAPL{=m,pl=0.1}".
  * </ul>
  *
- * Keys in the candle symbol are case-sensitive, while values are not. The ::valueOf() method parses any valid string
+ * Keys in the candle symbol are case-sensitive, while values are not. The CandleSymbol::valueOf() method parses any valid string
  * representation into a candle symbol object.
- * The result of the candle symbol ::toString() method is always normalized: keys are ordered lexicographically,
+ * The result of the candle symbol CandleSymbol::toString() method is always normalized: keys are ordered lexicographically,
  * values are in lower-case and are abbreviated to their shortest possible form.
  */
 struct DXFCPP_EXPORT CandleSymbol {
@@ -233,7 +233,7 @@ struct DXFCPP_EXPORT CandleSymbol {
     /**
      * Returns string representation of this symbol.
      * The string representation can be transformed back into symbol object
-     * using {@link #valueOf(String) valueOf(String)} method.
+     * using CandleSymbol::valueOf() method.
      *
      * @return string representation of this symbol.
      */

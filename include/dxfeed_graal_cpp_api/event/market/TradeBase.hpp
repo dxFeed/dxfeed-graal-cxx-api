@@ -25,7 +25,7 @@ struct EventMapper;
  * given moment of time.
  *
  * Trade event represents last trade information for <b>regular trading hours</b> (RTH) with an official volume and
- * turnover <b>for the whole trading day</b> identified by @ref ::getDayId() "dayId" field.
+ * turnover <b>for the whole trading day</b> identified by @ref TradeBase::getDayId() "dayId" field.
  *
  * TradeETH event is defined only for symbols (typically stocks and ETFs) with a designated
  * <b>extended trading hours</b> (ETH, pre market and post market trading sessions). It represents last trade price
@@ -75,7 +75,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     /**
      * Maximum allowed sequence value.
      *
-     * @see ::setSequence()
+     * @see TradeBase::setSequence()
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
@@ -102,10 +102,10 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     /**
      * Changes time and sequence of last trade.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref TradeBase::setTime() "time" and/or @ref TradeBase::setSequence() "sequence".
      *
      * @param timeSequence the time and sequence.
-     * @see ::getTimeSequence()
+     * @see TradeBase::getTimeSequence()
      */
     void setTimeSequence(std::int64_t timeSequence) noexcept {
         tradeBaseData_.timeSequence = timeSequence;
@@ -175,8 +175,8 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
 
     /**
      * Returns sequence number of the last trade to distinguish trades that have the same
-     * @ref ::getTime() "time". This sequence number does not have to be unique and
-     * does not need to be sequential. Sequence can range from 0 to ::MAX_SEQUENCE.
+     * @ref TradeBase::getTime() "time". This sequence number does not have to be unique and
+     * does not need to be sequential. Sequence can range from 0 to TradeBase::MAX_SEQUENCE.
      *
      * @return sequence of the last trade.
      */
@@ -185,10 +185,10 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     }
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of the last trade.
+     * Changes @ref TradeBase::getSequence() "sequence number" of the last trade.
      *
      * @param sequence the sequence.
-     * @see ::getSequence()
+     * @see TradeBase::getSequence()
      */
     void setSequence(std::int32_t sequence) noexcept {
         // TODO: Improve error handling
