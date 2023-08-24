@@ -66,6 +66,12 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
     void* toGraal() const noexcept;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
     static void freeGraal(void* graalNative) noexcept;
 
   public:

@@ -83,11 +83,11 @@ class DXFCPP_EXPORT IndexedEventSource {
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
-     * @param graal The pointer to the dxFeed Graal SDK structure.
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graal) noexcept;
+    static void freeGraal(void *graalNative) noexcept;
 
-    static IndexedEventSource fromGraal(void *graal) noexcept;
+    static IndexedEventSource fromGraal(void *graalNative) noexcept;
 };
 
 } // namespace dxfcpp

@@ -212,9 +212,14 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         data_ = candleSymbol;
     }
 
-    static void freeGraal(void *graal) noexcept;
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
 
-    static SymbolWrapper fromGraal(void *graal) noexcept;
+    static SymbolWrapper fromGraal(void *graalNative) noexcept;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).

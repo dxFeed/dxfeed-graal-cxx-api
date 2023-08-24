@@ -73,9 +73,14 @@ struct DXFCPP_EXPORT StringSymbol final {
      */
     void *toGraal() const noexcept;
 
-    static void freeGraal(void *graal) noexcept;
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
 
-    static StringSymbol fromGraal(void *graal) noexcept;
+    static StringSymbol fromGraal(void *graalNative) noexcept;
 
     /**
      * Returns a string representation of the current object.

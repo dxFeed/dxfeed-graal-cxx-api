@@ -100,7 +100,7 @@ std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 void *OrderSource::toGraal() const noexcept {
     auto *graalSource = new (std::nothrow) dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
 
-    return dxfcpp::bit_cast<void *>(graalSource);
+    return static_cast<void *>(graalSource);
 }
 
 } // namespace dxfcpp

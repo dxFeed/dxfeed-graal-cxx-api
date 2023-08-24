@@ -147,67 +147,67 @@ template void *
 SymbolWrapper::SymbolListUtils::toGraalList<dxfcpp::SymbolWrapper const *>(dxfcpp::SymbolWrapper const *,
                                                                            dxfcpp::SymbolWrapper const *) noexcept;
 
-void SymbolWrapper::freeGraal(void *graal) noexcept {
+void SymbolWrapper::freeGraal(void *graalNative) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("SymbolWrapper::SymbolListUtils::freeGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("SymbolWrapper::SymbolListUtils::freeGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
-    if (graal == nullptr) {
+    if (graalNative == nullptr) {
         return;
     }
 
-    switch (dxfcpp::bit_cast<dxfg_symbol_t *>(graal)->type) {
+    switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
     case STRING:
-        StringSymbol::freeGraal(graal);
+        StringSymbol::freeGraal(graalNative);
 
         break;
 
     case CANDLE:
-        CandleSymbol::freeGraal(graal);
+        CandleSymbol::freeGraal(graalNative);
 
         break;
 
     case WILDCARD:
-        WildcardSymbol::freeGraal(graal);
+        WildcardSymbol::freeGraal(graalNative);
 
         break;
 
     case INDEXED_EVENT_SUBSCRIPTION:
-        IndexedEventSubscriptionSymbol::freeGraal(graal);
+        IndexedEventSubscriptionSymbol::freeGraal(graalNative);
 
         break;
 
     case TIME_SERIES_SUBSCRIPTION:
-        TimeSeriesSubscriptionSymbol::freeGraal(graal);
+        TimeSeriesSubscriptionSymbol::freeGraal(graalNative);
 
         break;
     }
 }
 
-SymbolWrapper SymbolWrapper::fromGraal(void *graal) noexcept {
+SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("SymbolWrapper::fromGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("SymbolWrapper::fromGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
-    if (graal == nullptr) {
+    if (graalNative == nullptr) {
         return {};
     }
 
-    switch (dxfcpp::bit_cast<dxfg_symbol_t *>(graal)->type) {
+    switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
     case STRING:
-        return StringSymbol::fromGraal(graal);
+        return StringSymbol::fromGraal(graalNative);
 
     case CANDLE:
-        return CandleSymbol::fromGraal(graal);
+        return CandleSymbol::fromGraal(graalNative);
 
     case WILDCARD:
-        return WildcardSymbol::fromGraal(graal);
+        return WildcardSymbol::fromGraal(graalNative);
 
     case INDEXED_EVENT_SUBSCRIPTION:
-        return IndexedEventSubscriptionSymbol::fromGraal(graal);
+        return IndexedEventSubscriptionSymbol::fromGraal(graalNative);
 
     case TIME_SERIES_SUBSCRIPTION:
-        return TimeSeriesSubscriptionSymbol::fromGraal(graal);
+        return TimeSeriesSubscriptionSymbol::fromGraal(graalNative);
     }
 
     return {};

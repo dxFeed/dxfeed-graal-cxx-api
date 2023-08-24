@@ -266,9 +266,14 @@ struct DXFCPP_EXPORT CandleSymbol {
      */
     virtual void *toGraal() const noexcept;
 
-    static void freeGraal(void *graal) noexcept;
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
 
-    static CandleSymbol fromGraal(void *graal) noexcept;
+    static CandleSymbol fromGraal(void *graalNative) noexcept;
 
     /**
      * Converts the given string symbol into the candle symbol object.
