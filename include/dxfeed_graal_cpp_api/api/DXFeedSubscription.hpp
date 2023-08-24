@@ -266,7 +266,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * Adds listener for events.
      * Event lister can be added only when subscription is not producing any events.
      * The subscription must be either empty
-     * (its set of @ref ::getSymbols() "symbols" is empty or not @ref ::attach() "attached" to any feed
+     * (its set of @ref DXFeedSubscription::getSymbols() "symbols" is empty or not @ref DXFeedSubscription::attach() "attached" to any feed
      * (its set of change listeners is empty).
      *
      * This method does nothing if this subscription is closed.
@@ -308,7 +308,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * Adds typed listener for events.
      * Event lister can be added only when subscription is not producing any events.
      * The subscription must be either empty
-     * (its set of @ref ::getSymbols() "symbols" is empty or not @ref ::attach() "attached" to any feed
+     * (its set of @ref DXFeedSubscription::getSymbols() "symbols" is empty or not @ref DXFeedSubscription::attach() "attached" to any feed
      * (its set of change listeners is empty).
      *
      * This method does nothing if this subscription is closed.
@@ -412,7 +412,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * Adds the specified symbol to the set of subscribed symbols.
      * This is a convenience method to subscribe to one symbol at a time that has a return fast-path for a case when
      * the symbol is already in the set.
-     * When subscribing to multiple symbols at once it is preferable to use @ref ::addSymbols(const SymbolsCollection
+     * When subscribing to multiple symbols at once it is preferable to use @ref DXFeedSubscription::addSymbols(const SymbolsCollection
      * &collection) "addSymbols(symbols)" method.
      *
      * Example:
@@ -436,7 +436,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 
     /**
      * Removes the specified symbol from the set of subscribed symbols.
-     * To conveniently remove one or few symbols you can use @ref ::removeSymbols(const SymbolsCollection &collection)
+     * To conveniently remove one or few symbols you can use @ref DXFeedSubscription::removeSymbols(const SymbolsCollection &collection)
      * "removeSymbols(symbols)" method.
      *
      * Example:
@@ -650,7 +650,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return `true` if this subscription is closed.
      *
-     * @see ::close
+     * @see DXFeedSubscription::close()
      */
     bool isClosed() const noexcept {
         if constexpr (Debugger::isDebug) {
@@ -674,7 +674,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return `true` if this subscription contains the corresponding event type.
      *
-     * @see ::getEventTypes()
+     * @see DXFeedSubscription::getEventTypes()
      */
     bool containsEventType(const EventTypeEnum &eventType) const noexcept {
         return eventTypes_.contains(eventType);

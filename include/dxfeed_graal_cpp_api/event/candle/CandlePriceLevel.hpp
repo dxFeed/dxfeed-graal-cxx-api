@@ -33,7 +33,7 @@ namespace dxfcpp {
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
  * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY constant.
- * The value that this key shall be set to is equal to the corresponding ::toString()
+ * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
  */
 struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
     /**
@@ -45,7 +45,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * The attribute key that is used to store the value of `CandlePriceLevel` in a symbol string using methods
      * of MarketEventSymbols class.
      * The value of this constant is "pl".
-     * The value that this key shall be set to is equal to the corresponding ::toString()
+     * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
      */
     static const std::string ATTRIBUTE_KEY;
 
@@ -71,7 +71,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
     /**
      * Returns string representation of this price level.
      * The string representation is composed of value.
-     * This string representation can be converted back into object with ::parse() method.
+     * This string representation can be converted back into object with CandlePriceLevel::parse() method.
      *
      * @return string representation of this price level.
      */
@@ -100,7 +100,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
 
     /**
      * Parses string representation of candle price level into object.
-     * Any string that was returned by ::toString() can be parsed
+     * Any string that was returned by CandlePriceLevel::toString() can be parsed
      * and case is ignored for parsing.
      *
      * @param s string representation of candle price level.
@@ -132,7 +132,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
 
     /**
      * Returns candle price level of the given candle symbol string.
-     * The result is ::DEFAULT if the symbol does not have candle price level attribute.
+     * The result is CandlePriceLevel::DEFAULT if the symbol does not have candle price level attribute.
      *
      * @param symbol candle symbol string.
      * @return candle price level of the given candle symbol string or std::nullopt if there is no supported attribute's

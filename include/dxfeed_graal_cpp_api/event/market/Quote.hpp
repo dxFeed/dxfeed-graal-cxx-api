@@ -78,7 +78,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Maximum allowed sequence value.
      *
-     * @see ::setSequence()
+     * @see Quote::setSequence()
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
@@ -96,9 +96,9 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     }
 
     /**
-     * Returns sequence number of this quote to distinguish quotes that have the same @ref ::getTime() "time". This
+     * Returns sequence number of this quote to distinguish quotes that have the same @ref Quote::getTime() "time". This
      * sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to
-     * ::MAX_SEQUENCE.
+     * Quote::MAX_SEQUENCE.
      *
      * @return sequence of this quote.
      */
@@ -107,11 +107,11 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     }
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of this quote.
+     * Changes @ref Quote::getSequence() "sequence number" of this quote.
      *
      * @param sequence The sequence.
      *
-     * @see ::getSequence()
+     * @see Quote::getSequence()
      */
     void setSequence(std::int32_t sequence) noexcept {
         // TODO: Improve error handling
@@ -152,7 +152,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
 
     /**
      * Changes microseconds and nanoseconds part of time of the last bid or ask change.
-     * <b>This method changes ::getTimeNanos() result.</b>
+     * <b>This method changes Quote::getTimeNanos() result.</b>
      *
      * @param timeNanoPart The microseconds and nanoseconds part of time of the last bid or ask change.
      */
@@ -178,7 +178,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
      *
      * You can set the actual millisecond-precision time here to publish event and the millisecond part
-     * will make the ::getTime() of this quote even precise up to a millisecond.
+     * will make the Quote::getTime() of this quote even precise up to a millisecond.
      *
      * @param bidTime time of the last bid change.
      */
@@ -263,7 +263,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
      *
      * You can set the actual millisecond-precision time here to publish event and the millisecond part
-     * will make the ::getTime() of this quote even precise up to a millisecond.
+     * will make the Quote::getTime() of this quote even precise up to a millisecond.
      *
      * @param askTime time of the last ask change.
      */

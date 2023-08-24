@@ -125,9 +125,9 @@ struct DXFCPP_EXPORT CandleType {
 
     /**
      * Returns candle type period in milliseconds as closely as possible.
-     * Certain types like ::SECOND and ::DAY span a specific number of milliseconds.
-     * ::MONTH, ::OPTEXP and ::YEAR are approximate. Candle type period of ::TICK, ::VOLUME, ::PRICE,
-     * ::PRICE_MOMENTUM and ::PRICE_RENKO is not defined and this method returns `0`.
+     * Certain types like CandleType::SECOND and CandleType::DAY span a specific number of milliseconds.
+     * CandleType::MONTH, CandleType::OPTEXP and CandleType::YEAR are approximate. Candle type period of CandleType::TICK, CandleType::VOLUME, CandleType::PRICE,
+     * CandleType::PRICE_MOMENTUM and CandleType::PRICE_RENKO is not defined and this method returns `0`.
      *
      * @return aggregation period in milliseconds.
      */
@@ -147,9 +147,9 @@ struct DXFCPP_EXPORT CandleType {
     /**
      * Returns string representation of this candle type.
      * The string representation of candle type is the shortest unique prefix of the lower case string that corresponds
-     * to its @ref ::getName() "name".
-     * For example, ::TICK is represented as `"t"`, while ::MONTH is represented as `"mo"` to distinguish it from
-     * ::MINUTE that is represented as `"m"`.
+     * to its @ref CandleType::getName() "name".
+     * For example, CandleType::TICK is represented as `"t"`, while CandleType::MONTH is represented as `"mo"` to distinguish it from
+     * CandleType::MINUTE that is represented as `"m"`.
      *
      * @return string representation of this candle price type.
      */
@@ -159,8 +159,8 @@ struct DXFCPP_EXPORT CandleType {
 
     /**
      * Parses string representation of candle type into object.
-     * Any string that that is a prefix of candle type ::getName() can be parsed
-     * (including the one that was returned by ::toString()) and case is ignored for parsing.
+     * Any string that that is a prefix of candle type CandleType::getName() can be parsed
+     * (including the one that was returned by CandleType::toString()) and case is ignored for parsing.
      *
      * @param s The string representation of candle type.
      * @return A candle type or std::nullopt if the string representation is invalid.

@@ -29,14 +29,14 @@ struct EventMapper;
  * Option Sales are intended to provide information about option trades <b>in a continuous time slice</b> with
  * the additional metrics, like Option Volatility, Option Delta, and Underlying Price.
  *
- * <p>Option Sale events have unique @ref ::getIndex() "index" which can be used for later
+ * <p>Option Sale events have unique @ref OptionSale::getIndex() "index" which can be used for later
  * correction/cancellation processing.
  *
  * Option sale data source provides a consistent view of the set of known option sales.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref OptionSale::getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
  * Multiple event sources for the same symbol are not supported for option sale events, thus
- * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ * @ref OptionSale::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * This event is implemented on top of QDS records `OptionSale`.
  */
@@ -104,7 +104,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     /**
      * Maximum allowed sequence value.
      *
-     * @see ::setSequence()
+     * @see OptionSale::setSequence()
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
@@ -148,7 +148,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
+     * The index is composed of @ref OptionSale::getTime() "time" and @ref OptionSale::getSequence() "sequence".
      * Changing either time or sequence changes event index.
      *
      * @return unique index of this event.
@@ -159,13 +159,13 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence" and
+     * The index is composed of @ref OptionSale::getTime() "time" and @ref OptionSale::getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref OptionSale::setTime() "time" and/or @ref OptionSale::setSequence() "sequence".
      *
      * @param index the event index.
-     * @see ::getIndex()
+     * @see OptionSale::getIndex()
      */
     void setIndex(std::int64_t index) noexcept override {
         data_.index = index;
@@ -183,7 +183,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     /**
      * Changes time and sequence of this event.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref OptionSale::setTime() "time" and/or @ref OptionSale::setSequence() "sequence".
      *
      * @param timeSequence the time and sequence.
      * @see ::getTimeSequence()

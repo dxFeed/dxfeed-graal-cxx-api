@@ -202,7 +202,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
 
     /**
      * Returns candle period of the given candle symbol string.
-     * The result is ::DEFAULT if the symbol does not have candle period attribute.
+     * The result is CandlePeriod::DEFAULT if the symbol does not have candle period attribute.
      *
      * @param symbol candle symbol string.
      * @return candle period of the given candle symbol string or std::nullopt if parsing fails (if string

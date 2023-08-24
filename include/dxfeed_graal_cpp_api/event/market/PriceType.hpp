@@ -29,7 +29,7 @@ struct DXFCPP_EXPORT PriceType : Enum<PriceType, std::uint32_t> {
     static const PriceType INDICATIVE;
 
     /**
-     * Preliminary price (preliminary settlement price), usually posted prior to ::FINAL price.
+     * Preliminary price (preliminary settlement price), usually posted prior to PriceType::FINAL price.
      */
     static const PriceType PRELIMINARY;
 
