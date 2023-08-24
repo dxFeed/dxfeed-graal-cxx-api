@@ -30,12 +30,40 @@ struct SymbolWrapper;
  *
  * <h3>Equality and hash codes</h3>
  *
- * Indexed event subscription symbols are compared based on their @ref ::getEventSymbol() "eventSymbol" and
- * @ref ::getSource() "source".
+ * Indexed event subscription symbols are compared based on their @ref IndexedEventSubscriptionSymbol::getEventSymbol()
+ * "eventSymbol" and
+ * @ref IndexedEventSubscriptionSymbol::getSource() "source".
  */
 class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
+    friend SymbolWrapper;
+
     std::unique_ptr<SymbolWrapper> eventSymbol_;
     IndexedEventSource source_;
+
+  protected:
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    virtual void *toGraal() const noexcept;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     */
+    static IndexedEventSubscriptionSymbol fromGraal(void *graalNative) noexcept;
 
   public:
     /**
@@ -67,12 +95,6 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      * @return indexed event source.
      */
     virtual const IndexedEventSource &getSource() const;
-
-    virtual void *toGraal() const noexcept;
-
-    static void freeGraal(void *graal) noexcept;
-
-    static IndexedEventSubscriptionSymbol fromGraal(void *graal) noexcept;
 
     /**
      * Returns string representation of this indexed event subscription symbol.

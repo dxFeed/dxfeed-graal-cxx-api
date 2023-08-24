@@ -112,7 +112,7 @@ std::string TimeAndSale::toString() const noexcept {
                        "exchange={}, price={}, size={}, bid={}, "
                        "ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, validTick={}, type={}{}{}}}",
                        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                       getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
+                       getEventFlagsMask().getMask(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
                        getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
                        dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
                        getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()), getAggressorSide().toString(),

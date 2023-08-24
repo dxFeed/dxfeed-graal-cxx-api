@@ -29,11 +29,11 @@ struct DXFeed;
 /**
  * Manages network connections to @ref DXFeed "feed" or
  * @ref DXPublisher "publisher". There are per-process (per GraalVM Isolate for now) ready-to-use singleton instances
- * that are available with ::getInstance() and ::getInstance(Role) methods as well as
- * factory methods ::create() and ::create(Role), and a number of configuration methods. Advanced
+ * that are available with DXEndpoint::getInstance() and DXEndpoint::getInstance(Role) methods as well as
+ * factory methods DXEndpoint::create() and DXEndpoint::create(Role), and a number of configuration methods. Advanced
  * properties can be configured using
- * @ref ::newBuilder() "newBuilder()".@ref Builder#withProperty(const std::string&, const std::string&)
- * "withProperty(key, value)".@ref Builder::build() "build()".
+ * @ref DXEndpoint::newBuilder() "newBuilder()".@ref DXEndpoint::Builder::withProperty(const std::string&, const std::string&)
+ * "withProperty(key, value)".@ref DXEndpoint::Builder::build() "build()".
  *
  * See DXFeed for details on how to subscribe to symbols and receive events.
  *
@@ -823,7 +823,6 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     class DXFCPP_EXPORT Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
-        //        mutable std::recursive_mutex mtx_{};
         JavaObjectHandler<Builder> handler_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;

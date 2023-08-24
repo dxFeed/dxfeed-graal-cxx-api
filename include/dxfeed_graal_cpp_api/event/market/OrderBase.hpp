@@ -206,8 +206,18 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     }
 
     ///
-    EventFlagsMask getEventFlags() const noexcept override {
+    std::int32_t getEventFlags() const noexcept override {
+        return orderBaseData_.eventFlags;
+    }
+
+    ///
+    EventFlagsMask getEventFlagsMask() const noexcept override {
         return EventFlagsMask(orderBaseData_.eventFlags);
+    }
+
+    ///
+    void setEventFlags(std::int32_t eventFlags) noexcept override {
+        orderBaseData_.eventFlags = eventFlags;
     }
 
     ///

@@ -92,7 +92,7 @@ std::string Series::toString() const noexcept {
         "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
         "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getSequence(),
+        getEventFlagsMask().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getSequence(),
         day_util::getYearMonthDayByDayId(getExpiration()), dxfcpp::toString(getVolatility()),
         dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()), dxfcpp::toString(getPutCallRatio()),
         dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));

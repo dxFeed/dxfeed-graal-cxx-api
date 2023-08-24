@@ -64,6 +64,13 @@ struct DXFCPP_EXPORT StringSymbol final {
         data_ = std::move(string);
     }
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
     void *toGraal() const noexcept;
 
     static void freeGraal(void *graal) noexcept;

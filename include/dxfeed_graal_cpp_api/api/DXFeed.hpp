@@ -24,6 +24,84 @@ class EventTypeEnum;
 
 /**
  * Main entry class for dxFeed API (<b>read it first</b>).
+ *
+ * <h3>Sample usage</h3>
+ *
+ * This section gives sample usage scenarios.
+ *
+ * <h4>Default singleton instance</h4>
+ *
+ * There is a singleton instance of the feed that is returned by ::getInstance() method.
+ * It is created on the first use with default configuration properties that are explained in detail in
+ * documentation for DXEndpoint class in the "Default properties" section.
+ *
+ * <p>In particular,
+ * you can provide a default address to connect and credentials  using
+ * "@ref DXEndpoint::DXFEED_ADDRESS_PROPERTY "dxfeed.address"",
+ * "@ref DXEndpoint::DXFEED_USER_PROPERTY "dxfeed.user"", and
+ * "{@link DXEndpoint#DXFEED_PASSWORD_PROPERTY dxfeed.password}"
+ * system properties or by putting them into
+ * "{@link DXEndpoint#DXFEED_PROPERTIES_PROPERTY dxfeed.properties}"
+ * file on JVM classpath. dxFeed API samples come with a ready-to-use "<b>dxfeed.properties</b>"
+ * file that contains an address of dxFeed demo feed at "<b>demo.dxfeed.com:7300</b>" and
+ * demo access credentials.
+ *
+ * <h4>Subscribe for single event type</h4>
+ *
+ * The following code creates listener that prints mid price for each quote
+ * and subscribes for quotes on SPDR S&amp;P 500 ETF symbol:
+ * <pre><tt>
+ * {@link DXFeedSubscription DXFeedSubscription}&lt;{@link Quote Quote}&gt; sub = {@link DXFeed DXFeed}.{@link #getInstance() getInstance}().{@link #createSubscription(Class) createSubscription}({@link Quote Quote.class});
+ * sub.{@link DXFeedSubscription#addEventListener addEventListener}(new {@link DXFeedEventListener DXFeedEventListener}&lt;{@link Quote Quote}&gt;() {
+ *     public void eventsReceived({@link List List}&lt;{@link Quote Quote}&gt; quotes) {
+ *         for ({@link Quote Quote} quote : quotes)
+ *             System.out.println("Mid = " + (quote.{@link Quote#getBidPrice getBidPrice}() + quote.{@link Quote#getAskPrice getAskPrice}()) / 2);
+ *     }
+ * });
+ * sub.{@link DXFeedSubscription#addSymbols(Object...) addSymbols}("SPY");</tt></pre>
+ *
+ * Note, that order of calls is important here. By attaching listeners first and then setting
+ * subscription we ensure that the current quote gets received by the listener. See
+ * {@link DXFeedSubscription#addSymbols(Object...) DXFeedSubscription.addSymbols} for details.
+ * If a set of symbols is changed first, then {@link DXFeedSubscription#addEventListener(DXFeedEventListener) sub.addEventListener}
+ * raises an {@link IllegalStateException} to protected from hard-to-catch bugs with potentially missed events.
+ *
+ * <h4>Subscribe for multiple event types</h4>
+ *
+ * The following code creates listener that prints each received event and
+ * subscribes for quotes and trades on SPDR S&amp;P 500 ETF symbol:
+ * <pre><tt>
+ * {@link DXFeedSubscription DXFeedSubscription}&lt;{@link MarketEvent MarketEvent}&gt; sub = {@link DXFeed DXFeed}.{@link #getInstance() getInstance}().&lt;{@link MarketEvent MarketEvent}&gt;{@link #createSubscription(Class[]) createSubscription}({@link Quote Quote.class}, {@link Trade Trade.class});
+ * sub.{@link DXFeedSubscription#addEventListener addEventListener}(new {@link DXFeedEventListener DXFeedEventListener}&lt;{@link MarketEvent MarketEvent}&gt;() {
+ *     public void eventsReceived({@link List List}&lt;{@link MarketEvent MarketEvent}&gt; events) {
+ *         for ({@link MarketEvent MarketEvent} event : events)
+ *             System.out.println(event);
+ *     }
+ * });
+ * sub.{@link DXFeedSubscription#addSymbols(Object...) addSymbols}("SPY");</tt></pre>
+ *
+ * <h4>Subscribe for event and query periodically its last value</h4>
+ *
+ * The following code subscribes for trades on SPDR S&amp;P 500 ETF symbol and
+ * prints last trade every second.
+ *
+ * <pre><tt>
+ * {@link DXFeedSubscription DXFeedSubscription}&lt;{@link Trade Trade}&gt; sub = {@link DXFeed DXFeed}.{@link #getInstance() getInstance}().{@link #createSubscription(Class) createSubscription}({@link Trade Trade.class});
+ * sub.{@link DXFeedSubscription#addSymbols(Object...) addSymbols}("SPY");
+ * while (true) {
+ *     System.out.println(feed.{@link #getLastEvent getLastEvent}(new Trade("SPY")));
+ *     Thread.sleep(1000);
+ * }</tt></pre>
+ *
+ * <h3>Threads and locks</h3>
+ *
+ * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
+ *
+ * <h3>Implementation details</h3>
+ *
+ * dxFeed API is implemented on top of QDS. dxFeed API classes itself are in "<b>dxfeed-api.jar</b>", but
+ * their implementation is in "<b>qds.jar</b>". You need have "<b>qds.jar</b>" in your classpath
+ * in order to use dxFeed API.
  */
 struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct DXEndpoint;

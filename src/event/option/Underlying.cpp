@@ -86,7 +86,7 @@ std::string Underlying::toString() const noexcept {
         "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
         "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(),
+        getEventFlagsMask().getMask(), formatTimeStampWithMillis(getTime()), getSequence(),
         dxfcpp::toString(getVolatility()), dxfcpp::toString(getFrontVolatility()),
         dxfcpp::toString(getBackVolatility()), dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()),
         dxfcpp::toString(getPutCallRatio()));

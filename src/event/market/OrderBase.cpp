@@ -73,7 +73,7 @@ std::string OrderBase::baseFieldsToString() const noexcept {
         "timeNanoPart={}, action={}, actionTime={}, orderId={}, auxOrderId={}, price={}, "
         "size={}, executedSize={}, count={}, exchange={}, side={}, scope={}, tradeId={}, tradePrice={}, tradeSize={}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()), getSource().toString(),
-        getEventFlags().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getSequence(), getTimeNanoPart(),
+        getEventFlagsMask().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getSequence(), getTimeNanoPart(),
         getAction().toString(), formatTimeStampWithMillis(getActionTime()), getOrderId(), getAuxOrderId(),
         dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()), dxfcpp::toString(getExecutedSize()), getCount(),
         encodeChar(getExchangeCode()), getOrderSide().toString(), getScope().toString(), getTradeId(),

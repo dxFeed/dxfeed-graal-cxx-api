@@ -88,7 +88,7 @@ std::string Greeks::toString() const noexcept {
         "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
         "gamma={}, theta={}, rho={}, vega={}}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), dxfcpp::toString(getPrice()),
+        getEventFlagsMask().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), dxfcpp::toString(getPrice()),
         dxfcpp::toString(getVolatility()), dxfcpp::toString(getDelta()), dxfcpp::toString(getGamma()),
         dxfcpp::toString(getTheta()), dxfcpp::toString(getRho()), dxfcpp::toString(getVega()));
 }

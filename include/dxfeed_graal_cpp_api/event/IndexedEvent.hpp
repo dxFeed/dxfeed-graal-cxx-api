@@ -67,17 +67,33 @@ struct DXFCPP_EXPORT IndexedEvent {
 
     /**
      * Returns transactional event flags.
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See EventFlag "Event Flags" section.
      *
      * @return The transactional event flags.
      */
-    virtual EventFlagsMask getEventFlags() const noexcept = 0;
+    virtual std::int32_t getEventFlags() const noexcept = 0;
+
+    /**
+     * Returns transactional event flags.
+     * See EventFlag "Event Flags" section.
+     *
+     * @return The transactional event flags' mask.
+     */
+    virtual EventFlagsMask getEventFlagsMask() const noexcept = 0;
 
     /**
      * Changes transactional event flags.
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See EventFlag "Event Flags" section.
      *
      * @param eventFlags transactional event flags.
+     */
+    virtual void setEventFlags(std::int32_t eventFlags) noexcept = 0;
+
+    /**
+     * Changes transactional event flags.
+     * See EventFlag "Event Flags" section.
+     *
+     * @param eventFlags transactional event flags' mask.
      */
     virtual void setEventFlags(const EventFlagsMask &eventFlags) noexcept = 0;
 

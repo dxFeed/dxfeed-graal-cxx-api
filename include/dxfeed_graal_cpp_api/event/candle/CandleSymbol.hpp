@@ -257,6 +257,13 @@ struct DXFCPP_EXPORT CandleSymbol {
 
     virtual ~CandleSymbol() = default;
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
     virtual void *toGraal() const noexcept;
 
     static void freeGraal(void *graal) noexcept;

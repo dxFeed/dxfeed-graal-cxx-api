@@ -71,8 +71,20 @@ class DXFCPP_EXPORT IndexedEventSource {
         return id_ < indexedEventSource.id_;
     }
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
     virtual void *toGraal() const noexcept;
 
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graal The pointer to the dxFeed Graal SDK structure.
+     */
     static void freeGraal(void *graal) noexcept;
 
     static IndexedEventSource fromGraal(void *graal) noexcept;
