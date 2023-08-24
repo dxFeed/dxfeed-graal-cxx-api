@@ -71,41 +71,6 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-    template <typename ChildType, typename GraalNativeEventType, typename ChildGraalNativeEventType, auto clazz>
-    static std::shared_ptr<ChildType> fromGraal(void *graalNative) noexcept
-#if __cpp_concepts
-        requires(std::is_base_of_v<TradeBase, ChildType>)
-#endif
-    {
-        if (!graalNative) {
-            return {};
-        }
-
-        if (bit_cast<GraalNativeEventType *>(graalNative)->clazz != clazz) {
-            return {};
-        }
-
-        try {
-            auto graalTradeBaseChild = bit_cast<ChildGraalNativeEventType *>(graalNative);
-            auto tradeBaseChild =
-                std::make_shared<ChildType>(dxfcpp::toString(graalTradeBaseChild->trade_base.market_event.event_symbol));
-
-            tradeBaseChild->setEventTime(graalTradeBaseChild->trade_base.market_event.event_time);
-            tradeBaseChild->tradeBaseData_ = {
-                graalTradeBaseChild->trade_base.time_sequence, graalTradeBaseChild->trade_base.time_nano_part,
-                graalTradeBaseChild->trade_base.exchange_code, graalTradeBaseChild->trade_base.price,
-                graalTradeBaseChild->trade_base.change,        graalTradeBaseChild->trade_base.size,
-                graalTradeBaseChild->trade_base.day_id,        graalTradeBaseChild->trade_base.day_volume,
-                graalTradeBaseChild->trade_base.day_turnover,  graalTradeBaseChild->trade_base.flags,
-            };
-
-            return tradeBaseChild;
-        } catch (...) {
-            // TODO: error handling
-            return {};
-        }
-    }
-
   public:
     /**
      * Maximum allowed sequence value.
