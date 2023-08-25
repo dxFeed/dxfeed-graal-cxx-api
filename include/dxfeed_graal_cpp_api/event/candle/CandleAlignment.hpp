@@ -40,7 +40,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
     static const CandleAlignment SESSION;
 
     /**
-     * Default alignment is ::MIDNIGHT.
+     * Default alignment is CandleAlignment::MIDNIGHT.
      */
     static const CandleAlignment DEFAULT;
 
@@ -48,7 +48,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * The attribute key that is used to store the value of CandleAlignment in
      * a symbol string using methods of MarketEventSymbols class.
      * The value of this constant is "a".
-     * The value that this key shall be set to is equal to the corresponding ::toString()
+     * The value that this key shall be set to is equal to the corresponding CandleAlignment::toString()
      */
     static const std::string ATTRIBUTE_KEY;
 
@@ -78,7 +78,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
 
     /**
      * Returns string representation of this candle alignment.
-     * The string representation of candle alignment "m" for ::MIDNIGHT and "s" for ::SESSION.
+     * The string representation of candle alignment "m" for CandleAlignment::MIDNIGHT and "s" for CandleAlignment::SESSION.
      *
      * @return string representation of this candle alignment.
      */
@@ -92,7 +92,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
 
     /**
      * Parses string representation of candle alignment into object.
-     * Any string that was returned by ::toString() can be parsed and case is ignored for parsing.
+     * Any string that was returned by CandleAlignment::toString() can be parsed and case is ignored for parsing.
      *
      * @param s The string representation of candle alignment.
      * @return The candle alignment (reference) or std::nullopt if there is no supported attribute's value.
@@ -119,7 +119,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
 
     /**
      * Returns candle alignment of the given candle symbol string.
-     * The result is ::DEFAULT if the symbol does not have candle alignment attribute or std::nullopt if there is no
+     * The result is CandleAlignment::DEFAULT if the symbol does not have candle alignment attribute or std::nullopt if there is no
      * supported attribute's value.
      *
      * @param symbol The candle symbol string.

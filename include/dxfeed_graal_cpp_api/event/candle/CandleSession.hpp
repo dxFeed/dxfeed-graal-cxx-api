@@ -28,9 +28,9 @@ namespace dxfcpp {
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
  *
- * <p> ::ANY session is a default.
- * The key to use with these methods is available via ::ATTRIBUTE_KEY constant.
- * The value that this key shall be set to is equal to the corresponding ::toString()
+ * <p> CandleSession::ANY session is a default.
+ * The key to use with these methods is available via CandleSession::ATTRIBUTE_KEY constant.
+ * The value that this key shall be set to is equal to the corresponding CandleSession::toString()
  */
 struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
     /**
@@ -44,16 +44,16 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
     static const CandleSession REGULAR;
 
     /**
-     * Default trading session is {@link #ANY}.
+     * Default trading session is CandleSession::ANY.
      */
     static const CandleSession DEFAULT;
 
     /**
-     * The attribute key that is used to store the value of {@code CandleSession} in
-     * a symbol string using methods of {@link MarketEventSymbols} class.
+     * The attribute key that is used to store the value of CandleSession in
+     * a symbol string using methods of MarketEventSymbols class.
      * The value of this constant is "tho", which is an abbreviation for "trading hours only".
      * The value that this key shall be set to is equal to
-     * the corresponding {@link #toString() CandleSession.toString()}
+     * the corresponding CandleSession::toString()
      */
     static const std::string ATTRIBUTE_KEY;
 
@@ -93,9 +93,9 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
 
     /**
      * Returns string representation of this candle session attribute.
-     * The string representation of candle session attribute is a lower case string
-     * that corresponds to its {@link #name() name}. For example,
-     * {@link #ANY} is represented as "any".
+     * The string representation of candle session attribute is a lower case string that corresponds to its
+     * @ref CandleSession::name() "name". For example, CandleSession::ANY is represented as "any".
+     *
      * @return string representation of this candle session attribute.
      */
     const std::string &toString() const & noexcept {
@@ -108,7 +108,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
 
     /**
      * Parses string representation of candle session attribute into object.
-     * Any string that was returned by ::toString() can be parsed and case is ignored for parsing.
+     * Any string that was returned by CandleSession::toString() can be parsed and case is ignored for parsing.
      *
      * @param s The string representation of candle session attribute.
      * @return The candle session attribute (reference) or std::nullopt if there is no supported attribute's value.
@@ -143,7 +143,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
 
     /**
      * Returns candle session attribute of the given candle symbol string.
-     * The result is ::DEFAULT if the symbol does not have candle session attribute or std::nullopt if there is no
+     * The result is CandleSession::DEFAULT if the symbol does not have candle session attribute or std::nullopt if there is no
      * supported attribute's value.
      *
      * @param symbol The candle symbol string.

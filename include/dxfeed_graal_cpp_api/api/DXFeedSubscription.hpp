@@ -74,7 +74,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     template <typename EventTypesCollection>
     explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
 #if __cpp_concepts
-        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
+        requires requires {
+            {
+                DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
+                                   std::end(std::forward<EventTypesCollection>(eventTypes)))
+            };
+        }
 #endif
         : DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
                              std::end(std::forward<EventTypesCollection>(eventTypes))) {
@@ -119,7 +124,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription(Quote::Type);
+     * auto sub = dxfcpp::DXFeedSubscription::create(dxfcpp::Quote::TYPE);
      * ```
      *
      * @param eventType the event type.
@@ -142,8 +147,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto eventTypes = {dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type};
+     * auto eventTypes = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
+     *
      * auto sub = dxfcpp::DXFeedSubscription::create(eventTypes.begin(), eventTypes.end());
+     * ```
+     *
+     * ```cpp
+     * std::vector types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
+     *
+     * auto sub = dxfcpp::DXFeedSubscription::create(types.begin(), types.end());
      * ```
      *
      * @tparam EventTypeIt The collection's iterator type
@@ -175,7 +187,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription::create({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = dxfcpp::DXFeedSubscription::create({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      * ```
      *
      * @param eventTypes The event type collection.
@@ -195,8 +207,13 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::Type,
-     * dxfcpp::TimeAndSale::Type});
+     * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Quote::TYPE,
+     * dxfcpp::TimeAndSale::TYPE});
+     * ```
+     *
+     * ```cpp
+     * std::vector types = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
+     * auto sub = dxfcpp::DXFeedSubscription::create(types);
      * ```
      *
      * @tparam EventTypesCollection The type of the collection of event types
@@ -204,11 +221,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
     template <typename EventTypesCollection>
-    static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept
-#if __cpp_concepts
-        requires ElementTypeIs<EventTypesCollection, EventTypeEnum>
-#endif
-    {
+    static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept {
         auto sub =
             std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
         auto id = ApiContext::getInstance()->getDxFeedSubscriptionManager()->registerEntity(sub);
@@ -253,14 +266,14 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * Adds listener for events.
      * Event lister can be added only when subscription is not producing any events.
      * The subscription must be either empty
-     * (its set of @ref ::getSymbols() "symbols" is empty or not @ref ::attach() "attached" to any feed
+     * (its set of @ref DXFeedSubscription::getSymbols() "symbols" is empty or not @ref DXFeedSubscription::attach() "attached" to any feed
      * (its set of change listeners is empty).
      *
      * This method does nothing if this subscription is closed.
      *
      * Example:
      * ```cpp
-     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      *
      * sub->addEventListener([](auto &&events) {
      *     for (const auto &e : events) {
@@ -295,14 +308,14 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * Adds typed listener for events.
      * Event lister can be added only when subscription is not producing any events.
      * The subscription must be either empty
-     * (its set of @ref ::getSymbols() "symbols" is empty or not @ref ::attach() "attached" to any feed
+     * (its set of @ref DXFeedSubscription::getSymbols() "symbols" is empty or not @ref DXFeedSubscription::attach() "attached" to any feed
      * (its set of change listeners is empty).
      *
      * This method does nothing if this subscription is closed.
      *
      * Example:
      * ```cpp
-     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      *
      * sub->addEventListener(std::function([](const std::vector<std::shared_ptr<dxfcpp::Quotes>> &quotes) -> void {
      *     for (const auto &q : quotes) {
@@ -374,7 +387,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::Type, dxfcpp::TimeAndSale::Type});
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      * auto id = sub->onEvent() += [](auto &&events) {
      *     for (const auto &e : events) {
      *         if (auto quote = e->template sharedAs<dxfcpp::Quote>(); quote) {
@@ -399,7 +412,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * Adds the specified symbol to the set of subscribed symbols.
      * This is a convenience method to subscribe to one symbol at a time that has a return fast-path for a case when
      * the symbol is already in the set.
-     * When subscribing to multiple symbols at once it is preferable to use @ref ::addSymbols(const SymbolsCollection
+     * When subscribing to multiple symbols at once it is preferable to use @ref DXFeedSubscription::addSymbols(const SymbolsCollection
      * &collection) "addSymbols(symbols)" method.
      *
      * Example:
@@ -423,7 +436,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 
     /**
      * Removes the specified symbol from the set of subscribed symbols.
-     * To conveniently remove one or few symbols you can use @ref ::removeSymbols(const SymbolsCollection &collection)
+     * To conveniently remove one or few symbols you can use @ref DXFeedSubscription::removeSymbols(const SymbolsCollection &collection)
      * "removeSymbols(symbols)" method.
      *
      * Example:
@@ -464,10 +477,10 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto *list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
 
         addSymbolsImpl(list);
-        SymbolWrapper::freeGraalList(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
     }
 
     /**
@@ -522,10 +535,10 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto *list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
 
         removeSymbolsImpl(list);
-        SymbolWrapper::freeGraalList(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
     }
 
     /**
@@ -581,10 +594,10 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
-        auto *list = SymbolWrapper::toGraalList(begin, end);
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
 
         setSymbolsImpl(list);
-        SymbolWrapper::freeGraalList(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
     }
 
     /**
@@ -637,7 +650,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return `true` if this subscription is closed.
      *
-     * @see ::close
+     * @see DXFeedSubscription::close()
      */
     bool isClosed() const noexcept {
         if constexpr (Debugger::isDebug) {
@@ -661,7 +674,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return `true` if this subscription contains the corresponding event type.
      *
-     * @see ::getEventTypes()
+     * @see DXFeedSubscription::getEventTypes()
      */
     bool containsEventType(const EventTypeEnum &eventType) const noexcept {
         return eventTypes_.contains(eventType);

@@ -135,9 +135,6 @@ inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
     }
 }
 
-template <typename Collection, typename ElementType>
-concept ElementTypeIs = std::is_same_v<std::decay_t<decltype(*std::begin(Collection{}))>, ElementType>;
-
 namespace math {
 static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
     std::int64_t r = x / y;

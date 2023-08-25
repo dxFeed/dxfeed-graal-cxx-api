@@ -331,6 +331,26 @@ std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
     return feed_;
 }
 
+std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXEndpoint{" + handler_.toString() + "}::getPublisher()");
+    }
+
+    if (!publisher_) {
+        auto feedHandle = !handler_ ? nullptr
+                                    : runIsolatedOrElse(
+                                          [handler = bit_cast<dxfg_endpoint_t *>(handler_.get())](auto threadHandle) {
+                                              return dxfg_DXEndpoint_getPublisher(
+                                                  dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handler);
+                                          },
+                                          nullptr);
+
+        publisher_ = DXPublisher::create(feedHandle);
+    }
+
+    return publisher_;
+}
+
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder::create()");

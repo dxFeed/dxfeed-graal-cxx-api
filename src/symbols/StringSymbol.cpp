@@ -48,34 +48,34 @@ void *StringSymbol::toGraal() const noexcept {
 
     auto *graalSymbol = new (std::nothrow) dxfg_string_symbol_t{{STRING}, createCString(data_)};
 
-    return dxfcpp::bit_cast<void *>(graalSymbol);
+    return static_cast<void *>(graalSymbol);
 }
 
-void StringSymbol::freeGraal(void *graal) noexcept {
+void StringSymbol::freeGraal(void *graalNative) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("StringSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("StringSymbol::freeGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
-    if (graal == nullptr) {
+    if (graalNative == nullptr) {
         return;
     }
 
-    auto *graalSymbol = dxfcpp::bit_cast<dxfg_string_symbol_t *>(graal);
+    auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
 
     delete[] graalSymbol->symbol;
     delete graalSymbol;
 }
 
-StringSymbol StringSymbol::fromGraal(void *graal) noexcept {
+StringSymbol StringSymbol::fromGraal(void *graalNative) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("StringSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("StringSymbol::fromGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
-    if (graal == nullptr) {
+    if (graalNative == nullptr) {
         return {};
     }
 
-    auto *graalSymbol = dxfcpp::bit_cast<dxfg_string_symbol_t *>(graal);
+    auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
 
     return {graalSymbol->symbol};
 }

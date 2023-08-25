@@ -24,6 +24,7 @@ template <typename T> void JavaObjectHandler<T>::deleter(void *handler) noexcept
 template struct JavaObjectHandler<DXEndpoint>;
 template struct JavaObjectHandler<DXEndpointStateChangeListener>;
 template struct JavaObjectHandler<DXFeed>;
+template struct JavaObjectHandler<DXPublisher>;
 template struct JavaObjectHandler<DXFeedSubscription>;
 template struct JavaObjectHandler<DXFeedEventListener>;
 template struct JavaObjectHandler<DXEndpoint::Builder>;

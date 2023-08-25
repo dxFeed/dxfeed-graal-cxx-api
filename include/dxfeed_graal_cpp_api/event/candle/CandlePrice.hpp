@@ -25,8 +25,8 @@ namespace dxfcpp {
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via ::ATTRIBUTE_KEY constant.
- * The value that this key shall be set to is equal to the corresponding ::toString()
+ * The key to use with these methods is available via CandlePrice::ATTRIBUTE_KEY constant.
+ * The value that this key shall be set to is equal to the corresponding CandlePrice::toString()
  */
 struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
     /**
@@ -57,7 +57,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
     static const CandlePrice SETTLEMENT;
 
     /**
-     * Default price type is ::LAST.
+     * Default price type is CandlePrice::LAST.
      */
     static const CandlePrice DEFAULT;
 
@@ -65,7 +65,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      * The attribute key that is used to store the value of `CandlePrice` in a symbol string using methods of
      * MarketEventSymbols class.
      * The value of this constant is "price".
-     * The value that this key shall be set to is equal to the corresponding ::toString()
+     * The value that this key shall be set to is equal to the corresponding CandlePrice::toString()
      */
     static const std::string ATTRIBUTE_KEY;
 
@@ -95,9 +95,9 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
 
     /**
      * Returns string representation of this candle price type.
-     * The string representation of candle price type is a lower case string
-     * that corresponds to its {@link #name() name}. For example,
-     * {@link #LAST} is represented as "last".
+     * The string representation of candle price type is a lower case string that corresponds to
+     * its @ref CandlePrice::name() "name". For example, CandlePrice::LAST is represented as "last".
+     *
      * @return string representation of this candle price type.
      */
     const std::string &toString() const & noexcept {
@@ -110,7 +110,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
 
     /**
      * Parses string representation of candle price type into object.
-     * Any string that was returned by ::toString() can be parsed and case is ignored for parsing.
+     * Any string that was returned by CandlePrice::toString() can be parsed and case is ignored for parsing.
      *
      * @param s The string representation of candle price type.
      * @return The candle price type (reference) or std::nullopt if there is no supported attribute's value.
@@ -145,7 +145,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
 
     /**
      * Returns candle price type of the given candle symbol string.
-     * The result is ::DEFAULT if the symbol does not have candle price type attribute or std::nullopt if there is no
+     * The result is CandlePrice::DEFAULT if the symbol does not have candle price type attribute or std::nullopt if there is no
      * supported attribute's value.
      *
      * @param symbol The candle symbol string.

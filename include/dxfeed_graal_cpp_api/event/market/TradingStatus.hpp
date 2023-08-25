@@ -37,4 +37,8 @@ struct DXFCPP_EXPORT TradingStatus : Enum<TradingStatus, std::uint32_t> {
     static const TradingStatus ACTIVE;
 };
 
+template <>
+const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>>
+    TradingStatus::ParentType::ALL;
+
 } // namespace dxfcpp

@@ -34,7 +34,7 @@ class IndexedEventSubscriptionSymbol;
  * <h3>Equality and hash codes</h3>
  *
  * This is a FilteredSubscriptionSymbol.
- * Time-series subscription symbols are compared based on their @ref ::getEventSymbol() "eventSymbol" only.
+ * Time-series subscription symbols are compared based on their @ref TimeSeriesSubscriptionSymbol::getEventSymbol() "eventSymbol" only.
  * It means, that a set of time-series subscription symbols can contain at most one time-series subscription
  * for each event symbol.
  */
@@ -64,11 +64,23 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      */
     std::int64_t getFromTime() const;
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
     void *toGraal() const noexcept override;
 
-    static void freeGraal(void *graal) noexcept;
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
 
-    static TimeSeriesSubscriptionSymbol fromGraal(void *graal) noexcept;
+    static TimeSeriesSubscriptionSymbol fromGraal(void *graalNative) noexcept;
 
     /**
      * Returns string representation of this time-series subscription symbol.

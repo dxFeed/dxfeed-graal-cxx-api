@@ -65,9 +65,32 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
 
     Data data_{};
 
-    static std::shared_ptr<Profile> fromGraalNative(void *graalNative) noexcept;
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+    static void freeGraalData(void *graalNative) noexcept;
 
   public:
+
+    static std::shared_ptr<Profile> fromGraal(void *graalNative) noexcept;
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    void* toGraal() const noexcept override;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void* graalNative) noexcept;
+
+  public:
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new profile event with default values.

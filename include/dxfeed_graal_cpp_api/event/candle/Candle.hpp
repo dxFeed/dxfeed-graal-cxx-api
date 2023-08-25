@@ -37,13 +37,13 @@ struct EventMapper;
  * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some candle sources provide a consistent view of the set of known candles.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref Candle::getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
- * Multiple event sources for the same symbol are not supported for candles, thus @ref ::getSource() "source" property
+ * Multiple event sources for the same symbol are not supported for candles, thus @ref Candle::getSource() "source" property
  * is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * <p>TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents a list
- * current of time-series events order by their @ref ::getTime() "time".
+ * current of time-series events order by their @ref Candle::getTime() "time".
  * It relies on the code of AbstractIndexedEventModel to handle this logic.
  * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
@@ -98,16 +98,39 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     Data data_{};
 
-    static std::shared_ptr<Candle> fromGraalNative(void *graalNative) noexcept;
+    void fillData(void *graalNative) noexcept;
+    void fillGraalData(void *graalNative) const noexcept;
+    static void freeGraalData(void *graalNative) noexcept;
+
+  public:
+
+    static std::shared_ptr<Candle> fromGraal(void *graalNative) noexcept;
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    void* toGraal() const noexcept override;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void* graalNative) noexcept;
 
   public:
     /**
      * Maximum allowed sequence value.
      *
-     * @see ::setSequence()
+     * @see Candle::setSequence()
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /**
@@ -143,8 +166,18 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     std::string toString() const noexcept override;
 
     ///
-    EventFlagsMask getEventFlags() const noexcept override {
+    std::int32_t getEventFlags() const noexcept override {
+        return data_.eventFlags;
+    }
+
+    ///
+    EventFlagsMask getEventFlagsMask() const noexcept override {
         return EventFlagsMask(data_.eventFlags);
+    }
+
+    ///
+    void setEventFlags(std::int32_t eventFlags) noexcept override {
+        data_.eventFlags = eventFlags;
     }
 
     ///
@@ -175,7 +208,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes timestamp of the event in milliseconds.
      *
      * @param time timestamp of the event in milliseconds.
-     * @see ::getTime()
+     * @see Candle::getTime()
      */
     void setTime(std::int64_t time) noexcept {
         data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
@@ -184,9 +217,9 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     }
 
     /**
-     * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() "time".
+     * Returns the sequence number of this event to distinguish events that have the same @ref Candle::getTime() "time".
      * This sequence number does not have to be unique and does not need to be sequential.
-     * Sequence can range from 0 to ::MAX_SEQUENCE.
+     * Sequence can range from 0 to Candle::MAX_SEQUENCE.
      *
      * @return The sequence number of this event
      */
@@ -195,10 +228,10 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     }
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of this event.
+     * Changes @ref Candle::getSequence() "sequence number" of this event.
      *
      * @param sequence the sequence.
-     * @see ::getSequence()
+     * @see Candle::getSequence()
      */
     void setSequence(int sequence) noexcept {
         // TODO: Improve error handling
@@ -305,7 +338,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Returns volume-weighted average price (VWAP) in this candle.
-     * Total turnover in this candle can be computed with <code>getVWAP() * {@link #getVolume() getVolume}()</code>.
+     * Total turnover in this candle can be computed with <code>getVWAP() * @ref Candle::getVolume() "getVolume"()</code>.
      * @return volume-weighted average price (VWAP) in this candle.
      */
         double getVWAP() const noexcept {

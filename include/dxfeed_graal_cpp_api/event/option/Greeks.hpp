@@ -75,7 +75,28 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
 
     Data data_{};
 
-    static std::shared_ptr<Greeks> fromGraalNative(void *graalNative) noexcept;
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+
+  public:
+
+    static std::shared_ptr<Greeks> fromGraal(void *graalNative) noexcept;
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    void* toGraal() const noexcept override;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void* graalNative) noexcept;
 
   public:
     /**
@@ -85,6 +106,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new greeks event with default values.
@@ -104,8 +126,18 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     }
 
     ///
-    EventFlagsMask getEventFlags() const noexcept override {
+    std::int32_t getEventFlags() const noexcept override {
+        return data_.eventFlags;
+    }
+
+    ///
+    EventFlagsMask getEventFlagsMask() const noexcept override {
         return EventFlagsMask(data_.eventFlags);
+    }
+
+    ///
+    void setEventFlags(std::int32_t eventFlags) noexcept override {
+        data_.eventFlags = eventFlags;
     }
 
     ///

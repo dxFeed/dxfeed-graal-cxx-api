@@ -29,14 +29,14 @@ struct EventMapper;
  * Option Sales are intended to provide information about option trades <b>in a continuous time slice</b> with
  * the additional metrics, like Option Volatility, Option Delta, and Underlying Price.
  *
- * <p>Option Sale events have unique @ref ::getIndex() "index" which can be used for later
+ * <p>Option Sale events have unique @ref OptionSale::getIndex() "index" which can be used for later
  * correction/cancellation processing.
  *
  * Option sale data source provides a consistent view of the set of known option sales.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref OptionSale::getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
  * Multiple event sources for the same symbol are not supported for option sale events, thus
- * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ * @ref OptionSale::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * This event is implemented on top of QDS records `OptionSale`.
  */
@@ -73,21 +73,44 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
         double underlyingPrice = math::NaN;
         double volatility = math::NaN;
         double delta = math::NaN;
-        std::string optionSymbol;
+        std::string optionSymbol{};
     };
 
     Data data_{};
 
-    static std::shared_ptr<OptionSale> fromGraalNative(void *graalNative) noexcept;
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
+    static void freeGraalData(void *graalNative) noexcept;
+
+  public:
+
+    static std::shared_ptr<OptionSale> fromGraal(void *graalNative) noexcept;
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    void* toGraal() const noexcept override;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void* graalNative) noexcept;
 
   public:
     /**
      * Maximum allowed sequence value.
      *
-     * @see ::setSequence()
+     * @see OptionSale::setSequence()
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new option sale event with default values.
@@ -107,8 +130,18 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     ///
-    EventFlagsMask getEventFlags() const noexcept override {
+    std::int32_t getEventFlags() const noexcept override {
+        return data_.eventFlags;
+    }
+
+    ///
+    EventFlagsMask getEventFlagsMask() const noexcept override {
         return EventFlagsMask(data_.eventFlags);
+    }
+
+    ///
+    void setEventFlags(std::int32_t eventFlags) noexcept override {
+        data_.eventFlags = eventFlags;
     }
 
     ///
@@ -118,7 +151,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
+     * The index is composed of @ref OptionSale::getTime() "time" and @ref OptionSale::getSequence() "sequence".
      * Changing either time or sequence changes event index.
      *
      * @return unique index of this event.
@@ -129,13 +162,13 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence" and
+     * The index is composed of @ref OptionSale::getTime() "time" and @ref OptionSale::getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref OptionSale::setTime() "time" and/or @ref OptionSale::setSequence() "sequence".
      *
      * @param index the event index.
-     * @see ::getIndex()
+     * @see OptionSale::getIndex()
      */
     void setIndex(std::int64_t index) noexcept override {
         data_.index = index;
@@ -153,7 +186,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     /**
      * Changes time and sequence of this event.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref OptionSale::setTime() "time" and/or @ref OptionSale::setSequence() "sequence".
      *
      * @param timeSequence the time and sequence.
      * @see ::getTimeSequence()

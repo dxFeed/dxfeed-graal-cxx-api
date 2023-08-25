@@ -43,4 +43,7 @@ struct DXFCPP_EXPORT Scope : Enum<Scope, std::uint32_t> {
     static const Scope ORDER;
 };
 
+template <>
+const std::unordered_map<Scope::CodeType, std::reference_wrapper<const Scope>> Scope::ParentType::ALL;
+
 } // namespace dxfcpp

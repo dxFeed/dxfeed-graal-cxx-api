@@ -27,24 +27,24 @@ void *IndexedEventSubscriptionSymbol::toGraal() const noexcept {
         Debugger::debug("IndexedEventSubscriptionSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new (std::nothrow)
-        dxfg_indexed_event_subscription_symbol_t{{INDEXED_EVENT_SUBSCRIPTION},
-                                                 dxfcpp::bit_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()),
-                                                 dxfcpp::bit_cast<dxfg_indexed_event_source_t *>(source_.toGraal())};
+    auto *graalSymbol = new (std::nothrow) dxfg_indexed_event_subscription_symbol_t{
+        .supper = {.type = dxfg_symbol_type_t::INDEXED_EVENT_SUBSCRIPTION},
+        .symbol = static_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()),
+        .source = static_cast<dxfg_indexed_event_source_t *>(source_.toGraal())};
 
-    return dxfcpp::bit_cast<void *>(graalSymbol);
+    return static_cast<void *>(graalSymbol);
 }
 
-void IndexedEventSubscriptionSymbol::freeGraal(void *graal) noexcept {
+void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("IndexedEventSubscriptionSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("IndexedEventSubscriptionSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
-    if (graal == nullptr) {
+    if (graalNative == nullptr) {
         return;
     }
 
-    auto *graalSymbol = dxfcpp::bit_cast<dxfg_indexed_event_subscription_symbol_t *>(graal);
+    auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
 
     SymbolWrapper::freeGraal(graalSymbol->symbol);
     IndexedEventSource::freeGraal(graalSymbol->source);
@@ -52,16 +52,16 @@ void IndexedEventSubscriptionSymbol::freeGraal(void *graal) noexcept {
     delete graalSymbol;
 }
 
-IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *graal) noexcept {
+IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *graalNative) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("IndexedEventSubscriptionSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("IndexedEventSubscriptionSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
-    if (graal == nullptr) {
+    if (graalNative == nullptr) {
         return {};
     }
 
-    auto *graalSymbol = dxfcpp::bit_cast<dxfg_indexed_event_subscription_symbol_t *>(graal);
+    auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
 
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), IndexedEventSource::fromGraal(graalSymbol->source)};
 }

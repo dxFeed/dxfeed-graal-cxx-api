@@ -115,30 +115,42 @@ TEST_CASE("DXFeedSubscription") {
 
     dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
 
+    std::set types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
+
+    auto s3 = dxfcpp::DXFeed::getInstance()->createSubscription(types);
+
+    auto s4 = dxfcpp::DXFeed::getInstance()->createSubscription(types.begin(), types.end());
+
+    auto s5 = dxfcpp::DXFeed::getInstance()->createSubscription(std::move(types));
+
+    auto types2 = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
+
+    auto sub6 = dxfcpp::DXFeedSubscription::create(types2.begin(), types2.end());
+
     dxfcpp::DXFeed::getInstance();
 }
 
 TEST_CASE("dxfcpp::DXFeed::getInstance()") { dxfcpp::DXFeed::getInstance(); }
 
-TEST_CASE("dxfcpp::SymbolWrapper::toGraalList") {
+TEST_CASE("dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList") {
     using namespace std::literals;
 
-    auto* list = dxfcpp::SymbolWrapper::toGraalList({"AAPL", "IBM"s, "TSLA"sv});
-    auto* list2 = dxfcpp::SymbolWrapper::toGraalList(std::vector<std::string>{"XXX", "YYY", "ZZZ"});
+    auto* list = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList({"AAPL", "IBM"s, "TSLA"sv});
+    auto* list2 = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList(std::vector<std::string>{"XXX", "YYY", "ZZZ"});
 
     auto set = std::set<dxfcpp::SymbolWrapper>{"111", "222"sv, "333"s};
 
-    auto* list3 = dxfcpp::SymbolWrapper::toGraalList(set.begin(), set.end());
+    auto* list3 = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList(set.begin(), set.end());
 
-    auto sl = dxfcpp::SymbolWrapper::fromGraalList(list);
+    auto sl = dxfcpp::SymbolWrapper::SymbolListUtils::fromGraalList(list);
 
 
     std::cout << "Symbols:\n";
-    for (auto s : sl) {
+    for (const auto& s : sl) {
         std::cout << s.toString() << "\n";
     }
 
-    dxfcpp::SymbolWrapper::freeGraalList(list);
-    dxfcpp::SymbolWrapper::freeGraalList(list2);
-    dxfcpp::SymbolWrapper::freeGraalList(list3);
+    dxfcpp::SymbolWrapper::SymbolListUtils::freeGraalList(list);
+    dxfcpp::SymbolWrapper::SymbolListUtils::freeGraalList(list2);
+    dxfcpp::SymbolWrapper::SymbolListUtils::freeGraalList(list3);
 }

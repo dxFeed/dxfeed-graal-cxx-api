@@ -10,8 +10,6 @@ namespace dxfcpp {
 
 std::string toString(const dxfg_symbol_list &graalSymbolList);
 
-// TODO: CandleSymbol, indexed_event_subscription_symbol, time_series_subscription_symbol,
-// ::toGraal
 struct SymbolList::Impl : public RawListWrapper<dxfg_symbol_list, [](dxfg_symbol_list &list, std::size_t index,
                                                                      const SymbolWrapper &symbolWrapper) {
     *list.elements[index] = *bit_cast<dxfg_symbol_t *>(symbolWrapper.toGraal());

@@ -32,7 +32,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
     static const CandleExchange COMPOSITE;
 
     /**
-     * Default exchange is ::COMPOSITE.
+     * Default exchange is CandleExchange::COMPOSITE.
      */
     static const CandleExchange DEFAULT;
 
@@ -46,7 +46,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
     CandleExchange() noexcept = default;
 
     /**
-     * Returns exchange code. It is `'\0'` for ::COMPOSITE exchange.
+     * Returns exchange code. It is `'\0'` for CandleExchange::COMPOSITE exchange.
      * @return exchange code.
      */
     char getExchangeCode() const noexcept {
@@ -65,7 +65,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
 
     /**
      * Returns string representation of this exchange.
-     * It is the string `"COMPOSITE"` for ::COMPOSITE exchange or
+     * It is the string `"COMPOSITE"` for CandleExchange::COMPOSITE exchange or
      * exchange character otherwise.
      *
      * @return string representation of this exchange.
@@ -90,7 +90,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
 
     /**
      * Returns exchange attribute object of the given candle symbol string.
-     * The result is ::DEFAULT if the symbol does not have exchange attribute.
+     * The result is CandleExchange::DEFAULT if the symbol does not have exchange attribute.
      *
      * @param symbol candle symbol string.
      * @return exchange attribute object of the given candle symbol string.

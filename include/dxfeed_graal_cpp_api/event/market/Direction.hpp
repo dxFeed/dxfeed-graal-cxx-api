@@ -56,4 +56,7 @@ struct DXFCPP_EXPORT Direction : Enum<Direction, std::uint32_t> {
     static const Direction UP;
 };
 
+template <>
+const std::unordered_map<Direction::CodeType, std::reference_wrapper<const Direction>> Direction::ParentType::ALL;
+
 } // namespace dxfcpp

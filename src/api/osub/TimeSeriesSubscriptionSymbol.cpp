@@ -21,38 +21,40 @@ void *TimeSeriesSubscriptionSymbol::toGraal() const noexcept {
         Debugger::debug("TimeSeriesSubscriptionSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new (std::nothrow) dxfg_time_series_subscription_symbol_t{
-        {TIME_SERIES_SUBSCRIPTION}, dxfcpp::bit_cast<dxfg_symbol_t *>(getEventSymbol()->toGraal()), fromTime_};
+    auto *graalSymbol = new (std::nothrow)
+        dxfg_time_series_subscription_symbol_t{.supper = {.type = dxfg_symbol_type_t::TIME_SERIES_SUBSCRIPTION},
+                                               .symbol = static_cast<dxfg_symbol_t *>(getEventSymbol()->toGraal()),
+                                               .from_time = fromTime_};
 
-    return dxfcpp::bit_cast<void *>(graalSymbol);
+    return static_cast<void *>(graalSymbol);
 }
 
-void TimeSeriesSubscriptionSymbol::freeGraal(void *graal) noexcept {
+void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("TimeSeriesSubscriptionSymbol::freeGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("TimeSeriesSubscriptionSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
-    if (graal == nullptr) {
+    if (graalNative == nullptr) {
         return;
     }
 
-    auto *graalSymbol = dxfcpp::bit_cast<dxfg_time_series_subscription_symbol_t *>(graal);
+    auto *graalSymbol = static_cast<dxfg_time_series_subscription_symbol_t *>(graalNative);
 
     SymbolWrapper::freeGraal(graalSymbol->symbol);
 
     delete graalSymbol;
 }
 
-TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal) noexcept {
+TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graalNative) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("TimeSeriesSubscriptionSymbol::fromGraal(graal = " + toStringAny(graal) + ")");
+        Debugger::debug("TimeSeriesSubscriptionSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
-    if (graal == nullptr) {
+    if (graalNative == nullptr) {
         return {};
     }
 
-    auto *graalSymbol = dxfcpp::bit_cast<dxfg_time_series_subscription_symbol_t *>(graal);
+    auto *graalSymbol = static_cast<dxfg_time_series_subscription_symbol_t *>(graalNative);
 
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), graalSymbol->from_time};
 }

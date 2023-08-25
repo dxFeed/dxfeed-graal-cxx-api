@@ -15,22 +15,22 @@ const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
 void *IndexedEventSource::toGraal() const noexcept {
     auto *graalSource = new (std::nothrow) dxfg_indexed_event_source_t{INDEXED_EVENT_SOURCE, id_, createCString(name_)};
 
-    return dxfcpp::bit_cast<void *>(graalSource);
+    return static_cast<void *>(graalSource);
 }
 
-void IndexedEventSource::freeGraal(void *graal) noexcept {
-    if (graal == nullptr) {
+void IndexedEventSource::freeGraal(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
         return;
     }
 
-    auto *graalSource = dxfcpp::bit_cast<dxfg_indexed_event_source_t *>(graal);
+    auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
 
     delete[] graalSource->name;
     delete graalSource;
 }
 
-IndexedEventSource IndexedEventSource::fromGraal(void *graal) noexcept {
-    auto *graalSource = dxfcpp::bit_cast<dxfg_indexed_event_source_t *>(graal);
+IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) noexcept {
+    auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
 
     if (graalSource == nullptr) {
         return {};

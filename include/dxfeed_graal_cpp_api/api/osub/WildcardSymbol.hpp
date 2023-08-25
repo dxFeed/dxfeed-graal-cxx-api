@@ -14,8 +14,8 @@ namespace dxfcpp {
 
 /**
  * Represents [wildcard] subscription to all events of the specific event type.
- * The @ref WildcardSymbol::ALL constant can be added to any DXFeedSubscription instance with @ref
- * DXFeedSubscription::addSymbols() "addSymbols" method to the effect of subscribing to all possible event symbols. The
+ * The @ref WildcardSymbol::ALL constant can be added to any DXFeedSubscription instance with
+ * @ref DXFeedSubscription::addSymbols() "addSymbols" method to the effect of subscribing to all possible event symbols. The
  * corresponding subscription will start receiving all published events of the corresponding types.
  */
 struct DXFCPP_EXPORT WildcardSymbol final {
@@ -58,11 +58,23 @@ struct DXFCPP_EXPORT WildcardSymbol final {
         return symbol_;
     }
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
     void *toGraal() const noexcept;
 
-    static void freeGraal(void *graal) noexcept;
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
 
-    static const WildcardSymbol &fromGraal(void *graal) noexcept;
+    static const WildcardSymbol &fromGraal(void *graalNative) noexcept;
 
     /**
      * Returns string representation of this wildcard subscription symbol.

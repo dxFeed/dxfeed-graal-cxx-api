@@ -11,7 +11,7 @@
 namespace dxfcpp {
 
 /**
- * The enumeration type that provides additional information about the dxFeed C++-API event type.
+ * The enumeration type that provides additional information about the dxFeed Graal C++-API event type.
  * Useful when used as a subscription parameter.
  */
 class DXFCPP_EXPORT EventTypeEnum {

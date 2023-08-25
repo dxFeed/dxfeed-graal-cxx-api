@@ -6,5 +6,6 @@
 #include "../../internal/Conf.hpp"
 
 #include "IndexedEventSubscriptionSymbol.hpp"
+#include "ObservableSubscription.hpp"
 #include "TimeSeriesSubscriptionSymbol.hpp"
 #include "WildcardSymbol.hpp"
