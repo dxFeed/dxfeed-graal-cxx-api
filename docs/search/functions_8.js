@@ -1,4 +1,27 @@
 var searchData=
 [
-  ['marketevent_0',['MarketEvent',['../de/d01/structdxfcpp_1_1_market_event.html#afeb8874ca4d6b603d5b941f19e0735cf',1,'dxfcpp::MarketEvent']]]
+  ['id_855',['id',['../df/da4/classdxfcpp_1_1IndexedEventSource.html#a251e43b2d80bda9d117e8dd1c3aa5413',1,'dxfcpp::IndexedEventSource']]],
+  ['in_856',['in',['../d9/d0f/classdxfcpp_1_1EventFlag.html#aa0b904e1d50c6f79d8739f028559cffc',1,'dxfcpp::EventFlag::in(std::uint32_t eventFlagsMask) const noexcept'],['../d9/d0f/classdxfcpp_1_1EventFlag.html#ae109db0bd6293f60d84f8c2e96118992',1,'dxfcpp::EventFlag::in(const EventFlagsMask &amp;eventFlagsMask) const noexcept']]],
+  ['indexedeventsource_857',['IndexedEventSource',['../df/da4/classdxfcpp_1_1IndexedEventSource.html#a36c6e14bc7e4127c9c5e9107fefeb0a6',1,'dxfcpp::IndexedEventSource']]],
+  ['indexedeventsubscriptionsymbol_858',['IndexedEventSubscriptionSymbol',['../d5/d05/classdxfcpp_1_1IndexedEventSubscriptionSymbol.html#af054e3abd90886bcf6890d3b4ee76739',1,'dxfcpp::IndexedEventSubscriptionSymbol']]],
+  ['is_859',['is',['../db/d51/structdxfcpp_1_1SharedEntity.html#ac83e17b089df3399f9a2216000ee859e',1,'dxfcpp::SharedEntity']]],
+  ['iscancel_860',['isCancel',['../db/d4a/classdxfcpp_1_1OptionSale.html#ad2c6cb82b9f4c1eea3f1a01fc07df6e5',1,'dxfcpp::OptionSale::isCancel()'],['../dc/d9c/classdxfcpp_1_1TimeAndSale.html#a69d5f8c42ab2370c9c9591b960f655b0',1,'dxfcpp::TimeAndSale::isCancel()']]],
+  ['iscandlesymbol_861',['isCandleSymbol',['../dc/de1/structdxfcpp_1_1SymbolWrapper.html#a4fb50df341ceb4ce7614852099c719d8',1,'dxfcpp::SymbolWrapper']]],
+  ['isclosed_862',['isClosed',['../d8/db3/structdxfcpp_1_1DXEndpoint.html#a8513eebf380d198002fc62b142f251cf',1,'dxfcpp::DXEndpoint::isClosed()'],['../df/d08/classdxfcpp_1_1DXFeedSubscription.html#af7f5a48d182d5bec9ed6d8b1325371e1',1,'dxfcpp::DXFeedSubscription::isClosed()']]],
+  ['iscorrection_863',['isCorrection',['../db/d4a/classdxfcpp_1_1OptionSale.html#a3ab1bb5a09a6ad33a14e62c882e53c23',1,'dxfcpp::OptionSale::isCorrection()'],['../dc/d9c/classdxfcpp_1_1TimeAndSale.html#ac4fd8ebce10ec00015ad7c967d5a3cfd',1,'dxfcpp::TimeAndSale::isCorrection()']]],
+  ['isextendedtradinghours_864',['isExtendedTradingHours',['../db/d4a/classdxfcpp_1_1OptionSale.html#afc2636644d2037e826679535b2ec4f97',1,'dxfcpp::OptionSale::isExtendedTradingHours()'],['../dc/d9c/classdxfcpp_1_1TimeAndSale.html#a840cd76bb8d99b14268a32d3cc5c8455',1,'dxfcpp::TimeAndSale::isExtendedTradingHours()'],['../d5/df8/classdxfcpp_1_1TradeBase.html#a4edeabe4466107f4ba0aba1cf03a99d4',1,'dxfcpp::TradeBase::isExtendedTradingHours()']]],
+  ['isindexed_865',['isIndexed',['../d3/df2/classdxfcpp_1_1EventTypeEnum.html#a52cbec49c8921bb5be3543b311a7d056',1,'dxfcpp::EventTypeEnum']]],
+  ['isindexedeventsubscriptionsymbol_866',['isIndexedEventSubscriptionSymbol',['../dc/de1/structdxfcpp_1_1SymbolWrapper.html#a3e77002d8946d22008ca2a0772d7bd7b',1,'dxfcpp::SymbolWrapper']]],
+  ['islasting_867',['isLasting',['../d3/df2/classdxfcpp_1_1EventTypeEnum.html#afc503113362d61acbf91a9429d7626e4',1,'dxfcpp::EventTypeEnum']]],
+  ['isnew_868',['isNew',['../db/d4a/classdxfcpp_1_1OptionSale.html#a251d252fa473b0dd18b19acd2e0d8689',1,'dxfcpp::OptionSale::isNew()'],['../dc/d9c/classdxfcpp_1_1TimeAndSale.html#a2e6cbfb6b5527ce6e9eaf0c5302b571b',1,'dxfcpp::TimeAndSale::isNew()']]],
+  ['isonlyindexed_869',['isOnlyIndexed',['../d3/df2/classdxfcpp_1_1EventTypeEnum.html#abf850871484b8212eb536d2b8f85a992',1,'dxfcpp::EventTypeEnum']]],
+  ['isshortsalerestricted_870',['isShortSaleRestricted',['../dd/d66/classdxfcpp_1_1Profile.html#afdb8200924e421b8d221290baf3de447',1,'dxfcpp::Profile']]],
+  ['isspreadleg_871',['isSpreadLeg',['../db/d4a/classdxfcpp_1_1OptionSale.html#ab66f7dc0cb9edcaba39223d37ef00e34',1,'dxfcpp::OptionSale::isSpreadLeg()'],['../dc/d9c/classdxfcpp_1_1TimeAndSale.html#a7cf19805aab24f33fe16f31544def899',1,'dxfcpp::TimeAndSale::isSpreadLeg()']]],
+  ['isstringsymbol_872',['isStringSymbol',['../dc/de1/structdxfcpp_1_1SymbolWrapper.html#a0f66038aa88942094d6a34838e3bafa4',1,'dxfcpp::SymbolWrapper']]],
+  ['istimeseries_873',['isTimeSeries',['../d3/df2/classdxfcpp_1_1EventTypeEnum.html#a3bfd1a0aef9d454e03632391bb4619ce',1,'dxfcpp::EventTypeEnum']]],
+  ['istimeseriessubscriptionsymbol_874',['isTimeSeriesSubscriptionSymbol',['../dc/de1/structdxfcpp_1_1SymbolWrapper.html#a8e6657db1f3a1d24ca921829b08561a6',1,'dxfcpp::SymbolWrapper']]],
+  ['istrading_875',['isTrading',['../d7/d7e/structdxfcpp_1_1SessionType.html#aba906f02e0e56f416d88bc31ca2621df',1,'dxfcpp::SessionType']]],
+  ['istradinghalted_876',['isTradingHalted',['../dd/d66/classdxfcpp_1_1Profile.html#a46302b3f64b88162be137d5d8b2bbddb',1,'dxfcpp::Profile']]],
+  ['isvalidtick_877',['isValidTick',['../db/d4a/classdxfcpp_1_1OptionSale.html#a2dfc7d136f1e6c4d29d0ca77d9e2c8cb',1,'dxfcpp::OptionSale::isValidTick()'],['../dc/d9c/classdxfcpp_1_1TimeAndSale.html#a378647b10d8a2a9ff2df256a6d8a26bf',1,'dxfcpp::TimeAndSale::isValidTick()']]],
+  ['iswildcardsymbol_878',['isWildcardSymbol',['../dc/de1/structdxfcpp_1_1SymbolWrapper.html#a8f39830e71468fb50a80b5a56750db42',1,'dxfcpp::SymbolWrapper']]]
 ];

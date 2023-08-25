@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['read_5faux_5fimage_5fmeta_5ffailed_0',['READ_AUX_IMAGE_META_FAILED',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#a3d6f257c44e21c2f23bab2b2dec4116b',1,'dxfcpp::CEntryPointErrors']]],
-  ['regular_1',['REGULAR',['../d8/d03/structdxfcpp_1_1_price_type.html#a3b8b623b2c7152112d2fb686afa3888e',1,'dxfcpp::PriceType']]],
-  ['remove_5fevent_2',['REMOVE_EVENT',['../de/d03/classdxfcpp_1_1_event_flag.html#ae244786e6fb0f520858ac29c08855708',1,'dxfcpp::EventFlag::REMOVE_EVENT'],['../da/d01/structdxfcpp_1_1_indexed_event.html#ae3cd8ed3be94e645913ccd23bfc07edd',1,'dxfcpp::IndexedEvent::REMOVE_EVENT']]],
-  ['remove_5fsymbol_3',['REMOVE_SYMBOL',['../de/d03/classdxfcpp_1_1_event_flag.html#a6181d88706e072646fb4594e4fce94ed',1,'dxfcpp::EventFlag']]],
-  ['reserve_5faddress_5fspace_5ffailed_4',['RESERVE_ADDRESS_SPACE_FAILED',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#abd0b640e1af379be55cec1e541898f37',1,'dxfcpp::CEntryPointErrors']]]
+  ['partial_1101',['PARTIAL',['../df/de9/structdxfcpp_1_1OrderAction.html#a85eadf4613bcb638bd2a39d2ac61b7ba',1,'dxfcpp::OrderAction']]],
+  ['pre_5fmarket_1102',['PRE_MARKET',['../d5/d86/structdxfcpp_1_1SessionFilter.html#afa3b75b98f822d74e60aebe07f76bf7e',1,'dxfcpp::SessionFilter::PRE_MARKET()'],['../d7/d7e/structdxfcpp_1_1SessionType.html#ae343864a83844a9785b517522531330a',1,'dxfcpp::SessionType::PRE_MARKET()']]],
+  ['preliminary_1103',['PRELIMINARY',['../df/d8b/structdxfcpp_1_1PriceType.html#a6c3ceac783d44449248884e13703ec72',1,'dxfcpp::PriceType']]],
+  ['price_1104',['PRICE',['../de/dbc/structdxfcpp_1_1CandleType.html#ab8cb67de68ca6279c774605cc07cf808',1,'dxfcpp::CandleType']]],
+  ['price_5fmomentum_1105',['PRICE_MOMENTUM',['../de/dbc/structdxfcpp_1_1CandleType.html#a8a3ec1642188afc6d4bd8c2b4f9c28c2',1,'dxfcpp::CandleType']]],
+  ['price_5frenko_1106',['PRICE_RENKO',['../de/dbc/structdxfcpp_1_1CandleType.html#a776a9b674ffe3013e751f3baca064caa',1,'dxfcpp::CandleType']]],
+  ['protect_5fheap_5ffailed_1107',['PROTECT_HEAP_FAILED',['../d0/df2/structdxfcpp_1_1CEntryPointErrors.html#a694f24336e4806bef18f2449133bb01e',1,'dxfcpp::CEntryPointErrors']]]
 ];

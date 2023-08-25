@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['entity_0',['Entity',['../d9/d02/structdxfcpp_1_1_entity.html',1,'dxfcpp']]],
-  ['eventflag_1',['EventFlag',['../de/d03/classdxfcpp_1_1_event_flag.html',1,'dxfcpp']]],
-  ['eventtype_2',['EventType',['../d8/d03/structdxfcpp_1_1_event_type.html',1,'dxfcpp']]],
-  ['eventtypeenum_3',['EventTypeEnum',['../d9/d00/classdxfcpp_1_1_event_type_enum.html',1,'dxfcpp']]],
-  ['eventtypewithsymbol_4',['EventTypeWithSymbol',['../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html',1,'dxfcpp']]],
-  ['eventtypewithsymbol_3c_20candlesymbol_20_3e_5',['EventTypeWithSymbol&lt; CandleSymbol &gt;',['../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html',1,'dxfcpp']]],
-  ['eventtypewithsymbol_3c_20std_3a_3astring_20_3e_6',['EventTypeWithSymbol&lt; std::string &gt;',['../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html',1,'dxfcpp']]]
+  ['direction_593',['Direction',['../d1/d94/structdxfcpp_1_1Direction.html',1,'dxfcpp']]],
+  ['dxendpoint_594',['DXEndpoint',['../d8/db3/structdxfcpp_1_1DXEndpoint.html',1,'dxfcpp']]],
+  ['dxfc_5fdxendpoint_5fproperty_5ft_595',['dxfc_dxendpoint_property_t',['../d6/d22/structdxfc__dxendpoint__property__t.html',1,'']]],
+  ['dxfeed_596',['DXFeed',['../db/de7/structdxfcpp_1_1DXFeed.html',1,'dxfcpp']]],
+  ['dxfeedsubscription_597',['DXFeedSubscription',['../df/d08/classdxfcpp_1_1DXFeedSubscription.html',1,'dxfcpp']]],
+  ['dxpublisher_598',['DXPublisher',['../df/deb/structdxfcpp_1_1DXPublisher.html',1,'dxfcpp']]]
 ];

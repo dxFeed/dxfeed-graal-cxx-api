@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['name_0',['name',['../d2/d01/classdxfcpp_1_1_indexed_event_source.html#a60876eb77d249937307e31a13d6d8bf2',1,'dxfcpp::IndexedEventSource']]],
-  ['newbuilder_1',['newBuilder',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#a4fd9e984ae1cc206b6ccf9e7d528af29',1,'dxfcpp::DXEndpoint']]]
+  ['marketevent_879',['MarketEvent',['../d9/df0/structdxfcpp_1_1MarketEvent.html#afeb8874ca4d6b603d5b941f19e0735cf',1,'dxfcpp::MarketEvent']]]
 ];

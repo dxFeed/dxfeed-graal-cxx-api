@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['role_0',['Role',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d',1,'dxfcpp::DXEndpoint']]]
+  ['role_1161',['Role',['../d8/db3/structdxfcpp_1_1DXEndpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2d',1,'dxfcpp::DXEndpoint']]]
 ];

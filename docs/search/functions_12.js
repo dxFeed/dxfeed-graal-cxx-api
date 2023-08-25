@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['_7ebuilder_0',['~Builder',['../d9/d02/classdxfcpp_1_1_d_x_endpoint_1_1_builder.html#abc9c35e76c8fcc848f7ef3f37f9d7ce4',1,'dxfcpp::DXEndpoint::Builder']]],
-  ['_7eentity_1',['~Entity',['../d9/d02/structdxfcpp_1_1_entity.html#a491b6b3c1b6f3ae655ec503e258ce162',1,'dxfcpp::Entity']]]
+  ['valueof_1026',['valueOf',['../d8/d91/structdxfcpp_1_1CandleSymbol.html#a172839424746a872d15a57d487a5c74f',1,'dxfcpp::CandleSymbol::valueOf(std::string symbol) noexcept'],['../d8/d91/structdxfcpp_1_1CandleSymbol.html#af6d9bdc66ecb67ac46f5c07bdeddc240',1,'dxfcpp::CandleSymbol::valueOf(std::string symbol, const CandleSymbolAttributeVariant &amp;attribute) noexcept'],['../d8/d91/structdxfcpp_1_1CandleSymbol.html#af1d695587a0193af239e0cdfe5f7279e',1,'dxfcpp::CandleSymbol::valueOf(std::string symbol, std::initializer_list&lt; CandleSymbolAttributeVariant &gt; attributes) noexcept'],['../d6/dbd/structdxfcpp_1_1CandleExchange.html#a2cf28d6f038e4e7378a1b11282036b6c',1,'dxfcpp::CandleExchange::valueOf()'],['../da/d7a/structdxfcpp_1_1CandlePeriod.html#acc49dfdd3538de249418b53970b0938a',1,'dxfcpp::CandlePeriod::valueOf()'],['../dd/dd5/structdxfcpp_1_1CandlePriceLevel.html#a6b5ded3539fef9de352ec60e950da809',1,'dxfcpp::CandlePriceLevel::valueOf()']]]
 ];

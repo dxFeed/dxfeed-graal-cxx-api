@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['optionsale_0',['OptionSale',['../de/d02/classdxfcpp_1_1_option_sale.html',1,'dxfcpp']]]
+  ['lastingevent_617',['LastingEvent',['../d4/da9/structdxfcpp_1_1LastingEvent.html',1,'dxfcpp']]]
 ];

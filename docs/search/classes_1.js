@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['centrypointerrors_0',['CEntryPointErrors',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html',1,'dxfcpp']]]
+  ['builder_581',['Builder',['../d2/dcd/classdxfcpp_1_1DXEndpoint_1_1Builder.html',1,'dxfcpp::DXEndpoint']]]
 ];

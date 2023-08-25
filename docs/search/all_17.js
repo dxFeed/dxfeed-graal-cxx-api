@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['_7ebuilder_0',['~Builder',['../d9/d02/classdxfcpp_1_1_d_x_endpoint_1_1_builder.html#abc9c35e76c8fcc848f7ef3f37f9d7ce4',1,'dxfcpp::DXEndpoint::Builder']]],
-  ['_7eentity_1',['~Entity',['../d9/d02/structdxfcpp_1_1_entity.html#a491b6b3c1b6f3ae655ec503e258ce162',1,'dxfcpp::Entity']]]
+  ['zero_575',['ZERO',['../d1/d94/structdxfcpp_1_1Direction.html#a8f35df343051d2ccab48adee22e48e1d',1,'dxfcpp::Direction']]],
+  ['zero_5fdown_576',['ZERO_DOWN',['../d1/d94/structdxfcpp_1_1Direction.html#a5c280dcaf9e2d12e6fcdb091c8ec4f9f',1,'dxfcpp::Direction']]],
+  ['zero_5fup_577',['ZERO_UP',['../d1/d94/structdxfcpp_1_1Direction.html#a0d9172a737701f90c8c2484dc597bc30',1,'dxfcpp::Direction']]]
 ];
