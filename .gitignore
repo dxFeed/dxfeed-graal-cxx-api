@@ -37,8 +37,9 @@
 build/
 cmake-build-*/
 .idea/
-/doc/html/
-/doc/latex/
+/docs/html/
+/docs/latex/
+/docs/*.log
 
 .PVS-Studio/
 *.PVS-Studio.*

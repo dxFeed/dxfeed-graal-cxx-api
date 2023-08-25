@@ -103,6 +103,8 @@ class DXFCPP_EXPORT Order : public OrderBase {
     void fillGraalData(void *graalNative) const noexcept override;
     static void freeGraalData(void *graalNative) noexcept;
 
+  public:
+
     static std::shared_ptr<Order> fromGraal(void *graalNative) noexcept;
 
     /**
@@ -112,7 +114,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    virtual void* toGraal() const noexcept;
+    void* toGraal() const noexcept override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).

@@ -82,6 +82,8 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     void fillGraalData(void *graalNative) const noexcept override;
     static void freeGraalData(void *graalNative) noexcept;
 
+  public:
+
     static std::shared_ptr<OptionSale> fromGraal(void *graalNative) noexcept;
 
     /**
@@ -91,7 +93,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void* toGraal() const noexcept;
+    void* toGraal() const noexcept override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).

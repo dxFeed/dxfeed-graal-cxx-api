@@ -102,6 +102,8 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     void fillGraalData(void *graalNative) const noexcept;
     static void freeGraalData(void *graalNative) noexcept;
 
+  public:
+
     static std::shared_ptr<Candle> fromGraal(void *graalNative) noexcept;
 
     /**
@@ -111,7 +113,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void* toGraal() const noexcept;
+    void* toGraal() const noexcept override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
