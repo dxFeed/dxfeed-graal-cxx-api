@@ -88,6 +88,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     static void freeGraal(void* graalNative) noexcept;
 
   public:
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new profile event with default values.

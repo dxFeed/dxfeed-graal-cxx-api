@@ -122,6 +122,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     static void freeGraal(void* graalNative) noexcept;
 
   public:
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new order event with default values.

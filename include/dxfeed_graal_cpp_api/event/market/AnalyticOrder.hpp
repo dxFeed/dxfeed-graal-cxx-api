@@ -89,6 +89,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     static void freeGraal(void* graalNative) noexcept;
 
   public:
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new analytic order event with default values.

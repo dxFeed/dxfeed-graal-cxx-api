@@ -120,6 +120,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
     static void freeGraal(void* graalNative) noexcept;
 
   public:
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new trade event with default values.

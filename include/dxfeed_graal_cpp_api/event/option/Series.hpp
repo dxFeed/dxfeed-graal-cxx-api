@@ -112,6 +112,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new series event with default values.

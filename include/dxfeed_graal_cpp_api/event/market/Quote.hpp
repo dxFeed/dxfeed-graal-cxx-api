@@ -82,6 +82,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new quote event with default values.
