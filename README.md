@@ -464,11 +464,11 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   remote publisher hub (also known as multiplexor) or creates a publisher on the local
   host ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/WriteTapeFile.java))
   - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+  - [x] dxFeed Graal C++ API
 - [STREAM_PUBLISHER](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_PUBLISHER) is
   similar to PUBLISHER and also connects to the remote publisher hub, but is designed for bulk data publishing
   - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+  - [x] dxFeed Graal C++ API
 - [ON_DEMAND_FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#ON_DEMAND_FEED) is similar
   to FEED, but it is designed to be used with OnDemandService for historical data replay only
   - [ ] dxFeed Graal C API

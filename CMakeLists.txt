@@ -39,7 +39,7 @@ option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.0" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.1" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
 include(FetchContent)
