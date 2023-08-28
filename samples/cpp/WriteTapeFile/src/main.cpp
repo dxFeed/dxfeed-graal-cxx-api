@@ -3,8 +3,6 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <iostream>
-
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
