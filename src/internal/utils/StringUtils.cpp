@@ -83,6 +83,46 @@ char utf16to8(std::int16_t in) noexcept {
     }
 }
 
+std::string utf16toUtf8String(std::int16_t in) noexcept {
+    try {
+        std::string out{};
+        auto utf16in = {in};
+
+        utf8::utf16to8(std::begin(utf16in), std::end(utf16in), std::back_inserter(out));
+
+        return out;
+    } catch (...) {
+        // TODO: error handling
+        return "";
+    }
+}
+
+std::string utf16toUtf8String(const std::u16string& in) noexcept {
+    try {
+        std::string out{};
+
+        utf8::utf16to8(std::begin(in), std::end(in), std::back_inserter(out));
+
+        return out;
+    } catch (...) {
+        // TODO: error handling
+        return "";
+    }
+}
+
+std::string utf16toUtf8String(const std::vector<std::int16_t>& in) noexcept {
+    try {
+        std::string out{};
+
+        utf8::utf16to8(std::begin(in), std::end(in), std::back_inserter(out));
+
+        return out;
+    } catch (...) {
+        // TODO: error handling
+        return "";
+    }
+}
+
 std::int16_t utf8to16(char in) noexcept {
     try {
         std::u16string out{};

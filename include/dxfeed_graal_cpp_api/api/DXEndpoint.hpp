@@ -176,6 +176,8 @@ struct DXFeed;
  */
 struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     /**
+     * `"name"`
+     *
      * Defines property for endpoint name that is used to distinguish multiple endpoints
      * in the same process in logs and in other diagnostic means.
      * Use Builder::withProperty(const std::string&, const std::string&) method.
@@ -184,6 +186,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string NAME_PROPERTY;
 
     /**
+     * `"dxfeed.properties"`
+     *
      * Defines path to a file with properties for an endpoint with role @ref Role::FEED "FEED" or
      * @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
      * By default, properties a loaded from a path resource named "dxfeed.properties".
@@ -193,6 +197,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXFEED_PROPERTIES_PROPERTY;
 
     /**
+     * `"dxfeed.address"`
+     *
      * Defines default connection address for an endpoint with role @ref Role::FEED "FEED"
      * or @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
      * Connection is established to this address by role @ref Role::FEED "FEED" as soon as endpoint is created, while
@@ -210,6 +216,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXFEED_ADDRESS_PROPERTY;
 
     /**
+     * `"dxfeed.user"`
+     *
      * Defines default user name for an endpoint with role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
      * "ON_DEMAND_FEED".
      *
@@ -218,6 +226,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXFEED_USER_PROPERTY;
 
     /**
+     * `"dxfeed.password"`
+     *
      * Defines default password for an endpoint with role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
      * "ON_DEMAND_FEED".
      *
@@ -226,6 +236,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXFEED_PASSWORD_PROPERTY;
 
     /**
+     * `"dxfeed.threadPoolSize"`
+     *
      * Defines thread pool size for an endpoint with role @ref Role::FEED "FEED".
      * By default, the thread pool size is equal to the number of available processors.
      * @see Builder::withProperty(const std::string&, const std::string&)
@@ -233,6 +245,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXFEED_THREAD_POOL_SIZE_PROPERTY;
 
     /**
+     * `"dxfeed.aggregationPeriod"`
+     *
      * Defines data aggregation period an endpoint with role @ref Role::FEED "FEED" that
      * limits the rate of data notifications. For example, setting the value of this property
      * to "0.1s" limits notification to once every 100ms (at most 10 per second).
@@ -241,6 +255,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXFEED_AGGREGATION_PERIOD_PROPERTY;
 
     /**
+     * `"dxfeed.wildcard.enable"`
+     *
      * Set this property to `true` to turns on wildcard support.
      * By default, the endpoint does not support wildcards. This property is needed for
      * WildcardSymbol support and for the use of "tape:..." address in DXPublisher.
@@ -248,6 +264,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXFEED_WILDCARD_ENABLE_PROPERTY;
 
     /**
+     * `"dxpublisher.properties"`
+     *
      * Defines path to a file with properties for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
      * By default, properties a loaded from a classpath resource named "dxpublisher.properties".
      * @see Builder::withProperty(const std::string&, const std::string&)
@@ -255,6 +273,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXPUBLISHER_PROPERTIES_PROPERTY;
 
     /**
+     * `"dxpublisher.address"`
+     *
      * Defines default connection address for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
      * Connection is established to this address as soon as endpoint is created.
      * By default, connection is not established until DXEndpoint::connect(const std::string&) is invoked.
@@ -263,6 +283,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXPUBLISHER_ADDRESS_PROPERTY;
 
     /**
+     * `"dxpublisher.threadPoolSize"`
+     *
      * Defines thread pool size for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
      * By default, the thread pool size is equal to the number of available processors.
      * @see Builder#withProperty(const std::string&, const std::string&)
@@ -270,6 +292,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY;
 
     /**
+     * `"dxendpoint.eventTime"`
+     *
      * Set this property to `true` to enable @ref EventType::getEventTime() "event time" support.
      * By default, the endpoint does not support event time.
      *
@@ -285,6 +309,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXENDPOINT_EVENT_TIME_PROPERTY;
 
     /**
+     * `"dxendpoint.storeEverything"`
+     *
      * Set this property to  to store all @ref LastingEvent "lasting" and @ref IndexedEvent "indexed" events even when
      * there is no subscription on them. By default, the endpoint stores only events from subscriptions. It works in
      * the same way both for DXFeed and DXPublisher.
@@ -296,6 +322,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXENDPOINT_STORE_EVERYTHING_PROPERTY;
 
     /**
+     * `"dxscheme.nanoTime"`
+     *
      * Set this property to `true` to turn on nanoseconds precision business time.
      * By default, this feature is turned off.
      * Business time in most events is available with
@@ -314,6 +342,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static const std::string DXSCHEME_NANO_TIME_PROPERTY;
 
     /**
+     * `"dxscheme.enabled."`
+     *
      * Defines whether a specified field from the scheme should be enabled instead of it's default behaviour.
      * Use it according to following format:<br>
      * <b>`dxscheme.enabled.<field_property_name>=<event_name_mask_glob>`</b>

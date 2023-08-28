@@ -9,6 +9,7 @@
 #include <string>
 #include <thread>
 #include <locale>
+#include <cstddef>
 
 namespace dxfcpp {
 
@@ -42,7 +43,37 @@ template <typename T> std::string toStringAny(T &&t) {
     }
 }
 
+/**
+ * Tries to convert UTF16 char to ASCII.
+ *
+ * @param in The UTF16 char
+ * @return ASCII char
+ */
 DXFCPP_EXPORT char utf16to8(std::int16_t in) noexcept;
+
+/**
+ * Converts UTF16 char to UTF8 string
+ *
+ * @param in The UTF16 char
+ * @return UTF8 string
+ */
+DXFCPP_EXPORT std::string utf16toUtf8String(std::int16_t in) noexcept;
+
+/**
+ * Converts UTF16 string to UTF8 string
+ *
+ * @param in The UTF16 string
+ * @return UTF8 string
+ */
+DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string& in) noexcept;
+
+/**
+ * Converts vector of UTF16 chars to UTF8 string
+ *
+ * @param in The UTF16 string
+ * @return UTF8 string
+ */
+DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t>& in) noexcept;
 
 DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept;
 

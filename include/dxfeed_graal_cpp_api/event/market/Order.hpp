@@ -124,6 +124,12 @@ class DXFCPP_EXPORT Order : public OrderBase {
     static void freeGraal(void* graalNative) noexcept;
 
   public:
+    /// The alias to a type of shared pointer to the Order object
+    using Ptr = std::shared_ptr<Order>;
+
+    /// The alias to a type of unique pointer to the Order object
+    using Unique = std::unique_ptr<Order>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 

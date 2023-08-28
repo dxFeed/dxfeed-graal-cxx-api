@@ -42,6 +42,9 @@ option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.1" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
+option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
+option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
+
 include(FetchContent)
 
 if (WIN32)
@@ -259,6 +262,7 @@ endif ()
 if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/PrintQuoteEvents)
     add_subdirectory(samples/cpp/DxFeedSample)
+    add_subdirectory(samples/cpp/WriteTapeFile)
 endif ()
 
 if (DXFCXX_BUILD_TOOLS)

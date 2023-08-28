@@ -109,6 +109,12 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// The alias to a type of shared pointer to the Underlying object
+    using Ptr = std::shared_ptr<Underlying>;
+
+    /// The alias to a type of unique pointer to the Underlying object
+    using Unique = std::unique_ptr<Underlying>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 

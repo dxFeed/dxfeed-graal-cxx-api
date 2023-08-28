@@ -113,6 +113,12 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// The alias to a type of shared pointer to the TheoPrice object
+    using Ptr = std::shared_ptr<TheoPrice>;
+
+    /// The alias to a type of unique pointer to the TheoPrice object
+    using Unique = std::unique_ptr<TheoPrice>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 

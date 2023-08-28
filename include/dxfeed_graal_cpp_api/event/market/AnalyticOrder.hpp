@@ -91,6 +91,12 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     static void freeGraal(void* graalNative) noexcept;
 
   public:
+    /// The alias to a type of shared pointer to the AnalyticOrder object
+    using Ptr = std::shared_ptr<AnalyticOrder>;
+
+    /// The alias to a type of unique pointer to the AnalyticOrder object
+    using Unique = std::unique_ptr<AnalyticOrder>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 

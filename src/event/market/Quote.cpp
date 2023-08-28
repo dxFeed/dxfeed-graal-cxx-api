@@ -23,6 +23,10 @@ std::int16_t Quote::getBidExchangeCode() const noexcept {
     return data_.bidExchangeCode;
 }
 
+std::string Quote::getBidExchangeCodeString() const noexcept {
+    return utf16toUtf8String(data_.bidExchangeCode);
+}
+
 void Quote::setBidExchangeCode(char bidExchangeCode) noexcept {
     data_.bidExchangeCode = utf8to16(bidExchangeCode);
 }
@@ -33,6 +37,10 @@ void Quote::setBidExchangeCode(std::int16_t bidExchangeCode) noexcept {
 
 std::int16_t Quote::getAskExchangeCode() const noexcept {
     return data_.askExchangeCode;
+}
+
+std::string Quote::getAskExchangeCodeString() const noexcept {
+    return utf16toUtf8String(data_.askExchangeCode);
 }
 
 void Quote::setAskExchangeCode(char askExchangeCode) noexcept {
