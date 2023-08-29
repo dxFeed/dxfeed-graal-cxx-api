@@ -36,6 +36,8 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     /**
      * Returns a pointer to the current object wrapped in a smart pointer to type T
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<T>(new T(...))` or `std::make_shared<T>(...)`
+     *
      * @tparam T The type to convert to a pointer to
      * @return a smart pointer to type T
      */
@@ -45,6 +47,8 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
 
     /**
      * Returns a pointer to the current object wrapped in a smart pointer to type T
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<T>(new T(...))` or `std::make_shared<T>(...)`
      *
      * @tparam T The type to convert to a pointer to
      * @return a smart pointer to type T

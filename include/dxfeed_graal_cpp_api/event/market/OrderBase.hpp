@@ -53,8 +53,9 @@ struct EventMapper;
  * The corresponding information is carried in @ref OrderBase::getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
  *
- * <p> The event @ref OrderBase::getSource() "source" identifier for an order is a part of the unique event @ref OrderBase::getIndex() "index".
- * It occupies highest bits of the @ref OrderBase::getIndex() "index" (index is not-negative). The lowest bits of
+ * <p> The event @ref OrderBase::getSource() "source" identifier for an order is a part of the unique event @ref
+ * OrderBase::getIndex() "index". It occupies highest bits of the @ref OrderBase::getIndex() "index" (index is
+ * not-negative). The lowest bits of
  * @ref OrderBase::getIndex() "index" contain source-specific event index which is always zero in
  * an event that is marked with EventFlag::SNAPSHOT_END bit in @ref OrderBase::getEventFlags() "eventFlags".
  *
@@ -262,7 +263,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes time and sequence of this order.
-     * <b>Do not use this method directly.</b>
+     * @warning <b>Do not use this method directly.</b>
      * Change @ref OrderBase::setTime() "time" and/or @ref OrderBase::setSequence() "sequence".
      *
      * @param timeSequence the time and sequence.
@@ -375,7 +376,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     /**
      * Changes action of this order.
      *
-     * @param action side of this order.
+     * @param action The action of this order.
      */
     void setAction(const OrderAction &action) noexcept {
         orderBaseData_.flags = setBits(orderBaseData_.flags, ACTION_MASK, ACTION_SHIFT, action.getCode());
@@ -591,6 +592,16 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     std::int16_t getExchangeCode() const noexcept {
         return utf8to16(static_cast<char>(
             static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
+    }
+
+    /**
+     * Returns exchange code of this order as UTF8 string.
+     *
+     * @return exchange code of this order as UTF8 string.
+     */
+    std::string getExchangeCodeString() const noexcept {
+        return {1ULL, static_cast<char>(
+                          static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT)))};
     }
 
     /**

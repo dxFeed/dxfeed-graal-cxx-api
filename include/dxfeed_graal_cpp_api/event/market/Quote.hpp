@@ -104,6 +104,62 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     }
 
     /**
+     * Changes event's symbol and returns the current quote.
+     *
+     * @param eventSymbol The symbol of this event.
+     * @return The current quote.
+     */
+    Quote &withEventSymbol(const std::string &eventSymbol) noexcept {
+        MarketEvent::setEventSymbol(eventSymbol);
+
+        return *this;
+    }
+
+    /**
+     * Changes event's symbol and returns a shared pointer to the current quote.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
+     * @param eventSymbol The symbol of this event.
+     * @return A shared pointer to the current quote.
+     */
+    Quote::Ptr withEventSymbolShared(const std::string &eventSymbol) noexcept {
+        MarketEvent::setEventSymbol(eventSymbol);
+
+        return shared_from_this()->sharedAs<Quote>();
+    }
+
+    /**
+     * Changes event's creation time and returns the current quote.
+     *
+     * @param eventTime the difference, measured in milliseconds, between the event creation time and
+     * midnight, January 1, 1970 UTC.
+     * @return The current quote.
+     */
+    Quote &withEventTime(std::int64_t eventTime) noexcept {
+        MarketEvent::setEventTime(eventTime);
+
+        return *this;
+    }
+
+    /**
+     * Changes event's creation time and returns a shared pointer to the current quote.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
+     * @param eventTime the difference, measured in milliseconds, between the event creation time and
+     * midnight, January 1, 1970 UTC.
+     * @return A shared pointer to the current quote.
+     */
+    Quote::Ptr withEventTimeShared(std::int64_t eventTime) noexcept {
+        MarketEvent::setEventTime(eventTime);
+
+        return shared_from_this()->sharedAs<Quote>();
+    }
+
+    /**
      * Returns sequence number of this quote to distinguish quotes that have the same @ref Quote::getTime() "time". This
      * sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to
      * Quote::MAX_SEQUENCE.
@@ -142,13 +198,17 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     }
 
     /**
-     * Changes @ref Quote::getSequence() "sequence number" of this quote and returns a shared pointer to the current quote.
+     * Changes @ref Quote::getSequence() "sequence number" of this quote and returns a shared pointer to the current
+     * quote.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
      *
      * @param sequence The sequence.
      * @return A shared pointer to the current quote.
      * @see Quote::getSequence()
      */
-    Ptr withSequenceShared(std::int32_t sequence) noexcept {
+    Quote::Ptr withSequenceShared(std::int32_t sequence) noexcept {
         setSequence(sequence);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -208,13 +268,16 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     }
 
     /**
-     * Changes microseconds and nanoseconds part of time of the last bid or ask change and returns a shared pointer to the current quote.
-     * <b>This method changes Quote::getTimeNanos() result.</b>
+     * Changes microseconds and nanoseconds part of time of the last bid or ask change and returns a shared pointer to
+     * the current quote. <b>This method changes Quote::getTimeNanos() result.</b>
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
      *
      * @param timeNanoPart The microseconds and nanoseconds part of time of the last bid or ask change.
      * @return A shared pointer to the current quote.
      */
-    Ptr withTimeNanoPartShared(std::int32_t timeNanoPart) noexcept {
+    Quote::Ptr withTimeNanoPartShared(std::int32_t timeNanoPart) noexcept {
         setTimeNanoPart(timeNanoPart);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -271,10 +334,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * You can set the actual millisecond-precision time here to publish event and the millisecond part
      * will make the Quote::getTime() of this quote even precise up to a millisecond.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param bidTime The time of the last bid change.
      * @return A shared pointer to the current quote.
      */
-    Ptr withBidTimeShared(std::int64_t bidTime) noexcept {
+    Quote::Ptr withBidTimeShared(std::int64_t bidTime) noexcept {
         setBidTime(bidTime);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -316,10 +382,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Changes bid exchange code and returns a shared pointer to the current quote.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param bidExchangeCode The bid exchange code.
      * @return A shared pointer to the current quote.
      */
-    Ptr withBidExchangeCodeShared(char bidExchangeCode) noexcept {
+    Quote::Ptr withBidExchangeCodeShared(char bidExchangeCode) noexcept {
         setBidExchangeCode(bidExchangeCode);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -347,10 +416,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Changes bid exchange code and returns a shared pointer to the current quote.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param bidExchangeCode The bid exchange code.
      * @return A shared pointer to the current quote.
      */
-    Ptr withBidExchangeCodeShared(std::int16_t bidExchangeCode) noexcept {
+    Quote::Ptr withBidExchangeCodeShared(std::int16_t bidExchangeCode) noexcept {
         setBidExchangeCode(bidExchangeCode);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -389,10 +461,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Changes bid price and returns a shared pointer to the current quote.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param bidPrice The bid price.
      * @return A shared pointer to the current quote.
      */
-    Ptr withBidPriceShared(double bidPrice) noexcept {
+    Quote::Ptr withBidPriceShared(double bidPrice) noexcept {
         setBidPrice(bidPrice);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -431,10 +506,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Changes bid size and returns a shared pointer to the current quote.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param bidSize The bid size.
      * @retrun A shared pointer to the current quote.
      */
-    Ptr withBidSizeShared(double bidSize) noexcept {
+    Quote::Ptr withBidSizeShared(double bidSize) noexcept {
         setBidSize(bidSize);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -478,7 +556,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param askTime The time of the last ask change.
      * @return The current quote.
      */
-    Quote& withAskTime(std::int64_t askTime) noexcept {
+    Quote &withAskTime(std::int64_t askTime) noexcept {
         setAskTime(askTime);
 
         return *this;
@@ -491,10 +569,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * You can set the actual millisecond-precision time here to publish event and the millisecond part
      * will make the Quote::getTime() of this quote even precise up to a millisecond.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param askTime The time of the last ask change.
      * @return A shared pointer to the current quote.
      */
-    Ptr withAskTimeShared(std::int64_t askTime) noexcept {
+    Quote::Ptr withAskTimeShared(std::int64_t askTime) noexcept {
         setAskTime(askTime);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -536,10 +617,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Changes ask exchange code and returns a shared pointer to the current quote.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param askExchangeCode The ask exchange code.
      * @return A shared pointer to the current quote.
      */
-    Ptr withAskExchangeCodeShared(char askExchangeCode) noexcept {
+    Quote::Ptr withAskExchangeCodeShared(char askExchangeCode) noexcept {
         setAskExchangeCode(askExchangeCode);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -567,10 +651,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Changes ask exchange code and returns a shared pointer to the current quote.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param askExchangeCode The ask exchange code.
      * @return A shared pointer to the current quote.
      */
-    Ptr withAskExchangeCodeShared(std::int16_t askExchangeCode) noexcept {
+    Quote::Ptr withAskExchangeCodeShared(std::int16_t askExchangeCode) noexcept {
         setAskExchangeCode(askExchangeCode);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -609,10 +696,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Changes ask price and returns a shared pointer to the current quote.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param askPrice The ask price.
      * @return A shared pointer to the current quote.
      */
-    Ptr withAskPriceShared(double askPrice) noexcept {
+    Quote::Ptr withAskPriceShared(double askPrice) noexcept {
         setAskPrice(askPrice);
 
         return shared_from_this()->sharedAs<Quote>();
@@ -651,10 +741,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     /**
      * Changes ask size and returns a shared pointer to the current quote.
      *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Quote>(new
+     * Quote(...))` or `std::make_shared<Quote>(...)`
+     *
      * @param askSize The ask size.
      * @retrun A shared pointer to the current quote.
      */
-    Ptr withAskSizeShared(double askSize) noexcept {
+    Quote::Ptr withAskSizeShared(double askSize) noexcept {
         setAskSize(askSize);
 
         return shared_from_this()->sharedAs<Quote>();

@@ -48,26 +48,29 @@ if (DXFCXX_ENABLE_VS_ASAN)
     )
 endif ()
 
+target_include_directories(${PROJECT_NAME} PRIVATE ../../../include)
+
 if (DXFCXX_ENABLE_ASAN_UBSAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
     target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
+
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:dxfcxx::graal>
+            $<TARGET_FILE:dxfcxx>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+else ()
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:dxfcxx::graal>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif ()
-
-target_include_directories(${PROJECT_NAME} PRIVATE ../../../include)
-
-#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
-target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
-target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:dxfcxx::graal>
-        $<TARGET_FILE:dxfcxx>
-        #        ${CMAKE_CURRENT_SOURCE_DIR}/dxfeed.properties
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
     install(TARGETS ${PROJECT_NAME})
-    #    install(FILES "dxfeed.properties" DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     if (WIN32)
         install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
