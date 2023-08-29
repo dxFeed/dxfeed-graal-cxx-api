@@ -254,10 +254,8 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 * [PrintQuoteEvents](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PrintQuoteEvents/src/main.cpp)
   is a simple demonstration of how to subscribe to the `Quote` event, using a `DxFeed` instance singleton
   and `dxfeed.properties` file
-<!--
 * [WriteTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp)
   is a simple demonstration of how to write events to a tape file
--->
 
 ## Current State
 

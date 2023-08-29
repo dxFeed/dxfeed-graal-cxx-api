@@ -95,6 +95,12 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
     static void freeGraal(void* graalNative) noexcept;
 
   public:
+    /// The alias to a type of shared pointer to the Trade object
+    using Ptr = std::shared_ptr<Trade>;
+
+    /// The alias to a type of unique pointer to the Trade object
+    using Unique = std::unique_ptr<Trade>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 

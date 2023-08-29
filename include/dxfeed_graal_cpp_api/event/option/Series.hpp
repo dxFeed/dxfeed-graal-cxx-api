@@ -114,6 +114,12 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// The alias to a type of shared pointer to the Series object
+    using Ptr = std::shared_ptr<Series>;
+
+    /// The alias to a type of unique pointer to the Series object
+    using Unique = std::unique_ptr<Series>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 

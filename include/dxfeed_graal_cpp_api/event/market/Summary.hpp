@@ -82,6 +82,12 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     static void freeGraal(void* graalNative) noexcept;
 
   public:
+    /// The alias to a type of shared pointer to the Summary object
+    using Ptr = std::shared_ptr<Summary>;
+
+    /// The alias to a type of unique pointer to the Summary object
+    using Unique = std::unique_ptr<Summary>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 

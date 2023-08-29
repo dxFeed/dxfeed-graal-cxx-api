@@ -138,6 +138,12 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// The alias to a type of shared pointer to the TimeAndSale object
+    using Ptr = std::shared_ptr<TimeAndSale>;
+
+    /// The alias to a type of unique pointer to the TimeAndSale object
+    using Unique = std::unique_ptr<TimeAndSale>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 

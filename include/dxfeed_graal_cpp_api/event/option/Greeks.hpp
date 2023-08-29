@@ -106,6 +106,12 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    /// The alias to a type of shared pointer to the Greeks object
+    using Ptr = std::shared_ptr<Greeks>;
+
+    /// The alias to a type of unique pointer to the Greeks object
+    using Unique = std::unique_ptr<Greeks>;
+
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
