@@ -32,4 +32,6 @@ int main() {
     // Wait until all data is written, close, and wait until it closes.
     endpoint->awaitProcessed();
     endpoint->closeAndAwaitTermination();
+
+    return 0;
 }

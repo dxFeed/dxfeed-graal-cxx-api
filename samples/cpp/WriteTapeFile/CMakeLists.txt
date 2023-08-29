@@ -33,13 +33,6 @@ elseif (UNIX)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
 endif ()
 
-if (DXFCXX_ENABLE_ASAN_UBSAN)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize=undefined")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize=undefined")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address -fsanitize=undefined")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address -fsanitize=undefined")
-endif ()
-
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 if (DXFCXX_ENABLE_VS_ASAN)
@@ -55,15 +48,20 @@ if (DXFCXX_ENABLE_VS_ASAN)
     )
 endif ()
 
+if (DXFCXX_ENABLE_ASAN_UBSAN)
+    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
+    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
+endif ()
+
 target_include_directories(${PROJECT_NAME} PRIVATE ../../../include)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
-#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
-#target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
+#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
+target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
-        #        $<TARGET_FILE:dxfcxx>
+        $<TARGET_FILE:dxfcxx>
         #        ${CMAKE_CURRENT_SOURCE_DIR}/dxfeed.properties
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 

@@ -8,9 +8,6 @@
 
 namespace dxfcpp {
 
-const SessionType SessionType::NO_TRADING{"NO_TRADING", false};
-const SessionType SessionType::PRE_MARKET{"PRE_MARKET", true};
-const SessionType SessionType::REGULAR{"REGULAR", true};
-const SessionType SessionType::AFTER_MARKET{"AFTER_MARKET", true};
+// The SessionType static fields are initialized in CandleSession.cpp
 
 } // namespace dxfcpp

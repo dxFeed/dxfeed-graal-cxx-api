@@ -39,7 +39,7 @@ option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.1" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.2" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
@@ -248,6 +248,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
 target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
+
+if (DXFCXX_ENABLE_ASAN_UBSAN)
+    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
+    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
+    target_link_libraries(${PROJECT_NAME} PUBLIC asan ubsan)
+endif ()
 
 add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}_static>)
