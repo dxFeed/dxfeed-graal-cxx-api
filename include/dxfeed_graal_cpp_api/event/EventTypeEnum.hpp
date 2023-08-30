@@ -64,6 +64,8 @@ class DXFCPP_EXPORT EventTypeEnum {
     static const EventTypeEnum SERIES;
     static const EventTypeEnum OPTION_SALE;
 
+    static const std::vector<std::reference_wrapper<const EventTypeEnum>> ALL;
+
     explicit EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", false} {
     }
 

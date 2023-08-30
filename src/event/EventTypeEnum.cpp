@@ -31,4 +31,24 @@ const EventTypeEnum EventTypeEnum::SPREAD_ORDER{DXFG_EVENT_SPREAD_ORDER, "SPREAD
 const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, "SERIES", false, true};
 const EventTypeEnum EventTypeEnum::OPTION_SALE{DXFG_EVENT_OPTION_SALE, "OPTION_SALE", false, true};
 
+const std::vector<std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL{
+    std::cref(QUOTE),
+    std::cref(PROFILE),
+    std::cref(SUMMARY),
+    std::cref(GREEKS),
+    std::cref(CANDLE),
+    std::cref(UNDERLYING),
+    std::cref(THEO_PRICE),
+    std::cref(TRADE),
+    std::cref(TRADE_ETH),
+    //std::cref(CONFIGURATION),
+    //std::cref(MESSAGE),
+    std::cref(TIME_AND_SALE),
+    std::cref(ORDER),
+    std::cref(ANALYTIC_ORDER),
+    std::cref(SPREAD_ORDER),
+    std::cref(SERIES),
+    std::cref(OPTION_SALE),
+};
+
 } // namespace dxfcpp
