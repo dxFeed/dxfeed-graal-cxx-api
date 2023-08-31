@@ -44,6 +44,7 @@ set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/
 
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
 option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
+option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
 include(FetchContent)
 
@@ -94,37 +95,37 @@ set(dxFeedNativeAPIInternalSources
         src/internal/EventClassList.cpp
         src/internal/SymbolList.cpp
         src/internal/Common.cpp
-        )
+)
 
 set(dxFeedNativeAPIInternalUtilsSources
         src/internal/utils/StringUtils.cpp
-        )
+)
 
 set(dxFeedNativeAPIInternalUtilsDebugSources
         src/internal/utils/debug/Debug.cpp
-        )
+)
 
 set(dxFeedNativeAPIAPISources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
         src/api/DXPublisher.cpp
-        )
+)
 
 set(dxFeedNativeAPIAPIOsubSources
         src/api/osub/WildcardSymbol.cpp
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
-        )
+)
 
 set(dxFeedNativeAPISymbolsSources
         src/symbols/StringSymbol.cpp
         src/symbols/SymbolWrapper.cpp
-        )
+)
 
 set(dxFeedNativeAPISystemSources
         src/system/System.cpp
-        )
+)
 
 set(dxFeedNativeAPIEventSources
         src/event/EventTypeEnum.cpp
@@ -132,7 +133,7 @@ set(dxFeedNativeAPIEventSources
         src/event/EventFlag.cpp
         src/event/IndexedEvent.cpp
         src/event/EventMapper.cpp
-        )
+)
 
 set(dxFeedNativeAPIEventCandleSources
         src/event/candle/Candle.cpp
@@ -144,7 +145,7 @@ set(dxFeedNativeAPIEventCandleSources
         src/event/candle/CandleType.cpp
         src/event/candle/CandleSession.cpp
         src/event/candle/CandleSymbol.cpp
-        )
+)
 
 set(dxFeedNativeAPIEventMarketSources
         src/event/market/AnalyticOrder.cpp
@@ -170,19 +171,19 @@ set(dxFeedNativeAPIEventMarketSources
         src/event/market/TradeBase.cpp
         src/event/market/TradeETH.cpp
         src/event/market/TradingStatus.cpp
-        )
+)
 
 set(dxFeedNativeAPIEventOptionSources
         src/event/option/Greeks.cpp
         src/event/option/Underlying.cpp
         src/event/option/TheoPrice.cpp
         src/event/option/Series.cpp
-        )
+)
 
 set(dxFeedNativeAPIScheduleSources
         src/schedule/SessionFilter.cpp
         src/schedule/SessionType.cpp
-        )
+)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_MACOSX_RPATH ON)
@@ -213,7 +214,7 @@ add_library(${PROJECT_NAME}_static STATIC
         ${dxFeedNativeAPIEventOptionSources}
         ${dxFeedNativeAPIScheduleSources}
         src/api.cpp
-        )
+)
 
 add_library(${PROJECT_NAME} SHARED
         ${dxFeedNativeAPIInternalSources}
@@ -229,7 +230,7 @@ add_library(${PROJECT_NAME} SHARED
         ${dxFeedNativeAPIEventOptionSources}
         ${dxFeedNativeAPIScheduleSources}
         src/api.cpp
-        )
+)
 
 add_library(dxfcxx ALIAS ${PROJECT_NAME})
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
@@ -245,6 +246,43 @@ target_compile_definitions(${PROJECT_NAME}_static PRIVATE
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
         DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1)
+
+target_compile_options(${PROJECT_NAME}
+        PUBLIC
+        $<$<COMPILE_LANG_AND_ID:C,CXX,MSVC>:
+        /W2
+        >
+)
+
+target_compile_options(${PROJECT_NAME}_static
+        PUBLIC
+        $<$<COMPILE_LANG_AND_ID:C,CXX,MSVC>:
+        /W2
+        >
+)
+
+target_compile_options(${PROJECT_NAME}
+        PUBLIC
+        $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
+        -Wall
+        -Wextra
+        -pedantic
+        >
+)
+
+target_compile_options(${PROJECT_NAME}_static
+        PUBLIC
+        $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
+        -Wall
+        -Wextra
+        -pedantic
+        >
+)
+
+if (DXFCXX_USE_PRECOMPILED_HEADERS)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
+    target_precompile_headers(${PROJECT_NAME}_static REUSE_FROM ${PROJECT_NAME})
+endif ()
 
 target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
 target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
