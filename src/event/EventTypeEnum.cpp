@@ -51,4 +51,24 @@ const std::vector<std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::AL
     std::cref(OPTION_SALE),
 };
 
+const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_NAME{
+    {QUOTE.getName(), std::cref(QUOTE)},
+    {PROFILE.getName(), std::cref(PROFILE)},
+    {SUMMARY.getName(), std::cref(SUMMARY)},
+    {GREEKS.getName(), std::cref(GREEKS)},
+    {CANDLE.getName(), std::cref(CANDLE)},
+    {UNDERLYING.getName(), std::cref(UNDERLYING)},
+    {THEO_PRICE.getName(), std::cref(THEO_PRICE)},
+    {TRADE.getName(), std::cref(TRADE)},
+    {TRADE_ETH.getName(), std::cref(TRADE_ETH)},
+    // {CONFIGURATION.getName(), std::cref(CONFIGURATION)},
+    // {MESSAGE.getName(), std::cref(MESSAGE)},
+    {TIME_AND_SALE.getName(), std::cref(TIME_AND_SALE)},
+    {ORDER.getName(), std::cref(ORDER)},
+    {ANALYTIC_ORDER.getName(), std::cref(ANALYTIC_ORDER)},
+    {SPREAD_ORDER.getName(), std::cref(SPREAD_ORDER)},
+    {SERIES.getName(), std::cref(SERIES)},
+    {OPTION_SALE.getName(), std::cref(OPTION_SALE)},
+};
+
 } // namespace dxfcpp
