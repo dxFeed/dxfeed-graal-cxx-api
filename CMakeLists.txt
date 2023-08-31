@@ -325,6 +325,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/DxFeedSample)
     add_subdirectory(samples/cpp/WriteTapeFile)
     add_subdirectory(samples/cpp/ConvertTapeFile)
+    add_subdirectory(samples/cpp/DXFeedFileParser)
 endif ()
 
 if (DXFCXX_BUILD_TOOLS)
