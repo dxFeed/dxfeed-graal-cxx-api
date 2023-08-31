@@ -6,11 +6,11 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "dxfeed_graal_cpp_api/event/market/SpreadOrder.hpp"
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
-#include "dxfeed_graal_cpp_api/event/market/SpreadOrder.hpp"
 
 namespace dxfcpp {
 
@@ -82,8 +82,8 @@ void *SpreadOrder::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSpreadOrder = new (std::nothrow)
-        dxfg_spread_order_t{.order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER}}}};
+    auto *graalSpreadOrder = new (std::nothrow) dxfg_spread_order_t{
+        .order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER}}}};
 
     if (!graalSpreadOrder) {
         // TODO: error handling

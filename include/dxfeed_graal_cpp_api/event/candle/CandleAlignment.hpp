@@ -56,7 +56,6 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
     static const std::vector<std::reference_wrapper<const CandleAlignment>> VALUES;
 
   private:
-
     std::string string_{};
 
     explicit CandleAlignment(const std::string &string) noexcept : string_{string} {
@@ -64,6 +63,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
 
   public:
     CandleAlignment() noexcept = default;
+    virtual ~CandleAlignment() noexcept = default;
 
     /**
      * Returns candle event symbol string with this candle alignment set.
@@ -78,7 +78,8 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
 
     /**
      * Returns string representation of this candle alignment.
-     * The string representation of candle alignment "m" for CandleAlignment::MIDNIGHT and "s" for CandleAlignment::SESSION.
+     * The string representation of candle alignment "m" for CandleAlignment::MIDNIGHT and "s" for
+     * CandleAlignment::SESSION.
      *
      * @return string representation of this candle alignment.
      */
@@ -105,22 +106,22 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
         }
 
         for (const auto &alignmentRef : VALUES) {
-            const auto& alignmentStr = alignmentRef.get().toString();
+            const auto &alignmentStr = alignmentRef.get().toString();
 
             if (iEquals(alignmentStr, s)) {
                 return alignmentRef;
             }
         }
 
-        //TODO: error handling throw IllegalArgumentException("Unknown candle alignment: " + s);
+        // TODO: error handling throw IllegalArgumentException("Unknown candle alignment: " + s);
 
         return std::nullopt;
     }
 
     /**
      * Returns candle alignment of the given candle symbol string.
-     * The result is CandleAlignment::DEFAULT if the symbol does not have candle alignment attribute or std::nullopt if there is no
-     * supported attribute's value.
+     * The result is CandleAlignment::DEFAULT if the symbol does not have candle alignment attribute or std::nullopt if
+     * there is no supported attribute's value.
      *
      * @param symbol The candle symbol string.
      * @return candle alignment of the given candle symbol string or std::nullopt if there is no supported attribute's

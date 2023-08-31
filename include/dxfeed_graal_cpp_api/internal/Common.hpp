@@ -8,8 +8,8 @@
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
-#include <cstring>
 #include <climits>
+#include <cstring>
 
 #include <chrono>
 #include <cmath>
@@ -672,7 +672,7 @@ constexpr static std::size_t hashMix(std::size_t v) noexcept {
     return hashMixImpl<sizeof(std::size_t) * CHAR_BIT>::fn(v);
 }
 
-template <class T> constexpr void hashCombine(std::size_t &seed, const T& v) noexcept {
+template <class T> constexpr void hashCombine(std::size_t &seed, const T &v) noexcept {
     seed = hashMix(seed + 0x9e3779b9 + std::hash<T>()(v));
 }
 

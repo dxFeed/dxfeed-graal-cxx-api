@@ -16,7 +16,7 @@ namespace dxfcpp {
  * Action enum for the Full Order Book (FOB) Orders. Action describes business meaning of the Order event:
  * whether order was added or replaced, partially or fully executed, etc.
  */
-struct DXFCPP_EXPORT OrderAction : Enum<OrderAction, std::uint32_t> {
+struct OrderAction : Enum<OrderAction, std::uint32_t> {
     using Enum::Enum;
 
     /**

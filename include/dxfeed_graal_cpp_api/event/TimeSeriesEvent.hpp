@@ -54,15 +54,18 @@ namespace dxfcpp {
  * When publishing time-series event with DXPublisher::publishEvents() method on incoming TimeSeriesSubscriptionSymbol
  * the snapshot of currently known events for the requested time range has to be published first.
  *
- * A snapshot is published in the <em>descending</em> order of @ref TimeSeriesEvent::getIndex() "index" (which is the same as the
- * descending order of @ref TimeSeriesEvent::getTime() "time"), starting with an event with the largest index and marking it
- * with TimeSeriesEvent::SNAPSHOT_BEGIN bit in @ref TimeSeriesEvent::getEventFlags "eventFlags". All other event follow with default, zero
- * @ref TimeSeriesEvent::getEventFlags() "eventFlags". If there is no actual event at the time that was specified in subscription
+ * A snapshot is published in the <em>descending</em> order of @ref TimeSeriesEvent::getIndex() "index" (which is the
+ * same as the descending order of @ref TimeSeriesEvent::getTime() "time"), starting with an event with the largest
+ * index and marking it with TimeSeriesEvent::SNAPSHOT_BEGIN bit in @ref TimeSeriesEvent::getEventFlags "eventFlags".
+ * All other event follow with default, zero
+ * @ref TimeSeriesEvent::getEventFlags() "eventFlags". If there is no actual event at the time that was specified in
+ * subscription
  * @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" property, then event with the corresponding time
  * has to be created anyway and published. To distinguish it from the actual event, it has to be marked with
- * TimeSeriesEvent::REMOVE_EVENT bit in @ref TimeSeriesEvent::getEventFlags() "eventFlags". TimeSeriesEvent::SNAPSHOT_END bit in this event's
- * @ref TimeSeriesEvent::getEventFlags() "eventFlags" s optional during publishing. It will be properly set on receiving end anyway.
- * Note, that publishing any event with time that is below subscription
+ * TimeSeriesEvent::REMOVE_EVENT bit in @ref TimeSeriesEvent::getEventFlags() "eventFlags".
+ * TimeSeriesEvent::SNAPSHOT_END bit in this event's
+ * @ref TimeSeriesEvent::getEventFlags() "eventFlags" s optional during publishing. It will be properly set on receiving
+ * end anyway. Note, that publishing any event with time that is below subscription
  * @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" also works as a legal indicator for the end of the
  * snapshot.
  *

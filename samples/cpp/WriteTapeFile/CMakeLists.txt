@@ -51,8 +51,8 @@ endif ()
 target_include_directories(${PROJECT_NAME} PRIVATE ../../../include)
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
-    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
-    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
+    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
+    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
 
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
     target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
@@ -62,10 +62,18 @@ if (DXFCXX_ENABLE_ASAN_UBSAN)
             $<TARGET_FILE:dxfcxx>
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 else ()
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+    #    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+    #
+    #    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    #            $<TARGET_FILE:dxfcxx::graal>
+    #            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:dxfcxx::graal>
+            $<TARGET_FILE:dxfcxx>
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif ()
 

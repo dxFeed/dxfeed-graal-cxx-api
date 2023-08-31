@@ -39,8 +39,8 @@ struct EventMapper;
  * Some candle sources provide a consistent view of the set of known candles.
  * The corresponding information is carried in @ref Candle::getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
- * Multiple event sources for the same symbol are not supported for candles, thus @ref Candle::getSource() "source" property
- * is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ * Multiple event sources for the same symbol are not supported for candles, thus @ref Candle::getSource() "source"
+ * property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * <p>TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents a list
  * current of time-series events order by their @ref Candle::getTime() "time".
@@ -103,7 +103,6 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-
     static std::shared_ptr<Candle> fromGraal(void *graalNative) noexcept;
 
     /**
@@ -113,14 +112,14 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void* toGraal() const noexcept override;
+    void *toGraal() const noexcept override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void* graalNative) noexcept;
+    static void freeGraal(void *graalNative) noexcept;
 
   public:
     /**
@@ -258,7 +257,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes total number of original trade (or quote) events in this candle.
      * @param count total number of original trade (or quote) events in this candle.
      */
-    void setCount(std::int64_t count) noexcept{
+    void setCount(std::int64_t count) noexcept {
         data_.count = count;
     }
 
@@ -274,7 +273,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes the first (open) price of this candle.
      * @param open the first (open) price of this candle.
      */
-    void setOpen(double open) noexcept{
+    void setOpen(double open) noexcept {
         data_.open = open;
     }
 
@@ -290,7 +289,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes the maximal (high) price of this candle.
      * @param high the maximal (high) price of this candle.
      */
-    void setHigh(double high) noexcept{
+    void setHigh(double high) noexcept {
         data_.high = high;
     }
 
@@ -306,7 +305,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes the minimal (low) price of this candle.
      * @param low the minimal (low) price of this candle.
      */
-    void setLow(double low) noexcept{
+    void setLow(double low) noexcept {
         data_.low = low;
     }
 
@@ -322,7 +321,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes the last (close) price of this candle.
      * @param close the last (close) price of this candle.
      */
-    void setClose(double close) noexcept{
+    void setClose(double close) noexcept {
         data_.close = close;
     }
 
@@ -338,16 +337,17 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes total volume in this candle.
      * @param volume total volume in this candle.
      */
-    void setVolume(double volume) noexcept{
+    void setVolume(double volume) noexcept {
         data_.volume = volume;
     }
 
     /**
      * Returns volume-weighted average price (VWAP) in this candle.
-     * Total turnover in this candle can be computed with <code>getVWAP() * @ref Candle::getVolume() "getVolume"()</code>.
+     * Total turnover in this candle can be computed with <code>getVWAP() * @ref Candle::getVolume()
+     * "getVolume"()</code>.
      * @return volume-weighted average price (VWAP) in this candle.
      */
-        double getVWAP() const noexcept {
+    double getVWAP() const noexcept {
         return data_.vwap;
     }
 
@@ -355,7 +355,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes volume-weighted average price (VWAP) in this candle.
      * @param vwap volume-weighted average price (VWAP) in this candle.
      */
-    void setVWAP(double vwap) noexcept{
+    void setVWAP(double vwap) noexcept {
         data_.vwap = vwap;
     }
 
@@ -371,7 +371,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes bid volume in this candle.
      * @param bidVolume bid volume in this candle.
      */
-    void setBidVolume(double bidVolume) noexcept{
+    void setBidVolume(double bidVolume) noexcept {
         data_.bidVolume = bidVolume;
     }
 
@@ -387,7 +387,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes ask volume in this candle.
      * @param askVolume ask volume in this candle.
      */
-    void setAskVolume(double askVolume) noexcept{
+    void setAskVolume(double askVolume) noexcept {
         data_.askVolume = askVolume;
     }
 
@@ -419,7 +419,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes open interest.
      * @param openInterest open interest.
      */
-    void setOpenInterest(double openInterest) noexcept{
+    void setOpenInterest(double openInterest) noexcept {
         data_.openInterest = openInterest;
     }
 };

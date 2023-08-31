@@ -97,7 +97,7 @@ std::string utf16toUtf8String(std::int16_t in) noexcept {
     }
 }
 
-std::string utf16toUtf8String(const std::u16string& in) noexcept {
+std::string utf16toUtf8String(const std::u16string &in) noexcept {
     try {
         std::string out{};
 
@@ -110,7 +110,7 @@ std::string utf16toUtf8String(const std::u16string& in) noexcept {
     }
 }
 
-std::string utf16toUtf8String(const std::vector<std::int16_t>& in) noexcept {
+std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept {
     try {
         std::string out{};
 

@@ -18,7 +18,8 @@ namespace dxfcpp {
 
 /**
  * Period attribute of CandleSymbol defines aggregation period of the candles.
- * Aggregation period is defined as pair of a @ref CandlePeriod::getValue() "value" and @ref CandlePeriod::getType() "type".
+ * Aggregation period is defined as pair of a @ref CandlePeriod::getValue() "value" and @ref CandlePeriod::getType()
+ * "type".
  *
  * <h3>Implementation details</h3>
  *
@@ -27,7 +28,8 @@ namespace dxfcpp {
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
  * The key to use with these methods is available via CandlePeriod::ATTRIBUTE_KEY constant.
- * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString() "CandlePeriod.toString()"
+ * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString()
+ * "CandlePeriod.toString()"
  */
 struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     /**

@@ -26,6 +26,7 @@ class DXFCPP_EXPORT IndexedEventSource {
     static const IndexedEventSource DEFAULT;
 
     IndexedEventSource() noexcept = default;
+    virtual ~IndexedEventSource() noexcept = default;
 
     /**
      * Creates the new IndexedEvent's source by id and name.
@@ -94,6 +95,6 @@ class DXFCPP_EXPORT IndexedEventSource {
 
 template <> struct std::hash<dxfcpp::IndexedEventSource> {
     std::size_t operator()(const dxfcpp::IndexedEventSource &indexedEventSource) const noexcept {
-        return indexedEventSource.id();
+        return static_cast<std::size_t>(indexedEventSource.id());
     }
 };

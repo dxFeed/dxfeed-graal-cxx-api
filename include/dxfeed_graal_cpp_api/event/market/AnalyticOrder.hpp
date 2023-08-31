@@ -22,19 +22,21 @@ struct EventMapper;
 
 /**
  * Represents an extension of Order introducing analytic information, e.g. adding to this order iceberg related
- * information (@ref AnalyticOrder::getIcebergPeakSize() "icebergPeakSize", @ref AnalyticOrder::getIcebergHiddenSize() "icebergHiddenSize",
+ * information (@ref AnalyticOrder::getIcebergPeakSize() "icebergPeakSize", @ref AnalyticOrder::getIcebergHiddenSize()
+ * "icebergHiddenSize",
  * @ref AnalyticOrder::getIcebergExecutedSize() "icebergExecutedSize").
  * The collection of analytic order events of a symbol represents the most recent analytic information
  * that is available about orders on the market at any given moment of time.
  *
  * <p> Analytic order is similar to a regular Order. In addition this event has few additional properties:
  * <ul>
- *     <li>@ref AnalyticOrder::getIcebergPeakSize() "icebergPeakSize" - the size of the peak, i.e. the visible part of the iceberg,
- *                              that is being continually refilled until the order is fully traded or cancelled;
- *     <li>@ref AnalyticOrder::getIcebergHiddenSize() "icebergHiddenSize" - the prediction of current hidden size of the iceberg, as inferred by the model;
- *     <li>@ref AnalyticOrder::getIcebergExecutedSize() "icebergExecutedSize" - the executed size of the iceberg order. For IcebergType::SYNTHETIC type
- *                             represents total executed size of all orders composing current iceberg;
- *     <li>AnalyticOrder::getIcebergType() - type of the iceberg, either native (exchange-managed) or synthetic (managed outside of the exchange).
+ *     <li>@ref AnalyticOrder::getIcebergPeakSize() "icebergPeakSize" - the size of the peak, i.e. the visible part of
+ * the iceberg, that is being continually refilled until the order is fully traded or cancelled; <li>@ref
+ * AnalyticOrder::getIcebergHiddenSize() "icebergHiddenSize" - the prediction of current hidden size of the iceberg, as
+ * inferred by the model; <li>@ref AnalyticOrder::getIcebergExecutedSize() "icebergExecutedSize" - the executed size of
+ * the iceberg order. For IcebergType::SYNTHETIC type represents total executed size of all orders composing current
+ * iceberg; <li>AnalyticOrder::getIcebergType() - type of the iceberg, either native (exchange-managed) or synthetic
+ * (managed outside of the exchange).
  * </ul>
  *
  * <h3>Implementation details</h3>
@@ -71,7 +73,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     void fillGraalData(void *graalNative) const noexcept override;
 
   public:
-
     static std::shared_ptr<AnalyticOrder> fromGraal(void *graalNative) noexcept;
 
     /**
@@ -81,14 +82,14 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void* toGraal() const noexcept override;
+    void *toGraal() const noexcept override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void* graalNative) noexcept;
+    static void freeGraal(void *graalNative) noexcept;
 
   public:
     /// The alias to a type of shared pointer to the AnalyticOrder object

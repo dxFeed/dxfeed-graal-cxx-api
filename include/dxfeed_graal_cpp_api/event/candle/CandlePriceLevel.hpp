@@ -122,7 +122,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      */
     static std::optional<CandlePriceLevel> valueOf(double value) noexcept {
         if (std::isinf(value) || (value == 0.0 && std::signbit(value))) {
-            //TODO: error handling throw IllegalArgumentException("Incorrect candle price level: " + value);
+            // TODO: error handling throw IllegalArgumentException("Incorrect candle price level: " + value);
 
             return std::nullopt;
         }
@@ -164,8 +164,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
             }
 
             if (a.value() != other.value().toString()) {
-                return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY,
-                                                                      other.value().toString());
+                return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.value().toString());
             }
         }
 

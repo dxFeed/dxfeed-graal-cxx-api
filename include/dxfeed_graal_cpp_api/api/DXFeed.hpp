@@ -51,27 +51,31 @@ class EventTypeEnum;
  * The following code creates listener that prints mid price for each quote
  * and subscribes for quotes on SPDR S&P 500 ETF symbol:
  * <pre><tt>
- * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription() "createSubscription"(Quote::TYPE);
+ * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription()
+ * "createSubscription"(Quote::TYPE);
  *
  * sub->@ref DXFeedSubscription::addEventListener() "addEventListener"<Quote>([](const auto& quotes) {
  *     for (const auto& quote : quotes) {
- *         std::cout << "Mid = " + (quote->@ref Quote::getBidPrice() "getBidPrice"() + quote->@ref Quote::getAskPrice() "getAskPrice"()) / 2) << std::endl;
+ *         std::cout << "Mid = " + (quote->@ref Quote::getBidPrice() "getBidPrice"() + quote->@ref Quote::getAskPrice()
+ * "getAskPrice"()) / 2) << std::endl;
  *     }
  * });
  *
  * sub->@ref DXFeedSubscription::addSymbols() "addSymbols"("SPY");</tt></pre>
  *
  * Note, that order of calls is important here. By attaching listeners first and then setting
- * subscription we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols() for details.
- * If a set of symbols is changed first, then @ref DXFeedSubscription::addEventListener() "sub->addEventListener"
- * raises an IllegalStateException in JVM to protected from hard-to-catch bugs with potentially missed events.
+ * subscription we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols() for
+ * details. If a set of symbols is changed first, then @ref DXFeedSubscription::addEventListener()
+ * "sub->addEventListener" raises an IllegalStateException in JVM to protected from hard-to-catch bugs with potentially
+ * missed events.
  *
  * <h4>Subscribe for multiple event types</h4>
  *
  * The following code creates listener that prints each received event and
  * subscribes for quotes and trades on SPDR S&P 500 ETF symbol:
  * <pre><tt>
- * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription() "createSubscription"({Quote::TYPE, Trade::TYPE});
+ * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription()
+ * "createSubscription"({Quote::TYPE, Trade::TYPE});
  *
  * sub->@ref DXFeedSubscription::addEventListener() "addEventListener"([](auto&& events) {
  *     for (const auto& event : events) {
@@ -89,7 +93,8 @@ class EventTypeEnum;
  * <pre><tt>
  * using namespace std::chrono_literals;
  *
- * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription() "createSubscription"({Trade::TYPE});
+ * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription()
+ * "createSubscription"({Trade::TYPE});
  *
  * sub->@ref DXFeedSubscription::addSymbols() "addSymbols"("SPY");
  *
@@ -271,8 +276,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypesCollection>
-    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept
-    {
+    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::createSubscription(eventTypes = " +
                             namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");

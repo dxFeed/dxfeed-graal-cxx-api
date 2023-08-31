@@ -15,8 +15,8 @@ namespace dxfcpp {
 /**
  * Represents [wildcard] subscription to all events of the specific event type.
  * The @ref WildcardSymbol::ALL constant can be added to any DXFeedSubscription instance with
- * @ref DXFeedSubscription::addSymbols() "addSymbols" method to the effect of subscribing to all possible event symbols. The
- * corresponding subscription will start receiving all published events of the corresponding types.
+ * @ref DXFeedSubscription::addSymbols() "addSymbols" method to the effect of subscribing to all possible event symbols.
+ * The corresponding subscription will start receiving all published events of the corresponding types.
  */
 struct DXFCPP_EXPORT WildcardSymbol final {
     /**

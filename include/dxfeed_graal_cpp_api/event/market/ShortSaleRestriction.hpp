@@ -18,7 +18,7 @@ namespace dxfcpp {
 /**
  * Short sale restriction on an instrument.
  */
-struct DXFCPP_EXPORT ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
+struct ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
     using Enum::Enum;
 
     /**

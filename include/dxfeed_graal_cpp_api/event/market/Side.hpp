@@ -18,7 +18,7 @@ namespace dxfcpp {
 /**
  * Side of an order or a trade.
  */
-struct DXFCPP_EXPORT Side : Enum<Side, std::uint32_t> {
+struct Side : Enum<Side, std::uint32_t> {
     using Enum::Enum;
 
     /**
@@ -37,7 +37,6 @@ struct DXFCPP_EXPORT Side : Enum<Side, std::uint32_t> {
     static const Side SELL;
 };
 
-template <>
-const std::unordered_map<Side::CodeType, std::reference_wrapper<const Side>> Side::ParentType::ALL;
+template <> const std::unordered_map<Side::CodeType, std::reference_wrapper<const Side>> Side::ParentType::ALL;
 
 } // namespace dxfcpp

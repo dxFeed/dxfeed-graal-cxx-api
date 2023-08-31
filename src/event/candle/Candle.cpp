@@ -118,7 +118,8 @@ void *Candle::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalCandle = new (std::nothrow) dxfg_candle_t{.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_CANDLE}};
+    auto *graalCandle =
+        new (std::nothrow) dxfg_candle_t{.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_CANDLE}};
 
     if (!graalCandle) {
         // TODO: error handling

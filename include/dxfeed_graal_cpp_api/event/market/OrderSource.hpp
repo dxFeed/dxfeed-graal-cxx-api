@@ -43,7 +43,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     }
 
     OrderSource(std::int32_t id, const std::string &name) noexcept
-        : IndexedEventSource(id, name), builtin_{false}, pubFlags_{0} {
+        : IndexedEventSource(id, name), pubFlags_{0}, builtin_{false} {
     }
 
     static std::int32_t composeId(const std::string &name) noexcept {
@@ -57,9 +57,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
             return -1;
         }
 
-        for (int i = 0; i < n; i++) {
-            auto c = name[i];
-
+        for (auto c : name) {
             if (!checkChar(c)) {
                 // TODO: error handling
 

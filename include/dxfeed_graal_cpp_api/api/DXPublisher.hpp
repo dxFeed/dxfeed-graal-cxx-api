@@ -50,7 +50,8 @@ class ObservableSubscription;
  * auto @ref Quote "quote" = std::make_shared<@ref Quote "Quote">("A:TEST");
  * quote->@ref Quote::setBidPrice "setBidPrice"(100);
  * quote->@ref Quote::setAskPrice "setAskPrice"(101);
- * @ref DXPublisher "DXPublisher"::@ref DXPublisher::getInstance() "getInstance"()->@ref DXPublisher::publishEvents() "publishEvents"(quote);</tt></pre>
+ * @ref DXPublisher "DXPublisher"::@ref DXPublisher::getInstance() "getInstance"()->@ref DXPublisher::publishEvents()
+ * "publishEvents"(quote);</tt></pre>
  *
  * <h3>Threads and locks</h3>
  *
@@ -86,7 +87,6 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * DXEndpoint::getPublisher() "getPublisher"().
      */
     static std::shared_ptr<DXPublisher> getInstance() noexcept;
-
 
     /**
      * Publishes events to the corresponding feed. If the @ref DXEndpoint "endpoint" of this publisher has
@@ -170,8 +170,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
 #endif
     {
         this->template publishEvents<decltype(std::begin(std::forward<EventsCollection>(events)))>(
-            std::begin(std::forward<EventsCollection>(events)),
-            std::end(std::forward<EventsCollection>(events)));
+            std::begin(std::forward<EventsCollection>(events)), std::end(std::forward<EventsCollection>(events)));
     }
 
     /**
@@ -210,7 +209,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
         EventMapper::freeGraalList(list);
     }
 
-    std::shared_ptr<ObservableSubscription> getSubscription(const EventTypeEnum&);
+    std::shared_ptr<ObservableSubscription> getSubscription(const EventTypeEnum &);
 
     std::string toString() const noexcept override;
 };

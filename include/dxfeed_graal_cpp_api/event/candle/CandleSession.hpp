@@ -61,7 +61,6 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
     static const std::vector<std::reference_wrapper<const CandleSession>> VALUES;
 
   private:
-
     SessionFilter sessionFilter_;
     std::string string_;
 
@@ -129,7 +128,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
         }
 
         for (const auto &sessionRef : VALUES) {
-            const auto& sessionStr = sessionRef.get().toString();
+            const auto &sessionStr = sessionRef.get().toString();
 
             if (sessionStr.length() >= n && iEquals(sessionStr.substr(0, n), s)) {
                 return sessionRef;
@@ -143,8 +142,8 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
 
     /**
      * Returns candle session attribute of the given candle symbol string.
-     * The result is CandleSession::DEFAULT if the symbol does not have candle session attribute or std::nullopt if there is no
-     * supported attribute's value.
+     * The result is CandleSession::DEFAULT if the symbol does not have candle session attribute or std::nullopt if
+     * there is no supported attribute's value.
      *
      * @param symbol The candle symbol string.
      * @return candle session attribute of the given candle symbol string or std::nullopt if there is no supported

@@ -86,9 +86,9 @@ std::string TheoPrice::toString() const noexcept {
         "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
         "delta={}, gamma={}, dividend={}, interest={}}}",
         MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), dxfcpp::toString(getPrice()),
-        dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getDelta()), dxfcpp::toString(getGamma()),
-        dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
+        getEventFlagsMask().getMask(), formatTimeStampWithMillis(getTime()), getSequence(),
+        dxfcpp::toString(getPrice()), dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getDelta()),
+        dxfcpp::toString(getGamma()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
 void *TheoPrice::toGraal() const noexcept {
