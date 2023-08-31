@@ -15,7 +15,7 @@ void printUsage() {
 
     auto x = ranges::join_with_view(evenTypeEnums | ranges::views::transform([](const auto& enumElement) {
                                         return enumElement.get().getName();
-                                    }), ranges::range<char>(std::string(1, ',')));
+                                    }), ",");
 
     for (auto c : x) {
         std::cout << c << "{" << static_cast<std::size_t>(static_cast<unsigned char>(c)) << "}";
