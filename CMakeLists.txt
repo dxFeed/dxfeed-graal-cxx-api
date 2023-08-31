@@ -288,8 +288,8 @@ target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp
 target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
-    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
-    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined" "-fPIC")
+    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
+    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
     target_link_libraries(${PROJECT_NAME} PUBLIC asan ubsan)
 endif ()
 

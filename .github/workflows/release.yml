@@ -32,7 +32,7 @@ jobs:
       - id: get_latest_tag
         run: |
           echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
-      
+
       - id: set_version
         run: |
           if [[ "${{ !inputs.use_latest_tag && startsWith(github.ref, 'refs/tags/') }}" == "true" ]]
@@ -43,10 +43,10 @@ jobs:
             echo "version=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
             echo "tag_name=${{ format('refs/tags/{0}', steps.get_latest_tag.outputs.tag) }}" >> $GITHUB_OUTPUT            
           fi
-                
+
   build_package_and_upload:
     name: Build, Package & Upload
-    needs: [get_version]
+    needs: [ get_version ]
     strategy:
       matrix:
         #        os: [windows-latest, macos-latest, ubuntu-latest]
@@ -66,12 +66,6 @@ jobs:
         if: ${{ contains(matrix.os, 'macos') }}
         run: sudo xcode-select -s '/Applications/Xcode_${{env.XCODE_VERSION}}.app/Contents/Developer'
 
-      - name: Select gcc version
-        if: ${{ contains(matrix.os, 'ubuntu') }}
-        run: |
-          export CC=gcc-${{env.GCC_VERSION}}
-          export CXX=g++-${{env.GCC_VERSION}}
-
       - name: Prepare build
         run: |
           ls
@@ -81,8 +75,15 @@ jobs:
         if: ${{ contains(matrix.os, 'windows') }}
         run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
 
-      - name: Configure CMake (!Win)
-        if: ${{ !contains(matrix.os, 'windows') }}
+      - name: Configure CMake (MacOS)
+        if: ${{ contains(matrix.os, 'macos') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+
+      - name: Configure CMake (Ubuntu)
+        env:
+          CC: gcc-${{env.GCC_VERSION}}
+          CXX: g++-${{env.GCC_VERSION}}
+        if: ${{ contains(matrix.os, 'ubuntu') }}
         run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
 
       - name: Build
@@ -102,7 +103,7 @@ jobs:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}
     runs-on: ubuntu-latest
     name: Publish Release
-    needs: [get_version, build_package_and_upload]
+    needs: [ get_version, build_package_and_upload ]
     permissions:
       contents: write
     steps:
