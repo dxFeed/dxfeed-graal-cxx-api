@@ -70,7 +70,6 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-
     static std::shared_ptr<Profile> fromGraal(void *graalNative) noexcept;
 
     /**
@@ -80,14 +79,14 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void* toGraal() const noexcept override;
+    void *toGraal() const noexcept override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void* graalNative) noexcept;
+    static void freeGraal(void *graalNative) noexcept;
 
   public:
     /// The alias to a type of shared pointer to the Profile object

@@ -14,7 +14,7 @@
 
 namespace dxfcpp {
 
-template <typename Child, typename Code> struct DXFCPP_EXPORT Enum {
+template <typename Child, typename Code> struct Enum {
     using ParentType = Enum<Child, Code>;
     using ChildType = Child;
     using CodeType = Code;

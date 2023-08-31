@@ -18,7 +18,7 @@ namespace dxfcpp {
 /**
  * Type of a time and sale event.
  */
-struct DXFCPP_EXPORT TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
+struct TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
     using Enum::Enum;
 
     /**

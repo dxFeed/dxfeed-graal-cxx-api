@@ -15,7 +15,7 @@ namespace dxfcpp {
 /**
  * Type of the price value.
  */
-struct DXFCPP_EXPORT PriceType : Enum<PriceType, std::uint32_t> {
+struct PriceType : Enum<PriceType, std::uint32_t> {
     using Enum::Enum;
 
     /**

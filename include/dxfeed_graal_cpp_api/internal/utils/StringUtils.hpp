@@ -5,11 +5,11 @@
 
 #include "../Conf.hpp"
 
+#include <cstddef>
 #include <cstdint>
+#include <locale>
 #include <string>
 #include <thread>
-#include <locale>
-#include <cstddef>
 
 namespace dxfcpp {
 
@@ -65,7 +65,7 @@ DXFCPP_EXPORT std::string utf16toUtf8String(std::int16_t in) noexcept;
  * @param in The UTF16 string
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string& in) noexcept;
+DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string &in) noexcept;
 
 /**
  * Converts vector of UTF16 chars to UTF8 string
@@ -73,7 +73,7 @@ DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string& in) noexcept;
  * @param in The UTF16 string
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t>& in) noexcept;
+DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept;
 
 DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept;
 

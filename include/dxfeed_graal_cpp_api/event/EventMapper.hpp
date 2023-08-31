@@ -35,9 +35,9 @@ struct DXFCPP_EXPORT EventMapper {
         bool needToFree = false;
 
         for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
-            if constexpr (requires { it->toGraal(); }) { //It<EventType>
+            if constexpr (requires { it->toGraal(); }) { // It<EventType>
                 needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
-            } else if constexpr (requires { (*it)->toGraal(); }) { //It<Ptr<EventType>>
+            } else if constexpr (requires { (*it)->toGraal(); }) { // It<Ptr<EventType>>
                 needToFree = setGraalListElement(list, elementIdx, (*it)->toGraal()) == false;
             }
 

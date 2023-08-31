@@ -350,7 +350,8 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @param extendedTradingHours `true` if last trade was in extended trading hours.
      */
     void setExtendedTradingHours(bool extendedTradingHours) noexcept {
-        tradeBaseData_.flags = extendedTradingHours ? orOp(tradeBaseData_.flags, ETH) : andOp(tradeBaseData_.flags, ~ETH);
+        tradeBaseData_.flags =
+            extendedTradingHours ? orOp(tradeBaseData_.flags, ETH) : andOp(tradeBaseData_.flags, ~ETH);
     }
 
     /**

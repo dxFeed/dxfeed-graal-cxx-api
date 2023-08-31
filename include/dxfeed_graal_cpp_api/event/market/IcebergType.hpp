@@ -15,7 +15,7 @@ namespace dxfcpp {
 /**
  * Type of an iceberg order.
  */
-struct DXFCPP_EXPORT IcebergType : Enum<IcebergType, std::uint32_t> {
+struct IcebergType : Enum<IcebergType, std::uint32_t> {
     using Enum::Enum;
 
     /**

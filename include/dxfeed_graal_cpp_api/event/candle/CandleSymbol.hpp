@@ -38,9 +38,9 @@ struct SymbolWrapper;
  *
  * <h3>String representation</h3>
  *
- * The string representation of the candle symbol consist of a @ref CandleSymbol::getBaseSymbol() "baseSymbol" followed by
- * an optional '&' with an @ref CandleSymbol::getExchange() "exchange" code letter and followed by an optional list of
- * comma-separated key=value pairs in curly braces:
+ * The string representation of the candle symbol consist of a @ref CandleSymbol::getBaseSymbol() "baseSymbol" followed
+ * by an optional '&' with an @ref CandleSymbol::getExchange() "exchange" code letter and followed by an optional list
+ * of comma-separated key=value pairs in curly braces:
  *
  * <p>`<baseSymbol> [ '&' <exchange> ] [ '{' <key1>=<value1> [ ',' <key2>=<value2> ] ... '}' ]`
  *
@@ -61,10 +61,10 @@ struct SymbolWrapper;
  *     candle of "EUR/USD" bid price shall be specified with "EUR/USD{=m,price=bid}" candle symbol string. However, the
  *     CandlePrice::SETTLEMENT can be abbreviated to "s", so a daily candle on "/ES" futures settlement prices can be
  *     specified with "/ES{=d,price=s}" string.
- * <li>"tho" key with a value of "true" corresponds to @ref CandleSymbol::getSession() "session" set to CandleSession::REGULAR
- *     which limits the candle to trading hours only, so a 133 tick candles on "GOOG" base symbol collected over
- *     trading hours only can be specified with "GOOG{=133t,tho=true}" string. Note, that the default daily candles
- *     for US equities are special for historical reasons and correspond to the way US equity exchange report their
+ * <li>"tho" key with a value of "true" corresponds to @ref CandleSymbol::getSession() "session" set to
+ * CandleSession::REGULAR which limits the candle to trading hours only, so a 133 tick candles on "GOOG" base symbol
+ * collected over trading hours only can be specified with "GOOG{=133t,tho=true}" string. Note, that the default daily
+ * candles for US equities are special for historical reasons and correspond to the way US equity exchange report their
  *     daily summary data. The volume the US equity default daily candle corresponds to the total daily traded volume,
  *     while open, high, low, and close correspond to the regular trading hours only.
  * <li>"a" key corresponds to @ref CandleSymbol::getAlignment() "alignment" &mdash; alignment attribute of this symbol.
@@ -72,16 +72,16 @@ struct SymbolWrapper;
  *     can be abbreviated to the first letter. So, a 1 hour candle on a symbol "AAPL" that starts at the regular
  *     trading session at 9:30 am ET can be specified with "AAPL{=h,a=s,tho=true}". Contrast that to
  *     the "AAPL{=h,tho=true}" candle that is aligned at midnight and thus starts at 9:00 am.
- * <li>"pl" key corresponds to @ref CandleSymbol::getPriceLevel() "price level" &mdash; price level attribute of this symbol.
- *     The CandlePriceLevel defines additional axis to split candles within particular price corridor in addition to
+ * <li>"pl" key corresponds to @ref CandleSymbol::getPriceLevel() "price level" &mdash; price level attribute of this
+ * symbol. The CandlePriceLevel defines additional axis to split candles within particular price corridor in addition to
  *     CandlePeriod attribute with the default value `NaN`. So a one-minute candles of "AAPL" with price level 0.1
  *     shall be specified with "AAPL{=m,pl=0.1}".
  * </ul>
  *
- * Keys in the candle symbol are case-sensitive, while values are not. The CandleSymbol::valueOf() method parses any valid string
- * representation into a candle symbol object.
- * The result of the candle symbol CandleSymbol::toString() method is always normalized: keys are ordered lexicographically,
- * values are in lower-case and are abbreviated to their shortest possible form.
+ * Keys in the candle symbol are case-sensitive, while values are not. The CandleSymbol::valueOf() method parses any
+ * valid string representation into a candle symbol object. The result of the candle symbol CandleSymbol::toString()
+ * method is always normalized: keys are ordered lexicographically, values are in lower-case and are abbreviated to
+ * their shortest possible form.
  */
 struct DXFCPP_EXPORT CandleSymbol {
 

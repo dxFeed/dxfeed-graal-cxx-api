@@ -147,7 +147,8 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return length >= 2 && symbol[length - 2] == EXCHANGE_SEPARATOR;
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string getBaseSymbolInternal(const std::string &symbol, std::size_t length) noexcept {
+    static DXFCPP_CXX20_CONSTEXPR_STRING std::string getBaseSymbolInternal(const std::string &symbol,
+                                                                           std::size_t length) noexcept {
         return hasExchangeCodeInternal(symbol, length) ? symbol.substr(0, length - 2) : symbol.substr(0, length);
     }
 

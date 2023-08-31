@@ -18,7 +18,7 @@ namespace dxfcpp {
 /**
  * Trading status of an instrument.
  */
-struct DXFCPP_EXPORT TradingStatus : Enum<TradingStatus, std::uint32_t> {
+struct TradingStatus : Enum<TradingStatus, std::uint32_t> {
     using Enum::Enum;
 
     /**

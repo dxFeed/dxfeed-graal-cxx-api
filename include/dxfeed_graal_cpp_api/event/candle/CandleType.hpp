@@ -126,8 +126,9 @@ struct DXFCPP_EXPORT CandleType {
     /**
      * Returns candle type period in milliseconds as closely as possible.
      * Certain types like CandleType::SECOND and CandleType::DAY span a specific number of milliseconds.
-     * CandleType::MONTH, CandleType::OPTEXP and CandleType::YEAR are approximate. Candle type period of CandleType::TICK, CandleType::VOLUME, CandleType::PRICE,
-     * CandleType::PRICE_MOMENTUM and CandleType::PRICE_RENKO is not defined and this method returns `0`.
+     * CandleType::MONTH, CandleType::OPTEXP and CandleType::YEAR are approximate. Candle type period of
+     * CandleType::TICK, CandleType::VOLUME, CandleType::PRICE, CandleType::PRICE_MOMENTUM and CandleType::PRICE_RENKO
+     * is not defined and this method returns `0`.
      *
      * @return aggregation period in milliseconds.
      */
@@ -148,8 +149,8 @@ struct DXFCPP_EXPORT CandleType {
      * Returns string representation of this candle type.
      * The string representation of candle type is the shortest unique prefix of the lower case string that corresponds
      * to its @ref CandleType::getName() "name".
-     * For example, CandleType::TICK is represented as `"t"`, while CandleType::MONTH is represented as `"mo"` to distinguish it from
-     * CandleType::MINUTE that is represented as `"m"`.
+     * For example, CandleType::TICK is represented as `"t"`, while CandleType::MONTH is represented as `"mo"` to
+     * distinguish it from CandleType::MINUTE that is represented as `"m"`.
      *
      * @return string representation of this candle price type.
      */

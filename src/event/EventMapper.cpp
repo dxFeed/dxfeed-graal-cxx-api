@@ -248,8 +248,7 @@ void *EventMapper::newGraalList(std::ptrdiff_t size) noexcept {
     return list;
 }
 
-bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx,
-                                                         void *element) noexcept {
+bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept {
     using ListType = dxfg_event_type_list;
     using SizeType = decltype(ListType::size);
     using ElementType = dxfg_event_type_t;

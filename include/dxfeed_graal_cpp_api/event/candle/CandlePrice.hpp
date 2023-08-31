@@ -73,7 +73,6 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
     static const std::vector<std::reference_wrapper<const CandlePrice>> VALUES;
 
   private:
-
     std::string string_;
 
     explicit CandlePrice(std::string string) noexcept : string_{std::move(string)} {
@@ -145,8 +144,8 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
 
     /**
      * Returns candle price type of the given candle symbol string.
-     * The result is CandlePrice::DEFAULT if the symbol does not have candle price type attribute or std::nullopt if there is no
-     * supported attribute's value.
+     * The result is CandlePrice::DEFAULT if the symbol does not have candle price type attribute or std::nullopt if
+     * there is no supported attribute's value.
      *
      * @param symbol The candle symbol string.
      * @return candle price type of the given candle symbol string or std::nullopt if there is no supported attribute's

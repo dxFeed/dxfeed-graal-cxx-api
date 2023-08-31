@@ -30,14 +30,15 @@ struct EventMapper;
  *
  * The Trade event defines last trade @ref Trade::getPrice() "price" as officially defined
  * by the corresponding exchange for its <b>regular trading hours</b> (RTH).
- * It also include an official exchange @ref Trade::getDayVolume() "dayVolume" and @ref Trade::getDayTurnover() "dayTurnover"
- * <b>for the whole trading day</b> identified by @ref Trade::getDayId() "dayId".
- * So, Trade event captures all the official numbers that are typically reported by exchange.
+ * It also include an official exchange @ref Trade::getDayVolume() "dayVolume" and @ref Trade::getDayTurnover()
+ * "dayTurnover" <b>for the whole trading day</b> identified by @ref Trade::getDayId() "dayId". So, Trade event captures
+ * all the official numbers that are typically reported by exchange.
  *
  * <p>Trades that happen in <b>extended trading hours</b> (ETH, pre-market and post-market trading sessions),
  * which are typically defined for stocks and ETFs, do not update last trade @ref Trade::getTime() "time",
  * @ref Trade::getExchangeCode() "exchangeCode", @ref Trade::getPrice() "price", @ref Trade::getChange() "change",
- * @ref Trade::getSize() "size", and @ref Trade::getTickDirection() "tickDirection" in the Trade event, but they do update
+ * @ref Trade::getSize() "size", and @ref Trade::getTickDirection() "tickDirection" in the Trade event, but they do
+ * update
  * @ref Trade::getDayVolume() "dayVolume" and @ref Trade::getDayTurnover() "dayTurnover".
  *
  * <p>During extended trading hours a TradeETH event is generated on each trade with its
@@ -75,7 +76,6 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
     void fillGraalData(void *graalNative) const noexcept override;
 
   public:
-
     static std::shared_ptr<Trade> fromGraal(void *graalNative) noexcept;
 
     /**
@@ -85,14 +85,14 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void* toGraal() const noexcept override;
+    void *toGraal() const noexcept override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void* graalNative) noexcept;
+    static void freeGraal(void *graalNative) noexcept;
 
   public:
     /// The alias to a type of shared pointer to the Trade object

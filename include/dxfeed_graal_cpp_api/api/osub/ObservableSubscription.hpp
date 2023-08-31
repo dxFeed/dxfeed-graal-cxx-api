@@ -16,4 +16,4 @@ namespace dxfcpp {
 
 class ObservableSubscription {};
 
-}
+} // namespace dxfcpp
