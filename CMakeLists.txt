@@ -238,8 +238,6 @@ add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-add_library(${PROJECT_NAME}_CompilerOptions INTERFACE)
-
 target_include_directories(${PROJECT_NAME}_static PUBLIC include)
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1)
@@ -264,28 +262,42 @@ target_compile_options(${PROJECT_NAME}_static
 target_compile_options(${PROJECT_NAME}
         PUBLIC
         $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
+        -fPIC
         -Wall
         -Wextra
         -pedantic
         >
 )
+
+target_link_options(${PROJECT_NAME}
+        PUBLIC
+        $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
+        -fPIC
+        >)
 
 target_compile_options(${PROJECT_NAME}_static
         PUBLIC
         $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
+        -fPIC
         -Wall
         -Wextra
         -pedantic
         >
 )
 
+target_link_options(${PROJECT_NAME}_static
+        PUBLIC
+        $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
+        -fPIC
+        >)
+
 if (DXFCXX_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(${PROJECT_NAME} PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
-    target_precompile_headers(${PROJECT_NAME}_static REUSE_FROM ${PROJECT_NAME})
+    target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
 endif ()
 
-target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
-target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only PUBLIC ${PROJECT_NAME}_CompilerOptions)
+target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only)
+target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only)
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")

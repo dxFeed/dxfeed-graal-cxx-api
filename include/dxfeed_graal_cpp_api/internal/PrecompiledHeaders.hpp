@@ -38,3 +38,7 @@
 #include <fmt/std.h>
 
 #include <utf8.h>
+
+#include "Common.hpp"
+#include "Handler.hpp"
+#include "Id.hpp"
