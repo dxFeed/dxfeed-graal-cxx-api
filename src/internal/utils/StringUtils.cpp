@@ -16,6 +16,8 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+#include <range/v3/all.hpp>
+
 namespace dxfcpp {
 
 std::string toString(bool b) noexcept {
@@ -187,5 +189,14 @@ char *createCString(const std::string &s) noexcept {
 
     return cString;
 }
+
+std::string trimStr(const std::string &s) noexcept {
+    auto trimPredicate = [](auto c) {
+        return c == ' ' || c == '\t' || c == '\v' || c == '\r' || c == '\n';
+    };
+
+    return s | ranges::views::drop_while(trimPredicate) | ranges::views::reverse |
+           ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
+};
 
 } // namespace dxfcpp

@@ -39,6 +39,8 @@
 
 #include <utf8.h>
 
+#include <range/v3/all.hpp>
+
 #include "Common.hpp"
 #include "Handler.hpp"
 #include "Id.hpp"

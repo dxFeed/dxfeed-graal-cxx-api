@@ -21,6 +21,7 @@
 #include "internal/managers/EntityManager.hpp"
 #include "internal/managers/ErrorHandlingManager.hpp"
 #include "internal/utils/StringUtils.hpp"
+#include "internal/utils/CmdArgsUtils.hpp"
 #include "internal/utils/debug/Debug.hpp"
 
 #include "api/ApiModule.hpp"

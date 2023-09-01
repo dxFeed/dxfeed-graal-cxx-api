@@ -58,7 +58,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     using DataType = typename std::variant<WildcardSymbol, StringSymbol, IndexedEventSubscriptionSymbol,
                                            TimeSeriesSubscriptionSymbol, CandleSymbol>;
 
-    class SymbolListUtils final {
+    class DXFCPP_EXPORT SymbolListUtils final {
         static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
         static void *newGraalList(std::ptrdiff_t size) noexcept;
         static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;

@@ -152,4 +152,6 @@ inline bool iEquals(const Range1 &first, const Range2 &second, const std::locale
     return equals(first, second, detail::IsIEqual(locale));
 }
 
+DXFCPP_EXPORT std::string trimStr(const std::string &s) noexcept;
+
 } // namespace dxfcpp

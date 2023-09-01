@@ -34,7 +34,6 @@ elseif (UNIX)
 endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_include_directories(${PROJECT_NAME} PRIVATE ../../../include)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
 #target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
