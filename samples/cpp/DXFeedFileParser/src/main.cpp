@@ -6,7 +6,7 @@
 #include <range/v3/all.hpp>
 
 #include <atomic>
-#include <syncstream>
+#include <mutex>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
     }
 
     std::atomic<std::size_t> eventCounter{};
+    std::mutex ioMtx{};
 
     // Parse args.
     std::string fileName = argv[1];
@@ -51,9 +52,11 @@ int main(int argc, char *argv[]) {
 
     // Subscribe to a specified event and symbol.
     auto sub = feed->createSubscription(types);
-    sub->addEventListener([&eventCounter](const auto &events) {
+    sub->addEventListener([&eventCounter, &ioMtx](const auto &events) {
+        std::lock_guard lock{ioMtx};
+
         for (auto &&e : events) {
-            std::osyncstream(std::cout) << (++eventCounter) << ": " << e << "\n";
+            std::cout << (++eventCounter) << ": " << e << "\n";
         }
     });
 
