@@ -1,0 +1,31 @@
+// Copyright (c) 2023 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
+
+#include <dxfg_api.h>
+
+#include <dxfeed_graal_c_api/api.h>
+#include <dxfeed_graal_cpp_api/api.hpp>
+
+#include <cstring>
+#include <memory>
+#include <string>
+#include <utility>
+
+#include <utf8.h>
+
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
+#include <range/v3/all.hpp>
+
+using namespace std::literals;
+
+namespace dxfcpp::enum_utils {
+
+std::string getEventTypeEnumNamesList(std::string separator) noexcept {
+    return EventTypeEnum::ALL_BY_NAME | ranges::views::keys | ranges::views::join(separator) | ranges::to<std::string>;
+}
+
+} // namespace dxfcpp::enum_utils

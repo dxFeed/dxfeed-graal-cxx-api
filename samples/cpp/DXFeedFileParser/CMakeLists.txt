@@ -35,8 +35,6 @@ endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ../../../third_party/range-v3-0.12/include)
-
 if (DXFCXX_ENABLE_VS_ASAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")
     target_link_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")

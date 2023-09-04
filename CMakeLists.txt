@@ -104,6 +104,7 @@ set(dxFeedNativeAPIInternalSources
 
 set(dxFeedNativeAPIInternalUtilsSources
         src/internal/utils/StringUtils.cpp
+        src/internal/utils/EnumUtils.cpp
         src/internal/utils/CmdArgsUtils.cpp
 )
 
