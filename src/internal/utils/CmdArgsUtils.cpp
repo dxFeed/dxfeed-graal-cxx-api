@@ -18,6 +18,8 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+#include <range/v3/all.hpp>
+
 
 namespace dxfcpp {
 

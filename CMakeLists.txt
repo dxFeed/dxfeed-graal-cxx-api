@@ -93,24 +93,26 @@ add_subdirectory(third_party/fmt-10.0.0)
 # find_package(utf8cpp)
 # find_package(fmt)
 
-set(dxFeedNativeAPIInternalSources
-        src/internal/CEntryPointErrors.cpp
-        src/internal/Isolate.cpp
-        src/internal/JavaObjectHandler.cpp
-        src/internal/EventClassList.cpp
-        src/internal/SymbolList.cpp
-        src/internal/Common.cpp
-)
+#set(dxFeedNativeAPIInternalSources
+#        src/internal/CEntryPointErrors.cpp
+#        src/internal/Isolate.cpp
+#        src/internal/JavaObjectHandler.cpp
+#        src/internal/EventClassList.cpp
+#        src/internal/SymbolList.cpp
+#        src/internal/Common.cpp
+#)
+#
+#set(dxFeedNativeAPIInternalUtilsSources
+#        src/internal/utils/StringUtils.cpp
+#        src/internal/utils/EnumUtils.cpp
+#        src/internal/utils/CmdArgsUtils.cpp
+#)
+#
+#set(dxFeedNativeAPIInternalUtilsDebugSources
+#        src/internal/utils/debug/Debug.cpp
+#)
 
-set(dxFeedNativeAPIInternalUtilsSources
-        src/internal/utils/StringUtils.cpp
-        src/internal/utils/EnumUtils.cpp
-        src/internal/utils/CmdArgsUtils.cpp
-)
-
-set(dxFeedNativeAPIInternalUtilsDebugSources
-        src/internal/utils/debug/Debug.cpp
-)
+add_subdirectory(src/internal)
 
 set(dxFeedNativeAPIAPISources
         src/api/DXEndpoint.cpp
@@ -208,9 +210,12 @@ elseif (UNIX)
 endif ()
 
 add_library(${PROJECT_NAME}_static STATIC
-        ${dxFeedNativeAPIInternalSources}
-        ${dxFeedNativeAPIInternalUtilsSources}
-        ${dxFeedNativeAPIInternalUtilsDebugSources}
+#        ${dxFeedNativeAPIInternalSources}
+#        ${dxFeedNativeAPIInternalUtilsSources}
+#        ${dxFeedNativeAPIInternalUtilsDebugSources}
+
+#        $<TARGET_OBJECTS:dxFeedGraalCxxApi_Internal>
+
         ${dxFeedNativeAPIAPISources}
         ${dxFeedNativeAPIAPIOsubSources}
         ${dxFeedNativeAPISymbolsSources}
@@ -224,9 +229,12 @@ add_library(${PROJECT_NAME}_static STATIC
 )
 
 add_library(${PROJECT_NAME} SHARED
-        ${dxFeedNativeAPIInternalSources}
-        ${dxFeedNativeAPIInternalUtilsSources}
-        ${dxFeedNativeAPIInternalUtilsDebugSources}
+#        ${dxFeedNativeAPIInternalSources}
+#        ${dxFeedNativeAPIInternalUtilsSources}
+#        ${dxFeedNativeAPIInternalUtilsDebugSources}
+
+#        $<TARGET_OBJECTS:dxFeedGraalCxxApi_Internal>
+
         ${dxFeedNativeAPIAPISources}
         ${dxFeedNativeAPIAPIOsubSources}
         ${dxFeedNativeAPISymbolsSources}
@@ -305,8 +313,8 @@ if (DXFCXX_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
 endif ()
 
-target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only)
-target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only)
+target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk dxfcxx::internal utf8cpp fmt::fmt-header-only)
+target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk dxfcxx::internal utf8cpp fmt::fmt-header-only)
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
@@ -330,6 +338,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/WriteTapeFile)
     add_subdirectory(samples/cpp/ConvertTapeFile)
     add_subdirectory(samples/cpp/DxFeedFileParser)
+    add_subdirectory(samples/cpp/DxFeedConnect)
 endif ()
 
 if (DXFCXX_BUILD_TOOLS)
