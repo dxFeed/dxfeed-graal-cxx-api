@@ -23,6 +23,7 @@
 #include "internal/utils/StringUtils.hpp"
 #include "internal/utils/CmdArgsUtils.hpp"
 #include "internal/utils/EnumUtils.hpp"
+#include "internal/utils/TimeFormat.hpp"
 #include "internal/utils/debug/Debug.hpp"
 
 #include "api/ApiModule.hpp"

@@ -16,10 +16,10 @@ Usage:
 DxFeedFileParser <file> <type> <symbol>
 
 Where:
-    file   - Is a file name.
-    type   - Is comma-separated list of dxfeed event types ()" +
+    file    - Is a file name.
+    types   - Is comma-separated list of dxfeed event types ()" +
                        dxfcpp::enum_utils::getEventTypeEnumNamesList() + R"().
-    symbol - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").)";
+    symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").)";
 
     std::cout << usageString << std::endl;
 }
