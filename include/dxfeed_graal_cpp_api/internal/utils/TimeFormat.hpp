@@ -83,25 +83,26 @@ struct DXFCPP_EXPORT TimeFormat {
         ValueType template_{};
 
       public:
-        MinuteCacheEntry(KeyType minute, const ValueType &templat) noexcept : minute_{minute}, template_{templat} {
+        MinuteCacheEntry(KeyType minute, ValueType minuteTemplate) noexcept
+            : minute_{minute}, template_{std::move(minuteTemplate)} {
         }
 
         MinuteCacheEntry() noexcept : MinuteCacheEntry(std::numeric_limits<KeyType>::min(), "") {
         }
 
-        KeyType getKey() const noexcept {
+        [[nodiscard]] KeyType getKey() const noexcept {
             return minute_;
         }
 
-        const ValueType &getValue() const noexcept {
+        [[nodiscard]] const ValueType &getValue() const & noexcept {
             return template_;
         }
 
-        KeyType getMinute() const {
+        [[nodiscard]] KeyType getMinute() const {
             return minute_;
         }
 
-        const ValueType &getTemplate() const {
+        [[nodiscard]] const ValueType &getTemplate() const & noexcept {
             return template_;
         }
 
@@ -121,17 +122,17 @@ struct DXFCPP_EXPORT TimeFormat {
         ValueType value_{};
 
       public:
-        CacheEntry(KeyType key, const ValueType &value) noexcept : key_{key}, value_{value} {
+        CacheEntry(KeyType key, ValueType value) noexcept : key_{key}, value_{std::move(value)} {
         }
 
         CacheEntry() noexcept : CacheEntry(std::numeric_limits<KeyType>::min(), "") {
         }
 
-        KeyType getKey() const noexcept {
+        [[nodiscard]] KeyType getKey() const noexcept {
             return key_;
         }
 
-        const ValueType &getValue() const noexcept {
+        [[nodiscard]] const ValueType &getValue() const & noexcept {
             return value_;
         }
 
