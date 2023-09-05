@@ -40,8 +40,12 @@ struct DXFCPP_EXPORT TimeFormat {
             data_[index] = entry;
         }
 
-        void add(const Entry::KeyType &key, const Entry::ValueType &value) {
+        void add(const typename Entry::KeyType &key, const typename Entry::ValueType &value) {
             add({key, value});
+        }
+
+        void clear() noexcept {
+            data_.swap({maxSize, Entry::STUB});
         }
 
         template <typename Key> const Entry &get(const Key &key) const noexcept {
