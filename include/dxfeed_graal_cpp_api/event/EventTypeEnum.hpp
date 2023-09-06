@@ -21,6 +21,8 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     const std::string name_;
 
+    const std::string className_;
+
     // A flag that indicates that the current enum element is characterizing the Lasting (TICKER) event.
     const bool isLasting_;
 
@@ -34,10 +36,11 @@ class DXFCPP_EXPORT EventTypeEnum {
     // TimeSeries) event.
     const bool isOnlyIndexed_;
 
-    EventTypeEnum(std::uint32_t id, std::string name, bool isLasting, bool isIndexed = false,
+    EventTypeEnum(std::uint32_t id, std::string name, std::string className, bool isLasting, bool isIndexed = false,
                   bool isTimeSeries = false) noexcept
-        : id_{id}, name_{std::move(name)}, isLasting_{isLasting}, isIndexed_{isIndexed || isTimeSeries},
-          isTimeSeries_{isTimeSeries}, isOnlyIndexed_{isIndexed && !isTimeSeries} {
+        : id_{id}, name_{std::move(name)}, className_{std::move(className)}, isLasting_{isLasting},
+          isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries},
+          isOnlyIndexed_{isIndexed && !isTimeSeries} {
     }
 
   public:
@@ -69,7 +72,9 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> ALL_BY_NAME;
 
-    explicit EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", false} {
+    static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> ALL_BY_CLASS_NAME;
+
+    explicit EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", "Invalid", false} {
     }
 
     /**
@@ -82,8 +87,15 @@ class DXFCPP_EXPORT EventTypeEnum {
     /**
      * @return The current enum element name
      */
-    const std::string &getName() const noexcept {
+    const std::string &getName() const & noexcept {
         return name_;
+    }
+
+    /**
+     * @return The current enum element class name
+     */
+    const std::string &getClassName() const & noexcept {
+        return className_;
     }
 
     bool operator==(const EventTypeEnum &eventTypeEnum) const noexcept {

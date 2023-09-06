@@ -11,6 +11,8 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+
 project(dxFeedGraalCxxApi)
 
 set(DXFCXX_VERSION "0.1.4" CACHE STRING "The dxFeed Graal CXX API package version")
@@ -89,11 +91,14 @@ FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 add_subdirectory(third_party/utfcpp-3.2.3)
 set(FMT_INSTALL OFF)
 add_subdirectory(third_party/fmt-10.0.0)
+#set(BUILD_TZ_LIB ON)
+#set(USE_SYSTEM_TZ_DB ON)
+add_subdirectory(third_party/date-3.0.1)
 
 # find_package(utf8cpp)
 # find_package(fmt)
 
-set(dxFeedNativeAPIInternalSources
+set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp
         src/internal/JavaObjectHandler.cpp
@@ -102,38 +107,40 @@ set(dxFeedNativeAPIInternalSources
         src/internal/Common.cpp
 )
 
-set(dxFeedNativeAPIInternalUtilsSources
+set(dxFeedGraalCxxApi_InternalUtils_Sources
         src/internal/utils/StringUtils.cpp
+        src/internal/utils/EnumUtils.cpp
+        src/internal/utils/TimeFormat.cpp
         src/internal/utils/CmdArgsUtils.cpp
 )
 
-set(dxFeedNativeAPIInternalUtilsDebugSources
+set(dxFeedGraalCxxApi_InternalUtilsDebug_Sources
         src/internal/utils/debug/Debug.cpp
 )
 
-set(dxFeedNativeAPIAPISources
+set(dxFeedGraalCxxApi_API_Sources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
         src/api/DXPublisher.cpp
 )
 
-set(dxFeedNativeAPIAPIOsubSources
+set(dxFeedGraalCxxApi_APIOsub_Sources
         src/api/osub/WildcardSymbol.cpp
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
 )
 
-set(dxFeedNativeAPISymbolsSources
+set(dxFeedGraalCxxApi_Symbols_Sources
         src/symbols/StringSymbol.cpp
         src/symbols/SymbolWrapper.cpp
 )
 
-set(dxFeedNativeAPISystemSources
+set(dxFeedGraalCxxApi_System_Sources
         src/system/System.cpp
 )
 
-set(dxFeedNativeAPIEventSources
+set(dxFeedGraalCxxApi_Event_Sources
         src/event/EventTypeEnum.cpp
         src/event/IndexedEventSource.cpp
         src/event/EventFlag.cpp
@@ -141,7 +148,7 @@ set(dxFeedNativeAPIEventSources
         src/event/EventMapper.cpp
 )
 
-set(dxFeedNativeAPIEventCandleSources
+set(dxFeedGraalCxxApi_EventCandle_Sources
         src/event/candle/Candle.cpp
         src/event/candle/CandleAlignment.cpp
         src/event/candle/CandleExchange.cpp
@@ -153,7 +160,7 @@ set(dxFeedNativeAPIEventCandleSources
         src/event/candle/CandleSymbol.cpp
 )
 
-set(dxFeedNativeAPIEventMarketSources
+set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/AnalyticOrder.cpp
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
@@ -179,16 +186,32 @@ set(dxFeedNativeAPIEventMarketSources
         src/event/market/TradingStatus.cpp
 )
 
-set(dxFeedNativeAPIEventOptionSources
+set(dxFeedGraalCxxApi_EventOption_Sources
         src/event/option/Greeks.cpp
         src/event/option/Underlying.cpp
         src/event/option/TheoPrice.cpp
         src/event/option/Series.cpp
 )
 
-set(dxFeedNativeAPIScheduleSources
+set(dxFeedGraalCxxApi_Schedule_Sources
         src/schedule/SessionFilter.cpp
         src/schedule/SessionType.cpp
+)
+
+set(dxFeedGraalCxxApi_Sources
+        ${dxFeedGraalCxxApi_Internal_Sources}
+        ${dxFeedGraalCxxApi_InternalUtils_Sources}
+        ${dxFeedGraalCxxApi_InternalUtilsDebug_Sources}
+        ${dxFeedGraalCxxApi_API_Sources}
+        ${dxFeedGraalCxxApi_APIOsub_Sources}
+        ${dxFeedGraalCxxApi_Symbols_Sources}
+        ${dxFeedGraalCxxApi_System_Sources}
+        ${dxFeedGraalCxxApi_Event_Sources}
+        ${dxFeedGraalCxxApi_EventCandle_Sources}
+        ${dxFeedGraalCxxApi_EventMarket_Sources}
+        ${dxFeedGraalCxxApi_EventOption_Sources}
+        ${dxFeedGraalCxxApi_EventOption_Sources}
+        ${dxFeedGraalCxxApi_Schedule_Sources}
 )
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -207,34 +230,12 @@ elseif (UNIX)
 endif ()
 
 add_library(${PROJECT_NAME}_static STATIC
-        ${dxFeedNativeAPIInternalSources}
-        ${dxFeedNativeAPIInternalUtilsSources}
-        ${dxFeedNativeAPIInternalUtilsDebugSources}
-        ${dxFeedNativeAPIAPISources}
-        ${dxFeedNativeAPIAPIOsubSources}
-        ${dxFeedNativeAPISymbolsSources}
-        ${dxFeedNativeAPISystemSources}
-        ${dxFeedNativeAPIEventSources}
-        ${dxFeedNativeAPIEventCandleSources}
-        ${dxFeedNativeAPIEventMarketSources}
-        ${dxFeedNativeAPIEventOptionSources}
-        ${dxFeedNativeAPIScheduleSources}
+        ${dxFeedGraalCxxApi_Sources}
         src/api.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED
-        ${dxFeedNativeAPIInternalSources}
-        ${dxFeedNativeAPIInternalUtilsSources}
-        ${dxFeedNativeAPIInternalUtilsDebugSources}
-        ${dxFeedNativeAPIAPISources}
-        ${dxFeedNativeAPIAPIOsubSources}
-        ${dxFeedNativeAPISymbolsSources}
-        ${dxFeedNativeAPISystemSources}
-        ${dxFeedNativeAPIEventSources}
-        ${dxFeedNativeAPIEventCandleSources}
-        ${dxFeedNativeAPIEventMarketSources}
-        ${dxFeedNativeAPIEventOptionSources}
-        ${dxFeedNativeAPIScheduleSources}
+        ${dxFeedGraalCxxApi_Sources}
         src/api.cpp
 )
 
@@ -304,8 +305,8 @@ if (DXFCXX_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
 endif ()
 
-target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only)
-target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only)
+target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
@@ -328,7 +329,8 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/DxFeedSample)
     add_subdirectory(samples/cpp/WriteTapeFile)
     add_subdirectory(samples/cpp/ConvertTapeFile)
-    add_subdirectory(samples/cpp/DXFeedFileParser)
+    add_subdirectory(samples/cpp/DxFeedFileParser)
+    add_subdirectory(samples/cpp/DxFeedConnect)
 endif ()
 
 if (DXFCXX_BUILD_TOOLS)

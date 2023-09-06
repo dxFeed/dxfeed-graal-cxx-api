@@ -8,3 +8,6 @@
    SPDX-License-Identifier: MIT
 4. range-v3 - https://github.com/ericniebler/range-v3/blob/master/LICENSE.txt
    SPDX-License-Identifier: BSL-1.0
+5. date - https://github.com/HowardHinnant/date/blob/master/LICENSE.txt
+   SPDX-License-Identifier: MIT
+   

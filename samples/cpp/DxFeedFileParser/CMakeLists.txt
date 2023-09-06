@@ -11,7 +11,7 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
-project(DXFeedFileParser LANGUAGES CXX)
+project(DxFeedFileParser LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
@@ -34,8 +34,6 @@ elseif (UNIX)
 endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
-
-target_include_directories(${PROJECT_NAME} PRIVATE ../../../third_party/range-v3-0.12/include)
 
 if (DXFCXX_ENABLE_VS_ASAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")

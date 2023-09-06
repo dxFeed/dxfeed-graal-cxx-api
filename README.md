@@ -243,11 +243,9 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 ## Samples
 * [ConvertTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ConvertTapeFile/src/main.cpp)
   demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering
-<!--
 * [DxFeedConnect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedConnect/src/main.cpp)
   demonstrates how to subscribe various market events for the specified symbols
--->
-* [DxFeedFileParser](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DXFeedFileParser/src/main.cpp)
+* [DxFeedFileParser](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedFileParser/src/main.cpp)
   is a simple demonstration of how events are read form a tape file
 * [DxFeedSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedSample/src/main.cpp)
   is a simple demonstration of how to create multiple event listeners and subscribe to `Quote` and `Trade` events

@@ -3,8 +3,6 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <range/v3/all.hpp>
-
 #include <atomic>
 #include <mutex>
 
@@ -13,20 +11,16 @@ using namespace dxfcpp::literals;
 using namespace std::literals;
 
 void printUsage() {
-    auto evenTypeEnumNames = EventTypeEnum::ALL | ranges::views::transform([](const auto &enumElement) {
-                                 return enumElement.get().getName();
-                             }) |
-                             ranges::views::join(',') | ranges::to<std::string>;
-
     auto usageString = R"(
 Usage:
 DxFeedFileParser <file> <type> <symbol>
 
 Where:
-    file   - Is a file name.
-    type   - Is comma-separated list of dxfeed event types ()" +
-                       evenTypeEnumNames + R"().
-    symbol - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").)";
+    file    - Is a file name.
+    types   - Is comma-separated list of dxfeed event types ()" +
+                       dxfcpp::enum_utils::getEventTypeEnumNamesList() + " or " +
+                       dxfcpp::enum_utils::getEventTypeEnumClassNamesList() + R"().
+    symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").)";
 
     std::cout << usageString << std::endl;
 }

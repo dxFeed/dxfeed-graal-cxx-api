@@ -32,4 +32,12 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      */
     static std::unordered_set<std::reference_wrapper<const EventTypeEnum>> parseTypes(const std::string &types);
 };
+
+/**
+ * Parses Date+Time string and converts to timestamp
+ *
+ * @param string Date+Time string
+ * @return UTC timestamp
+ */
+DXFCPP_EXPORT std::int64_t parseDateTime(const std::string& string);
 } // namespace dxfcpp
