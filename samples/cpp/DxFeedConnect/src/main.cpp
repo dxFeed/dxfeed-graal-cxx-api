@@ -5,7 +5,8 @@
 
 #include <atomic>
 #include <mutex>
-#include <chrono>
+#include <date/date.h>
+#include <date/tz.h>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
@@ -43,9 +44,7 @@ Examples:
 }
 
 int main(int argc, char *argv[]) {
-    const std::chrono::zoned_time cur_time{ std::chrono::current_zone(),
-                                           std::chrono::system_clock::now() };
-    std::cout << cur_time << '\n';
+    //std::cout << date::current_zone()->name() << std::endl;
 
     return 0;
 
