@@ -32,4 +32,6 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      */
     static std::unordered_set<std::reference_wrapper<const EventTypeEnum>> parseTypes(const std::string &types);
 };
+
+DXFCPP_EXPORT std::int64_t parseDateTimeOrPeriod(const std::string& string);
 } // namespace dxfcpp

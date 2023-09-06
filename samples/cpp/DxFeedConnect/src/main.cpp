@@ -4,9 +4,10 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <atomic>
+#include <chrono>
 #include <mutex>
-#include <date/date.h>
-#include <date/tz.h>
+#include <range/v3/all.hpp>
+#include <string>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
@@ -22,7 +23,8 @@ Where:
               To pass an authorization token, add to the address: "[login=entitle:<token>]",
               e.g.: demo.dxfeed.com:7300[login=entitle:<token>]
     types   - Is comma-separated list of dxfeed event types ()" +
-                       dxfcpp::enum_utils::getEventTypeEnumNamesList() + R"().
+                       dxfcpp::enum_utils::getEventTypeEnumNamesList() + " or " +
+                       dxfcpp::enum_utils::getEventTypeEnumClassNamesList() + R"().
     symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").
               for Candle event specify symbol with aggregation like in "AAPL{=d}"
     time    - Is from-time for history subscription in standard formats.
@@ -36,18 +38,14 @@ Where:
                   123456789 - value-in-milliseconds
 
 Examples:
-    DXFeedConnect demo.dxfeed.com:7300 Quote,Trade MSFT,IBM
-    DXFeedConnect demo.dxfeed.com:7300 TimeAndSale AAPL
-    DXFeedConnect demo.dxfeed.com:7300 Candle AAPL{=d} 20230201Z)";
+    DxFeedConnect demo.dxfeed.com:7300 Quote,Trade MSFT,IBM
+    DxFeedConnect demo.dxfeed.com:7300 TimeAndSale AAPL
+    DxFeedConnect demo.dxfeed.com:7300 Candle AAPL{=d} 20230901Z)";
 
     std::cout << usageString << std::endl;
 }
 
 int main(int argc, char *argv[]) {
-    //std::cout << date::current_zone()->name() << std::endl;
-
-    return 0;
-
     if (argc < 4) {
         printUsage();
 
@@ -61,9 +59,10 @@ int main(int argc, char *argv[]) {
     std::string address = argv[1];
     auto types = CmdArgsUtils::parseTypes(argv[2]);
     auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
+    auto time = -1ULL;
 
     if (argc >= 5) {
-        // std::chrono::parse
+        time = parseDateTimeOrPeriod(argv[4]);
     }
 
     // Create an endpoint and connect to specified address.
@@ -82,7 +81,13 @@ int main(int argc, char *argv[]) {
     });
 
     // Add symbols.
-    sub->addSymbols(symbols);
+    if (time != -1) {
+        sub->addSymbols(symbols | ranges::views::transform([time](const auto &s) {
+                            return TimeSeriesSubscriptionSymbol(s, time);
+                        }));
+    } else {
+        sub->addSymbols(symbols);
+    }
 
     std::cin.get();
 

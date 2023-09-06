@@ -21,6 +21,8 @@ namespace dxfcpp {
 
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.
+ *
+ * TBD
  */
 struct DXFCPP_EXPORT TimeFormat {
     template <typename Entry, std::size_t maxSize = 256>

@@ -35,6 +35,8 @@ endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
+target_include_directories(${PROJECT_NAME} PRIVATE ../../../third_party/range-v3-0.12/include)
+
 if (DXFCXX_ENABLE_VS_ASAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")
     target_link_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")
@@ -49,7 +51,7 @@ if (DXFCXX_ENABLE_VS_ASAN)
 endif ()
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx date::date date::date-tz)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx )
     target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:dxfcxx::graal>
@@ -59,7 +61,7 @@ if (DXFCXX_ENABLE_ASAN_UBSAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
     target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
 else ()
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx date::date date::date-tz)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx date::date)
     target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:dxfcxx::graal>

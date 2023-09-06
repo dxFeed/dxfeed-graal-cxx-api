@@ -17,5 +17,13 @@ namespace dxfcpp::enum_utils {
  */
 DXFCPP_EXPORT std::string getEventTypeEnumNamesList(std::string separator = std::string(",")) noexcept;
 
+/**
+ * Returns a separated list of class names of EventTypeEnum elements.
+ *
+ * @param separator The list separator
+ * @return A separated list of class names
+ */
+DXFCPP_EXPORT std::string getEventTypeEnumClassNamesList(std::string separator = std::string(",")) noexcept;
+
 }
 

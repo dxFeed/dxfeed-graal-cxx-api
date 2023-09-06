@@ -18,7 +18,8 @@ DxFeedFileParser <file> <type> <symbol>
 Where:
     file    - Is a file name.
     types   - Is comma-separated list of dxfeed event types ()" +
-                       dxfcpp::enum_utils::getEventTypeEnumNamesList() + R"().
+                       dxfcpp::enum_utils::getEventTypeEnumNamesList() + " or " +
+                       dxfcpp::enum_utils::getEventTypeEnumClassNamesList() + R"().
     symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").)";
 
     std::cout << usageString << std::endl;
