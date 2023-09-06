@@ -5,6 +5,7 @@
 
 #include <atomic>
 #include <mutex>
+#include <chrono>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
@@ -41,52 +42,10 @@ Examples:
     std::cout << usageString << std::endl;
 }
 
-struct E {
-    using KeyType = std::int64_t;
-    using ValueType = std::string;
-
-    static const E STUB;
-
-    KeyType key{};
-    ValueType value{};
-
-    const KeyType &getKey() const noexcept {
-        return key;
-    }
-
-    const ValueType &getValue() const noexcept {
-        return value;
-    }
-};
-
-const E E::STUB{};
-
 int main(int argc, char *argv[]) {
-    TimeFormat::Cache<E> cache{};
-
-    cache.add({1, "1"});
-
-    std::cout << "1:\n";
-
-    if (auto valueRefOpt = cache.getEntryValue(1); valueRefOpt) {
-        std::cout << valueRefOpt->get() << std::endl;
-    }
-
-    std::cout << "257:\n";
-
-    cache.add({257, "257"});
-
-    if (auto valueRefOpt = cache.getEntryValue(1); valueRefOpt) {
-        std::cout << valueRefOpt->get() << std::endl;
-    } else {
-        std::cout << " -- 1 " << std::endl;
-    }
-
-    if (auto valueRefOpt = cache.getEntryValue(257); valueRefOpt) {
-        std::cout << valueRefOpt->get() << std::endl;
-    } else {
-        std::cout << " -- 257 " << std::endl;
-    }
+    const std::chrono::zoned_time cur_time{ std::chrono::current_zone(),
+                                           std::chrono::system_clock::now() };
+    std::cout << cur_time << '\n';
 
     return 0;
 
