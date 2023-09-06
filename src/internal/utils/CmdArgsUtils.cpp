@@ -23,7 +23,7 @@
 
 #include <range/v3/all.hpp>
 
-#if defined(__clang__)
+#if !defined(__cpp_lib_chrono) || (__cpp_lib_chrono < 201907L)
 #    include <date/date.h>
 #endif
 
@@ -182,7 +182,7 @@ std::int64_t parseDateTime(const std::string &string) {
         return result;
     }();
 
-#if defined(__clang__)
+#if !defined(__cpp_lib_chrono) || (__cpp_lib_chrono < 201907L)
     using sys_millis = date::sys_time<std::chrono::milliseconds>;
     using local_millis = date::local_time<std::chrono::milliseconds>;
 #else
@@ -197,11 +197,12 @@ std::int64_t parseDateTime(const std::string &string) {
         std::chrono::minutes offset{};
         std::int64_t offsetMillis{};
 
-#if defined(__clang__)
+#if !defined(__cpp_lib_chrono) || (__cpp_lib_chrono < 201907L)
         date::from_stream(in, format.c_str(), tp, &abbrev, &offset);
 #else
         std::chrono::from_stream(in, format.c_str(), tp, &abbrev, &offset);
 #endif
+
 
         if (in.fail()) {
             return -1LL;
