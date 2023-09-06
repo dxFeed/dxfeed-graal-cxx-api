@@ -6,8 +6,9 @@
 #include <atomic>
 #include <chrono>
 #include <mutex>
-#include <range/v3/all.hpp>
 #include <string>
+
+#include <range/v3/all.hpp>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]) {
     auto time = -1ULL;
 
     if (argc >= 5) {
-        time = parseDateTimeOrPeriod(argv[4]);
+        time = parseDateTime(argv[4]);
     }
 
     // Create an endpoint and connect to specified address.

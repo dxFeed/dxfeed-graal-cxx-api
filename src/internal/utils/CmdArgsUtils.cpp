@@ -6,7 +6,9 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <chrono>
 #include <cstring>
+#include <ctime>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -21,9 +23,20 @@
 
 #include <range/v3/all.hpp>
 
-#include <date/date.h>
+#if defined(__clang__)
+#    include <date/date.h>
+#endif
 
 namespace dxfcpp {
+
+auto getUtcOffset() {
+    const std::time_t epochPlus11H = 60 * 60 * 11;
+    const int localTime = localtime(&epochPlus11H)->tm_hour * 60 + localtime(&epochPlus11H)->tm_min;
+    const int gmTime = gmtime(&epochPlus11H)->tm_hour * 60 + gmtime(&epochPlus11H)->tm_min;
+    const int tzDiff = localTime - gmTime;
+
+    return tzDiff * 60 * 1000;
+}
 
 auto splitAndTrim = [](auto &&symbols) noexcept {
     return symbols | ranges::views::split(',') | ranges::views::filter([](const auto &s) {
@@ -119,7 +132,7 @@ std::unordered_set<std::reference_wrapper<const EventTypeEnum>> CmdArgsUtils::pa
            ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>();
 }
 
-std::int64_t parseDateTimeOrPeriod(const std::string &string) {
+std::int64_t parseDateTime(const std::string &string) {
     const static auto dateFormats = {
         "%Y%m%d", "%Y-%m-%d",
         //        "%Y\\%m\\%d",
@@ -169,19 +182,40 @@ std::int64_t parseDateTimeOrPeriod(const std::string &string) {
         return result;
     }();
 
+#if defined(__clang__)
     using sys_millis = date::sys_time<std::chrono::milliseconds>;
     using local_millis = date::local_time<std::chrono::milliseconds>;
+#else
+    using sys_millis = std::chrono::sys_time<std::chrono::milliseconds>;
+    using local_millis = std::chrono::local_time<std::chrono::milliseconds>;
+#endif
 
     auto tryParse = []<typename TimePoint>(const std::string &format, const std::string &str,
                                            TimePoint tp = {}) -> std::int64_t {
         std::istringstream in{str};
-        date::from_stream(in, format.c_str(), tp);
+        std::string abbrev{};
+        std::chrono::minutes offset{};
+        std::int64_t offsetMillis{};
+
+#if defined(__clang__)
+        date::from_stream(in, format.c_str(), tp, &abbrev, &offset);
+#else
+        std::chrono::from_stream(in, format.c_str(), tp, &abbrev, &offset);
+#endif
 
         if (in.fail()) {
             return -1LL;
         }
 
-        return tp.time_since_epoch().count();
+        offsetMillis = std::chrono::duration_cast<std::chrono::milliseconds>(offset).count();
+
+        if (format.ends_with('Z')) { // offsetMillis == 0
+            return tp.time_since_epoch().count();
+        } else if (offsetMillis == 0 && !format.ends_with('z')) {
+            return tp.time_since_epoch().count() - getUtcOffset();
+        }
+
+        return tp.time_since_epoch().count() - offsetMillis;
     };
 
     auto s = trimStr(string);
@@ -196,18 +230,8 @@ std::int64_t parseDateTimeOrPeriod(const std::string &string) {
 
     try {
         for (const auto &f : formats) {
-            if (f.ends_with('Z')) {
-                if (auto r = tryParse(f, s, sys_millis{}); r != -1) {
-                    std::cerr << "sys: '" + f + "' -> '" + s + "'" << std::endl;
-
-                    return r;
-                }
-            } else {
-                if (auto r = tryParse(f, s, local_millis{}); r != -1) {
-                    std::cerr << "local: '" + f + "' -> '" + s + "'" << std::endl;
-
-                    return r;
-                }
+            if (auto r = tryParse(f, s, local_millis{}); r != -1) {
+                return r;
             }
         }
     } catch (...) {
