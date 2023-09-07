@@ -103,12 +103,6 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-    /// The alias to a type of shared pointer to the Candle object
-    using Ptr = std::shared_ptr<Candle>;
-
-    /// The alias to a type of unique pointer to the Candle object
-    using Unique = std::unique_ptr<Candle>;
-
     static std::shared_ptr<Candle> fromGraal(void *graalNative) noexcept;
 
     /**
