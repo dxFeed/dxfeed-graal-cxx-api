@@ -21,7 +21,7 @@ the [Overview](#overview) section.<br>
 ## Table of Contents
 
 - [Overview](#overview)
-    * [Reasons for the New C/C++ API Repository](#reasons-for-the-new-net-api-repository)
+    * [Reasons for the New C/C++ API Repository](#reasons-for-the-new-cxx-api-repository)
     * [Benefits of the New Version](#benefits-of-the-new-version)
     * [Milestones](#milestones)
     * [Future Development](#future-development)
@@ -40,7 +40,7 @@ the [Overview](#overview) section.<br>
 
 ## Overview
 
-### Reasons for the New C/C++ API Repository
+### Reasons for the New CXX API Repository
 
 The old version of [dxFeed C API](https://github.com/dxFeed/dxfeed-c-api), has
 several [architectural restrictions](#architectural-restrictions-and-other-limitations-of-the-old-version)

@@ -27,11 +27,18 @@ DXFCPP_EXPORT std::string toString(void *ptr);
 
 DXFCPP_EXPORT std::string toString(double d);
 
+template <typename T> std::string toStringAny(T &&t);
+
+template <typename T, typename U>
+std::string toString(const std::pair<T, U>& p) {
+    return "{" + toStringAny(p.first) + ", " +  toStringAny(p.second) + "}";
+}
+
 template <typename T> std::string toStringAny(T &&t) {
     if constexpr (requires { t.toString(); }) {
         return t.toString();
-    } else if constexpr (requires { *t.toString(); }) {
-        return *t.toString();
+    } else if constexpr (requires { t->toString(); }) {
+        return t->toString();
     } else if constexpr (requires { toString(t); }) {
         return toString(t);
     } else if constexpr (requires { std::to_string(t); }) {
@@ -105,7 +112,7 @@ template <typename It> std::string elementsToString(It begin, It end) {
     std::string result{"["};
 
     for (auto it = begin; it != end; it++) {
-        result += String::EMPTY + "'" + toStringAny(*it) + "'" + (std::next(it) == end ? "" : ", ");
+        result += String::EMPTY + toStringAny(*it) + (std::next(it) == end ? "" : ", ");
     }
 
     return result + "]";

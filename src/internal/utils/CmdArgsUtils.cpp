@@ -38,22 +38,30 @@ auto getUtcOffset() {
     return tzDiff * 60 * 1000;
 }
 
-auto splitAndTrim = [](auto &&symbols) noexcept {
-    return symbols | ranges::views::split(',') | ranges::views::filter([](const auto &s) {
-               return !s.empty();
-           }) |
-           ranges::views::transform([](auto &&s) {
-               return s | ranges::to<std::string>();
-           }) |
-           ranges::views::transform([](const std::string &s) {
-               return trimStr(s);
-           }) |
-           ranges::views::filter([](const auto &s) {
-               return !s.empty();
-           });
+decltype(ranges::views::filter([](const auto &s) {
+    return !s.empty();
+})) filterNonEmpty{};
+
+decltype(ranges::views::transform([](auto &&s) {
+    return s | ranges::to<std::string>();
+})) transformToString{};
+
+decltype(ranges::views::transform([](const std::string &s) {
+    return trimStr(s);
+})) trim{};
+
+auto splitAndTrim = [](auto &&symbols, char sep = ',') noexcept {
+    return symbols | ranges::views::split(sep) | filterNonEmpty | transformToString | trim;
 };
 
-std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &symbols) {
+decltype(ranges::views::transform([](auto &&s) {
+    return s | ranges::views::transform([](unsigned char c) {
+               return std::toupper(c);
+           }) |
+           ranges::to<std::string>();
+})) transformToUpper{};
+
+std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
     std::unordered_set<std::string> result{};
 
     auto addSymbol = [&result](auto &&symbol) {
@@ -107,15 +115,10 @@ std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &sy
     return result;
 }
 
-std::unordered_set<std::reference_wrapper<const EventTypeEnum>> CmdArgsUtils::parseTypes(const std::string &types) {
-    auto split = splitAndTrim(types);
-    auto allByName = split | ranges::views::transform([](auto &&s) {
-                         return s | ranges::views::transform([](unsigned char c) {
-                                    return std::toupper(c);
-                                }) |
-                                ranges::to<std::string>();
-                     }) |
-                     ranges::views::filter([](const auto &s) {
+std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
+CmdArgsUtils::parseTypes(const std::string &types) noexcept {
+    auto split = splitAndTrim(types) | filterNonEmpty;
+    auto allByName = split | transformToUpper | ranges::views::filter([](const auto &s) {
                          return EventTypeEnum::ALL_BY_NAME.contains(s);
                      }) |
                      ranges::views::transform([](const auto &s) {
@@ -132,7 +135,26 @@ std::unordered_set<std::reference_wrapper<const EventTypeEnum>> CmdArgsUtils::pa
            ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>();
 }
 
-std::int64_t parseDateTime(const std::string &string) {
+std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const std::string &properties) noexcept {
+    auto p = trimStr(properties);
+
+    if (p.empty()) {
+        return {};
+    }
+
+    return splitAndTrim(p) | filterNonEmpty | ranges::views::transform([](const std::string &kv) {
+               return splitAndTrim(kv, '=') | ranges::to<std::vector<std::string>>();
+           }) |
+           ranges::views::filter([](auto &&kv) {
+               return kv.size() == 2;
+           }) |
+           ranges::views::transform([](auto &&kv) {
+               return std::make_pair(kv[0], kv[1]);
+           }) |
+           ranges::to<std::unordered_map<std::string, std::string>>();
+}
+
+std::int64_t parseDateTime(const std::string &string) noexcept {
     const static auto dateFormats = {
         "%Y%m%d", "%Y-%m-%d",
         //        "%Y\\%m\\%d",
@@ -202,7 +224,6 @@ std::int64_t parseDateTime(const std::string &string) {
 #else
         std::chrono::from_stream(in, format.c_str(), tp, &abbrev, &offset);
 #endif
-
 
         if (in.fail()) {
             return -1LL;
