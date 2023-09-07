@@ -8,8 +8,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <string>
-#include <unordered_set>
 #include <type_traits>
+#include <unordered_set>
 
 namespace dxfcpp {
 
@@ -30,7 +30,8 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param types The comma-separated list of event types.
      * @return The created set of parsed types.
      */
-    static std::unordered_set<std::reference_wrapper<const EventTypeEnum>> parseTypes(const std::string &types) noexcept;
+    static std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
+    parseTypes(const std::string &types) noexcept;
 
     /**
      * Parses the input collection of strings and returns a collection of key-value properties.
@@ -39,7 +40,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param properties The input comma-separated key-value pairs.
      * @return The collection of key-value properties.
      */
-    static std::unordered_map<std::string, std::string> parseProperties(const std::string& properties) noexcept;
+    static std::unordered_map<std::string, std::string> parseProperties(const std::string &properties) noexcept;
 };
 
 /**
@@ -48,6 +49,28 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
  * @param string Date+Time string
  * @return UTC timestamp
  */
-DXFCPP_EXPORT std::int64_t parseDateTime(const std::string& string) noexcept;
+DXFCPP_EXPORT std::int64_t parseDateTime(const std::string &string) noexcept;
+
+struct Arg {};
+
+struct ValueArg {};
+
+struct AddressArg : ValueArg {
+    [[nodiscard]] std::string getName() const noexcept {
+        return "address";
+    }
+
+    [[nodiscard]] std::string getShortDescription() const noexcept {
+        return
+            R"(
+        The address(es) to connect to retrieve data (see "Help address").
+        For Token-Based Authorization, use the following format: "<address>:<port>[login=entitle:<token>]".
+)";
+    }
+
+    [[nodiscard]] std::string parse(const std::string& s) const noexcept{
+        return s;
+    }
+};
 
 } // namespace dxfcpp
