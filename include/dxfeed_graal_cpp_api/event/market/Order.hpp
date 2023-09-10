@@ -149,7 +149,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param eventSymbol The symbol of this event.
      * @return The current order.
      */
-    Order &withEventSymbol(const std::string &eventSymbol) noexcept {
+    virtual Order &withEventSymbol(const std::string &eventSymbol) noexcept {
         MarketEvent::setEventSymbol(eventSymbol);
 
         return *this;

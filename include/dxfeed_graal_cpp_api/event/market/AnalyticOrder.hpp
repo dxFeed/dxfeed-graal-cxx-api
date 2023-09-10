@@ -113,6 +113,33 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
+     * Changes event's symbol and returns the current analytic order.
+     *
+     * @param eventSymbol The symbol of this event.
+     * @return The current analytic order.
+     */
+    AnalyticOrder &withEventSymbol(const std::string &eventSymbol) noexcept override {
+        MarketEvent::setEventSymbol(eventSymbol);
+
+        return *this;
+    }
+
+    /**
+     * Changes event's symbol and returns a shared pointer to the current analytic order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Order>(new
+     * Order(...))` or `std::make_shared<Order>(...)`
+     *
+     * @param eventSymbol The symbol of this event.
+     * @return A shared pointer to the current order.
+     */
+    AnalyticOrder::Ptr withEventSymbolShared(const std::string &eventSymbol) noexcept {
+        MarketEvent::setEventSymbol(eventSymbol);
+
+        return shared_from_this()->sharedAs<AnalyticOrder>();
+    }
+
+    /**
      * Returns iceberg peak size of this analytic order.
      *
      * @return iceberg peak size of this analytic order.
