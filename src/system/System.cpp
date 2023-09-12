@@ -23,9 +23,9 @@ bool System::setProperty(const std::string &key, const std::string &value) {
 
     auto result = runIsolatedOrElse(
         [key = key, value = value](auto threadHandle) {
-            return CEntryPointErrors::valueOf(dxfg_system_set_property(
+            return static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(
                        dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
-                   CEntryPointErrors::NO_ERROR;
+                   CEntryPointErrorsEnum::NO_ERROR;
         },
         false);
 

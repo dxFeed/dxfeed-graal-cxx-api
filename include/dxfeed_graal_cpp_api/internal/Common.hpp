@@ -26,6 +26,9 @@ namespace dxfcpp {
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 
+template <typename T>
+concept EnumConcept = std::is_enum_v<T>;
+
 #include <type_traits>
 
 namespace detail {
