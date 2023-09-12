@@ -15,6 +15,7 @@
 #include <mutex>
 #include <thread>
 #include <variant>
+#include <concepts>
 
 #ifdef NO_ERROR
 #    undef NO_ERROR

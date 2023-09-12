@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <concepts>
 
 namespace dxfcpp {
 

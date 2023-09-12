@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <unordered_set>
+#include <concepts>
 
 namespace dxfcpp {
 

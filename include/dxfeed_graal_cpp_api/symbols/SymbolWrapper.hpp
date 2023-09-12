@@ -10,6 +10,7 @@
 #include <optional>
 #include <utility>
 #include <variant>
+#include <concepts>
 
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
