@@ -45,7 +45,7 @@ concept ConvertibleToSymbolWrapperCollection =
     } &&
     (
         requires(Collection c) {
-            { *std::begin(c) } -> std::convertible_to<SymbolWrapper>;
+            { *std::begin(c) } -> dxfcpp::ConvertibleTo<SymbolWrapper>;
         } ||
         requires(Collection c) {
             { *std::begin(c) } -> ConvertibleToSymbolWrapper;

@@ -50,7 +50,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     template <typename EventTypeIt>
 #if __cpp_concepts
         requires requires(EventTypeIt iter) {
-            { *iter } -> std::convertible_to<EventTypeEnum>;
+            { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
         }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
@@ -167,7 +167,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     template <typename EventTypeIt>
 #if __cpp_concepts
         requires requires(EventTypeIt iter) {
-            { *iter } -> std::convertible_to<EventTypeEnum>;
+            { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
         }
 #endif
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) noexcept {
@@ -342,7 +342,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     std::size_t addEventListener(std::function<void(const std::vector<std::shared_ptr<EventT>> &)> &&listener) noexcept
 #if __cpp_concepts
         requires std::is_base_of_v<EventType, EventT> && requires {
-            { EventT::TYPE } -> std::convertible_to<EventTypeEnum>;
+            { EventT::TYPE } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
         }
 #endif
     {
