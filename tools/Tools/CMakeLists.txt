@@ -40,7 +40,7 @@ add_executable(${PROJECT_NAME}
         src/PerfTest/PerfTestTool.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${PROJECT_NAME}>)

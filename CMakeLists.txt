@@ -88,6 +88,9 @@ endif ()
 FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 # DxFeedGraalNativeSdk_SOURCE_DIR
 
+FetchContent_Declare(Process GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default)
+FetchContent_MakeAvailable(Process)
+
 add_subdirectory(third_party/utfcpp-3.2.3)
 set(FMT_INSTALL OFF)
 add_subdirectory(third_party/fmt-10.0.0)

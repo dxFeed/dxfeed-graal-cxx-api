@@ -6,8 +6,10 @@
    SPDX-License-Identifier: MIT
 3. doctest - https://github.com/doctest/doctest/blob/master/LICENSE.txt  
    SPDX-License-Identifier: MIT
-4. range-v3 - https://github.com/ericniebler/range-v3/blob/master/LICENSE.txt
+4. range-v3 - https://github.com/ericniebler/range-v3/blob/master/LICENSE.txt  
    SPDX-License-Identifier: BSL-1.0
-5. date - https://github.com/HowardHinnant/date/blob/master/LICENSE.txt
+5. date - https://github.com/HowardHinnant/date/blob/master/LICENSE.txt  
    SPDX-License-Identifier: MIT
+6. Process - https://github.com/ttldtor/Process/blob/default/LICENSE  
+   SPDX-License-Identifier: BSL-1.0
    
