@@ -7,6 +7,10 @@
 #    error Please, include windows.h or winnt.h after dxFeed Graal CXX API headers
 #endif
 
+#ifndef DXFCXX_VERSION
+#define DXFCXX_VERSION "0.0.0"
+#endif
+
 #ifdef DXFCPP_EXPORT
 #    error DXFCPP_EXPORT was previously defined
 #endif

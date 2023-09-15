@@ -36,11 +36,14 @@ endif ()
 add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Connect/ConnectTool.cpp
+        src/Dump/DumpTool.cpp
+        src/Help/HelpTool.cpp
         src/LatencyTest/LatencyTestTool.cpp
         src/PerfTest/PerfTestTool.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process)
+target_include_directories(${PROJECT_NAME} PRIVATE ../../third_party/range-v3-0.12/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process fmt::fmt-header-only)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${PROJECT_NAME}>)

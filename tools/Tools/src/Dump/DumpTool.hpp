@@ -13,23 +13,29 @@
 
 namespace dxfcpp::tools {
 
-struct PerfTestTool {
+struct DumpTool {
     [[nodiscard]] std::string getName() const noexcept {
-        return "PerfTest";
+        return "Dump";
     }
 
     [[nodiscard]] std::string getShortDescription() const noexcept {
-        return "Connects to specified address and calculates performance counters.";
+        return "Dumps all events received from address.";
     }
 
     [[nodiscard]] std::string getDescription() const noexcept {
         return R"(
-Connects to the specified address(es) and calculates performance counters (events per second, cpu usage, etc).
+Dumps all events received from address.
+Enforces a streaming contract for subscription. A wildcard enabled by default.
+This was designed to receive data from a file.
+If <types> is not specified, creates a subscription for all available event types.
+If <symbol> is not specified, the wildcard symbol is used.
 )";
     }
 
     [[nodiscard]] std::vector<std::string> getUsage() const noexcept {
         return {
+            getName() + " <address> [<options>]",
+            getName() + " <address> <types> [<options>]",
             getName() + " <address> <types> <symbols> [<options>]",
         };
     }
@@ -40,17 +46,6 @@ Connects to the specified address(es) and calculates performance counters (event
 
     template <typename Args> void run(Args &&args) {
         using namespace std::literals;
-
-        auto endpoint = DXEndpoint::newBuilder()
-                            ->withRole(args.isForceStream() ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
-                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-                            ->withProperties(CmdArgsUtils::parseProperties(args.getProperties()))
-                            ->withName("PerfTestTool")
-                            ->build();
-
-        auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.getTypes()));
-
-        auto measurementPeriod = 2s;
     }
 };
 

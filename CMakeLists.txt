@@ -327,6 +327,9 @@ add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMM
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
+target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
+target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
+
 if (DXFCXX_BUILD_UNIT_TESTS)
     include(CTest)
     add_subdirectory(tests)

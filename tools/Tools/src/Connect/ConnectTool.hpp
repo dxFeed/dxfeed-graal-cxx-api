@@ -13,19 +13,17 @@
 
 namespace dxfcpp::tools {
 
-struct PerfTestTool {
+struct ConnectTool {
     [[nodiscard]] std::string getName() const noexcept {
-        return "PerfTest";
+        return "Connect";
     }
 
     [[nodiscard]] std::string getShortDescription() const noexcept {
-        return "Connects to specified address and calculates performance counters.";
+        return "Connects to specified address(es).";
     }
 
     [[nodiscard]] std::string getDescription() const noexcept {
-        return R"(
-Connects to the specified address(es) and calculates performance counters (events per second, cpu usage, etc).
-)";
+        return "Connects to the specified address(es) and subscribes to the specified symbols.";
     }
 
     [[nodiscard]] std::vector<std::string> getUsage() const noexcept {
@@ -40,17 +38,6 @@ Connects to the specified address(es) and calculates performance counters (event
 
     template <typename Args> void run(Args &&args) {
         using namespace std::literals;
-
-        auto endpoint = DXEndpoint::newBuilder()
-                            ->withRole(args.isForceStream() ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
-                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-                            ->withProperties(CmdArgsUtils::parseProperties(args.getProperties()))
-                            ->withName("PerfTestTool")
-                            ->build();
-
-        auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.getTypes()));
-
-        auto measurementPeriod = 2s;
     }
 };
 

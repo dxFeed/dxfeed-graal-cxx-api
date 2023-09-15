@@ -13,19 +13,17 @@
 
 namespace dxfcpp::tools {
 
-struct PerfTestTool {
+struct LatencyTest {
     [[nodiscard]] std::string getName() const noexcept {
-        return "PerfTest";
+        return "LatencyTest";
     }
 
     [[nodiscard]] std::string getShortDescription() const noexcept {
-        return "Connects to specified address and calculates performance counters.";
+        return "Connects to the specified address(es) and calculates latency.";
     }
 
     [[nodiscard]] std::string getDescription() const noexcept {
-        return R"(
-Connects to the specified address(es) and calculates performance counters (events per second, cpu usage, etc).
-)";
+        return R"(Connects to the specified address(es) and calculates latency.)";
     }
 
     [[nodiscard]] std::vector<std::string> getUsage() const noexcept {
@@ -40,17 +38,6 @@ Connects to the specified address(es) and calculates performance counters (event
 
     template <typename Args> void run(Args &&args) {
         using namespace std::literals;
-
-        auto endpoint = DXEndpoint::newBuilder()
-                            ->withRole(args.isForceStream() ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
-                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-                            ->withProperties(CmdArgsUtils::parseProperties(args.getProperties()))
-                            ->withName("PerfTestTool")
-                            ->build();
-
-        auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.getTypes()));
-
-        auto measurementPeriod = 2s;
     }
 };
 
