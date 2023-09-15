@@ -45,7 +45,7 @@ Connects to the specified address(es) and calculates performance counters (event
                             ->withRole(args.isForceStream() ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
                             ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
                             ->withProperties(CmdArgsUtils::parseProperties(args.getProperties()))
-                            ->withName("PerfTestTool")
+                            ->withName(getName() + "Tool")
                             ->build();
 
         auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.getTypes()));

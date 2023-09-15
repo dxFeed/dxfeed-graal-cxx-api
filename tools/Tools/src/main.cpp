@@ -72,6 +72,10 @@ int main(int argc, char *argv[]) {
     std::vector<Tool> tools{tools::ConnectTool{}, tools::DumpTool{}, tools::HelpTool{}, tools::LatencyTest{},
                             tools::PerfTestTool{}};
 
+    std::cout << std::thread::hardware_concurrency() << std::endl;
+
+    tools::ConnectTool{}.run(tools::ConnectTool::Args{"demo.dxfeed.com:7300", "Quote", "AAPL"});
+
     if (args.empty() || args[0] == "--help" || args[0] == "-h") {
         showUsage(tools);
 

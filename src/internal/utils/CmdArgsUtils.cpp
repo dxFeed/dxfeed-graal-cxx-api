@@ -62,6 +62,10 @@ decltype(ranges::views::transform([](auto &&s) {
 })) transformToUpper{};
 
 std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
+    if (symbols.empty()) {
+        return {};
+    }
+
     std::unordered_set<std::string> result{};
 
     auto addSymbol = [&result](auto &&symbol) {
@@ -117,6 +121,10 @@ std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &sy
 
 std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
 CmdArgsUtils::parseTypes(const std::string &types) noexcept {
+    if (types.empty()) {
+        return {};
+    }
+
     auto split = splitAndTrim(types) | filterNonEmpty;
     auto allByName = split | transformToUpper | ranges::views::filter([](const auto &s) {
                          return EventTypeEnum::ALL_BY_NAME.contains(s);
@@ -133,6 +141,15 @@ CmdArgsUtils::parseTypes(const std::string &types) noexcept {
 
     return ranges::views::concat(allByName, allByClassName) |
            ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>();
+}
+
+std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
+CmdArgsUtils::parseTypes(std::optional<std::string> types) noexcept {
+    if (types.has_value()) {
+        return parseTypes(types.value());
+    }
+
+    return std::unordered_set<std::reference_wrapper<const EventTypeEnum>>{};
 }
 
 std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const std::string &properties) noexcept {
@@ -154,7 +171,7 @@ std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const
            ranges::to<std::unordered_map<std::string, std::string>>();
 }
 
-std::int64_t parseDateTime(const std::string &string) noexcept {
+std::int64_t CmdArgsUtils::parseDateTime(const std::string &string) noexcept {
     const static auto dateFormats = {
         "%Y%m%d", "%Y-%m-%d",
         //        "%Y\\%m\\%d",
