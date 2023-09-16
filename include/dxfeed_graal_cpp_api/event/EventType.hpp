@@ -27,7 +27,7 @@ namespace dxfcpp {
  * @see DXFeed
  */
 struct DXFCPP_EXPORT EventType : public SharedEntity {
-    /// The alias to a type of shared pointer to the EventType's child object.
+    /// The alias to a type of shared pointer to the EventType object.
     using Ptr = std::shared_ptr<EventType>;
 
     /**

@@ -20,57 +20,90 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
     /**
      * Parses an input string and returns a set of symbols.
      *
-     * If the result type is SymbolWrapper, then the symbol "all" or "*" can be passed. This will add WildcardSymbol
-     * (all symbols).
+     * The symbol "all" or "*" can be passed. This will add WildcardSymbol (all symbols).
      *
-     * @tparam R The result type (std::string, SymbolWrapper, CandleSymbol)
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    template <typename R = std::string> static std::unordered_set<R> parseSymbols(const std::string &symbols) noexcept;
+    static std::unordered_set<SymbolWrapper> parseSymbols(const std::string &symbols) noexcept;
 
     /**
      * Parses an input string and returns a set of symbols.
      *
-     * If the result type is SymbolWrapper, then the symbol "all" or "*" can be passed. This will add WildcardSymbol
-     * (all symbols).
+     * The symbol "all" or "*" can be passed. This will add WildcardSymbol (all symbols)..
      *
-     * @tparam R The result type (std::string, SymbolWrapper, CandleSymbol)
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    template <typename R = std::string> static std::unordered_set<R> parseSymbols(const char *symbols) noexcept {
-        return parseSymbols<R>(std::string(symbols));
+    static std::unordered_set<SymbolWrapper> parseSymbols(const char *symbols) noexcept {
+        return parseSymbols(std::string(symbols));
     }
 
     /**
      * Parses an input string and returns a set of symbols.
      *
-     * If the result type is SymbolWrapper, then the symbol "all" or "*" can be passed. This will add WildcardSymbol
-     * (all symbols).
+     * The symbol "all" or "*" can be passed. This will add WildcardSymbol (all symbols).
      *
-     * @tparam R The result type (std::string, SymbolWrapper, CandleSymbol)
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    template <typename R = std::string> static std::unordered_set<R> parseSymbols(std::string_view symbols) noexcept {
-        return parseSymbols<R>(symbols.data());
+    static std::unordered_set<SymbolWrapper> parseSymbols(std::string_view symbols) noexcept {
+        return parseSymbols(symbols.data());
     }
 
     /**
      * Parses an input string and returns a set of symbols.
      *
-     * If the result type is SymbolWrapper, then the symbol "all" or "*" can be passed. This will add WildcardSymbol
-     * (all symbols).
+     * The symbol "all" or "*" can be passed. This will add WildcardSymbol (all symbols).
      *
-     * @tparam R The result type (std::string, SymbolWrapper, CandleSymbol)
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    template <typename R = std::string>
-    static std::unordered_set<R> parseSymbols(std::optional<std::string> symbols) noexcept {
+    static std::unordered_set<SymbolWrapper> parseSymbols(std::optional<std::string> symbols) noexcept {
         if (symbols.has_value()) {
-            return parseSymbols<R>(symbols.value());
+            return parseSymbols(symbols.value());
+        }
+
+        return {};
+    }
+
+    /**
+     * Parses an input string and returns a set of candle symbols.
+     *
+     * @param symbols The coma-separated list of symbols.
+     * @return The created set of parsed candle symbols
+     */
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(const std::string &symbols) noexcept;
+
+    /**
+     * Parses an input string and returns a set of candle symbols.
+     *
+     * @param symbols The coma-separated list of symbols.
+     * @return The created set of parsed candle symbols
+     */
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(const char *symbols) noexcept {
+        return parseCandleSymbols(std::string(symbols));
+    }
+
+    /**
+     * Parses an input string and returns a set of candle symbols.
+     *
+     * @param symbols The coma-separated list of symbols.
+     * @return The created set of parsed candle symbols
+     */
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::string_view symbols) noexcept {
+        return parseCandleSymbols(symbols.data());
+    }
+
+    /**
+     * Parses an input string and returns a set of candle symbols.
+     *
+     * @param symbols The coma-separated list of symbols.
+     * @return The created set of parsed candle symbols
+     */
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::optional<std::string> symbols) noexcept {
+        if (symbols.has_value()) {
+            return parseCandleSymbols(symbols.value());
         }
 
         return {};

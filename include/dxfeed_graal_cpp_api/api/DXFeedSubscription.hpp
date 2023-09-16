@@ -107,6 +107,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const noexcept;
 
   public:
+    /// The alias to a type of shared pointer to the DXFeedSubscription object
+    using Ptr = std::shared_ptr<DXFeedSubscription>;
+
+    /// The alias to a type of unique pointer to the DXFeedSubscription object
+    using Unique = std::unique_ptr<DXFeedSubscription>;
+
     ///
     std::string toString() const noexcept override;
 

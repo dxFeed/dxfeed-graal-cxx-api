@@ -52,7 +52,7 @@ struct ConnectTool {
         std::optional<std::string> source;
         std::optional<std::string> properties;
         std::optional<std::string> tape;
-        std::optional<bool> isQuite;
+        bool isQuite;
 
         static Args parse(const std::vector<std::string> &args) noexcept {
             return {};
@@ -82,7 +82,7 @@ struct ConnectTool {
             });
         }
 
-        auto symbols = CmdArgsUtils::parseSymbols(args.symbols) | ranges::to<std::unordered_set<SymbolWrapper>>;
+        auto symbols = CmdArgsUtils::parseSymbols(args.symbols);
 
         if (args.fromTime.has_value()) {
             auto fromTime = CmdArgsUtils::parseDateTime(args.fromTime.value());

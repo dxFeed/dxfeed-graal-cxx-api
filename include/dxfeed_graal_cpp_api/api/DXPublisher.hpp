@@ -58,6 +58,12 @@ class ObservableSubscription;
  * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
  */
 struct DXFCPP_EXPORT DXPublisher : SharedEntity {
+    /// The alias to a type of shared pointer to the DXPublisher object
+    using Ptr = std::shared_ptr<DXPublisher>;
+
+    /// The alias to a type of unique pointer to the DXPublisher object
+    using Unique = std::unique_ptr<DXPublisher>;
+
     friend struct DXEndpoint;
 
   private:

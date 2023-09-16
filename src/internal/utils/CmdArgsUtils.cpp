@@ -61,7 +61,7 @@ decltype(ranges::views::transform([](auto &&s) {
            ranges::to<std::string>();
 })) transformToUpper{};
 
-template <> std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
+std::unordered_set<std::string> parseStringSymbols(const std::string &symbols) noexcept {
     auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
@@ -121,22 +121,24 @@ template <> std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std
     return result;
 }
 
-template <> std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
+std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
     auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
         return {};
     }
 
-    if (trimmedSymbols == "*" || iEquals(trimmedSymbols, "all")) {
+    auto parsed = parseStringSymbols(trimmedSymbols);
+
+    if (parsed.contains("*") || parsed.contains("all") || parsed.contains("All") || parsed.contains("ALL")) {
         return {WildcardSymbol::ALL};
     }
 
-    return parseSymbols(trimmedSymbols) | ranges::to<std::unordered_set<SymbolWrapper>>();
+    return parsed | ranges::to<std::unordered_set<SymbolWrapper>>();
 }
 
-template <> std::unordered_set<CandleSymbol> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
-    auto parsed = parseSymbols(symbols);
+std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::string &symbols) noexcept {
+    auto parsed = parseStringSymbols(symbols);
 
     return parsed | ranges::views::transform([](auto &&s) {
                return CandleSymbol::valueOf(s);
