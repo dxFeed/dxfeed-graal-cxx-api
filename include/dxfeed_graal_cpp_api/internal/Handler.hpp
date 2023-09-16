@@ -79,7 +79,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      *
      * @param mainFuturesSize The size of the circular buffer of futures
      */
-    explicit Handler(std::size_t mainFuturesSize = MAIN_FUTURES_DEFAULT_SIZE)
+    explicit Handler(std::size_t mainFuturesSize = MAIN_FUTURES_DEFAULT_SIZE) noexcept
         : mainFuturesCurrentIndex_{0ULL}, mainFuturesSize_{mainFuturesSize} {
         mainFutures_.reserve(mainFuturesSize);
     }

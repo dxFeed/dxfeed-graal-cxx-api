@@ -61,6 +61,18 @@ void showUsage(auto &&tools) noexcept {
 }
 
 int main(int argc, char *argv[]) {
+    auto stopWatch = StopWatch();
+    auto stopWatch2 = StopWatch();
+    stopWatch.restart();
+    stopWatch2.restart();
+    auto t = Timer::schedule([&]{
+        std::cerr << "T: " << std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now()).time_since_epoch().count() << std::endl;
+        std::cerr << "Elapsed: " << stopWatch.elapsed().count() << "ms" << std::endl;
+        std::cerr << "Elapsed2: " << stopWatch2.elapsed().count() << "ms" << std::endl;
+
+        stopWatch2.restart();
+    }, 2s, 2s);
+
     std::vector<std::string> args{};
 
     if (argc > 1) {
