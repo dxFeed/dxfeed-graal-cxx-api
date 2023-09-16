@@ -46,13 +46,13 @@ struct ConnectTool {
 
     struct Args {
         std::string address;
-        std::optional<std::string> types;
-        std::optional<std::string> symbols;
+        std::string types;
+        std::string symbols;
         std::optional<std::string> fromTime;
         std::optional<std::string> source;
         std::optional<std::string> properties;
         std::optional<std::string> tape;
-        bool isQuite;
+        std::optional<bool> isQuite;
 
         static Args parse(const std::vector<std::string> &args) noexcept {
             return {};

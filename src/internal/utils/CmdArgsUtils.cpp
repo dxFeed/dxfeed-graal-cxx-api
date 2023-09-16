@@ -61,8 +61,10 @@ decltype(ranges::views::transform([](auto &&s) {
            ranges::to<std::string>();
 })) transformToUpper{};
 
-std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
-    if (symbols.empty()) {
+template <> std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
+    auto trimmedSymbols = trimStr(symbols);
+
+    if (trimmedSymbols.empty()) {
         return {};
     }
 
@@ -119,13 +121,42 @@ std::unordered_set<std::string> CmdArgsUtils::parseSymbols(const std::string &sy
     return result;
 }
 
-std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
-CmdArgsUtils::parseTypes(const std::string &types) noexcept {
-    if (types.empty()) {
+template <> std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
+    auto trimmedSymbols = trimStr(symbols);
+
+    if (trimmedSymbols.empty()) {
         return {};
     }
 
-    auto split = splitAndTrim(types) | filterNonEmpty;
+    if (trimmedSymbols == "*" || iEquals(trimmedSymbols, "all")) {
+        return {WildcardSymbol::ALL};
+    }
+
+    return parseSymbols(trimmedSymbols) | ranges::to<std::unordered_set<SymbolWrapper>>();
+}
+
+template <> std::unordered_set<CandleSymbol> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
+    auto parsed = parseSymbols(symbols);
+
+    return parsed | ranges::views::transform([](auto &&s) {
+               return CandleSymbol::valueOf(s);
+           }) |
+           ranges::to<std::unordered_set<CandleSymbol>>();
+}
+
+std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
+CmdArgsUtils::parseTypes(const std::string &types) noexcept {
+    auto trimmedTypes = trimStr(types);
+
+    if (trimmedTypes.empty()) {
+        return {};
+    }
+
+    if (trimmedTypes == "*" || iEquals(trimmedTypes, "all")) {
+        return EventTypeEnum::ALL | ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>();
+    }
+
+    auto split = splitAndTrim(trimmedTypes) | filterNonEmpty;
     auto allByName = split | transformToUpper | ranges::views::filter([](const auto &s) {
                          return EventTypeEnum::ALL_BY_NAME.contains(s);
                      }) |

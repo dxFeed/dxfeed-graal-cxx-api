@@ -20,40 +20,57 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
     /**
      * Parses an input string and returns a set of symbols.
      *
+     * If the result type is SymbolWrapper, then the symbol "all" or "*" can be passed. This will add WildcardSymbol
+     * (all symbols).
+     *
+     * @tparam R The result type (std::string, SymbolWrapper, CandleSymbol)
      * @param symbols The coma-separated list of symbols.
-     * @return The created set of parsed symbols.
+     * @return The created set of parsed symbols
      */
-    static std::unordered_set<std::string> parseSymbols(const std::string &symbols) noexcept;
+    template <typename R = std::string> static std::unordered_set<R> parseSymbols(const std::string &symbols) noexcept;
 
     /**
      * Parses an input string and returns a set of symbols.
      *
+     * If the result type is SymbolWrapper, then the symbol "all" or "*" can be passed. This will add WildcardSymbol
+     * (all symbols).
+     *
+     * @tparam R The result type (std::string, SymbolWrapper, CandleSymbol)
      * @param symbols The coma-separated list of symbols.
-     * @return The created set of parsed symbols.
+     * @return The created set of parsed symbols
      */
-    static std::unordered_set<std::string> parseSymbols(const char *symbols) noexcept {
-        return parseSymbols(std::string(symbols));
+    template <typename R = std::string> static std::unordered_set<R> parseSymbols(const char *symbols) noexcept {
+        return parseSymbols<R>(std::string(symbols));
     }
 
     /**
      * Parses an input string and returns a set of symbols.
      *
+     * If the result type is SymbolWrapper, then the symbol "all" or "*" can be passed. This will add WildcardSymbol
+     * (all symbols).
+     *
+     * @tparam R The result type (std::string, SymbolWrapper, CandleSymbol)
      * @param symbols The coma-separated list of symbols.
-     * @return The created set of parsed symbols.
+     * @return The created set of parsed symbols
      */
-    static std::unordered_set<std::string> parseSymbols(std::string_view symbols) noexcept {
-        return parseSymbols(symbols.data());
+    template <typename R = std::string> static std::unordered_set<R> parseSymbols(std::string_view symbols) noexcept {
+        return parseSymbols<R>(symbols.data());
     }
 
     /**
      * Parses an input string and returns a set of symbols.
      *
+     * If the result type is SymbolWrapper, then the symbol "all" or "*" can be passed. This will add WildcardSymbol
+     * (all symbols).
+     *
+     * @tparam R The result type (std::string, SymbolWrapper, CandleSymbol)
      * @param symbols The coma-separated list of symbols.
-     * @return The created set of parsed symbols.
+     * @return The created set of parsed symbols
      */
-    static std::unordered_set<std::string> parseSymbols(std::optional<std::string> symbols) noexcept {
+    template <typename R = std::string>
+    static std::unordered_set<R> parseSymbols(std::optional<std::string> symbols) noexcept {
         if (symbols.has_value()) {
-            return parseSymbols(symbols.value());
+            return parseSymbols<R>(symbols.value());
         }
 
         return {};
@@ -61,6 +78,8 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
 
     /**
      * Parses an input string and returns a set of event types.
+     *
+     * "all" or "*" will be converted to all types.
      *
      * @param types The comma-separated list of event types.
      * @return The created set of parsed types.
@@ -70,6 +89,8 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
 
     /**
      * Parses an input string and returns a set of event types.
+     *
+     * "all" or "*" will be converted to all types.
      *
      * @param types The comma-separated list of event types.
      * @return The created set of parsed types.
@@ -81,6 +102,8 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
     /**
      * Parses an input string and returns a set of event types.
      *
+     * "all" or "*" will be converted to all types.
+     *
      * @param types The comma-separated list of event types.
      * @return The created set of parsed types.
      */
@@ -90,6 +113,8 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
 
     /**
      * Parses an input string and returns a set of event types.
+     *
+     * "all" or "*" will be converted to all types.
      *
      * @param types The comma-separated list of event types.
      * @return The created set of parsed types.
