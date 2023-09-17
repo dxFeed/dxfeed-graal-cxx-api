@@ -13,10 +13,17 @@
 #include <utility>
 #include <variant>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
+#include <range/v3/all.hpp>
+
 namespace dxfcpp::tools {
 
 struct HelpTool {
-    static const std::unordered_map<std::string, std::string, decltype(&icHash), decltype(&iEquals)>
+    static const std::unordered_map<std::string, std::string>
         EMBEDDED_ARTICLES;
 
     [[nodiscard]] std::string getName() const noexcept {

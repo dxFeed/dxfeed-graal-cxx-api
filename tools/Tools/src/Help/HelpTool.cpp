@@ -4,7 +4,7 @@
 #include "HelpTool.hpp"
 
 namespace dxfcpp::tools {
-const std::unordered_map<std::string, std::string, decltype(&icHash), decltype(&iEquals)> HelpTool::EMBEDDED_ARTICLES{
+const std::unordered_map<std::string, std::string> HelpTool::EMBEDDED_ARTICLES{
     {"Connect",
      R"(This tool is used to connect to some address with specified subscription, and log or tape received data. By default it
 just logs all received records to a screen in text format.

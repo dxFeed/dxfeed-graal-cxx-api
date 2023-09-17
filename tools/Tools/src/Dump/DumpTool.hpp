@@ -11,7 +11,30 @@
 #include <utility>
 #include <variant>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
+#include <range/v3/all.hpp>
+
 namespace dxfcpp::tools {
+
+decltype(ranges::views::filter([](const auto &s) {
+    return !s.empty();
+})) filterNonEmpty{};
+
+decltype(ranges::views::transform([](auto &&s) {
+    return s | ranges::to<std::string>();
+})) transformToString{};
+
+decltype(ranges::views::transform([](const std::string &s) {
+    return trimStr(s);
+})) trim{};
+
+inline auto splitAndTrim = [](const std::string &s, char sep = ',') noexcept {
+    return s | ranges::views::split(sep) | transformToString | trim;
+};
 
 struct DumpTool {
     [[nodiscard]] std::string getName() const noexcept {
@@ -44,9 +67,66 @@ If <symbol> is not specified, the wildcard symbol is used.
         return {};
     }
 
+    struct Arg {};
 
-    struct Arg{};
+    struct PositionalArg {};
 
+    struct AddressArg : PositionalArg {
+        std::string name{"address"};
+        std::size_t position{0};
+        std::string helpText{R"(
+The address(es) to connect to retrieve data (see "Help address").
+For Token-Based Authorization, use the following format: "<address>:<port>[login=entitle:<token>]".
+)"};
+        bool required{true};
+
+        [[nodiscard]] std::string prepareHelp(std::size_t namePadding,
+                                              std::size_t nameFieldSize /* padding + name + padding */,
+                                              std::size_t windowSize) const noexcept {
+            auto nameField = fmt::format("{:{}}{:<{}}{:{}}", "", namePadding, getFullName(),
+                                         nameFieldSize - 2 * namePadding, "", namePadding);
+
+            // std::cout << nameField << std::endl;
+
+            auto helpTextSize = windowSize - nameFieldSize - 1;
+            auto fullHelpTextLines = splitAndTrim(getFullHelpText(), '\n') |
+                                     ranges::views::transform([helpTextSize](auto &&line) {
+                                         if (line.size() > helpTextSize) {
+                                             return line | ranges::views::chunk(helpTextSize) | transformToString |
+                                                    ranges::to<std::vector<std::string>>();
+                                         }
+
+                                         return std::vector<std::string>{{line}};
+                                     }) |
+                                     ranges::views::join | ranges::to<std::vector<std::string>>();
+
+            if (fullHelpTextLines.empty()) {
+                return nameField + "\n";
+            }
+
+            std::string result{};
+
+            for (std::size_t i = 0; i < fullHelpTextLines.size(); i++) {
+                if (i == 0) {
+                    result += fmt::format("{}{}\n", nameField, fullHelpTextLines[i]);
+                } else if (fullHelpTextLines[i].empty()) {
+                    result += "\n";
+                } else {
+                    result += fmt::format("{:{}}{}\n", "", nameFieldSize, fullHelpTextLines[i]);
+                }
+            }
+
+            return result;
+        }
+
+        [[nodiscard]] std::string getFullName() const noexcept {
+            return fmt::format("{} (pos. {})", name, position);
+        }
+
+        [[nodiscard]] std::string getFullHelpText() const noexcept {
+            return fmt::format("{}{}", required ? "Required. " : "", trimStr(helpText));
+        }
+    };
 
     struct Args {
         std::string address;

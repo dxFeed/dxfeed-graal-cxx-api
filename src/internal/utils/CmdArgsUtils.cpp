@@ -15,6 +15,7 @@
 #include <utf8.h>
 #include <utility>
 #include <vector>
+#include <locale>
 
 #include <fmt/chrono.h>
 #include <fmt/format.h>
@@ -55,8 +56,10 @@ auto splitAndTrim = [](auto &&symbols, char sep = ',') noexcept {
 };
 
 decltype(ranges::views::transform([](auto &&s) {
-    return s | ranges::views::transform([](unsigned char c) {
-               return std::toupper(c);
+    auto locale = std::locale{};
+
+    return s | ranges::views::transform([&locale](unsigned char c) {
+               return std::toupper(c, locale);
            }) |
            ranges::to<std::string>();
 })) transformToUpper{};

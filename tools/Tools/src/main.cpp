@@ -61,6 +61,15 @@ void showUsage(auto &&tools) noexcept {
 }
 
 int main(int argc, char *argv[]) {
+    auto [width, height] = Console::getSize();
+
+    std::cout << width << " x " << height << std::endl;
+
+    auto aa = tools::DumpTool::AddressArg{};
+    auto h = tools::DumpTool::AddressArg{}.prepareHelp(2, 2 + aa.getFullName().size() + 2, width);
+
+    std::cout << h << std::endl; return 0;
+
     std::vector<std::string> args{};
 
     if (argc > 1) {
