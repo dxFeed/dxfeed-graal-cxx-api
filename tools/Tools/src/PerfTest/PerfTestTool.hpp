@@ -47,70 +47,71 @@ Connects to the specified address(es) and calculates performance counters (event
 
     struct Diagnostic final {
       private:
-        bool showCpuUsageByCore{};
-        std::chrono::milliseconds cpuStartTime{};
-        std::atomic<std::size_t> eventsCounter{};
-        std::atomic<std::size_t> listenerCallsCounter{};
+        bool showCpuUsageByCore_{};
+        std::chrono::milliseconds cpuStartTime_{};
+        std::atomic<std::size_t> eventsCounter_{};
+        std::atomic<std::size_t> listenerCallsCounter_{};
 
-        double peakMemoryUsage{};
-        double peakCpuUsage{};
+        mutable std::mutex mtx_{};
+        double peakMemoryUsage_{};
+        double peakCpuUsage_{};
 
-        std::shared_ptr<Timer> timer{};
-        StopWatch timerDiff{};
-        StopWatch runningDiff{};
+        std::shared_ptr<Timer> timer_{};
+        StopWatch timerDiff_{};
+        StopWatch runningDiff_{};
 
-        explicit Diagnostic(bool showCpuUsageByCore) noexcept : showCpuUsageByCore{showCpuUsageByCore} {
-            timerDiff.restart();
-            runningDiff.restart();
-            cpuStartTime = ttldtor::process::Process::getTotalProcessorTime();
+        explicit Diagnostic(bool showCpuUsageByCore) noexcept : showCpuUsageByCore_{showCpuUsageByCore} {
+            timerDiff_.restart();
+            runningDiff_.restart();
+            cpuStartTime_ = ttldtor::process::Process::getTotalProcessorTime();
+        }
+
+        static std::string formatDouble(double value) noexcept {
+            return std::format("{:.2f}", std::isnan(value) ? 0.0 : value);
         }
 
         void onTimer() noexcept {
             auto eventsPerSecond = getEventsPerSecond();
             auto listenerCallsPerSecond = getListenerCallsPerSecond();
 
+            std::lock_guard lock{mtx_};
+
             auto currentMemoryUsage = getMemoryUsage();
-            peakMemoryUsage = currentMemoryUsage > peakMemoryUsage ? currentMemoryUsage : peakMemoryUsage;
+            peakMemoryUsage_ = currentMemoryUsage > peakMemoryUsage_ ? currentMemoryUsage : peakMemoryUsage_;
 
             auto currentCpuUsage = getCpuUsage();
-            peakCpuUsage = currentCpuUsage > peakCpuUsage ? currentCpuUsage : peakCpuUsage;
+            peakCpuUsage_ = currentCpuUsage > peakCpuUsage_ ? currentCpuUsage : peakCpuUsage_;
 
             fmt::print("\n{}\n", Platform::getPlatformInfo());
             std::cout << "----------------------------------------------------\n";
-            fmt::print("  Rate of events (avg)           : {:.2f} (events/s)\n",
-                       std::isnan(eventsPerSecond) ? 0.0 : eventsPerSecond);
-            fmt::print("  Rate of listener calls         : {:.2f} (calls/s)\n",
-                       std::isnan(listenerCallsPerSecond) ? 0.0 : listenerCallsPerSecond);
-
-            auto numberOfEventsInCall = eventsPerSecond / listenerCallsPerSecond;
-
-            fmt::print("  Number of events in call (avg) : {:.2f} (events)\n",
-                       std::isnan(numberOfEventsInCall) ? 0.0 : numberOfEventsInCall);
+            fmt::print("  Rate of events (avg)           : {} (events/s)\n", formatDouble(eventsPerSecond));
+            fmt::print("  Rate of listener calls         : {} (calls/s)\n", formatDouble(listenerCallsPerSecond));
+            fmt::print("  Number of events in call (avg) : {} (events)\n", formatDouble(eventsPerSecond / listenerCallsPerSecond));
             fmt::print("  Current memory usage           : {:.3f} (Mbyte)\n", currentMemoryUsage);
-            fmt::print("  Peak memory usage              : {:.3f} (Mbyte)\n", peakMemoryUsage);
+            fmt::print("  Peak memory usage              : {:.3f} (Mbyte)\n", peakMemoryUsage_);
             fmt::print("  Current CPU usage              : {:.2f} %\n", currentCpuUsage * 100.0);
-            fmt::print("  Peak CPU usage                 : {:.2f} %\n", peakCpuUsage * 100.0);
-            fmt::print("  Running time                   : {:%H:%M:%S}\n", runningDiff.elapsed());
+            fmt::print("  Peak CPU usage                 : {:.2f} %\n", peakCpuUsage_ * 100.0);
+            fmt::print("  Running time                   : {:%H:%M:%S}\n", runningDiff_.elapsed());
 
-            timerDiff.restart();
+            timerDiff_.restart();
         }
 
         std::size_t getAndResetEventsCounter() noexcept {
-            return eventsCounter.exchange(0);
+            return eventsCounter_.exchange(0);
         }
 
         std::size_t getAndResetListenerCallsCounter() noexcept {
-            return listenerCallsCounter.exchange(0);
+            return listenerCallsCounter_.exchange(0);
         }
 
         double getEventsPerSecond() noexcept {
             return static_cast<double>(getAndResetEventsCounter()) /
-                   static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(timerDiff.elapsed()).count());
+                   static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(timerDiff_.elapsed()).count());
         }
 
         double getListenerCallsPerSecond() noexcept {
             return static_cast<double>(getAndResetListenerCallsCounter()) /
-                   static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(timerDiff.elapsed()).count());
+                   static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(timerDiff_.elapsed()).count());
         }
 
         static double getMemoryUsage() noexcept {
@@ -119,13 +120,13 @@ Connects to the specified address(es) and calculates performance counters (event
 
         double getCpuUsage() noexcept {
             auto cpuEndTime = ttldtor::process::Process::getTotalProcessorTime();
-            auto cpuDiff = cpuEndTime - cpuStartTime;
+            auto cpuDiff = cpuEndTime - cpuStartTime_;
 
-            cpuStartTime = cpuEndTime;
+            cpuStartTime_ = cpuEndTime;
 
             return static_cast<double>(cpuDiff.count()) /
-                   (static_cast<double>(timerDiff.elapsed().count()) *
-                    static_cast<double>(!showCpuUsageByCore ? std::thread::hardware_concurrency() : 1));
+                   (static_cast<double>(timerDiff_.elapsed().count()) *
+                    static_cast<double>(!showCpuUsageByCore_ ? std::thread::hardware_concurrency() : 1));
         }
 
       public:
@@ -133,7 +134,7 @@ Connects to the specified address(es) and calculates performance counters (event
                                                   bool showCpuUsageByCore) noexcept {
             auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore));
 
-            d->timer = Timer::schedule(
+            d->timer_ = Timer::schedule(
                 [self = d] {
                     self->onTimer();
                 },
@@ -143,11 +144,11 @@ Connects to the specified address(es) and calculates performance counters (event
         }
 
         void addEventsCounter(std::size_t value) noexcept {
-            eventsCounter += value;
+            eventsCounter_ += value;
         }
 
         void addListenerCallsCounter(std::size_t value) noexcept {
-            listenerCallsCounter += value;
+            listenerCallsCounter_ += value;
         }
     };
 
@@ -170,7 +171,7 @@ Connects to the specified address(es) and calculates performance counters (event
 
         auto endpoint = DXEndpoint::newBuilder()
                             ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
-                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
+                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
                             ->withProperties(CmdArgsUtils::parseProperties(args.properties))
                             ->withName(getName() + "Tool")
                             ->build();
@@ -193,7 +194,7 @@ Connects to the specified address(es) and calculates performance counters (event
 
         sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols));
         endpoint->connect(args.address);
-        endpoint->awaitNotConnected(); // non blocking
+        endpoint->awaitNotConnected();
         endpoint->closeAndAwaitTermination();
 
         std::cout << hash << std::endl;
