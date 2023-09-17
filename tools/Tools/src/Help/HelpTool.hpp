@@ -8,12 +8,17 @@
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <string>
+#include <unordered_map>
 #include <utility>
 #include <variant>
 
 namespace dxfcpp::tools {
 
 struct HelpTool {
+    static const std::unordered_map<std::string, std::string, decltype(&icHash), decltype(&iEquals)>
+        EMBEDDED_ARTICLES;
+
     [[nodiscard]] std::string getName() const noexcept {
         return "Help";
     }

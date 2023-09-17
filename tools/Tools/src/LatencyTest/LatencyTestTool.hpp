@@ -82,23 +82,23 @@ struct LatencyTest {
             return std::format("{:.2f}", value);
         }
 
-        static double calcPercentile(std::vector<double> sequence, double excelPercentile) noexcept {
+        static double calcPercentile(std::vector<std::int64_t> sequence, double excelPercentile) noexcept {
             std::sort(std::begin(sequence), std::end(sequence));
 
             auto n = ((static_cast<double>(sequence.size()) - 1.0) * excelPercentile) + 1.0;
 
             if (std::abs(n - 1.0) < std::numeric_limits<double>::epsilon()) {
-                return sequence[0];
+                return static_cast<double>(sequence[0]);
             }
 
             if (std::abs(static_cast<double>(sequence.size()) - 1.0) < std::numeric_limits<double>::epsilon()) {
-                return sequence[sequence.size() - 1];
+                return static_cast<double>(sequence[sequence.size() - 1]);
             }
 
             auto k = static_cast<std::size_t>(n);
             auto d = n - static_cast<double>(k);
 
-            return sequence[k - 1] + (d * (sequence[k] - sequence[k - 1]));
+            return static_cast<double>(sequence[k - 1]) + (d * (static_cast<double>(sequence[k]) - static_cast<double>(sequence[k - 1])));
         }
 
         static double calcMin(auto &&values) noexcept {
@@ -120,9 +120,9 @@ struct LatencyTest {
                 return stdDev;
             }
 
-            auto avg = calcMean(values);
-            auto sum = std::accumulate(std::begin(values), std::end(values), 0.0, [avg](auto a, auto b) {
-                return a + (b - avg) * (b - avg);
+            double avg = calcMean(values);
+            double sum = std::accumulate(std::begin(values), std::end(values), 0.0, [avg](double a, std::int64_t b) {
+                return a + (static_cast<double>(b) - avg) * (static_cast<double>(b) - avg);
             });
 
             stdDev = std::sqrt(sum / (static_cast<double>(values.size()) - 1.0));
@@ -130,7 +130,7 @@ struct LatencyTest {
             return stdDev;
         }
 
-        static double calcStdErr(auto &&values, auto stdDev) noexcept {
+        static double calcStdErr(auto &&values, double stdDev) noexcept {
             return stdDev / std::sqrt(static_cast<double>(values.size()));
         }
 
@@ -144,7 +144,7 @@ struct LatencyTest {
                 min_ = calcMin(deltaTimes_);
                 mean_ = calcMean(deltaTimes_);
                 max_ = calcMax(deltaTimes_);
-                percentile_ = calcPercentile(std::vector<double>{deltaTimes_.begin(), deltaTimes_.end()}, 0.99);
+                percentile_ = calcPercentile(std::vector<std::int64_t>{deltaTimes_.begin(), deltaTimes_.end()}, 0.99);
                 stdDev_ = calcStdDev(deltaTimes_);
                 stdErr_ = calcStdErr(deltaTimes_, stdDev_);
                 sampleSize_ = deltaTimes_.size();

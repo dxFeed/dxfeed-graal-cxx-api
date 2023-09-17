@@ -7,6 +7,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <locale>
 #include <string>
 #include <thread>
@@ -29,9 +30,8 @@ DXFCPP_EXPORT std::string toString(double d);
 
 template <typename T> std::string toStringAny(T &&t);
 
-template <typename T, typename U>
-std::string toString(const std::pair<T, U>& p) {
-    return "{" + toStringAny(p.first) + ", " +  toStringAny(p.second) + "}";
+template <typename T, typename U> std::string toString(const std::pair<T, U> &p) {
+    return "{" + toStringAny(p.first) + ", " + toStringAny(p.second) + "}";
 }
 
 template <typename T> std::string toStringAny(T &&t) {
@@ -145,7 +145,7 @@ inline bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
     auto firstIt = std::begin(first);
     auto secondIt = std::begin(second);
 
-    for (; firstIt != std::end(first) && secondIt != std::end(second); ++firstIt, secondIt++) {
+    for (; firstIt != std::end(first) && secondIt != std::end(second); ++firstIt, ++secondIt) {
         if (!cmp(*firstIt, *secondIt)) {
             return false;
         }
@@ -154,9 +154,21 @@ inline bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
     return (secondIt == std::end(second)) && (firstIt == std::end(first));
 }
 
-template <typename Range1, typename Range2>
-inline bool iEquals(const Range1 &first, const Range2 &second, const std::locale &locale = std::locale()) {
+DXFCPP_EXPORT inline bool iEquals(const std::string &first, const std::string &second) noexcept {
+    const std::locale &locale = std::locale();
+
     return equals(first, second, detail::IsIEqual(locale));
+}
+
+DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
+    const std::locale &locale = std::locale();
+    std::string result{};
+
+    for (auto c : s) {
+        result += std::tolower(c, locale);
+    }
+
+    return std::hash<std::string>()(result);
 }
 
 DXFCPP_EXPORT std::string trimStr(const std::string &s) noexcept;

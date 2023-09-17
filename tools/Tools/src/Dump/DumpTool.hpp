@@ -45,6 +45,9 @@ If <symbol> is not specified, the wildcard symbol is used.
     }
 
 
+    struct Arg{};
+
+
     struct Args {
         std::string address;
         std::optional<std::string> types;
