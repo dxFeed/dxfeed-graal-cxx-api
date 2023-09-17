@@ -13,6 +13,11 @@
 
 #include <process/process.hpp>
 
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
 namespace dxfcpp::tools {
 
 struct PerfTestTool {
@@ -40,158 +45,124 @@ Connects to the specified address(es) and calculates performance counters (event
         return {};
     }
 
-    struct Diagnostic {
-        std::chrono::seconds measurementPeriod{};
+    struct Diagnostic final {
+      private:
         bool showCpuUsageByCore{};
         std::chrono::milliseconds cpuStartTime{};
-        std::atomic<std::size_t> eventCounter{};
-        std::atomic<std::size_t> listenerCounter{};
+        std::atomic<std::size_t> eventsCounter{};
+        std::atomic<std::size_t> listenerCallsCounter{};
 
-        std::mutex mtx{};
         double peakMemoryUsage{};
         double peakCpuUsage{};
 
         std::shared_ptr<Timer> timer{};
+        StopWatch timerDiff{};
+        StopWatch runningDiff{};
 
-        Diagnostic(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore) noexcept
-            : measurementPeriod{measurementPeriod}, showCpuUsageByCore{showCpuUsageByCore} {
+        explicit Diagnostic(bool showCpuUsageByCore) noexcept : showCpuUsageByCore{showCpuUsageByCore} {
+            timerDiff.restart();
+            runningDiff.restart();
             cpuStartTime = ttldtor::process::Process::getTotalProcessorTime();
-
-            timer = Timer::schedule([&]{}, measurementPeriod, measurementPeriod);
         }
 
-        void addEventCounter(std::size_t value) {
-            eventCounter += value;
+        void onTimer() noexcept {
+            auto eventsPerSecond = getEventsPerSecond();
+            auto listenerCallsPerSecond = getListenerCallsPerSecond();
+
+            auto currentMemoryUsage = getMemoryUsage();
+            peakMemoryUsage = currentMemoryUsage > peakMemoryUsage ? currentMemoryUsage : peakMemoryUsage;
+
+            auto currentCpuUsage = getCpuUsage();
+            peakCpuUsage = currentCpuUsage > peakCpuUsage ? currentCpuUsage : peakCpuUsage;
+
+            std::cout << "\n----------------------------------------------------\n";
+            fmt::print("  Rate of events (avg)           : {:.2f} (events/s)\n",
+                       std::isnan(eventsPerSecond) ? 0.0 : eventsPerSecond);
+            fmt::print("  Rate of listener calls         : {:.2f} (calls/s)\n",
+                       std::isnan(listenerCallsPerSecond) ? 0.0 : listenerCallsPerSecond);
+
+            auto numberOfEventsInCall = eventsPerSecond / listenerCallsPerSecond;
+
+            fmt::print("  Number of events in call (avg) : {:.2f} (events)\n",
+                       std::isnan(numberOfEventsInCall) ? 0.0 : numberOfEventsInCall);
+            fmt::print("  Current memory usage           : {:.3f} (Mbyte)\n", currentMemoryUsage);
+            fmt::print("  Peak memory usage              : {:.3f} (Mbyte)\n", peakMemoryUsage);
+            fmt::print("  Current CPU usage              : {:.2f} %\n", currentCpuUsage * 100.0);
+            fmt::print("  Peak CPU usage                 : {:.2f} %\n", peakCpuUsage * 100.0);
+            fmt::print("  Running time                   : {:%H:%M:%S}\n", runningDiff.elapsed());
+
+            timerDiff.restart();
         }
 
-        void addListenerCounter(std::size_t value) {
-            listenerCounter += value;
+        std::size_t getAndResetEventsCounter() noexcept {
+            return eventsCounter.exchange(0);
+        }
+
+        std::size_t getAndResetListenerCallsCounter() noexcept {
+            return listenerCallsCounter.exchange(0);
+        }
+
+        double getEventsPerSecond() noexcept {
+            return static_cast<double>(getAndResetEventsCounter()) /
+                   static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(timerDiff.elapsed()).count());
+        }
+
+        double getListenerCallsPerSecond() noexcept {
+            return static_cast<double>(getAndResetListenerCallsCounter()) /
+                   static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(timerDiff.elapsed()).count());
+        }
+
+        static double getMemoryUsage() noexcept {
+            return static_cast<double>(ttldtor::process::Process::getWorkingSetSize()) / 1024.0 / 1024.0;
+        }
+
+        double getCpuUsage() noexcept {
+            auto cpuEndTime = ttldtor::process::Process::getTotalProcessorTime();
+            auto cpuDiff = cpuEndTime - cpuStartTime;
+
+            cpuStartTime = cpuEndTime;
+
+            return static_cast<double>(cpuDiff.count()) /
+                   (static_cast<double>(timerDiff.elapsed().count()) *
+                    static_cast<double>(!showCpuUsageByCore ? std::thread::hardware_concurrency() : 1));
+        }
+
+      public:
+        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod,
+                                                  bool showCpuUsageByCore) noexcept {
+            auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore));
+
+            d->timer = Timer::schedule(
+                [self = d] {
+                    self->onTimer();
+                },
+                measurementPeriod, measurementPeriod);
+
+            return d;
+        }
+
+        void addEventsCounter(std::size_t value) noexcept {
+            eventsCounter += value;
+        }
+
+        void addListenerCallsCounter(std::size_t value) noexcept {
+            listenerCallsCounter += value;
         }
     };
 
-    //  private sealed class Diagnostic : IDisposable
-    //    {
-    //      private static readonly double CpuCoeff = GetCpuCoeff();
-    //      private static readonly string DiagnosticHeader = PlatformUtils.PlatformDiagInfo;
-    //      private static readonly NumberFormatInfo SpaceNumFormat = new() { NumberGroupSeparator = " " };
-    //
-    //      private readonly Timer _timer;
-    //      private readonly Process _currentProcess;
-    //
-    //      private readonly bool _showCpuUsageByCore;
-    //
-    //      private readonly Stopwatch _timerDiff = new();
-    //      private readonly Stopwatch _runningDiff = new();
-    //      private TimeSpan _cpuStartTime;
-    //      private long _eventCounter;
-    //      private long _listenerCounter;
-    //      private double _peakMemoryUsage;
-    //      private double _peakCpuUsage;
-    //
-    //      public Diagnostic(Process currentProcess, TimeSpan measurementPeriod, bool showCpuUsageByCore)
-    //        {
-    //            _showCpuUsageByCore = showCpuUsageByCore;
-    //            _currentProcess = currentProcess;
-    //            _timerDiff.Restart();
-    //            _runningDiff.Restart();
-    //            _cpuStartTime = _currentProcess.TotalProcessorTime;
-    //            _timer = new Timer(TimerCallback, null, measurementPeriod, measurementPeriod);
-    //        }
-    //
-    //      public void AddEventCounter(long value) =>
-    //                                           Interlocked.Add(ref _eventCounter, value);
-    //
-    //      public void AddListenerCounter(long value) =>
-    //                                              Interlocked.Add(ref _listenerCounter, value);
-    //
-    //      public void Dispose()
-    //        {
-    //            _currentProcess.Dispose();
-    //            _timer.Dispose();
-    //        }
-    //
-    //      private static double GetCpuCoeff()
-    //        {
-    //            if (PlatformUtils.IsAppleSilicon)
-    //            {
-    //                // Seems like a weird error in macOS with M1 processor.
-    //                // EndProcessorTime - StartProcessorTime returns a very small value.
-    //                // For example, if a process maxes out one core for 2 seconds,
-    //                // EndProcessorTime - StartProcessorTime should be ≈2000ms but it is ≈48ms.
-    //                // Test output:
-    //                // =======timer elapsed=======
-    //                // total: 00:00:00.2414159
-    //                // system: 00:00:00.2402822
-    //                // user: 00:00:00.0011358
-    //                // timeDiff: 2001.158 ms
-    //                // cpuUsageDiff: 48.1079 ms        # must be ≈2000ms
-    //                // =======timer elapsed end=======
-    //                // This factor temporarily solves the problem (2000ms / 48ms ≈ 41.6).
-    //                // There has already been an error associated with this counter
-    //                // https://github.com/dotnet/runtime/issues/29527
-    //                return 41.6;
-    //            }
-    //
-    //            return 1;
-    //        }
-    //
-    //      private static string FormatDouble(double value) =>
-    //                                                           double.IsNaN(value) ? "0" : value.ToString("N2",
-    //                                                           SpaceNumFormat);
-    //
-    //      private double GetEventsPerSec() =>
-    //                                   GetAndResetEventCounter() / _timerDiff.Elapsed.TotalSeconds;
-    //
-    //      private double GetListenerCallsPerSec() =>
-    //                                          GetAndResetListenerCounter() / _timerDiff.Elapsed.TotalSeconds;
-    //
-    //      private double GetMemoryUsage()
-    //        {
-    //            _currentProcess.Refresh();
-    //            return _currentProcess.WorkingSet64 / 1024.0 / 1024.0;
-    //        }
-    //
-    //      private double GetCpuUsage()
-    //        {
-    //            _currentProcess.Refresh();
-    //            var cpuEndTime = _currentProcess.TotalProcessorTime;
-    //            var cpuDiff = (cpuEndTime - _cpuStartTime) * CpuCoeff;
-    //            _cpuStartTime = cpuEndTime;
-    //            return cpuDiff / (_timerDiff.Elapsed * (!_showCpuUsageByCore ? PlatformUtils.LogicalCoreCount : 1));
-    //        }
-    //
-    //      private long GetAndResetEventCounter() =>
-    //                                         Interlocked.Exchange(ref _eventCounter, 0);
-    //
-    //      private long GetAndResetListenerCounter() =>
-    //                                            Interlocked.Exchange(ref _listenerCounter, 0);
-    //
-    //      private void TimerCallback(object? _)
-    //        {
-    //            var eventsPerSec = GetEventsPerSec();
-    //            var listenerCallsPerSec = GetListenerCallsPerSec();
-    //
-    //            var currentMemoryUsage = GetMemoryUsage();
-    //            _peakMemoryUsage = currentMemoryUsage > _peakMemoryUsage ? currentMemoryUsage : _peakMemoryUsage;
-    //
-    //            var currentCpuUsage = GetCpuUsage();
-    //            _peakCpuUsage = currentCpuUsage > _peakCpuUsage ? currentCpuUsage : _peakCpuUsage;
-    //
-    //            Console.WriteLine();
-    //            Console.WriteLine(DiagnosticHeader);
-    //            Console.WriteLine(@"----------------------------------------------");
-    //            Console.WriteLine(@$"  Rate of events (avg)           : {FormatDouble(eventsPerSec)} (events/s)");
-    //            Console.WriteLine(@$"  Rate of listener calls         : {FormatDouble(listenerCallsPerSec)}
-    //            (calls/s)"); Console.WriteLine(@$"  Number of events in call (avg) : {FormatDouble(eventsPerSec /
-    //            listenerCallsPerSec)} (events)"); Console.WriteLine(@$"  Current memory usage           :
-    //            {currentMemoryUsage} (Mbyte)"); Console.WriteLine(@$"  Peak memory usage              :
-    //            {_peakMemoryUsage} (Mbyte)"); Console.WriteLine(@$"  Current CPU usage              :
-    //            {currentCpuUsage:P2}"); Console.WriteLine(@$"  Peak CPU usage                 : {_peakCpuUsage:P2}");
-    //            Console.WriteLine(@$"  Running time                   : {_runningDiff.Elapsed}");
-    //
-    //            _timerDiff.Restart();
-    //        }
-    //    }
+    struct Args {
+        std::string address{};
+        std::string types{};
+        std::string symbols{};
+        std::optional<std::string> properties{};
+        bool forceStream{};
+        bool showCpuUsageByCore{};
+        bool detachListener{};
+
+        static Args parse(const std::vector<std::string> &args) noexcept {
+            return {};
+        }
+    };
 
     template <typename Args> void run(Args &&args) {
         using namespace std::literals;
@@ -204,34 +175,27 @@ Connects to the specified address(es) and calculates performance counters (event
                             ->build();
 
         auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types));
+        auto diagnostic = Diagnostic::create(2s, args.showCpuUsageByCore);
 
-        auto measurementPeriod = 2s;
+        std::atomic<std::size_t> hash{};
 
-        //        using var diagnostic =
-        //            new Diagnostic(Process.GetCurrentProcess(), measurementPeriod, args.ShowCpuUsageByCore);
-        //
-        //        if (!args.DetachListener)
-        //        {
-        //            sub.AddEventListener(events =>
-        //                                          {
-        //                                              var eventTypes = events as IEventType[] ?? events.ToArray();
-        //                                              diagnostic.AddListenerCounter(1);
-        //                                              diagnostic.AddEventCounter(eventTypes.Length);
-        //                                              foreach (var e in eventTypes)
-        //                                              {
-        //                                                  _blackHoleHashCode += e.GetHashCode();
-        //                                              }
-        //                                          });
-        //        }
-        //
-        //        sub.AddSymbols(ParseSymbols(args.Symbols!).ToList());
-        //
-        //        endpoint.Connect(args.Address);
-        //
-        //        endpoint.AwaitNotConnected();
-        //        endpoint.CloseAndAwaitTermination();
-        //
-        //        Output.WriteLine(_blackHoleHashCode);
+        if (!args.detachListener) {
+            sub->addEventListener([d = diagnostic, &hash](auto &&events) {
+                d->addListenerCallsCounter(1);
+                d->addEventsCounter(events.size());
+
+                for (auto &&e : events) {
+                    hash += std::hash<std::shared_ptr<EventType>>{}(e);
+                }
+            });
+        }
+
+        sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols));
+        endpoint->connect(args.address);
+        endpoint->awaitNotConnected(); // non blocking
+        endpoint->closeAndAwaitTermination();
+
+        std::cout << hash << std::endl;
     }
 };
 

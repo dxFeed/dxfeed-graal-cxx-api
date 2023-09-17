@@ -154,7 +154,7 @@ CmdArgsUtils::parseTypes(const std::string &types) noexcept {
         return {};
     }
 
-    if (trimmedTypes == "*" || iEquals(trimmedTypes, "all")) {
+    if (trimmedTypes == "*" || trimmedTypes == "all" || trimmedTypes == "All" || trimmedTypes == "ALL") {
         return EventTypeEnum::ALL | ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>();
     }
 

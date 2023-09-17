@@ -61,18 +61,6 @@ void showUsage(auto &&tools) noexcept {
 }
 
 int main(int argc, char *argv[]) {
-    auto stopWatch = StopWatch();
-    auto stopWatch2 = StopWatch();
-    stopWatch.restart();
-    stopWatch2.restart();
-    auto t = Timer::schedule([&]{
-        std::cerr << "T: " << std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now()).time_since_epoch().count() << std::endl;
-        std::cerr << "Elapsed: " << stopWatch.elapsed().count() << "ms" << std::endl;
-        std::cerr << "Elapsed2: " << stopWatch2.elapsed().count() << "ms" << std::endl;
-
-        stopWatch2.restart();
-    }, 2s, 2s);
-
     std::vector<std::string> args{};
 
     if (argc > 1) {
@@ -86,7 +74,9 @@ int main(int argc, char *argv[]) {
 
     std::cout << std::thread::hardware_concurrency() << std::endl;
 
-    tools::DumpTool{}.run(tools::DumpTool::Args{"demo.dxfeed.com:7300", "Quote", "AAPL"});
+    //tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"demo.dxfeed.com:7300", "all", "AAPL"});
+    //tools::PerfTestTool{}.run(tools::PerfTestTool::Args{R"(file:C:\Users\ttldt\Downloads\tapeK\tapeK.txt[readAs=stream_data,speed=max])", "all", "all"});
+    tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"127.0.0.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
 
     if (args.empty() || args[0] == "--help" || args[0] == "-h") {
         showUsage(tools);
