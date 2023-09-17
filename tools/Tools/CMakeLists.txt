@@ -40,6 +40,7 @@ add_executable(${PROJECT_NAME}
         src/Help/HelpTool.cpp
         src/LatencyTest/LatencyTestTool.cpp
         src/PerfTest/PerfTestTool.cpp
+        src/Args/Args.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ../../third_party/range-v3-0.12/include)

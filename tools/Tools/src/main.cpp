@@ -43,16 +43,17 @@ void showUsage(auto &&tools) noexcept {
 
     auto maxNameSize = ranges::max(tools | ranges::views::transform([](auto &&tool) {
                                        return std::visit(
-                                           [](auto &&t) {
-                                               return t.getName().size();
+                                           []<typename Tool>(Tool &&t) {
+                                               return std::decay_t<Tool>::NAME.size();
                                            },
                                            tool);
                                    }));
 
     for (auto &&tool : tools) {
         std::visit(
-            [maxNameSize](auto &&t) {
-                fmt::print("  {:{}}  {}\n", t.getName(), maxNameSize, t.getShortDescription());
+            [maxNameSize]<typename Tool>(Tool &&t) {
+                fmt::print("  {:{}}  {}\n", std::decay_t<Tool>::NAME, maxNameSize,
+                           std::decay_t<Tool>::SHORT_DESCRIPTION);
             },
             tool);
     }
@@ -65,10 +66,29 @@ int main(int argc, char *argv[]) {
 
     std::cout << width << " x " << height << std::endl;
 
-    auto aa = tools::DumpTool::AddressArg{};
-    auto h = tools::DumpTool::AddressArg{}.prepareHelp(2, 2 + aa.getFullName().size() + 2, width);
+    using Arg = std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired>;
 
-    std::cout << h << std::endl; return 0;
+    std::vector<Arg> argz{tools::AddressArg{}, tools::AddressArgRequired{}, tools::TypesArg{}, tools::TypesArgRequired{}};
+
+    auto maxNameSize = ranges::max(argz | ranges::views::transform([](auto &&arg) {
+                                       return std::visit(
+                                           []<typename Arg>(Arg &&) {
+                                               return std::decay_t<Arg>::getFullName().size();
+                                           },
+                                           arg);
+                                   }));
+
+    for (auto &&arg : argz) {
+        std::visit(
+            [maxNameSize, width]<typename Arg>(Arg &&) {
+                fmt::print("{}", std::decay_t<Arg>::prepareHelp(2, 2 + maxNameSize + 2, width));
+            },
+            arg);
+    }
+
+    auto h = tools::AddressArgRequired::prepareHelp(2, 2 + tools::AddressArgRequired::getFullName().size() + 2, width);
+    std::cout << h << std::endl;
+    return 0;
 
     std::vector<std::string> args{};
 
@@ -81,9 +101,9 @@ int main(int argc, char *argv[]) {
     std::vector<Tool> tools{tools::ConnectTool{}, tools::DumpTool{}, tools::HelpTool{}, tools::LatencyTest{},
                             tools::PerfTestTool{}};
 
-    //tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"demo.dxfeed.com:7300", "all", "AAPL"});
-    //tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"127.0.0.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
-    //tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"172.25.32.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
+    // tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"demo.dxfeed.com:7300", "all", "AAPL"});
+    // tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"127.0.0.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
+    // tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"172.25.32.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
     tools::LatencyTest{}.run(tools::LatencyTest::Args{"demo.dxfeed.com:7300", "all", "AAPL"});
 
     if (args.empty() || args[0] == "--help" || args[0] == "-h") {

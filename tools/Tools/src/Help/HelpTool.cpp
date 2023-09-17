@@ -279,4 +279,17 @@ Examples of valid date-times:
   2007-11-02Z
   123456789 // value-in-milliseconds)"},
 };
-}
+
+const std::string HelpTool::NAME{"Help"};
+const std::string HelpTool::SHORT_DESCRIPTION{"Help tool."};
+const std::string HelpTool::DESCRIPTION{R"(Displays documentation pages.)"};
+const std::vector<std::string> HelpTool::USAGE{
+    NAME + " <article>",
+    NAME + " <tool>",
+};
+const std::vector<std::string> HelpTool::ADDITIONAL_INFO{
+    R"(To see help on some topic type "Help <topic>".)",
+    R"(To see list of all articles type "Help contents".)",
+    R"(Use "Help all" to generate all existing help articles.)",
+};
+} // namespace dxfcpp::tools

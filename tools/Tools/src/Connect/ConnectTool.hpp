@@ -22,27 +22,11 @@
 namespace dxfcpp::tools {
 
 struct ConnectTool {
-    [[nodiscard]] std::string getName() const noexcept {
-        return "Connect";
-    }
-
-    [[nodiscard]] std::string getShortDescription() const noexcept {
-        return "Connects to specified address(es).";
-    }
-
-    [[nodiscard]] std::string getDescription() const noexcept {
-        return "Connects to the specified address(es) and subscribes to the specified symbols.";
-    }
-
-    [[nodiscard]] std::vector<std::string> getUsage() const noexcept {
-        return {
-            getName() + " <address> <types> <symbols> [<options>]",
-        };
-    }
-
-    [[nodiscard]] std::vector<std::string> getAdditionalInfo() const noexcept {
-        return {};
-    }
+    static const std::string NAME;
+    static const std::string SHORT_DESCRIPTION;
+    static const std::string DESCRIPTION;
+    static const std::vector<std::string> USAGE;
+    static const std::vector<std::string> ADDITIONAL_INFO;
 
     struct Args {
         std::string address;
@@ -66,7 +50,7 @@ struct ConnectTool {
             DXEndpoint::newBuilder()
                 ->withRole(DXEndpoint::Role::FEED)
                 ->withProperties(CmdArgsUtils::parseProperties(args.properties))
-                ->withName(getName() + "Tool")
+                ->withName(NAME + "Tool")
                 ->build();
 
         std::shared_ptr<DXFeedSubscription> sub = endpoint->getFeed()->createSubscription(
@@ -106,7 +90,7 @@ struct ConnectTool {
             auto pub = DXEndpoint::newBuilder()
                            ->withRole(DXEndpoint::Role::STREAM_PUBLISHER)
                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default
-                           ->withName(getName() + "Tool")
+                           ->withName(NAME + "Tool")
                            ->build()
                            ->connect(tape.starts_with("tape:") ? tape : "tape:" + tape)
                            ->getPublisher();

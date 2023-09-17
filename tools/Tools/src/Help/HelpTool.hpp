@@ -25,32 +25,11 @@ namespace dxfcpp::tools {
 struct HelpTool {
     static const std::unordered_map<std::string, std::string>
         EMBEDDED_ARTICLES;
-
-    [[nodiscard]] std::string getName() const noexcept {
-        return "Help";
-    }
-
-    [[nodiscard]] std::string getShortDescription() const noexcept {
-        return "Help tool.";
-    }
-
-    [[nodiscard]] std::string getDescription() const noexcept {
-        return "Displays documentation pages.";
-    }
-
-    [[nodiscard]] std::vector<std::string> getUsage() const noexcept {
-        return {
-            getName() + " <article>",
-        };
-    }
-
-    [[nodiscard]] std::vector<std::string> getAdditionalInfo() const noexcept {
-        return {
-            R"(To see help on some topic type "Help <topic>".)",
-            R"(To see list of all articles type "Help contents".)",
-            R"(Use "Help all" to generate all existing help articles.)",
-        };
-    }
+    static const std::string NAME;
+    static const std::string SHORT_DESCRIPTION;
+    static const std::string DESCRIPTION;
+    static const std::vector<std::string> USAGE;
+    static const std::vector<std::string> ADDITIONAL_INFO;
 
     template <typename Args> void run(Args &&args) {
         using namespace std::literals;

@@ -24,27 +24,11 @@
 namespace dxfcpp::tools {
 
 struct LatencyTest {
-    [[nodiscard]] std::string getName() const noexcept {
-        return "LatencyTest";
-    }
-
-    [[nodiscard]] std::string getShortDescription() const noexcept {
-        return "Connects to the specified address(es) and calculates latency.";
-    }
-
-    [[nodiscard]] std::string getDescription() const noexcept {
-        return R"(Connects to the specified address(es) and calculates latency.)";
-    }
-
-    [[nodiscard]] std::vector<std::string> getUsage() const noexcept {
-        return {
-            getName() + " <address> <types> <symbols> [<options>]",
-        };
-    }
-
-    [[nodiscard]] std::vector<std::string> getAdditionalInfo() const noexcept {
-        return {};
-    }
+    static const std::string NAME;
+    static const std::string SHORT_DESCRIPTION;
+    static const std::string DESCRIPTION;
+    static const std::vector<std::string> USAGE;
+    static const std::vector<std::string> ADDITIONAL_INFO;
 
     struct Diagnostic final {
       private:
@@ -280,7 +264,7 @@ struct LatencyTest {
                             ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
                             ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
                             ->withProperties(CmdArgsUtils::parseProperties(args.properties))
-                            ->withName(getName() + "Tool")
+                            ->withName(NAME + "Tool")
                             ->build();
 
         auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types.has_value() ? args.types.value() : "all"));
