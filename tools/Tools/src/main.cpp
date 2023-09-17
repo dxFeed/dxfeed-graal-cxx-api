@@ -75,7 +75,8 @@ int main(int argc, char *argv[]) {
     std::cout << std::thread::hardware_concurrency() << std::endl;
 
     //tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"demo.dxfeed.com:7300", "all", "AAPL"});
-    tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"127.0.0.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
+    //tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"127.0.0.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
+    tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"172.25.32.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
 
     if (args.empty() || args[0] == "--help" || args[0] == "-h") {
         showUsage(tools);

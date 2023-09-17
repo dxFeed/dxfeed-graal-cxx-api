@@ -113,6 +113,7 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/EventClassList.cpp
         src/internal/SymbolList.cpp
         src/internal/Common.cpp
+        src/internal/Platform.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources

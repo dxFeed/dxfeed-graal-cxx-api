@@ -75,7 +75,8 @@ Connects to the specified address(es) and calculates performance counters (event
             auto currentCpuUsage = getCpuUsage();
             peakCpuUsage = currentCpuUsage > peakCpuUsage ? currentCpuUsage : peakCpuUsage;
 
-            std::cout << "\n----------------------------------------------------\n";
+            fmt::print("\n{}\n", Platform::getPlatformInfo());
+            std::cout << "----------------------------------------------------\n";
             fmt::print("  Rate of events (avg)           : {:.2f} (events/s)\n",
                        std::isnan(eventsPerSecond) ? 0.0 : eventsPerSecond);
             fmt::print("  Rate of listener calls         : {:.2f} (calls/s)\n",

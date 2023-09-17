@@ -17,6 +17,7 @@
 #include "internal/SymbolList.hpp"
 #include "internal/Timer.hpp"
 #include "internal/StopWatch.hpp"
+#include "internal/Platform.hpp"
 #include "internal/context/ApiContext.hpp"
 #include "internal/managers/DXEndpointManager.hpp"
 #include "internal/managers/DXFeedSubscriptionManager.hpp"
