@@ -79,7 +79,7 @@ struct LatencyTest {
                 return "---";
             }
 
-            return std::format("{:.2f}", value);
+            return fmt::format("{:.2f}", value);
         }
 
         static double calcPercentile(std::vector<std::int64_t> sequence, double excelPercentile) noexcept {

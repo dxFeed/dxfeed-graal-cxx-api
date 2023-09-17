@@ -67,7 +67,7 @@ Connects to the specified address(es) and calculates performance counters (event
         }
 
         static std::string formatDouble(double value) noexcept {
-            return std::format("{:.2f}", std::isnan(value) ? 0.0 : value);
+            return fmt::format("{:.2f}", std::isnan(value) ? 0.0 : value);
         }
 
         void onTimer() noexcept {
