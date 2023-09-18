@@ -5,6 +5,8 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "../Args/Args.hpp"
+
 #include <chrono>
 #include <cstdint>
 #include <list>
@@ -82,7 +84,8 @@ struct LatencyTest {
             auto k = static_cast<std::size_t>(n);
             auto d = n - static_cast<double>(k);
 
-            return static_cast<double>(sequence[k - 1]) + (d * (static_cast<double>(sequence[k]) - static_cast<double>(sequence[k - 1])));
+            return static_cast<double>(sequence[k - 1]) +
+                   (d * (static_cast<double>(sequence[k]) - static_cast<double>(sequence[k - 1])));
         }
 
         static double calcMin(auto &&values) noexcept {
@@ -246,14 +249,23 @@ struct LatencyTest {
 
     struct Args {
         std::string address{};
-        std::optional<std::string>  types{};
-        std::optional<std::string>  symbols{};
+        std::optional<std::string> types{};
+        std::optional<std::string> symbols{};
         std::optional<std::string> properties{};
         bool forceStream{};
         std::size_t interval{2};
 
-        static Args parse(const std::vector<std::string> &args) noexcept {
-            return {};
+        static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
+            auto parsedAddress = AddressArgRequired::parse(args);
+
+            if (parsedAddress.isError) {
+                return ParseResult<Args>::error(parsedAddress.errorString);
+            }
+
+            auto parsedTypes = TypesArg::parse(args);
+            auto parsedSymbols = SymbolsArg::parse(args);
+
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, {}, false, 2});
         }
     };
 
@@ -267,7 +279,8 @@ struct LatencyTest {
                             ->withName(NAME + "Tool")
                             ->build();
 
-        auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types.has_value() ? args.types.value() : "all"));
+        auto sub = endpoint->getFeed()->createSubscription(
+            CmdArgsUtils::parseTypes(args.types.has_value() ? args.types.value() : "all"));
         auto diagnostic = Diagnostic::create(std::chrono::seconds(args.interval));
 
         sub->addEventListener([d = diagnostic](auto &&events) {

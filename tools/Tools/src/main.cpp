@@ -66,9 +66,11 @@ int main(int argc, char *argv[]) {
 
     std::cout << width << " x " << height << std::endl;
 
-    using Arg = std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired>;
+    using Arg = std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired,
+                             tools::SymbolsArg, tools::SymbolsArgRequired>;
 
-    std::vector<Arg> argz{tools::AddressArg{}, tools::AddressArgRequired{}, tools::TypesArg{}, tools::TypesArgRequired{}};
+    std::vector<Arg> argz{tools::AddressArg{}, tools::AddressArgRequired{}, tools::TypesArg{},
+                          tools::TypesArgRequired{}, tools::SymbolsArg{}, tools::SymbolsArgRequired{}};
 
     auto maxNameSize = ranges::max(argz | ranges::views::transform([](auto &&arg) {
                                        return std::visit(
@@ -86,8 +88,6 @@ int main(int argc, char *argv[]) {
             arg);
     }
 
-    auto h = tools::AddressArgRequired::prepareHelp(2, 2 + tools::AddressArgRequired::getFullName().size() + 2, width);
-    std::cout << h << std::endl;
     return 0;
 
     std::vector<std::string> args{};

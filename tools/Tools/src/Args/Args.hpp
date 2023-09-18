@@ -187,4 +187,52 @@ struct TypesArgRequired : TypesArg {
     }
 };
 
+struct SymbolsArg : PositionalArg {
+    const static std::string NAME;
+    const static std::size_t POSITION{2};
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<SymbolsArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return fmt::format("{} (pos. {})", NAME, POSITION);
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args) {
+        return ParseResult<std::optional<std::string>>::ok(args.size() > POSITION ? std::optional{args[POSITION]}
+                                                                                  : std::nullopt);
+    }
+};
+
+struct SymbolsArgRequired : SymbolsArg {
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<SymbolsArgRequired>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return fmt::format("Required. {}", trimStr(HELP_TEXT));
+    }
+
+    static ParseResult<std::string> parse(const std::vector<std::string> &args) {
+        if (args.size() > POSITION) {
+            return ParseResult<std::string>::ok(args[POSITION]);
+        }
+
+        return ParseResult<std::string>::error("Symbols parsing error. Insufficient parameters.");
+    }
+};
+
+
+
+
 } // namespace dxfcpp::tools

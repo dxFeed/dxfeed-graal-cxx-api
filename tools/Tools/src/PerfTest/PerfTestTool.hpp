@@ -5,6 +5,8 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "../Args/Args.hpp"
+
 #include <chrono>
 #include <cstdint>
 #include <memory>
@@ -70,7 +72,8 @@ struct PerfTestTool {
             std::cout << "----------------------------------------------------\n";
             fmt::print("  Rate of events (avg)           : {} (events/s)\n", formatDouble(eventsPerSecond));
             fmt::print("  Rate of listener calls         : {} (calls/s)\n", formatDouble(listenerCallsPerSecond));
-            fmt::print("  Number of events in call (avg) : {} (events)\n", formatDouble(eventsPerSecond / listenerCallsPerSecond));
+            fmt::print("  Number of events in call (avg) : {} (events)\n",
+                       formatDouble(eventsPerSecond / listenerCallsPerSecond));
             fmt::print("  Current memory usage           : {:.3f} (Mbyte)\n", currentMemoryUsage);
             fmt::print("  Peak memory usage              : {:.3f} (Mbyte)\n", peakMemoryUsage_);
             fmt::print("  Current CPU usage              : {:.2f} %\n", currentCpuUsage * 100.0);
@@ -145,8 +148,26 @@ struct PerfTestTool {
         bool showCpuUsageByCore{};
         bool detachListener{};
 
-        static Args parse(const std::vector<std::string> &args) noexcept {
-            return {};
+        static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
+            auto parsedAddress = AddressArgRequired::parse(args);
+
+            if (parsedAddress.isError) {
+                return ParseResult<Args>::error(parsedAddress.errorString);
+            }
+
+            auto parsedTypes = TypesArgRequired::parse(args);
+
+            if (parsedTypes.isError) {
+                return ParseResult<Args>::error(parsedTypes.errorString);
+            }
+
+            auto parsedSymbols = SymbolsArgRequired::parse(args);
+
+            if (parsedSymbols.isError) {
+                return ParseResult<Args>::error(parsedSymbols.errorString);
+            }
+
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, {}, false, false, false});
         }
     };
 

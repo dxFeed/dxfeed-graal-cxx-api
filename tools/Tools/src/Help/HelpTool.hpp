@@ -5,6 +5,8 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "../Args/Args.hpp"
+
 #include <chrono>
 #include <cstdint>
 #include <memory>

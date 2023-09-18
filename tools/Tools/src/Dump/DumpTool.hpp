@@ -38,13 +38,17 @@ struct DumpTool {
         bool isQuite;
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
-            auto r = AddressArgRequired::parse(args);
+            auto parsedAddress = AddressArgRequired::parse(args);
 
-            if (r.isError) {
-                return ParseResult<Args>::error(r.errorString);
+            if (parsedAddress.isError) {
+                return ParseResult<Args>::error(parsedAddress.errorString);
             }
 
-            return ParseResult<Args>::ok({r.result, {}, {}, {}, {}, false});
+            auto parsedTypes = TypesArg::parse(args);
+            auto parsedSymbols = SymbolsArg::parse(args);
+
+
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, {}, {}, false});
         }
     };
 

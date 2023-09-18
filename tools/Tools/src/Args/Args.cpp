@@ -17,4 +17,11 @@ Comma-separated list of dxfeed event types (e.g. Quote, TimeAndSale).
 Use "all" for all available event types.
 )"};
 
+const std::string SymbolsArg::NAME{"symbols"};
+const std::string SymbolsArg::HELP_TEXT{R"(
+Comma-separated list of symbol names to get events for (e.g. "IBM, AAPL, MSFT").
+Use "all" for wildcard subscription.
+The "dxfeed.wildcard.enable" property must be set to true to enable wildcard subscription.
+)"};
+
 }

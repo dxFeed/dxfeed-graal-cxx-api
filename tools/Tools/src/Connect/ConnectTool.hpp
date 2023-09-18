@@ -5,6 +5,8 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "../Args/Args.hpp"
+
 #include <chrono>
 #include <cstdint>
 #include <iostream>
@@ -38,8 +40,27 @@ struct ConnectTool {
         std::optional<std::string> tape;
         bool isQuite;
 
-        static Args parse(const std::vector<std::string> &args) noexcept {
-            return {};
+        static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
+            auto parsedAddress = AddressArgRequired::parse(args);
+
+            if (parsedAddress.isError) {
+                return ParseResult<Args>::error(parsedAddress.errorString);
+            }
+
+            auto parsedTypes = TypesArgRequired::parse(args);
+
+            if (parsedTypes.isError) {
+                return ParseResult<Args>::error(parsedTypes.errorString);
+            }
+
+            auto parsedSymbols = SymbolsArgRequired::parse(args);
+
+            if (parsedSymbols.isError) {
+                return ParseResult<Args>::error(parsedSymbols.errorString);
+            }
+
+
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, {}, {}, {}, {}, false});
         }
     };
 
