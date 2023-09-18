@@ -6,8 +6,7 @@
 namespace dxfcpp::tools {
 const std::string ConnectTool::NAME{"Connect"};
 const std::string ConnectTool::SHORT_DESCRIPTION{"Connects to specified address(es)."};
-const std::string ConnectTool::DESCRIPTION{
-    R"(
+const std::string ConnectTool::DESCRIPTION{R"(
 Connects to the specified address(es) and subscribes to the specified symbols.
 )"};
 const std::vector<std::string> ConnectTool::USAGE{

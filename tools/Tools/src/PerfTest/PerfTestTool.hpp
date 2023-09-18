@@ -31,6 +31,24 @@ struct PerfTestTool {
     static const std::vector<std::string> USAGE;
     static const std::vector<std::string> ADDITIONAL_INFO;
 
+    // TODO: add
+    static const std::vector<ArgType> ARGS;
+
+    [[nodiscard]] static std::string getName() noexcept {
+        return NAME;
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NAME;
+    }
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t) noexcept {
+        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(),
+                           nameFieldSize - 2 * namePadding, "", namePadding, SHORT_DESCRIPTION);
+    }
+
     struct Diagnostic final {
       private:
         bool showCpuUsageByCore_{};

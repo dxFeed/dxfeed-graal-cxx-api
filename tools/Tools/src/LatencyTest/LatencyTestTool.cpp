@@ -13,4 +13,7 @@ const std::vector<std::string> LatencyTest::USAGE{
     NAME + " <address> <types> <symbols> [<options>]",
 };
 const std::vector<std::string> LatencyTest::ADDITIONAL_INFO{};
-}
+
+const std::vector<ArgType> LatencyTest::ARGS{AddressArgRequired{}, TypesArg{},    SymbolsArg{}, PropertiesArg{},
+                                             ForceStreamArg{},     IntervalArg{}, HelpArg{}};
+} // namespace dxfcpp::tools

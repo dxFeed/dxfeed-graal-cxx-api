@@ -31,74 +31,42 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace ttldtor::process;
 
-using Tool =
-    std::variant<tools::ConnectTool, tools::DumpTool, tools::HelpTool, tools::LatencyTest, tools::PerfTestTool>;
-
 auto getVersion() noexcept {
     return "Tools " DXFCXX_VERSION;
 }
 
-void showUsage(auto &&tools) noexcept {
-    std::cout << getVersion() << "\n\nUsage:\n  Tools <tool> [...]\n\nWhere <tool> is one of:\n";
+struct Tools {
+    static const std::string NAME;
+    static const std::string SHORT_DESCRIPTION;
+    static const std::string DESCRIPTION;
+    static const std::vector<std::string> USAGE;
+    static const std::vector<std::string> ADDITIONAL_INFO;
+    static const std::vector<tools::HelpTool::Tool> ARGS;
 
-    auto maxNameSize = ranges::max(tools | ranges::views::transform([](auto &&tool) {
-                                       return std::visit(
-                                           []<typename Tool>(Tool &&t) {
-                                               return std::decay_t<Tool>::NAME.size();
-                                           },
-                                           tool);
-                                   }));
-
-    for (auto &&tool : tools) {
-        std::visit(
-            [maxNameSize]<typename Tool>(Tool &&t) {
-                fmt::print("  {:{}}  {}\n", std::decay_t<Tool>::NAME, maxNameSize,
-                           std::decay_t<Tool>::SHORT_DESCRIPTION);
-            },
-            tool);
+    [[nodiscard]] static std::string getName() noexcept {
+        return "Tools " DXFCXX_VERSION;
     }
 
-    std::cout << "\nTo get detailed help on some tool use \"Help <tool>\".\n";
-}
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return "Tools " DXFCXX_VERSION;
+    }
+};
+
+const std::string Tools::NAME{"Tools"};
+const std::string Tools::SHORT_DESCRIPTION{"A collection of useful utilities that use the dxFeed API."};
+const std::string Tools::DESCRIPTION{};
+const std::vector<std::string> Tools::USAGE{
+    NAME + " <tool> [...]",
+};
+const std::vector<std::string> Tools::ADDITIONAL_INFO{
+    {R"(To get detailed help on some tool use "Help <tool>".)"},
+};
+
+const std::vector<tools::HelpTool::Tool> Tools::ARGS{tools::HelpTool::ALL_TOOLS | ranges::views::values |
+                                                     ranges::to<std::vector>};
 
 int main(int argc, char *argv[]) {
-    std:: cout << tools::HelpTool::generateHelpScreen<tools::ConnectTool>(); return 0;
-
-    auto [width, height] = Console::getSize();
-
-    std::cout << width << " x " << height << std::endl;
-
-    using Arg = std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired,
-                             tools::SymbolsArg, tools::SymbolsArgRequired, tools::PropertiesArg, tools::FromTimeArg,
-                             tools::SourceArg, tools::TapeArg, tools::QuiteArg, tools::ForceStreamArg,
-                             tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg, tools::HelpArg>;
-
-    std::vector<Arg> argz{tools::AddressArg{},        tools::AddressArgRequired{},
-                          tools::TypesArg{},          tools::TypesArgRequired{},
-                          tools::SymbolsArg{},        tools::SymbolsArgRequired{},
-                          tools::PropertiesArg{},     tools::FromTimeArg{},
-                          tools::SourceArg{},         tools::TapeArg{},
-                          tools::QuiteArg{},          tools::ForceStreamArg{},
-                          tools::CPUUsageByCoreArg{}, tools::DetachListenerArg{},
-                          tools::IntervalArg{},       tools::HelpArg{}};
-
-    auto maxNameSize = ranges::max(argz | ranges::views::transform([](auto &&arg) {
-                                       return std::visit(
-                                           []<typename Arg>(Arg &&) {
-                                               return std::decay_t<Arg>::getFullName().size();
-                                           },
-                                           arg);
-                                   }));
-
-    for (auto &&arg : argz) {
-        std::visit(
-            [maxNameSize, width]<typename Arg>(Arg &&) {
-                fmt::print("{}", std::decay_t<Arg>::prepareHelp(2, 2 + maxNameSize + 2, width));
-            },
-            arg);
-    }
-
-    return 0;
+    const auto usage = tools::HelpTool::generateHelpScreen<Tools>();
 
     std::vector<std::string> args{};
 
@@ -108,16 +76,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    std::vector<Tool> tools{tools::ConnectTool{}, tools::DumpTool{}, tools::HelpTool{}, tools::LatencyTest{},
-                            tools::PerfTestTool{}};
-
-    // tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"demo.dxfeed.com:7300", "all", "AAPL"});
-    // tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"127.0.0.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
-    // tools::PerfTestTool{}.run(tools::PerfTestTool::Args{"172.25.32.1:6666", "TimeAndSale", "ETH/USD:GDAX"});
-    tools::LatencyTest{}.run(tools::LatencyTest::Args{"demo.dxfeed.com:7300", "all", "AAPL"});
-
     if (args.empty() || args[0] == "--help" || args[0] == "-h") {
-        showUsage(tools);
+        std::cout << usage << std::endl;
 
         return 0;
     }
@@ -128,11 +88,33 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    //    std::cout << "Memory usage: " << Process::getPhysicalMemorySize() / 1024 << "KB" << std::endl;
-    //    std::cout << "Total CPU time: " << Process::getTotalProcessorTime().count() << "ms" << std::endl;
-    //
-    //    dxfcpp::DXFeed::getInstance();
-    //
-    //    std::cout << "Memory usage: " << Process::getPhysicalMemorySize() / 1024 << "KB" << std::endl;
-    //    std::cout << "Total CPU time: " << Process::getTotalProcessorTime().count() << "ms" << std::endl;
+    for (auto &&[name, tool] : tools::HelpTool::ALL_TOOLS) {
+        if (iEquals(args[0], name)) {
+            std::visit(
+                [&args]<typename Tool>(Tool &&t) {
+                    using T = std::decay_t<Tool>;
+
+                    auto result = T::Args::parse(args | ranges::views::drop(1) | ranges::to<std::vector>);
+
+                    if (result.isHelp) {
+                        std::cout << tools::HelpTool::generateHelpScreen<T>() << "\n";
+
+                        return;
+                    }
+
+                    if (result.isError) {
+                        std::cout << tools::HelpTool::generateHelpScreen<T>(result.errorString) << "\n";
+
+                        return;
+                    }
+                },
+                tool);
+
+            return 0;
+        }
+    }
+
+    std::cout << getVersion() << "\n";
+
+    return 0;
 }

@@ -6,18 +6,21 @@
 namespace dxfcpp::tools {
 
 const std::string AddressArg::NAME{"address"};
+const std::size_t AddressArg::POSITION{0};
 const std::string AddressArg::HELP_TEXT{R"(
 The address(es) to connect to retrieve data (see "Help address").
 For Token-Based Authorization, use the following format: "<address>:<port>[login=entitle:<token>]".
 )"};
 
 const std::string TypesArg::NAME{"types"};
+const std::size_t TypesArg::POSITION{1};
 const std::string TypesArg::HELP_TEXT{R"(
 Comma-separated list of dxfeed event types (e.g. Quote, TimeAndSale).
 Use "all" for all available event types.
 )"};
 
 const std::string SymbolsArg::NAME{"symbols"};
+const std::size_t SymbolsArg::POSITION{2};
 const std::string SymbolsArg::HELP_TEXT{R"(
 Comma-separated list of symbol names to get events for (e.g. "IBM, AAPL, MSFT").
 Use "all" for wildcard subscription.
@@ -92,6 +95,12 @@ const std::string HelpArg::SHORT_NAME{"h"};
 const std::string HelpArg::LONG_NAME{"help"};
 const std::string HelpArg::HELP_TEXT{R"(
 Display this help screen.
+)"};
+
+const std::string ArticleArgRequired::NAME{"article"};
+const std::size_t ArticleArgRequired::POSITION{0};
+const std::string ArticleArgRequired::HELP_TEXT{R"(
+Help article to show.
 )"};
 
 }

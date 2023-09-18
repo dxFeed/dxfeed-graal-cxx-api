@@ -3,6 +3,18 @@
 
 #include "HelpTool.hpp"
 
+#include "../Connect/ConnectTool.hpp"
+#include "../Dump/DumpTool.hpp"
+#include "../LatencyTest/LatencyTestTool.hpp"
+#include "../PerfTest/PerfTestTool.hpp"
+
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+#include <fmt/std.h>
+
+#include <range/v3/all.hpp>
+
 namespace dxfcpp::tools {
 const std::unordered_map<std::string, std::string> HelpTool::EMBEDDED_ARTICLES{
     {"Connect",
@@ -287,11 +299,27 @@ Displays documentation pages.
 )"};
 const std::vector<std::string> HelpTool::USAGE{
     NAME + " <article>",
-    NAME + " <tool>",
+    NAME + " contents",
+    NAME + " all",
 };
 const std::vector<std::string> HelpTool::ADDITIONAL_INFO{
     R"(To see help on some topic type "Help <topic>".)",
     R"(To see list of all articles type "Help contents".)",
     R"(Use "Help all" to generate all existing help articles.)",
 };
+
+const std::vector<ArgType> HelpTool::ARGS{ArticleArgRequired{}, HelpArg{}};
+
+const std::unordered_map<std::string, HelpTool::Tool> HelpTool::ALL_TOOLS{{ConnectTool::getName(), ConnectTool{}},
+                                                                          {DumpTool::getName(), DumpTool{}},
+                                                                          {HelpTool::getName(), HelpTool{}},
+                                                                          {LatencyTest::getName(), LatencyTest{}},
+                                                                          {PerfTestTool::getName(), PerfTestTool{}}};
+
+const std::vector<std::string> HelpTool::ALL_TOOL_NAMES =
+    ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
+
+const std::vector<std::string> HelpTool::ALL_ARTICLE_NAMES =
+    EMBEDDED_ARTICLES | ranges::views::keys | ranges::to<std::vector<std::string>>();
+
 } // namespace dxfcpp::tools
