@@ -41,17 +41,22 @@ template <typename R> struct ParseResult {
     R result{};
     std::string errorString{};
     bool isError{};
+    bool isHelp{};
 
     static ParseResult ok(R &&r) noexcept {
-        return {r, "", false};
+        return {r, "", false, false};
     }
 
     static ParseResult ok(const R &r) noexcept {
-        return {r, "", false};
+        return {r, "", false, false};
     }
 
     static ParseResult error(const std::string &errorString) {
-        return {{}, errorString, true};
+        return {{}, errorString, true, false};
+    }
+
+    static ParseResult help() {
+        return {{}, {}, false, true};
     }
 };
 
@@ -540,5 +545,36 @@ struct IntervalArg : NamedUnsignedIntArg {
         return NamedUnsignedIntArg::parse<IntervalArg>(args, index);
     }
 };
+
+struct HelpArg : FlagArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<HelpArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<HelpArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) {
+        return FlagArg::parse<HelpArg>(args, index);
+    }
+};
+
+
+using ArgType = std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired,
+                         tools::SymbolsArg, tools::SymbolsArgRequired, tools::PropertiesArg, tools::FromTimeArg,
+                         tools::SourceArg, tools::TapeArg, tools::QuiteArg, tools::ForceStreamArg,
+                         tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg, tools::HelpArg>;
 
 } // namespace dxfcpp::tools

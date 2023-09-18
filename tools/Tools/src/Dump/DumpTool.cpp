@@ -19,4 +19,7 @@ const std::vector<std::string> DumpTool::USAGE{
     NAME + " <address> <types> <symbols> [<options>]",
 };
 const std::vector<std::string> DumpTool::ADDITIONAL_INFO{};
+
+const std::vector<ArgType> DumpTool::ARGS{AddressArgRequired{}, TypesArg{}, SymbolsArg{}, PropertiesArg{}, TapeArg{},
+                                          QuiteArg{},           HelpArg{}};
 } // namespace dxfcpp::tools

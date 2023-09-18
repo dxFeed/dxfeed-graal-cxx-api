@@ -12,6 +12,7 @@
 #include <memory>
 #include <utility>
 #include <variant>
+#include <vector>
 
 #include <fmt/chrono.h>
 #include <fmt/format.h>
@@ -28,6 +29,7 @@ struct DumpTool {
     static const std::string DESCRIPTION;
     static const std::vector<std::string> USAGE;
     static const std::vector<std::string> ADDITIONAL_INFO;
+    static const std::vector<ArgType> ARGS;
 
     struct Args {
         std::string address;
@@ -38,17 +40,56 @@ struct DumpTool {
         bool isQuite;
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
+            std::size_t index = 0;
+
+            if (HelpArg::parse(args, index).result) {
+                return ParseResult<Args>::help();
+            }
+
             auto parsedAddress = AddressArgRequired::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
             }
 
+            index++;
+
             auto parsedTypes = TypesArg::parse(args);
+
+            if (parsedTypes.result.has_value()) {
+                index++;
+            }
+
             auto parsedSymbols = SymbolsArg::parse(args);
 
+            if (parsedSymbols.result.has_value()) {
+                index++;
+            }
 
-            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, {}, {}, false});
+            bool propertiesIsParsed{};
+            std::optional<std::string> properties{};
+            bool tapeIsParsed{};
+            std::optional<std::string> tape{};
+            bool isQuite{};
+
+            if (index < args.size()) {
+                for (; index < args.size(); index++) {
+                    if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
+                        properties = PropertiesArg::parse(args, index).result;
+                        propertiesIsParsed = true;
+                        index++;
+                    } else if (!tapeIsParsed && TapeArg::canParse(args, index)) {
+                        tape = TapeArg::parse(args, index).result;
+                        tapeIsParsed = true;
+                        index++;
+                    } else if (!isQuite) {
+                        isQuite = QuiteArg::parse(args, index).result;
+                    }
+                }
+            }
+
+            return ParseResult<Args>::ok(
+                {parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties, tape, isQuite});
         }
     };
 

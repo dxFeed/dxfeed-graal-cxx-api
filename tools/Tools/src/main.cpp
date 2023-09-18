@@ -62,6 +62,8 @@ void showUsage(auto &&tools) noexcept {
 }
 
 int main(int argc, char *argv[]) {
+    std:: cout << tools::HelpTool::generateHelpScreen<tools::DumpTool>(); return 0;
+
     auto [width, height] = Console::getSize();
 
     std::cout << width << " x " << height << std::endl;
@@ -69,13 +71,16 @@ int main(int argc, char *argv[]) {
     using Arg = std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired,
                              tools::SymbolsArg, tools::SymbolsArgRequired, tools::PropertiesArg, tools::FromTimeArg,
                              tools::SourceArg, tools::TapeArg, tools::QuiteArg, tools::ForceStreamArg,
-                             tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg>;
+                             tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg, tools::HelpArg>;
 
-    std::vector<Arg> argz{tools::AddressArg{},        tools::AddressArgRequired{}, tools::TypesArg{},
-                          tools::TypesArgRequired{},  tools::SymbolsArg{},         tools::SymbolsArgRequired{},
-                          tools::PropertiesArg{},     tools::FromTimeArg{},        tools::SourceArg{},
-                          tools::TapeArg{},           tools::QuiteArg{},           tools::ForceStreamArg{},
-                          tools::CPUUsageByCoreArg{}, tools::DetachListenerArg{},  tools::IntervalArg{}};
+    std::vector<Arg> argz{tools::AddressArg{},        tools::AddressArgRequired{},
+                          tools::TypesArg{},          tools::TypesArgRequired{},
+                          tools::SymbolsArg{},        tools::SymbolsArgRequired{},
+                          tools::PropertiesArg{},     tools::FromTimeArg{},
+                          tools::SourceArg{},         tools::TapeArg{},
+                          tools::QuiteArg{},          tools::ForceStreamArg{},
+                          tools::CPUUsageByCoreArg{}, tools::DetachListenerArg{},
+                          tools::IntervalArg{},       tools::HelpArg{}};
 
     auto maxNameSize = ranges::max(argz | ranges::views::transform([](auto &&arg) {
                                        return std::visit(

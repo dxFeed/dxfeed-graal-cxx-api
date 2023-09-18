@@ -87,4 +87,11 @@ const std::string IntervalArg::HELP_TEXT{R"(
 Measurement interval in seconds.
 )"};
 
+const std::string HelpArg::NAME{"help"};
+const std::string HelpArg::SHORT_NAME{"h"};
+const std::string HelpArg::LONG_NAME{"help"};
+const std::string HelpArg::HELP_TEXT{R"(
+Display this help screen.
+)"};
+
 }
