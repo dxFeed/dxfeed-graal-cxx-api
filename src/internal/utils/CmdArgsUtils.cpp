@@ -58,7 +58,7 @@ auto splitAndTrim = [](auto &&symbols, char sep = ',') noexcept {
 decltype(ranges::views::transform([](auto &&s) {
     auto locale = std::locale{};
 
-    return s | ranges::views::transform([&locale](unsigned char c) {
+    return s | ranges::views::transform([&locale](auto c) {
                return std::toupper(c, locale);
            }) |
            ranges::to<std::string>();
