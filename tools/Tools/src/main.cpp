@@ -62,7 +62,7 @@ void showUsage(auto &&tools) noexcept {
 }
 
 int main(int argc, char *argv[]) {
-    std:: cout << tools::HelpTool::generateHelpScreen<tools::DumpTool>(); return 0;
+    std:: cout << tools::HelpTool::generateHelpScreen<tools::ConnectTool>(); return 0;
 
     auto [width, height] = Console::getSize();
 

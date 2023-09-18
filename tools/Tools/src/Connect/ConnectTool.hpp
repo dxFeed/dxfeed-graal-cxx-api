@@ -29,6 +29,7 @@ struct ConnectTool {
     static const std::string DESCRIPTION;
     static const std::vector<std::string> USAGE;
     static const std::vector<std::string> ADDITIONAL_INFO;
+    static const std::vector<ArgType> ARGS;
 
     struct Args {
         std::string address;
@@ -41,11 +42,19 @@ struct ConnectTool {
         bool isQuite;
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
+            std::size_t index = 0;
+
+            if (HelpArg::parse(args, index).result) {
+                return ParseResult<Args>::help();
+            }
+
             auto parsedAddress = AddressArgRequired::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
             }
+
+            index++;
 
             auto parsedTypes = TypesArgRequired::parse(args);
 
@@ -53,29 +62,66 @@ struct ConnectTool {
                 return ParseResult<Args>::error(parsedTypes.errorString);
             }
 
+            index++;
+
             auto parsedSymbols = SymbolsArgRequired::parse(args);
 
             if (parsedSymbols.isError) {
                 return ParseResult<Args>::error(parsedSymbols.errorString);
             }
 
+            index++;
 
-            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, {}, {}, {}, {}, false});
+            bool fromTimeIsParsed{};
+            std::optional<std::string> fromTime{};
+            bool sourceIsParsed{};
+            std::optional<std::string> source{};
+            bool propertiesIsParsed{};
+            std::optional<std::string> properties{};
+            bool tapeIsParsed{};
+            std::optional<std::string> tape{};
+            bool isQuite{};
+
+            if (index < args.size()) {
+                for (; index < args.size(); index++) {
+                    if (!fromTimeIsParsed && FromTimeArg::canParse(args, index)) {
+                        fromTime = FromTimeArg::parse(args, index).result;
+                        fromTimeIsParsed = true;
+                        index++;
+                    } else if (!sourceIsParsed && SourceArg::canParse(args, index)) {
+                        source = SourceArg::parse(args, index).result;
+                        sourceIsParsed = true;
+                        index++;
+                    } else if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
+                        properties = PropertiesArg::parse(args, index).result;
+                        propertiesIsParsed = true;
+                        index++;
+                    } else if (!tapeIsParsed && TapeArg::canParse(args, index)) {
+                        tape = TapeArg::parse(args, index).result;
+                        tapeIsParsed = true;
+                        index++;
+                    } else if (!isQuite) {
+                        isQuite = QuiteArg::parse(args, index).result;
+                    }
+                }
+            }
+
+            return ParseResult<Args>::ok(
+                {parsedAddress.result, parsedTypes.result, parsedSymbols.result, fromTime, source, properties, tape, isQuite});
         }
     };
 
     template <typename Args> void run(Args &&args) {
         using namespace std::literals;
 
-        auto endpoint =
-            DXEndpoint::newBuilder()
-                ->withRole(DXEndpoint::Role::FEED)
-                ->withProperties(CmdArgsUtils::parseProperties(args.properties))
-                ->withName(NAME + "Tool")
-                ->build();
+        auto endpoint = DXEndpoint::newBuilder()
+                            ->withRole(DXEndpoint::Role::FEED)
+                            ->withProperties(CmdArgsUtils::parseProperties(args.properties))
+                            ->withName(NAME + "Tool")
+                            ->build();
 
-        std::shared_ptr<DXFeedSubscription> sub = endpoint->getFeed()->createSubscription(
-            CmdArgsUtils::parseTypes(args.types));
+        std::shared_ptr<DXFeedSubscription> sub =
+            endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types));
 
         if (!args.isQuite) {
             sub->addEventListener([](auto &&events) {

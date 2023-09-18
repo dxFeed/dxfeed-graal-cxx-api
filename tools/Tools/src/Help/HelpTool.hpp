@@ -39,7 +39,7 @@ struct HelpTool {
 
     static std::string getArticle(const std::string& article) noexcept {
         for (auto&& [key, value] : EMBEDDED_ARTICLES) {
-            if (iEquals(key, value)) {
+            if (iEquals(key, article)) {
                 return value;
             }
         }
