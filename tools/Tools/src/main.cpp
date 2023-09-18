@@ -67,10 +67,15 @@ int main(int argc, char *argv[]) {
     std::cout << width << " x " << height << std::endl;
 
     using Arg = std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired,
-                             tools::SymbolsArg, tools::SymbolsArgRequired>;
+                             tools::SymbolsArg, tools::SymbolsArgRequired, tools::PropertiesArg, tools::FromTimeArg,
+                             tools::SourceArg, tools::TapeArg, tools::QuiteArg, tools::ForceStreamArg,
+                             tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg>;
 
-    std::vector<Arg> argz{tools::AddressArg{}, tools::AddressArgRequired{}, tools::TypesArg{},
-                          tools::TypesArgRequired{}, tools::SymbolsArg{}, tools::SymbolsArgRequired{}};
+    std::vector<Arg> argz{tools::AddressArg{},        tools::AddressArgRequired{}, tools::TypesArg{},
+                          tools::TypesArgRequired{},  tools::SymbolsArg{},         tools::SymbolsArgRequired{},
+                          tools::PropertiesArg{},     tools::FromTimeArg{},        tools::SourceArg{},
+                          tools::TapeArg{},           tools::QuiteArg{},           tools::ForceStreamArg{},
+                          tools::CPUUsageByCoreArg{}, tools::DetachListenerArg{},  tools::IntervalArg{}};
 
     auto maxNameSize = ranges::max(argz | ranges::views::transform([](auto &&arg) {
                                        return std::visit(

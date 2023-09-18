@@ -37,6 +37,24 @@ inline auto splitAndTrim = [](const std::string &s, char sep = ',') noexcept {
     return s | ranges::views::split(sep) | transformToString | trim;
 };
 
+template <typename R> struct ParseResult {
+    R result{};
+    std::string errorString{};
+    bool isError{};
+
+    static ParseResult ok(R &&r) noexcept {
+        return {r, "", false};
+    }
+
+    static ParseResult ok(const R &r) noexcept {
+        return {r, "", false};
+    }
+
+    static ParseResult error(const std::string &errorString) {
+        return {{}, errorString, true};
+    }
+};
+
 struct Arg {
     template <typename A>
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
@@ -79,21 +97,67 @@ struct Arg {
 
 struct PositionalArg : Arg {};
 
-template <typename R> struct ParseResult {
-    R result{};
-    std::string errorString{};
-    bool isError{};
-
-    static ParseResult ok(R &&r) noexcept {
-        return {r, "", false};
+struct NamedArg : Arg {
+    template <typename A> static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return args.size() > index + 1 && ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
+                                           (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME));
     }
 
-    static ParseResult ok(const R &r) noexcept {
-        return {r, "", false};
+    template <typename A>
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        if (args.size() <= index + 1) {
+            return ParseResult<std::optional<std::string>>::ok(std::nullopt);
+        }
+
+        if ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
+            (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)) {
+            return ParseResult<std::optional<std::string>>::ok(args[index + 1]);
+        }
+
+        return ParseResult<std::optional<std::string>>::ok(std::nullopt);
     }
 
-    static ParseResult error(const std::string &errorString) {
-        return {{}, errorString, true};
+    template <typename A> [[nodiscard]] static std::string getFullName() noexcept {
+        std::string result{};
+
+        if (!A::SHORT_NAME.empty()) {
+            result += "-" + A::SHORT_NAME;
+        }
+
+        if (!A::LONG_NAME.empty()) {
+            result += (!A::SHORT_NAME.empty() ? ", " : String::EMPTY) + "--" + A::LONG_NAME;
+        }
+
+        return result;
+    }
+};
+
+struct NamedUnsignedIntArg : NamedArg {
+    template <typename A>
+    static ParseResult<std::optional<std::size_t>> parse(const std::vector<std::string> &args,
+                                                         std::size_t index) noexcept {
+        if (args.size() <= index + 1) {
+            return ParseResult<std::optional<std::size_t>>::ok(std::nullopt);
+        }
+
+        if ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
+            (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)) {
+            try {
+                return ParseResult<std::optional<std::size_t>>::ok(std::stoull(args[index + 1]));
+            } catch (...) {
+                return ParseResult<std::optional<std::size_t>>::ok(std::nullopt);
+            }
+        }
+
+        return ParseResult<std::optional<std::size_t>>::ok(std::nullopt);
+    }
+};
+
+struct FlagArg : NamedArg {
+    template <typename A> static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) {
+        return ParseResult<bool>::ok(args.size() > index &&
+                                     ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
+                                      (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)));
     }
 };
 
@@ -232,7 +296,249 @@ struct SymbolsArgRequired : SymbolsArg {
     }
 };
 
+struct PropertiesArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
 
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<PropertiesArg>(namePadding, nameFieldSize, windowSize);
+    }
 
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<PropertiesArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<PropertiesArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<PropertiesArg>(args, index);
+    }
+};
+
+struct FromTimeArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<FromTimeArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<FromTimeArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<FromTimeArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<FromTimeArg>(args, index);
+    }
+};
+
+struct SourceArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<SourceArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<SourceArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<SourceArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<SourceArg>(args, index);
+    }
+};
+
+struct TapeArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<TapeArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<TapeArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<TapeArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<TapeArg>(args, index);
+    }
+};
+
+struct QuiteArg : FlagArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<QuiteArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<QuiteArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) {
+        return FlagArg::parse<QuiteArg>(args, index);
+    }
+};
+
+struct ForceStreamArg : FlagArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<ForceStreamArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<ForceStreamArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) {
+        return FlagArg::parse<ForceStreamArg>(args, index);
+    }
+};
+
+struct CPUUsageByCoreArg : FlagArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<CPUUsageByCoreArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<CPUUsageByCoreArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) {
+        return FlagArg::parse<CPUUsageByCoreArg>(args, index);
+    }
+};
+
+struct DetachListenerArg : FlagArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<DetachListenerArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<DetachListenerArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) {
+        return FlagArg::parse<DetachListenerArg>(args, index);
+    }
+};
+
+struct IntervalArg : NamedUnsignedIntArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<IntervalArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<IntervalArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<IntervalArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::size_t>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedUnsignedIntArg::parse<IntervalArg>(args, index);
+    }
+};
 
 } // namespace dxfcpp::tools
