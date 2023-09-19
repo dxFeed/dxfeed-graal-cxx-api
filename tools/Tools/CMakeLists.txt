@@ -35,11 +35,7 @@ endif ()
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
-        src/Connect/ConnectTool.cpp
-        src/Dump/DumpTool.cpp
-        src/Help/HelpTool.cpp
-        src/LatencyTest/LatencyTestTool.cpp
-        src/PerfTest/PerfTestTool.cpp
+        src/Tools.cpp
         src/Args/Args.cpp
 )
 

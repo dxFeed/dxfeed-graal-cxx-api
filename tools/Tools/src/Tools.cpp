@@ -1,21 +1,70 @@
 // Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "HelpTool.hpp"
-
-#include "../Connect/ConnectTool.hpp"
-#include "../Dump/DumpTool.hpp"
-#include "../LatencyTest/LatencyTestTool.hpp"
-#include "../PerfTest/PerfTestTool.hpp"
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
-
-#include <range/v3/all.hpp>
+#include "Tools.hpp"
 
 namespace dxfcpp::tools {
+
+const std::string ConnectTool::NAME{"Connect"};
+const std::string ConnectTool::SHORT_DESCRIPTION{"Connects to specified address(es)."};
+const std::string ConnectTool::DESCRIPTION{R"(
+Connects to the specified address(es) and subscribes to the specified symbols.
+)"};
+const std::vector<std::string> ConnectTool::USAGE{
+    NAME + " <address> <types> <symbols> [<options>]",
+};
+const std::vector<std::string> ConnectTool::ADDITIONAL_INFO{};
+
+const std::vector<ArgType> ConnectTool::ARGS{
+    AddressArgRequired{}, TypesArgRequired{}, SymbolsArgRequired{}, FromTimeArg{}, SourceArg{},
+    PropertiesArg{},      TapeArg{},          QuiteArg{},           HelpArg{}};
+
+const std::string DumpTool::NAME{"Dump"};
+const std::string DumpTool::SHORT_DESCRIPTION{"Dumps all events received from address."};
+const std::string DumpTool::DESCRIPTION{R"(
+Dumps all events received from address.
+Enforces a streaming contract for subscription. A wildcard enabled by default.
+This was designed to receive data from a file.
+If <types> is not specified, creates a subscription for all available event types.
+If <symbol> is not specified, the wildcard symbol is used.
+)"};
+const std::vector<std::string> DumpTool::USAGE{
+    NAME + " <address> [<options>]",
+    NAME + " <address> <types> [<options>]",
+    NAME + " <address> <types> <symbols> [<options>]",
+};
+const std::vector<std::string> DumpTool::ADDITIONAL_INFO{};
+
+const std::vector<ArgType> DumpTool::ARGS{AddressArgRequired{}, TypesArg{}, SymbolsArg{}, PropertiesArg{}, TapeArg{},
+                                          QuiteArg{},           HelpArg{}};
+
+const std::string LatencyTest::NAME{"LatencyTest"};
+const std::string LatencyTest::SHORT_DESCRIPTION{"Connects to the specified address(es) and calculates latency."};
+const std::string LatencyTest::DESCRIPTION{R"(
+Connects to the specified address(es) and calculates latency.
+)"};
+const std::vector<std::string> LatencyTest::USAGE{
+    NAME + " <address> <types> <symbols> [<options>]",
+};
+const std::vector<std::string> LatencyTest::ADDITIONAL_INFO{};
+
+const std::vector<ArgType> LatencyTest::ARGS{AddressArgRequired{}, TypesArg{},    SymbolsArg{}, PropertiesArg{},
+                                             ForceStreamArg{},     IntervalArg{}, HelpArg{}};
+
+const std::string PerfTestTool::NAME{"PerfTest"};
+const std::string PerfTestTool::SHORT_DESCRIPTION{"Connects to specified address and calculates performance counters."};
+const std::string PerfTestTool::DESCRIPTION{R"(
+Connects to the specified address(es) and calculates performance counters (events per second, cpu usage, etc).
+)"};
+const std::vector<std::string> PerfTestTool::USAGE{
+    NAME + " <address> <types> <symbols> [<options>]",
+};
+const std::vector<std::string> PerfTestTool::ADDITIONAL_INFO{};
+
+const std::vector<ArgType> PerfTestTool::ARGS{AddressArgRequired{}, TypesArgRequired{}, SymbolsArgRequired{},
+                                              PropertiesArg{},      ForceStreamArg{},   CPUUsageByCoreArg{},
+                                              DetachListenerArg{},  HelpArg{}};
+
 const std::unordered_map<std::string, std::string> HelpTool::EMBEDDED_ARTICLES{
     {"Connect",
      R"(This tool is used to connect to some address with specified subscription, and log or tape received data. By default it
@@ -310,16 +359,29 @@ const std::vector<std::string> HelpTool::ADDITIONAL_INFO{
 
 const std::vector<ArgType> HelpTool::ARGS{ArticleArgRequired{}, HelpArg{}};
 
-const std::unordered_map<std::string, HelpTool::Tool> HelpTool::ALL_TOOLS{{ConnectTool::getName(), ConnectTool{}},
-                                                                          {DumpTool::getName(), DumpTool{}},
-                                                                          {HelpTool::getName(), HelpTool{}},
-                                                                          {LatencyTest::getName(), LatencyTest{}},
-                                                                          {PerfTestTool::getName(), PerfTestTool{}}};
-
-const std::vector<std::string> HelpTool::ALL_TOOL_NAMES =
-    ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
-
 const std::vector<std::string> HelpTool::ALL_ARTICLE_NAMES =
     EMBEDDED_ARTICLES | ranges::views::keys | ranges::to<std::vector<std::string>>();
 
+const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::ALL_TOOLS{
+    {ConnectTool::getName(), ConnectTool{}},
+    {DumpTool::getName(), DumpTool{}},
+    {HelpTool::getName(), HelpTool{}},
+    {LatencyTest::getName(), LatencyTest{}},
+    {PerfTestTool::getName(), PerfTestTool{}}};
+
+const std::vector<std::string> tools::HelpTool::ALL_TOOL_NAMES =
+    tools::HelpTool::ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
+
+const std::string Tools::NAME{"Tools"};
+const std::string Tools::SHORT_DESCRIPTION{"A collection of useful utilities that use the dxFeed API."};
+const std::string Tools::DESCRIPTION{};
+const std::vector<std::string> Tools::USAGE{
+    NAME + " <tool> [...]",
+};
+const std::vector<std::string> Tools::ADDITIONAL_INFO{
+    {R"(To get detailed help on some tool use "Help <tool>".)"},
+};
+
+const std::vector<tools::HelpTool::Tool> Tools::ARGS{tools::HelpTool::ALL_TOOLS | ranges::views::values |
+                                                     ranges::to<std::vector>};
 } // namespace dxfcpp::tools
