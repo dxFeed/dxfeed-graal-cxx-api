@@ -239,14 +239,14 @@ is a collection of tools that allow you to subscribe to various market events fo
 be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases) (including self-contained
 versions)
 
-* [Connect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Connect/ConnectTool.cpp)
+* [Connect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Connect/ConnectTool.hpp)
   connects to the specified address(es) and subscribes to the specified events with the specified symbol
-* [Dump](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Dump/DumpTool.cpp)
+* [Dump](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Dump/DumpTool.hpp)
   dumps all events received from address. This was designed to retrieve data from a file
-* [PerfTest](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/PerfTest/PerfTestTool.cpp)
+* [PerfTest](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/PerfTest/PerfTestTool.hpp)
   connects to the specified address(es) and calculates performance counters (events per second, memory usage, CPU usage,
   etc.)
-* [LatencyTest](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/LatencyTest/LatencyTestTool.cpp)
+* [LatencyTest](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/LatencyTest/LatencyTestTool.hpp)
   connects to the specified address(es) and calculates latency.
 
 ## Samples
