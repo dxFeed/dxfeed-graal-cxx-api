@@ -95,14 +95,24 @@ DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t tim
 DXFCPP_EXPORT char *createCString(const std::string &s) noexcept;
 
 template <typename It>
-#if __cpp_concepts
     requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }
-#endif
 std::string namesToString(It begin, It end) {
     std::string result{"["};
 
     for (auto it = begin; it != end; it++) {
         result += String::EMPTY + "'" + it->getName() + "'" + (std::next(it) == end ? "" : ", ");
+    }
+
+    return result + "]";
+}
+
+template <typename It>
+    requires requires { std::is_same_v<std::decay_t<decltype(It {} -> get().getName())>, std::string>; }
+std::string namesToString(It begin, It end) {
+    std::string result{"["};
+
+    for (auto it = begin; it != end; it++) {
+        result += String::EMPTY + "'" + it->get().getName() + "'" + (std::next(it) == end ? "" : ", ");
     }
 
     return result + "]";
