@@ -121,7 +121,7 @@ Connects to the local endpoint, subscribes to TimeAndSale event for ETH/USD:GDAX
   perftest 127.0.0.1:7777 TimeAndSale ETH/USD:GDAX
 
 Connects to the tape file (on max speed and cyclically), subscribes for all symbols and print performance counters:
-  perftest file:tape.csv[speed=mac,cycle] all all --force-stream)"},
+  perftest file:tape.csv[speed=max,cycle] all all --force-stream)"},
     {"Address",
      R"(To create a connection using any tool one must specify an address. Depending on an address format different message
 connectors are used to establish connection.
@@ -371,6 +371,8 @@ const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::AL
 
 const std::vector<std::string> tools::HelpTool::ALL_TOOL_NAMES =
     tools::HelpTool::ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
+
+const std::set<std::string> HelpTool::ALL_NAMES = ranges::views::concat(ALL_ARTICLE_NAMES, ALL_TOOL_NAMES) | ranges::to<std::set>;
 
 const std::string Tools::NAME{"Tools"};
 const std::string Tools::SHORT_DESCRIPTION{"A collection of useful utilities that use the dxFeed API."};

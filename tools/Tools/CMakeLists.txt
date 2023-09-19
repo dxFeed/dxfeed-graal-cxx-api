@@ -41,16 +41,16 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PRIVATE ../../third_party/range-v3-0.12/include)
 
-#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process fmt::fmt-header-only)
-#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-#        $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process fmt::fmt-header-only)
-target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
+target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process fmt::fmt-header-only)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:dxfcxx::graal>
-        $<TARGET_FILE:dxfcxx>
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+        $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+
+#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process fmt::fmt-header-only)
+#target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
+#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#        $<TARGET_FILE:dxfcxx::graal>
+#        $<TARGET_FILE:dxfcxx>
+#        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_TOOLS)
     install(TARGETS ${PROJECT_NAME})

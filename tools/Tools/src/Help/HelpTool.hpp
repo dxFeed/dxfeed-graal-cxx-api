@@ -59,6 +59,7 @@ struct HelpTool {
     static const std::unordered_map<std::string, Tool> ALL_TOOLS;
     static const std::vector<std::string> ALL_TOOL_NAMES;
     static const std::vector<std::string> ALL_ARTICLE_NAMES;
+    static const std::set<std::string> ALL_NAMES;
 
     static constexpr std::size_t PADDING{2};
 
@@ -83,20 +84,40 @@ struct HelpTool {
     };
 
     static void run(const Args &args) noexcept {
+        auto [width, height] = Console::getSize();
         using namespace std::literals;
 
-        if (args.article == "all") {
+        if (iEquals(args.article, "all")) {
+            fmt::print("{0:-^{1}}\n", "", width - 1);
+            for (auto&& name : ALL_NAMES) {
+                std::cout << generateScreen(name) << std::endl;
+                fmt::print("{0:-^{1}}\n", "", width - 1);
+            }
+        } else if (iEquals(args.article, "contents")) {
+            fmt::print("\nHelp articles:\n");
+
+            for (auto&& name : ALL_NAMES) {
+                fmt::print("{:{}}{}\n", "", PADDING, name);
+            }
+        } else {
+            auto screen = generateScreen(args.article);
+
+            if (screen.empty()) {
+                fmt::print("\n{:{}}No help article found for \"{}\".\n", "", PADDING, args.article);
+            } else {
+                fmt::print("{}\n", screen);
+            }
         }
     }
 
-    static std::string getArticle(const std::string &article) noexcept {
+    static std::pair<std::string, std::string> getArticle(const std::string &article) noexcept {
         for (auto &&[key, value] : EMBEDDED_ARTICLES) {
             if (iEquals(key, article)) {
-                return value;
+                return {key, value};
             }
         }
 
-        return String::EMPTY;
+        return {String::EMPTY, String::EMPTY};
     }
 
     template <typename Tool>
@@ -168,16 +189,16 @@ struct HelpTool {
 
     template <typename Tool> static std::string generateArticleInfo() noexcept {
         std::string result{};
-        auto article = HelpTool::getArticle(Tool::getName());
+        auto [article, content] = HelpTool::getArticle(Tool::getName());
 
-        if (!article.empty()) {
-            result += "\n" + article + "\n";
+        if (!content.empty()) {
+            result += "\n" + content + "\n";
         }
 
         return result;
     }
 
-    template <typename Tool> static std::string generateHelpScreen(const std::string &parseResult = "") noexcept {
+    template <typename Tool> static std::string generateToolHelpScreen(const std::string &parseResult = "") noexcept {
         auto [width, height] = Console::getSize();
 
         std::string result{};
@@ -190,6 +211,55 @@ struct HelpTool {
         result += generateArticleInfo<Tool>();
 
         return result;
+    }
+
+    static std::string generateArticleHeader(std::size_t width, const std::string &article) noexcept {
+        std::string result{};
+
+        result = fmt::format("\n{}{}", article, ((article.size() <= width - 1) ? "\n" : "")) +
+                 fmt::format("{0:=^{1}}\n", "", (article.size() <= width - 1 ? article.size() : width - 1));
+
+        return result;
+    }
+
+    static std::string generateArticleScreen(const std::string &article, const std::string& content) noexcept {
+        auto [width, height] = Console::getSize();
+        std::string result{};
+
+        result += generateArticleHeader(width, article) + "\n";
+        result += content + "\n";
+
+        return result;
+    }
+
+    static std::string generateScreen(const std::string& article) noexcept {
+        std::string screen{};
+
+        for (auto&& [name, tool] : ALL_TOOLS) {
+            if (iEquals(article, name)) {
+                screen = std::visit(
+                    []<typename Tool>(Tool &&) {
+                        using T = std::decay_t<Tool>;
+
+                        return tools::HelpTool::generateToolHelpScreen<T>();
+                    },
+                    tool);
+
+                break;
+            }
+        }
+
+        if (!screen.empty()) {
+            return screen;
+        }
+
+        auto [name, content] = getArticle(article);
+
+        if (!content.empty()) {
+            return generateArticleScreen(name, content);
+        }
+
+        return screen;
     }
 };
 

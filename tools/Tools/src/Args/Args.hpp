@@ -187,8 +187,9 @@ struct FlagArg : NamedArg {
     template <typename A>
     static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) noexcept {
         auto r = ParseResult<bool>::ok(args.size() > index &&
-                                       ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
-                                        (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)), index);
+                                           ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
+                                            (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)),
+                                       index);
 
         if (r.result) {
             r.nextIndex = index + 1;
@@ -201,8 +202,7 @@ struct FlagArg : NamedArg {
 struct TailArg : PositionalArg, RequiredMixin {
     template <typename A> static ParseResult<std::string> parse(const std::vector<std::string> &args) noexcept {
         return RequiredMixin::parse<A, [](const std::vector<std::string> &args) noexcept {
-            return ParseResult<std::string>::ok(args | ranges::views::drop(A::POSITION + 1) |
-                                                    ranges::views::join(std::string(" ")) | ranges::to<std::string>,
+            return ParseResult<std::string>::ok(args | ranges::views::join(std::string(" ")) | ranges::to<std::string>,
                                                 args.size() - 1);
         }>(args);
     }

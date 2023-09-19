@@ -29,7 +29,7 @@ using namespace dxfcpp::literals;
 using namespace ttldtor::process;
 
 int main(int argc, char *argv[]) {
-    const auto usage = tools::HelpTool::generateHelpScreen<tools::Tools>();
+    const auto usage = tools::HelpTool::generateToolHelpScreen<tools::Tools>();
 
     std::vector<std::string> args{};
 
@@ -62,17 +62,20 @@ int main(int argc, char *argv[]) {
                 auto parseResult = T::Args::parse(args | ranges::views::drop(1) | ranges::to<std::vector>);
 
                 if (parseResult.isHelp) {
-                    std::cout << tools::HelpTool::generateHelpScreen<T>() << "\n";
+                    std::cout << tools::Tools::getName() << "\n";
+                    std::cout << tools::HelpTool::generateToolHelpScreen<T>() << "\n";
 
                     return;
                 }
 
                 if (parseResult.isError) {
-                    std::cout << tools::HelpTool::generateHelpScreen<T>(parseResult.errorString) << "\n";
+                    std::cout << tools::Tools::getName() << "\n";
+                    std::cout << tools::HelpTool::generateToolHelpScreen<T>(parseResult.errorString) << "\n";
 
                     return;
                 }
 
+                std::cout << tools::Tools::getName() << "\n";
                 T::run(parseResult.result);
             },
             tool);
