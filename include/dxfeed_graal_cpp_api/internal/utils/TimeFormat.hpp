@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <concepts>
 
 namespace dxfcpp {
 
@@ -28,9 +29,9 @@ struct DXFCPP_EXPORT TimeFormat {
     template <typename Entry, std::size_t maxSize = 256>
         requires requires(Entry e) {
             { Entry{typename Entry::KeyType{}, typename Entry::ValueType{}} };
-            { Entry::STUB } -> std::convertible_to<Entry>;
-            { e.getKey() } -> std::convertible_to<typename Entry::KeyType>;
-            { e.getValue() } -> std::convertible_to<typename Entry::ValueType>;
+            { Entry::STUB } -> dxfcpp::ConvertibleTo<Entry>;
+            { e.getKey() } -> dxfcpp::ConvertibleTo<typename Entry::KeyType>;
+            { e.getValue() } -> dxfcpp::ConvertibleTo<typename Entry::ValueType>;
         }
     class Cache {
         std::vector<Entry> data_{maxSize, Entry::STUB};

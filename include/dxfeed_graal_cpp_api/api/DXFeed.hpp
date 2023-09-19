@@ -110,6 +110,12 @@ class EventTypeEnum;
  * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
  */
 struct DXFCPP_EXPORT DXFeed : SharedEntity {
+    /// The alias to a type of shared pointer to the DXFeed object
+    using Ptr = std::shared_ptr<DXFeed>;
+
+    /// The alias to a type of unique pointer to the DXFeed object
+    using Unique = std::unique_ptr<DXFeed>;
+
     friend struct DXEndpoint;
 
   private:

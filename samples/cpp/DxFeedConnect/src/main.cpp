@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
     auto time = -1ULL;
 
     if (argc >= 5) {
-        time = parseDateTime(argv[4]);
+        time = CmdArgsUtils::parseDateTime(argv[4]);
     }
 
     // Create an endpoint and connect to specified address.

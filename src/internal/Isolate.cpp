@@ -7,7 +7,7 @@
 
 namespace dxfcpp {
 
-CEntryPointErrors Isolate::IsolateThread::detach() noexcept {
+CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
     if constexpr (Debugger::traceIsolates) {
         Debugger::trace(toString() + "::detach()");
     }
@@ -18,14 +18,15 @@ CEntryPointErrors Isolate::IsolateThread::detach() noexcept {
             Debugger::trace(toString() + "::detach(): !handle => Not attached");
         }
 
-        return CEntryPointErrors::NO_ERROR;
+        return CEntryPointErrorsEnum::NO_ERROR;
     }
 
-    auto result = CEntryPointErrors::valueOf(graal_detach_thread(dxfcpp::bit_cast<graal_isolatethread_t *>(handle)));
+    auto result =
+        static_cast<CEntryPointErrorsEnum>(graal_detach_thread(dxfcpp::bit_cast<graal_isolatethread_t *>(handle)));
 
-    if (result == CEntryPointErrors::NO_ERROR) {
+    if (result == CEntryPointErrorsEnum::NO_ERROR) {
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace(toString() + "::detach(): result == CEntryPointErrors::NO_ERROR => Detached");
+            Debugger::trace(toString() + "::detach(): result == CEntryPointErrorsEnum::NO_ERROR => Detached");
         }
 
         handle = nullptr;
@@ -34,7 +35,7 @@ CEntryPointErrors Isolate::IsolateThread::detach() noexcept {
     return result;
 }
 
-CEntryPointErrors Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate() noexcept {
+CEntryPointErrorsEnum Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate() noexcept {
     if constexpr (Debugger::traceIsolates) {
         Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate()");
     }
@@ -44,16 +45,17 @@ CEntryPointErrors Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate() n
             Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate(): !handle => Not attached");
         }
 
-        return CEntryPointErrors::NO_ERROR;
+        return CEntryPointErrorsEnum::NO_ERROR;
     }
 
-    auto result = CEntryPointErrors::valueOf(
+    auto result = static_cast<CEntryPointErrorsEnum>(
         graal_detach_all_threads_and_tear_down_isolate(dxfcpp::bit_cast<graal_isolatethread_t *>(handle)));
 
-    if (result == CEntryPointErrors::NO_ERROR) {
+    if (result == CEntryPointErrorsEnum::NO_ERROR) {
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate(): CEntryPointErrors::NO_ERROR => All "
-                                         "threads have been detached. The isolate has been teared down.");
+            Debugger::trace(toString() +
+                            "::detachAllThreadsAndTearDownIsolate(): CEntryPointErrorsEnum::NO_ERROR => All "
+                            "threads have been detached. The isolate has been teared down.");
         }
 
         handle = nullptr;
@@ -70,8 +72,8 @@ std::shared_ptr<Isolate> Isolate::create() noexcept {
     graal_isolate_t *graalIsolateHandle{};
     graal_isolatethread_t *graalIsolateThreadHandle{};
 
-    if (CEntryPointErrors::valueOf(graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) ==
-        CEntryPointErrors::NO_ERROR) {
+    if (static_cast<CEntryPointErrorsEnum>(graal_create_isolate(
+            nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) == CEntryPointErrorsEnum::NO_ERROR) {
 
         auto result =
             std::shared_ptr<Isolate>{new (std::nothrow) Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
@@ -90,7 +92,7 @@ std::shared_ptr<Isolate> Isolate::create() noexcept {
     return nullptr;
 }
 
-CEntryPointErrors Isolate::attach() noexcept {
+CEntryPointErrorsEnum Isolate::attach() noexcept {
     if constexpr (Debugger::traceIsolates) {
         Debugger::trace(toString() + "::attach()");
     }
@@ -103,13 +105,14 @@ CEntryPointErrors Isolate::attach() noexcept {
 
         graal_isolatethread_t *newIsolateThreadHandle{};
 
-        if (auto result = CEntryPointErrors::valueOf(
+        if (auto result = static_cast<CEntryPointErrorsEnum>(
                 graal_attach_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_), &newIsolateThreadHandle));
-            result != CEntryPointErrors::NO_ERROR) {
+            result != CEntryPointErrorsEnum::NO_ERROR) {
 
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace(toString() + "::attach(): result != CEntryPointErrors::NO_ERROR [" +
-                                std::to_string(result.getCode()) + "] " + result.getDescription());
+                Debugger::trace(toString() + "::attach(): result != CEntryPointErrorsEnum::NO_ERROR [" +
+                                std::to_string(static_cast<std::underlying_type_t<CEntryPointErrorsEnum>>(result)) +
+                                "] " + CEntryPointErrors::valueOf(result).getDescription());
             }
 
             return result;
@@ -127,7 +130,7 @@ CEntryPointErrors Isolate::attach() noexcept {
         }
     }
 
-    return CEntryPointErrors::NO_ERROR;
+    return CEntryPointErrorsEnum::NO_ERROR;
 }
 
 GraalIsolateThreadHandle Isolate::get() noexcept {

@@ -10,6 +10,7 @@
 #include <optional>
 #include <utility>
 #include <variant>
+#include <concepts>
 
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
@@ -44,7 +45,7 @@ concept ConvertibleToSymbolWrapperCollection =
     } &&
     (
         requires(Collection c) {
-            { *std::begin(c) } -> std::convertible_to<SymbolWrapper>;
+            { *std::begin(c) } -> dxfcpp::ConvertibleTo<SymbolWrapper>;
         } ||
         requires(Collection c) {
             { *std::begin(c) } -> ConvertibleToSymbolWrapper;

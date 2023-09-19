@@ -174,6 +174,12 @@ struct DXFeed;
  * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html)
  */
 struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
+    /// The alias to a type of shared pointer to the DXEndpoint object
+    using Ptr = std::shared_ptr<DXEndpoint>;
+
+    /// The alias to a type of unique pointer to the DXEndpoint object
+    using Unique = std::unique_ptr<DXEndpoint>;
+
     /**
      * `"name"`
      *

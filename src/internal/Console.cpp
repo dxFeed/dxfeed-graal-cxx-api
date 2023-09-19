@@ -1,0 +1,74 @@
+// Copyright (c) 2023 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
+
+#include <dxfg_api.h>
+
+#include <dxfeed_graal_c_api/api.h>
+#include <dxfeed_graal_cpp_api/api.hpp>
+
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+
+#include <chrono>
+#include <sstream>
+#include <thread>
+#include <utility>
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#    include <windows.h>
+
+namespace dxfcpp {
+std::pair<std::size_t, size_t> Console::getSize() noexcept {
+    CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo{};
+    std::size_t columns{}, rows{};
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &consoleScreenBufferInfo);
+    columns =
+        static_cast<std::size_t>(consoleScreenBufferInfo.srWindow.Right - consoleScreenBufferInfo.srWindow.Left + 1);
+    rows = static_cast<std::size_t>(consoleScreenBufferInfo.srWindow.Bottom - consoleScreenBufferInfo.srWindow.Top + 1);
+
+    return {columns, rows};
+}
+} // namespace dxfcpp
+
+#elif defined(__CYGWIN__) || defined(__ANDROID__) || defined(__linux__) || defined(__APPLE__)
+#    include <fcntl.h>     // open(), O_EVTONLY, O_NONBLOCK
+#    include <sys/ioctl.h> // ioctl()
+#    include <unistd.h>    // close()
+
+namespace dxfcpp {
+std::pair<std::size_t, size_t> Console::getSize() noexcept {
+#    if defined(__APPLE__)
+    auto ttyFileDescriptor = open("/dev/tty", O_EVTONLY | O_NONBLOCK);
+#    else
+    auto ttyFileDescriptor = open("/dev/tty", O_RDWR);
+#    endif
+
+    if (ttyFileDescriptor == -1) {
+        return {80, 25};
+    }
+
+    winsize winSize{};
+
+    auto result = ioctl(ttyFileDescriptor, TIOCGWINSZ, &winSize);
+
+    close(ttyFileDescriptor);
+
+    if (result == -1) {
+        return {80, 25};
+    }
+
+    return {static_cast<std::size_t>(winSize.ws_col), static_cast<std::size_t>(winSize.ws_row)};
+}
+} // namespace dxfcpp
+
+#else
+
+namespace dxfcpp {
+std::pair<std::size_t, size_t> Console::getSize() noexcept {
+    return {80, 25};
+}
+} // namespace dxfcpp
+
+#endif

@@ -160,12 +160,70 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
         eventSymbol_ = eventSymbol;
     }
 
+    /**
+     * Changes event's symbol and returns the current candle.
+     *
+     * @param eventSymbol The symbol of this event.
+     * @return The current candle.
+     */
+    Candle &withEventSymbol(const CandleSymbol &eventSymbol) noexcept {
+        Candle::setEventSymbol(eventSymbol);
+
+        return *this;
+    }
+
+    /**
+     * Changes event's symbol and returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param eventSymbol The symbol of this event.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withEventSymbolShared(const CandleSymbol &eventSymbol) noexcept {
+        Candle::setEventSymbol(eventSymbol);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    ///
     std::int64_t getEventTime() const noexcept override {
         return data_.eventTime;
     }
 
+    ///
     void setEventTime(std::int64_t eventTime) noexcept override {
         data_.eventTime = eventTime;
+    }
+
+    /**
+     * Changes event's creation time and returns the current candle.
+     *
+     * @param eventTime the difference, measured in milliseconds, between the event creation time and
+     * midnight, January 1, 1970 UTC.
+     * @return The current candle.
+     */
+    Candle &withEventTime(std::int64_t eventTime) noexcept {
+        Candle::setEventTime(eventTime);
+
+        return *this;
+    }
+
+    /**
+     * Changes event's creation time and returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param eventTime the difference, measured in milliseconds, between the event creation time and
+     * midnight, January 1, 1970 UTC.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withEventTimeShared(std::int64_t eventTime) noexcept {
+        Candle::setEventTime(eventTime);
+
+        return shared_from_this()->sharedAs<Candle>();
     }
 
     std::string toString() const noexcept override;
@@ -185,14 +243,101 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
         data_.eventFlags = eventFlags;
     }
 
+    /**
+     * Changes transactional event flags and returns the current candle.
+     * See EventFlag "Event Flags" section.
+     *
+     * @param eventFlags transactional event flags.
+     * @return The current candle.
+     */
+    Candle &withEventFlags(std::int32_t eventFlags) noexcept {
+        Candle::setEventFlags(eventFlags);
+
+        return *this;
+    }
+
+    /**
+     * Changes transactional event flags and returns a shared pointer to the current candle.
+     * See EventFlag "Event Flags" section.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param eventFlags transactional event flags.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withEventFlagsShared(std::int32_t eventFlags) noexcept {
+        Candle::setEventFlags(eventFlags);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
     ///
     void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
         data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
     }
 
+    /**
+     * Changes transactional event flags and returns the current candle.
+     * See EventFlag "Event Flags" section.
+     *
+     * @param eventFlags transactional event flags' mask.
+     * @return The current candle.
+     */
+    Candle &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
+        Candle::setEventFlags(eventFlags);
+
+        return *this;
+    }
+
+    /**
+     * Changes transactional event flags and returns a shared pointer to the current candle.
+     * See EventFlag "Event Flags" section.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param eventFlags transactional event flags' mask.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withEventFlagsShared(const EventFlagsMask &eventFlags) noexcept {
+        Candle::setEventFlags(eventFlags);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
     ///
     void setIndex(std::int64_t index) noexcept override {
         data_.index = index;
+    }
+
+    /**
+     * Changes unique per-symbol index of this event.
+     * Returns the current candle.
+     *
+     * @param index unique per-symbol index of this candle.
+     * @return The current candle.
+     */
+    Candle &withIndex(std::int64_t index) noexcept {
+        Candle::setIndex(index);
+
+        return *this;
+    }
+
+    /**
+     * Changes unique per-symbol index of this event.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param index unique per-symbol index of this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withIndexShared(std::int64_t index) noexcept {
+        Candle::setIndex(index);
+
+        return shared_from_this()->sharedAs<Candle>();
     }
 
     ///
@@ -222,6 +367,35 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     }
 
     /**
+     * Changes timestamp of the event in milliseconds.
+     * Returns the current candle.
+     *
+     * @param time timestamp of the event in milliseconds.
+     * @return The current candle.
+     */
+    Candle &withTime(std::int64_t time) noexcept {
+        Candle::setTime(time);
+
+        return *this;
+    }
+
+    /**
+     * Changes timestamp of the event in milliseconds.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param time timestamp of the event in milliseconds.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withTimeShared(std::int64_t time) noexcept {
+        Candle::setTime(time);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns the sequence number of this event to distinguish events that have the same @ref Candle::getTime() "time".
      * This sequence number does not have to be unique and does not need to be sequential.
      * Sequence can range from 0 to Candle::MAX_SEQUENCE.
@@ -246,8 +420,39 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     }
 
     /**
+     * Changes @ref Candle::getSequence() "sequence number" of this event.
+     * Returns the current candle.
+     *
+     * @param sequence the sequence.
+     * @return The current candle.
+     * @see Candle::getSequence()
+     */
+    Candle &withSequence(std::int32_t sequence) noexcept {
+        Candle::setSequence(sequence);
+
+        return *this;
+    }
+
+    /**
+     * Changes @ref Candle::getSequence() "sequence number" of this event.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param sequence the sequence.
+     * @return A shared pointer to the current candle.
+     * @see Candle::getSequence()
+     */
+    Candle::Ptr withSequenceShared(std::int32_t sequence) noexcept {
+        Candle::setSequence(sequence);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns total number of original trade (or quote) events in this candle.
-     * @return total number of original trade (or quote) events in this candle.
+     * @return Total number of original trade (or quote) events in this candle.
      */
     std::int64_t getCount() const noexcept {
         return data_.count;
@@ -255,15 +460,44 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes total number of original trade (or quote) events in this candle.
-     * @param count total number of original trade (or quote) events in this candle.
+     * @param count Total number of original trade (or quote) events in this candle.
      */
     void setCount(std::int64_t count) noexcept {
         data_.count = count;
     }
 
     /**
+     * Changes total number of original trade (or quote) events in this candle.
+     * Returns the current candle.
+     *
+     * @param count Total number of original trade (or quote) events in this candle.
+     * @return The current candle.
+     */
+    Candle &withCount(std::int64_t count) noexcept {
+        Candle::setCount(count);
+
+        return *this;
+    }
+
+    /**
+     * Changes total number of original trade (or quote) events in this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param count Total number of original trade (or quote) events in this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withCountShared(std::int64_t count) noexcept {
+        Candle::setCount(count);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns the first (open) price of this candle.
-     * @return the first (open) price of this candle.
+     * @return The first (open) price of this candle.
      */
     double getOpen() const noexcept {
         return data_.open;
@@ -271,15 +505,44 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes the first (open) price of this candle.
-     * @param open the first (open) price of this candle.
+     * @param open The first (open) price of this candle.
      */
     void setOpen(double open) noexcept {
         data_.open = open;
     }
 
     /**
+     * Changes the first (open) price of this candle.
+     * Returns the current candle.
+     *
+     * @param open The first (open) price of this candle.
+     * @return The current candle.
+     */
+    Candle &withOpen(double open) noexcept {
+        Candle::setOpen(open);
+
+        return *this;
+    }
+
+    /**
+     * Changes the first (open) price of this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param open The first (open) price of this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withOpenShared(double open) noexcept {
+        Candle::setOpen(open);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns the maximal (high) price of this candle.
-     * @return the maximal (high) price of this candle.
+     * @return The maximal (high) price of this candle.
      */
     double getHigh() const noexcept {
         return data_.high;
@@ -287,15 +550,44 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes the maximal (high) price of this candle.
-     * @param high the maximal (high) price of this candle.
+     * @param high The maximal (high) price of this candle.
      */
     void setHigh(double high) noexcept {
         data_.high = high;
     }
 
     /**
+     * Changes the maximal (high) price of this candle.
+     * Returns the current candle.
+     *
+     * @param high The maximal (high) price of this candle.
+     * @return The current candle.
+     */
+    Candle &withHigh(double high) noexcept {
+        Candle::setHigh(high);
+
+        return *this;
+    }
+
+    /**
+     * Changes the maximal (high) price of this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param high The maximal (high) price of this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withHighShared(double high) noexcept {
+        Candle::setHigh(high);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns the minimal (low) price of this candle.
-     * @return the minimal (low) price of this candle.
+     * @return The minimal (low) price of this candle.
      */
     double getLow() const noexcept {
         return data_.low;
@@ -303,15 +595,44 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes the minimal (low) price of this candle.
-     * @param low the minimal (low) price of this candle.
+     * @param low The minimal (low) price of this candle.
      */
     void setLow(double low) noexcept {
         data_.low = low;
     }
 
     /**
+     * Changes the minimal (low) price of this candle.
+     * Returns the current candle.
+     *
+     * @param low The minimal (low) price of this candle.
+     * @return The current candle.
+     */
+    Candle &withLow(double low) noexcept {
+        Candle::setLow(low);
+
+        return *this;
+    }
+
+    /**
+     * Changes the minimal (low) price of this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param low The minimal (low) price of this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withLowShared(double low) noexcept {
+        Candle::setLow(low);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns the last (close) price of this candle.
-     * @return the last (close) price of this candle.
+     * @return The last (close) price of this candle.
      */
     double getClose() const noexcept {
         return data_.close;
@@ -319,15 +640,44 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes the last (close) price of this candle.
-     * @param close the last (close) price of this candle.
+     * @param close The last (close) price of this candle.
      */
     void setClose(double close) noexcept {
         data_.close = close;
     }
 
     /**
+     * Changes the last (close) price of this candle.
+     * Returns the current candle.
+     *
+     * @param close The last (close) price of this candle.
+     * @return The current candle.
+     */
+    Candle &withClose(double close) noexcept {
+        Candle::setClose(close);
+
+        return *this;
+    }
+
+    /**
+     * Changes the last (close) price of this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param close The last (close) price of this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withCloseShared(double close) noexcept {
+        Candle::setClose(close);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns total volume in this candle.
-     * @return total volume in this candle.
+     * @return Total volume in this candle.
      */
     double getVolume() const noexcept {
         return data_.volume;
@@ -335,17 +685,46 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes total volume in this candle.
-     * @param volume total volume in this candle.
+     * @param volume Total volume in this candle.
      */
     void setVolume(double volume) noexcept {
         data_.volume = volume;
     }
 
     /**
+     * Changes total volume in this candle.
+     * Returns the current candle.
+     *
+     * @param volume Total volume in this candle.
+     * @return The current candle.
+     */
+    Candle &withVolume(double volume) noexcept {
+        Candle::setVolume(volume);
+
+        return *this;
+    }
+
+    /**
+     * Changes total volume in this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param volume Total volume in this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withVolumeShared(double volume) noexcept {
+        Candle::setVolume(volume);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns volume-weighted average price (VWAP) in this candle.
      * Total turnover in this candle can be computed with <code>getVWAP() * @ref Candle::getVolume()
      * "getVolume"()</code>.
-     * @return volume-weighted average price (VWAP) in this candle.
+     * @return Volume-weighted average price (VWAP) in this candle.
      */
     double getVWAP() const noexcept {
         return data_.vwap;
@@ -353,15 +732,44 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes volume-weighted average price (VWAP) in this candle.
-     * @param vwap volume-weighted average price (VWAP) in this candle.
+     * @param vwap Volume-weighted average price (VWAP) in this candle.
      */
     void setVWAP(double vwap) noexcept {
         data_.vwap = vwap;
     }
 
     /**
+     * Changes volume-weighted average price (VWAP) in this candle.
+     * Returns the current candle.
+     *
+     * @param vwap Volume-weighted average price (VWAP) in this candle.
+     * @return The current candle.
+     */
+    Candle &withVWAP(double vwap) noexcept {
+        Candle::setVWAP(vwap);
+
+        return *this;
+    }
+
+    /**
+     * Changes volume-weighted average price (VWAP) in this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param vwap Volume-weighted average price (VWAP) in this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withVWAPShared(double vwap) noexcept {
+        Candle::setVWAP(vwap);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns bid volume in this candle.
-     * @return bid volume in this candle.
+     * @return Bid volume in this candle.
      */
     double getBidVolume() const noexcept {
         return data_.bidVolume;
@@ -369,15 +777,44 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes bid volume in this candle.
-     * @param bidVolume bid volume in this candle.
+     * @param bidVolume Bid volume in this candle.
      */
     void setBidVolume(double bidVolume) noexcept {
         data_.bidVolume = bidVolume;
     }
 
     /**
+     * Changes bid volume in this candle.
+     * Returns the current candle.
+     *
+     * @param bidVolume Bid volume in this candle.
+     * @return The current candle.
+     */
+    Candle &withBidVolume(double bidVolume) noexcept {
+        Candle::setBidVolume(bidVolume);
+
+        return *this;
+    }
+
+    /**
+     * Changes bid volume in this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param bidVolume Bid volume in this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withBidVolumeShared(double bidVolume) noexcept {
+        Candle::setBidVolume(bidVolume);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
      * Returns ask volume in this candle.
-     * @return ask volume in this candle.
+     * @return Ask volume in this candle.
      */
     double getAskVolume() const noexcept {
         return data_.askVolume;
@@ -385,42 +822,129 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Changes ask volume in this candle.
-     * @param askVolume ask volume in this candle.
+     * @param askVolume Ask volume in this candle.
      */
     void setAskVolume(double askVolume) noexcept {
         data_.askVolume = askVolume;
     }
 
     /**
-     * Returns implied volatility.
-     * @return implied volatility.
+     * Changes ask volume in this candle.
+     * Returns the current candle.
+     *
+     * @param askVolume Ask volume in this candle.
+     * @return The current candle.
+     */
+    Candle &withAskVolume(double askVolume) noexcept {
+        Candle::setAskVolume(askVolume);
+
+        return *this;
+    }
+
+    /**
+     * Changes ask volume in this candle.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param askVolume Ask volume in this candle.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withAskVolumeShared(double askVolume) noexcept {
+        Candle::setAskVolume(askVolume);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
+     * Returns the implied volatility.
+     * @return The implied volatility.
      */
     double getImpVolatility() const noexcept {
         return data_.impVolatility;
     }
 
     /**
-     * Changes implied volatility.
-     * @param impVolatility implied volatility.
+     * Changes the implied volatility.
+     * @param impVolatility The implied volatility.
      */
     void setImpVolatility(double impVolatility) {
         data_.impVolatility = impVolatility;
     }
 
     /**
-     * Returns open interest.
-     * @return open interest.
+     * Changes implied volatility.
+     * Returns the current candle.
+     *
+     * @param impVolatility The implied volatility.
+     * @return The current candle.
+     */
+    Candle &withImpVolatility(double impVolatility) noexcept {
+        Candle::setImpVolatility(impVolatility);
+
+        return *this;
+    }
+
+    /**
+     * Changes implied volatility.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param impVolatility The implied volatility.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withImpVolatilityShared(double impVolatility) noexcept {
+        Candle::setImpVolatility(impVolatility);
+
+        return shared_from_this()->sharedAs<Candle>();
+    }
+
+    /**
+     * Returns the open interest.
+     * @return The open interest.
      */
     double getOpenInterest() const noexcept {
         return data_.openInterest;
     }
 
     /**
-     * Changes open interest.
-     * @param openInterest open interest.
+     * Changes the open interest.
+     * @param openInterest The open interest.
      */
     void setOpenInterest(double openInterest) noexcept {
         data_.openInterest = openInterest;
+    }
+
+    /**
+     * Changes the open interest.
+     * Returns the current candle.
+     *
+     * @param openInterest The open interest.
+     * @return The current candle.
+     */
+    Candle &withOpenInterest(double openInterest) noexcept {
+        Candle::setOpenInterest(openInterest);
+
+        return *this;
+    }
+
+    /**
+     * Changes the open interest.
+     * Returns a shared pointer to the current candle.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Candle>(new
+     * Candle(...))` or `std::make_shared<Candle>(...)`
+     *
+     * @param openInterest The open interest.
+     * @return A shared pointer to the current candle.
+     */
+    Candle::Ptr withOpenInterestShared(double openInterest) noexcept {
+        Candle::setOpenInterest(openInterest);
+
+        return shared_from_this()->sharedAs<Candle>();
     }
 };
 

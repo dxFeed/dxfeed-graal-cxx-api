@@ -9,6 +9,7 @@
 #include <string>
 #include <type_traits>
 #include <unordered_map>
+#include <concepts>
 
 #include "Common.hpp"
 
@@ -71,7 +72,7 @@ template <typename Child, typename Code> struct Enum {
      *
      * @return `true` if the elements are the same
      */
-    template <std::convertible_to<Enum<Child, Code>> E> friend bool operator==(const E &e1, const E &e2) {
+    template <dxfcpp::ConvertibleTo<Enum<Child, Code>> E> friend bool operator==(const E &e1, const E &e2) {
         return e1.getCode() == e2.getCode();
     }
 
@@ -85,7 +86,7 @@ template <typename Child, typename Code> struct Enum {
      *
      * @return The output stream
      */
-    template <typename OStream, std::convertible_to<Enum<Child, Code>> E>
+    template <typename OStream, dxfcpp::ConvertibleTo<Enum<Child, Code>> E>
     friend OStream &operator<<(OStream &os, const E &e) {
         return os << e.toString();
     }

@@ -44,6 +44,11 @@ class DXFCPP_EXPORT EventTypeEnum {
     }
 
   public:
+    using RefSetType =
+        std::unordered_set<std::reference_wrapper<const EventTypeEnum>, decltype([](auto &&eventTypeRef) {
+                               return static_cast<std::size_t>(eventTypeRef.get().getId());
+                           })>;
+
     static const EventTypeEnum QUOTE;
     static const EventTypeEnum PROFILE;
     static const EventTypeEnum SUMMARY;
@@ -74,8 +79,10 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> ALL_BY_CLASS_NAME;
 
-    explicit EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", "Invalid", false} {
+    EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", "Invalid", false} {
     }
+
+    virtual ~EventTypeEnum() noexcept = default;
 
     /**
      * @return The dxFeed Graal Native C-API event class id

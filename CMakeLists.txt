@@ -41,7 +41,7 @@ option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.2" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.0.4" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
@@ -62,8 +62,13 @@ elseif (APPLE)
         set(DXFCXX_TARGET_PLATFORM "x86_64-osx")
     endif ()
 elseif (UNIX)
-    set(DXFCXX_GRAAL_TARGET_PLATFORM "amd64-linux")
-    set(DXFCXX_TARGET_PLATFORM "x86_64-linux")
+    if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64")
+        set(DXFCXX_GRAAL_TARGET_PLATFORM "amd64-linux")
+        set(DXFCXX_TARGET_PLATFORM "x86_64-linux")
+    else ()
+        set(DXFCXX_GRAAL_TARGET_PLATFORM "unknown")
+        set(DXFCXX_TARGET_PLATFORM "unknown")
+    endif ()
 elseif ()
     set(DXFCXX_GRAAL_TARGET_PLATFORM "unknown")
     set(DXFCXX_TARGET_PLATFORM "unknown")
@@ -77,7 +82,7 @@ else ()
     endif ()
 
     if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown")
-        message(ERROR "Unknown platform!")
+        message(ERROR "Unsupported platform!")
     else ()
         set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
     endif ()
@@ -87,6 +92,9 @@ endif ()
 
 FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 # DxFeedGraalNativeSdk_SOURCE_DIR
+
+FetchContent_Declare(Process GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default)
+FetchContent_MakeAvailable(Process)
 
 add_subdirectory(third_party/utfcpp-3.2.3)
 set(FMT_INSTALL OFF)
@@ -105,6 +113,8 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/EventClassList.cpp
         src/internal/SymbolList.cpp
         src/internal/Common.cpp
+        src/internal/Platform.cpp
+        src/internal/Console.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources
@@ -318,6 +328,9 @@ add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMM
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}_static>)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
+target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
 
 if (DXFCXX_BUILD_UNIT_TESTS)
     include(CTest)

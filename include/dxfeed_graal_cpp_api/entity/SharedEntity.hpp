@@ -13,7 +13,7 @@ namespace dxfcpp {
 
 /// Base abstract "shared entity" class. Has some helpers for dynamic polymorphism
 struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> {
-    /// The simple type synonym for the SharedEntity type
+    /// The alias to a type of shared pointer to the SharedEntity object.
     using Ptr = std::shared_ptr<SharedEntity>;
 
     /**
