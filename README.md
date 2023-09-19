@@ -13,10 +13,12 @@ and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) 
 the [Overview](#overview) section.<br>
 :warning: It’s an **alpha** version and still under active development. **Don’t use it in a production environment.**
 
+[![Release](https://img.shields.io/github/v/release/dxFeed/dxfeed-graal-cxx-api)](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest)
 [![Build](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml)
 ![](https://img.shields.io/badge/C++%20standard-C++20-blueviolet) ![](https://img.shields.io/badge/C%20standard-C11-blueviolet)
-![Platform](https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20osx--x64-lightgrey)
+![Platform](https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20osx--x64%20%7C%20osx--aarch64-lightgrey)
 [![License](https://img.shields.io/badge/license-MPL--2.0-orange)](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/master/LICENSE)
+[![Downloads](https://img.shields.io/github/downloads/dxFeed/dxfeed-graal-cxx-api/total)](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest)
 
 ## Table of Contents
 
