@@ -30,8 +30,6 @@ struct PerfTestTool {
     static const std::string DESCRIPTION;
     static const std::vector<std::string> USAGE;
     static const std::vector<std::string> ADDITIONAL_INFO;
-
-    // TODO: add
     static const std::vector<ArgType> ARGS;
 
     [[nodiscard]] static std::string getName() noexcept {
@@ -45,8 +43,8 @@ struct PerfTestTool {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t) noexcept {
-        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(),
-                           nameFieldSize - 2 * namePadding, "", namePadding, SHORT_DESCRIPTION);
+        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(), nameFieldSize - 2 * namePadding, "",
+                           namePadding, SHORT_DESCRIPTION);
     }
 
     struct Diagnostic final {
@@ -167,11 +165,19 @@ struct PerfTestTool {
         bool detachListener{};
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
+            std::size_t index = 0;
+
+            if (HelpArg::parse(args, index).result) {
+                return ParseResult<Args>::help();
+            }
+
             auto parsedAddress = AddressArgRequired::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
             }
+
+            index++;
 
             auto parsedTypes = TypesArgRequired::parse(args);
 
@@ -179,17 +185,55 @@ struct PerfTestTool {
                 return ParseResult<Args>::error(parsedTypes.errorString);
             }
 
+            index++;
+
             auto parsedSymbols = SymbolsArgRequired::parse(args);
 
             if (parsedSymbols.isError) {
                 return ParseResult<Args>::error(parsedSymbols.errorString);
             }
 
-            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, {}, false, false, false});
+            index++;
+
+            bool propertiesIsParsed{};
+            std::optional<std::string> properties{};
+            bool forceStream{};
+            bool showCpuUsageByCore{};
+            bool detachListener{};
+
+            for (; index < args.size();) {
+                if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
+                    auto parseResult = PropertiesArg::parse(args, index);
+
+                    properties = parseResult.result;
+                    propertiesIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else {
+                    if (!forceStream && (forceStream = ForceStreamArg::parse(args, index).result)) {
+                        index++;
+                        continue;
+                    }
+
+                    if (!showCpuUsageByCore && (showCpuUsageByCore = CPUUsageByCoreArg::parse(args, index).result)) {
+                        index++;
+                        continue;
+                    }
+
+                    if (!detachListener && (detachListener = DetachListenerArg::parse(args, index).result)) {
+                        index++;
+                        continue;
+                    }
+
+                    index++;
+                }
+            }
+
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties,
+                                          forceStream, showCpuUsageByCore, detachListener});
         }
     };
 
-    template <typename Args> void run(Args &&args) {
+    static void run(const Args &args) noexcept {
         using namespace std::literals;
 
         auto endpoint = DXEndpoint::newBuilder()

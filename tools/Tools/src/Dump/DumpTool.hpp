@@ -42,8 +42,8 @@ struct DumpTool {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t) noexcept {
-        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(),
-                           nameFieldSize - 2 * namePadding, "", namePadding, SHORT_DESCRIPTION);
+        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(), nameFieldSize - 2 * namePadding, "",
+                           namePadding, SHORT_DESCRIPTION);
     }
 
     struct Args {
@@ -87,19 +87,26 @@ struct DumpTool {
             std::optional<std::string> tape{};
             bool isQuite{};
 
-            if (index < args.size()) {
-                for (; index < args.size(); index++) {
-                    if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
-                        properties = PropertiesArg::parse(args, index).result;
-                        propertiesIsParsed = true;
+            for (; index < args.size();) {
+                if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
+                    auto parseResult = PropertiesArg::parse(args, index);
+
+                    properties = parseResult.result;
+                    propertiesIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else if (!tapeIsParsed && TapeArg::canParse(args, index)) {
+                    auto parseResult = TapeArg::parse(args, index);
+
+                    tape = parseResult.result;
+                    tapeIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else {
+                    if (!isQuite && (isQuite = QuiteArg::parse(args, index).result)) {
                         index++;
-                    } else if (!tapeIsParsed && TapeArg::canParse(args, index)) {
-                        tape = TapeArg::parse(args, index).result;
-                        tapeIsParsed = true;
-                        index++;
-                    } else if (!isQuite) {
-                        isQuite = QuiteArg::parse(args, index).result;
+                        continue;
                     }
+
+                    index++;
                 }
             }
 
@@ -108,7 +115,7 @@ struct DumpTool {
         }
     };
 
-    template <typename Args> void run(Args &&args) {
+    static void run(const Args &args) noexcept {
         using namespace std::literals;
 
         auto properties = CmdArgsUtils::parseProperties(args.properties);

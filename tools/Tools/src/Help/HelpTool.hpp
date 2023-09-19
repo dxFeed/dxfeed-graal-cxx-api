@@ -82,7 +82,7 @@ struct HelpTool {
         }
     };
 
-    void run(const Args &args) {
+    static void run(const Args &args) noexcept {
         using namespace std::literals;
 
         if (args.article == "all") {

@@ -42,8 +42,8 @@ struct ConnectTool {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t) noexcept {
-        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(),
-                                     nameFieldSize - 2 * namePadding, "", namePadding, SHORT_DESCRIPTION);
+        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(), nameFieldSize - 2 * namePadding, "",
+                           namePadding, SHORT_DESCRIPTION);
     }
 
     struct Args {
@@ -97,36 +97,47 @@ struct ConnectTool {
             std::optional<std::string> tape{};
             bool isQuite{};
 
-            if (index < args.size()) {
-                for (; index < args.size(); index++) {
-                    if (!fromTimeIsParsed && FromTimeArg::canParse(args, index)) {
-                        fromTime = FromTimeArg::parse(args, index).result;
-                        fromTimeIsParsed = true;
+            for (; index < args.size();) {
+                if (!fromTimeIsParsed && FromTimeArg::canParse(args, index)) {
+                    auto parseResult = FromTimeArg::parse(args, index);
+
+                    fromTime = parseResult.result;
+                    fromTimeIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else if (!sourceIsParsed && SourceArg::canParse(args, index)) {
+                    auto parseResult = SourceArg::parse(args, index);
+
+                    source = parseResult.result;
+                    sourceIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
+                    auto parseResult = PropertiesArg::parse(args, index);
+
+                    properties = parseResult.result;
+                    propertiesIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else if (!tapeIsParsed && TapeArg::canParse(args, index)) {
+                    auto parseResult = TapeArg::parse(args, index);
+
+                    tape = parseResult.result;
+                    tapeIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else {
+                    if (!isQuite && (isQuite = QuiteArg::parse(args, index).result)) {
                         index++;
-                    } else if (!sourceIsParsed && SourceArg::canParse(args, index)) {
-                        source = SourceArg::parse(args, index).result;
-                        sourceIsParsed = true;
-                        index++;
-                    } else if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
-                        properties = PropertiesArg::parse(args, index).result;
-                        propertiesIsParsed = true;
-                        index++;
-                    } else if (!tapeIsParsed && TapeArg::canParse(args, index)) {
-                        tape = TapeArg::parse(args, index).result;
-                        tapeIsParsed = true;
-                        index++;
-                    } else if (!isQuite) {
-                        isQuite = QuiteArg::parse(args, index).result;
+                        continue;
                     }
+
+                    index++;
                 }
             }
 
-            return ParseResult<Args>::ok(
-                {parsedAddress.result, parsedTypes.result, parsedSymbols.result, fromTime, source, properties, tape, isQuite});
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, fromTime,
+                                          source, properties, tape, isQuite});
         }
     };
 
-    template <typename Args> void run(Args &&args) {
+    static void run(const Args &args) noexcept {
         using namespace std::literals;
 
         auto endpoint = DXEndpoint::newBuilder()

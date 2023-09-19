@@ -31,8 +31,6 @@ struct LatencyTest {
     static const std::string DESCRIPTION;
     static const std::vector<std::string> USAGE;
     static const std::vector<std::string> ADDITIONAL_INFO;
-
-    // TODO: add
     static const std::vector<ArgType> ARGS;
 
     [[nodiscard]] static std::string getName() noexcept {
@@ -274,20 +272,66 @@ struct LatencyTest {
         std::size_t interval{2};
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
+            std::size_t index = 0;
+
+            if (HelpArg::parse(args, index).result) {
+                return ParseResult<Args>::help();
+            }
+
             auto parsedAddress = AddressArgRequired::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
             }
 
+            index++;
+
             auto parsedTypes = TypesArg::parse(args);
+
+            if (parsedTypes.result.has_value()) {
+                index++;
+            }
+
             auto parsedSymbols = SymbolsArg::parse(args);
 
-            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, {}, false, 2});
+            if (parsedSymbols.result.has_value()) {
+                index++;
+            }
+
+            bool propertiesIsParsed{};
+            std::optional<std::string> properties{};
+            bool intervalIsParsed{};
+            std::optional<std::size_t> interval{};
+            bool forceStream{};
+
+            for (; index < args.size();) {
+                if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
+                    auto parseResult = PropertiesArg::parse(args, index);
+
+                    properties = parseResult.result;
+                    propertiesIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else if (!intervalIsParsed && IntervalArg::canParse(args, index)) {
+                    auto parseResult = IntervalArg::parse(args, index);
+
+                    interval = parseResult.result;
+                    intervalIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else {
+                    if (!forceStream && (forceStream = ForceStreamArg::parse(args, index).result)) {
+                        index++;
+                        continue;
+                    }
+
+                    index++;
+                }
+            }
+
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties, forceStream, interval.value_or(2)});
         }
     };
 
-    template <typename Args> void run(Args &&args) {
+    static void run(const Args &args) noexcept {
         using namespace std::literals;
 
         auto endpoint = DXEndpoint::newBuilder()

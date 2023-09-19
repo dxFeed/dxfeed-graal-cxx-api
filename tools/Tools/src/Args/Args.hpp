@@ -136,15 +136,15 @@ struct NamedArg : Arg {
     static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args,
                                                          std::size_t index) noexcept {
         if (args.size() <= index + 1) {
-            return ParseResult<std::optional<std::string>>::ok(std::nullopt);
+            return ParseResult<std::optional<std::string>>::ok(std::nullopt, index);
         }
 
         if ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
             (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)) {
-            return ParseResult<std::optional<std::string>>::ok(args[index + 1], index + 1);
+            return ParseResult<std::optional<std::string>>::ok(args[index + 1], index + 2);
         }
 
-        return ParseResult<std::optional<std::string>>::ok(std::nullopt);
+        return ParseResult<std::optional<std::string>>::ok(std::nullopt, index);
     }
 
     template <typename A> [[nodiscard]] static std::string getFullName() noexcept {
@@ -167,19 +167,19 @@ struct NamedUnsignedIntArg : NamedArg {
     static ParseResult<std::optional<std::size_t>> parse(const std::vector<std::string> &args,
                                                          std::size_t index) noexcept {
         if (args.size() <= index + 1) {
-            return ParseResult<std::optional<std::size_t>>::ok(std::nullopt);
+            return ParseResult<std::optional<std::size_t>>::ok(std::nullopt, index);
         }
 
         if ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
             (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)) {
             try {
-                return ParseResult<std::optional<std::size_t>>::ok(std::stoull(args[index + 1]), index + 1);
+                return ParseResult<std::optional<std::size_t>>::ok(std::stoull(args[index + 1]), index + 2);
             } catch (...) {
-                return ParseResult<std::optional<std::size_t>>::ok(std::nullopt);
+                return ParseResult<std::optional<std::size_t>>::ok(std::nullopt, index);
             }
         }
 
-        return ParseResult<std::optional<std::size_t>>::ok(std::nullopt);
+        return ParseResult<std::optional<std::size_t>>::ok(std::nullopt, index);
     }
 };
 
@@ -188,7 +188,7 @@ struct FlagArg : NamedArg {
     static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) noexcept {
         auto r = ParseResult<bool>::ok(args.size() > index &&
                                        ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
-                                        (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)));
+                                        (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)), index);
 
         if (r.result) {
             r.nextIndex = index + 1;

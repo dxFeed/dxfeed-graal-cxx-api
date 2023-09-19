@@ -13,11 +13,6 @@
 
 #include <process/process.hpp>
 
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
-
 #include <range/v3/all.hpp>
 
 template <class... Ts> struct overloaded : Ts... {
@@ -89,29 +84,33 @@ int main(int argc, char *argv[]) {
     }
 
     for (auto &&[name, tool] : tools::HelpTool::ALL_TOOLS) {
-        if (iEquals(args[0], name)) {
-            std::visit(
-                [&args]<typename Tool>(Tool &&t) {
-                    using T = std::decay_t<Tool>;
-
-                    auto result = T::Args::parse(args | ranges::views::drop(1) | ranges::to<std::vector>);
-
-                    if (result.isHelp) {
-                        std::cout << tools::HelpTool::generateHelpScreen<T>() << "\n";
-
-                        return;
-                    }
-
-                    if (result.isError) {
-                        std::cout << tools::HelpTool::generateHelpScreen<T>(result.errorString) << "\n";
-
-                        return;
-                    }
-                },
-                tool);
-
-            return 0;
+        if (!iEquals(args[0], name)) {
+            continue;
         }
+
+        std::visit(
+            [&args]<typename Tool>(Tool &&) {
+                using T = std::decay_t<Tool>;
+
+                auto parseResult = T::Args::parse(args | ranges::views::drop(1) | ranges::to<std::vector>);
+
+                if (parseResult.isHelp) {
+                    std::cout << tools::HelpTool::generateHelpScreen<T>() << "\n";
+
+                    return;
+                }
+
+                if (parseResult.isError) {
+                    std::cout << tools::HelpTool::generateHelpScreen<T>(parseResult.errorString) << "\n";
+
+                    return;
+                }
+
+                T::run(parseResult.result);
+            },
+            tool);
+
+        return 0;
     }
 
     std::cout << getVersion() << "\n";
