@@ -21,6 +21,6 @@ do
     echo "--- Building ---" && cmake --build "$BUILD_DIR" --config $BUILD_TYPE --parallel 8 &&
     cd "$BUILD_DIR" &&
     echo "--- Packing ---" && cpack -G ZIP -C $BUILD_TYPE --config ./dxFeedGraalCxxApiPackConfig.cmake &&
-    echo "--- Coping bundles ---" && find . -maxdepth 1 -name "*$BUILD_TYPE.zip" -print0 | xargs -0 cp -rf -t "$DIST_DIR" &&
+    echo "--- Coping bundles ---" && find . -maxdepth 1 -name "*$BUILD_TYPE.zip" -type f -print0 | xargs -0 -I {} cp {} "$DIST_DIR/" &&
     cd "$CUR_DIR" || exit
 done

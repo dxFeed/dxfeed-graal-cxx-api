@@ -361,6 +361,7 @@ if (DXFCXX_INSTALL)
     include(CPack)
 
     if (DXFCXX_INSTALL_LIB)
+        #install(FILES $<TARGET_PDB_FILE:${PROJECT_NAME}> DESTINATION bin OPTIONAL)
         install(TARGETS ${PROJECT_NAME})
         install(TARGETS ${PROJECT_NAME}_static)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)

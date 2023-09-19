@@ -52,8 +52,8 @@ jobs:
         #        os: [windows-latest, macos-latest, ubuntu-latest]
         os: [ windows-latest, macos-13, ubuntu-22.04 ]
         #os: [ ubuntu-22.04 ]
-        buildType: [ Release, Debug ]
-        #buildType: [ Release ]
+        buildType: [ Release, MinSizeRel ]
+        #buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
     runs-on: ${{ matrix.os }}
     env:
       XCODE_VERSION: '15.0'
