@@ -5,6 +5,20 @@
 
 #include <iostream>
 
+void printUsage() {
+    auto usageString = R"(
+Usage:
+DxFeedIpfConnect <type> <ipf-file>
+
+Where:
+    type     - Is dxfeed event type ()" +
+                       dxfcpp::enum_utils::getMarketEventTypeEnumNamesList() + " or " +
+                       dxfcpp::enum_utils::getMarketEventTypeEnumClassNamesList() + R"().
+    ipf-file - Is name of instrument profiles file.)";
+
+    std::cout << usageString << std::endl;
+}
+
 /*
  * This sample demonstrates how to subscribe to available symbols using IPF.
  * Use default DXFeed instance for that data feed address is defined by "dxfeed.properties" file.
@@ -12,6 +26,14 @@
 int main(int argc, char *argv[]) {
     using namespace dxfcpp;
     using namespace std::string_literals;
+
+    if (argc < 3) {
+        printUsage();
+
+        return 0;
+    }
+
+
 
 
 //  public static void main(String[] args) throws InterruptedException, IOException {

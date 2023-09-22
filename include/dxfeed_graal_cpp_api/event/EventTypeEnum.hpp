@@ -36,11 +36,14 @@ class DXFCPP_EXPORT EventTypeEnum {
     // TimeSeries) event.
     const bool isOnlyIndexed_;
 
+    // A flag that indicates that the current enum element is characterizing the Market event.
+    const bool isMarket_;
+
     EventTypeEnum(std::uint32_t id, std::string name, std::string className, bool isLasting, bool isIndexed = false,
-                  bool isTimeSeries = false) noexcept
+                  bool isTimeSeries = false, bool isMarket = true) noexcept
         : id_{id}, name_{std::move(name)}, className_{std::move(className)}, isLasting_{isLasting},
           isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries},
-          isOnlyIndexed_{isIndexed && !isTimeSeries} {
+          isOnlyIndexed_{isIndexed && !isTimeSeries}, isMarket_{isMarket} {
     }
 
   public:
@@ -87,21 +90,21 @@ class DXFCPP_EXPORT EventTypeEnum {
     /**
      * @return The dxFeed Graal Native C-API event class id
      */
-    std::uint32_t getId() const noexcept {
+    [[nodiscard]] std::uint32_t getId() const noexcept {
         return id_;
     }
 
     /**
      * @return The current enum element name
      */
-    const std::string &getName() const & noexcept {
+    [[nodiscard]] const std::string &getName() const & noexcept {
         return name_;
     }
 
     /**
      * @return The current enum element class name
      */
-    const std::string &getClassName() const & noexcept {
+    [[nodiscard]] const std::string &getClassName() const & noexcept {
         return className_;
     }
 
@@ -144,28 +147,35 @@ class DXFCPP_EXPORT EventTypeEnum {
     /**
      * @return `true` if the current enum element is characterizing the Lasting (TICKER) event
      */
-    bool isLasting() const noexcept {
+    [[nodiscard]] bool isLasting() const noexcept {
         return isLasting_;
     }
 
     /**
      * @return `true` if the current enum element is characterizing the Indexed event.
      */
-    bool isIndexed() const noexcept {
+    [[nodiscard]] bool isIndexed() const noexcept {
         return isIndexed_;
     }
 
     /**
      * @return `true` if the current enum element is characterizing the TimeSeries (HISTORY) event.
      */
-    bool isTimeSeries() const noexcept {
+    [[nodiscard]] bool isTimeSeries() const noexcept {
         return isTimeSeries_;
     }
 
     /**
      * @return `true` if the current enum element is characterizing the OnlyIndexed (Indexed, but not TimeSeries) event.
      */
-    bool isOnlyIndexed() const noexcept {
+    [[nodiscard]] bool isOnlyIndexed() const noexcept {
+        return isOnlyIndexed_;
+    }
+
+    /**
+     * @return `true` if the current enum element is characterizing the Market event.
+     */
+    [[nodiscard]] bool isMarket() const noexcept {
         return isOnlyIndexed_;
     }
 };
