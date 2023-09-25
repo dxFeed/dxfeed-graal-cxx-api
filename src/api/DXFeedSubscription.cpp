@@ -151,7 +151,7 @@ bool DXFeedSubscription::isClosedImpl() const noexcept {
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
-    : mtx_{}, eventTypes_{eventType}, handler_{}, eventListenerHandler_{}, onEvent_{} {
+    : eventTypes_{eventType}, handler_{}, eventListenerHandler_{}, onEvent_{1} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
