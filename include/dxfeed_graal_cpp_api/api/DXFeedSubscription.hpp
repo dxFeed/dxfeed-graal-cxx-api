@@ -33,8 +33,6 @@ struct DXFeed;
 class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     friend struct DXFeed;
 
-    mutable std::recursive_mutex mtx_{};
-
     std::unordered_set<EventTypeEnum> eventTypes_;
     JavaObjectHandler<DXFeedSubscription> handler_;
     JavaObjectHandler<DXFeedEventListener> eventListenerHandler_;
@@ -54,7 +52,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : mtx_{}, eventTypes_(begin, end), handler_{}, eventListenerHandler_{}, onEvent_{} {
+        : eventTypes_(begin, end), handler_{}, eventListenerHandler_{}, onEvent_{1} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
@@ -62,6 +60,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
 
         if (!list) {
+            // TODO: error handling
             return;
         }
 
@@ -121,9 +120,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug("DXFeedSubscription{" + handler_.toString() + "}::~DXFeedSubscription()");
         }
 
-        tryCallWithLock(mtx_, [this] {
             closeImpl();
-        });
     }
 
     /**
@@ -263,8 +260,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::close()");
         }
-
-        std::lock_guard lock(mtx_);
 
         closeImpl();
     }

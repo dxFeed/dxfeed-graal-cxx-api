@@ -44,7 +44,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
     static constexpr std::size_t FAKE_ID{static_cast<std::size_t>(-1)};
 
   private:
-    static constexpr unsigned MAIN_FUTURES_DEFAULT_SIZE = 1024;
+    static constexpr unsigned MAIN_FUTURES_DEFAULT_SIZE = 1;
 
     std::recursive_mutex listenersMutex_{};
     std::unordered_map<std::size_t, ListenerType> listeners_{};
@@ -91,6 +91,12 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      */
     void handle(ArgTypes... args) {
         auto f = handleImpl(args...);
+
+        if (mainFuturesSize_ <= 1) {
+            f.wait();
+
+            return;
+        }
 
         {
             std::lock_guard guard{mainFuturesMutex_};
