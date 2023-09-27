@@ -81,7 +81,9 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      */
     explicit Handler(std::size_t mainFuturesSize = MAIN_FUTURES_DEFAULT_SIZE) noexcept
         : mainFuturesCurrentIndex_{0ULL}, mainFuturesSize_{mainFuturesSize} {
-        mainFutures_.reserve(mainFuturesSize);
+        if (mainFuturesSize > 1) {
+            mainFutures_.reserve(mainFuturesSize);
+        }
     }
 
     /**
@@ -94,17 +96,13 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
 
         if (mainFuturesSize_ <= 1) {
             f.wait();
-
-            return;
-        }
-
-        {
+        } else {
             std::lock_guard guard{mainFuturesMutex_};
 
             if (mainFutures_.size() < mainFuturesSize_) {
                 mainFutures_.emplace_back(f);
             } else {
-                mainFuturesCurrentIndex_ = mainFuturesCurrentIndex_ % mainFuturesSize_;
+                mainFuturesCurrentIndex_ %= mainFuturesSize_;
                 mainFutures_[mainFuturesCurrentIndex_].wait();
                 mainFutures_[mainFuturesCurrentIndex_] = f;
                 mainFuturesCurrentIndex_++;

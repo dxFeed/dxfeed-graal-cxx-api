@@ -27,6 +27,8 @@
 
 #include <range/v3/all.hpp>
 
+#include <console/console.hpp>
+
 namespace dxfcpp::tools {
 
 struct HelpTool {
@@ -84,7 +86,7 @@ struct HelpTool {
     };
 
     static void run(const Args &args) noexcept {
-        auto [width, height] = Console::getSize();
+        auto [width, height] = org::ttldtor::console::Console::getSize();
         using namespace std::literals;
 
         if (iEquals(args.article, "all")) {
@@ -199,7 +201,7 @@ struct HelpTool {
     }
 
     template <typename Tool> static std::string generateToolHelpScreen(const std::string &parseResult = "") noexcept {
-        auto [width, height] = Console::getSize();
+        auto [width, height] = org::ttldtor::console::Console::getSize();
 
         std::string result{};
 
@@ -223,7 +225,7 @@ struct HelpTool {
     }
 
     static std::string generateArticleScreen(const std::string &article, const std::string& content) noexcept {
-        auto [width, height] = Console::getSize();
+        auto [width, height] = org::ttldtor::console::Console::getSize();
         std::string result{};
 
         result += generateArticleHeader(width, article) + "\n";

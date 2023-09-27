@@ -7,7 +7,6 @@
 
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
-#include "internal/Console.hpp"
 #include "internal/Enum.hpp"
 #include "internal/EventClassList.hpp"
 #include "internal/Id.hpp"

@@ -81,6 +81,9 @@ FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 FetchContent_Declare(Process GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default)
 FetchContent_MakeAvailable(Process)
 
+FetchContent_Declare(Console GIT_REPOSITORY "https://github.com/ttldtor/Console.git" GIT_TAG default)
+FetchContent_MakeAvailable(Console)
+
 add_subdirectory(third_party/utfcpp-3.2.3)
 set(FMT_INSTALL OFF)
 add_subdirectory(third_party/fmt-10.0.0)
@@ -99,7 +102,6 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/SymbolList.cpp
         src/internal/Common.cpp
         src/internal/Platform.cpp
-        src/internal/Console.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources
