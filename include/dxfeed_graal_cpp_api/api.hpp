@@ -30,6 +30,7 @@
 #include "internal/utils/debug/Debug.hpp"
 
 #include "api/ApiModule.hpp"
+#include "ipf/IpfModule.hpp"
 #include "entity/EntityModule.hpp"
 #include "event/EventModule.hpp"
 #include "schedule/ScheduleModule.hpp"

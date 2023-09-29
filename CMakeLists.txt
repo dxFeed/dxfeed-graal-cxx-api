@@ -115,17 +115,21 @@ set(dxFeedGraalCxxApi_InternalUtilsDebug_Sources
         src/internal/utils/debug/Debug.cpp
 )
 
-set(dxFeedGraalCxxApi_API_Sources
+set(dxFeedGraalCxxApi_Api_Sources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
         src/api/DXPublisher.cpp
 )
 
-set(dxFeedGraalCxxApi_APIOsub_Sources
+set(dxFeedGraalCxxApi_ApiOsub_Sources
         src/api/osub/WildcardSymbol.cpp
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
+)
+
+set(dxFeedGraalCxxApi_Ipf_Sources
+        src/ipf/InstrumentProfile.cpp
 )
 
 set(dxFeedGraalCxxApi_Symbols_Sources
@@ -199,8 +203,9 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Internal_Sources}
         ${dxFeedGraalCxxApi_InternalUtils_Sources}
         ${dxFeedGraalCxxApi_InternalUtilsDebug_Sources}
-        ${dxFeedGraalCxxApi_API_Sources}
-        ${dxFeedGraalCxxApi_APIOsub_Sources}
+        ${dxFeedGraalCxxApi_Api_Sources}
+        ${dxFeedGraalCxxApi_ApiOsub_Sources}
+        ${dxFeedGraalCxxApi_Ipf_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}
         ${dxFeedGraalCxxApi_System_Sources}
         ${dxFeedGraalCxxApi_Event_Sources}
