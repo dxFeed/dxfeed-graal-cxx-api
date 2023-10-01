@@ -157,13 +157,119 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      * Changes type of instrument and returns a shared pointer to the current instrument profile.
      *
      * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
-     * Candle(...))` or `std::make_shared<InstrumentProfile>(...)`
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
      *
      * @param type The type of instrument.
      * @return A shared pointer to the current instrument profile.
      */
     InstrumentProfile::Ptr withTypeShared(const std::string &type) noexcept {
         InstrumentProfile::setType(type);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns identifier of instrument, preferable an international one in Latin alphabet.
+     * It is a mandatory field. It may not be empty.
+     * Example: "GOOG", "/YGM9", ".ZYEAD".
+     *
+     * @return The identifier of instrument.
+     */
+    const std::string &getSymbol() const & noexcept {
+        return data_.symbol;
+    }
+
+    /**
+     * Changes identifier of instrument, preferable an international one in Latin alphabet.
+     * It is a mandatory field. It may not be empty.
+     * Example: "GOOG", "/YGM9", ".ZYEAD".
+     *
+     * @param symbol The identifier of instrument.
+     */
+    void setSymbol(const std::string &symbol) noexcept {
+        data_.symbol = symbol;
+    }
+
+    /**
+     * Changes identifier of instrument, preferable an international one in Latin alphabet.
+     * Returns the current instrument profile.
+     * It is a mandatory field. It may not be empty.
+     * Example: "GOOG", "/YGM9", ".ZYEAD".
+     *
+     * @param symbol The identifier of instrument.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withSymbol(const std::string &symbol) noexcept {
+        InstrumentProfile::setSymbol(symbol);
+
+        return *this;
+    }
+
+    /**
+     * Changes identifier of instrument, preferable an international one in Latin alphabet.
+     * Returns a shared pointer to the current instrument profile.
+     * It is a mandatory field. It may not be empty.
+     * Example: "GOOG", "/YGM9", ".ZYEAD".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param symbol The identifier of instrument.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withSymbolShared(const std::string &symbol) noexcept {
+        InstrumentProfile::setSymbol(symbol);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns the description of instrument, preferable an international one in Latin alphabet.
+     * Example: "Google Inc.", "Mini Gold Futures,Jun-2009,ETH".
+     *
+     * @return The description of instrument.
+     */
+    const std::string &getDescription() const & noexcept {
+        return data_.description;
+    }
+
+    /**
+     * Changes description of instrument, preferable an international one in Latin alphabet.
+     * Example: "Google Inc.", "Mini Gold Futures,Jun-2009,ETH".
+     *
+     * @param description The description of instrument.
+     */
+    void setDescription(const std::string &description) noexcept {
+        data_.description = description;
+    }
+
+    /**
+     * Changes description of instrument, preferable an international one in Latin alphabet.
+     * Returns the current instrument profile.
+     * Example: "Google Inc.", "Mini Gold Futures,Jun-2009,ETH".
+     *
+     * @param description The description of instrument.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withDescription(const std::string &description) noexcept {
+        InstrumentProfile::setDescription(description);
+
+        return *this;
+    }
+
+    /**
+     * Changes identifier of instrument, preferable an international one in Latin alphabet.
+     * Returns a shared pointer to the current instrument profile.
+     * Example: "Google Inc.", "Mini Gold Futures,Jun-2009,ETH".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param description The description of instrument.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withDescriptionShared(const std::string &description) noexcept {
+        InstrumentProfile::setDescription(description);
 
         return shared_from_this()->sharedAs<InstrumentProfile>();
     }
