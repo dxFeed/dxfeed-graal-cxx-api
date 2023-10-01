@@ -19,13 +19,18 @@
 #    include <execution>
 #endif
 
-#include <memory>
-#include <unordered_set>
 #include <concepts>
+#include <memory>
+#include <type_traits>
+#include <unordered_set>
 
 namespace dxfcpp {
 
 struct DXFeed;
+struct MarketEvent;
+struct IndexedEvent;
+struct TimeSeriesEvent;
+struct LastingEvent;
 
 /**
  * Subscription for a set of symbols and event types.
@@ -120,7 +125,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             Debugger::debug("DXFeedSubscription{" + handler_.toString() + "}::~DXFeedSubscription()");
         }
 
-            closeImpl();
+        closeImpl();
     }
 
     /**
@@ -331,10 +336,17 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *     }
      * });
      *
+     * sub->addEventListener<dxfcpp::MarketEvent>([](const auto &marketEvents) -> void {
+     *     for (const auto &me : marketEvents) {
+     *         std::cout << "Market Event's symbol: " + me->getEventSymbol() << std::endl;
+     *     }
+     * });
+     *
      * sub->addSymbols({"$TOP10L/Q", "AAPL", "$TICK", "SPX"});
      * ```
      *
-     * @tparam EventT The event type (EventType's child with field Type, convertible to EventTypeEnum
+     * @tparam EventT The event type (EventType's child with field TYPE, convertible to EventTypeEnum or MarketEvent or
+     * LastingEvent or TimeSeriesEvent or IndexedEvent)
      * @param listener The listener. Listener can be callable with signature: `void(const
      * std::vector<std::shared_ptr<EventT>&)`
      * @return The listener id
@@ -342,16 +354,13 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     template <typename EventT>
     std::size_t addEventListener(std::function<void(const std::vector<std::shared_ptr<EventT>> &)> &&listener) noexcept
 #if __cpp_concepts
-        requires std::is_base_of_v<EventType, EventT> && requires {
-            { EventT::TYPE } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
-        }
+        requires std::is_base_of_v<EventType, EventT> &&
+                 (requires {
+                     { EventT::TYPE } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
+                 } || std::is_same_v<EventT, MarketEvent> || std::is_same_v<EventT, LastingEvent> ||
+                  std::is_same_v<EventT, TimeSeriesEvent> || std::is_same_v<EventT, IndexedEvent>)
 #endif
     {
-        if (!containsEventType(EventT::TYPE)) {
-            return onEvent_ += [](auto) {
-            };
-        }
-
         return onEvent_ += [l = listener](auto &&events) {
             std::vector<std::shared_ptr<EventT>> filteredEvents{};
 
