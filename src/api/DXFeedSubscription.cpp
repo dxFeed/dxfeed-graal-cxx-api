@@ -176,7 +176,7 @@ DXFeedSubscription::createSubscriptionHandlerFromEventClassList(const std::uniqu
 void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noexcept {
     auto onEvents = [](graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
         auto id = Id<DXFeedSubscription>::from(bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
-        auto sub = ApiContext::getInstance()->getDxFeedSubscriptionManager()->getEntity(id);
+        auto sub = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getEntity(id);
 
         if (sub) {
             auto &&events = EventMapper::fromGraalList(bit_cast<void *>(graalNativeEvents));

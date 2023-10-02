@@ -120,6 +120,9 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
 
     std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
 
+    auto id = ApiContext::getInstance()->getManager<DXFeedManager>()->registerEntity(feed);
+    ignore_unused(id);
+
     // TODO: error handling
 
     if (feed) {

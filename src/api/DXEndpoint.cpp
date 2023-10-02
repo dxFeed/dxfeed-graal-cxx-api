@@ -86,12 +86,12 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     endpoint->role_ = role;
     endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
 
-    auto id = ApiContext::getInstance()->getDxEndpointManager()->registerEntity(endpoint);
+    auto id = ApiContext::getInstance()->getManager<DXEndpointManager>()->registerEntity(endpoint);
 
     auto onPropertyChange = [](graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                dxfg_endpoint_state_t newState, void *userData) {
         auto id = Id<DXEndpoint>::from(bit_cast<Id<DXEndpoint>::ValueType>(userData));
-        auto endpoint = ApiContext::getInstance()->getDxEndpointManager()->getEntity(id);
+        auto endpoint = ApiContext::getInstance()->getManager<DXEndpointManager>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
             Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
@@ -102,7 +102,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
             endpoint->onStateChange_(graalStateToState(oldState), graalStateToState(newState));
 
             if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
-                ApiContext::getInstance()->getDxEndpointManager()->unregisterEntity(id);
+                ApiContext::getInstance()->getManager<DXEndpointManager>()->unregisterEntity(id);
             }
         }
     };
