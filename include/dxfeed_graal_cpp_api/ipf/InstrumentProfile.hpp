@@ -620,170 +620,420 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
         return shared_from_this()->sharedAs<InstrumentProfile>();
     }
 
-    //    /**
-    //     * Returns currency of quotation, pricing and trading.
-    //     * It shall use three-letter currency code from ISO 4217 standard.
-    //     * See <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217 on Wikipedia</a>.
-    //     * Example: "USD", "RUB".
-    //     * @return currency of quotation, pricing and trading.
-    //     */
-    //  public String getCurrency() {
-    //        return currency;
-    //    }
-    //
-    //    /**
-    //     * Changes currency of quotation, pricing and trading.
-    //     * It shall use three-letter currency code from ISO 4217 standard.
-    //     * See <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217 on Wikipedia</a>.
-    //     * Example: "USD", "RUB".
-    //     * @param currency currency of quotation, pricing and trading.
-    //     */
-    //  public void setCurrency(String currency) {
-    //        this.currency = currency == null || currency.isEmpty() ? "" : currency;
-    //    }
-    //
-    //    /**
-    //     * Returns base currency of currency pair (FOREX instruments).
-    //     * It shall use three-letter currency code similarly to {@link #getCurrency currency}.
-    //     * @return base currency of currency pair (FOREX instruments).
-    //     */
-    //  public String getBaseCurrency() {
-    //        return baseCurrency;
-    //    }
-    //
-    //    /**
-    //     * Changes base currency of currency pair (FOREX instruments).
-    //     * It shall use three-letter currency code similarly to {@link #setCurrency currency}.
-    //     * @param baseCurrency base currency of currency pair (FOREX instruments).
-    //     */
-    //  public void setBaseCurrency(String baseCurrency) {
-    //        this.baseCurrency = baseCurrency == null || baseCurrency.isEmpty() ? "" : baseCurrency;
-    //    }
-    //
-    //    /**
-    //     * Returns Classification of Financial Instruments code.
-    //     * It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/Put type,
-    //     * American/European exercise, Cash/Physical delivery.
-    //     * It shall use six-letter CFI code from ISO 10962 standard.
-    //     * It is allowed to use 'X' extensively and to omit trailing letters (assumed to be 'X').
-    //     * See <a href="http://en.wikipedia.org/wiki/ISO_10962">ISO 10962 on Wikipedia</a>.
-    //     * Example: "ESNTPB", "ESXXXX", "ES" , "OPASPS".
-    //     * @return CFI code.
-    //     */
-    //  public String getCFI() {
-    //        return cfi;
-    //    }
-    //
-    //    /**
-    //     * Changes Classification of Financial Instruments code.
-    //     * It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/Put type,
-    //     * American/European exercise, Cash/Physical delivery.
-    //     * It shall use six-letter CFI code from ISO 10962 standard.
-    //     * It is allowed to use 'X' extensively and to omit trailing letters (assumed to be 'X').
-    //     * See <a href="http://en.wikipedia.org/wiki/ISO_10962">ISO 10962 on Wikipedia</a>.
-    //     * Example: "ESNTPB", "ESXXXX", "ES" , "OPASPS".
-    //     * @param cfi CFI code.
-    //     */
-    //  public void setCFI(String cfi) {
-    //        this.cfi = cfi == null || cfi.isEmpty() ? "" : cfi;
-    //    }
-    //
-    //    /**
-    //     * Returns International Securities Identifying Number.
-    //     * It shall use twelve-letter code from ISO 6166 standard.
-    //     * See <a href="http://en.wikipedia.org/wiki/ISO_6166">ISO 6166 on Wikipedia</a>
-    //     * or <a href="http://en.wikipedia.org/wiki/International_Securities_Identifying_Number">ISIN on
-    //     Wikipedia</a>.
-    //     * Example: "DE0007100000", "US38259P5089".
-    //     * @return International Securities Identifying Number.
-    //     */
-    //  public String getISIN() {
-    //        return isin;
-    //    }
-    //
-    //    /**
-    //     * Changes International Securities Identifying Number.
-    //     * It shall use twelve-letter code from ISO 6166 standard.
-    //     * See <a href="http://en.wikipedia.org/wiki/ISO_6166">ISO 6166 on Wikipedia</a>
-    //     * or <a href="http://en.wikipedia.org/wiki/International_Securities_Identifying_Number">ISIN on
-    //     Wikipedia</a>.
-    //     * Example: "DE0007100000", "US38259P5089".
-    //     * @param isin International Securities Identifying Number.
-    //     */
-    //  public void setISIN(String isin) {
-    //        this.isin = isin == null || isin.isEmpty() ? "" : isin;
-    //    }
-    //
-    //    /**
-    //     * Returns Stock Exchange Daily Official List.
-    //     * It shall use seven-letter code assigned by London Stock Exchange.
-    //     * See <a href="http://en.wikipedia.org/wiki/SEDOL">SEDOL on Wikipedia</a> or
-    //     * <a href="http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/">SEDOL on LSE</a>.
-    //     * Example: "2310967", "5766857".
-    //     * @return Stock Exchange Daily Official List.
-    //     */
-    //  public String getSEDOL() {
-    //        return sedol;
-    //    }
-    //
-    //    /**
-    //     * Changes Stock Exchange Daily Official List.
-    //     * It shall use seven-letter code assigned by London Stock Exchange.
-    //     * See <a href="http://en.wikipedia.org/wiki/SEDOL">SEDOL on Wikipedia</a> or
-    //     * <a href="http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/">SEDOL on LSE</a>.
-    //     * Example: "2310967", "5766857".
-    //     * @param sedol Stock Exchange Daily Official List.
-    //     */
-    //  public void setSEDOL(String sedol) {
-    //        this.sedol = sedol == null || sedol.isEmpty() ? "" : sedol;
-    //    }
-    //
-    //    /**
-    //     * Returns Committee on Uniform Security Identification Procedures code.
-    //     * It shall use nine-letter code assigned by CUSIP Services Bureau.
-    //     * See <a href="http://en.wikipedia.org/wiki/CUSIP">CUSIP on Wikipedia</a>.
-    //     * Example: "38259P508".
-    //     * @return CUSIP code.
-    //     */
-    //  public String getCUSIP() {
-    //        return cusip;
-    //    }
-    //
-    //    /**
-    //     * Changes Committee on Uniform Security Identification Procedures code.
-    //     * It shall use nine-letter code assigned by CUSIP Services Bureau.
-    //     * See <a href="http://en.wikipedia.org/wiki/CUSIP">CUSIP on Wikipedia</a>.
-    //     * Example: "38259P508".
-    //     * @param cusip CUSIP code.
-    //     */
-    //  public void setCUSIP(String cusip) {
-    //        this.cusip = cusip == null || cusip.isEmpty() ? "" : cusip;
-    //    }
-    //
-    //    /**
-    //     * Returns Industry Classification Benchmark.
-    //     * It shall use four-digit number from ICB catalog.
-    //     * See <a href="http://en.wikipedia.org/wiki/Industry_Classification_Benchmark">ICB on Wikipedia</a>
-    //     * or <a href="http://www.icbenchmark.com/">ICB homepage</a>.
-    //     * Example: "9535".
-    //     * @return Industry Classification Benchmark.
-    //     */
-    //  public int getICB() {
-    //        return icb;
-    //    }
-    //
-    //    /**
-    //     * Changes Industry Classification Benchmark.
-    //     * It shall use four-digit number from ICB catalog.
-    //     * See <a href="http://en.wikipedia.org/wiki/Industry_Classification_Benchmark">ICB on Wikipedia</a>
-    //     * or <a href="http://www.icbenchmark.com/">ICB homepage</a>.
-    //     * Example: "9535".
-    //     * @param icb Industry Classification Benchmark.
-    //     */
-    //  public void setICB(int icb) {
-    //        this.icb = icb;
-    //    }
-    //
+    /**
+     * Returns currency of quotation, pricing and trading.
+     * It shall use three-letter currency code from ISO 4217 standard.
+     * See <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217 on Wikipedia</a>.
+     * Example: "USD", "RUB".
+     *
+     * @return Currency of quotation, pricing and trading.
+     */
+    const std::string &getCurrency() const & noexcept {
+        return data_.currency;
+    }
+
+    /**
+     * Changes currency of quotation, pricing and trading.
+     * It shall use three-letter currency code from ISO 4217 standard.
+     * See <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217 on Wikipedia</a>.
+     * Example: "USD", "RUB".
+     *
+     * @param currency Currency of quotation, pricing and trading.
+     */
+    void setCurrency(const std::string &currency) noexcept {
+        data_.currency = currency;
+    }
+
+    /**
+     * Changes currency of quotation, pricing and trading.
+     * It shall use three-letter currency code from ISO 4217 standard.
+     * See <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217 on Wikipedia</a>.
+     * Example: "USD", "RUB".
+     *
+     * @param currency Currency of quotation, pricing and trading.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withCurrency(const std::string &currency) noexcept {
+        InstrumentProfile::setCurrency(currency);
+
+        return *this;
+    }
+
+    /**
+     * Changes currency of quotation, pricing and trading.
+     * It shall use three-letter currency code from ISO 4217 standard.
+     * See <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217 on Wikipedia</a>.
+     * Example: "USD", "RUB".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param currency Currency of quotation, pricing and trading.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withCurrencyShared(const std::string &currency) noexcept {
+        InstrumentProfile::setCurrency(currency);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns base currency of currency pair (FOREX instruments).
+     * It shall use three-letter currency code similarly to @ref InstrumentProfile::getCurrency() "currency".
+     *
+     * @return The base currency of currency pair (FOREX instruments).
+     */
+    const std::string &getBaseCurrency() const & noexcept {
+        return data_.baseCurrency;
+    }
+
+    /**
+     * Changes base currency of currency pair (FOREX instruments).
+     * It shall use three-letter currency code similarly to @ref InstrumentProfile::getCurrency() "currency".
+     *
+     * @param baseCurrency The base currency of currency pair (FOREX instruments).
+     */
+    void setBaseCurrency(const std::string &baseCurrency) noexcept {
+        data_.baseCurrency = baseCurrency;
+    }
+
+    /**
+     * Changes base currency of currency pair (FOREX instruments).
+     * It shall use three-letter currency code similarly to @ref InstrumentProfile::getCurrency() "currency".
+     *
+     * @param baseCurrency The base currency of currency pair (FOREX instruments).
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withBaseCurrency(const std::string &baseCurrency) noexcept {
+        InstrumentProfile::setBaseCurrency(baseCurrency);
+
+        return *this;
+    }
+
+    /**
+     * Changes base currency of currency pair (FOREX instruments).
+     * It shall use three-letter currency code similarly to @ref InstrumentProfile::getCurrency() "currency".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param baseCurrency The base currency of currency pair (FOREX instruments).
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withBaseCurrencyShared(const std::string &baseCurrency) noexcept {
+        InstrumentProfile::setBaseCurrency(baseCurrency);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns Classification of Financial Instruments code.
+     * It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/Put type,
+     * American/European exercise, Cash/Physical delivery.
+     * It shall use six-letter CFI code from ISO 10962 standard.
+     * It is allowed to use 'X' extensively and to omit trailing letters (assumed to be 'X').
+     * See <a href="http://en.wikipedia.org/wiki/ISO_10962">ISO 10962 on Wikipedia</a>.
+     * Example: "ESNTPB", "ESXXXX", "ES" , "OPASPS".
+     *
+     * @return CFI code.
+     */
+    const std::string &getCFI() const & noexcept {
+        return data_.cfi;
+    }
+
+    /**
+     * Changes Classification of Financial Instruments code.
+     * It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/Put type,
+     * American/European exercise, Cash/Physical delivery.
+     * It shall use six-letter CFI code from ISO 10962 standard.
+     * It is allowed to use 'X' extensively and to omit trailing letters (assumed to be 'X').
+     * See <a href="http://en.wikipedia.org/wiki/ISO_10962">ISO 10962 on Wikipedia</a>.
+     * Example: "ESNTPB", "ESXXXX", "ES" , "OPASPS".
+     *
+     * @param cfi CFI code.
+     */
+    void setCFI(const std::string &cfi) noexcept {
+        data_.cfi = cfi;
+    }
+
+    /**
+     * Changes Classification of Financial Instruments code.
+     * It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/Put type,
+     * American/European exercise, Cash/Physical delivery.
+     * It shall use six-letter CFI code from ISO 10962 standard.
+     * It is allowed to use 'X' extensively and to omit trailing letters (assumed to be 'X').
+     * See <a href="http://en.wikipedia.org/wiki/ISO_10962">ISO 10962 on Wikipedia</a>.
+     * Example: "ESNTPB", "ESXXXX", "ES" , "OPASPS".
+     *
+     * @param cfi CFI code.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withCFI(const std::string &cfi) noexcept {
+        InstrumentProfile::setCFI(cfi);
+
+        return *this;
+    }
+
+    /**
+     * Changes Classification of Financial Instruments code.
+     * It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/Put type,
+     * American/European exercise, Cash/Physical delivery.
+     * It shall use six-letter CFI code from ISO 10962 standard.
+     * It is allowed to use 'X' extensively and to omit trailing letters (assumed to be 'X').
+     * See <a href="http://en.wikipedia.org/wiki/ISO_10962">ISO 10962 on Wikipedia</a>.
+     * Example: "ESNTPB", "ESXXXX", "ES" , "OPASPS".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param cfi CFI code.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withCFIShared(const std::string &cfi) noexcept {
+        InstrumentProfile::setCFI(cfi);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns International Securities Identifying Number.
+     * It shall use twelve-letter code from ISO 6166 standard.
+     * See <a href="http://en.wikipedia.org/wiki/ISO_6166">ISO 6166 on Wikipedia</a>
+     * or <a href="http://en.wikipedia.org/wiki/International_Securities_Identifying_Number">ISIN on Wikipedia</a>.
+     * Example: "DE0007100000", "US38259P5089".
+     *
+     * @return International Securities Identifying Number.
+     */
+    const std::string &getISIN() const & noexcept {
+        return data_.isin;
+    }
+
+    /**
+     * Changes International Securities Identifying Number.
+     * It shall use twelve-letter code from ISO 6166 standard.
+     * See <a href="http://en.wikipedia.org/wiki/ISO_6166">ISO 6166 on Wikipedia</a>
+     * or <a href="http://en.wikipedia.org/wiki/International_Securities_Identifying_Number">ISIN on Wikipedia</a>.
+     * Example: "DE0007100000", "US38259P5089".
+     *
+     * @param isin International Securities Identifying Number.
+     */
+    void setISIN(const std::string &isin) noexcept {
+        data_.isin = isin;
+    }
+
+    /**
+     * Changes International Securities Identifying Number.
+     * It shall use twelve-letter code from ISO 6166 standard.
+     * See <a href="http://en.wikipedia.org/wiki/ISO_6166">ISO 6166 on Wikipedia</a>
+     * or <a href="http://en.wikipedia.org/wiki/International_Securities_Identifying_Number">ISIN on Wikipedia</a>.
+     * Example: "DE0007100000", "US38259P5089".
+     *
+     * @param isin International Securities Identifying Number.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withISIN(const std::string &isin) noexcept {
+        InstrumentProfile::setISIN(isin);
+
+        return *this;
+    }
+
+    /**
+     * Changes International Securities Identifying Number.
+     * It shall use twelve-letter code from ISO 6166 standard.
+     * See <a href="http://en.wikipedia.org/wiki/ISO_6166">ISO 6166 on Wikipedia</a>
+     * or <a href="http://en.wikipedia.org/wiki/International_Securities_Identifying_Number">ISIN on Wikipedia</a>.
+     * Example: "DE0007100000", "US38259P5089".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param isin International Securities Identifying Number.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withISINShared(const std::string &isin) noexcept {
+        InstrumentProfile::setISIN(isin);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns Stock Exchange Daily Official List.
+     * It shall use seven-letter code assigned by London Stock Exchange.
+     * See <a href="http://en.wikipedia.org/wiki/SEDOL">SEDOL on Wikipedia</a> or
+     * <a href="http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/">SEDOL on LSE</a>.
+     * Example: "2310967", "5766857".
+     *
+     * @return Stock Exchange Daily Official List.
+     */
+    const std::string &getSEDOL() const & noexcept {
+        return data_.sedol;
+    }
+
+    /**
+     * Changes Stock Exchange Daily Official List.
+     * It shall use seven-letter code assigned by London Stock Exchange.
+     * See <a href="http://en.wikipedia.org/wiki/SEDOL">SEDOL on Wikipedia</a> or
+     * <a href="http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/">SEDOL on LSE</a>.
+     * Example: "2310967", "5766857".
+     *
+     * @param sedol Stock Exchange Daily Official List.
+     */
+    void setSEDOL(const std::string &sedol) noexcept {
+        data_.sedol = sedol;
+    }
+
+    /**
+     * Changes Stock Exchange Daily Official List.
+     * It shall use seven-letter code assigned by London Stock Exchange.
+     * See <a href="http://en.wikipedia.org/wiki/SEDOL">SEDOL on Wikipedia</a> or
+     * <a href="http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/">SEDOL on LSE</a>.
+     * Example: "2310967", "5766857".
+     *
+     * @param sedol Stock Exchange Daily Official List.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withSEDOL(const std::string &sedol) noexcept {
+        InstrumentProfile::setSEDOL(sedol);
+
+        return *this;
+    }
+
+    /**
+     * Changes Stock Exchange Daily Official List.
+     * It shall use seven-letter code assigned by London Stock Exchange.
+     * See <a href="http://en.wikipedia.org/wiki/SEDOL">SEDOL on Wikipedia</a> or
+     * <a href="http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/">SEDOL on LSE</a>.
+     * Example: "2310967", "5766857".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param sedol Stock Exchange Daily Official List.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withSEDOLShared(const std::string &sedol) noexcept {
+        InstrumentProfile::setSEDOL(sedol);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns Committee on Uniform Security Identification Procedures code.
+     * It shall use nine-letter code assigned by CUSIP Services Bureau.
+     * See <a href="http://en.wikipedia.org/wiki/CUSIP">CUSIP on Wikipedia</a>.
+     * Example: "38259P508".
+     *
+     * @return CUSIP code.
+     */
+    const std::string &getCUSIP() const & noexcept {
+        return data_.cusip;
+    }
+
+    /**
+     * Changes Committee on Uniform Security Identification Procedures code.
+     * It shall use nine-letter code assigned by CUSIP Services Bureau.
+     * See <a href="http://en.wikipedia.org/wiki/CUSIP">CUSIP on Wikipedia</a>.
+     * Example: "38259P508".
+     *
+     * @param cusip CUSIP code.
+     */
+    void setCUSIP(const std::string &cusip) noexcept {
+        data_.cusip = cusip;
+    }
+
+    /**
+     * Changes Committee on Uniform Security Identification Procedures code.
+     * It shall use nine-letter code assigned by CUSIP Services Bureau.
+     * See <a href="http://en.wikipedia.org/wiki/CUSIP">CUSIP on Wikipedia</a>.
+     * Example: "38259P508".
+     *
+     * @param cusip CUSIP code
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withCUSIP(const std::string &cusip) noexcept {
+        InstrumentProfile::setCUSIP(cusip);
+
+        return *this;
+    }
+
+    /**
+     * Changes Committee on Uniform Security Identification Procedures code.
+     * It shall use nine-letter code assigned by CUSIP Services Bureau.
+     * See <a href="http://en.wikipedia.org/wiki/CUSIP">CUSIP on Wikipedia</a>.
+     * Example: "38259P508".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param cusip CUSIP code
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withCUSIPShared(const std::string &cusip) noexcept {
+        InstrumentProfile::setCUSIP(cusip);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns Industry Classification Benchmark.
+     * It shall use four-digit number from ICB catalog.
+     * See <a href="http://en.wikipedia.org/wiki/Industry_Classification_Benchmark">ICB on Wikipedia</a>
+     * or <a href="http://www.icbenchmark.com/">ICB homepage</a>.
+     * Example: "9535".
+     *
+     * @return Industry Classification Benchmark.
+     */
+    std::int32_t getICB() const noexcept {
+        return data_.icb;
+    }
+
+    /**
+     * Changes Industry Classification Benchmark.
+     * It shall use four-digit number from ICB catalog.
+     * See <a href="http://en.wikipedia.org/wiki/Industry_Classification_Benchmark">ICB on Wikipedia</a>
+     * or <a href="http://www.icbenchmark.com/">ICB homepage</a>.
+     * Example: "9535".
+     *
+     * @param icb Industry Classification Benchmark.
+     */
+    void setICB(std::int32_t icb) noexcept {
+        data_.icb = icb;
+    }
+
+    /**
+     * Changes Industry Classification Benchmark.
+     * It shall use four-digit number from ICB catalog.
+     * See <a href="http://en.wikipedia.org/wiki/Industry_Classification_Benchmark">ICB on Wikipedia</a>
+     * or <a href="http://www.icbenchmark.com/">ICB homepage</a>.
+     * Example: "9535".
+     *
+     * @param icb Industry Classification Benchmark.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withICB(std::int32_t icb) noexcept {
+        InstrumentProfile::setICB(icb);
+
+        return *this;
+    }
+
+    /**
+     * Changes Industry Classification Benchmark.
+     * It shall use four-digit number from ICB catalog.
+     * See <a href="http://en.wikipedia.org/wiki/Industry_Classification_Benchmark">ICB on Wikipedia</a>
+     * or <a href="http://www.icbenchmark.com/">ICB homepage</a>.
+     * Example: "9535".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param icb Industry Classification Benchmark.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withICBShared(std::int32_t icb) noexcept {
+        InstrumentProfile::setICB(icb);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
 
     /**
      * Returns Standard Industrial Classification.
@@ -846,156 +1096,397 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
         return shared_from_this()->sharedAs<InstrumentProfile>();
     }
 
-    //
-    //    /**
-    //     * Returns market value multiplier.
-    //     * Example: 100, 33.2.
-    //     * @return market value multiplier.
-    //     */
-    //  public double getMultiplier() {
-    //        return multiplier;
-    //    }
-    //
-    //    /**
-    //     * Changes market value multiplier.
-    //     * Example: 100, 33.2.
-    //     * @param multiplier market value multiplier.
-    //     */
-    //  public void setMultiplier(double multiplier) {
-    //        this.multiplier = multiplier;
-    //    }
-    //
-    //    /**
-    //     * Returns product for futures and options on futures (underlying asset name).
-    //     * Example: "/YG".
-    //     * @return product for futures and options on futures (underlying asset name).
-    //     */
-    //  public String getProduct() {
-    //        return product;
-    //    }
-    //
-    //    /**
-    //     * Changes product for futures and options on futures (underlying asset name).
-    //     * Example: "/YG".
-    //     * @param product product for futures and options on futures (underlying asset name).
-    //     */
-    //  public void setProduct(String product) {
-    //        this.product = product == null || product.isEmpty() ? "" : product;
-    //    }
-    //
-    //    /**
-    //     * Returns primary underlying symbol for options.
-    //     * Example: "C", "/YGM9"
-    //     * @return primary underlying symbol for options.
-    //     */
-    //  public String getUnderlying() {
-    //        return underlying;
-    //    }
-    //
-    //    /**
-    //     * Changes primary underlying symbol for options.
-    //     * Example: "C", "/YGM9"
-    //     * @param underlying primary underlying symbol for options.
-    //     */
-    //  public void setUnderlying(String underlying) {
-    //        this.underlying = underlying == null || underlying.isEmpty() ? "" : underlying;
-    //    }
-    //
-    //    /**
-    //     * Returns shares per contract for options.
-    //     * Example: 1, 100.
-    //     * @return shares per contract for options.
-    //     */
-    //  public double getSPC() {
-    //        return spc;
-    //    }
-    //
-    //    /**
-    //     * Changes shares per contract for options.
-    //     * Example: 1, 100.
-    //     * @param spc shares per contract for options.
-    //     */
-    //  public void setSPC(double spc) {
-    //        this.spc = spc;
-    //    }
-    //
-    //    /**
-    //     * Returns additional underlyings for options, including additional cash.
-    //     * It shall use following format:
-    //     * <pre>
-    //     *     &lt;VALUE&gt; ::= &lt;empty&gt; | &lt;LIST&gt;
-    //     *     &lt;LIST&gt; ::= &lt;AU&gt; | &lt;AU&gt; &lt;semicolon&gt; &lt;space&gt; &lt;LIST&gt;
-    //     *     &lt;AU&gt; ::= &lt;UNDERLYING&gt; &lt;space&gt; &lt;SPC&gt; </pre>
-    //     * the list shall be sorted by &lt;UNDERLYING&gt;.
-    //     * Example: "SE 50", "FIS 53; US$ 45.46".
-    //     * @return additional underlyings for options, including additional cash.
-    //     */
-    //  public String getAdditionalUnderlyings() {
-    //        return additionalUnderlyings;
-    //    }
-    //
-    //    /**
-    //     * Changes additional underlyings for options, including additional cash.
-    //     * It shall use following format:
-    //     * <pre>
-    //     *     &lt;VALUE&gt; ::= &lt;empty&gt; | &lt;LIST&gt;
-    //     *     &lt;LIST&gt; ::= &lt;AU&gt; | &lt;AU&gt; &lt;semicolon&gt; &lt;space&gt; &lt;LIST&gt;
-    //     *     &lt;AU&gt; ::= &lt;UNDERLYING&gt; &lt;space&gt; &lt;SPC&gt; </pre>
-    //     * the list shall be sorted by &lt;UNDERLYING&gt;.
-    //     * Example: "SE 50", "FIS 53; US$ 45.46".
-    //     * @param additionalUnderlyings additional underlyings for options, including additional cash.
-    //     */
-    //  public void setAdditionalUnderlyings(String additionalUnderlyings) {
-    //        this.additionalUnderlyings = additionalUnderlyings == null || additionalUnderlyings.isEmpty() ? "" :
-    //        additionalUnderlyings;
-    //    }
-    //
-    //    /**
-    //     * Returns maturity month-year as provided for corresponding FIX tag (200).
-    //     * It can use several different formats depending on data source:
-    //     * <ul>
-    //     * <li>YYYYMM – if only year and month are specified
-    //     * <li>YYYYMMDD – if full date is specified
-    //     * <li>YYYYMMwN – if week number (within a month) is specified
-    //     * </ul>
-    //     * @return  maturity month-year as provided for corresponding FIX tag (200).
-    //     */
-    //  public String getMMY() {
-    //        return mmy;
-    //    }
-    //
-    //    /**
-    //     * Changes maturity month-year as provided for corresponding FIX tag (200).
-    //     * It can use several different formats depending on data source:
-    //     * <ul>
-    //     * <li>YYYYMM – if only year and month are specified
-    //     * <li>YYYYMMDD – if full date is specified
-    //     * <li>YYYYMMwN – if week number (within a month) is specified
-    //     * </ul>
-    //     * @param mmy  maturity month-year as provided for corresponding FIX tag (200).
-    //     */
-    //  public void setMMY(String mmy) {
-    //        this.mmy = mmy == null || mmy.isEmpty() ? "" : mmy;
-    //    }
-    //
-    //    /**
-    //     * Returns day id of expiration.
-    //     * Example: {@link DayUtil#getDayIdByYearMonthDay DayUtil.getDayIdByYearMonthDay}(20090117).
-    //     * @return day id of expiration.
-    //     */
-    //  public int getExpiration() {
-    //        return expiration;
-    //    }
-    //
-    //    /**
-    //     * Changes day id of expiration.
-    //     * Example: {@link DayUtil#getDayIdByYearMonthDay DayUtil.getDayIdByYearMonthDay}(20090117).
-    //     * @param expiration day id of expiration.
-    //     */
-    //  public void setExpiration(int expiration) {
-    //        this.expiration = expiration;
-    //    }
-    //
+    /**
+     * Returns market value multiplier.
+     * Example: 100, 33.2.
+     *
+     * @return The market value multiplier.
+     */
+    double getMultiplier() const noexcept {
+        return data_.multiplier;
+    }
+
+    /**
+     * Changes market value multiplier.
+     * Example: 100, 33.2.
+     *
+     * @param multiplier The market value multiplier.
+     */
+    void setMultiplier(double multiplier) noexcept {
+        data_.multiplier = multiplier;
+    }
+
+    /**
+     * Changes market value multiplier.
+     * Example: 100, 33.2.
+     *
+     * @param multiplier The market value multiplier.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withMultiplier(double multiplier) noexcept {
+        InstrumentProfile::setMultiplier(multiplier);
+
+        return *this;
+    }
+
+    /**
+     * Changes market value multiplier.
+     * Example: 100, 33.2.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param multiplier The market value multiplier.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withMultiplierShared(double multiplier) noexcept {
+        InstrumentProfile::setMultiplier(multiplier);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns product for futures and options on futures (underlying asset name).
+     * Example: "/YG".
+     *
+     * @return The product for futures and options on futures (underlying asset name).
+     */
+    const std::string &getProduct() const & noexcept {
+        return data_.product;
+    }
+
+    /**
+     * Changes product for futures and options on futures (underlying asset name).
+     * Example: "/YG".
+     *
+     * @param product The product for futures and options on futures (underlying asset name).
+     */
+    void setProduct(const std::string &product) noexcept {
+        data_.product = product;
+    }
+
+    /**
+     * Changes product for futures and options on futures (underlying asset name).
+     * Example: "/YG".
+     *
+     * @param product The product for futures and options on futures (underlying asset name).
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withProduct(const std::string &product) noexcept {
+        InstrumentProfile::setProduct(product);
+
+        return *this;
+    }
+
+    /**
+     * Changes product for futures and options on futures (underlying asset name).
+     * Example: "/YG".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param product The product for futures and options on futures (underlying asset name).
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withProductShared(const std::string &product) noexcept {
+        InstrumentProfile::setProduct(product);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns primary underlying symbol for options.
+     * Example: "C", "/YGM9"
+     *
+     * @return The primary underlying symbol for options.
+     */
+    const std::string &getUnderlying() const & noexcept {
+        return data_.underlying;
+    }
+
+    /**
+     * Changes primary underlying symbol for options.
+     * Example: "C", "/YGM9"
+     *
+     * @param underlying The primary underlying symbol for options.
+     */
+    void setUnderlying(const std::string &underlying) noexcept {
+        data_.underlying = underlying;
+    }
+
+    /**
+     * Changes primary underlying symbol for options.
+     * Example: "C", "/YGM9"
+     *
+     * @param underlying The primary underlying symbol for options.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withUnderlying(const std::string &underlying) noexcept {
+        InstrumentProfile::setUnderlying(underlying);
+
+        return *this;
+    }
+
+    /**
+     * Changes primary underlying symbol for options.
+     * Example: "C", "/YGM9"
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param underlying The primary underlying symbol for options.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withUnderlyingShared(const std::string &underlying) noexcept {
+        InstrumentProfile::setUnderlying(underlying);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns shares per contract for options.
+     * Example: 1, 100.
+     *
+     * @return shares per contract for options.
+     */
+    double getSPC() const noexcept {
+        return data_.spc;
+    }
+
+    /**
+     * Changes shares per contract for options.
+     * Example: 1, 100.
+     *
+     * @param spc The shares per contract for options.
+     */
+    void setSPC(double spc) noexcept {
+        data_.spc = spc;
+    }
+
+    /**
+     * Changes shares per contract for options.
+     * Example: 1, 100.
+     *
+     * @param spc The shares per contract for options.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withSPC(double spc) noexcept {
+        InstrumentProfile::setSPC(spc);
+
+        return *this;
+    }
+
+    /**
+     * Changes shares per contract for options.
+     * Example: 1, 100.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param spc The shares per contract for options.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withSPCShared(double spc) noexcept {
+        InstrumentProfile::setSPC(spc);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns additional underlyings for options, including additional cash.
+     * It shall use following format:
+     * ```
+     *     <VALUE> ::= <empty> | <LIST>
+     *     <LIST> ::= <AU> | <AU> <semicolon> <space> <LIST>
+     *     <AU> ::= <UNDERLYING> <space> <SPC>
+     * the list shall be sorted by <UNDERLYING>.
+     * ```
+     * Example: "SE 50", "FIS 53; US$ 45.46".
+     *
+     * @return The additional underlyings for options, including additional cash.
+     */
+    const std::string &getAdditionalUnderlyings() const & noexcept {
+        return data_.additionalUnderlyings;
+    }
+
+    /**
+     * Changes additional underlyings for options, including additional cash.
+     * It shall use following format:
+     * ```
+     *     <VALUE> ::= <empty> | <LIST>
+     *     <LIST> ::= <AU> | <AU> <semicolon> <space> <LIST>
+     *     <AU> ::= <UNDERLYING> <space> <SPC>
+     * the list shall be sorted by <UNDERLYING>.
+     * ```
+     * Example: "SE 50", "FIS 53; US$ 45.46".
+     *
+     * @param additionalUnderlyings The additional underlyings for options, including additional cash.
+     */
+    void setAdditionalUnderlyings(const std::string &additionalUnderlyings) noexcept {
+        data_.additionalUnderlyings = additionalUnderlyings;
+    }
+
+    /**
+     * Changes additional underlyings for options, including additional cash.
+     * It shall use following format:
+     * ```
+     *     <VALUE> ::= <empty> | <LIST>
+     *     <LIST> ::= <AU> | <AU> <semicolon> <space> <LIST>
+     *     <AU> ::= <UNDERLYING> <space> <SPC>
+     * the list shall be sorted by <UNDERLYING>.
+     * ```
+     * Example: "SE 50", "FIS 53; US$ 45.46".
+     *
+     * @param additionalUnderlyings The additional underlyings for options, including additional cash.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withAdditionalUnderlyings(const std::string &additionalUnderlyings) noexcept {
+        InstrumentProfile::setAdditionalUnderlyings(additionalUnderlyings);
+
+        return *this;
+    }
+
+    /**
+     * Changes additional underlyings for options, including additional cash.
+     * It shall use following format:
+     * ```
+     *     <VALUE> ::= <empty> | <LIST>
+     *     <LIST> ::= <AU> | <AU> <semicolon> <space> <LIST>
+     *     <AU> ::= <UNDERLYING> <space> <SPC>
+     * the list shall be sorted by <UNDERLYING>.
+     * ```
+     * Example: "SE 50", "FIS 53; US$ 45.46".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param additionalUnderlyings The additional underlyings for options, including additional cash.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withAdditionalUnderlyingsShared(const std::string &additionalUnderlyings) noexcept {
+        InstrumentProfile::setAdditionalUnderlyings(additionalUnderlyings);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns maturity month-year as provided for corresponding FIX tag (200).
+     * It can use several different formats depending on data source:
+     * <ul>
+     * <li>YYYYMM – if only year and month are specified
+     * <li>YYYYMMDD – if full date is specified
+     * <li>YYYYMMwN – if week number (within a month) is specified
+     * </ul>
+     *
+     * @return The maturity month-year as provided for corresponding FIX tag (200).
+     */
+    const std::string &getMMY() const & noexcept {
+        return data_.mmy;
+    }
+
+    /**
+     * Changes maturity month-year as provided for corresponding FIX tag (200).
+     * It can use several different formats depending on data source:
+     * <ul>
+     * <li>YYYYMM – if only year and month are specified
+     * <li>YYYYMMDD – if full date is specified
+     * <li>YYYYMMwN – if week number (within a month) is specified
+     * </ul>
+     *
+     * @param mmy The maturity month-year as provided for corresponding FIX tag (200).
+     */
+    void setMMY(const std::string &mmy) noexcept {
+        data_.mmy = mmy;
+    }
+
+    /**
+     * Changes maturity month-year as provided for corresponding FIX tag (200).
+     * It can use several different formats depending on data source:
+     * <ul>
+     * <li>YYYYMM – if only year and month are specified
+     * <li>YYYYMMDD – if full date is specified
+     * <li>YYYYMMwN – if week number (within a month) is specified
+     * </ul>
+     *
+     * @param mmy The maturity month-year as provided for corresponding FIX tag (200).
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withMMY(const std::string &mmy) noexcept {
+        InstrumentProfile::setMMY(mmy);
+
+        return *this;
+    }
+
+    /**
+     * Changes maturity month-year as provided for corresponding FIX tag (200).
+     * It can use several different formats depending on data source:
+     * <ul>
+     * <li>YYYYMM – if only year and month are specified
+     * <li>YYYYMMDD – if full date is specified
+     * <li>YYYYMMwN – if week number (within a month) is specified
+     * </ul>
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param mmy The maturity month-year as provided for corresponding FIX tag (200).
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withMMYShared(const std::string &mmy) noexcept {
+        InstrumentProfile::setMMY(mmy);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns day id of expiration.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     *
+     * @return The day id of expiration.
+     */
+    std::int32_t getExpiration() const noexcept {
+        return data_.expiration;
+    }
+
+    /**
+     * Changes day id of expiration.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     *
+     * @param expiration The day id of expiration.
+     */
+    void setExpiration(std::int32_t expiration) noexcept {
+        data_.expiration = expiration;
+    }
+
+    /**
+     * Changes day id of expiration.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     *
+     * @param expiration The day id of expiration.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withExpiration(std::int32_t expiration) noexcept {
+        InstrumentProfile::setExpiration(expiration);
+
+        return *this;
+    }
+
+    /**
+     * Changes day id of expiration.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param expiration The day id of expiration.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withExpirationShared(std::int32_t expiration) noexcept {
+        InstrumentProfile::setExpiration(expiration);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
     //    /**
     //     * Returns day id of last trading day.
     //     * Example: {@link DayUtil#getDayIdByYearMonthDay DayUtil.getDayIdByYearMonthDay}(20090116).
