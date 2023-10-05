@@ -1487,157 +1487,404 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
         return shared_from_this()->sharedAs<InstrumentProfile>();
     }
 
-    //    /**
-    //     * Returns day id of last trading day.
-    //     * Example: {@link DayUtil#getDayIdByYearMonthDay DayUtil.getDayIdByYearMonthDay}(20090116).
-    //     * @return day id of last trading day.
-    //     */
-    //  public int getLastTrade() {
-    //        return lastTrade;
-    //    }
-    //
-    //    /**
-    //     * Changes day id of last trading day.
-    //     * Example: {@link DayUtil#getDayIdByYearMonthDay DayUtil.getDayIdByYearMonthDay}(20090116).
-    //     * @param lastTrade day id of last trading day.
-    //     */
-    //  public void setLastTrade(int lastTrade) {
-    //        this.lastTrade = lastTrade;
-    //    }
-    //
-    //    /**
-    //     * Returns strike price for options.
-    //     * Example: 80, 22.5.
-    //     * @return strike price for options.
-    //     */
-    //  public double getStrike() {
-    //        return strike;
-    //    }
-    //
-    //    /**
-    //     * Changes strike price for options.
-    //     * Example: 80, 22.5.
-    //     * @param strike strike price for options.
-    //     */
-    //  public void setStrike(double strike) {
-    //        this.strike = strike;
-    //    }
-    //
-    //    /**
-    //     * Returns type of option.
-    //     * It shall use one of following values:
-    //     * <ul>
-    //     * <li>STAN = Standard Options
-    //     * <li>LEAP = Long-term Equity AnticiPation Securities
-    //     * <li>SDO = Special Dated Options
-    //     * <li>BINY = Binary Options
-    //     * <li>FLEX = FLexible EXchange Options
-    //     * <li>VSO = Variable Start Options
-    //     * <li>RNGE = Range
-    //     * </ul>
-    //     * @return type of option.
-    //     */
-    //  public String getOptionType() {
-    //        return optionType;
-    //    }
-    //
-    //    /**
-    //     * Changes type of option.
-    //     * It shall use one of following values:
-    //     * <ul>
-    //     * <li>STAN = Standard Options
-    //     * <li>LEAP = Long-term Equity AnticiPation Securities
-    //     * <li>SDO = Special Dated Options
-    //     * <li>BINY = Binary Options
-    //     * <li>FLEX = FLexible EXchange Options
-    //     * <li>VSO = Variable Start Options
-    //     * <li>RNGE = Range
-    //     * </ul>
-    //     * @param optionType type of option.
-    //     */
-    //  public void setOptionType(String optionType) {
-    //        this.optionType = optionType == null || optionType.isEmpty() ? "" : optionType;
-    //    }
-    //
-    //    /**
-    //     * Returns expiration cycle style, such as "Weeklys", "Quarterlys".
-    //     * @return expiration cycle style.
-    //     */
-    //  public String getExpirationStyle() {
-    //        return expirationStyle;
-    //    }
-    //
-    //    /**
-    //     * Returns expiration cycle style, such as "Weeklys", "Quarterlys".
-    //     * @param expirationStyle expiration cycle style.
-    //     */
-    //  public void setExpirationStyle(String expirationStyle) {
-    //        this.expirationStyle = expirationStyle == null || expirationStyle.isEmpty() ? "" : expirationStyle;
-    //    }
-    //
-    //    /**
-    //     * Returns settlement price determination style, such as "Open", "Close".
-    //     * @return settlement price determination style.
-    //     */
-    //  public String getSettlementStyle() {
-    //        return settlementStyle;
-    //    }
-    //
-    //    /**
-    //     * Changes settlement price determination style, such as "Open", "Close".
-    //     * @param settlementStyle settlement price determination style.
-    //     */
-    //  public void setSettlementStyle(String settlementStyle) {
-    //        this.settlementStyle = settlementStyle == null || settlementStyle.isEmpty() ? "" : settlementStyle;
-    //    }
-    //
-    //    /**
-    //     * Returns minimum allowed price increments with corresponding price ranges.
-    //     * It shall use following format:
-    //     * <pre>
-    //     *     &lt;VALUE&gt; ::= &lt;empty&gt; | &lt;LIST&gt;
-    //     *     &lt;LIST&gt; ::= &lt;INCREMENT&gt; | &lt;RANGE&gt; &lt;semicolon&gt; &lt;space&gt; &lt;LIST&gt;
-    //     *     &lt;RANGE&gt; ::= &lt;INCREMENT&gt; &lt;space&gt; &lt;UPPER_LIMIT&gt; </pre>
-    //     * the list shall be sorted by &lt;UPPER_LIMIT&gt;.
-    //     * Example: "0.25", "0.01 3; 0.05".
-    //     * @return minimum allowed price increments with corresponding price ranges.
-    //     */
-    //  public String getPriceIncrements() {
-    //        return priceIncrements;
-    //    }
-    //
-    //    /**
-    //     * Changes minimum allowed price increments with corresponding price ranges.
-    //     * It shall use following format:
-    //     * <pre>
-    //     *     &lt;VALUE&gt; ::= &lt;empty&gt; | &lt;LIST&gt;
-    //     *     &lt;LIST&gt; ::= &lt;INCREMENT&gt; | &lt;RANGE&gt; &lt;semicolon&gt; &lt;space&gt; &lt;LIST&gt;
-    //     *     &lt;RANGE&gt; ::= &lt;INCREMENT&gt; &lt;space&gt; &lt;UPPER_LIMIT&gt; </pre>
-    //     * the list shall be sorted by &lt;UPPER_LIMIT&gt;.
-    //     * Example: "0.25", "0.01 3; 0.05".
-    //     * @param priceIncrements minimum allowed price increments with corresponding price ranges.
-    //     */
-    //  public void setPriceIncrements(String priceIncrements) {
-    //        this.priceIncrements = priceIncrements == null || priceIncrements.isEmpty() ? "" : priceIncrements;
-    //    }
-    //
-    //    /**
-    //     * Returns trading hours specification.
-    //     * See {@link Schedule#getInstance(String)}.
-    //     * @return trading hours specification.
-    //     */
-    //  public String getTradingHours() {
-    //        return tradingHours;
-    //    }
-    //
-    //    /**
-    //     * Changes trading hours specification.
-    //     * See {@link Schedule#getInstance(String)}.
-    //     * @param tradingHours trading hours specification.
-    //     */
-    //  public void setTradingHours(String tradingHours) {
-    //        this.tradingHours = tradingHours == null || tradingHours.isEmpty() ? "" : tradingHours;
-    //    }
+    /**
+     * Returns day id of last trading day.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     *
+     * @return The day id of last trading day.
+     */
+    std::int32_t getLastTrade() const noexcept {
+        return data_.lastTrade;
+    }
+
+    /**
+     * Changes day id of last trading day.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     *
+     * @param lastTrade The day id of last trading day.
+     */
+    void setLastTrade(std::int32_t lastTrade) noexcept {
+        data_.lastTrade = lastTrade;
+    }
+
+    /**
+     * Changes day id of last trading day.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     *
+     * @param lastTrade The day id of last trading day.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withLastTrade(std::int32_t lastTrade) noexcept {
+        InstrumentProfile::setLastTrade(lastTrade);
+
+        return *this;
+    }
+
+    /**
+     * Changes day id of last trading day.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param lastTrade The day id of last trading day.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withLastTradeShared(std::int32_t lastTrade) noexcept {
+        InstrumentProfile::setLastTrade(lastTrade);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns strike price for options.
+     * Example: 80, 22.5.
+     *
+     * @return The strike price for options.
+     */
+    double getStrike() const noexcept {
+        return data_.strike;
+    }
+
+    /**
+     * Changes strike price for options.
+     * Example: 80, 22.5.
+     *
+     * @param strike The strike price for options.
+     */
+    void setStrike(double strike) noexcept {
+        data_.strike = strike;
+    }
+
+    /**
+     * Changes strike price for options.
+     * Example: 80, 22.5.
+     *
+     * @param strike The strike price for options
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withStrike(double strike) noexcept {
+        InstrumentProfile::setStrike(strike);
+
+        return *this;
+    }
+
+    /**
+     * Changes strike price for options.
+     * Example: 80, 22.5.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param strike The strike price for options
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withStrikeShared(double strike) noexcept {
+        InstrumentProfile::setStrike(strike);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns type of option.
+     * It shall use one of following values:
+     * <ul>
+     * <li>STAN = Standard Options
+     * <li>LEAP = Long-term Equity AnticiPation Securities
+     * <li>SDO = Special Dated Options
+     * <li>BINY = Binary Options
+     * <li>FLEX = FLexible EXchange Options
+     * <li>VSO = Variable Start Options
+     * <li>RNGE = Range
+     * </ul>
+     *
+     * @return The type of option.
+     */
+    const std::string &getOptionType() const & noexcept {
+        return data_.optionType;
+    }
+
+    /**
+     * Changes type of option.
+     * It shall use one of following values:
+     * <ul>
+     * <li>STAN = Standard Options
+     * <li>LEAP = Long-term Equity AnticiPation Securities
+     * <li>SDO = Special Dated Options
+     * <li>BINY = Binary Options
+     * <li>FLEX = FLexible EXchange Options
+     * <li>VSO = Variable Start Options
+     * <li>RNGE = Range
+     * </ul>
+     *
+     * @param optionType The type of option.
+     */
+    void setOptionType(const std::string &optionType) noexcept {
+        data_.optionType = optionType;
+    }
+
+    /**
+     * Changes type of option.
+     * It shall use one of following values:
+     * <ul>
+     * <li>STAN = Standard Options
+     * <li>LEAP = Long-term Equity AnticiPation Securities
+     * <li>SDO = Special Dated Options
+     * <li>BINY = Binary Options
+     * <li>FLEX = FLexible EXchange Options
+     * <li>VSO = Variable Start Options
+     * <li>RNGE = Range
+     * </ul>
+     *
+     * @param optionType The type of option.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withOptionType(const std::string &optionType) noexcept {
+        InstrumentProfile::setOptionType(optionType);
+
+        return *this;
+    }
+
+    /**
+     * Changes type of option.
+     * It shall use one of following values:
+     * <ul>
+     * <li>STAN = Standard Options
+     * <li>LEAP = Long-term Equity AnticiPation Securities
+     * <li>SDO = Special Dated Options
+     * <li>BINY = Binary Options
+     * <li>FLEX = FLexible EXchange Options
+     * <li>VSO = Variable Start Options
+     * <li>RNGE = Range
+     * </ul>
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param optionType The type of option.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withOptionTypeShared(const std::string &optionType) noexcept {
+        InstrumentProfile::setOptionType(optionType);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns expiration cycle style, such as "Weeklys", "Quarterlys".
+     *
+     * @return The expiration cycle style.
+     */
+    const std::string &getExpirationStyle() const & noexcept {
+        return data_.expirationStyle;
+    }
+
+    /**
+     * Changes the expiration cycle style, such as "Weeklys", "Quarterlys".
+     *
+     * @param expirationStyle The expiration cycle style.
+     */
+    void setExpirationStyle(const std::string &expirationStyle) noexcept {
+        data_.expirationStyle = expirationStyle;
+    }
+
+    /**
+     * Changes the expiration cycle style, such as "Weeklys", "Quarterlys".
+     *
+     * @param expirationStyle The expiration cycle style.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withExpirationStyle(const std::string &expirationStyle) noexcept {
+        InstrumentProfile::setExpirationStyle(expirationStyle);
+
+        return *this;
+    }
+
+    /**
+     * Changes the expiration cycle style, such as "Weeklys", "Quarterlys".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param expirationStyle The expiration cycle style.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withExpirationStyleShared(const std::string &expirationStyle) noexcept {
+        InstrumentProfile::setExpirationStyle(expirationStyle);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns settlement price determination style, such as "Open", "Close".
+     *
+     * @return The settlement price determination style.
+     */
+    const std::string &getSettlementStyle() const & noexcept {
+        return data_.settlementStyle;
+    }
+
+    /**
+     * Changes settlement price determination style, such as "Open", "Close".
+     *
+     * @param settlementStyle The settlement price determination style.
+     */
+    void setSettlementStyle(const std::string &settlementStyle) noexcept {
+        data_.settlementStyle = settlementStyle;
+    }
+
+    /**
+     * Changes settlement price determination style, such as "Open", "Close".
+     *
+     * @param settlementStyle The settlement price determination style.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withSettlementStyle(const std::string &settlementStyle) noexcept {
+        InstrumentProfile::setSettlementStyle(settlementStyle);
+
+        return *this;
+    }
+
+    /**
+     * Changes settlement price determination style, such as "Open", "Close".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param settlementStyle The settlement price determination style.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withSettlementStyleShared(const std::string &settlementStyle) noexcept {
+        InstrumentProfile::setSettlementStyle(settlementStyle);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns minimum allowed price increments with corresponding price ranges.
+     * It shall use following format:
+     * ```
+     *     <VALUE> ::= <empty> | <LIST>
+     *     <LIST> ::= <INCREMENT> | <RANGE> <semicolon> <space> <LIST>
+     *     <RANGE> ::= <INCREMENT> <space> <UPPER_LIMIT>
+     * the list shall be sorted by <UPPER_LIMIT>.
+     * ```
+     * Example: "0.25", "0.01 3; 0.05".
+     *
+     * @return The minimum allowed price increments with corresponding price ranges.
+     */
+    const std::string &getPriceIncrements() const & noexcept {
+        return data_.priceIncrements;
+    }
+
+    /**
+     * Changes minimum allowed price increments with corresponding price ranges.
+     * It shall use following format:
+     * ```
+     *     <VALUE> ::= <empty> | <LIST>
+     *     <LIST> ::= <INCREMENT> | <RANGE> <semicolon> <space> <LIST>
+     *     <RANGE> ::= <INCREMENT> <space> <UPPER_LIMIT>
+     * the list shall be sorted by <UPPER_LIMIT>.
+     * ```
+     * Example: "0.25", "0.01 3; 0.05".
+     *
+     * @param priceIncrements The minimum allowed price increments with corresponding price ranges.
+     */
+    void setPriceIncrements(const std::string &priceIncrements) noexcept {
+        data_.priceIncrements = priceIncrements;
+    }
+
+    /**
+     * Changes minimum allowed price increments with corresponding price ranges.
+     * It shall use following format:
+     * ```
+     *     <VALUE> ::= <empty> | <LIST>
+     *     <LIST> ::= <INCREMENT> | <RANGE> <semicolon> <space> <LIST>
+     *     <RANGE> ::= <INCREMENT> <space> <UPPER_LIMIT>
+     * the list shall be sorted by <UPPER_LIMIT>.
+     * ```
+     * Example: "0.25", "0.01 3; 0.05".
+     *
+     * @param priceIncrements The minimum allowed price increments with corresponding price ranges.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withPriceIncrements(const std::string &priceIncrements) noexcept {
+        InstrumentProfile::setPriceIncrements(priceIncrements);
+
+        return *this;
+    }
+
+    /**
+     * Changes minimum allowed price increments with corresponding price ranges.
+     * It shall use following format:
+     * ```
+     *     <VALUE> ::= <empty> | <LIST>
+     *     <LIST> ::= <INCREMENT> | <RANGE> <semicolon> <space> <LIST>
+     *     <RANGE> ::= <INCREMENT> <space> <UPPER_LIMIT>
+     * the list shall be sorted by <UPPER_LIMIT>.
+     * ```
+     * Example: "0.25", "0.01 3; 0.05".
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param priceIncrements The minimum allowed price increments with corresponding price ranges.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withPriceIncrementsShared(const std::string &priceIncrements) noexcept {
+        InstrumentProfile::setPriceIncrements(priceIncrements);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
+
+    /**
+     * Returns trading hours specification.
+     * See Schedule::getInstance().
+     *
+     * @return The trading hours specification.
+     */
+    const std::string &getTradingHours() const & noexcept {
+        return data_.tradingHours;
+    }
+
+    /**
+     * Changes trading hours specification.
+     * See Schedule::getInstance().
+     *
+     * @param tradingHours The trading hours specification.
+     */
+    void setTradingHours(const std::string &tradingHours) noexcept {
+        data_.tradingHours = tradingHours;
+    }
+
+    /**
+     * Changes trading hours specification.
+     * See Schedule::getInstance().
+     *
+     * @param tradingHours The trading hours specification.
+     * @return The current instrument profile.
+     */
+    InstrumentProfile &withTradingHours(const std::string &tradingHours) noexcept {
+        InstrumentProfile::setTradingHours(tradingHours);
+
+        return *this;
+    }
+
+    /**
+     * Changes trading hours specification.
+     * See Schedule::getInstance().
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<InstrumentProfile>(new
+     * InstrumentProfile(...))` or `std::make_shared<InstrumentProfile>(...)`
+     *
+     * @param tradingHours The trading hours specification.
+     * @return A shared pointer to the current instrument profile.
+     */
+    InstrumentProfile::Ptr withTradingHoursShared(const std::string &tradingHours) noexcept {
+        InstrumentProfile::setTradingHours(tradingHours);
+
+        return shared_from_this()->sharedAs<InstrumentProfile>();
+    }
 };
 
 } // namespace dxfcpp
