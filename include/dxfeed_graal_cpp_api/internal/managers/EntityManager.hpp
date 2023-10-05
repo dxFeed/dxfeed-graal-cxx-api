@@ -14,7 +14,9 @@
 
 namespace dxfcpp {
 
-template <typename EntityType> struct EntityManager : private NonCopyable<EntityManager<EntityType>> {
+template <typename EntityType_> struct EntityManager : private NonCopyable<EntityManager<EntityType_>> {
+    using EntityType = EntityType_;
+
 #if DXFCPP_DEBUG == 1
     static auto getDebugName() {
         return std::string("EntityManager<") + typeid(EntityType).name() + ">";

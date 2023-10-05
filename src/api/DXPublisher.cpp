@@ -9,7 +9,6 @@
 #include <string>
 #include <utility>
 
-#include "dxfeed_graal_cpp_api/api/DXPublisher.hpp"
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
@@ -31,6 +30,9 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *feedHandle) noexcept {
     }
 
     std::shared_ptr<DXPublisher> publisher{new (std::nothrow) DXPublisher{}};
+
+    auto id = ApiContext::getInstance()->getManager<DXPublisherManager>()->registerEntity(publisher);
+    ignore_unused(id);
 
     // TODO: error handling
 

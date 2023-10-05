@@ -15,7 +15,7 @@ using namespace dxfcpp::literals;
 using namespace std::literals;
 
 //Segfaults appear sporadically on Linux and MacOS.
-#ifdef _WIN32
+//#ifdef _WIN32
 
 TEST_CASE("DXPublisher::publishEvents") {
     System::setProperty("dxendpoint.eventTime", "true");
@@ -65,7 +65,8 @@ TEST_CASE("DXPublisher::publishEvents") {
 
     std::this_thread::sleep_for(1000ms);
 
-    endpoint->close();
+    endpoint->awaitProcessed();
+    endpoint->closeAndAwaitTermination();
 
     std::lock_guard lock{mtx};
 
@@ -73,4 +74,4 @@ TEST_CASE("DXPublisher::publishEvents") {
     REQUIRE_EQ(quote->toString(), result.back()->toString());
 }
 
-#endif
+//#endif
