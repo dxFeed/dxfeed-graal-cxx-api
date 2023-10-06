@@ -130,6 +130,7 @@ set(dxFeedGraalCxxApi_ApiOsub_Sources
 
 set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/InstrumentProfile.cpp
+        src/ipf/InstrumentProfileField.cpp
         src/ipf/InstrumentProfileReader.cpp
 )
 

@@ -5,5 +5,6 @@
 
 #include "../internal/Conf.hpp"
 
+#include "InstrumentProfileField.hpp"
 #include "InstrumentProfile.hpp"
 #include "InstrumentProfileReader.hpp"
