@@ -39,8 +39,8 @@ std::size_t EventClassList::size() const noexcept {
     return impl_->size();
 }
 
-void *EventClassList::getHandler() noexcept {
-    return impl_->getHandler();
+void *EventClassList::getHandle() noexcept {
+    return impl_->getHandle();
 }
 
 EventClassList::~EventClassList() noexcept = default;

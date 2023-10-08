@@ -106,6 +106,8 @@ TEST_CASE("dxfc_dxendpoint_builder_t bug") {
 //    }
 //
 //    dxfc_dxendpoint_close(endpoint);
+//
+//    std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
 TEST_CASE("DXFeedSubscription") {

@@ -12,7 +12,7 @@ std::string toString(const dxfg_symbol_list &graalSymbolList);
 
 struct SymbolList::Impl : public RawListWrapper<dxfg_symbol_list, [](dxfg_symbol_list &list, std::size_t index,
                                                                      const SymbolWrapper &symbolWrapper) {
-    *list.elements[index] = *bit_cast<dxfg_symbol_t *>(symbolWrapper.toGraal());
+    *list.elements[index] = *dxfcpp::bit_cast<dxfg_symbol_t *>(symbolWrapper.toGraal());
 }> {
     std::string toString() const noexcept {
         return "SymbolList::Impl{list = " + dxfcpp::toString(list_) + "}";
@@ -42,8 +42,8 @@ std::size_t SymbolList::size() const noexcept {
     return impl_->size();
 }
 
-void *SymbolList::getHandler() noexcept {
-    return impl_->getHandler();
+void *SymbolList::getHandle() noexcept {
+    return impl_->getHandle();
 }
 
 SymbolList::~SymbolList() noexcept = default;
@@ -81,7 +81,7 @@ std::string toString(const dxfg_symbol_t *graalSymbol) {
     case STRING: {
         result += "STRING";
 
-        const auto *stringSymbol = bit_cast<const dxfg_string_symbol_t *>(graalSymbol);
+        const auto *stringSymbol = dxfcpp::bit_cast<const dxfg_string_symbol_t *>(graalSymbol);
 
         result += std::string(", symbol = ") + (!stringSymbol->symbol ? "null" : stringSymbol->symbol);
 
@@ -90,7 +90,7 @@ std::string toString(const dxfg_symbol_t *graalSymbol) {
     case CANDLE: {
         result += "CANDLE";
 
-        const auto *candleSymbol = bit_cast<const dxfg_candle_symbol_t *>(graalSymbol);
+        const auto *candleSymbol = dxfcpp::bit_cast<const dxfg_candle_symbol_t *>(graalSymbol);
 
         result += std::string(", symbol = ") + (!candleSymbol->symbol ? "null" : candleSymbol->symbol);
 
@@ -103,7 +103,7 @@ std::string toString(const dxfg_symbol_t *graalSymbol) {
         result += "INDEXED_EVENT_SUBSCRIPTION";
 
         const auto *indexedEventSubscriptionSymbol =
-            bit_cast<const dxfg_indexed_event_subscription_symbol_t *>(graalSymbol);
+            dxfcpp::bit_cast<const dxfg_indexed_event_subscription_symbol_t *>(graalSymbol);
 
         auto symbol =
             !indexedEventSubscriptionSymbol->symbol ? "null" : toString(indexedEventSubscriptionSymbol->symbol);
@@ -119,7 +119,7 @@ std::string toString(const dxfg_symbol_t *graalSymbol) {
         result += "TIME_SERIES_SUBSCRIPTION";
 
         const auto *timeSeriesSubscriptionSymbol =
-            bit_cast<const dxfg_time_series_subscription_symbol_t *>(graalSymbol);
+            dxfcpp::bit_cast<const dxfg_time_series_subscription_symbol_t *>(graalSymbol);
 
         auto symbol = !timeSeriesSubscriptionSymbol->symbol ? "null" : toString(timeSeriesSubscriptionSymbol->symbol);
 

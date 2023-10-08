@@ -12,4 +12,6 @@
    SPDX-License-Identifier: MIT
 6. Process - https://github.com/ttldtor/Process/blob/default/LICENSE  
    SPDX-License-Identifier: BSL-1.0
+7. Console - https://github.com/ttldtor/Console/blob/default/LICENSE  
+   SPDX-License-Identifier: BSL-1.0
    

@@ -179,11 +179,11 @@ Xcode 14.3+
 
 ## Installation
 
-Examples of how to install the library can be found [here](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples).
+Examples of how to install the library and integrate with the library can be found [here](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples).
 
 The API is delivered as a dynamic library (`dxFeedGraalCxxApi.so|dll|dylib`) and a static
-one (`dxFeedGraalCxxApi.a|lib`).
-Also, it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH`.
+one (`dxFeedGraalCxxApi_static.a|lib`).
+Also, it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH` (Or use `RPATH`, `LD_LIBRARY_PATH`).
 
 ## Usage
 
@@ -266,7 +266,9 @@ versions)
   and `dxfeed.properties` file
 * [WriteTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp)
   is a simple demonstration of how to write events to a tape file
-* [Other samples (external project)](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples)
+* [DxFeedIpfConnect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedIpfConnect/src/main.cpp)
+  This sample demonstrates how to subscribe to available symbols using IPF. It uses a `DxFeed` instance singleton
+  and `dxfeed.properties` file
 
 ## Current State
 

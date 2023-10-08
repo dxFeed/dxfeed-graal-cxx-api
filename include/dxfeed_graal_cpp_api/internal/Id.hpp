@@ -12,9 +12,10 @@ namespace dxfcpp {
 
 template <typename T> struct Id {
     using ValueType = std::size_t;
+    const static Id UNKNOWN;
 
   private:
-    const ValueType value_{};
+    ValueType value_{};
 
     explicit Id(ValueType value) : value_{value} {
     }
@@ -46,6 +47,9 @@ template <typename T> struct Id {
         return getValue() <=> id.getValue();
     }
 };
+
+template<typename T> const Id<T> Id<T>::UNKNOWN{static_cast<Id<T>::ValueType>(-1)};
+
 } // namespace dxfcpp
 
 template <typename T> struct std::hash<dxfcpp::Id<T>> {

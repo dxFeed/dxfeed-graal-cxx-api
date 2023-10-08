@@ -34,7 +34,7 @@ void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) noexcept
     }
 
     if (size == 0) {
-        return bit_cast<void *>(list);
+        return dxfcpp::bit_cast<void *>(list);
     }
 
     list->elements = new (std::nothrow) ElementType *[size] {
@@ -62,7 +62,7 @@ bool SymbolWrapper::SymbolListUtils::setGraalListElement(void *graalList, std::p
         return false;
     }
 
-    bit_cast<ListType *>(graalList)->elements[elementIdx] = bit_cast<ElementType *>(element);
+    dxfcpp::bit_cast<ListType *>(graalList)->elements[elementIdx] = dxfcpp::bit_cast<ElementType *>(element);
 
     return true;
 }
@@ -76,11 +76,11 @@ bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std:
         return false;
     }
 
-    auto *list = bit_cast<ListType *>(graalList);
+    auto *list = dxfcpp::bit_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
         // TODO: error handling
-        SymbolWrapper::freeGraal(bit_cast<void *>(list->elements[i]));
+        SymbolWrapper::freeGraal(dxfcpp::bit_cast<void *>(list->elements[i]));
     }
 
     delete[] list->elements;
@@ -101,12 +101,12 @@ void SymbolWrapper::SymbolListUtils::freeGraalList(void *graalList) noexcept {
         return;
     }
 
-    auto list = bit_cast<ListType *>(graalList);
+    auto list = dxfcpp::bit_cast<ListType *>(graalList);
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
             if (list->elements[elementIndex]) {
-                SymbolWrapper::freeGraal(bit_cast<void *>(list->elements[elementIndex]));
+                SymbolWrapper::freeGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex]));
             }
         }
 
@@ -130,12 +130,12 @@ std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *g
 
     std::vector<SymbolWrapper> result{};
 
-    auto list = bit_cast<ListType *>(graalList);
+    auto list = dxfcpp::bit_cast<ListType *>(graalList);
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
             if (list->elements[elementIndex]) {
-                result.emplace_back(SymbolWrapper::fromGraal(bit_cast<void *>(list->elements[elementIndex])));
+                result.emplace_back(SymbolWrapper::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
             }
         }
     }

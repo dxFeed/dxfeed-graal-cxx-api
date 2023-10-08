@@ -65,7 +65,7 @@ struct PerfTestTool {
         explicit Diagnostic(bool showCpuUsageByCore) noexcept : showCpuUsageByCore_{showCpuUsageByCore} {
             timerDiff_.restart();
             runningDiff_.restart();
-            cpuStartTime_ = ttldtor::process::Process::getTotalProcessorTime();
+            cpuStartTime_ = org::ttldtor::process::Process::getTotalProcessorTime();
         }
 
         static std::string formatDouble(double value) noexcept {
@@ -118,11 +118,11 @@ struct PerfTestTool {
         }
 
         static double getMemoryUsage() noexcept {
-            return static_cast<double>(ttldtor::process::Process::getWorkingSetSize()) / 1024.0 / 1024.0;
+            return static_cast<double>(org::ttldtor::process::Process::getWorkingSetSize()) / 1024.0 / 1024.0;
         }
 
         double getCpuUsage() noexcept {
-            auto cpuEndTime = ttldtor::process::Process::getTotalProcessorTime();
+            auto cpuEndTime = org::ttldtor::process::Process::getTotalProcessorTime();
             auto cpuDiff = cpuEndTime - cpuStartTime_;
 
             cpuStartTime_ = cpuEndTime;

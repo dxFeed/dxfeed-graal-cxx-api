@@ -81,6 +81,9 @@ FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 FetchContent_Declare(Process GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default)
 FetchContent_MakeAvailable(Process)
 
+FetchContent_Declare(Console GIT_REPOSITORY "https://github.com/ttldtor/Console.git" GIT_TAG default)
+FetchContent_MakeAvailable(Console)
+
 add_subdirectory(third_party/utfcpp-3.2.3)
 set(FMT_INSTALL OFF)
 add_subdirectory(third_party/fmt-10.0.0)
@@ -94,12 +97,11 @@ add_subdirectory(third_party/date-3.0.1)
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp
-        src/internal/JavaObjectHandler.cpp
+        src/internal/JavaObjectHandle.cpp
         src/internal/EventClassList.cpp
         src/internal/SymbolList.cpp
         src/internal/Common.cpp
         src/internal/Platform.cpp
-        src/internal/Console.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources
@@ -113,17 +115,23 @@ set(dxFeedGraalCxxApi_InternalUtilsDebug_Sources
         src/internal/utils/debug/Debug.cpp
 )
 
-set(dxFeedGraalCxxApi_API_Sources
+set(dxFeedGraalCxxApi_Api_Sources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
         src/api/DXPublisher.cpp
 )
 
-set(dxFeedGraalCxxApi_APIOsub_Sources
+set(dxFeedGraalCxxApi_ApiOsub_Sources
         src/api/osub/WildcardSymbol.cpp
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
+)
+
+set(dxFeedGraalCxxApi_Ipf_Sources
+        src/ipf/InstrumentProfile.cpp
+        src/ipf/InstrumentProfileField.cpp
+        src/ipf/InstrumentProfileReader.cpp
 )
 
 set(dxFeedGraalCxxApi_Symbols_Sources
@@ -197,8 +205,9 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Internal_Sources}
         ${dxFeedGraalCxxApi_InternalUtils_Sources}
         ${dxFeedGraalCxxApi_InternalUtilsDebug_Sources}
-        ${dxFeedGraalCxxApi_API_Sources}
-        ${dxFeedGraalCxxApi_APIOsub_Sources}
+        ${dxFeedGraalCxxApi_Api_Sources}
+        ${dxFeedGraalCxxApi_ApiOsub_Sources}
+        ${dxFeedGraalCxxApi_Ipf_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}
         ${dxFeedGraalCxxApi_System_Sources}
         ${dxFeedGraalCxxApi_Event_Sources}
@@ -329,6 +338,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/ConvertTapeFile)
     add_subdirectory(samples/cpp/DxFeedFileParser)
     add_subdirectory(samples/cpp/DxFeedConnect)
+    add_subdirectory(samples/cpp/DxFeedIpfConnect)
 endif ()
 
 if (DXFCXX_BUILD_TOOLS)

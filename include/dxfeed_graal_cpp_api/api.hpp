@@ -7,12 +7,11 @@
 
 #include "internal/CEntryPointErrors.hpp"
 #include "internal/Common.hpp"
-#include "internal/Console.hpp"
 #include "internal/Enum.hpp"
 #include "internal/EventClassList.hpp"
 #include "internal/Id.hpp"
 #include "internal/Isolate.hpp"
-#include "internal/JavaObjectHandler.hpp"
+#include "internal/JavaObjectHandle.hpp"
 #include "internal/NonCopyable.hpp"
 #include "internal/Platform.hpp"
 #include "internal/RawListWrapper.hpp"
@@ -31,6 +30,7 @@
 #include "internal/utils/debug/Debug.hpp"
 
 #include "api/ApiModule.hpp"
+#include "ipf/IpfModule.hpp"
 #include "entity/EntityModule.hpp"
 #include "event/EventModule.hpp"
 #include "schedule/ScheduleModule.hpp"

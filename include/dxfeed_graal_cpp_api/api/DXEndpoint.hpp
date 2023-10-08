@@ -9,7 +9,7 @@
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
-#include "../internal/JavaObjectHandler.hpp"
+#include "../internal/JavaObjectHandle.hpp"
 #include "DXFeed.hpp"
 #include "DXPublisher.hpp"
 
@@ -495,12 +495,12 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static inline std::mutex MTX{};
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
-    JavaObjectHandler<DXEndpoint> handler_;
+    JavaObjectHandle<DXEndpoint> handle_;
     Role role_ = Role::FEED;
     std::string name_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
-    JavaObjectHandler<DXEndpointStateChangeListener> stateChangeListenerHandler_;
+    JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_;
     Handler<void(State, State)> onStateChange_{};
 
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
@@ -511,7 +511,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     void closeImpl();
 
   protected:
-    DXEndpoint() : handler_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandler_{}, onStateChange_{} {
+    DXEndpoint() : handle_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandle_{}, onStateChange_{} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXEndpoint()");
         }
@@ -520,7 +520,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
   public:
     ~DXEndpoint() noexcept override {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint{" + handler_.toString() + "}::~DXEndpoint()");
+            Debugger::debug("DXEndpoint{" + handle_.toString() + "}::~DXEndpoint()");
         }
     }
 
@@ -793,7 +793,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      */
     void close() {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint{" + handler_.toString() + "}::close()");
+            Debugger::debug("DXEndpoint{" + handle_.toString() + "}::close()");
         }
 
         closeImpl();
@@ -855,11 +855,11 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     class DXFCPP_EXPORT Builder : public std::enable_shared_from_this<Builder> {
         friend DXEndpoint;
 
-        JavaObjectHandler<Builder> handler_;
+        JavaObjectHandle<Builder> handle_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() : handler_{}, properties_{} {
+        Builder() : handle_{}, properties_{} {
             if constexpr (Debugger::isDebug) {
                 Debugger::debug("DXEndpoint::Builder::Builder()");
             }
@@ -885,7 +885,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
         /// Releases the GraalVM handle
         virtual ~Builder() {
             if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::~Builder()");
+                Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::~Builder()");
             }
         }
 
@@ -901,7 +901,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
         std::shared_ptr<Builder> withName(const std::string &name) {
             // TODO: check invalid utf-8
             if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::withName(name = " + name + ")");
+                Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");
             }
 
             return withProperty(NAME_PROPERTY, name);
@@ -939,7 +939,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
             if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{" + handler_.toString() + "}::withProperties(properties[" +
+                Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperties(properties[" +
                                 std::to_string(properties.size()) + "])");
             }
 

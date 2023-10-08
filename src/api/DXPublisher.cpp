@@ -9,7 +9,6 @@
 #include <string>
 #include <utility>
 
-#include "dxfeed_graal_cpp_api/api/DXPublisher.hpp"
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
@@ -32,24 +31,27 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *feedHandle) noexcept {
 
     std::shared_ptr<DXPublisher> publisher{new (std::nothrow) DXPublisher{}};
 
+    auto id = ApiContext::getInstance()->getManager<DXPublisherManager>()->registerEntity(publisher);
+    ignore_unused(id);
+
     // TODO: error handling
 
     if (publisher) {
-        publisher->handler_ = JavaObjectHandler<DXPublisher>(feedHandle);
+        publisher->handle_ = JavaObjectHandle<DXPublisher>(feedHandle);
     }
 
     return publisher;
 }
 
 std::string DXPublisher::toString() const noexcept {
-    return fmt::format("DXPublisher{{{}}}", handler_.toString());
+    return fmt::format("DXPublisher{{{}}}", handle_.toString());
 }
 
 void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
     runIsolatedOrElse(
-        [handler = bit_cast<dxfg_publisher_t *>(handler_.get()), graalEventsList](auto threadHandle) {
-            return dxfg_DXPublisher_publishEvents(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handler,
-                                                  bit_cast<dxfg_event_type_list *>(graalEventsList)) == 0;
+        [handle = dxfcpp::bit_cast<dxfg_publisher_t *>(handle_.get()), graalEventsList](auto threadHandle) {
+            return dxfg_DXPublisher_publishEvents(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+                                                  dxfcpp::bit_cast<dxfg_event_type_list *>(graalEventsList)) == 0;
         },
         false);
 }

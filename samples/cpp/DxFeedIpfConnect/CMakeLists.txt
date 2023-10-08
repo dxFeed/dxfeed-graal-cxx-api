@@ -1,7 +1,7 @@
 # Copyright (c) 2023 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
 
 if (POLICY CMP0092)
     cmake_policy(SET CMP0092 NEW)
@@ -11,7 +11,7 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
-project(Tools LANGUAGES CXX)
+project(DxFeedIpfConnect LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
@@ -33,27 +33,21 @@ elseif (UNIX)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
 endif ()
 
-add_executable(${PROJECT_NAME}
-        src/main.cpp
-        src/Tools.cpp
-        src/Args/Args.cpp
-)
+add_executable(${PROJECT_NAME} src/main.cpp)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ../../third_party/range-v3-0.12/include)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only)
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
-
-#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process console::console fmt::fmt-header-only)
+target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
 #target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
-#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-#        $<TARGET_FILE:dxfcxx::graal>
-#        $<TARGET_FILE:dxfcxx>
-#        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
-if (DXFCXX_INSTALL AND DXFCXX_INSTALL_TOOLS)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:dxfcxx::graal>
+        #        $<TARGET_FILE:dxfcxx>
+        ${CMAKE_CURRENT_SOURCE_DIR}/dxfeed.properties
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+
+if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
     install(TARGETS ${PROJECT_NAME})
+    install(FILES "dxfeed.properties" DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     if (WIN32)
         install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
