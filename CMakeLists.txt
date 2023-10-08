@@ -97,7 +97,7 @@ add_subdirectory(third_party/date-3.0.1)
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp
-        src/internal/JavaObjectHandler.cpp
+        src/internal/JavaObjectHandle.cpp
         src/internal/EventClassList.cpp
         src/internal/SymbolList.cpp
         src/internal/Common.cpp

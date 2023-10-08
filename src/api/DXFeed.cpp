@@ -29,14 +29,14 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
         Debugger::debug(toString() + "::attachSubscription(" + subscription->toString() + ")");
     }
 
-    if (!handler_ || !subscription || !subscription->handler_) {
+    if (!handle_ || !subscription || !subscription->handle_) {
         return;
     }
 
     if (runIsolatedOrElse(
-            [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
-             subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
-                return dxfg_DXFeed_attachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handler,
+            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
+             subHandler = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+                return dxfg_DXFeed_attachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
                                                       subHandler) == 0;
             },
             false)) {
@@ -50,15 +50,15 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
         Debugger::debug(toString() + "::detachSubscription(" + subscription->toString() + ")");
     }
 
-    if (!handler_ || !subscription || !subscription->handler_) {
+    if (!handle_ || !subscription || !subscription->handle_) {
         return;
     }
 
     if (runIsolatedOrElse(
-            [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
-             subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handler,
-                                                      subHandler) == 0;
+            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
+             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+                                                      subHandle) == 0;
             },
             false)) {
 
@@ -71,15 +71,15 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
         Debugger::debug(toString() + "::detachSubscriptionAndClear(" + subscription->toString() + ")");
     }
 
-    if (!handler_ || !subscription || !subscription->handler_) {
+    if (!handle_ || !subscription || !subscription->handle_) {
         return;
     }
 
     if (runIsolatedOrElse(
-            [handler = bit_cast<dxfg_feed_t *>(handler_.get()),
-             subHandler = bit_cast<dxfg_subscription_t *>(subscription->handler_.get())](auto threadHandle) {
+            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
+             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
                 return dxfg_DXFeed_detachSubscriptionAndClear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                              handler, subHandler) == 0;
+                                                              handle, subHandle) == 0;
             },
             false)) {
 
@@ -126,14 +126,14 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
     // TODO: error handling
 
     if (feed) {
-        feed->handler_ = JavaObjectHandler<DXFeed>(feedHandle);
+        feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
     }
 
     return feed;
 }
 
 std::string DXFeed::toString() const noexcept {
-    return fmt::format("DXFeed{{{}}}", handler_.toString());
+    return fmt::format("DXFeed{{{}}}", handle_.toString());
 }
 
 } // namespace dxfcpp

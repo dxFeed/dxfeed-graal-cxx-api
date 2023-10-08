@@ -12,15 +12,15 @@
 
 namespace dxfcpp {
 
-template <typename T> struct JavaObjectHandler {
+template <typename T> struct JavaObjectHandle {
     using Type = T;
-    static DXFCPP_EXPORT void deleter(void *handler) noexcept;
-    explicit JavaObjectHandler(void *handler = nullptr) noexcept : impl_{handler, &deleter} {
+    static DXFCPP_EXPORT void deleter(void *handle) noexcept;
+    explicit JavaObjectHandle(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
     }
 
-    JavaObjectHandler(JavaObjectHandler &&) = default;
-    JavaObjectHandler &operator=(JavaObjectHandler &&) = default;
-    virtual ~JavaObjectHandler() noexcept = default;
+    JavaObjectHandle(JavaObjectHandle &&) = default;
+    JavaObjectHandle &operator=(JavaObjectHandle &&) = default;
+    virtual ~JavaObjectHandle() noexcept = default;
 
     [[nodiscard]] std::string toString() const noexcept {
         if (impl_)

@@ -19,7 +19,7 @@ void *WildcardSymbol::toGraal() const noexcept {
 
     static const dxfg_wildcard_symbol_t wildcardGraalSymbol{{WILDCARD}};
 
-    return bit_cast<void *>(&wildcardGraalSymbol);
+    return dxfcpp::bit_cast<void *>(&wildcardGraalSymbol);
 }
 
 void WildcardSymbol::freeGraal(void *) noexcept {

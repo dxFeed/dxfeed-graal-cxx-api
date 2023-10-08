@@ -11,7 +11,7 @@
 #include "internal/EventClassList.hpp"
 #include "internal/Id.hpp"
 #include "internal/Isolate.hpp"
-#include "internal/JavaObjectHandler.hpp"
+#include "internal/JavaObjectHandle.hpp"
 #include "internal/NonCopyable.hpp"
 #include "internal/Platform.hpp"
 #include "internal/RawListWrapper.hpp"

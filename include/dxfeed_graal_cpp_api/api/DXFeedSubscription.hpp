@@ -10,7 +10,7 @@
 #include "../event/EventTypeEnum.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
-#include "../internal/JavaObjectHandler.hpp"
+#include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/StringSymbol.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "osub/WildcardSymbol.hpp"
@@ -39,13 +39,13 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     friend struct DXFeed;
 
     std::unordered_set<EventTypeEnum> eventTypes_;
-    JavaObjectHandler<DXFeedSubscription> handler_;
-    JavaObjectHandler<DXFeedEventListener> eventListenerHandler_;
+    JavaObjectHandle<DXFeedSubscription> handle_;
+    JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
     Handler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{1};
 
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
-    static JavaObjectHandler<DXFeedSubscription>
+    static JavaObjectHandle<DXFeedSubscription>
     createSubscriptionHandlerFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept;
 
     void setEventListenerHandler(Id<DXFeedSubscription> id) noexcept;
@@ -57,7 +57,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : eventTypes_(begin, end), handler_{}, eventListenerHandler_{}, onEvent_{1} {
+        : eventTypes_(begin, end), handle_{}, eventListenerHandle_{}, onEvent_{1} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
@@ -69,7 +69,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             return;
         }
 
-        handler_ = createSubscriptionHandlerFromEventClassList(list);
+        handle_ = createSubscriptionHandlerFromEventClassList(list);
     }
 
     DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
@@ -122,7 +122,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 
     ~DXFeedSubscription() override {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription{" + handler_.toString() + "}::~DXFeedSubscription()");
+            Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
         }
 
         closeImpl();

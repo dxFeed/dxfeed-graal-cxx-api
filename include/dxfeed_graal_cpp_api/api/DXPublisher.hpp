@@ -9,7 +9,7 @@
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
-#include "../internal/JavaObjectHandler.hpp"
+#include "../internal/JavaObjectHandle.hpp"
 
 #include "DXFeedSubscription.hpp"
 
@@ -67,13 +67,13 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     friend struct DXEndpoint;
 
   private:
-    JavaObjectHandler<DXPublisher> handler_;
+    JavaObjectHandle<DXPublisher> handle_;
 
     static std::shared_ptr<DXPublisher> create(void *feedHandle) noexcept;
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
-    DXPublisher() noexcept : handler_{} {
+    DXPublisher() noexcept : handle_{} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXPublisher()");
         }
@@ -82,7 +82,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
   public:
     ~DXPublisher() noexcept override {
         if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXPublisher{" + handler_.toString() + "}::~DXPublisher()");
+            Debugger::debug("DXPublisher{" + handle_.toString() + "}::~DXPublisher()");
         }
     }
 

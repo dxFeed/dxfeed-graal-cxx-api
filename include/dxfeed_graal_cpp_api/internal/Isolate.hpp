@@ -38,7 +38,7 @@ class Isolate final {
             this->idx = Id<IsolateThread>::getNext().getValue();
 
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("IsolateThread{" + dxfcpp::toString(bit_cast<void *>(handle)) +
+                Debugger::trace("IsolateThread{" + dxfcpp::toString(dxfcpp::bit_cast<void *>(handle)) +
                                 ", isMain = " + dxfcpp::toString(isMain) + ", tid = " + dxfcpp::toString(tid) +
                                 ", idx = " + std::to_string(idx) + "}()");
             }
@@ -65,7 +65,7 @@ class Isolate final {
         }
 
         std::string toString() const {
-            return std::string("IsolateThread{") + dxfcpp::toString(bit_cast<void *>(handle)) +
+            return std::string("IsolateThread{") + dxfcpp::toString(dxfcpp::bit_cast<void *>(handle)) +
                    ", isMain = " + dxfcpp::toString(isMain) + ", tid = " + dxfcpp::toString(tid) +
                    ", idx = " + std::to_string(idx) + "}";
         }
@@ -83,7 +83,7 @@ class Isolate final {
         currentIsolateThread_.isMain = true;
 
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("Isolate{" + dxfcpp::toString(bit_cast<void *>(handle)) + ", main = " +
+            Debugger::trace("Isolate{" + dxfcpp::toString(dxfcpp::bit_cast<void *>(handle)) + ", main = " +
                             mainIsolateThread_.toString() + ", current = " + currentIsolateThread_.toString() + "}()");
         }
     }
@@ -160,7 +160,7 @@ class Isolate final {
     }
 
     std::string toString() const noexcept {
-        return std::string("Isolate{") + dxfcpp::toString(bit_cast<void *>(handle_)) +
+        return std::string("Isolate{") + dxfcpp::toString(dxfcpp::bit_cast<void *>(handle_)) +
                ", main = " + mainIsolateThread_.toString() + ", current = " + currentIsolateThread_.toString() + "}";
     }
 };
