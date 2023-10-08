@@ -36,6 +36,11 @@ namespace dxfcpp {
  * </ul>
  */
 class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
+    Id<InstrumentProfileReader> id_;
+    JavaObjectHandle<DXFeedSubscription> handle_;
+
+    InstrumentProfileReader() noexcept;
+
   public:
     /// The alias to a type of shared pointer to the DXFeedSubscription object
     using Ptr = std::shared_ptr<InstrumentProfileReader>;
@@ -44,7 +49,11 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     using Unique = std::unique_ptr<InstrumentProfileReader>;
 
     static Ptr create() noexcept {
-        return {};
+        auto reader = std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
+
+        reader->id_ = ApiContext::getInstance()->getManager<InstrumentProfileReaderManager>()->registerEntity(reader);
+
+        return reader;
     }
 
     /**
@@ -65,9 +74,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param address URL of file to read from
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string& address) noexcept {
-        return {};
-    }
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string& address) const noexcept;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified basic user and password
@@ -87,9 +94,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param password the password (may be null)
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string& address, const std::string& user, const std::string& password) noexcept {
-        return {};
-    }
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string& address, const std::string& user, const std::string& password) const noexcept;
 };
 
 }
