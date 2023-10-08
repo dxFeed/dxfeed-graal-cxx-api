@@ -41,7 +41,7 @@ struct SymbolList {
 
     [[nodiscard]] std::size_t size() const noexcept;
 
-    void *getHandler() noexcept;
+    void *getHandle() noexcept;
 
     ~SymbolList() noexcept;
 

@@ -35,9 +35,9 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
 
     if (runIsolatedOrElse(
             [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
-             subHandler = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
                 return dxfg_DXFeed_attachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      subHandler) == 0;
+                                                      subHandle) == 0;
             },
             false)) {
 

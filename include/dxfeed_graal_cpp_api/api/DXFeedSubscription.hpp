@@ -46,9 +46,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
     static JavaObjectHandle<DXFeedSubscription>
-    createSubscriptionHandlerFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept;
+    createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept;
 
-    void setEventListenerHandler(Id<DXFeedSubscription> id) noexcept;
+    void setEventListenerHandle(Id<DXFeedSubscription> id) noexcept;
 
     template <typename EventTypeIt>
 #if __cpp_concepts
@@ -69,7 +69,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             return;
         }
 
-        handle_ = createSubscriptionHandlerFromEventClassList(list);
+        handle_ = createSubscriptionHandleFromEventClassList(list);
     }
 
     DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
@@ -146,7 +146,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventType));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
-        sub->setEventListenerHandler(id);
+        sub->setEventListenerHandle(id);
 
         return sub;
     }
@@ -186,7 +186,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(begin, end));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
-        sub->setEventListenerHandler(id);
+        sub->setEventListenerHandle(id);
 
         return sub;
     }
@@ -206,7 +206,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventTypes));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
-        sub->setEventListenerHandler(id);
+        sub->setEventListenerHandle(id);
 
         return sub;
     }
@@ -235,7 +235,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
-        sub->setEventListenerHandler(id);
+        sub->setEventListenerHandle(id);
 
         return sub;
     }

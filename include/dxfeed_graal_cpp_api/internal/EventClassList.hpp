@@ -41,7 +41,7 @@ struct DXFCPP_EXPORT EventClassList {
 
     [[nodiscard]] std::size_t size() const noexcept;
 
-    void *getHandler() noexcept;
+    void *getHandle() noexcept;
 
     ~EventClassList() noexcept;
 

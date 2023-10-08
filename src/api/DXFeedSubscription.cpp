@@ -193,15 +193,15 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
 }
 
 JavaObjectHandle<DXFeedSubscription>
-DXFeedSubscription::createSubscriptionHandlerFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept {
+DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept {
     return JavaObjectHandle<DXFeedSubscription>(runIsolatedOrElse(
-        [listHandler = dxfcpp::bit_cast<dxfg_event_clazz_list_t *>(list->getHandler())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_new2(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), listHandler);
+        [listHandle = dxfcpp::bit_cast<dxfg_event_clazz_list_t *>(list->getHandle())](auto threadHandle) {
+            return dxfg_DXFeedSubscription_new2(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), listHandle);
         },
         nullptr));
 }
 
-void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noexcept {
+void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexcept {
     auto onEvents = [](graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
         auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
         auto sub = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getEntity(id);
@@ -222,11 +222,11 @@ void DXFeedSubscription::setEventListenerHandler(Id<DXFeedSubscription> id) noex
 
     if (handle_ && eventListenerHandle_) {
         runIsolatedOrElse(
-            [handler = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()),
-             eventListenerHandler =
+            [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()),
+             eventListenerHandle =
                  dxfcpp::bit_cast<dxfg_feed_event_listener_t *>(eventListenerHandle_.get())](auto threadHandle) {
                 return dxfg_DXFeedSubscription_addEventListener(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                                handler, eventListenerHandler) == 0;
+                                                                handle, eventListenerHandle) == 0;
             },
             false);
     }

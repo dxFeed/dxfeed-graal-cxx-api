@@ -42,8 +42,8 @@ std::size_t SymbolList::size() const noexcept {
     return impl_->size();
 }
 
-void *SymbolList::getHandler() noexcept {
-    return impl_->getHandler();
+void *SymbolList::getHandle() noexcept {
+    return impl_->getHandle();
 }
 
 SymbolList::~SymbolList() noexcept = default;
