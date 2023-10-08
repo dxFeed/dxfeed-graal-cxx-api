@@ -59,9 +59,9 @@ class DXFCPP_EXPORT InstrumentProfileField {
     InstrumentProfileFieldTypeEnum typeEnum_;
     bool numericField_;
 
-    InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const std::string &name,
+    InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, std::string name,
                            InstrumentProfileFieldTypeEnum typeEnum) noexcept
-        : fieldEnum_{fieldEnum}, name_{name}, typeEnum_{typeEnum},
+        : fieldEnum_{fieldEnum}, name_{std::move(name)}, typeEnum_{typeEnum},
           numericField_{typeEnum != InstrumentProfileFieldTypeEnum::STRING} {
     }
 
@@ -102,7 +102,7 @@ class DXFCPP_EXPORT InstrumentProfileField {
     const static InstrumentProfileField PRICE_INCREMENTS;
     const static InstrumentProfileField TRADING_HOURS;
 
-    const std::string &getName() const & noexcept {
+    [[nodiscard]] const std::string &getName() const & noexcept {
         return name_;
     }
 
