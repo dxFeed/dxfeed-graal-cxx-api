@@ -207,6 +207,17 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     }
 
     /**
+     * Returns exchange code of last trade as UTF8 string.
+     *
+     * @return exchange code of last trade as UTF8 string.
+     */
+    std::string getExchangeCodeString() const noexcept {
+        //TODO: cache
+
+        return dxfcpp::utf16toUtf8String(tradeBaseData_.exchangeCode);
+    }
+
+    /**
      * Changes exchange code of the last trade.
      *
      * @param exchangeCode exchange code of the last trade.

@@ -296,6 +296,17 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
+     * Returns exchange code of this option sale as UTF8 string.
+     *
+     * @return exchange code of this option sale as UTF8 string.
+     */
+    std::string getExchangeCodeString() const noexcept {
+        //TODO: cache
+
+        return dxfcpp::utf16toUtf8String(data_.exchangeCode);
+    }
+
+    /**
      * Changes exchange code of this option sale event.
      *
      * @param exchangeCode exchange code of this option sale event.
