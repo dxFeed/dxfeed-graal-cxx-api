@@ -14,7 +14,11 @@ Where:
     type     - Is dxfeed event type ()" +
                        dxfcpp::enum_utils::getMarketEventTypeEnumNamesList() + " or " +
                        dxfcpp::enum_utils::getMarketEventTypeEnumClassNamesList() + R"().
-    ipf-file - Is name of instrument profiles file.)";
+    ipf-file - Is name of instrument profiles file.
+
+Examples:
+    DxFeedIpfConnect Quote http://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip
+)";
 
     std::cout << usageString << std::endl;
 }

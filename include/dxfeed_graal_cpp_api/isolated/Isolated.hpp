@@ -1,0 +1,37 @@
+// Copyright (c) 2023 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
+
+#pragma once
+
+#include "../internal/Conf.hpp"
+
+namespace dxfcpp::isolated {
+namespace api {
+struct DXEndpoint {
+    static bool close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
+    static dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
+    static bool user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &user) noexcept;
+    static bool password(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &password) noexcept;
+    static bool connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &address) noexcept;
+};
+} // namespace api
+
+namespace ipf {
+struct InstrumentProfileReader {
+    static /* dxfg_instrument_profile_reader_t* */ void *create() noexcept;
+
+    static /* dxfg_instrument_profile_list* */ void *
+    readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
+                 const std::string &address) noexcept;
+
+    static /* dxfg_instrument_profile_list* */ void *
+    readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
+                 const std::string &address, const std::string &user, const std::string &password) noexcept;
+};
+
+struct InstrumentProfileList {
+    static bool release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept;
+};
+
+} // namespace ipf
+} // namespace dxfcpp::isolated

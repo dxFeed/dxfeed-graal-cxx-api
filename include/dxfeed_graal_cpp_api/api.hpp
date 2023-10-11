@@ -37,3 +37,5 @@
 #include "symbols/StringSymbol.hpp"
 #include "symbols/SymbolWrapper.hpp"
 #include "system/System.hpp"
+
+#include "isolated/Isolated.hpp"
