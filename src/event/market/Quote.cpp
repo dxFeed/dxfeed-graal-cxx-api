@@ -24,6 +24,8 @@ std::int16_t Quote::getBidExchangeCode() const noexcept {
 }
 
 std::string Quote::getBidExchangeCodeString() const noexcept {
+    //TODO: cache
+
     return utf16toUtf8String(data_.bidExchangeCode);
 }
 
@@ -40,6 +42,8 @@ std::int16_t Quote::getAskExchangeCode() const noexcept {
 }
 
 std::string Quote::getAskExchangeCodeString() const noexcept {
+    //TODO: cache
+
     return utf16toUtf8String(data_.askExchangeCode);
 }
 

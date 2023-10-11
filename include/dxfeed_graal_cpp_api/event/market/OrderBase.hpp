@@ -600,8 +600,10 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @return exchange code of this order as UTF8 string.
      */
     std::string getExchangeCodeString() const noexcept {
-        return {1ULL, static_cast<char>(
-                          static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT)))};
+        //TODO: cache
+
+        return std::string(1ULL, static_cast<char>(
+                          static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
     }
 
     /**
