@@ -138,12 +138,7 @@ DXEndpoint::State DXEndpoint::getState() const {
         return State::CLOSED;
     }
 
-    return runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return graalStateToState(
-                dxfg_DXEndpoint_getState(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle));
-        },
-        State::CLOSED);
+    return isolated::api::DXEndpoint::getState(handle_.get());
 }
 
 void DXEndpoint::closeImpl() {
@@ -151,12 +146,7 @@ void DXEndpoint::closeImpl() {
         return;
     }
 
-    runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_close(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
-        },
-        false);
-
+    isolated::api::DXEndpoint::close(handle_.get());
     // TODO: close the Feed and Publisher
 }
 
@@ -170,12 +160,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
         return sharedAs<DXEndpoint>();
     }
 
-    runIsolatedOrElse(
-        [user = user, handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_user(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                        user.c_str()) == 0;
-        },
-        false);
+    isolated::api::DXEndpoint::user(handle_.get(), user);
 
     return sharedAs<DXEndpoint>();
 }
@@ -190,12 +175,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
         return sharedAs<DXEndpoint>();
     }
 
-    runIsolatedOrElse(
-        [password = password, handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_password(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                            password.c_str()) == 0;
-        },
-        false);
+    isolated::api::DXEndpoint::password(handle_.get(), password);
 
     return sharedAs<DXEndpoint>();
 }
@@ -210,12 +190,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
         return sharedAs<DXEndpoint>();
     }
 
-    runIsolatedOrElse(
-        [address = address, handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_connect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                           address.c_str()) == 0;
-        },
-        false);
+    isolated::api::DXEndpoint::connect(handle_.get(), address);
 
     return sharedAs<DXEndpoint>();
 }
@@ -505,12 +480,12 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
 
     auto endpointHandle =
         !handle_ ? nullptr
-                  : runIsolatedOrElse(
-                        [handle = dxfcpp::bit_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-                            return dxfg_DXEndpoint_Builder_build(
-                                dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle);
-                        },
-                        nullptr);
+                 : runIsolatedOrElse(
+                       [handle = dxfcpp::bit_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
+                           return dxfg_DXEndpoint_Builder_build(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                                handle);
+                       },
+                       nullptr);
 
     return DXEndpoint::create(endpointHandle, role_, properties_);
 }

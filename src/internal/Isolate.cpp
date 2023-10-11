@@ -1,7 +1,7 @@
 // Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <graal_isolate.h>
+#include <dxfg_api.h>
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
@@ -142,3 +142,148 @@ GraalIsolateThreadHandle Isolate::get() noexcept {
 }
 
 } // namespace dxfcpp
+
+namespace dxfcpp::isolated {
+
+namespace api {
+
+static dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
+    switch (state) {
+    case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
+        return dxfcpp::DXEndpoint::State::NOT_CONNECTED;
+    case DXFG_ENDPOINT_STATE_CONNECTING:
+        return dxfcpp::DXEndpoint::State::CONNECTING;
+    case DXFG_ENDPOINT_STATE_CONNECTED:
+        return dxfcpp::DXEndpoint::State::CONNECTED;
+    case DXFG_ENDPOINT_STATE_CLOSED:
+        return dxfcpp::DXEndpoint::State::CLOSED;
+    }
+
+    return dxfcpp::DXEndpoint::State::NOT_CONNECTED;
+}
+
+bool DXEndpoint::close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept {
+    if (!graalDXEndpointHandle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalDXEndpointHandle) {
+            return dxfg_DXEndpoint_close(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                         graalDXEndpointHandle) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle));
+}
+
+bool DXEndpoint::user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &user) noexcept {
+    if (!graalDXEndpointHandle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalDXEndpointHandle, auto &&user) {
+            return dxfg_DXEndpoint_user(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), graalDXEndpointHandle,
+                                        user.c_str()) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle), user);
+}
+
+bool DXEndpoint::password(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &password) noexcept {
+    if (!graalDXEndpointHandle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalDXEndpointHandle, auto &&password) {
+            return dxfg_DXEndpoint_password(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                            graalDXEndpointHandle, password.c_str()) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle), password);
+}
+
+bool DXEndpoint::connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &address) noexcept {
+    if (!graalDXEndpointHandle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalDXEndpointHandle, auto &&address) {
+            return dxfg_DXEndpoint_connect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                            graalDXEndpointHandle, address.c_str()) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle), address);
+}
+
+dxfcpp::DXEndpoint::State DXEndpoint::getState(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept {
+    if (!graalDXEndpointHandle) {
+        return dxfcpp::DXEndpoint::State::CLOSED;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalDXEndpointHandle) {
+            return graalStateToState(dxfg_DXEndpoint_getState(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                              graalDXEndpointHandle));
+        },
+        dxfcpp::DXEndpoint::State::CLOSED, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle));
+}
+
+} // namespace api
+
+namespace ipf {
+
+/* dxfg_instrument_profile_reader_t* */ void *InstrumentProfileReader::create() noexcept {
+    return runIsolatedOrElse(
+        [](auto threadHandle) {
+            return dxfg_InstrumentProfileReader_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle));
+        },
+        nullptr);
+}
+
+/* dxfg_instrument_profile_list* */ void *
+InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
+                                      const std::string &address) noexcept {
+    if (!graalInstrumentProfileReaderHandle) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalInstrumentProfileReaderHandle, auto &&address) {
+            return dxfg_InstrumentProfileReader_readFromFile(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                             graalInstrumentProfileReaderHandle, address.c_str());
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle), address));
+}
+
+/* dxfg_instrument_profile_list* */ void *
+InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
+                                      const std::string &address, const std::string &user,
+                                      const std::string &password) noexcept {
+    if (!graalInstrumentProfileReaderHandle) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalInstrumentProfileReaderHandle, auto &&address, auto &&user, auto &&password) {
+            return dxfg_InstrumentProfileReader_readFromFile2(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                              graalInstrumentProfileReaderHandle, address.c_str(),
+                                                              user.c_str(), password.c_str());
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle), address,
+        user, password));
+}
+
+bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {
+    if (!graalInstrumentProfileList) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&list) {
+            return dxfg_CList_InstrumentProfile_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                        list) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_instrument_profile_list *>(graalInstrumentProfileList));
+}
+
+} // namespace ipf
+} // namespace dxfcpp::isolated

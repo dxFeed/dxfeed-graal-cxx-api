@@ -19,11 +19,7 @@
 namespace dxfcpp {
 
 InstrumentProfileReader::InstrumentProfileReader() noexcept : id_{Id<InstrumentProfileReader>::UNKNOWN}, handle_{} {
-    handle_ = JavaObjectHandle<DXFeedSubscription>(runIsolatedOrElse(
-        [](auto threadHandle) {
-            return dxfg_InstrumentProfileReader_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle));
-        },
-        nullptr));
+    handle_ = JavaObjectHandle<DXFeedSubscription>(dxfcpp::isolated::ipf::InstrumentProfileReader::create());
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList) {
@@ -56,22 +52,10 @@ InstrumentProfileReader::readFromFile(const std::string &address) const noexcept
         return {};
     }
 
-    dxfg_instrument_profile_list *list = runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_instrument_profile_reader_t *>(handle_.get()),
-         address = address](auto threadHandle) {
-            return dxfg_InstrumentProfileReader_readFromFile(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                             handle, address.c_str());
-        },
-        nullptr);
+    auto *list = dxfcpp::isolated::ipf::InstrumentProfileReader::readFromFile(handle_.get(), address);
+    auto result = fromGraalList(list);
 
-    auto result = fromGraalList(dxfcpp::bit_cast<void *>(list));
-
-    runIsolatedOrElse(
-        [list](auto threadHandle) {
-            return dxfg_CList_InstrumentProfile_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                        list) == 0;
-        },
-        false);
+    dxfcpp::isolated::ipf::InstrumentProfileList::release(list);
 
     return result;
 }
@@ -83,22 +67,10 @@ InstrumentProfileReader::readFromFile(const std::string &address, const std::str
         return {};
     }
 
-    dxfg_instrument_profile_list *list = runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_instrument_profile_reader_t *>(handle_.get()), address = address, user = user,
-         password = password](auto threadHandle) {
-            return dxfg_InstrumentProfileReader_readFromFile2(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                              handle, address.c_str(), user.c_str(), password.c_str());
-        },
-        nullptr);
+    auto *list = dxfcpp::isolated::ipf::InstrumentProfileReader::readFromFile(handle_.get(), address, user, password);
+    auto result = fromGraalList(list);
 
-    auto result = fromGraalList(dxfcpp::bit_cast<void *>(list));
-
-    runIsolatedOrElse(
-        [list](auto threadHandle) {
-            return dxfg_CList_InstrumentProfile_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                        list) == 0;
-        },
-        false);
+    dxfcpp::isolated::ipf::InstrumentProfileList::release(list);
 
     return result;
 }

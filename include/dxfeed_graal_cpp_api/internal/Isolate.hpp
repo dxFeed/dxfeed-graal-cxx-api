@@ -9,13 +9,13 @@
 #include "Common.hpp"
 #include "utils/StringUtils.hpp"
 
+#include <concepts>
 #include <functional>
 #include <iostream>
 #include <memory>
 #include <mutex>
 #include <thread>
 #include <variant>
-#include <concepts>
 
 #ifdef NO_ERROR
 #    undef NO_ERROR
@@ -114,7 +114,8 @@ class Isolate final {
     }
 
     template <typename F>
-    auto runIsolated(F &&f) -> std::variant<CEntryPointErrorsEnum, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
+    auto runIsolated(F &&f)
+        -> std::variant<CEntryPointErrorsEnum, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
         if constexpr (Debugger::traceIsolates) {
             Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
         }
@@ -127,13 +128,42 @@ class Isolate final {
         if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
             if constexpr (Debugger::traceIsolates) {
                 Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
-                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " + CEntryPointErrors::valueOf(result).getDescription());
+                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
+                                CEntryPointErrors::valueOf(result).getDescription());
             }
 
             return result;
         }
 
         return std::invoke(std::forward<F>(f), currentIsolateThread_.handle);
+    }
+
+    template <typename F, typename Arg, typename... Args>
+    auto runIsolated(F &&f, Arg &&arg, Args &&...args)
+        -> std::variant<CEntryPointErrorsEnum,
+                        std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...>> {
+        if constexpr (Debugger::traceIsolates) {
+            Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
+        }
+
+        // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
+        if (auto currentThreadHandle = get(); currentThreadHandle != nullptr) {
+            return std::invoke(std::forward<F>(f), currentThreadHandle, std::forward<Arg>(arg),
+                               std::forward<Args>(args)...);
+        }
+
+        if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
+            if constexpr (Debugger::traceIsolates) {
+                Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
+                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
+                                CEntryPointErrors::valueOf(result).getDescription());
+            }
+
+            return result;
+        }
+
+        return std::invoke(std::forward<F>(f), currentIsolateThread_.handle, std::forward<Arg>(arg),
+                           std::forward<Args>(args)...);
     }
 
     template <typename F, typename R>
@@ -151,6 +181,24 @@ class Isolate final {
                 }
             },
             Isolate::getInstance()->runIsolated(std::forward<F>(f)));
+    }
+
+    template <typename F, typename R, typename Arg, typename... Args>
+#if __cpp_concepts
+        requires dxfcpp::ConvertibleTo<R, std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...>>
+#endif
+    auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
+        return std::visit(
+            [defaultValue =
+                 std::move(defaultValue)]<typename T>(T &&arg) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...> {
+                if constexpr (std::is_same_v<T, CEntryPointErrorsEnum>) {
+                    return defaultValue;
+                } else {
+                    return arg;
+                }
+            },
+            Isolate::getInstance()->runIsolated(std::forward<F>(f), std::forward<Arg>(arg),
+                                                std::forward<Args>(args)...));
     }
 
     ~Isolate() {
@@ -175,6 +223,15 @@ template <typename F, typename R>
 #endif
 auto runIsolatedOrElse(F &&f, R defaultValue) {
     return Isolate::getInstance()->runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue));
+}
+
+template <typename F, typename R, typename Arg, typename... Args>
+#if __cpp_concepts
+    requires dxfcpp::ConvertibleTo<R, std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...>>
+#endif
+auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
+    return Isolate::getInstance()->runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue),
+                                                     std::forward<Arg>(arg), std::forward<Args>(args)...);
 }
 
 } // namespace dxfcpp
