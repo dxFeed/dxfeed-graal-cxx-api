@@ -209,7 +209,7 @@ bool DXEndpoint::connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, con
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&graalDXEndpointHandle, auto &&address) {
             return dxfg_DXEndpoint_connect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                            graalDXEndpointHandle, address.c_str()) == 0;
+                                           graalDXEndpointHandle, address.c_str()) == 0;
         },
         false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle), address);
 }
@@ -237,6 +237,33 @@ namespace ipf {
             return dxfg_InstrumentProfileReader_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle));
         },
         nullptr);
+}
+
+static std::int64_t
+getLastModified(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
+    if (!graalInstrumentProfileReaderHandle) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalInstrumentProfileReaderHandle) {
+            return dxfg_InstrumentProfileReader_getLastModified(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                                graalInstrumentProfileReaderHandle);
+        },
+        0, dxfcpp::bit_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle));
+}
+
+static bool wasComplete(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
+    if (!graalInstrumentProfileReaderHandle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalInstrumentProfileReaderHandle) {
+            return dxfg_InstrumentProfileReader_wasComplete(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                            graalInstrumentProfileReaderHandle) == 1;
+        },
+        false, dxfcpp::bit_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle));
 }
 
 /* dxfg_instrument_profile_list* */ void *
