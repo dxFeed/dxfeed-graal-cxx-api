@@ -31,6 +31,8 @@ struct InstrumentProfileReader {
     static /* dxfg_instrument_profile_list* */ void *
     readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
                  const std::string &address, const std::string &user, const std::string &password) noexcept;
+
+    static std::string resolveSourceURL(const std::string & address) noexcept;
 };
 
 struct InstrumentProfileList {

@@ -38,6 +38,10 @@ bool InstrumentProfileReader::wasComplete() const noexcept {
     return isolated::ipf::InstrumentProfileReader::wasComplete(handle_.get());
 }
 
+std::string InstrumentProfileReader::resolveSourceURL(const std::string &address) noexcept {
+    return isolated::ipf::InstrumentProfileReader::resolveSourceURL(address);
+}
+
 std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList) {
     using ListType = dxfg_instrument_profile_list;
     using SizeType = decltype(ListType::size);
