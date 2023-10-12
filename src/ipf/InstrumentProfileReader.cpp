@@ -34,12 +34,14 @@ std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList) {
 
     auto list = dxfcpp::bit_cast<ListType *>(graalList);
 
-    if (list->size > 0 && list->elements != nullptr) {
-        for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
-            if (list->elements[elementIndex]) {
-                result.emplace_back(
-                    InstrumentProfile::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
-            }
+    if (list->size <= 0 || list->elements == nullptr) {
+        return result;
+    }
+
+    for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
+        if (list->elements[elementIndex]) {
+            result.emplace_back(
+                InstrumentProfile::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
         }
     }
 
