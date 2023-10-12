@@ -22,6 +22,22 @@ InstrumentProfileReader::InstrumentProfileReader() noexcept : id_{Id<InstrumentP
     handle_ = JavaObjectHandle<DXFeedSubscription>(dxfcpp::isolated::ipf::InstrumentProfileReader::create());
 }
 
+std::int64_t InstrumentProfileReader::getLastModified() const noexcept {
+    if (!handle_) {
+        return 0;
+    }
+
+    return isolated::ipf::InstrumentProfileReader::getLastModified(handle_.get());
+}
+
+bool InstrumentProfileReader::wasComplete() const noexcept {
+    if (!handle_) {
+        return false;
+    }
+
+    return isolated::ipf::InstrumentProfileReader::wasComplete(handle_.get());
+}
+
 std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList) {
     using ListType = dxfg_instrument_profile_list;
     using SizeType = decltype(ListType::size);
@@ -40,8 +56,7 @@ std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList) {
 
     for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
         if (list->elements[elementIndex]) {
-            result.emplace_back(
-                InstrumentProfile::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
+            result.emplace_back(InstrumentProfile::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
         }
     }
 

@@ -20,6 +20,10 @@ namespace ipf {
 struct InstrumentProfileReader {
     static /* dxfg_instrument_profile_reader_t* */ void *create() noexcept;
 
+    static std::int64_t getLastModified(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
+
+    static bool wasComplete(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
+
     static /* dxfg_instrument_profile_list* */ void *
     readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
                  const std::string &address) noexcept;

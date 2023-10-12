@@ -57,6 +57,17 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     }
 
     /**
+     * Returns last modification time (in milliseconds) from last InstrumentProfileReader::readFromFile() operation
+     * or zero if it is unknown.
+     */
+    std::int64_t getLastModified() const noexcept;
+
+    /**
+     * Returns `true` if IPF was fully read on last InstrumentProfileReader::readFromFile() operation.
+     */
+    bool wasComplete() const noexcept;
+
+    /**
      * Reads and returns instrument profiles from specified file.
      * This method recognizes data compression formats "zip" and "gzip" automatically.
      * In case of <em>zip</em> the first file entry will be read and parsed as a plain data stream.
@@ -74,7 +85,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param address URL of file to read from
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string& address) const noexcept;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address) const noexcept;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified basic user and password
@@ -94,7 +105,8 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param password the password (may be null)
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string& address, const std::string& user, const std::string& password) const noexcept;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address, const std::string &user,
+                                                                 const std::string &password) const noexcept;
 };
 
-}
+} // namespace dxfcpp
