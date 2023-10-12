@@ -239,8 +239,8 @@ namespace ipf {
         nullptr);
 }
 
-static std::int64_t
-getLastModified(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
+std::int64_t InstrumentProfileReader::getLastModified(
+    /* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
     if (!graalInstrumentProfileReaderHandle) {
         return 0;
     }
@@ -253,7 +253,8 @@ getLastModified(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentPr
         0, dxfcpp::bit_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle));
 }
 
-static bool wasComplete(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
+bool InstrumentProfileReader::wasComplete(
+    /* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
     if (!graalInstrumentProfileReaderHandle) {
         return false;
     }
