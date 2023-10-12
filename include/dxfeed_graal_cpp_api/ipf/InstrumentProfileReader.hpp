@@ -68,6 +68,12 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     bool wasComplete() const noexcept;
 
     /**
+     * Converts a specified string address specification into an URL that will be read by
+     * InstrumentProfileReader::readFromFile() method.
+     */
+    static std::string resolveSourceURL(const std::string &address) noexcept;
+
+    /**
      * Reads and returns instrument profiles from specified file.
      * This method recognizes data compression formats "zip" and "gzip" automatically.
      * In case of <em>zip</em> the first file entry will be read and parsed as a plain data stream.

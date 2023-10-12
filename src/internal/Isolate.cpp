@@ -300,6 +300,15 @@ InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ v
         user, password));
 }
 
+std::string InstrumentProfileReader::resolveSourceURL(const std::string &address) noexcept {
+    return dxfcpp::toString(runIsolatedOrElse(
+        [](auto threadHandle, auto &&address) {
+            return dxfg_InstrumentProfileReader_resolveSourceURL(
+                dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), address.c_str());
+        },
+        nullptr, address));
+}
+
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {
     if (!graalInstrumentProfileList) {
         return false;
