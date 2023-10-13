@@ -42,10 +42,10 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     InstrumentProfileReader() noexcept;
 
   public:
-    /// The alias to a type of shared pointer to the DXFeedSubscription object
+    /// The alias to a type of shared pointer to the InstrumentProfileReader object
     using Ptr = std::shared_ptr<InstrumentProfileReader>;
 
-    /// The alias to a type of unique pointer to the DXFeedSubscription object
+    /// The alias to a type of unique pointer to the InstrumentProfileReader object
     using Unique = std::unique_ptr<InstrumentProfileReader>;
 
     static Ptr create() noexcept {
