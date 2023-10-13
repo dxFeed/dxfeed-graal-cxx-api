@@ -26,6 +26,7 @@
 #include "internal/managers/DXPublisherManager.hpp"
 #include "internal/managers/InstrumentProfileReaderManager.hpp"
 #include "internal/managers/InstrumentProfileCollectorManager.hpp"
+#include "internal/managers/InstrumentProfileConnectionManager.hpp"
 #include "internal/managers/EntityManager.hpp"
 #include "internal/managers/ErrorHandlingManager.hpp"
 

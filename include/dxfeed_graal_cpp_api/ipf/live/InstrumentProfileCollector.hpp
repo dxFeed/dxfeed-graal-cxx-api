@@ -6,6 +6,10 @@
 #include "../../internal/Conf.hpp"
 
 #include "../../internal/Common.hpp"
+#include "../../internal/Id.hpp"
+#include "../../internal/JavaObjectHandle.hpp"
+
+#include "../../entity/SharedEntity.hpp"
 
 namespace dxfcpp {
 
