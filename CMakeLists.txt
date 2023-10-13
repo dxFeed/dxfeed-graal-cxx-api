@@ -132,6 +132,7 @@ set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/InstrumentProfile.cpp
         src/ipf/InstrumentProfileField.cpp
         src/ipf/InstrumentProfileReader.cpp
+        src/ipf/live/InstrumentProfileCollector.cpp
 )
 
 set(dxFeedGraalCxxApi_Symbols_Sources

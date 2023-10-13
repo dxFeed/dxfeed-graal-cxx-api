@@ -35,6 +35,10 @@ struct InstrumentProfileReader {
     static std::string resolveSourceURL(const std::string & address) noexcept;
 };
 
+struct InstrumentProfileCollector {
+    static /* dxfg_ipf_collector_t* */ void *create() noexcept;
+};
+
 struct InstrumentProfileList {
     static bool release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept;
 };

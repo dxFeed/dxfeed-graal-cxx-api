@@ -143,6 +143,8 @@ GraalIsolateThreadHandle Isolate::get() noexcept {
 
 } // namespace dxfcpp
 
+// see isolated/isolated.hpp
+
 namespace dxfcpp::isolated {
 
 namespace api {
@@ -232,11 +234,11 @@ dxfcpp::DXEndpoint::State DXEndpoint::getState(/* dxfg_endpoint_t* */ void *graa
 namespace ipf {
 
 /* dxfg_instrument_profile_reader_t* */ void *InstrumentProfileReader::create() noexcept {
-    return runIsolatedOrElse(
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle) {
             return dxfg_InstrumentProfileReader_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle));
         },
-        nullptr);
+        nullptr));
 }
 
 std::int64_t InstrumentProfileReader::getLastModified(
@@ -307,6 +309,14 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
                 dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), address.c_str());
         },
         nullptr, address));
+}
+
+/* dxfg_ipf_collector_t* */ void *InstrumentProfileCollector::create() noexcept {
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle) {
+            return dxfg_InstrumentProfileCollector_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle));
+        },
+        nullptr));
 }
 
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {

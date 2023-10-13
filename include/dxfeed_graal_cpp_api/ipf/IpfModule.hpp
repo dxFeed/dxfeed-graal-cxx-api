@@ -8,3 +8,5 @@
 #include "InstrumentProfileField.hpp"
 #include "InstrumentProfile.hpp"
 #include "InstrumentProfileReader.hpp"
+
+#include "live/InstrumentProfileCollector.hpp"
