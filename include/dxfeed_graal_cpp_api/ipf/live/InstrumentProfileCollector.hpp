@@ -13,7 +13,11 @@
 
 namespace dxfcpp {
 
+class InstrumentProfileConnection;
+
 class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
+    friend InstrumentProfileConnection;
+
     Id<InstrumentProfileCollector> id_;
     JavaObjectHandle<InstrumentProfileCollector> handle_;
 

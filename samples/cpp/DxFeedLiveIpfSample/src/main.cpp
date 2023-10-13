@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     std::string url = argc > 1 ? argv[1] : DXFEED_IPF_URL;
 
     auto collector = InstrumentProfileCollector::create();
-//    auto connection = InstrumentProfileConnection::createConnection(url, collector);
+    auto connection = InstrumentProfileConnection::createConnection(url, collector);
 //    // Update period can be used to re-read IPF files, not needed for services supporting IPF "live-update"
 //    connection->setUpdatePeriod(std::chrono::seconds(60));
 //    connection->addStateChangeListener(

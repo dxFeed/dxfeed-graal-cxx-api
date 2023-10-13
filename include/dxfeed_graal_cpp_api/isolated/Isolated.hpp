@@ -39,6 +39,10 @@ struct InstrumentProfileCollector {
     static /* dxfg_ipf_collector_t* */ void *create() noexcept;
 };
 
+struct InstrumentProfileConnection {
+    static /* dxfg_ipf_connection_t* */ void* createConnection(const std::string& address, /* dxfg_ipf_collector_t* */ void* instrumentProfileCollectorHandle) noexcept;
+};
+
 struct InstrumentProfileList {
     static bool release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept;
 };
