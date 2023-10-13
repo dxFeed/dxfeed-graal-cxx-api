@@ -17,7 +17,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     Id<InstrumentProfileConnection> id_;
     JavaObjectHandle<InstrumentProfileConnection> handle_;
 
-    //InstrumentProfileConnection() noexcept;
+    InstrumentProfileConnection() noexcept;
 
   public:
 
@@ -26,6 +26,23 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
 
     /// The alias to a type of unique pointer to the InstrumentProfileConnection object
     using Unique = std::unique_ptr<InstrumentProfileConnection>;
+
+    /**
+     * Creates instrument profile connection with a specified address and collector.
+     * Address may be just "<host>:<port>" of server, URL, or a file path.
+     * The "[update=<period>]" clause can be optionally added at the end of the address to
+     * specify an @ref InstrumentProfileConnection::getUpdatePeriod() "update period" via an address string.
+     * Default update period is 1 minute.
+     *
+     * <p>Connection needs to be @ref InstrumentProfileConnection::start() "started" to begin an actual operation.
+     *
+     * @param address The address.
+     * @param collector The instrument profile collector to push updates into.
+     *
+     * @return new instrument profile connection.
+     */
+  static Ptr createConnection(const std::string& address, InstrumentProfileCollector::Ptr collector) noexcept;
+
 };
 
 }
