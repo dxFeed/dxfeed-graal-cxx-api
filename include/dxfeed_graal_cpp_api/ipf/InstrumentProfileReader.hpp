@@ -6,6 +6,10 @@
 #include "../internal/Conf.hpp"
 
 #include "../internal/Common.hpp"
+#include "../internal/Id.hpp"
+#include "../internal/JavaObjectHandle.hpp"
+
+#include "../entity/SharedEntity.hpp"
 
 #include "InstrumentProfile.hpp"
 
@@ -48,13 +52,12 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     /// The alias to a type of unique pointer to the InstrumentProfileReader object
     using Unique = std::unique_ptr<InstrumentProfileReader>;
 
-    static Ptr create() noexcept {
-        auto reader = std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
-
-        reader->id_ = ApiContext::getInstance()->getManager<InstrumentProfileReaderManager>()->registerEntity(reader);
-
-        return reader;
-    }
+    /**
+     * Creates the new InstrumentProfileReader
+     *
+     * @return The new InstrumentProfileReader
+     */
+    static Ptr create() noexcept;
 
     /**
      * Returns last modification time (in milliseconds) from last InstrumentProfileReader::readFromFile() operation

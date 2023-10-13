@@ -22,6 +22,14 @@ InstrumentProfileReader::InstrumentProfileReader() noexcept : id_{Id<InstrumentP
     handle_ = JavaObjectHandle<InstrumentProfileReader>(dxfcpp::isolated::ipf::InstrumentProfileReader::create());
 }
 
+InstrumentProfileReader::Ptr InstrumentProfileReader::create() noexcept {
+    auto reader = std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
+
+    reader->id_ = ApiContext::getInstance()->getManager<InstrumentProfileReaderManager>()->registerEntity(reader);
+
+    return reader;
+}
+
 std::int64_t InstrumentProfileReader::getLastModified() const noexcept {
     if (!handle_) {
         return 0;

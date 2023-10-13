@@ -22,12 +22,15 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
 }
 
 template struct JavaObjectHandle<DXEndpoint>;
+template struct JavaObjectHandle<DXEndpoint::Builder>;
 template struct JavaObjectHandle<DXEndpointStateChangeListener>;
+
 template struct JavaObjectHandle<DXFeed>;
 template struct JavaObjectHandle<DXPublisher>;
 template struct JavaObjectHandle<DXFeedSubscription>;
 template struct JavaObjectHandle<DXFeedEventListener>;
-template struct JavaObjectHandle<DXEndpoint::Builder>;
+
 template struct JavaObjectHandle<InstrumentProfileReader>;
+template struct JavaObjectHandle<InstrumentProfileCollector>;
 
 } // namespace dxfcpp

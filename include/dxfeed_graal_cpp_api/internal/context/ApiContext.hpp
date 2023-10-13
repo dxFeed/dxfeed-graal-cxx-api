@@ -11,6 +11,7 @@
 #include "../managers/DXFeedManager.hpp"
 #include "../managers/DXFeedSubscriptionManager.hpp"
 #include "../managers/DXPublisherManager.hpp"
+#include "../managers/InstrumentProfileCollectorManager.hpp"
 #include "../managers/InstrumentProfileReaderManager.hpp"
 
 namespace dxfcpp {
@@ -18,7 +19,8 @@ namespace dxfcpp {
 template <typename Manager> struct AddManagerMixin {
     mutable std::shared_ptr<Manager> manager_;
 
-    AddManagerMixin() noexcept : manager_{std::make_shared<Manager>()} {}
+    AddManagerMixin() noexcept : manager_{std::make_shared<Manager>()} {
+    }
 
     std::shared_ptr<Manager> getManager() const noexcept {
         return manager_;
@@ -29,7 +31,8 @@ class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
                                  AddManagerMixin<DXFeedSubscriptionManager>,
                                  AddManagerMixin<DXFeedManager>,
                                  AddManagerMixin<DXPublisherManager>,
-                                 AddManagerMixin<InstrumentProfileReaderManager> {
+                                 AddManagerMixin<InstrumentProfileReaderManager>,
+                                 AddManagerMixin<InstrumentProfileCollectorManager> {
     ApiContext() noexcept = default;
 
   public:

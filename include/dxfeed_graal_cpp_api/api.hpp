@@ -19,10 +19,16 @@
 #include "internal/SymbolList.hpp"
 #include "internal/Timer.hpp"
 #include "internal/context/ApiContext.hpp"
+
 #include "internal/managers/DXEndpointManager.hpp"
+#include "internal/managers/DXFeedManager.hpp"
 #include "internal/managers/DXFeedSubscriptionManager.hpp"
+#include "internal/managers/DXPublisherManager.hpp"
+#include "internal/managers/InstrumentProfileReaderManager.hpp"
+#include "internal/managers/InstrumentProfileCollectorManager.hpp"
 #include "internal/managers/EntityManager.hpp"
 #include "internal/managers/ErrorHandlingManager.hpp"
+
 #include "internal/utils/CmdArgsUtils.hpp"
 #include "internal/utils/EnumUtils.hpp"
 #include "internal/utils/StringUtils.hpp"
