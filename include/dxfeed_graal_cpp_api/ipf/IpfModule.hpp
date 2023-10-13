@@ -10,3 +10,4 @@
 #include "InstrumentProfileReader.hpp"
 
 #include "live/InstrumentProfileCollector.hpp"
+#include "live/InstrumentProfileConnection.hpp"

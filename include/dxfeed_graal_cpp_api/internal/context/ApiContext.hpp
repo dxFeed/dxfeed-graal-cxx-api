@@ -12,6 +12,7 @@
 #include "../managers/DXFeedSubscriptionManager.hpp"
 #include "../managers/DXPublisherManager.hpp"
 #include "../managers/InstrumentProfileCollectorManager.hpp"
+#include "../managers/InstrumentProfileConnectionManager.hpp"
 #include "../managers/InstrumentProfileReaderManager.hpp"
 
 namespace dxfcpp {
@@ -32,7 +33,8 @@ class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
                                  AddManagerMixin<DXFeedManager>,
                                  AddManagerMixin<DXPublisherManager>,
                                  AddManagerMixin<InstrumentProfileReaderManager>,
-                                 AddManagerMixin<InstrumentProfileCollectorManager> {
+                                 AddManagerMixin<InstrumentProfileCollectorManager>,
+                                 AddManagerMixin<InstrumentProfileConnectionManager> {
     ApiContext() noexcept = default;
 
   public:
