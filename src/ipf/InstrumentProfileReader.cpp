@@ -19,7 +19,7 @@
 namespace dxfcpp {
 
 InstrumentProfileReader::InstrumentProfileReader() noexcept : id_{Id<InstrumentProfileReader>::UNKNOWN}, handle_{} {
-    handle_ = JavaObjectHandle<DXFeedSubscription>(dxfcpp::isolated::ipf::InstrumentProfileReader::create());
+    handle_ = JavaObjectHandle<InstrumentProfileReader>(dxfcpp::isolated::ipf::InstrumentProfileReader::create());
 }
 
 std::int64_t InstrumentProfileReader::getLastModified() const noexcept {

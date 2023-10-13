@@ -37,7 +37,7 @@ namespace dxfcpp {
  */
 class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     Id<InstrumentProfileReader> id_;
-    JavaObjectHandle<DXFeedSubscription> handle_;
+    JavaObjectHandle<InstrumentProfileReader> handle_;
 
     InstrumentProfileReader() noexcept;
 
