@@ -45,6 +45,7 @@ struct InstrumentProfileConnection {
     static std::int64_t getUpdatePeriod(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle) noexcept;
     static bool setUpdatePeriod(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle, std::int64_t updatePeriod) noexcept;
     static dxfcpp::InstrumentProfileConnection::State getState(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle) noexcept;
+    static std::int64_t getLastModified(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle) noexcept;
 };
 
 struct InstrumentProfileList {
