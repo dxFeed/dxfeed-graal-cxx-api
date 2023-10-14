@@ -27,6 +27,54 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     using Unique = std::unique_ptr<InstrumentProfileConnection>;
 
     /**
+     * Instrument profile connection state.
+     */
+    enum class State : std::int32_t {
+        /**
+         * Instrument profile connection is not started yet.
+         * @ref InstrumentProfileConnection::start() "start" was not invoked yet.
+         */
+        NOT_CONNECTED,
+
+        /**
+         * Connection is being established.
+         */
+        CONNECTING,
+
+        /**
+         * Connection was established.
+         */
+        CONNECTED,
+
+        /**
+         * Initial instrument profiles snapshot was fully read (this state is set only once).
+         */
+        COMPLETED,
+
+        /**
+         * Instrument profile connection was @ref InstrumentProfileConnection::close() "closed".
+         */
+        CLOSED
+    };
+
+    static auto stateToString(State state) noexcept {
+        switch (state) {
+        case State::NOT_CONNECTED:
+            return "NOT_CONNECTED";
+        case State::CONNECTING:
+            return "CONNECTING";
+        case State::CONNECTED:
+            return "CONNECTED";
+        case State::COMPLETED:
+            return "COMPLETED";
+        case State::CLOSED:
+            return "CLOSED";
+        }
+
+        return "";
+    }
+
+    /**
      * Creates instrument profile connection with a specified address and collector.
      * Address may be just "<host>:<port>" of server, URL, or a file path.
      * The "[update=<period>]" clause can be optionally added at the end of the address to
@@ -91,6 +139,13 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     void setUpdatePeriod(std::chrono::milliseconds updatePeriod) const noexcept {
         setUpdatePeriod(updatePeriod.count());
     }
+
+    /**
+     * Returns state of this instrument profile connections.
+     *
+     * @return The state of this instrument profile connections.
+     */
+    State getState() const noexcept;
 };
 
 } // namespace dxfcpp

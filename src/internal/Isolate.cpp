@@ -364,7 +364,7 @@ std::int64_t InstrumentProfileConnection::getUpdatePeriod(
 }
 
 bool InstrumentProfileConnection::setUpdatePeriod(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
-                                                  std::int64_t updatePeriod) {
+                                                  std::int64_t updatePeriod) noexcept {
     if (!instrumentProfileConnectionHandle) {
         return false;
     }
@@ -376,6 +376,38 @@ bool InstrumentProfileConnection::setUpdatePeriod(/* dxfg_ipf_connection_t * */ 
                        updatePeriod) == 0;
         },
         false, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle), updatePeriod);
+}
+
+static dxfcpp::InstrumentProfileConnection::State graalStateToState(dxfg_ipf_connection_state_t state) {
+    switch (state) {
+    case DXFG_IPF_CONNECTION_STATE_NOT_CONNECTED:
+        return dxfcpp::InstrumentProfileConnection::State::NOT_CONNECTED;
+    case DXFG_IPF_CONNECTION_STATE_CONNECTING:
+        return dxfcpp::InstrumentProfileConnection::State::CONNECTING;
+    case DXFG_IPF_CONNECTION_STATE_CONNECTED:
+        return dxfcpp::InstrumentProfileConnection::State::CONNECTED;
+    case DXFG_IPF_CONNECTION_STATE_COMPLETED:
+        return dxfcpp::InstrumentProfileConnection::State::COMPLETED;
+    case DXFG_IPF_CONNECTION_STATE_CLOSED:
+        return dxfcpp::InstrumentProfileConnection::State::CLOSED;
+    }
+
+    return dxfcpp::InstrumentProfileConnection::State::NOT_CONNECTED;
+}
+
+dxfcpp::InstrumentProfileConnection::State
+InstrumentProfileConnection::getState(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
+    if (!instrumentProfileConnectionHandle) {
+        return dxfcpp::InstrumentProfileConnection::State::CLOSED;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileConnectionHandle) {
+            return graalStateToState(dxfg_InstrumentProfileConnection_getState(
+                dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileConnectionHandle));
+        },
+        dxfcpp::InstrumentProfileConnection::State::CLOSED,
+        dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
 }
 
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {
