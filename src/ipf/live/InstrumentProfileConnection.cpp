@@ -73,4 +73,12 @@ InstrumentProfileConnection::State InstrumentProfileConnection::getState() const
     return isolated::ipf::InstrumentProfileConnection::getState(handle_.get());
 }
 
+std::int64_t InstrumentProfileConnection::getLastModified() const noexcept {
+    if (!handle_) {
+        return 0;
+    }
+
+    return isolated::ipf::InstrumentProfileConnection::getLastModified(handle_.get());
+}
+
 } // namespace dxfcpp

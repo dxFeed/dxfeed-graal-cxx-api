@@ -146,6 +146,14 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @return The state of this instrument profile connections.
      */
     State getState() const noexcept;
+
+    /**
+     * Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
+     * Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+     *
+     * @return The last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
+     */
+    std::int64_t getLastModified() const noexcept;
 };
 
 } // namespace dxfcpp
