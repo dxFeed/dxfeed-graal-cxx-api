@@ -20,7 +20,6 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     InstrumentProfileConnection() noexcept;
 
   public:
-
     /// The alias to a type of shared pointer to the InstrumentProfileConnection object
     using Ptr = std::shared_ptr<InstrumentProfileConnection>;
 
@@ -41,8 +40,15 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return new instrument profile connection.
      */
-  static Ptr createConnection(const std::string& address, InstrumentProfileCollector::Ptr collector) noexcept;
+    static Ptr createConnection(const std::string &address, InstrumentProfileCollector::Ptr collector) noexcept;
 
+    /**
+     * Returns the address of this instrument profile connection.
+     * It does not include additional options specified as part of the address.
+     *
+     * @return The address of this instrument profile connection.
+     */
+    std::string getAddress() const noexcept;
 };
 
-}
+} // namespace dxfcpp
