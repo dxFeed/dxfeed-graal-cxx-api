@@ -57,4 +57,12 @@ std::int64_t InstrumentProfileConnection::getUpdatePeriod() const noexcept {
     return isolated::ipf::InstrumentProfileConnection::getUpdatePeriod(handle_.get());
 }
 
+void InstrumentProfileConnection::setUpdatePeriod(std::int64_t updatePeriod) const noexcept {
+    if (!handle_) {
+        return;
+    }
+
+    isolated::ipf::InstrumentProfileConnection::setUpdatePeriod(handle_.get(), updatePeriod);
+}
+
 } // namespace dxfcpp
