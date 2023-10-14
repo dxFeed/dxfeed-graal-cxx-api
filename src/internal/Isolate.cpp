@@ -337,12 +337,30 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
 
 std::string InstrumentProfileConnection::getAddress(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
+    if (!instrumentProfileConnectionHandle) {
+        return String::EMPTY;
+    }
+
     return dxfcpp::toString(runIsolatedOrElse(
         [](auto threadHandle, auto &&instrumentProfileConnectionHandle) {
             return dxfg_InstrumentProfileConnection_getAddress(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
                                                                instrumentProfileConnectionHandle);
         },
         nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle)));
+}
+
+std::int64_t InstrumentProfileConnection::getUpdatePeriod(
+    /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
+    if (!instrumentProfileConnectionHandle) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileConnectionHandle) {
+            return dxfg_InstrumentProfileConnection_getUpdatePeriod(
+                dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileConnectionHandle);
+        },
+        0, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle))
 }
 
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {

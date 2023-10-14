@@ -1,7 +1,6 @@
 // Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/isolated/Isolated.hpp"
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -48,6 +47,14 @@ std::string InstrumentProfileConnection::getAddress() const noexcept {
     }
 
     return isolated::ipf::InstrumentProfileConnection::getAddress(handle_.get());
+}
+
+std::int64_t InstrumentProfileConnection::getUpdatePeriod() const noexcept {
+    if (!handle_) {
+        return 0;
+    }
+
+    return isolated::ipf::InstrumentProfileConnection::getUpdatePeriod(handle_.get());
 }
 
 } // namespace dxfcpp
