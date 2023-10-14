@@ -47,6 +47,7 @@ struct InstrumentProfileConnection {
     static dxfcpp::InstrumentProfileConnection::State getState(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle) noexcept;
     static std::int64_t getLastModified(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle) noexcept;
     static bool start(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle) noexcept;
+    static bool close(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle) noexcept;
 };
 
 struct InstrumentProfileList {

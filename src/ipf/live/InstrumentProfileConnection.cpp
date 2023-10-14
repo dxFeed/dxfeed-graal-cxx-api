@@ -89,4 +89,12 @@ void InstrumentProfileConnection::start() const noexcept {
     isolated::ipf::InstrumentProfileConnection::start(handle_.get());
 }
 
+void InstrumentProfileConnection::close() const noexcept {
+    if (!handle_) {
+        return;
+    }
+
+    isolated::ipf::InstrumentProfileConnection::close(handle_.get());
+}
+
 } // namespace dxfcpp
