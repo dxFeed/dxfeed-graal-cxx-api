@@ -157,10 +157,16 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
 
     /**
      * Starts this instrument profile connection. This connection's state immediately changes to
-     * @ref InstrumentProfileConnection::State#CONNECTING "CONNECTING" and the actual connection establishment proceeds
+     * @ref InstrumentProfileConnection::State::CONNECTING "CONNECTING" and the actual connection establishment proceeds
      * in the background.
      */
     void start() const noexcept;
+
+    /**
+     * Closes this instrument profile connection. This connection's state immediately changes to
+     * @ref InstrumentProfileConnection::State::CLOSED "CLOSED" and the background update procedures are terminated.
+     */
+    void close() const noexcept;
 };
 
 } // namespace dxfcpp
