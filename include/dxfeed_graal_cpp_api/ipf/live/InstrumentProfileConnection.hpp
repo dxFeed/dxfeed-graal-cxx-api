@@ -154,6 +154,13 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @return The last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
      */
     std::int64_t getLastModified() const noexcept;
+
+    /**
+     * Starts this instrument profile connection. This connection's state immediately changes to
+     * @ref InstrumentProfileConnection::State#CONNECTING "CONNECTING" and the actual connection establishment proceeds
+     * in the background.
+     */
+    void start() const noexcept;
 };
 
 } // namespace dxfcpp

@@ -424,6 +424,20 @@ std::int64_t InstrumentProfileConnection::getLastModified(
         0, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
 }
 
+bool InstrumentProfileConnection::start(
+    /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
+    if (!instrumentProfileConnectionHandle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileConnectionHandle) {
+            return dxfg_InstrumentProfileConnection_start(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                          instrumentProfileConnectionHandle) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
+}
+
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {
     if (!graalInstrumentProfileList) {
         return false;

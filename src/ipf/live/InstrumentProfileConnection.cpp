@@ -81,4 +81,12 @@ std::int64_t InstrumentProfileConnection::getLastModified() const noexcept {
     return isolated::ipf::InstrumentProfileConnection::getLastModified(handle_.get());
 }
 
+void InstrumentProfileConnection::start() const noexcept {
+    if (!handle_) {
+        return;
+    }
+
+    isolated::ipf::InstrumentProfileConnection::start(handle_.get());
+}
+
 } // namespace dxfcpp
