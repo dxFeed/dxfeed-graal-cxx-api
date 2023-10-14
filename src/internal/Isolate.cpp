@@ -360,7 +360,22 @@ std::int64_t InstrumentProfileConnection::getUpdatePeriod(
             return dxfg_InstrumentProfileConnection_getUpdatePeriod(
                 dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileConnectionHandle);
         },
-        0, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle))
+        0, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
+}
+
+bool InstrumentProfileConnection::setUpdatePeriod(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
+                                                  std::int64_t updatePeriod) {
+    if (!instrumentProfileConnectionHandle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileConnectionHandle, auto &&updatePeriod) {
+            return dxfg_InstrumentProfileConnection_setUpdatePeriod(
+                       dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileConnectionHandle,
+                       updatePeriod) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle), updatePeriod);
 }
 
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {

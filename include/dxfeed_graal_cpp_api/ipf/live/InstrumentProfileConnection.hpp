@@ -60,6 +60,37 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @return The update period in milliseconds.
      */
     std::int64_t getUpdatePeriod() const noexcept;
+
+    /**
+     * Returns update period in milliseconds as chrono::duration
+     * It is period of an update check when the instrument profiles source does not support live updates
+     * and/or when connection is dropped.
+     * Default update period is 1 minute, unless overridden in an
+     * @ref InstrumentProfileConnection::createConnection() "address string".
+     *
+     * @return The update period in milliseconds as chrono::duration.
+     */
+    std::chrono::milliseconds getUpdatePeriodAsDuration() const noexcept {
+        return std::chrono::milliseconds(getUpdatePeriod());
+    }
+
+    /**
+     * Changes the update period in milliseconds.
+     *
+     * @param updatePeriod The update period in milliseconds.
+     * @see InstrumentProfileConnection::getUpdatePeriod()
+     */
+    void setUpdatePeriod(std::int64_t updatePeriod) const noexcept;
+
+    /**
+     * Changes the update period in milliseconds as chrono::duration.
+     *
+     * @param updatePeriod The update period in milliseconds as chrono::duration.
+     * @see InstrumentProfileConnection::getUpdatePeriod()
+     */
+    void setUpdatePeriod(std::chrono::milliseconds updatePeriod) const noexcept {
+        setUpdatePeriod(updatePeriod.count());
+    }
 };
 
 } // namespace dxfcpp
