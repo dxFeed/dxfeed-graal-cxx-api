@@ -46,6 +46,8 @@ struct DXFeedEventListener {};
 
 struct DXEndpointStateChangeListener {};
 
+struct IpfPropertyChangeListener {};
+
 #if defined(__clang__)
 constexpr bool isClangFlavouredCompiler = true;
 #else

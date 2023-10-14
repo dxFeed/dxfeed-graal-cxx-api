@@ -14,11 +14,6 @@
 namespace dxfcpp {
 
 class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
-    Id<InstrumentProfileConnection> id_;
-    JavaObjectHandle<InstrumentProfileConnection> handle_;
-
-    InstrumentProfileConnection() noexcept;
-
   public:
     /// The alias to a type of shared pointer to the InstrumentProfileConnection object
     using Ptr = std::shared_ptr<InstrumentProfileConnection>;
@@ -57,7 +52,16 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
         CLOSED
     };
 
-    static auto stateToString(State state) noexcept {
+  private:
+    Id<InstrumentProfileConnection> id_;
+    JavaObjectHandle<InstrumentProfileConnection> handle_;
+    JavaObjectHandle<IpfPropertyChangeListener> stateChangeListenerHandle_;
+    Handler<void(State, State)> onStateChange_{};
+
+    InstrumentProfileConnection() noexcept;
+
+  public:
+    static std::string stateToString(State state) noexcept {
         switch (state) {
         case State::NOT_CONNECTED:
             return "NOT_CONNECTED";
@@ -167,6 +171,47 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @ref InstrumentProfileConnection::State::CLOSED "CLOSED" and the background update procedures are terminated.
      */
     void close() const noexcept;
+
+    /**
+     * Adds listener that is notified about changes in @ref InstrumentProfileConnection::getState() "state" property.
+     *
+     * <p>Installed listener can be removed by `id` with InstrumentProfileConnection::removeStateChangeListener method or by call
+     * `InstrumentProfileConnection::onStateChange() -= id`;
+     *
+     * @tparam StateChangeListener The listener type. It can be any callable with signature: `void(State, State)`
+     * @param listener The listener to add
+     * @return the listener id
+     */
+    template <typename StateChangeListener>
+    std::size_t addStateChangeListener(StateChangeListener &&listener) noexcept
+#if __cpp_concepts
+        requires requires {
+            { listener(State{}, State{}) } -> std::same_as<void>;
+        }
+#endif
+    {
+        return onStateChange_ += listener;
+    }
+
+    /**
+     * Removes listener that is notified about changes in @ref InstrumentProfileConnection::getState() "state" property.
+     * It removes the listener that was previously installed with InstrumentProfileConnection::addStateChangeListener method.
+     *
+     * @param listenerId The listener id to remove
+     */
+    void removeStateChangeListener(std::size_t listenerId) noexcept {
+        onStateChange_ -= listenerId;
+    }
+
+    /**
+     * Returns the onStateChange @ref Handler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * listeners.
+     *
+     * @return onStateChange handler with `void(State, State)` signature
+     */
+    auto &onStateChange() noexcept {
+        return onStateChange_;
+    }
 };
 
 } // namespace dxfcpp
