@@ -452,6 +452,38 @@ bool InstrumentProfileConnection::close(
         false, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
 }
 
+bool InstrumentProfileConnection::addStateChangeListener(
+    /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
+    /* dxfg_ipf_connection_state_change_listener_t * */ void *listener) noexcept {
+    if (!instrumentProfileConnectionHandle || !listener) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileConnectionHandle, auto &&listener) {
+            return dxfg_InstrumentProfileConnection_addStateChangeListener(
+                       dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileConnectionHandle,
+                       listener) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle),
+        dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_t *>(listener));
+}
+
+/* dxfg_ipf_connection_state_change_listener_t* */ void *
+IpfPropertyChangeListener::create(/* dxfg_ipf_connection_state_change_listener_func */ void *userFunc,
+                                  void *userData) noexcept {
+    if (!userFunc) {
+        return nullptr;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&userFunc, auto &&userData) {
+            return dxfg_IpfPropertyChangeListener_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), userFunc,
+                                                      userData);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_func>(userFunc), userData);
+}
+
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {
     if (!graalInstrumentProfileList) {
         return false;

@@ -42,55 +42,54 @@ int main(int argc, char *argv[]) {
     // Update period can be used to re-read IPF files, not needed for services supporting IPF "live-update"
     connection->setUpdatePeriod(std::chrono::seconds(60));
 
-//    connection->addStateChangeListener(
-//        [](InstrumentProfileConnection::State /* oldState */, InstrumentProfileConnection::State newState) {
-//            std::cout << "Connection state: " + InstrumentProfileConnection::stateToString(newState) << std::endl;
-//        });
-//
-//    connection->start();
-//    // We can wait until we get first full snapshot of instrument profiles
-//    connection->waitUntilCompleted(std::chrono::seconds(10));
-//
-//    // Data model to keep all instrument profiles mapped by their ticker symbol
-//    std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> profiles{};
-//    std::mutex mutex{};
-//
-//    // It is possible to add listener after connection is started - updates will not be missed in this case
-//    collector.addUpdateListener([&profiles, &mutex](auto &&instruments) {
-//        std::cout << "\nInstrument Profiles:" << std::endl;
-//        // We can observe REMOVED elements - need to add necessary filtering
-//        // See javadoc for InstrumentProfileCollector for more details
-//
-//        // (1) We can either process instrument profile updates manually
-//        for (auto &&profile : instruments) {
-//            std::lock_guard lock{mutex};
-//
-//            if (InstrumentProfileType::REMOVED->getName() == profile->getType()) {
-//                // Profile was removed - remove it from our data model
-//                profiles.erase(profile->getSymbol());
-//            } else {
-//                // Profile was updated - collector only notifies us if profile was changed
-//                profiles[profile.getSymbol()] = profile;
-//            }
-//        };
-//
-//        {
-//            std::lock_guard lock{mutex};
-//            std::cout << "Total number of profiles (1): " + std::to_string(profiles.size()) << std::endl;
-//        }
-//
-//        // (2) or access the concurrent view of instrument profiles
-//        std::unordered_set<std::string> symbols =
-//            StreamSupport.stream(collector->view().spliterator(), false)
-//                .filter(profile->!InstrumentProfileType.REMOVED.name().equals(profile.getType()))
-//                .map(InstrumentProfile::getSymbol)
-//                .collect(Collectors.toSet());
-//        std::cout << "Total number of profiles (2): " + std::to_string(symbols.size()) << std::endl;
-//
-//        std::cout << "Last modified: " + new Date(collector->getLastUpdateTime()) << std::endl;
+//    connection->addStateChangeListener([](auto /* InstrumentProfileConnection::State oldState */, auto newState) {
+//        std::cout << "Connection state: " + InstrumentProfileConnection::stateToString(newState) << std::endl;
 //    });
-//
-//    std::this_thread::sleep_for(std::chrono::days(365));
-//
-//    connection->close();
+
+    connection->start();
+    //    // We can wait until we get first full snapshot of instrument profiles
+    //    connection->waitUntilCompleted(std::chrono::seconds(10));
+    //
+    //    // Data model to keep all instrument profiles mapped by their ticker symbol
+    //    std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> profiles{};
+    //    std::mutex mutex{};
+    //
+    //    // It is possible to add listener after connection is started - updates will not be missed in this case
+    //    collector.addUpdateListener([&profiles, &mutex](auto &&instruments) {
+    //        std::cout << "\nInstrument Profiles:" << std::endl;
+    //        // We can observe REMOVED elements - need to add necessary filtering
+    //        // See javadoc for InstrumentProfileCollector for more details
+    //
+    //        // (1) We can either process instrument profile updates manually
+    //        for (auto &&profile : instruments) {
+    //            std::lock_guard lock{mutex};
+    //
+    //            if (InstrumentProfileType::REMOVED->getName() == profile->getType()) {
+    //                // Profile was removed - remove it from our data model
+    //                profiles.erase(profile->getSymbol());
+    //            } else {
+    //                // Profile was updated - collector only notifies us if profile was changed
+    //                profiles[profile.getSymbol()] = profile;
+    //            }
+    //        };
+    //
+    //        {
+    //            std::lock_guard lock{mutex};
+    //            std::cout << "Total number of profiles (1): " + std::to_string(profiles.size()) << std::endl;
+    //        }
+    //
+    //        // (2) or access the concurrent view of instrument profiles
+    //        std::unordered_set<std::string> symbols =
+    //            StreamSupport.stream(collector->view().spliterator(), false)
+    //                .filter(profile->!InstrumentProfileType.REMOVED.name().equals(profile.getType()))
+    //                .map(InstrumentProfile::getSymbol)
+    //                .collect(Collectors.toSet());
+    //        std::cout << "Total number of profiles (2): " + std::to_string(symbols.size()) << std::endl;
+    //
+    //        std::cout << "Last modified: " + new Date(collector->getLastUpdateTime()) << std::endl;
+    //    });
+    //
+    std::this_thread::sleep_for(std::chrono::days(365));
+
+    connection->close();
 }

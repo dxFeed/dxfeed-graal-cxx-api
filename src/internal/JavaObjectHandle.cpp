@@ -33,5 +33,6 @@ template struct JavaObjectHandle<DXFeedEventListener>;
 template struct JavaObjectHandle<InstrumentProfileReader>;
 template struct JavaObjectHandle<InstrumentProfileCollector>;
 template struct JavaObjectHandle<InstrumentProfileConnection>;
+template struct JavaObjectHandle<IpfPropertyChangeListener>;
 
 } // namespace dxfcpp
