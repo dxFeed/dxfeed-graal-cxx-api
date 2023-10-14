@@ -41,6 +41,7 @@ struct InstrumentProfileCollector {
 
 struct InstrumentProfileConnection {
     static /* dxfg_ipf_connection_t* */ void* createConnection(const std::string& address, /* dxfg_ipf_collector_t* */ void* instrumentProfileCollectorHandle) noexcept;
+    static std::string getAddress(/* dxfg_ipf_connection_t * */ void* instrumentProfileConnectionHandle) noexcept;
 };
 
 struct InstrumentProfileList {
