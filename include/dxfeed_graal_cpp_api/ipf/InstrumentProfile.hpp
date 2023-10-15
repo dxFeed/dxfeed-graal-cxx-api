@@ -55,6 +55,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
         std::string settlementStyle{};
         std::string priceIncrements{};
         std::string tradingHours{};
+        std::vector<std::string> rawCustomFields{};
         std::unordered_map<std::string, std::string> customFields{};
     };
 
