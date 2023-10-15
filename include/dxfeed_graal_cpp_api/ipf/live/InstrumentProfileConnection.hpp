@@ -60,6 +60,8 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
 
     InstrumentProfileConnection() noexcept;
 
+    struct Impl;
+
   public:
     static std::string stateToString(State state) noexcept {
         switch (state) {
