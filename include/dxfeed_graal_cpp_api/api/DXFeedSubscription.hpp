@@ -15,9 +15,6 @@
 #include "../symbols/SymbolWrapper.hpp"
 #include "osub/WildcardSymbol.hpp"
 
-#if __cpp_lib_parallel_algorithm
-#    include <execution>
-#endif
 
 #include <concepts>
 #include <memory>

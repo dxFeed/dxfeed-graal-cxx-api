@@ -42,9 +42,9 @@ int main(int argc, char *argv[]) {
     // Update period can be used to re-read IPF files, not needed for services supporting IPF "live-update"
     connection->setUpdatePeriod(std::chrono::seconds(60));
 
-//    connection->addStateChangeListener([](auto /* InstrumentProfileConnection::State oldState */, auto newState) {
-//        std::cout << "Connection state: " + InstrumentProfileConnection::stateToString(newState) << std::endl;
-//    });
+    connection->addStateChangeListener([](auto /* InstrumentProfileConnection::State oldState */, auto newState) {
+        std::cout << "Connection state: " + InstrumentProfileConnection::stateToString(newState) << std::endl;
+    });
 
     connection->start();
     //    // We can wait until we get first full snapshot of instrument profiles
