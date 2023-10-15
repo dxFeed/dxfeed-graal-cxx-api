@@ -24,7 +24,6 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     InstrumentProfileCollector() noexcept;
 
   public:
-
     /// The alias to a type of shared pointer to the InstrumentProfileCollector object
     using Ptr = std::shared_ptr<InstrumentProfileCollector>;
 
@@ -37,6 +36,24 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * @return The new InstrumentProfileCollector
      */
     static Ptr create() noexcept;
+
+    /**
+     * Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
+     * Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+     *
+     * @return The last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
+     */
+    std::int64_t getLastUpdateTime() const noexcept;
+
+    /**
+     * Returns last modification time (as std::chrono::milliseconds) of instrument profiles or zero if it is unknown.
+     * Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+     *
+     * @return The last modification time (as std::chrono::milliseconds) of instrument profiles or zero if it is unknown.
+     */
+    std::chrono::milliseconds getLastUpdateTimeAsDuration() const noexcept {
+        return std::chrono::milliseconds(getLastUpdateTime());
+    }
 };
 
-}
+} // namespace dxfcpp

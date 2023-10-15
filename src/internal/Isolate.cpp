@@ -319,6 +319,20 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
         nullptr));
 }
 
+std::int64_t InstrumentProfileCollector::getLastUpdateTime(
+    /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {
+    if (!instrumentProfileCollectorHandle) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileCollectorHandle) {
+            return dxfg_InstrumentProfileCollector_getLastUpdateTime(
+                dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileCollectorHandle);
+        },
+        0, dxfcpp::bit_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle));
+}
+
 /* dxfg_ipf_connection_t* */ void *InstrumentProfileConnection::createConnection(
     const std::string &address,
     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {
