@@ -469,6 +469,21 @@ bool InstrumentProfileConnection::addStateChangeListener(
         dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_t *>(listener));
 }
 
+bool InstrumentProfileConnection::waitUntilCompleted(
+    /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle, std::int64_t timeoutInMs) noexcept {
+    if (!instrumentProfileConnectionHandle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileConnectionHandle, auto &&listener) {
+            return dxfg_InstrumentProfileConnection_waitUntilCompleted(
+                       dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileConnectionHandle,
+                       listener) == 1;
+        },
+        false, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle), timeoutInMs);
+}
+
 /* dxfg_ipf_connection_state_change_listener_t* */ void *
 IpfPropertyChangeListener::create(/* dxfg_ipf_connection_state_change_listener_func */ void *userFunc,
                                   void *userData) noexcept {

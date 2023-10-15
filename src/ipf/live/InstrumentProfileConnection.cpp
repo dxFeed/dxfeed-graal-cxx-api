@@ -147,4 +147,12 @@ void InstrumentProfileConnection::close() const noexcept {
     isolated::ipf::InstrumentProfileConnection::close(handle_.get());
 }
 
+bool InstrumentProfileConnection::waitUntilCompleted(std::int64_t timeout) const noexcept {
+    if (!handle_) {
+        return false;
+    }
+
+    return isolated::ipf::InstrumentProfileConnection::waitUntilCompleted(handle_.get(), timeout);
+}
+
 } // namespace dxfcpp
