@@ -184,6 +184,10 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
 char *createCString(const std::string &s) noexcept {
     char *cString = new (std::nothrow) char[s.size() + 1];
 
+    if (!cString) {
+        return nullptr;
+    }
+
     std::copy(s.begin(), s.end(), cString);
     cString[s.size()] = '\0';
 
