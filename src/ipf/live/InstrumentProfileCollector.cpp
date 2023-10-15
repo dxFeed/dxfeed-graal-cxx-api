@@ -30,4 +30,12 @@ InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() noexcept {
     return collector;
 }
 
+std::int64_t InstrumentProfileCollector::getLastUpdateTime() const noexcept {
+    if (!handle_) {
+        return 0;
+    }
+
+    return dxfcpp::isolated::ipf::InstrumentProfileCollector::getLastUpdateTime(handle_.get());
+}
+
 }

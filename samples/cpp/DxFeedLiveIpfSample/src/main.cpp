@@ -50,10 +50,10 @@ int main(int argc, char *argv[]) {
 
     // We can wait until we get first full snapshot of instrument profiles
     connection->waitUntilCompleted(std::chrono::seconds(10));
-    //
-    //    // Data model to keep all instrument profiles mapped by their ticker symbol
-    //    std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> profiles{};
-    //    std::mutex mutex{};
+
+    // Data model to keep all instrument profiles mapped by their ticker symbol
+    std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> profiles{};
+    std::mutex mutex{};
     //
     //    // It is possible to add listener after connection is started - updates will not be missed in this case
     //    collector.addUpdateListener([&profiles, &mutex](auto &&instruments) {

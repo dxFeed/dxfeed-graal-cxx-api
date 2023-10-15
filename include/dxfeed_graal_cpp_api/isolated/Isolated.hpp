@@ -38,6 +38,7 @@ struct InstrumentProfileReader {
 
 struct InstrumentProfileCollector {
     static /* dxfg_ipf_collector_t* */ void *create() noexcept;
+    static std::int64_t getLastUpdateTime(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept;
 };
 
 struct InstrumentProfileConnection {
