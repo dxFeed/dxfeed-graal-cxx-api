@@ -49,11 +49,32 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * Returns last modification time (as std::chrono::milliseconds) of instrument profiles or zero if it is unknown.
      * Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
      *
-     * @return The last modification time (as std::chrono::milliseconds) of instrument profiles or zero if it is unknown.
+     * @return The last modification time (as std::chrono::milliseconds) of instrument profiles or zero if it is
+     * unknown.
      */
     std::chrono::milliseconds getLastUpdateTimeAsDuration() const noexcept {
         return std::chrono::milliseconds(getLastUpdateTime());
     }
+
+    /**
+     * Convenience method to update one instrument profile in this collector. This is a shortcut for:
+     * <pre><tt>
+     *    @ref InstrumentProfileCollector::updateInstrumentProfiles() "updateInstrumentProfiles"({ip}, nullptr);
+     * </tt></pre>
+     *
+     * @param ip The instrument profile.
+     */
+    void updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const noexcept;
+
+    /**
+     * Convenience method to update one instrument profile in this collector. This is a shortcut for:
+     * <pre><tt>
+     *    @ref InstrumentProfileCollector::updateInstrumentProfiles() "updateInstrumentProfiles"({ip}, nullptr);
+     * </tt></pre>
+     *
+     * @param ip The instrument profile.
+     */
+    void updateInstrumentProfile(const InstrumentProfile &ip) const noexcept;
 };
 
 } // namespace dxfcpp

@@ -333,6 +333,23 @@ std::int64_t InstrumentProfileCollector::getLastUpdateTime(
         0, dxfcpp::bit_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle));
 }
 
+bool InstrumentProfileCollector::updateInstrumentProfile(
+    /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
+    /* dxfg_instrument_profile_t * */ void *ip) noexcept {
+    if (!instrumentProfileCollectorHandle || !ip) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileCollectorHandle, auto &&ip) {
+            return dxfg_InstrumentProfileCollector_updateInstrumentProfile(
+                       dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileCollectorHandle, ip) ==
+                   0;
+        },
+        false, dxfcpp::bit_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle),
+        dxfcpp::bit_cast<dxfg_instrument_profile_t *>(ip));
+}
+
 /* dxfg_ipf_connection_t* */ void *InstrumentProfileConnection::createConnection(
     const std::string &address,
     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {
