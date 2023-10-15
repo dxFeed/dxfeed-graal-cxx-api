@@ -177,8 +177,8 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     /**
      * Adds listener that is notified about changes in @ref InstrumentProfileConnection::getState() "state" property.
      *
-     * <p>Installed listener can be removed by `id` with InstrumentProfileConnection::removeStateChangeListener method or by call
-     * `InstrumentProfileConnection::onStateChange() -= id`;
+     * <p>Installed listener can be removed by `id` with InstrumentProfileConnection::removeStateChangeListener method
+     * or by call `InstrumentProfileConnection::onStateChange() -= id`;
      *
      * @tparam StateChangeListener The listener type. It can be any callable with signature: `void(State, State)`
      * @param listener The listener to add
@@ -197,7 +197,8 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
 
     /**
      * Removes listener that is notified about changes in @ref InstrumentProfileConnection::getState() "state" property.
-     * It removes the listener that was previously installed with InstrumentProfileConnection::addStateChangeListener method.
+     * It removes the listener that was previously installed with InstrumentProfileConnection::addStateChangeListener
+     * method.
      *
      * @param listenerId The listener id to remove
      */
@@ -213,6 +214,26 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      */
     auto &onStateChange() noexcept {
         return onStateChange_;
+    }
+
+    /**
+     * Synchronously waits for full first snapshot read with the specified timeout.
+     *
+     * @param timeout The maximum time (in millis) to wait
+     * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED "COMPLETED" state was reached and `false`
+     *         if the waiting time elapsed before snapshot was fully read.
+     */
+    bool waitUntilCompleted(std::int64_t timeout) const noexcept;
+
+    /**
+     * Synchronously waits for full first snapshot read with the specified timeout.
+     *
+     * @param timeout The maximum time to wait
+     * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED "COMPLETED" state was reached and `false`
+     *         if the waiting time elapsed before snapshot was fully read.
+     */
+    bool waitUntilCompleted(std::chrono::milliseconds timeout) const noexcept {
+        return waitUntilCompleted(timeout.count());
     }
 };
 

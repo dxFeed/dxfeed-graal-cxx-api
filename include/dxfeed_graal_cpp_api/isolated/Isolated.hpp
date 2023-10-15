@@ -55,10 +55,13 @@ struct InstrumentProfileConnection {
     static bool close(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept;
     static bool addStateChangeListener(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
                                        /* dxfg_ipf_connection_state_change_listener_t * */ void *listener) noexcept;
+    static bool waitUntilCompleted(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
+                                   std::int64_t timeoutInMs) noexcept;
 };
 
 struct IpfPropertyChangeListener {
-    static /* dxfg_ipf_connection_state_change_listener_t* */ void* create(/* dxfg_ipf_connection_state_change_listener_func */ void* userFunc, void *userData) noexcept;
+    static /* dxfg_ipf_connection_state_change_listener_t* */ void *
+    create(/* dxfg_ipf_connection_state_change_listener_func */ void *userFunc, void *userData) noexcept;
 };
 
 struct InstrumentProfileList {

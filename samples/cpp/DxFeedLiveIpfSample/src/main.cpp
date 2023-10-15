@@ -47,8 +47,9 @@ int main(int argc, char *argv[]) {
     });
 
     connection->start();
-    //    // We can wait until we get first full snapshot of instrument profiles
-    //    connection->waitUntilCompleted(std::chrono::seconds(10));
+
+    // We can wait until we get first full snapshot of instrument profiles
+    connection->waitUntilCompleted(std::chrono::seconds(10));
     //
     //    // Data model to keep all instrument profiles mapped by their ticker symbol
     //    std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> profiles{};
