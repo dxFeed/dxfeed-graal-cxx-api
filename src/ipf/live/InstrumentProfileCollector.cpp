@@ -18,14 +18,16 @@
 
 namespace dxfcpp {
 
-InstrumentProfileCollector::InstrumentProfileCollector() noexcept : id_{Id<InstrumentProfileCollector>::UNKNOWN}, handle_{} {
+InstrumentProfileCollector::InstrumentProfileCollector() noexcept
+    : id_{Id<InstrumentProfileCollector>::UNKNOWN}, handle_{} {
     handle_ = JavaObjectHandle<InstrumentProfileCollector>(dxfcpp::isolated::ipf::InstrumentProfileCollector::create());
 }
 
 InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() noexcept {
     auto collector = std::shared_ptr<InstrumentProfileCollector>(new InstrumentProfileCollector());
 
-    collector->id_ = ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->registerEntity(collector);
+    collector->id_ =
+        ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->registerEntity(collector);
 
     return collector;
 }
@@ -38,4 +40,32 @@ std::int64_t InstrumentProfileCollector::getLastUpdateTime() const noexcept {
     return dxfcpp::isolated::ipf::InstrumentProfileCollector::getLastUpdateTime(handle_.get());
 }
 
+void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const noexcept {
+    if (!handle_) {
+        return;
+    }
+
+    auto graal = ip->toGraal();
+
+    if (graal) {
+        dxfcpp::isolated::ipf::InstrumentProfileCollector::updateInstrumentProfile(handle_.get(), graal);
+
+        InstrumentProfile::freeGraal(graal);
+    }
 }
+
+void InstrumentProfileCollector::updateInstrumentProfile(const InstrumentProfile &ip) const noexcept {
+    if (!handle_) {
+        return;
+    }
+
+    auto graal = ip.toGraal();
+
+    if (graal) {
+        dxfcpp::isolated::ipf::InstrumentProfileCollector::updateInstrumentProfile(handle_.get(), graal);
+
+        InstrumentProfile::freeGraal(graal);
+    }
+}
+
+} // namespace dxfcpp
