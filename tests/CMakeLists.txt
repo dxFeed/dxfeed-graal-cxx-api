@@ -24,6 +24,7 @@ set(DXFC_TEST_SOURCES
         api/DXEndpointTest.cpp
         api/DXPublisherTest.cpp
         api/MarketEventSymbolsTest.cpp
+        api/OrderSourceTest.cpp
         system/SystemTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
