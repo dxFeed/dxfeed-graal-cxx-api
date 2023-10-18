@@ -48,6 +48,14 @@ std::string toString(void *ptr) {
     return result.str();
 }
 
+std::string toString(const void *ptr) {
+    std::ostringstream result{};
+
+    result << ptr;
+
+    return result.str();
+}
+
 std::string toString(double d) {
     if (std::isnan(d)) {
         return "NaN";

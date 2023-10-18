@@ -26,6 +26,8 @@ DXFCPP_EXPORT std::string toString(std::thread::id theadId);
 
 DXFCPP_EXPORT std::string toString(void *ptr);
 
+DXFCPP_EXPORT std::string toString(const void *ptr);
+
 DXFCPP_EXPORT std::string toString(double d);
 
 template <typename T> std::string toStringAny(T &&t);

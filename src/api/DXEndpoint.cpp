@@ -93,6 +93,50 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
         auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
         auto endpoint = ApiContext::getInstance()->getManager<DXEndpointManager>()->getEntity(id);
 
+        struct TestEndpoint {
+            TestEndpoint() noexcept {
+                std::cout << "TestEndpoint(): isolate handle: " + dxfcpp::toString(Isolate::getInstance()->getHandle()) +
+                                 "\n                graal_get_current_thread: " +
+                                 dxfcpp::toString(dxfcpp::bit_cast<void *>(graal_get_current_thread(
+                                     dxfcpp::bit_cast<graal_isolate_t *>(Isolate::getInstance()->getHandle()))))
+                          << std::endl;
+
+                runIsolatedOrElse([](auto handle) {
+                    std::cout << "TestEndpoint(){isolated}: thread handle: " + dxfcpp::toString(handle) +
+                                     "\n                          isolate handle: " +
+                                     dxfcpp::toString(Isolate::getInstance()->getHandle()) +
+                                     "\n                          graal_get_current_thread: " +
+                                     dxfcpp::toString(dxfcpp::bit_cast<void *>(graal_get_current_thread(
+                                         dxfcpp::bit_cast<graal_isolate_t *>(Isolate::getInstance()->getHandle()))))
+                              << std::endl;
+
+                    return false;
+                }, false);
+            }
+
+            virtual ~TestEndpoint() noexcept {
+                std::cout << "~TestEndpoint(): isolate handle: " + dxfcpp::toString(Isolate::getInstance()->getHandle()) +
+                                 "\n                 graal_get_current_thread: " +
+                                 dxfcpp::toString(dxfcpp::bit_cast<void *>(graal_get_current_thread(
+                                     dxfcpp::bit_cast<graal_isolate_t *>(Isolate::getInstance()->getHandle()))))
+                          << std::endl;
+
+                runIsolatedOrElse([](auto handle) {
+                    std::cout << "~TestEndpoint(){isolated}: thread handle: " + dxfcpp::toString(handle) +
+                                     "\n                           isolate handle: " +
+                                     dxfcpp::toString(Isolate::getInstance()->getHandle()) +
+                                     "\n                           graal_get_current_thread: " +
+                                     dxfcpp::toString(dxfcpp::bit_cast<void *>(graal_get_current_thread(
+                                         dxfcpp::bit_cast<graal_isolate_t *>(Isolate::getInstance()->getHandle()))))
+                              << std::endl;
+
+                    return false;
+                }, false);
+            }
+        };
+
+        static thread_local std::unique_ptr<TestEndpoint> t(new TestEndpoint);
+
         if constexpr (Debugger::isDebug) {
             Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
                             ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr"));

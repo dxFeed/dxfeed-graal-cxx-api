@@ -64,8 +64,8 @@ void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) const noexcept {
 
     runIsolatedOrElse(
         [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
-            return dxfg_DXFeedSubscription_removeSymbol(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                        handle, dxfcpp::bit_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
+            return dxfg_DXFeedSubscription_removeSymbol(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+                                                        dxfcpp::bit_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
         },
         false);
 }
@@ -78,7 +78,8 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const noexcept
     runIsolatedOrElse(
         [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
             return dxfg_DXFeedSubscription_removeSymbols(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                         handle, dxfcpp::bit_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
+                                                         handle,
+                                                         dxfcpp::bit_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
         },
         false);
 }
@@ -203,6 +204,54 @@ DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique
 
 void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexcept {
     auto onEvents = [](graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
+        struct TestSub {
+            TestSub() noexcept {
+                std::cout << "TestSub(): isolate handle: " + dxfcpp::toString(Isolate::getInstance()->getHandle()) +
+                                 "\n           graal_get_current_thread: " +
+                                 dxfcpp::toString(dxfcpp::bit_cast<void *>(graal_get_current_thread(
+                                     dxfcpp::bit_cast<graal_isolate_t *>(Isolate::getInstance()->getHandle()))))
+                          << std::endl;
+
+                runIsolatedOrElse(
+                    [](auto handle) {
+                        std::cout << "TestSub(){isolated}: thread handle: " + dxfcpp::toString(handle) +
+                                         "\n                     isolate handle: " +
+                                         dxfcpp::toString(Isolate::getInstance()->getHandle()) +
+                                         "\n                     graal_get_current_thread: " +
+                                         dxfcpp::toString(dxfcpp::bit_cast<void *>(graal_get_current_thread(
+                                             dxfcpp::bit_cast<graal_isolate_t *>(Isolate::getInstance()->getHandle()))))
+                                  << std::endl;
+
+                        return false;
+                    },
+                    false);
+            }
+
+            virtual ~TestSub() noexcept {
+                std::cout << "~TestSub(): isolate handle: " + dxfcpp::toString(Isolate::getInstance()->getHandle()) +
+                                 "\n            graal_get_current_thread: " +
+                                 dxfcpp::toString(dxfcpp::bit_cast<void *>(graal_get_current_thread(
+                                     dxfcpp::bit_cast<graal_isolate_t *>(Isolate::getInstance()->getHandle()))))
+                          << std::endl;
+
+                runIsolatedOrElse(
+                    [](auto handle) {
+                        std::cout << "~TestSub(){isolated}: thread handle: " + dxfcpp::toString(handle) +
+                                         "\n                      isolate handle: " +
+                                         dxfcpp::toString(Isolate::getInstance()->getHandle()) +
+                                         "\n                      graal_get_current_thread: " +
+                                         dxfcpp::toString(dxfcpp::bit_cast<void *>(graal_get_current_thread(
+                                             dxfcpp::bit_cast<graal_isolate_t *>(Isolate::getInstance()->getHandle()))))
+                                  << std::endl;
+
+                        return false;
+                    },
+                    false);
+            }
+        };
+
+        static thread_local std::unique_ptr<TestSub> t(new TestSub);
+
         auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
         auto sub = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getEntity(id);
 

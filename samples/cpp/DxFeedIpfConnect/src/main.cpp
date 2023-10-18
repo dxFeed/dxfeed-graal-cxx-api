@@ -76,5 +76,5 @@ int main(int argc, char *argv[]) {
 
     sub->addSymbols(getSymbols(ipfFile));
 
-    std::this_thread::sleep_for(std::chrono::days(365));
+    std::this_thread::sleep_for(std::chrono::seconds(30));
 }

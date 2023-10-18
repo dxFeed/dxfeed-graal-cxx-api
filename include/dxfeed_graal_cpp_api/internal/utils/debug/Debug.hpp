@@ -5,9 +5,9 @@
 
 #include "../../Conf.hpp"
 
-#define DXFCPP_DEBUG 0
+#define DXFCPP_DEBUG 1
 // #define DXFCPP_TRACE_LISTS 1
-// #define DXFCPP_TRACE_ISOLATES 1
+#define DXFCPP_TRACE_ISOLATES 1
 
 #ifndef DXFCPP_DEBUG
 #    define DXFCPP_DEBUG 0

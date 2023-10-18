@@ -23,6 +23,7 @@
 
 namespace dxfcpp {
 using GraalIsolateHandle = void *;
+using ConstGraalIsolateHandle = const void *;
 using GraalIsolateThreadHandle = void *;
 using ConstGraalIsolateThreadHandle = const void *;
 
@@ -72,7 +73,7 @@ class Isolate final {
     };
 
     mutable std::recursive_mutex mtx_{};
-    ConstGraalIsolateThreadHandle handle_;
+    ConstGraalIsolateHandle handle_;
     IsolateThread mainIsolateThread_;
     static thread_local IsolateThread currentIsolateThread_;
 
@@ -95,6 +96,10 @@ class Isolate final {
     GraalIsolateThreadHandle get() noexcept;
 
   public:
+    ConstGraalIsolateHandle getHandle() const noexcept {
+        return handle_;
+    }
+
     Isolate() = delete;
     Isolate(const Isolate &) = delete;
     Isolate &operator=(const Isolate &) = delete;
