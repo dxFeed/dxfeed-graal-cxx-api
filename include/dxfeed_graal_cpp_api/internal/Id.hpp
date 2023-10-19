@@ -22,7 +22,7 @@ template <typename T> struct Id {
 
   public:
     static Id<T> getNext() {
-        static std::atomic<ValueType> value{};
+        static std::atomic<ValueType> value{1};
 
         return Id<T>{value++};
     }
