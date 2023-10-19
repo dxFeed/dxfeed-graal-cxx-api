@@ -51,7 +51,7 @@ template <typename T> std::string toStringAny(T &&t) {
 }
 
 /**
- * Tries to convert UTF16 char to ASCII.
+ * Tries to convert UTF16 char to ASCII (part of UTF8) char.
  *
  * @param in The UTF16 char
  * @return ASCII char
@@ -82,6 +82,12 @@ DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string &in) noexcept;
  */
 DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept;
 
+/**
+ * Tries to convert ASCII (part of UTF8) char to UTF16 char.
+ *
+ * @param in The ASCII char
+ * @return The UTF16 char
+ */
 DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept;
 
 DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp);

@@ -26,7 +26,10 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static constexpr std::uint32_t FULL_ORDER_BOOK = 0x0008U;
     static constexpr std::uint32_t FLAGS_SIZE = 4U;
 
-    static const std::unordered_map<std::int32_t, std::reference_wrapper<const OrderSource>> INTERNAL_SOURCES_;
+  public:
+    static const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>> PREDEFINED_SOURCES;
+
+  private:
 
     static inline std::mutex MTX_{};
     static std::unordered_map<std::int32_t, OrderSource> USER_SOURCES_;
@@ -466,7 +469,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @return order source.
      */
     static const OrderSource &valueOf(std::int32_t sourceId) noexcept {
-        if (auto found = INTERNAL_SOURCES_.find(sourceId); found != INTERNAL_SOURCES_.end()) {
+        if (auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
             return found->second;
         }
 
@@ -487,13 +490,13 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @return order source.
      */
     static const OrderSource &valueOf(const std::string &name) noexcept {
-        auto sourceId = composeId(name);
-
-        if (auto found = INTERNAL_SOURCES_.find(sourceId); found != INTERNAL_SOURCES_.end()) {
+        if (auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
             return found->second;
         }
 
         std::lock_guard lock(MTX_);
+
+        auto sourceId = composeId(name);
 
         if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
             return found->second;

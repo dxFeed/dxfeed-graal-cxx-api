@@ -51,49 +51,23 @@ const OrderSource OrderSource::iex("iex", PUB_ORDER);
 const OrderSource OrderSource::MEMX("MEMX", PUB_ORDER);
 const OrderSource OrderSource::memx("memx", PUB_ORDER);
 
-const std::unordered_map<std::int32_t, std::reference_wrapper<const OrderSource>> OrderSource::INTERNAL_SOURCES_{
-    {COMPOSITE_BID.id(), std::cref(COMPOSITE_BID)},
-    {COMPOSITE_ASK.id(), std::cref(COMPOSITE_ASK)},
-    {REGIONAL_BID.id(), std::cref(REGIONAL_BID)},
-    {REGIONAL_ASK.id(), std::cref(REGIONAL_ASK)},
-    {AGGREGATE_BID.id(), std::cref(AGGREGATE_BID)},
-    {AGGREGATE_ASK.id(), std::cref(AGGREGATE_ASK)},
-    {DEFAULT.id(), std::cref(DEFAULT)},
+const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
+    OrderSource::PREDEFINED_SOURCES =
+        [](std::initializer_list<std::reference_wrapper<const OrderSource>> orders) {
+            std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
+                result{};
 
-    {NTV.id(), std::cref(NTV)},
-    {ntv.id(), std::cref(ntv)},
-    {NFX.id(), std::cref(NFX)},
-    {ESPD.id(), std::cref(ESPD)},
-    {XNFI.id(), std::cref(XNFI)},
-    {ICE.id(), std::cref(ICE)},
-    {ISE.id(), std::cref(ISE)},
-    {DEA.id(), std::cref(DEA)},
-    {DEX.id(), std::cref(DEX)},
-    {dex.id(), std::cref(dex)},
-    {BYX.id(), std::cref(BYX)},
-    {BZX.id(), std::cref(BZX)},
-    {bzx.id(), std::cref(bzx)},
-    {BATE.id(), std::cref(BATE)},
-    {CHIX.id(), std::cref(CHIX)},
-    {CEUX.id(), std::cref(CEUX)},
-    {BXTR.id(), std::cref(BXTR)},
-    {IST.id(), std::cref(IST)},
-    {BI20.id(), std::cref(BI20)},
-    {ABE.id(), std::cref(ABE)},
-    {FAIR.id(), std::cref(FAIR)},
-    {GLBX.id(), std::cref(GLBX)},
-    {glbx.id(), std::cref(glbx)},
-    {ERIS.id(), std::cref(ERIS)},
-    {XEUR.id(), std::cref(XEUR)},
-    {xeur.id(), std::cref(xeur)},
-    {CFE.id(), std::cref(CFE)},
-    {C2OX.id(), std::cref(C2OX)},
-    {SMFE.id(), std::cref(SMFE)},
-    {smfe.id(), std::cref(smfe)},
-    {iex.id(), std::cref(iex)},
-    {MEMX.id(), std::cref(MEMX)},
-    {memx.id(), std::cref(memx)},
-};
+            for (auto &&o : orders) {
+                result.emplace(o.get().id(), o);
+                result.emplace(o.get().name(), o);
+            }
+
+            return result;
+        }({COMPOSITE_BID, COMPOSITE_ASK, REGIONAL_BID, REGIONAL_ASK, AGGREGATE_BID, AGGREGATE_ASK, DEFAULT, NTV,
+           ntv,           NFX,           ESPD,         XNFI,         ICE,           ISE,           DEA,     DEX,
+           dex,           BYX,           BZX,          bzx,          BATE,          CHIX,          CEUX,    BXTR,
+           IST,           BI20,          ABE,          FAIR,         GLBX,          glbx,          ERIS,    XEUR,
+           xeur,          CFE,           C2OX,         SMFE,         smfe,          iex,           MEMX,    memx});
 
 std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 

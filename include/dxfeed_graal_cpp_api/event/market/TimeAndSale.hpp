@@ -301,6 +301,17 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     }
 
     /**
+     * Returns exchange code of this time and sale event as UTF8 string.
+     *
+     * @return exchange code of this time and sale event as UTF8 string.
+     */
+    std::string getExchangeCodeString() const noexcept {
+        //TODO: cache
+
+        return dxfcpp::utf16toUtf8String(data_.exchangeCode);
+    }
+
+    /**
      * Changes exchange code of this time and sale event.
      *
      * @param exchangeCode exchange code of this time and sale event.
