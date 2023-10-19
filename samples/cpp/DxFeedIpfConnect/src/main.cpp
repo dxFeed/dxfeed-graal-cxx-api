@@ -17,7 +17,7 @@ Where:
     ipf-file - Is name of instrument profiles file.
 
 Examples:
-    DxFeedIpfConnect Quote http://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip
+    DxFeedIpfConnect Quote https://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip
 )";
 
     std::cout << usageString << std::endl;
