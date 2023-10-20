@@ -50,31 +50,6 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
     return isolated::ipf::InstrumentProfileReader::resolveSourceURL(address);
 }
 
-std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList) {
-    using ListType = dxfg_instrument_profile_list;
-    using SizeType = decltype(ListType::size);
-
-    if (!graalList) {
-        return {};
-    }
-
-    std::vector<std::shared_ptr<InstrumentProfile>> result{};
-
-    auto list = dxfcpp::bit_cast<ListType *>(graalList);
-
-    if (list->size <= 0 || list->elements == nullptr) {
-        return result;
-    }
-
-    for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
-        if (list->elements[elementIndex]) {
-            result.emplace_back(InstrumentProfile::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
-        }
-    }
-
-    return result;
-}
-
 std::vector<std::shared_ptr<InstrumentProfile>>
 InstrumentProfileReader::readFromFile(const std::string &address) const noexcept {
     if (!handle_) {
@@ -82,7 +57,7 @@ InstrumentProfileReader::readFromFile(const std::string &address) const noexcept
     }
 
     auto *list = dxfcpp::isolated::ipf::InstrumentProfileReader::readFromFile(handle_.get(), address);
-    auto result = fromGraalList(list);
+    auto result = InstrumentProfile::fromGraalList(list);
 
     dxfcpp::isolated::ipf::InstrumentProfileList::release(list);
 
@@ -97,7 +72,7 @@ InstrumentProfileReader::readFromFile(const std::string &address, const std::str
     }
 
     auto *list = dxfcpp::isolated::ipf::InstrumentProfileReader::readFromFile(handle_.get(), address, user, password);
-    auto result = fromGraalList(list);
+    auto result = InstrumentProfile::fromGraalList(list);
 
     dxfcpp::isolated::ipf::InstrumentProfileList::release(list);
 

@@ -48,6 +48,8 @@ struct DXEndpointStateChangeListener {};
 
 struct IpfPropertyChangeListener {};
 
+struct InstrumentProfileUpdateListener {};
+
 #if defined(__clang__)
 constexpr bool isClangFlavouredCompiler = true;
 #else

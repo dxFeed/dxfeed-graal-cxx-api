@@ -20,8 +20,12 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
 
     Id<InstrumentProfileCollector> id_;
     JavaObjectHandle<InstrumentProfileCollector> handle_;
+    JavaObjectHandle<InstrumentProfileUpdateListener> instrumentProfileUpdateListenerHandle_;
+    Handler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> onInstrumentProfilesUpdate_{1};
 
     InstrumentProfileCollector() noexcept;
+
+    struct Impl;
 
   public:
     /// The alias to a type of shared pointer to the InstrumentProfileCollector object
@@ -75,6 +79,70 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * @param ip The instrument profile.
      */
     void updateInstrumentProfile(const InstrumentProfile &ip) const noexcept;
+
+    /**
+     * Adds listener that is notified about any updates in the set of instrument profiles.
+     * If a set of instrument profiles is not empty, then this listener will be immediately notified.
+     *
+     * @warning The API will be changed in the future. Instead of a vector, a wrapped Java-like iterator will be passed.
+     *
+     * Example:
+     * ```cpp
+     * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) -> void {
+     *     for (const auto &p : profiles) {
+     *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
+     *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
+     *         } else {
+     *             std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
+     *         }
+     *     }
+     * });
+     * ```
+     *
+     * Example:
+     * ```cpp
+     * collector->addUpdateListener([](auto &&profiles) -> void {
+     *     for (const auto &p : profiles) {
+     *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
+     *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
+     *         } else {
+     *             std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
+     *         }
+     *     }
+     * });
+    * ```
+     * @tparam InstrumentProfileUpdateListener The listener type. Listener can be callable with signature: `void(const
+     * std::vector<std::shared_ptr<InstrumentProfile>&)`
+     * @param listener The profile update listener. The listener can be callable with signature: `void(const
+     * std::vector<std::shared_ptr<InstrumentProfile>&)`
+     * @return The listener id
+     */
+    template <typename InstrumentProfileUpdateListener>
+    std::size_t addUpdateListener(InstrumentProfileUpdateListener listener) noexcept
+#if __cpp_concepts
+        requires requires {
+            { listener(std::vector<std::shared_ptr<InstrumentProfile>>{}) } -> std::same_as<void>;
+        }
+#endif
+    {
+        return onInstrumentProfilesUpdate_ += listener;
+    }
+
+    /**
+     * Removes listener for instrument profile updates.
+     *
+     * Example:
+     * ```cpp
+     * auto id = collector->addUpdateListener([](auto){});
+     *
+     * collector->removeEventListener(id);
+     * ```
+     *
+     * @param listenerId The listener id
+     */
+    void removeUpdateListener(std::size_t listenerId) noexcept {
+        onInstrumentProfilesUpdate_ -= listenerId;
+    }
 };
 
 } // namespace dxfcpp

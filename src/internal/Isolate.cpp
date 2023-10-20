@@ -350,6 +350,22 @@ bool InstrumentProfileCollector::updateInstrumentProfile(
         dxfcpp::bit_cast<dxfg_instrument_profile_t *>(ip));
 }
 
+bool InstrumentProfileCollector::addUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
+                                                   /* dxfg_ipf_update_listener_t* */ void *listener) noexcept {
+    if (!instrumentProfileCollectorHandle || !listener) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileCollectorHandle, auto &&listener) {
+            return dxfg_InstrumentProfileCollector_addUpdateListener(
+                       dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileCollectorHandle,
+                       listener) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle),
+        dxfcpp::bit_cast<dxfg_ipf_update_listener_t *>(listener));
+}
+
 /* dxfg_ipf_connection_t* */ void *InstrumentProfileConnection::createConnection(
     const std::string &address,
     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {
@@ -522,12 +538,12 @@ IpfPropertyChangeListener::create(/* dxfg_ipf_connection_state_change_listener_f
         return nullptr;
     }
 
-    return runIsolatedOrElse(
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&userFunc, auto &&userData) {
             return dxfg_IpfPropertyChangeListener_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), userFunc,
                                                       userData);
         },
-        nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_func>(userFunc), userData);
+        nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_func>(userFunc), userData));
 }
 
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {
@@ -541,6 +557,48 @@ bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *g
                                                         list) == 0;
         },
         false, dxfcpp::bit_cast<dxfg_instrument_profile_list *>(graalInstrumentProfileList));
+}
+
+bool InstrumentProfileIterator::hasNext(/* dxfg_iterable_ip_t * */ void *iterable) noexcept {
+    if (!iterable) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&iterable) {
+            return dxfg_Iterable_InstrumentProfile_hasNext(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                           iterable) == 1;
+        },
+        false, dxfcpp::bit_cast<dxfg_iterable_ip_t *>(iterable));
+}
+
+/* dxfg_instrument_profile_t* */ void *
+InstrumentProfileIterator::next(/* dxfg_iterable_ip_t * */ void *iterable) noexcept {
+    if (!iterable) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&iterable) {
+            return dxfg_Iterable_InstrumentProfile_next(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                        iterable);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_iterable_ip_t *>(iterable)));
+}
+
+/* dxfg_ipf_update_listener_t* */ void *
+InstrumentProfileUpdateListener::create(/* dxfg_ipf_update_listener_function */ void *userFunc,
+                                        void *userData) noexcept {
+    if (!userFunc) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&userFunc, auto &&userData) {
+            return dxfg_InstrumentProfileUpdateListener_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                            userFunc, userData);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_ipf_update_listener_function>(userFunc), userData));
 }
 
 } // namespace ipf
