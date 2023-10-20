@@ -21,22 +21,22 @@ struct PriceType : Enum<PriceType, std::uint32_t> {
     /**
      * Regular price.
      */
-    static const PriceType REGULAR;
+    static const DXFCPP_EXPORT PriceType REGULAR;
 
     /**
      * Indicative price (derived via math formula).
      */
-    static const PriceType INDICATIVE;
+    static const DXFCPP_EXPORT PriceType INDICATIVE;
 
     /**
      * Preliminary price (preliminary settlement price), usually posted prior to PriceType::FINAL price.
      */
-    static const PriceType PRELIMINARY;
+    static const DXFCPP_EXPORT PriceType PRELIMINARY;
 
     /**
      * Final price (final settlement price).
      */
-    static const PriceType FINAL;
+    static const DXFCPP_EXPORT PriceType FINAL;
 };
 
 template <>

@@ -21,17 +21,17 @@ struct IcebergType : Enum<IcebergType, std::uint32_t> {
     /**
      * Iceberg type is undefined, unknown or inapplicable.
      */
-    static const IcebergType UNDEFINED;
+    static const DXFCPP_EXPORT IcebergType UNDEFINED;
 
     /**
      * Represents native (exchange-managed) iceberg type.
      */
-    static const IcebergType NATIVE;
+    static const DXFCPP_EXPORT IcebergType NATIVE;
 
     /**
      * Represents synthetic (managed outside of the exchange) iceberg type
      */
-    static const IcebergType SYNTHETIC;
+    static const DXFCPP_EXPORT IcebergType SYNTHETIC;
 };
 
 template <>

@@ -24,17 +24,17 @@ struct TradingStatus : Enum<TradingStatus, std::uint32_t> {
     /**
      * Trading status is undefined, unknown or inapplicable.
      */
-    static const TradingStatus UNDEFINED;
+    static const DXFCPP_EXPORT TradingStatus UNDEFINED;
 
     /**
      * Trading is halted.
      */
-    static const TradingStatus HALTED;
+    static const DXFCPP_EXPORT TradingStatus HALTED;
 
     /**
      * Trading is active.
      */
-    static const TradingStatus ACTIVE;
+    static const DXFCPP_EXPORT TradingStatus ACTIVE;
 };
 
 template <>

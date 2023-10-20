@@ -24,17 +24,17 @@ struct ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
     /**
      * Short sale restriction is undefined, unknown or inapplicable.
      */
-    static const ShortSaleRestriction UNDEFINED;
+    static const DXFCPP_EXPORT ShortSaleRestriction UNDEFINED;
 
     /**
      * Short sale restriction is active.
      */
-    static const ShortSaleRestriction ACTIVE;
+    static const DXFCPP_EXPORT ShortSaleRestriction ACTIVE;
 
     /**
      * Short sale restriction is inactive.
      */
-    static const ShortSaleRestriction INACTIVE;
+    static const DXFCPP_EXPORT ShortSaleRestriction INACTIVE;
 };
 
 template <>

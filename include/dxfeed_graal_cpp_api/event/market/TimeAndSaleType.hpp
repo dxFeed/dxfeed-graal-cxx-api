@@ -24,17 +24,17 @@ struct TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
     /**
      * Represents new time and sale event.
      */
-    static const TimeAndSaleType NEW;
+    static const DXFCPP_EXPORT TimeAndSaleType NEW;
 
     /**
      * Represents correction time and sale event.
      */
-    static const TimeAndSaleType CORRECTION;
+    static const DXFCPP_EXPORT TimeAndSaleType CORRECTION;
 
     /**
      * Represents cancel time and sale event.
      */
-    static const TimeAndSaleType CANCEL;
+    static const DXFCPP_EXPORT TimeAndSaleType CANCEL;
 };
 
 template <>
