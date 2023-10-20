@@ -55,52 +55,42 @@ int main(int argc, char *argv[]) {
     std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> profiles{};
     std::mutex mutex{};
 
-    collector->addUpdateListener([](auto &&profiles) -> void {
-        for (const auto &p : profiles) {
-            if (p->getType() == "REMOVED") {
-                std::cout << p->getSymbol() + ": " + p->getType() + "\n";
+    // It is possible to add listener after connection is started - updates will not be missed in this case
+    collector->addUpdateListener([&profiles, &mutex, self = collector](auto &&instruments) {
+        std::cout << "\nInstrument Profiles:" << std::endl;
+        // We can observe REMOVED elements - need to add necessary filtering
+        // See javadoc for InstrumentProfileCollector for more details
+
+        // (1) We can either process instrument profile updates manually
+        for (auto &&profile : instruments) {
+            std::lock_guard lock{mutex};
+
+            if (InstrumentProfileType::REMOVED.getName() == profile->getType()) {
+                // Profile was removed - remove it from our data model
+                profiles.erase(profile->getSymbol());
             } else {
-                std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
+                // Profile was updated - collector only notifies us if profile was changed
+                profiles[profile->getSymbol()] = profile;
             }
+        };
+
+        {
+            std::lock_guard lock{mutex};
+            std::cout << "Total number of profiles (1): " + std::to_string(profiles.size()) << std::endl;
         }
+        //
+        //        // (2) or access the concurrent view of instrument profiles
+        //        std::unordered_set<std::string> symbols =
+        //            StreamSupport.stream(collector->view().spliterator(), false)
+        //                .filter(profile->!InstrumentProfileType.REMOVED.name().equals(profile.getType()))
+        //                .map(InstrumentProfile::getSymbol)
+        //                .collect(Collectors.toSet());
+        //        std::cout << "Total number of profiles (2): " + std::to_string(symbols.size()) << std::endl;
+        //
+        std::cout << "Last modified: " + dxfcpp::formatTimeStampWithMillisWithTimeZone(self->getLastUpdateTime())
+                  << std::endl;
     });
 
-    //
-    //    // It is possible to add listener after connection is started - updates will not be missed in this case
-    //    collector.addUpdateListener([&profiles, &mutex](auto &&instruments) {
-    //        std::cout << "\nInstrument Profiles:" << std::endl;
-    //        // We can observe REMOVED elements - need to add necessary filtering
-    //        // See javadoc for InstrumentProfileCollector for more details
-    //
-    //        // (1) We can either process instrument profile updates manually
-    //        for (auto &&profile : instruments) {
-    //            std::lock_guard lock{mutex};
-    //
-    //            if (InstrumentProfileType::REMOVED->getName() == profile->getType()) {
-    //                // Profile was removed - remove it from our data model
-    //                profiles.erase(profile->getSymbol());
-    //            } else {
-    //                // Profile was updated - collector only notifies us if profile was changed
-    //                profiles[profile.getSymbol()] = profile;
-    //            }
-    //        };
-    //
-    //        {
-    //            std::lock_guard lock{mutex};
-    //            std::cout << "Total number of profiles (1): " + std::to_string(profiles.size()) << std::endl;
-    //        }
-    //
-    //        // (2) or access the concurrent view of instrument profiles
-    //        std::unordered_set<std::string> symbols =
-    //            StreamSupport.stream(collector->view().spliterator(), false)
-    //                .filter(profile->!InstrumentProfileType.REMOVED.name().equals(profile.getType()))
-    //                .map(InstrumentProfile::getSymbol)
-    //                .collect(Collectors.toSet());
-    //        std::cout << "Total number of profiles (2): " + std::to_string(symbols.size()) << std::endl;
-    //
-    //        std::cout << "Last modified: " + new Date(collector->getLastUpdateTime()) << std::endl;
-    //    });
-    //
     std::this_thread::sleep_for(std::chrono::days(365));
 
     connection->close();
