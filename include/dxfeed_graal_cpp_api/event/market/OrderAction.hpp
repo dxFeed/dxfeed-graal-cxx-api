@@ -25,7 +25,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      *
      * <p>All Full Order Book related fields for this action will be empty.
      */
-    static const OrderAction UNDEFINED;
+    static const DXFCPP_EXPORT OrderAction UNDEFINED;
 
     /**
      * New Order is added to Order Book.
@@ -37,7 +37,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * <li>Trade fields will be empty</li>
      * </ul>
      */
-    static const OrderAction NEW;
+    static const DXFCPP_EXPORT OrderAction NEW;
 
     /**
      * Order is modified and price-time-priority is not maintained (i.e. order has re-entered Order Book).
@@ -49,7 +49,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * <li>Trade fields will be empty</li>
      * </ul>
      */
-    static const OrderAction REPLACE;
+    static const DXFCPP_EXPORT OrderAction REPLACE;
 
     /**
      * Order is modified without changing its price-time-priority (usually due to partial cancel by user).
@@ -61,7 +61,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * <li>Trade fields will be empty</li>
      * </ul>
      */
-    static const OrderAction MODIFY;
+    static const DXFCPP_EXPORT OrderAction MODIFY;
 
     /**
      * Order is fully canceled and removed from Order Book.
@@ -74,7 +74,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * <li>Trade fields will be empty</li>
      * </ul>
      */
-    static const OrderAction DELETE;
+    static const DXFCPP_EXPORT OrderAction DELETE;
 
     /**
      * Size is changed (usually reduced) due to partial order execution.
@@ -89,7 +89,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * contain size and price of this execution</li>
      * </ul>
      */
-    static const OrderAction PARTIAL;
+    static const DXFCPP_EXPORT OrderAction PARTIAL;
 
     /**
      * Order is fully executed and removed from Order Book.
@@ -104,7 +104,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * contain size and price of this execution - always present</li>
      * </ul>
      */
-    static const OrderAction EXECUTE;
+    static const DXFCPP_EXPORT OrderAction EXECUTE;
 
     /**
      * Non-Book Trade - this Trade not refers to any entry in Order Book.
@@ -118,7 +118,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * contain size and price of this trade - always present</li>
      * </ul>
      */
-    static const OrderAction TRADE;
+    static const DXFCPP_EXPORT OrderAction TRADE;
 
     /**
      * Prior Trade/Order Execution bust.
@@ -131,7 +131,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * <li>@ref Order::getTradeSize() "tradeSize" and @ref Order::getTradePrice() "tradePrice" - always empty</li>
      * </ul>
      */
-    static const OrderAction BUST;
+    static const DXFCPP_EXPORT OrderAction BUST;
 };
 
 template <>
