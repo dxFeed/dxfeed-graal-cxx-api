@@ -216,6 +216,31 @@ std::shared_ptr<InstrumentProfile> InstrumentProfile::fromGraal(void *graalNativ
     return {};
 }
 
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList(void *graalList) noexcept {
+    using ListType = dxfg_instrument_profile_list;
+    using SizeType = decltype(ListType::size);
+
+    if (!graalList) {
+        return {};
+    }
+
+    std::vector<std::shared_ptr<InstrumentProfile>> result{};
+
+    auto list = dxfcpp::bit_cast<ListType *>(graalList);
+
+    if (list->size <= 0 || list->elements == nullptr) {
+        return result;
+    }
+
+    for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
+        if (list->elements[elementIndex]) {
+            result.emplace_back(InstrumentProfile::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
+        }
+    }
+
+    return result;
+}
+
 void *InstrumentProfile::toGraal() const noexcept {
     auto *graalInstrumentProfile =
         new (std::nothrow) dxfg_instrument_profile_t{};

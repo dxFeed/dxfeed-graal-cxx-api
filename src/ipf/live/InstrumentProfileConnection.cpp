@@ -63,7 +63,7 @@ InstrumentProfileConnection::InstrumentProfileConnection() noexcept
 InstrumentProfileConnection::Ptr
 InstrumentProfileConnection::createConnection(const std::string &address,
                                               InstrumentProfileCollector::Ptr collector) noexcept {
-    std::shared_ptr<InstrumentProfileConnection> connection{new (std::nothrow) InstrumentProfileConnection{}};
+    std::shared_ptr<InstrumentProfileConnection> connection(new (std::nothrow) InstrumentProfileConnection{});
 
     if (!connection || !collector->handle_) {
         // TODO: dummy connection & error handling;

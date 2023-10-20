@@ -91,6 +91,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
 
   public:
     static std::shared_ptr<InstrumentProfile> fromGraal(void *graalNative) noexcept;
+    static std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList) noexcept;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).

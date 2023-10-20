@@ -42,6 +42,8 @@ struct InstrumentProfileCollector {
     static bool updateInstrumentProfile(
         /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
         /* dxfg_instrument_profile_t * */ void *ip) noexcept;
+    static bool addUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
+                                  /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
 };
 
 struct InstrumentProfileConnection {
@@ -70,6 +72,16 @@ struct IpfPropertyChangeListener {
 
 struct InstrumentProfileList {
     static bool release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept;
+};
+
+struct InstrumentProfileIterator {
+    static bool hasNext(/* dxfg_iterable_ip_t * */ void *iterable) noexcept;
+    static /* dxfg_instrument_profile_t* */ void *next(/* dxfg_iterable_ip_t * */ void *iterable) noexcept;
+};
+
+struct InstrumentProfileUpdateListener {
+    static /* dxfg_ipf_update_listener_t* */ void *
+    create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData) noexcept;
 };
 
 } // namespace ipf

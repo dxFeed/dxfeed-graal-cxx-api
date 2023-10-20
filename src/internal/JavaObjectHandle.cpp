@@ -34,5 +34,6 @@ template struct JavaObjectHandle<InstrumentProfileReader>;
 template struct JavaObjectHandle<InstrumentProfileCollector>;
 template struct JavaObjectHandle<InstrumentProfileConnection>;
 template struct JavaObjectHandle<IpfPropertyChangeListener>;
+template struct JavaObjectHandle<InstrumentProfileUpdateListener>;
 
 } // namespace dxfcpp

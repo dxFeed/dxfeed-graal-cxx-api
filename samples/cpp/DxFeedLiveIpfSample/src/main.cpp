@@ -54,6 +54,17 @@ int main(int argc, char *argv[]) {
     // Data model to keep all instrument profiles mapped by their ticker symbol
     std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> profiles{};
     std::mutex mutex{};
+
+    collector->addUpdateListener([](auto &&profiles) -> void {
+        for (const auto &p : profiles) {
+            if (p->getType() == "REMOVED") {
+                std::cout << p->getSymbol() + ": " + p->getType() + "\n";
+            } else {
+                std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
+            }
+        }
+    });
+
     //
     //    // It is possible to add listener after connection is started - updates will not be missed in this case
     //    collector.addUpdateListener([&profiles, &mutex](auto &&instruments) {
