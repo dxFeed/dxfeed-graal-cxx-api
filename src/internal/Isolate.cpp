@@ -149,6 +149,21 @@ namespace dxfcpp::isolated {
 
 namespace api {
 
+/* dxfg_endpoint_state_change_listener_t* */ void *
+DXEndpointStateChangeListener::create(/* dxfg_endpoint_state_change_listener_func */ void *userFunc,
+                                      void *userData) noexcept {
+    if (!userFunc) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&userFunc, auto &&userData) {
+            return dxfg_PropertyChangeListener_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), userFunc,
+                                                   userData);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc), userData));
+}
+
 static dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
     switch (state) {
     case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
@@ -175,6 +190,19 @@ bool DXEndpoint::close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexc
                                          graalDXEndpointHandle) == 0;
         },
         false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle));
+}
+
+dxfcpp::DXEndpoint::State DXEndpoint::getState(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept {
+    if (!graalDXEndpointHandle) {
+        return dxfcpp::DXEndpoint::State::CLOSED;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalDXEndpointHandle) {
+            return graalStateToState(dxfg_DXEndpoint_getState(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                              graalDXEndpointHandle));
+        },
+        dxfcpp::DXEndpoint::State::CLOSED, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle));
 }
 
 bool DXEndpoint::user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &user) noexcept {
@@ -216,17 +244,19 @@ bool DXEndpoint::connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, con
         false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle), address);
 }
 
-dxfcpp::DXEndpoint::State DXEndpoint::getState(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept {
-    if (!graalDXEndpointHandle) {
-        return dxfcpp::DXEndpoint::State::CLOSED;
+bool DXEndpoint::addStateChangeListener(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle,
+                                        /* dxfg_endpoint_state_change_listener_t* */ void *listener) noexcept {
+    if (!graalDXEndpointHandle || !listener) {
+        return false;
     }
 
     return runIsolatedOrElse(
-        [](auto threadHandle, auto &&graalDXEndpointHandle) {
-            return graalStateToState(dxfg_DXEndpoint_getState(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                              graalDXEndpointHandle));
+        [](auto threadHandle, auto &&graalDXEndpointHandle, auto &&listener) {
+            return dxfg_DXEndpoint_addStateChangeListener(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                          graalDXEndpointHandle, listener) == 0;
         },
-        dxfcpp::DXEndpoint::State::CLOSED, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle));
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle),
+        dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_t *>(listener));
 }
 
 } // namespace api

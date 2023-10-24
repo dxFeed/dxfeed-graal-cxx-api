@@ -7,12 +7,19 @@
 
 namespace dxfcpp::isolated {
 namespace api {
+struct DXEndpointStateChangeListener {
+    static /* dxfg_endpoint_state_change_listener_t* */ void *
+    create(/* dxfg_endpoint_state_change_listener_func */ void *userFunc, void *userData) noexcept;
+};
+
 struct DXEndpoint {
     static bool close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
     static dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
     static bool user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &user) noexcept;
     static bool password(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &password) noexcept;
     static bool connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &address) noexcept;
+    static bool addStateChangeListener(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle,
+                                       /* dxfg_endpoint_state_change_listener_t* */ void *listener) noexcept;
 };
 } // namespace api
 
@@ -80,8 +87,8 @@ struct InstrumentProfileIterator {
 };
 
 struct InstrumentProfileUpdateListener {
-    static /* dxfg_ipf_update_listener_t* */ void *
-    create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData) noexcept;
+    static /* dxfg_ipf_update_listener_t* */ void *create(/* dxfg_ipf_update_listener_function */ void *userFunc,
+                                                          void *userData) noexcept;
 };
 
 } // namespace ipf

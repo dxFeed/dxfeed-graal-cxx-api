@@ -105,8 +105,10 @@ const std::unordered_map<CEntryPointErrors::CodeType, std::reference_wrapper<con
 
 thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
 
-const auto I = Isolate::getInstance();
+std::mutex DXEndpoint::instancesMutex{};
+std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::instances{};
 
-std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::INSTANCES{};
+const auto I = Isolate::getInstance();
+const auto A = ApiContext::getInstance();
 
 } // namespace dxfcpp

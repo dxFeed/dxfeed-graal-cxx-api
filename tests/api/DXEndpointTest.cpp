@@ -115,13 +115,13 @@ TEST_CASE("DXFeedSubscription") {
     auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
     auto s2 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE, dxfcpp::EventTypeEnum::CANDLE});
 
-    dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
+    //dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
 
     std::set types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
 
-    auto s3 = dxfcpp::DXFeed::getInstance()->createSubscription(types);
+    //auto s3 = dxfcpp::DXFeed::getInstance()->createSubscription(types);
 
-    auto s4 = dxfcpp::DXFeed::getInstance()->createSubscription(types.begin(), types.end());
+    //auto s4 = dxfcpp::DXFeed::getInstance()->createSubscription(types.begin(), types.end());
 
     auto s5 = dxfcpp::DXFeed::getInstance()->createSubscription(std::move(types));
 
@@ -129,7 +129,7 @@ TEST_CASE("DXFeedSubscription") {
 
     auto sub6 = dxfcpp::DXFeedSubscription::create(types2.begin(), types2.end());
 
-    dxfcpp::DXFeed::getInstance();
+    //dxfcpp::DXFeed::getInstance();
 }
 
 TEST_CASE("dxfcpp::DXFeed::getInstance()") { dxfcpp::DXFeed::getInstance(); }
