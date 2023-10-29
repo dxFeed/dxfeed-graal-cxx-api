@@ -80,9 +80,20 @@ struct InstrumentProfileIterator {
 };
 
 struct InstrumentProfileUpdateListener {
-    static /* dxfg_ipf_update_listener_t* */ void *
-    create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData) noexcept;
+    static /* dxfg_ipf_update_listener_t* */ void *create(/* dxfg_ipf_update_listener_function */ void *userFunc,
+                                                          void *userData) noexcept;
 };
 
 } // namespace ipf
+
+namespace schedule {
+struct Schedule {
+    static /* dxfg_schedule_t* */ void *getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept;
+    static /* dxfg_schedule_t* */ void *getInstance(const std::string &scheduleDefinition) noexcept;
+    static /* dxfg_schedule_t* */ void *getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile, const std::string& venue) noexcept;
+    static std::vector<std::string> getTradingVenues(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept;
+
+    static bool setDefaults(const std::vector<char>& data) noexcept;
+};
+} // namespace schedule
 } // namespace dxfcpp::isolated

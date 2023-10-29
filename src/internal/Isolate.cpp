@@ -602,4 +602,89 @@ InstrumentProfileUpdateListener::create(/* dxfg_ipf_update_listener_function */ 
 }
 
 } // namespace ipf
+
+namespace schedule {
+
+/* dxfg_schedule_t* */ void *Schedule::getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept {
+    if (!instrumentProfile) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfile) {
+            return dxfg_Schedule_getInstance(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                             instrumentProfile);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_instrument_profile_t *>(instrumentProfile)));
+}
+
+/* dxfg_schedule_t* */ void *Schedule::getInstance(const std::string &scheduleDefinition) noexcept {
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&scheduleDefinition) {
+            return dxfg_Schedule_getInstance2(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                              scheduleDefinition.c_str());
+        },
+        nullptr, scheduleDefinition));
+}
+
+/* dxfg_schedule_t* */ void *Schedule::getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile,
+                                                   const std::string &venue) noexcept {
+    if (!instrumentProfile) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfile, auto &&venue) {
+            return dxfg_Schedule_getInstance3(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                              instrumentProfile, venue.c_str());
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_instrument_profile_t *>(instrumentProfile), venue));
+}
+
+std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept {
+    std::vector<std::string> result{};
+
+    if (!instrumentProfile) {
+        return result;
+    }
+
+    auto graalStringList = runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfile) {
+            return dxfg_Schedule_getTradingVenues(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                  instrumentProfile);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_instrument_profile_t *>(instrumentProfile));
+
+    if (!graalStringList || graalStringList->size == 0) {
+        return result;
+    }
+
+    for (auto i = 0; i < graalStringList->size; i++) {
+        result.push_back(dxfcpp::toString(graalStringList->elements[i]));
+    }
+
+    runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalStringList) {
+            return dxfg_CList_String_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                             graalStringList) == 0;
+        },
+        false, graalStringList);
+
+    return result;
+};
+
+bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&data) {
+            auto size = data.size() > std::numeric_limits<std::int32_t>::max()
+                            ? std::numeric_limits<std::int32_t>::max()
+                            : static_cast<std::int32_t>(data.size());
+
+            return dxfg_Schedule_setDefaults(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), data.data(),
+                                             size) == 0;
+        },
+        false, data);
+}
+
+} // namespace schedule
 } // namespace dxfcpp::isolated

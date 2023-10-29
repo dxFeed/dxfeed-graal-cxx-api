@@ -14,7 +14,6 @@ using namespace dxfcpp;
 using namespace std::string_literals;
 
 void printUsage() {
-    //    System.out.println("wrong number of arguments");
     std::cout << R"(usage:  ScheduleSample  <defaults>  <profiles>  <symbol>  [time]
 where:  <defaults>  is a path to Schedule API defaults file
         <profiles>  is a URL to IPF file
@@ -33,11 +32,11 @@ void updateScheduleDefaults(const std::string &url) {
         return;
     }
 
-    std::string buffer(std::istreambuf_iterator<char>{is}, {});
+    std::vector<char> buffer(std::istreambuf_iterator<char>{is}, {});
 
-    //    if (Schedule::setDefaults(buffer) {
-    //        std::cout << "Schedule defaults updated successfully" << std::endl;
-    //    }
+    if (Schedule::setDefaults(buffer)) {
+        std::cout << "Schedule defaults updated successfully" << std::endl;
+    }
 }
 
 std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> loadInstrumentProfiles(const std::string &url) {
@@ -56,18 +55,17 @@ void checkAllSchedules(auto &&profiles) {
     auto successes = 0;
 
     for (auto &&[symbol, profile] : profiles) {
-        //        if (Schedule::getInstance(profile)) {
-        //            for (auto &&venue : Schedule::getTradingVenues(profile)) {
-        //                Schedule::getInstance(profile, venue);
-        //            }
-        //
-        //            successes++;
-        //        } else {
-        //            std::cerr << "Error getting schedule for " + profile->getSymbol() + " (" +
-        //            profile->getTradingHours() +
-        //                             "): "
-        //                      << std::endl;
-        //        }
+        if (Schedule::getInstance(profile)) {
+            for (auto &&venue : Schedule::getTradingVenues(profile)) {
+                Schedule::getInstance(profile, venue);
+            }
+
+            successes++;
+        } else {
+            std::cerr << "Error getting schedule for " + profile->getSymbol() + " (" + profile->getTradingHours() +
+                             "): "
+                      << std::endl;
+        }
     }
 
     std::cout << "Checked " << profiles.size() << " instrument profiles: " << successes << " successes, "
@@ -75,7 +73,7 @@ void checkAllSchedules(auto &&profiles) {
 }
 
 void printNext5Holidays(auto &&profile, auto time) {
-    //    auto schedule = Schedule::getInstance(profile);
+    auto schedule = Schedule::getInstance(profile);
     //    auto day = schedule->getDayByTime(time);
     //
     //    std::string output = "5 next holidays for " + profile->getSymbol() + ":";
@@ -94,7 +92,7 @@ void printNext5Holidays(auto &&profile, auto time) {
 }
 
 void printCurrentSession(auto &&profile, auto time) {
-    //    auto schedule = Schedule::getInstance(profile);
+    auto schedule = Schedule::getInstance(profile);
     //    auto session = schedule->getSessionByTime(time);
     //
     //    std::cout << "Current session for " + profile->getSymbol() + ": " + session->toString() + " in " +
@@ -103,7 +101,7 @@ void printCurrentSession(auto &&profile, auto time) {
 }
 
 void printNextTradingSession(auto &&profile, auto time) {
-    //    auto schedule = Schedule::getInstance(profile);
+    auto schedule = Schedule::getInstance(profile);
     //    auto session = schedule->getSessionByTime(time);
     //
     //    if (!session->isTrading()) {
@@ -116,7 +114,7 @@ void printNextTradingSession(auto &&profile, auto time) {
 }
 
 void printNearestTradingSession(auto &&profile, auto time) {
-    //    auto schedule = Schedule::getInstance(profile);
+    auto schedule = Schedule::getInstance(profile);
     //    auto session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);
     //
     //    std::cout << "Nearest trading session for " + profile.getSymbol() + ": " + session->toString() + " in " +
