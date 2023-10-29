@@ -5,8 +5,10 @@
 
 #include "../internal/Conf.hpp"
 
-#include "SessionFilter.hpp"
-#include "SessionType.hpp"
-#include "Day.hpp"
-#include "Session.hpp"
-#include "Schedule.hpp"
+namespace dxfcpp {
+
+struct DXFCPP_EXPORT Day {
+
+};
+
+}
