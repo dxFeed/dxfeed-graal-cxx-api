@@ -3,12 +3,12 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <string>
 #include <unordered_map>
-#include <chrono>
 
 using namespace dxfcpp;
 using namespace std::string_literals;
@@ -70,8 +70,8 @@ void checkAllSchedules(auto &&profiles) {
         //        }
     }
 
-    std::cout << "Checked " << profiles.size() << " instrument profiles: " << successes
-              << " successes, "  << (profiles.size() - successes) << " failures" << std::endl;
+    std::cout << "Checked " << profiles.size() << " instrument profiles: " << successes << " successes, "
+              << (profiles.size() - successes) << " failures" << std::endl;
 }
 
 void printNext5Holidays(auto &&profile, auto time) {
@@ -116,12 +116,12 @@ void printNextTradingSession(auto &&profile, auto time) {
 }
 
 void printNearestTradingSession(auto &&profile, auto time) {
-//    auto schedule = Schedule::getInstance(profile);
-//    auto session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);
-//
-//    std::cout << "Nearest trading session for " + profile.getSymbol() + ": " + session->toString() + " in " +
-//                     session->getDay()->toString()
-//              << std::endl;
+    //    auto schedule = Schedule::getInstance(profile);
+    //    auto session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);
+    //
+    //    std::cout << "Nearest trading session for " + profile.getSymbol() + ": " + session->toString() + " in " +
+    //                     session->getDay()->toString()
+    //              << std::endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -156,7 +156,11 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Found profile for " + symbol + ": " + profile->getDescription() << std::endl;
 
-    auto time = argc < 5 ? std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() : CmdArgsUtils::parseDateTime(argv[4]);
+    auto time =
+        argc < 5
+            ? std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
+                  .count()
+            : CmdArgsUtils::parseDateTime(argv[4]);
 
     std::cout << "Using timestamp " + formatTimeStampWithMillisWithTimeZone(time) << std::endl;
 
