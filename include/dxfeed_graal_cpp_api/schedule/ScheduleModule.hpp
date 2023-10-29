@@ -7,6 +7,7 @@
 
 #include "SessionFilter.hpp"
 #include "SessionType.hpp"
+#include "DayFilter.hpp"
 #include "Day.hpp"
 #include "Session.hpp"
 #include "Schedule.hpp"
