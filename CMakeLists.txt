@@ -202,6 +202,9 @@ set(dxFeedGraalCxxApi_EventOption_Sources
 set(dxFeedGraalCxxApi_Schedule_Sources
         src/schedule/SessionFilter.cpp
         src/schedule/SessionType.cpp
+        src/schedule/Day.cpp
+        src/schedule/Session.cpp
+        src/schedule/Schedule.cpp
 )
 
 set(dxFeedGraalCxxApi_Sources
