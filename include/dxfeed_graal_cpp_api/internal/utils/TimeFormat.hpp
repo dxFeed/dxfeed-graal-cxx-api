@@ -20,6 +20,10 @@
 
 namespace dxfcpp {
 
+struct DXFCPP_EXPORT TimeZone {
+
+};
+
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.
  *

@@ -90,13 +90,13 @@ DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t> &in)
  */
 DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept;
 
-DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp) noexcept;
 
-DXFCPP_EXPORT std::string formatTimeStampWithTimeZone(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStampWithTimeZone(std::int64_t timestamp) noexcept;
 
-DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp) noexcept;
 
-DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) noexcept;
 
 DXFCPP_EXPORT char *createCString(const std::string &s) noexcept;
 

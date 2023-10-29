@@ -139,46 +139,61 @@ std::int16_t utf8to16(char in) noexcept {
     }
 }
 
-std::string formatTimeStamp(std::int64_t timestamp) {
+std::string formatTimeStamp(std::int64_t timestamp) noexcept {
     if (timestamp == 0) {
         return "0";
     }
+    try {
+        auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
 
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-
-    return fmt::format("{:%Y%m%d-%H%M%S}", tm);
+        return fmt::format("{:%Y%m%d-%H%M%S}", tm);
+    } catch (...) {
+        return std::to_string(timestamp);
+    }
 }
 
-std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
+std::string formatTimeStampWithTimeZone(std::int64_t timestamp) noexcept {
     if (timestamp == 0) {
         return "0";
     }
 
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+    try {
+        auto tm = fmt::localtime(static_cast<std::time_t>(static_cast<std::uint32_t>(timestamp / 1000)));
 
-    return fmt::format("{:%Y%m%d-%H%M%S%z}", tm);
+        return fmt::format("{:%Y%m%d-%H%M%S%z}", tm);
+    } catch (...) {
+        return "0";
+    }
 }
 
-std::string formatTimeStampWithMillis(std::int64_t timestamp) {
+std::string formatTimeStampWithMillis(std::int64_t timestamp) noexcept {
     if (timestamp == 0) {
         return "0";
     }
 
-    auto ms = timestamp % 1000;
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+    try {
+        auto ms = static_cast<std::uint64_t>(timestamp) % 1000;
+        auto tm = fmt::localtime(static_cast<std::time_t>(static_cast<std::uint32_t>(timestamp / 1000)));
 
-    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}", tm, ms);
+        return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}", tm, ms);
+    } catch (...) {
+        return "0";
+    }
 }
 
-std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
+std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) noexcept {
     if (timestamp == 0) {
         return "0";
     }
 
-    auto ms = timestamp % 1000;
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+    try {
+        auto ms = static_cast<std::uint64_t>(timestamp) % 1000;
+        auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
 
-    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
+        return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
+    } catch (...) {
+        return "0";
+    }
 }
 
 char *createCString(const std::string &s) noexcept {
