@@ -41,11 +41,15 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
-                $<TARGET_FILE:dxfcxx>
+        $<TARGET_FILE:dxfcxx>
+        ${CMAKE_CURRENT_SOURCE_DIR}/schedule.properties
+        ${CMAKE_CURRENT_SOURCE_DIR}/sample.ipf.zip
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
     install(TARGETS ${PROJECT_NAME})
+    install(FILES "schedule.properties" DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(FILES "sample.ipf.zip" DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     if (WIN32)
         install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
