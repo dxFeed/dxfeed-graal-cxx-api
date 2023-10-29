@@ -8,5 +8,81 @@
 
 namespace dxfcpp {
 
-
+Schedule::Schedule() noexcept : handle_{nullptr} {
 }
+
+Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) noexcept {
+    Schedule::Ptr schedule{new (std::nothrow) Schedule{}};
+
+    if (!schedule || !profile) {
+        // TODO: error handling
+        return schedule;
+    }
+
+    auto graalProfile = profile->toGraal();
+    schedule->handle_ = isolated::schedule::Schedule::getInstance(graalProfile);
+
+    if (!schedule->handle_) {
+        // TODO: error handling
+    }
+
+    InstrumentProfile::freeGraal(graalProfile);
+
+    return schedule;
+}
+
+Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) noexcept {
+    Schedule::Ptr schedule{new (std::nothrow) Schedule{}};
+
+    if (!schedule) {
+        // TODO: error handling
+        return schedule;
+    }
+
+    schedule->handle_ = isolated::schedule::Schedule::getInstance(scheduleDefinition);
+
+    if (!schedule->handle_) {
+        // TODO: error handling
+    }
+
+    return schedule;
+}
+
+Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) noexcept {
+    Schedule::Ptr schedule{new (std::nothrow) Schedule{}};
+
+    if (!schedule || !profile) {
+        // TODO: error handling
+        return schedule;
+    }
+
+    auto graalProfile = profile->toGraal();
+    schedule->handle_ = isolated::schedule::Schedule::getInstance(graalProfile, venue);
+
+    if (!schedule->handle_) {
+        // TODO: error handling
+    }
+
+    InstrumentProfile::freeGraal(graalProfile);
+
+    return schedule;
+}
+
+std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) noexcept {
+    if (!profile) {
+        // TODO: error handling
+        return {};
+    }
+
+    auto graalProfile = profile->toGraal();
+    auto result = isolated::schedule::Schedule::getTradingVenues(graalProfile);
+    InstrumentProfile::freeGraal(graalProfile);
+
+    return result;
+}
+
+bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
+    return isolated::schedule::Schedule::setDefaults(data);
+}
+
+} // namespace dxfcpp
