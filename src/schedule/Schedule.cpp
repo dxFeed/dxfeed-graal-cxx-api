@@ -85,4 +85,26 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
     return isolated::schedule::Schedule::setDefaults(data);
 }
 
+std::shared_ptr<Day> Schedule::getDayByTime(std::int64_t time) const noexcept {
+    if (!handle_) {
+        return {};
+    }
+
+    auto graalDay = isolated::schedule::Schedule::getDayByTime(handle_, time);
+
+    if (!graalDay) {
+        return {};
+    }
+
+    std::shared_ptr<Day> day{new (std::nothrow) Day{}};
+
+    if (!day) {
+        return {};
+    }
+
+    day->handle_ = graalDay;
+
+    return day;
+}
+
 } // namespace dxfcpp
