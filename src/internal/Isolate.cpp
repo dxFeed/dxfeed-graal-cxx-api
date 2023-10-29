@@ -686,5 +686,17 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
         false, data);
 }
 
+/* dxfg_day_t* */ void *Schedule::getDayByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time) noexcept {
+    if (!schedule) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&schedule, auto &&time) {
+            return dxfg_Schedule_getDayByTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), schedule, time);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule), time));
+}
+
 } // namespace schedule
 } // namespace dxfcpp::isolated

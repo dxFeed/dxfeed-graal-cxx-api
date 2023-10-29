@@ -74,9 +74,9 @@ void checkAllSchedules(auto &&profiles) {
 
 void printNext5Holidays(auto &&profile, auto time) {
     auto schedule = Schedule::getInstance(profile);
-    //    auto day = schedule->getDayByTime(time);
-    //
-    //    std::string output = "5 next holidays for " + profile->getSymbol() + ":";
+    auto day = schedule->getDayByTime(time);
+
+    std::string output = "5 next holidays for " + profile->getSymbol() + ":";
     //
     //    for (auto i = 0; i < 5; i++) {
     //        day = day->findNextDay(DayFilter::HOLIDAY);
@@ -88,7 +88,7 @@ void printNext5Holidays(auto &&profile, auto time) {
     //        output += " " + std::to_string(day->getYearMonthDay());
     //    }
     //
-    //    std::cout << output << std::endl;
+    std::cout << output << std::endl;
 }
 
 void printCurrentSession(auto &&profile, auto time) {

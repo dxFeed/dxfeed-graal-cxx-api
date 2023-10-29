@@ -94,6 +94,8 @@ struct Schedule {
     static std::vector<std::string> getTradingVenues(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept;
 
     static bool setDefaults(const std::vector<char>& data) noexcept;
+
+    static /* dxfg_day_t* */ void* getDayByTime(/* dxfg_schedule_t* */ void * schedule, std::int64_t time) noexcept;
 };
 } // namespace schedule
 } // namespace dxfcpp::isolated

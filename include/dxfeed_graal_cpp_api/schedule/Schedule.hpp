@@ -60,7 +60,6 @@ struct DXFCPP_EXPORT Schedule {
      */
     static std::vector<std::string> getTradingVenues(std::shared_ptr<InstrumentProfile> profile) noexcept;
 
-
     /**
      * Sets shared defaults that are used by individual schedule instances.
      *
@@ -68,6 +67,16 @@ struct DXFCPP_EXPORT Schedule {
      * @return `true` if OK
      */
     static bool setDefaults(const std::vector<char> &data) noexcept;
+
+    /**
+     * Returns day that contains specified time.
+     * This method will return std::shared_ptr<Day>{nullptr} if specified time
+     * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     *
+     * @param time The time to search for
+     * @return The day that contains specified time or std::shared_ptr<Day>{nullptr} if specified time falls outside of valid date range
+     */
+    std::shared_ptr<Day> getDayByTime(std::int64_t time) const noexcept;
 };
 
 } // namespace dxfcpp
