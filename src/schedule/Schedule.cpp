@@ -8,7 +8,7 @@
 
 namespace dxfcpp {
 
-Schedule::Schedule() noexcept : handle_{nullptr} {
+Schedule::Schedule() noexcept : handle_{} {
 }
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) noexcept {
@@ -20,7 +20,7 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) 
     }
 
     auto graalProfile = profile->toGraal();
-    schedule->handle_ = isolated::schedule::Schedule::getInstance(graalProfile);
+    schedule->handle_ = JavaObjectHandle<Schedule>(isolated::schedule::Schedule::getInstance(graalProfile));
 
     if (!schedule->handle_) {
         // TODO: error handling
@@ -39,7 +39,7 @@ Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) noexc
         return schedule;
     }
 
-    schedule->handle_ = isolated::schedule::Schedule::getInstance(scheduleDefinition);
+    schedule->handle_ = JavaObjectHandle<Schedule>(isolated::schedule::Schedule::getInstance(scheduleDefinition));
 
     if (!schedule->handle_) {
         // TODO: error handling
@@ -57,7 +57,7 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, 
     }
 
     auto graalProfile = profile->toGraal();
-    schedule->handle_ = isolated::schedule::Schedule::getInstance(graalProfile, venue);
+    schedule->handle_ = JavaObjectHandle<Schedule>(isolated::schedule::Schedule::getInstance(graalProfile, venue));
 
     if (!schedule->handle_) {
         // TODO: error handling
@@ -90,7 +90,7 @@ std::shared_ptr<Day> Schedule::getDayByTime(std::int64_t time) const noexcept {
         return {};
     }
 
-    auto graalDay = isolated::schedule::Schedule::getDayByTime(handle_, time);
+    auto graalDay = isolated::schedule::Schedule::getDayByTime(handle_.get(), time);
 
     if (!graalDay) {
         return {};
@@ -102,7 +102,7 @@ std::shared_ptr<Day> Schedule::getDayByTime(std::int64_t time) const noexcept {
         return {};
     }
 
-    day->handle_ = graalDay;
+    day->handle_ = JavaObjectHandle<Day>(graalDay);
 
     return day;
 }

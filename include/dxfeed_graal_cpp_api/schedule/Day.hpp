@@ -17,7 +17,7 @@ struct DXFCPP_EXPORT Day {
     using Unique = std::unique_ptr<Day>;
 
   private:
-    void *handle_;
+    JavaObjectHandle<Day> handle_;
 
     Day() noexcept;
 

@@ -8,7 +8,7 @@
 
 namespace dxfcpp {
 
-Day::Day() noexcept : handle_{nullptr} {
+Day::Day() noexcept : handle_{} {
 }
 
 } // namespace dxfcpp
