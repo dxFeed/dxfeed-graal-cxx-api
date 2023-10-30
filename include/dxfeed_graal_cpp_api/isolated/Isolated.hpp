@@ -6,6 +6,14 @@
 #include "../internal/Conf.hpp"
 
 namespace dxfcpp::isolated {
+struct String {
+    static bool release(const char *string) noexcept;
+};
+
+struct StringList {
+    static bool release(/* dxfg_string_list* */ void *stringList) noexcept;
+};
+
 namespace api {
 struct DXEndpoint {
     static bool close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
@@ -90,12 +98,13 @@ namespace schedule {
 struct Schedule {
     static /* dxfg_schedule_t* */ void *getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept;
     static /* dxfg_schedule_t* */ void *getInstance(const std::string &scheduleDefinition) noexcept;
-    static /* dxfg_schedule_t* */ void *getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile, const std::string& venue) noexcept;
+    static /* dxfg_schedule_t* */ void *getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile,
+                                                    const std::string &venue) noexcept;
     static std::vector<std::string> getTradingVenues(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept;
 
-    static bool setDefaults(const std::vector<char>& data) noexcept;
+    static bool setDefaults(const std::vector<char> &data) noexcept;
 
-    static /* dxfg_day_t* */ void* getDayByTime(/* dxfg_schedule_t* */ void * schedule, std::int64_t time) noexcept;
+    static /* dxfg_day_t* */ void *getDayByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time) noexcept;
 };
 } // namespace schedule
 } // namespace dxfcpp::isolated

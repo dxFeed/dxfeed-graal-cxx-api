@@ -111,7 +111,7 @@ template <class F> class final_action {
 };
 
 // finally() - convenience function to generate a final_action
-template <class F> [[nodiscard]] auto finally(F &&f) noexcept {
+template <class F> auto finally(F &&f) noexcept {
     return final_action<std::decay_t<F>>{std::forward<F>(f)};
 }
 
