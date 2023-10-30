@@ -95,6 +95,10 @@ struct InstrumentProfileUpdateListener {
 } // namespace ipf
 
 namespace schedule {
+struct DayFilter {
+    static /* dxfg_day_filter_t* */ void* getInstance(std::uint32_t code) noexcept;
+};
+
 struct Schedule {
     static /* dxfg_schedule_t* */ void *getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept;
     static /* dxfg_schedule_t* */ void *getInstance(const std::string &scheduleDefinition) noexcept;
