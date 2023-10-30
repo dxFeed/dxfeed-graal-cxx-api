@@ -22,7 +22,7 @@ struct DXFCPP_EXPORT Schedule {
     using Unique = std::unique_ptr<Schedule>;
 
   private:
-    void *handle_;
+    JavaObjectHandle<Schedule> handle_;
 
     Schedule() noexcept;
 

@@ -36,4 +36,8 @@ template struct JavaObjectHandle<InstrumentProfileConnection>;
 template struct JavaObjectHandle<IpfPropertyChangeListener>;
 template struct JavaObjectHandle<InstrumentProfileUpdateListener>;
 
+template struct JavaObjectHandle<Schedule>;
+template struct JavaObjectHandle<Day>;
+template struct JavaObjectHandle<Session>;
+
 } // namespace dxfcpp
