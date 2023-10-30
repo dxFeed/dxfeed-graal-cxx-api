@@ -147,6 +147,30 @@ GraalIsolateThreadHandle Isolate::get() noexcept {
 
 namespace dxfcpp::isolated {
 
+bool String::release(const char *string) noexcept {
+    if (!string) {
+        return true;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&string) {
+            return dxfg_String_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), string) == 0;
+        },
+        false, string);
+}
+
+bool StringList::release(/* dxfg_string_list* */ void *stringList) noexcept {
+    if (!stringList) {
+        return true;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&stringList) {
+            return dxfg_CList_String_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), stringList) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_string_list *>(stringList));
+}
+
 namespace api {
 
 static dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
@@ -303,12 +327,18 @@ InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ v
 }
 
 std::string InstrumentProfileReader::resolveSourceURL(const std::string &address) noexcept {
-    return dxfcpp::toString(runIsolatedOrElse(
+    auto resolvedURL = runIsolatedOrElse(
         [](auto threadHandle, auto &&address) {
             return dxfg_InstrumentProfileReader_resolveSourceURL(
                 dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), address.c_str());
         },
-        nullptr, address));
+        nullptr, address);
+
+    finally([resolvedURL] {
+        String::release(resolvedURL);
+    });
+
+    return dxfcpp::toString(resolvedURL);
 }
 
 /* dxfg_ipf_collector_t* */ void *InstrumentProfileCollector::create() noexcept {
@@ -385,15 +415,25 @@ bool InstrumentProfileCollector::addUpdateListener(/* dxfg_ipf_collector_t* */ v
 std::string InstrumentProfileConnection::getAddress(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        return String::EMPTY;
+        return dxfcpp::String::EMPTY;
     }
 
-    return dxfcpp::toString(runIsolatedOrElse(
+    auto address = runIsolatedOrElse(
         [](auto threadHandle, auto &&instrumentProfileConnectionHandle) {
             return dxfg_InstrumentProfileConnection_getAddress(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
                                                                instrumentProfileConnectionHandle);
         },
-        nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle)));
+        nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
+
+    if (!address) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    finally([address] {
+        String::release(address);
+    });
+
+    return dxfcpp::toString(address);
 }
 
 std::int64_t InstrumentProfileConnection::getUpdatePeriod(
@@ -655,6 +695,10 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
         },
         nullptr, dxfcpp::bit_cast<dxfg_instrument_profile_t *>(instrumentProfile));
 
+    finally([graalStringList]{
+        StringList::release(graalStringList);
+    });
+
     if (!graalStringList || graalStringList->size == 0) {
         return result;
     }
@@ -662,13 +706,6 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
     for (auto i = 0; i < graalStringList->size; i++) {
         result.push_back(dxfcpp::toString(graalStringList->elements[i]));
     }
-
-    runIsolatedOrElse(
-        [](auto threadHandle, auto &&graalStringList) {
-            return dxfg_CList_String_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                             graalStringList) == 0;
-        },
-        false, graalStringList);
 
     return result;
 };
