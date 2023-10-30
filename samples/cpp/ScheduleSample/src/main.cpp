@@ -123,6 +123,9 @@ void printNearestTradingSession(auto &&profile, auto time) {
 }
 
 int main(int argc, char *argv[]) {
+
+    const auto& dayFilter = DayFilter::ANY;
+
     if (argc > 1 && (argv[1] == "-h"s || argv[1] == "--help"s)) {
         printUsage();
 
@@ -154,11 +157,7 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Found profile for " + symbol + ": " + profile->getDescription() << std::endl;
 
-    auto time =
-        argc < 5
-            ? std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
-                  .count()
-            : CmdArgsUtils::parseDateTime(argv[4]);
+    auto time = argc < 5 ? dxfcpp::now() : CmdArgsUtils::parseDateTime(argv[4]);
 
     std::cout << "Using timestamp " + formatTimeStampWithMillisWithTimeZone(time) << std::endl;
 

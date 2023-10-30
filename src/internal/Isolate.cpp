@@ -645,6 +645,14 @@ InstrumentProfileUpdateListener::create(/* dxfg_ipf_update_listener_function */ 
 
 namespace schedule {
 
+/* dxfg_day_filter_t* */ void *DayFilter::getInstance(std::uint32_t code) noexcept {
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&filter) {
+            return dxfg_DayFilter_getInstance(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), filter);
+        },
+        nullptr, static_cast<dxfg_day_filter_prepare_t>(code)));
+}
+
 /* dxfg_schedule_t* */ void *Schedule::getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept {
     if (!instrumentProfile) {
         return nullptr;
@@ -695,7 +703,7 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
         },
         nullptr, dxfcpp::bit_cast<dxfg_instrument_profile_t *>(instrumentProfile));
 
-    finally([graalStringList]{
+    finally([graalStringList] {
         StringList::release(graalStringList);
     });
 

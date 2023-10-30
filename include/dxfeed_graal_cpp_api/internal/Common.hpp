@@ -115,6 +115,16 @@ template <class F> auto finally(F &&f) noexcept {
     return final_action<std::decay_t<F>>{std::forward<F>(f)};
 }
 
+/// Lightweight implementation of "nullable bool"
+enum class Tristate : std::uint8_t {
+    FALSE = 0,
+    TRUE = 1,
+    NONE = 2,
+};
+
+/**
+ * @return The number of milliseconds that have passed since the start of the Unix epoch (1970-01-01).
+ */
 inline auto now() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
         .count();
