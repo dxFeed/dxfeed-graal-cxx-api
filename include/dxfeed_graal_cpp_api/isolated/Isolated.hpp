@@ -96,7 +96,12 @@ struct InstrumentProfileUpdateListener {
 
 namespace schedule {
 struct DayFilter {
-    static /* dxfg_day_filter_t* */ void* getInstance(std::uint32_t code) noexcept;
+    static /* dxfg_day_filter_t* */ void *getInstance(std::uint32_t code) noexcept;
+};
+
+struct Day {
+    static std::int32_t getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept;
+    static /* dxfg_day_t* */ void *findNextDay(/* dxfg_day_t* */ void *day, /* dxfg_day_filter_t* */ void *filter) noexcept;
 };
 
 struct Schedule {

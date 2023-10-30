@@ -65,6 +65,8 @@ enum class DayFilterEnum : std::uint32_t {
  * some only non-trading, and some ignore type of day altogether.
  */
 struct DXFCPP_EXPORT DayFilter {
+    friend struct Day;
+
     /// Accepts any day - useful for pure calendar navigation.
     static const DayFilter ANY;
 

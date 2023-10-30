@@ -77,17 +77,17 @@ void printNext5Holidays(auto &&profile, auto time) {
     auto day = schedule->getDayByTime(time);
 
     std::string output = "5 next holidays for " + profile->getSymbol() + ":";
-    //
-    //    for (auto i = 0; i < 5; i++) {
-    //        day = day->findNextDay(DayFilter::HOLIDAY);
-    //
-    //        if (!day) {
-    //            break;
-    //        }
-    //
-    //        output += " " + std::to_string(day->getYearMonthDay());
-    //    }
-    //
+
+    for (auto i = 0; i < 5; i++) {
+        day = day->findNextDay(DayFilter::HOLIDAY);
+
+        if (!day) {
+            break;
+        }
+
+        output += " " + std::to_string(day->getYearMonthDay());
+    }
+
     std::cout << output << std::endl;
 }
 
@@ -124,7 +124,7 @@ void printNearestTradingSession(auto &&profile, auto time) {
 
 int main(int argc, char *argv[]) {
 
-    const auto& dayFilter = DayFilter::ANY;
+    const auto &dayFilter = DayFilter::ANY;
 
     if (argc > 1 && (argv[1] == "-h"s || argv[1] == "--help"s)) {
         printUsage();

@@ -22,6 +22,24 @@ struct DXFCPP_EXPORT Day {
     Day() noexcept;
 
   public:
+    /**
+     * Returns year, month and day numbers packed in the following way:
+     * <pre>YearMonthDay = year * 10000 + month * 100 + day</pre>
+     * For example, September 28, 1977 has value 19770928.
+     *
+     * @return Packed year, month and day numbers
+     */
+    std::int32_t getYearMonthDay() const noexcept;
+
+    /**
+     * Returns following day accepted by specified filter.
+     * This method looks for appropriate day up to a year in the future. If no such day was found
+     * within one year this method will return <b>null</b>.
+     *
+     * @param filter the filter to test days
+     * @return nearest following day that is accepted by the filter
+     */
+    Day::Ptr findNextDay(const DayFilter &filter) const noexcept;
 };
 
-}
+} // namespace dxfcpp
