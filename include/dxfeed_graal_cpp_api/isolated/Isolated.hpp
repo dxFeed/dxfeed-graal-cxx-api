@@ -106,6 +106,10 @@ struct Day {
     static std::string toString(/* dxfg_day_t* */ void *day) noexcept;
 };
 
+struct SessionFilter {
+    static /* dxfg_session_filter_t* */ void *getInstance(std::uint32_t code) noexcept;
+};
+
 struct Session {
     static /* dxfg_day_t* */ void *getDay(/* dxfg_session_t* */ void *session) noexcept;
     static std::string toString(/* dxfg_session_t* */ void *session) noexcept;

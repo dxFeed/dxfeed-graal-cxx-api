@@ -691,6 +691,14 @@ std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
     return dxfcpp::toString(string);
 }
 
+/* dxfg_session_filter_t* */ void *SessionFilter::getInstance(std::uint32_t code) noexcept {
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&filter) {
+            return dxfg_SessionFilter_getInstance(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), filter);
+        },
+        nullptr, static_cast<dxfg_session_filter_prepare_t>(code)));
+}
+
 /* dxfg_day_t* */ void *Session::getDay(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
         return nullptr;
