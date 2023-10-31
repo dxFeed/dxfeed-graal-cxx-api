@@ -89,6 +89,23 @@ struct DXFCPP_EXPORT Schedule {
      * specified time falls outside of valid date range
      */
     Day::Ptr getDayByTime(std::int64_t time) const noexcept;
+
+    /**
+     * Returns session that is nearest to the specified time and that is accepted by specified filter.
+     * This method will return `Session::Ptr{nullptr}` if specified time falls outside of valid date range from
+     * 0001-01-02 to 9999-12-30 or if no sessions acceptable by specified filter are found within one year this method
+     * <p> To find nearest trading session of any type use this code:
+     * <pre>session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);</pre>
+     * To find nearest regular trading session use this code:
+     * <pre>session = schedule->getNearestSessionByTime(time, SessionFilter::REGULAR);</pre>
+     *
+     * @param time The time to search for
+     * @param filter the filter to test sessions
+     * @return session that is nearest to the specified time and that is accepted by specified filter or
+     * `Session::Ptr{nullptr}` if specified time falls outside of valid date range or if no such day was found within
+     * one year
+     */
+    Session::Ptr getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept;
 };
 
 } // namespace dxfcpp

@@ -871,5 +871,20 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
         nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule), time));
 }
 
+/* dxfg_session_t* */ void *Schedule::getNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time,
+                                                              /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!schedule || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&schedule, auto &&time, auto &&filter) {
+            return dxfg_Schedule_getNearestSessionByTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                         schedule, time, filter);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule), time,
+        dxfcpp::bit_cast<dxfg_session_filter_t *>(filter)));
+}
+
 } // namespace schedule
 } // namespace dxfcpp::isolated
