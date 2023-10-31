@@ -334,11 +334,11 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
         },
         nullptr, address);
 
-    finally([resolvedURL] {
-        String::release(resolvedURL);
-    });
+    auto result = dxfcpp::toString(resolvedURL);
 
-    return dxfcpp::toString(resolvedURL);
+    String::release(resolvedURL);
+
+    return result;
 }
 
 /* dxfg_ipf_collector_t* */ void *InstrumentProfileCollector::create() noexcept {
@@ -429,11 +429,11 @@ std::string InstrumentProfileConnection::getAddress(
         return dxfcpp::String::EMPTY;
     }
 
-    finally([address] {
-        String::release(address);
-    });
+    auto result = dxfcpp::toString(address);
 
-    return dxfcpp::toString(address);
+    String::release(address);
+
+    return result;
 }
 
 std::int64_t InstrumentProfileConnection::getUpdatePeriod(
@@ -684,11 +684,11 @@ std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
         return dxfcpp::String::EMPTY;
     }
 
-    finally([string] {
-        String::release(string);
-    });
+    auto result = dxfcpp::toString(string);
 
-    return dxfcpp::toString(string);
+    String::release(string);
+
+    return result;
 }
 
 /* dxfg_session_filter_t* */ void *SessionFilter::getInstance(std::uint32_t code) noexcept {
@@ -752,11 +752,11 @@ std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
         return dxfcpp::String::EMPTY;
     }
 
-    finally([string] {
-        String::release(string);
-    });
+    auto result = dxfcpp::toString(string);
 
-    return dxfcpp::toString(string);
+    String::release(string);
+
+    return result;
 }
 
 /* dxfg_day_filter_t* */ void *DayFilter::getInstance(std::uint32_t code) noexcept {
@@ -817,17 +817,15 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
         },
         nullptr, dxfcpp::bit_cast<dxfg_instrument_profile_t *>(instrumentProfile));
 
-    finally([graalStringList] {
-        StringList::release(graalStringList);
-    });
-
-    if (!graalStringList || graalStringList->size == 0) {
+    if (!graalStringList) {
         return result;
     }
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.push_back(dxfcpp::toString(graalStringList->elements[i]));
     }
+
+    StringList::release(graalStringList);
 
     return result;
 };
