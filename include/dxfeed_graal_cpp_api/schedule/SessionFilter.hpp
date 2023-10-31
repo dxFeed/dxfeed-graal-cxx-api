@@ -9,6 +9,24 @@
 
 namespace dxfcpp {
 
+enum class SessionFilterEnum : std::uint32_t {
+    /** Accepts any session - useful for pure schedule navigation. */
+    ANY = 0,
+    /** Accepts trading sessions only - those with <code>(Session::isTrading() == true)</code>. */
+    TRADING,
+    /** Accepts non-trading sessions only - those with <code>(Session::isTrading() == false)</code>. */
+    NON_TRADING,
+
+    /** Accepts any session with type SessionType::NO_TRADING. */
+    NO_TRADING,
+    /** Accepts any session with type SessionType::PRE_MARKET. */
+    PRE_MARKET,
+    /** Accepts any session with type SessionType::REGULAR. */
+    REGULAR,
+    /** Accepts any session with type SessionType::AFTER_MARKET. */
+    AFTER_MARKET,
+};
+
 /**
  * A filter for sessions used by various search methods.
  * This class provides predefined filters for certain Session attributes,
@@ -20,6 +38,8 @@ namespace dxfcpp {
  * some only non-trading, and some ignore type of session altogether.
  */
 struct DXFCPP_EXPORT SessionFilter {
+    friend struct Session;
+
     /** Accepts any session - useful for pure schedule navigation. */
     static const SessionFilter ANY;
     /** Accepts trading sessions only - those with <code>(Session::isTrading() == true)</code>. */
@@ -37,10 +57,16 @@ struct DXFCPP_EXPORT SessionFilter {
     static const SessionFilter AFTER_MARKET;
 
   protected:
+    SessionFilterEnum code_;
+
+    std::string name_;
+
     /// Required type, std::nullopt if not relevant.
     std::optional<SessionType> type_;
     /// Required trading flag, std::nullopt if not relevant.
     std::optional<bool> trading_;
+
+    JavaObjectHandle<SessionFilter> handle_;
 
   public:
     SessionFilter() noexcept = default;
@@ -57,12 +83,12 @@ struct DXFCPP_EXPORT SessionFilter {
      * Both parameters specify what value corresponding attributes should have.
      * If some parameter is std::nullopt then corresponding attribute is ignored (any value is accepted).
      *
+     * @param code The enum code
+     * @param name The enum name
      * @param type required type, std::nullopt if not relevant
      * @param trading required trading flag, std::nullopt if not relevant
      */
-    SessionFilter(std::optional<SessionType> type, std::optional<bool> trading) noexcept
-        : type_{type}, trading_{trading} {
-    }
+    SessionFilter(SessionFilterEnum code, std::string name, std::optional<SessionType> type, std::optional<bool> trading) noexcept;
 
     /**
      * Tests whether or not the specified session is an acceptable result.

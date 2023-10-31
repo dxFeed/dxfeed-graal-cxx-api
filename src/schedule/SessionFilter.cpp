@@ -9,5 +9,6 @@
 namespace dxfcpp {
 
 // The SessionFilter static fields are initialized in CandleSession.cpp
+// The SessionFilter constructor is implemented in CandleSession.cpp
 
 } // namespace dxfcpp
