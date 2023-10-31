@@ -7,6 +7,27 @@
 
 namespace dxfcpp {
 
+/**
+ * <b>Day</b> represents a continuous period of time approximately 24 hours long. The day is aligned
+ * to the start and the end of business activities of a certain business entity or business process.
+ * For example, the day may be aligned to a trading schedule of a particular instrument on an exchange.
+ * Thus, different days may start and end at various local times depending on the related trading schedules.
+ * <p>
+ * The length of the day depends on the trading schedule and other circumstances. For example, it is possible
+ * that day for Monday is longer than 24 hours because it includes part of Sunday; consequently, the day for
+ * Sunday will be shorter than 24 hours to avoid overlapping with Monday.
+ * <p>
+ * Days do not overlap with each other - rather they form consecutive chain of adjacent periods of time that
+ * cover entire time scale. The point on a border line is considered to belong to following day that starts there.
+ * <p>
+ * Each day consists of sessions that cover entire duration of the day. If day contains at least one trading
+ * session (i.e. session within which trading activity is allowed), then the day is considered trading day.
+ * Otherwise the day is considered non-trading day (e.g. weekend or holiday).
+ * <p>
+ * Day may contain sessions with zero duration - e.g. indices that post value once a day.
+ * Such sessions can be of any appropriate type, trading or non-trading.
+ * Day may have zero duration as well - e.g. when all time within it is transferred to other days.
+ */
 struct DXFCPP_EXPORT Day {
     friend struct Schedule;
 
@@ -34,7 +55,7 @@ struct DXFCPP_EXPORT Day {
     /**
      * Returns following day accepted by specified filter.
      * This method looks for appropriate day up to a year in the future. If no such day was found
-     * within one year this method will return <b>null</b>.
+     * within one year this method will return <b>Day::Ptr{nullptr}</b>.
      *
      * @param filter the filter to test days
      * @return nearest following day that is accepted by the filter

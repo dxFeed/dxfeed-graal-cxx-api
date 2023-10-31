@@ -69,14 +69,26 @@ struct DXFCPP_EXPORT Schedule {
     static bool setDefaults(const std::vector<char> &data) noexcept;
 
     /**
+     * Returns session that contains specified time.
+     * This method will return `Session::Ptr{nullptr}` if specified time
+     * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     *
+     * @param time the time to search for
+     * @return session that contains specified time or `Session::Ptr{nullptr}` if specified time
+     * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     */
+    Session::Ptr getSessionByTime(std::int64_t time) const noexcept;
+
+    /**
      * Returns day that contains specified time.
-     * This method will return std::shared_ptr<Day>{nullptr} if specified time
+     * This method will return `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if specified time
      * falls outside of valid date range from 0001-01-02 to 9999-12-30.
      *
      * @param time The time to search for
-     * @return The day that contains specified time or std::shared_ptr<Day>{nullptr} if specified time falls outside of valid date range
+     * @return The day that contains specified time or `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if
+     * specified time falls outside of valid date range
      */
-    std::shared_ptr<Day> getDayByTime(std::int64_t time) const noexcept;
+    Day::Ptr getDayByTime(std::int64_t time) const noexcept;
 };
 
 } // namespace dxfcpp
