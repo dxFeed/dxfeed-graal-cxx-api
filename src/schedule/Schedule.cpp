@@ -129,4 +129,26 @@ std::shared_ptr<Day> Schedule::getDayByTime(std::int64_t time) const noexcept {
     return day;
 }
 
+Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    auto graalSession = isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.handle_.get());
+
+    if (!graalSession) {
+        return {};
+    }
+
+    std::shared_ptr<Session> session{new (std::nothrow) Session{}};
+
+    if (!session) {
+        return {};
+    }
+
+    session->handle_ = JavaObjectHandle<Session>(graalSession);
+
+    return session;
+}
+
 } // namespace dxfcpp

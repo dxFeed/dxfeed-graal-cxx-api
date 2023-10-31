@@ -160,17 +160,26 @@ void printNextTradingSession(auto &&profile, auto time) {
 
 void printNearestTradingSession(auto &&profile, auto time) {
     auto schedule = Schedule::getInstance(profile);
-    //    auto session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);
-    //
-    //    std::cout << "Nearest trading session for " + profile.getSymbol() + ": " + session->toString() + " in " +
-    //                     session->getDay()->toString()
-    //              << std::endl;
+
+    if (!schedule) {
+        std::cerr << "Error getting schedule for " + profile->getSymbol() + " (" + profile->getTradingHours() + "): "
+                  << std::endl;
+
+        return;
+    }
+
+    auto session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);
+
+    if (!session) {
+        std::cerr << "There is no nearest trading session for " << profile->getSymbol() << std::endl;
+    } else {
+        std::cout << "Nearest trading session for " + profile->getSymbol() + ": " + session->toString() + " in " +
+                         session->getDay()->toString()
+                  << std::endl;
+    }
 }
 
 int main(int argc, char *argv[]) {
-
-    const auto &dayFilter = DayFilter::ANY;
-
     if (argc > 1 && (argv[1] == "-h"s || argv[1] == "--help"s)) {
         printUsage();
 

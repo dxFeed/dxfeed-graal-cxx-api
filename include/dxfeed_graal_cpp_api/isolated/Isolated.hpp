@@ -128,6 +128,8 @@ struct Schedule {
     static /* dxfg_session_t* */ void *getSessionByTime(/* dxfg_schedule_t* */ void *schedule,
                                                         std::int64_t time) noexcept;
     static /* dxfg_day_t* */ void *getDayByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time) noexcept;
+    static /* dxfg_session_t* */ void *getNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time,
+                                                               /* dxfg_session_filter_t* */ void *filter) noexcept;
 };
 } // namespace schedule
 } // namespace dxfcpp::isolated

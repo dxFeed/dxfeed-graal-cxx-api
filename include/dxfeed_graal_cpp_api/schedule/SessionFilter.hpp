@@ -39,6 +39,7 @@ enum class SessionFilterEnum : std::uint32_t {
  */
 struct DXFCPP_EXPORT SessionFilter {
     friend struct Session;
+    friend struct Schedule;
 
     /** Accepts any session - useful for pure schedule navigation. */
     static const SessionFilter ANY;
