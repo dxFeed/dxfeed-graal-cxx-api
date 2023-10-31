@@ -33,6 +33,36 @@ Day::Ptr Session::getDay() const noexcept {
     return day;
 }
 
+bool Session::isTrading() const noexcept {
+    if (!handle_) {
+        return false;
+    }
+
+    return isolated::schedule::Session::isTrading(handle_.get());
+}
+
+Session::Ptr Session::getNextSession(const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    auto graalSession = isolated::schedule::Session::getNextSession(handle_.get(), filter.handle_.get());
+
+    if (!graalSession) {
+        return {};
+    }
+
+    std::shared_ptr<Session> session{new (std::nothrow) Session{}};
+
+    if (!session) {
+        return {};
+    }
+
+    session->handle_ = JavaObjectHandle<Session>(graalSession);
+
+    return session;
+}
+
 std::string Session::toString() const noexcept {
     if (!handle_) {
         return dxfcpp::String::EMPTY;
