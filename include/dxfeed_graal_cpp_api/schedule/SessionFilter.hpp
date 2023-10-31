@@ -46,6 +46,11 @@ struct DXFCPP_EXPORT SessionFilter {
     SessionFilter() noexcept = default;
     virtual ~SessionFilter() noexcept = default;
 
+    SessionFilter(const SessionFilter &) = delete;
+    SessionFilter(SessionFilter &&) noexcept = delete;
+    SessionFilter &operator=(const SessionFilter &) = delete;
+    SessionFilter &operator=(const SessionFilter &&) noexcept = delete;
+
     /**
      * Creates filter with specified type and trading flag conditions.
      * <p>
