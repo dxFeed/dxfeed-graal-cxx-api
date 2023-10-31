@@ -30,6 +30,7 @@ namespace dxfcpp {
  */
 struct DXFCPP_EXPORT Day {
     friend struct Schedule;
+    friend struct Session;
 
     /// The alias to a type of shared pointer to the Day object
     using Ptr = std::shared_ptr<Day>;
@@ -61,6 +62,13 @@ struct DXFCPP_EXPORT Day {
      * @return nearest following day that is accepted by the filter
      */
     Day::Ptr findNextDay(const DayFilter &filter) const noexcept;
+
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
+    std::string toString() const noexcept;
 };
 
 } // namespace dxfcpp

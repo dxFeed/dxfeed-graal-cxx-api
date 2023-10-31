@@ -122,22 +122,34 @@ void printCurrentSession(auto &&profile, auto time) {
         return;
     }
 
-
-    //
-    //    std::cout << "Current session for " + profile->getSymbol() + ": " + session->toString() + " in " +
-    //                     session->getDay()->toString()
-    //              << std::endl;
+    std::cout << "Current session for " + profile->getSymbol() + ": " + session->toString() + " in " +
+                     session->getDay()->toString()
+              << std::endl;
 }
 
 void printNextTradingSession(auto &&profile, auto time) {
     auto schedule = Schedule::getInstance(profile);
-    //    auto session = schedule->getSessionByTime(time);
-    //
+
+    if (!schedule) {
+        std::cerr << "Error getting schedule for " + profile->getSymbol() + " (" + profile->getTradingHours() + "): "
+                  << std::endl;
+
+        return;
+    }
+
+    auto session = schedule->getSessionByTime(time);
+
+    if (!session) {
+        std::cerr << "Error getting session for time: " + formatTimeStampWithMillisWithTimeZone(time) << std::endl;
+
+        return;
+    }
+
     //    if (!session->isTrading()) {
     //        session = session->getNextSession(SessionFilter::TRADING);
     //    }
     //
-    //    std::cout << "Next trading session for " + profile.getSymbol() + ": " + session->toString() + " in " +
+    //    std::cout << "Next trading session for " + profile->getSymbol() + ": " + session->toString() + " in " +
     //                     session->getDay()->toString()
     //              << std::endl;
 }
