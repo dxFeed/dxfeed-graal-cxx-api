@@ -41,4 +41,12 @@ Day::Ptr Day::findNextDay(const DayFilter &filter) const noexcept {
     return day;
 }
 
+std::string Day::toString() const noexcept {
+    if (!handle_) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    return isolated::schedule::Day::toString(handle_.get());
+}
+
 } // namespace dxfcpp

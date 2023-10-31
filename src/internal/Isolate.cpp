@@ -669,6 +669,62 @@ std::int32_t Day::getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept {
         nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_day_filter_t *>(filter)));
 }
 
+std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    auto string = runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_toString(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_day_t *>(day));
+
+    if (!string) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    finally([string] {
+        String::release(string);
+    });
+
+    return dxfcpp::toString(string);
+}
+
+/* dxfg_day_t* */ void *Session::getDay(/* dxfg_session_t* */ void *session) noexcept {
+    if (!session) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&session) {
+            return dxfg_Session_getDay(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session)));
+}
+
+std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
+    if (!session) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    auto string = runIsolatedOrElse(
+        [](auto threadHandle, auto &&session) {
+            return dxfg_Session_toString(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session));
+
+    if (!string) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    finally([string] {
+        String::release(string);
+    });
+
+    return dxfcpp::toString(string);
+}
+
 /* dxfg_day_filter_t* */ void *DayFilter::getInstance(std::uint32_t code) noexcept {
     return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&filter) {

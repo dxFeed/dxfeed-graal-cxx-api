@@ -33,6 +33,17 @@ struct DXFCPP_EXPORT Session {
     Session() noexcept;
 
   public:
+    /**
+     * Returns day to which this session belongs.
+     */
+    Day::Ptr getDay() const noexcept;
+
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
+    std::string toString() const noexcept;
 };
 
-}
+} // namespace dxfcpp

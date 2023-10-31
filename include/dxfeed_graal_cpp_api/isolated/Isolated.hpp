@@ -101,7 +101,14 @@ struct DayFilter {
 
 struct Day {
     static std::int32_t getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept;
-    static /* dxfg_day_t* */ void *findNextDay(/* dxfg_day_t* */ void *day, /* dxfg_day_filter_t* */ void *filter) noexcept;
+    static /* dxfg_day_t* */ void *findNextDay(/* dxfg_day_t* */ void *day,
+                                               /* dxfg_day_filter_t* */ void *filter) noexcept;
+    static std::string toString(/* dxfg_day_t* */ void *day) noexcept;
+};
+
+struct Session {
+    static /* dxfg_day_t* */ void *getDay(/* dxfg_session_t* */ void *session) noexcept;
+    static std::string toString(/* dxfg_session_t* */ void *session) noexcept;
 };
 
 struct Schedule {
