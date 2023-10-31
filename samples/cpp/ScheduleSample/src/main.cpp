@@ -55,16 +55,25 @@ void checkAllSchedules(auto &&profiles) {
     auto successes = 0;
 
     for (auto &&[symbol, profile] : profiles) {
-        if (Schedule::getInstance(profile)) {
-            for (auto &&venue : Schedule::getTradingVenues(profile)) {
-                Schedule::getInstance(profile, venue);
-            }
+        bool error = false;
 
-            successes++;
+        if (!Schedule::getInstance(profile)) {
+            error = true;
         } else {
+            for (auto &&venue : Schedule::getTradingVenues(profile)) {
+                if (!Schedule::getInstance(profile, venue)) {
+                    error = true;
+                    break;
+                }
+            }
+        }
+
+        if (error) {
             std::cerr << "Error getting schedule for " + profile->getSymbol() + " (" + profile->getTradingHours() +
                              "): "
                       << std::endl;
+        } else {
+            successes++;
         }
     }
 
@@ -78,14 +87,18 @@ void printNext5Holidays(auto &&profile, auto time) {
 
     std::string output = "5 next holidays for " + profile->getSymbol() + ":";
 
-    for (auto i = 0; i < 5; i++) {
-        day = day->findNextDay(DayFilter::HOLIDAY);
+    if (!day) {
+        output += "Could not get day by time";
+    } else {
+        for (auto i = 0; i < 5; i++) {
+            day = day->findNextDay(DayFilter::HOLIDAY);
 
-        if (!day) {
-            break;
+            if (!day) {
+                break;
+            }
+
+            output += " " + std::to_string(day->getYearMonthDay());
         }
-
-        output += " " + std::to_string(day->getYearMonthDay());
     }
 
     std::cout << output << std::endl;
@@ -93,7 +106,23 @@ void printNext5Holidays(auto &&profile, auto time) {
 
 void printCurrentSession(auto &&profile, auto time) {
     auto schedule = Schedule::getInstance(profile);
-    //    auto session = schedule->getSessionByTime(time);
+
+    if (!schedule) {
+        std::cerr << "Error getting schedule for " + profile->getSymbol() + " (" + profile->getTradingHours() + "): "
+                  << std::endl;
+
+        return;
+    }
+
+    auto session = schedule->getSessionByTime(time);
+
+    if (!session) {
+        std::cerr << "Error getting session for time: " + formatTimeStampWithMillisWithTimeZone(time) << std::endl;
+
+        return;
+    }
+
+
     //
     //    std::cout << "Current session for " + profile->getSymbol() + ": " + session->toString() + " in " +
     //                     session->getDay()->toString()

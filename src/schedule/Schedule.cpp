@@ -85,6 +85,28 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
     return isolated::schedule::Schedule::setDefaults(data);
 }
 
+Session::Ptr Schedule::getSessionByTime(std::int64_t time) const noexcept {
+    if (!handle_) {
+        return {};
+    }
+
+    auto graalSession = isolated::schedule::Schedule::getSessionByTime(handle_.get(), time);
+
+    if (!graalSession) {
+        return {};
+    }
+
+    std::shared_ptr<Session> session{new (std::nothrow) Session{}};
+
+    if (!session) {
+        return {};
+    }
+
+    session->handle_ = JavaObjectHandle<Session>(graalSession);
+
+    return session;
+}
+
 std::shared_ptr<Day> Schedule::getDayByTime(std::int64_t time) const noexcept {
     if (!handle_) {
         return {};

@@ -8,5 +8,7 @@
 
 namespace dxfcpp {
 
+Session::Session() noexcept : handle_{} {
+}
 
 }
