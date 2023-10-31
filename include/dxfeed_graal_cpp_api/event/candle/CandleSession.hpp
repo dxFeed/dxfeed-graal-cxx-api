@@ -61,11 +61,11 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
     static const std::vector<std::reference_wrapper<const CandleSession>> VALUES;
 
   private:
-    SessionFilter sessionFilter_;
+    const SessionFilter *sessionFilter_;
     std::string string_;
 
     CandleSession(const SessionFilter &sessionFilter, std::string string) noexcept
-        : sessionFilter_{sessionFilter}, string_{std::move(string)} {
+        : sessionFilter_{&sessionFilter}, string_{std::move(string)} {
     }
 
   public:
@@ -77,7 +77,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
      * @return session filter that corresponds to this session attribute.
      */
     const SessionFilter &getSessionFilter() const noexcept {
-        return sessionFilter_;
+        return *sessionFilter_;
     }
 
     /**
@@ -102,7 +102,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
     }
 
     bool operator==(const CandleSession &candleSession) const noexcept {
-        return sessionFilter_ == candleSession.getSessionFilter() && string_ == candleSession.toString();
+        return *sessionFilter_ == candleSession.getSessionFilter() && string_ == candleSession.toString();
     }
 
     /**
