@@ -711,6 +711,32 @@ std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
         nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session)));
 }
 
+bool Session::isTrading(/* dxfg_session_t* */ void *session) noexcept {
+    if (!session) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&session) {
+            return dxfg_Session_isTrading(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session) == 1;
+        },
+        false, dxfcpp::bit_cast<dxfg_session_t *>(session));
+}
+
+/* dxfg_session_t* */ void *Session::getNextSession(/* dxfg_session_t* */ void *session,
+                                                    /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!session || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&session, auto &&filter) {
+            return dxfg_Session_getNextSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session,
+                                               filter);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session), dxfcpp::bit_cast<dxfg_session_filter_t *>(filter)));
+}
+
 std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
         return dxfcpp::String::EMPTY;

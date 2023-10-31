@@ -112,6 +112,9 @@ struct SessionFilter {
 
 struct Session {
     static /* dxfg_day_t* */ void *getDay(/* dxfg_session_t* */ void *session) noexcept;
+    static bool isTrading(/* dxfg_session_t* */ void *session) noexcept;
+    static /* dxfg_session_t* */ void *getNextSession(/* dxfg_session_t* */ void *session,
+                                                      /* dxfg_session_filter_t* */ void *filter) noexcept;
     static std::string toString(/* dxfg_session_t* */ void *session) noexcept;
 };
 

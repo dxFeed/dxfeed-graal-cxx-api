@@ -39,6 +39,32 @@ struct DXFCPP_EXPORT Session {
     Day::Ptr getDay() const noexcept;
 
     /**
+     * @return <code>true</code> if trading activity is allowed within this session.
+     * This method is equivalent to expression @ref SessionType::isTrading() "getType()->isTrading()".
+     * <p>
+     * Some sessions may have zero duration - e.g. indices that post value once a day.
+     * Such sessions can be of any appropriate type, trading or non-trading.
+     */
+    bool isTrading() const noexcept;
+
+    /**
+     * Returns following session accepted by specified filter.
+     * This method may cross the day boundary and return appropriate session from
+     * following days - up to a year in the future. If no such session was found
+     * within one year this method will return `Session::Ptr{nullptr}`.
+     * <p>
+     * To find following trading session of any type use this code:
+     * <pre>session = session->getNextSession(SessionFilter::TRADING);</pre>
+     * To find following regular trading session use this code:
+     * <pre>session = session->getNextSession(SessionFilter::REGULAR);</pre>
+     *
+     * @param filter The filter to test sessions
+     * @return The nearest following session that is accepted by the filter or `Session::Ptr{nullptr}` if no such
+     * session was found within one year
+     */
+    Session::Ptr getNextSession(const SessionFilter &filter) const noexcept;
+
+    /**
      * Returns a string representation of the current object.
      *
      * @return a string representation

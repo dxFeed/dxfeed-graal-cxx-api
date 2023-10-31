@@ -145,13 +145,17 @@ void printNextTradingSession(auto &&profile, auto time) {
         return;
     }
 
-    //    if (!session->isTrading()) {
-    //        session = session->getNextSession(SessionFilter::TRADING);
-    //    }
-    //
-    //    std::cout << "Next trading session for " + profile->getSymbol() + ": " + session->toString() + " in " +
-    //                     session->getDay()->toString()
-    //              << std::endl;
+    if (!session->isTrading()) {
+        session = session->getNextSession(SessionFilter::TRADING);
+    }
+
+    if (!session) {
+        std::cerr << "There is no next trading session for " << profile->getSymbol() << std::endl;
+    } else {
+        std::cout << "Next trading session for " + profile->getSymbol() + ": " + session->toString() + " in " +
+                         session->getDay()->toString()
+                  << std::endl;
+    }
 }
 
 void printNearestTradingSession(auto &&profile, auto time) {
