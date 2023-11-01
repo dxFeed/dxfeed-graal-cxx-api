@@ -78,6 +78,10 @@ struct IpfPropertyChangeListener {
     create(/* dxfg_ipf_connection_state_change_listener_func */ void *userFunc, void *userData) noexcept;
 };
 
+struct InstrumentProfile {
+    static bool release(/* dxfg_instrument_profile_t* */ void* ip) noexcept;
+};
+
 struct InstrumentProfileList {
     static bool release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept;
 };

@@ -586,6 +586,18 @@ IpfPropertyChangeListener::create(/* dxfg_ipf_connection_state_change_listener_f
         nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_func>(userFunc), userData));
 }
 
+bool InstrumentProfile::release(/* dxfg_instrument_profile_t* */ void *ip) noexcept {
+    if (!ip) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&ip) {
+            return dxfg_InstrumentProfile_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), ip) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_instrument_profile_t *>(ip));
+}
+
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {
     if (!graalInstrumentProfileList) {
         return false;
