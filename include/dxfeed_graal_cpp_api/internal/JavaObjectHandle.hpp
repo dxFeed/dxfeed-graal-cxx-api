@@ -13,9 +13,18 @@
 namespace dxfcpp {
 
 template <typename T> struct JavaObjectHandle {
+#if DXFCPP_DEBUG == 1
+    static auto getDebugName() {
+        return std::string("JavaObjectHandle<") + typeid(T).name() + ">";
+    }
+#endif
+
     using Type = T;
     static DXFCPP_EXPORT void deleter(void *handle) noexcept;
     explicit JavaObjectHandle(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
+        }
     }
 
     JavaObjectHandle(JavaObjectHandle &&) = default;
