@@ -34,7 +34,11 @@ struct NonOwningInstrumentProfileIterator {
             return {};
         }
 
-        return InstrumentProfile::fromGraal(isolated::ipf::InstrumentProfileIterator::next(iterable));
+        auto graalProfile = isolated::ipf::InstrumentProfileIterator::next(iterable);
+        auto result = InstrumentProfile::fromGraal(graalProfile);
+        isolated::ipf::InstrumentProfile::release(graalProfile);
+
+        return result;
     };
 
     [[nodiscard]] std::vector<std::shared_ptr<InstrumentProfile>> collect() const noexcept {
