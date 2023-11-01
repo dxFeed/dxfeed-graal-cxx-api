@@ -30,7 +30,15 @@ struct DXFCPP_EXPORT Session {
   private:
     JavaObjectHandle<Session> handle_;
 
-    Session() noexcept;
+    explicit Session(void* handle) noexcept;
+
+    /**
+     * Checks the handle, attempts to allocate memory for the pointer and return Session::Ptr
+     *
+     * @param handle The graal Session's handle
+     * @return The smart pointer for the Session object.
+     */
+    static Session::Ptr create(void* handle) noexcept;
 
   public:
     /**

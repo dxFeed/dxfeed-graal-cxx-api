@@ -8,7 +8,15 @@
 
 namespace dxfcpp {
 
-Session::Session() noexcept : handle_{} {
+Session::Session(void* handle) noexcept : handle_(handle) {
+}
+
+Session::Ptr Session::create(void *handle) noexcept {
+    if (!handle) {
+        return {};
+    }
+
+    return std::shared_ptr<Session>(new (std::nothrow) Session(handle));
 }
 
 Day::Ptr Session::getDay() const noexcept {
@@ -16,21 +24,7 @@ Day::Ptr Session::getDay() const noexcept {
         return {};
     }
 
-    auto graalDay = isolated::schedule::Session::getDay(handle_.get());
-
-    if (!graalDay) {
-        return {};
-    }
-
-    std::shared_ptr<Day> day{new (std::nothrow) Day{}};
-
-    if (!day) {
-        return {};
-    }
-
-    day->handle_ = JavaObjectHandle<Day>(graalDay);
-
-    return day;
+    return Day::create(isolated::schedule::Session::getDay(handle_.get()));
 }
 
 bool Session::isTrading() const noexcept {
@@ -46,21 +40,7 @@ Session::Ptr Session::getNextSession(const SessionFilter &filter) const noexcept
         return {};
     }
 
-    auto graalSession = isolated::schedule::Session::getNextSession(handle_.get(), filter.handle_.get());
-
-    if (!graalSession) {
-        return {};
-    }
-
-    std::shared_ptr<Session> session{new (std::nothrow) Session{}};
-
-    if (!session) {
-        return {};
-    }
-
-    session->handle_ = JavaObjectHandle<Session>(graalSession);
-
-    return session;
+    return Session::create(isolated::schedule::Session::getNextSession(handle_.get(), filter.handle_.get()));
 }
 
 std::string Session::toString() const noexcept {

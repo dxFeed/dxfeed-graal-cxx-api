@@ -8,7 +8,15 @@
 
 namespace dxfcpp {
 
-Day::Day() noexcept : handle_{} {
+Day::Day(void *handle) noexcept : handle_(handle) {
+}
+
+Day::Ptr Day::create(void *handle) noexcept {
+    if (!handle) {
+        return {};
+    }
+
+    return std::shared_ptr<Day>(new (std::nothrow) Day(handle));
 }
 
 std::int32_t Day::getYearMonthDay() const noexcept {
@@ -24,21 +32,7 @@ Day::Ptr Day::findNextDay(const DayFilter &filter) const noexcept {
         return {};
     }
 
-    auto graalDay = isolated::schedule::Day::findNextDay(handle_.get(), filter.handle_.get());
-
-    if (!graalDay) {
-        return {};
-    }
-
-    std::shared_ptr<Day> day{new (std::nothrow) Day{}};
-
-    if (!day) {
-        return {};
-    }
-
-    day->handle_ = JavaObjectHandle<Day>(graalDay);
-
-    return day;
+    return create(isolated::schedule::Day::findNextDay(handle_.get(), filter.handle_.get()));
 }
 
 std::string Day::toString() const noexcept {

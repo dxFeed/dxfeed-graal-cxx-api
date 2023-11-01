@@ -830,6 +830,15 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
     return result;
 };
 
+void Schedule::downloadDefaults(const std::string &downloadConfig) noexcept {
+    runIsolatedOrElse(
+        [](auto threadHandle, auto &&downloadConfig) {
+            return dxfg_Schedule_downloadDefaults(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                  downloadConfig.c_str()) == 0;
+        },
+        false, downloadConfig);
+}
+
 bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&data) {
@@ -867,6 +876,18 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
             return dxfg_Schedule_getDayByTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), schedule, time);
         },
         nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule), time));
+}
+
+/* dxfg_day_t* */ void *Schedule::getDayById(/* dxfg_schedule_t* */ void *schedule, std::int32_t dayId) noexcept {
+    if (!schedule) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&schedule, auto &&dayId) {
+            return dxfg_Schedule_getDayById(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), schedule, dayId);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule), dayId));
 }
 
 /* dxfg_session_t* */ void *Schedule::getNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time,
