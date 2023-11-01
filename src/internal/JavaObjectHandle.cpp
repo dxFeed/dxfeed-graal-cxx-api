@@ -9,8 +9,12 @@
 namespace dxfcpp {
 
 template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
-    runIsolatedOrElse(
+    auto result = runIsolatedOrElse(
         [handle = handle](auto threadHandle) {
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
+            }
+
             if (handle) {
                 return dxfg_JavaObjectHandler_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
                                                       dxfcpp::bit_cast<dxfg_java_object_handler *>(handle)) == 0;
@@ -19,6 +23,11 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
             return true;
         },
         false);
+    dxfcpp::ignore_unused(result);
+
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " + dxfcpp::toString(result));
+    }
 }
 
 template struct JavaObjectHandle<DXEndpoint>;
