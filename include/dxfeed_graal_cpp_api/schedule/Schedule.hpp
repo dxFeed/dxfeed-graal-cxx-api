@@ -24,7 +24,15 @@ struct DXFCPP_EXPORT Schedule {
   private:
     JavaObjectHandle<Schedule> handle_;
 
-    Schedule() noexcept;
+    explicit Schedule(void* handle = nullptr) noexcept;
+
+    /**
+     * Checks the handle, attempts to allocate memory for the pointer and return Schedule::Ptr
+     *
+     * @param handle The graal Schedule's handle
+     * @return The smart pointer for the Schedule object.
+     */
+    static Schedule::Ptr create(void* handle) noexcept;
 
   public:
     /**
@@ -61,6 +69,19 @@ struct DXFCPP_EXPORT Schedule {
     static std::vector<std::string> getTradingVenues(std::shared_ptr<InstrumentProfile> profile) noexcept;
 
     /**
+     * Downloads defaults using specified download config and optionally start periodic download.
+     * The specified config can be one of the following:<ul>
+     * <li>"" - stop periodic download
+     * <li>URL   - download once from specified URL and stop periodic download
+     * <li>URL,period   - start periodic download from specified URL
+     * <li>"auto"   - start periodic download from default location
+     * </ul>
+     *
+     * @param downloadConfig download config
+     */
+    static void downloadDefaults(const std::string &downloadConfig) noexcept;
+
+    /**
      * Sets shared defaults that are used by individual schedule instances.
      *
      * @param data The content of default data
@@ -89,6 +110,18 @@ struct DXFCPP_EXPORT Schedule {
      * specified time falls outside of valid date range
      */
     Day::Ptr getDayByTime(std::int64_t time) const noexcept;
+
+    /**
+     * Returns day for specified day identifier.
+     * This method will return `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if specified day identifier
+     * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     *
+     * @param dayId The day identifier to search for
+     * @return The day for specified day identifier or `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if
+     * specified day identifier falls outside of valid date range
+     * @see Day::getDayId()
+     */
+    Day::Ptr getDayById(std::int32_t dayId) const noexcept;
 
     /**
      * Returns session that is nearest to the specified time and that is accepted by specified filter.

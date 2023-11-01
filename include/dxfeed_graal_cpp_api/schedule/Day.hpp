@@ -41,7 +41,15 @@ struct DXFCPP_EXPORT Day {
   private:
     JavaObjectHandle<Day> handle_;
 
-    Day() noexcept;
+    explicit Day(void* handle = nullptr) noexcept;
+
+    /**
+     * Checks the handle, attempts to allocate memory for the pointer and return Day::Ptr
+     *
+     * @param handle The graal Day's handle
+     * @return The smart pointer for the Day object.
+     */
+    static Day::Ptr create(void* handle) noexcept;
 
   public:
     /**
