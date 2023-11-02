@@ -119,6 +119,8 @@ struct Session {
     static std::int32_t getType(/* dxfg_session_t* */ void *session) noexcept;
     static bool isTrading(/* dxfg_session_t* */ void *session) noexcept;
     static bool isEmpty(/* dxfg_session_t* */ void *session) noexcept;
+    static std::int64_t getStartTime(/* dxfg_session_t* */ void *session) noexcept;
+    static std::int64_t getEndTime(/* dxfg_session_t* */ void *session) noexcept;
     static /* dxfg_session_t* */ void *getNextSession(/* dxfg_session_t* */ void *session,
                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
     static std::string toString(/* dxfg_session_t* */ void *session) noexcept;

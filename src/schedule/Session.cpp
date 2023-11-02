@@ -62,6 +62,22 @@ bool Session::isEmpty() const noexcept {
     return isolated::schedule::Session::isEmpty(handle_.get());
 }
 
+std::int64_t Session::getStartTime() const noexcept {
+    if (!handle_) {
+        return 0;
+    }
+
+    return isolated::schedule::Session::getStartTime(handle_.get());
+}
+
+std::int64_t Session::getEndTime() const noexcept {
+    if (!handle_) {
+        return 0;
+    }
+
+    return isolated::schedule::Session::getEndTime(handle_.get());
+}
+
 Session::Ptr Session::getNextSession(const SessionFilter &filter) const noexcept {
     if (!handle_ || !filter.handle_) {
         return {};

@@ -751,6 +751,30 @@ bool Session::isEmpty(/* dxfg_session_t* */ void *session) noexcept {
         false, dxfcpp::bit_cast<dxfg_session_t *>(session));
 }
 
+std::int64_t Session::getStartTime(/* dxfg_session_t* */ void *session) noexcept {
+    if (!session) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&session) {
+            return dxfg_Session_getStartTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session);
+        },
+        0, dxfcpp::bit_cast<dxfg_session_t *>(session));
+}
+
+std::int64_t Session::getEndTime(/* dxfg_session_t* */ void *session) noexcept {
+    if (!session) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&session) {
+            return dxfg_Session_getEndTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session);
+        },
+        0, dxfcpp::bit_cast<dxfg_session_t *>(session));
+}
+
 /* dxfg_session_t* */ void *Session::getNextSession(/* dxfg_session_t* */ void *session,
                                                     /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!session || !filter) {
