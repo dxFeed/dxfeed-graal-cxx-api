@@ -118,6 +118,15 @@ struct Day {
     static std::int64_t getEndTime(/* dxfg_day_t* */ void *day) noexcept;
     static bool containsTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
     static std::int64_t getResetTime(/* dxfg_day_t* */ void *day) noexcept;
+    static /* dxfg_session_t* */ void *getSessionByTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
+    static /* dxfg_session_t* */ void *getFirstSession(/* dxfg_day_t* */ void *day,
+                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
+    static /* dxfg_session_t* */ void *getLastSession(/* dxfg_day_t* */ void *day,
+                                                      /* dxfg_session_filter_t* */ void *filter) noexcept;
+    static /* dxfg_session_t* */ void *findFirstSession(/* dxfg_day_t* */ void *day,
+                                                        /* dxfg_session_filter_t* */ void *filter) noexcept;
+    static /* dxfg_session_t* */ void *findLastSession(/* dxfg_day_t* */ void *day,
+                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
     static /* dxfg_day_t* */ void *findNextDay(/* dxfg_day_t* */ void *day,
                                                /* dxfg_day_filter_t* */ void *filter) noexcept;
     static std::string toString(/* dxfg_day_t* */ void *day) noexcept;
