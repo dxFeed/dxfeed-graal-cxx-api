@@ -130,6 +130,8 @@ struct Session {
                                                        /* dxfg_session_filter_t* */ void *filter) noexcept;
     static /* dxfg_session_t* */ void *findNextSession(/* dxfg_session_t* */ void *session,
                                                        /* dxfg_session_filter_t* */ void *filter) noexcept;
+    static std::size_t getHashCode(/* dxfg_session_t* */ void *session) noexcept;
+    static bool equals(/* dxfg_session_t* */ void *session, /* dxfg_session_t* */ void *otherSession) noexcept;
     static std::string toString(/* dxfg_session_t* */ void *session) noexcept;
 };
 

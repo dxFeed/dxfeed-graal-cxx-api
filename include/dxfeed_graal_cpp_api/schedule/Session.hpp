@@ -155,7 +155,15 @@ struct DXFCPP_EXPORT Session {
      */
     Session::Ptr findNextSession(const SessionFilter &filter) const noexcept;
 
-        /**
+    bool operator==(const Session &other) const noexcept;
+
+    bool operator==(const Session::Ptr &other) const noexcept {
+        return *this == *other;
+    }
+
+    std::size_t getHashCode() const noexcept;
+
+    /**
      * Returns a string representation of the current object.
      *
      * @return a string representation
@@ -164,3 +172,9 @@ struct DXFCPP_EXPORT Session {
 };
 
 } // namespace dxfcpp
+
+template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Session> {
+    std::size_t operator()(const dxfcpp::Session &session) const noexcept {
+        return session.getHashCode();
+    }
+};
