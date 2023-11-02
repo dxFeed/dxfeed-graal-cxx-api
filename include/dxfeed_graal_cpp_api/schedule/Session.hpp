@@ -30,7 +30,7 @@ struct DXFCPP_EXPORT Session {
   private:
     JavaObjectHandle<Session> handle_;
 
-    explicit Session(void* handle) noexcept;
+    explicit Session(void *handle) noexcept;
 
     /**
      * Checks the handle, attempts to allocate memory for the pointer and return Session::Ptr
@@ -38,22 +38,38 @@ struct DXFCPP_EXPORT Session {
      * @param handle The graal Session's handle
      * @return The smart pointer for the Session object.
      */
-    static Session::Ptr create(void* handle) noexcept;
+    static Session::Ptr create(void *handle) noexcept;
 
   public:
     /**
      * Returns day to which this session belongs.
+     *
+     * @return The day to which this session belongs.
      */
     Day::Ptr getDay() const noexcept;
 
     /**
+     * Returns type of this session.
+     *
+     * @return The type of this session.
+     */
+    const SessionType &getType() const & noexcept;
+
+    /**
      * @return <code>true</code> if trading activity is allowed within this session.
-     * This method is equivalent to expression @ref SessionType::isTrading() "getType()->isTrading()".
+     * This method is equivalent to expression @ref SessionType::isTrading() "getType().isTrading()".
      * <p>
      * Some sessions may have zero duration - e.g. indices that post value once a day.
      * Such sessions can be of any appropriate type, trading or non-trading.
      */
     bool isTrading() const noexcept;
+
+    /**
+     * @return <code>true</code> if this session has zero duration.
+     * Empty sessions can be used for indices that post value once a day or for convenience.
+     * Such sessions can be of any appropriate type, trading or non-trading.
+     */
+    bool isEmpty() const noexcept;
 
     /**
      * Returns following session accepted by specified filter.

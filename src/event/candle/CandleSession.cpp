@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "dxfeed_graal_cpp_api/schedule/SessionType.hpp"
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -8,10 +9,10 @@
 
 namespace dxfcpp {
 
-const SessionType SessionType::NO_TRADING{"NO_TRADING", false};
-const SessionType SessionType::PRE_MARKET{"PRE_MARKET", true};
-const SessionType SessionType::REGULAR{"REGULAR", true};
-const SessionType SessionType::AFTER_MARKET{"AFTER_MARKET", true};
+const SessionType SessionType::NO_TRADING{SessionTypeEnum::NO_TRADING, "NO_TRADING", false};
+const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARKET", true};
+const SessionType SessionType::REGULAR{SessionTypeEnum::REGULAR, "REGULAR", true};
+const SessionType SessionType::AFTER_MARKET{SessionTypeEnum::AFTER_MARKET, "AFTER_MARKET", true};
 
 SessionFilter::SessionFilter(SessionFilterEnum code, std::string name, std::optional<SessionType> type,
                              std::optional<bool> trading) noexcept

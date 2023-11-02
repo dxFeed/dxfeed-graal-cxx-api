@@ -8,7 +8,7 @@
 
 namespace dxfcpp {
 
-Session::Session(void* handle) noexcept : handle_(handle) {
+Session::Session(void *handle) noexcept : handle_(handle) {
 }
 
 Session::Ptr Session::create(void *handle) noexcept {
@@ -27,12 +27,39 @@ Day::Ptr Session::getDay() const noexcept {
     return Day::create(isolated::schedule::Session::getDay(handle_.get()));
 }
 
+const SessionType &Session::getType() const & noexcept {
+    if (!handle_) {
+        return SessionType::NO_TRADING;
+    }
+
+    switch (static_cast<SessionTypeEnum>(isolated::schedule::Session::getType(handle_.get()))) {
+    case SessionTypeEnum::NO_TRADING:
+        return SessionType::NO_TRADING;
+    case SessionTypeEnum::PRE_MARKET:
+        return SessionType::PRE_MARKET;
+    case SessionTypeEnum::REGULAR:
+        return SessionType::REGULAR;
+    case SessionTypeEnum::AFTER_MARKET:
+        return SessionType::AFTER_MARKET;
+    }
+
+    return SessionType::NO_TRADING;
+}
+
 bool Session::isTrading() const noexcept {
     if (!handle_) {
         return false;
     }
 
     return isolated::schedule::Session::isTrading(handle_.get());
+}
+
+bool Session::isEmpty() const noexcept {
+    if (!handle_) {
+        return false;
+    }
+
+    return isolated::schedule::Session::isEmpty(handle_.get());
 }
 
 Session::Ptr Session::getNextSession(const SessionFilter &filter) const noexcept {
