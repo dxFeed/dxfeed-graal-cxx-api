@@ -844,6 +844,35 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
         nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session), dxfcpp::bit_cast<dxfg_session_filter_t *>(filter)));
 }
 
+std::size_t Session::getHashCode(/* dxfg_session_t* */ void *session) noexcept {
+    if (!session) {
+        return dxfcpp::bit_cast<std::size_t>(session);
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&session) {
+            return dxfg_Session_hashCode(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session);
+        },
+        0, dxfcpp::bit_cast<dxfg_session_t *>(session));
+}
+
+bool Session::equals(/* dxfg_session_t* */ void *session, /* dxfg_session_t* */ void *otherSession) noexcept {
+    if (!session || !otherSession) {
+        return false;
+    }
+
+    if (session == otherSession) {
+        return true;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&session, auto &&otherSession) {
+            return dxfg_Session_equals(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session,
+                                       otherSession) == 1;
+        },
+        false, dxfcpp::bit_cast<dxfg_session_t *>(session), dxfcpp::bit_cast<dxfg_session_t *>(otherSession));
+}
+
 std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
         return dxfcpp::String::EMPTY;

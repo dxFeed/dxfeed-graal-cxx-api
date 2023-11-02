@@ -118,6 +118,26 @@ Session::Ptr Session::findNextSession(const SessionFilter &filter) const noexcep
     return Session::create(isolated::schedule::Session::findNextSession(handle_.get(), filter.handle_.get()));
 }
 
+bool Session::operator==(const Session &other) const noexcept {
+    if (!handle_ || !other.handle_) {
+        return false;
+    }
+
+    if (this == &other) {
+        return true;
+    }
+
+    return isolated::schedule::Session::equals(handle_.get(), other.handle_.get());
+}
+
+std::size_t Session::getHashCode() const noexcept {
+    if (!handle_) {
+        return dxfcpp::bit_cast<std::size_t>(this);
+    }
+
+    return isolated::schedule::Session::getHashCode(handle_.get());
+}
+
 std::string Session::toString() const noexcept {
     if (!handle_) {
         return dxfcpp::String::EMPTY;
