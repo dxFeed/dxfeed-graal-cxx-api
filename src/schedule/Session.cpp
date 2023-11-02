@@ -78,12 +78,44 @@ std::int64_t Session::getEndTime() const noexcept {
     return isolated::schedule::Session::getEndTime(handle_.get());
 }
 
+bool Session::containsTime(std::int64_t time) const noexcept {
+    if (!handle_) {
+        return false;
+    }
+
+    return isolated::schedule::Session::containsTime(handle_.get(), time);
+}
+
+Session::Ptr Session::getPrevSession(const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    return Session::create(isolated::schedule::Session::getPrevSession(handle_.get(), filter.handle_.get()));
+}
+
 Session::Ptr Session::getNextSession(const SessionFilter &filter) const noexcept {
     if (!handle_ || !filter.handle_) {
         return {};
     }
 
     return Session::create(isolated::schedule::Session::getNextSession(handle_.get(), filter.handle_.get()));
+}
+
+Session::Ptr Session::findPrevSession(const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    return Session::create(isolated::schedule::Session::findPrevSession(handle_.get(), filter.handle_.get()));
+}
+
+Session::Ptr Session::findNextSession(const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    return Session::create(isolated::schedule::Session::findNextSession(handle_.get(), filter.handle_.get()));
 }
 
 std::string Session::toString() const noexcept {

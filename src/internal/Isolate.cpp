@@ -775,6 +775,33 @@ std::int64_t Session::getEndTime(/* dxfg_session_t* */ void *session) noexcept {
         0, dxfcpp::bit_cast<dxfg_session_t *>(session));
 }
 
+bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t time) noexcept {
+    if (!session) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&session, auto &&time) {
+            return dxfg_Session_containsTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session, time) ==
+                   1;
+        },
+        false, dxfcpp::bit_cast<dxfg_session_t *>(session), time);
+}
+
+/* dxfg_session_t* */ void *Session::getPrevSession(/* dxfg_session_t* */ void *session,
+                                                    /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!session || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&session, auto &&filter) {
+            return dxfg_Session_getPrevSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session,
+                                               filter);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session), dxfcpp::bit_cast<dxfg_session_filter_t *>(filter)));
+}
+
 /* dxfg_session_t* */ void *Session::getNextSession(/* dxfg_session_t* */ void *session,
                                                     /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!session || !filter) {
@@ -785,6 +812,34 @@ std::int64_t Session::getEndTime(/* dxfg_session_t* */ void *session) noexcept {
         [](auto threadHandle, auto &&session, auto &&filter) {
             return dxfg_Session_getNextSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session,
                                                filter);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session), dxfcpp::bit_cast<dxfg_session_filter_t *>(filter)));
+}
+
+/* dxfg_session_t* */ void *Session::findPrevSession(/* dxfg_session_t* */ void *session,
+                                                     /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!session || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&session, auto &&filter) {
+            return dxfg_Session_findPrevSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session,
+                                                filter);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session), dxfcpp::bit_cast<dxfg_session_filter_t *>(filter)));
+}
+
+/* dxfg_session_t* */ void *Session::findNextSession(/* dxfg_session_t* */ void *session,
+                                                     /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!session || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&session, auto &&filter) {
+            return dxfg_Session_findNextSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session,
+                                                filter);
         },
         nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session), dxfcpp::bit_cast<dxfg_session_filter_t *>(filter)));
 }
