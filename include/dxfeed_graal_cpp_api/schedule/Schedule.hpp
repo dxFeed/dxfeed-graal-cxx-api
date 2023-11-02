@@ -143,8 +143,9 @@ struct DXFCPP_EXPORT Schedule {
 
     /**
      * Returns session that is nearest to the specified time and that is accepted by specified filter.
-     * This method will return `Session::Ptr{nullptr}` if specified time falls outside of valid date range from
-     * 0001-01-02 to 9999-12-30 or if no sessions acceptable by specified filter are found within one year this method
+     * This method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time falls
+     * outside of valid date range from 0001-01-02 to 9999-12-30 or if no sessions acceptable by specified filter are
+     * found within one year this method
      * <p> To find nearest trading session of any type use this code:
      * <pre>session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);</pre>
      * To find nearest regular trading session use this code:
@@ -153,10 +154,29 @@ struct DXFCPP_EXPORT Schedule {
      * @param time The time to search for
      * @param filter the filter to test sessions
      * @return session that is nearest to the specified time and that is accepted by specified filter or
-     * `Session::Ptr{nullptr}` if specified time falls outside of valid date range or if no such day was found within
-     * one year
+     * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time falls outside of valid date range
+     * or if no such day was found within one year
      */
     Session::Ptr getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept;
+
+    /**
+     * Returns session that is nearest to the specified time and that is accepted by specified filter.
+     * This method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time
+     * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     * If no sessions acceptable by specified filter are found within one year this method will return
+     * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
+     * <p>
+     * To find nearest trading session of any type use this code:
+     * <pre>session = schedule->findNearestSessionByTime(time, SessionFilter::TRADING);</pre>
+     * To find nearest regular trading session use this code:
+     * <pre>session = schedule->findNearestSessionByTime(time, SessionFilter::REGULAR);</pre>
+     *
+     * @param time The time to search for
+     * @param filter The filter to test sessions
+     * @return The session that is nearest to the specified time and that is accepted by specified filter or
+     * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time falls outside of valid date range
+     */
+    Session::Ptr findNearestSessionByTime(std::int64_t time, const SessionFilter& filter) const noexcept;
 };
 
 } // namespace dxfcpp
