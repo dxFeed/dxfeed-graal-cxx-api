@@ -94,6 +94,14 @@ Day::Ptr Schedule::getDayById(std::int32_t dayId) const noexcept {
     return Day::create(isolated::schedule::Schedule::getDayById(handle_.get(), dayId));
 }
 
+Day::Ptr Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcept {
+    if (!handle_) {
+        return {};
+    }
+
+    return Day::create(isolated::schedule::Schedule::getDayByYearMonthDay(handle_.get(), yearMonthDay));
+}
+
 Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
     if (!handle_ || !filter.handle_) {
         return {};
