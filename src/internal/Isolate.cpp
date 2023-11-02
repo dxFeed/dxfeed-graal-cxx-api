@@ -902,6 +902,20 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
         nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule), dayId));
 }
 
+/* dxfg_day_t* */ void *Schedule::getDayByYearMonthDay(/* dxfg_schedule_t* */ void *schedule,
+                                                       std::int32_t yearMonthDay) noexcept {
+    if (!schedule) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&schedule, auto &&yearMonthDay) {
+            return dxfg_Schedule_getDayByYearMonthDay(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), schedule,
+                                                      yearMonthDay);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule), yearMonthDay));
+}
+
 /* dxfg_session_t* */ void *Schedule::getNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time,
                                                               /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!schedule || !filter) {

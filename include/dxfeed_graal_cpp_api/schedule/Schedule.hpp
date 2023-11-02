@@ -124,6 +124,24 @@ struct DXFCPP_EXPORT Schedule {
     Day::Ptr getDayById(std::int32_t dayId) const noexcept;
 
     /**
+     * Returns day for specified year, month and day numbers.
+     * Year, month, and day numbers shall be packed in the following way:
+     * <pre>YearMonthDay = year * 10000 + month * 100 + day</pre>
+     * For example, September 28, 1977 has value 19770928.
+     * <p>
+     * If specified day does not exist then this method returns day with
+     * the lowest valid YearMonthDay that is greater than specified one.
+     * This method will return `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if specified year, month and day numbers
+     * fall outside of valid date range from 0001-01-02 to 9999-12-30.
+     *
+     * @param yearMonthDay The year, month and day numbers to search for
+     * @return The day for specified year, month and day numbers or `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr})
+     * if specified year, month and day numbers fall outside of valid date range
+     * @see Day#getYearMonthDay()
+     */
+    Day::Ptr getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcept;
+
+    /**
      * Returns session that is nearest to the specified time and that is accepted by specified filter.
      * This method will return `Session::Ptr{nullptr}` if specified time falls outside of valid date range from
      * 0001-01-02 to 9999-12-30 or if no sessions acceptable by specified filter are found within one year this method
