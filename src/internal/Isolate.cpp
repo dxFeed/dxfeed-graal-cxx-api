@@ -724,7 +724,7 @@ std::int32_t Session::getType(/* dxfg_session_t* */ void *session) noexcept {
         [](auto threadHandle, auto &&session) {
             return dxfg_Session_getType(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session);
         },
-        0, dxfcpp::bit_cast<dxfg_session_t *>(session))
+        0, dxfcpp::bit_cast<dxfg_session_t *>(session));
 }
 
 bool Session::isTrading(/* dxfg_session_t* */ void *session) noexcept {
