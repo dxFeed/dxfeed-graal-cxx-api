@@ -84,10 +84,32 @@ struct DXFCPP_EXPORT Session {
     std::int64_t getEndTime() const noexcept;
 
     /**
+     * @return <code>true</code> if specified time belongs to this session.
+     */
+    bool containsTime(std::int64_t time) const noexcept;
+
+    /**
+     * Returns previous session accepted by specified filter.
+     * This method may cross the day boundary and return appropriate session from
+     * previous days - up to a year back in time. If no such session was found
+     * within one year this method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
+     * <p>
+     * To find previous trading session of any type use this code:
+     * <pre>session = session->getPrevSession(SessionFilter::TRADING);</pre>
+     * To find previous regular trading session use this code:
+     * <pre>session = session->getPrevSession(SessionFilter::REGULAR);</pre>
+     *
+     * @param filter The filter to test sessions
+     * @return The nearest previous session that is accepted by the filter or `Session::Ptr{nullptr}`
+     * (std::shared_ptr<Session>{nullptr}) if no such session was found within one year
+     */
+    Session::Ptr getPrevSession(const SessionFilter &filter) const noexcept;
+
+    /**
      * Returns following session accepted by specified filter.
      * This method may cross the day boundary and return appropriate session from
      * following days - up to a year in the future. If no such session was found
-     * within one year this method will return `Session::Ptr{nullptr}`.
+     * within one year this method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
      * <p>
      * To find following trading session of any type use this code:
      * <pre>session = session->getNextSession(SessionFilter::TRADING);</pre>
@@ -95,12 +117,45 @@ struct DXFCPP_EXPORT Session {
      * <pre>session = session->getNextSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The nearest following session that is accepted by the filter or `Session::Ptr{nullptr}` if no such
+     * @return The nearest following session that is accepted by the filter or `Session::Ptr{nullptr}`
+     * (std::shared_ptr<Session>{nullptr}) if no such
      * session was found within one year
      */
     Session::Ptr getNextSession(const SessionFilter &filter) const noexcept;
 
     /**
+     * Returns previous session accepted by specified filter.
+     * This method may cross the day boundary and return appropriate session from
+     * previous days - up to a year back in time. If no such session was found
+     * within one year this method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
+     * <p>
+     * To find previous trading session of any type use this code:
+     * <pre>session = session->findPrevSession(SessionFilter::TRADING);</pre>
+     * To find previous regular trading session use this code:
+     * <pre>session = session->findPrevSession(SessionFilter::REGULAR);</pre>
+     *
+     * @param filter The filter to test sessions
+     * @return nearest previous session that is accepted by the filter
+     */
+    Session::Ptr findPrevSession(const SessionFilter &filter) const noexcept;
+
+    /**
+     * Returns following session accepted by specified filter.
+     * This method may cross the day boundary and return appropriate session from
+     * following days - up to a year in the future. If no such session was found
+     * within one year this method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
+     * <p>
+     * To find following trading session of any type use this code:
+     * <pre>session = session->findNextSession(SessionFilter::TRADING);</pre>
+     * To find following regular trading session use this code:
+     * <pre>session = session->findNextSession(SessionFilter::REGULAR);</pre>
+     *
+     * @param filter The filter to test sessions
+     * @return nearest following session that is accepted by the filter
+     */
+    Session::Ptr findNextSession(const SessionFilter &filter) const noexcept;
+
+        /**
      * Returns a string representation of the current object.
      *
      * @return a string representation

@@ -121,8 +121,15 @@ struct Session {
     static bool isEmpty(/* dxfg_session_t* */ void *session) noexcept;
     static std::int64_t getStartTime(/* dxfg_session_t* */ void *session) noexcept;
     static std::int64_t getEndTime(/* dxfg_session_t* */ void *session) noexcept;
+    static bool containsTime(/* dxfg_session_t* */ void *session, std::int64_t time) noexcept;
+    static /* dxfg_session_t* */ void *getPrevSession(/* dxfg_session_t* */ void *session,
+                                                      /* dxfg_session_filter_t* */ void *filter) noexcept;
     static /* dxfg_session_t* */ void *getNextSession(/* dxfg_session_t* */ void *session,
                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
+    static /* dxfg_session_t* */ void *findPrevSession(/* dxfg_session_t* */ void *session,
+                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
+    static /* dxfg_session_t* */ void *findNextSession(/* dxfg_session_t* */ void *session,
+                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
     static std::string toString(/* dxfg_session_t* */ void *session) noexcept;
 };
 
