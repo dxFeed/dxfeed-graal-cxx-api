@@ -72,6 +72,18 @@ struct DXFCPP_EXPORT Session {
     bool isEmpty() const noexcept;
 
     /**
+     * @return start time of this session (inclusive).
+     * For normal sessions the start time is less than the end time, for empty sessions they are equal.
+     */
+    std::int64_t getStartTime() const noexcept;
+
+    /**
+     * @return end time of this session (exclusive).
+     * For normal sessions the end time is greater than the start time, for empty sessions they are equal.
+     */
+    std::int64_t getEndTime() const noexcept;
+
+    /**
      * Returns following session accepted by specified filter.
      * This method may cross the day boundary and return appropriate session from
      * following days - up to a year in the future. If no such session was found
