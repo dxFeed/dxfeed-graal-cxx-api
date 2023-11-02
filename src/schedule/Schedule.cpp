@@ -120,4 +120,28 @@ Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const Session
         isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.handle_.get()));
 }
 
+std::string Schedule::getName() const noexcept {
+    if (!handle_) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    return isolated::schedule::Schedule::getName(handle_.get());
+}
+
+std::string Schedule::getTimeZoneDisplayName() const noexcept {
+    if (!handle_) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    return isolated::schedule::Schedule::getTimeZoneDisplayName(handle_.get());
+}
+
+std::string Schedule::getTimeZoneId() const noexcept {
+    if (!handle_) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    return isolated::schedule::Schedule::getTimeZoneId(handle_.get());
+}
+
 } // namespace dxfcpp

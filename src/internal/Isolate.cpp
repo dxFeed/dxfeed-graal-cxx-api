@@ -425,10 +425,6 @@ std::string InstrumentProfileConnection::getAddress(
         },
         nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
 
-    if (!address) {
-        return dxfcpp::String::EMPTY;
-    }
-
     auto result = dxfcpp::toString(address);
 
     String::release(address);
@@ -692,10 +688,6 @@ std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
         },
         nullptr, dxfcpp::bit_cast<dxfg_day_t *>(day));
 
-    if (!string) {
-        return dxfcpp::String::EMPTY;
-    }
-
     auto result = dxfcpp::toString(string);
 
     String::release(string);
@@ -759,10 +751,6 @@ std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
             return dxfg_Session_toString(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), session);
         },
         nullptr, dxfcpp::bit_cast<dxfg_session_t *>(session));
-
-    if (!string) {
-        return dxfcpp::String::EMPTY;
-    }
 
     auto result = dxfcpp::toString(string);
 
@@ -944,6 +932,60 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
         },
         nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule), time,
         dxfcpp::bit_cast<dxfg_session_filter_t *>(filter)));
+}
+
+std::string Schedule::getName(/* dxfg_schedule_t* */ void *schedule) noexcept {
+    if (!schedule) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    auto string = runIsolatedOrElse(
+        [](auto threadHandle, auto &&schedule) {
+            return dxfg_Schedule_getName(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), schedule);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule));
+
+    auto result = dxfcpp::toString(string);
+
+    String::release(string);
+
+    return result;
+}
+
+std::string Schedule::getTimeZoneDisplayName(/* dxfg_schedule_t* */ void *schedule) noexcept {
+    if (!schedule) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    auto string = runIsolatedOrElse(
+        [](auto threadHandle, auto &&schedule) {
+            return dxfg_Schedule_getTimeZone(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), schedule);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule));
+
+    auto result = dxfcpp::toString(string);
+
+    String::release(string);
+
+    return result;
+}
+
+std::string Schedule::getTimeZoneId(/* dxfg_schedule_t* */ void *schedule) noexcept {
+    if (!schedule) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    auto string = runIsolatedOrElse(
+        [](auto threadHandle, auto &&schedule) {
+            return dxfg_Schedule_getTimeZone_getID(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), schedule);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_schedule_t *>(schedule));
+
+    auto result = dxfcpp::toString(string);
+
+    String::release(string);
+
+    return result;
 }
 
 } // namespace schedule
