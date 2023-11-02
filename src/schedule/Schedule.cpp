@@ -111,4 +111,13 @@ Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionF
         isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.handle_.get()));
 }
 
+Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter& filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    return Session::create(
+        isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.handle_.get()));
+}
+
 } // namespace dxfcpp
