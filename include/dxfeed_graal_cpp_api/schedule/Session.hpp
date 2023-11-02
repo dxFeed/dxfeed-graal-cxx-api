@@ -20,6 +20,7 @@ namespace dxfcpp {
  */
 struct DXFCPP_EXPORT Session {
     friend struct Schedule;
+    friend struct Day;
 
     /// The alias to a type of shared pointer to the Session object
     using Ptr = std::shared_ptr<Session>;

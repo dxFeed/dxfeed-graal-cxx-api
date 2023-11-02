@@ -7,6 +7,10 @@
 
 namespace dxfcpp {
 
+struct Schedule;
+struct Session;
+struct SessionFilter;
+
 /**
  * <b>Day</b> represents a continuous period of time approximately 24 hours long. The day is aligned
  * to the start and the end of business activities of a certain business entity or business process.
@@ -41,7 +45,7 @@ struct DXFCPP_EXPORT Day {
   private:
     JavaObjectHandle<Day> handle_;
 
-    explicit Day(void* handle = nullptr) noexcept;
+    explicit Day(void *handle = nullptr) noexcept;
 
     /**
      * Checks the handle, attempts to allocate memory for the pointer and return Day::Ptr
@@ -49,7 +53,7 @@ struct DXFCPP_EXPORT Day {
      * @param handle The graal Day's handle
      * @return The smart pointer for the Day object.
      */
-    static Day::Ptr create(void* handle) noexcept;
+    static Day::Ptr create(void *handle) noexcept;
 
   public:
     /**
@@ -131,10 +135,92 @@ struct DXFCPP_EXPORT Day {
      */
     std::int64_t getResetTime() const noexcept;
 
+    //TODO: implement
+    /**
+     * @return The list of sessions that constitute this day.
+     * The list is ordered according to natural order of sessions - how they occur one after another.
+     */
+    std::vector<std::shared_ptr<Session>> getSessions() const noexcept {
+        return {};
+    }
+
+    /**
+     * Returns session belonging to this day that contains specified time.
+     * If no such session was found within this day this method will return Session::Ptr{nullptr}
+     * (std::shared_ptr<Session>{nullptr}).
+     *
+     * @param time The time to search for
+     * @return The session that contains specified time or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * if no such session was found within this day
+     */
+    std::shared_ptr<Session> getSessionByTime(std::int64_t time) const noexcept;
+
+    /**
+     * Returns first session belonging to this day accepted by specified filter.
+     * This method does not cross the day boundary. If no such session was found
+     * within this day this method will return Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * <p>
+     * To find first trading session of any type use this code:
+     * <pre>Session session = day->getFirstSession(SessionFilter::TRADING);</pre>
+     * To find first regular trading session use this code:
+     * <pre>Session session = day->getFirstSession(SessionFilter::REGULAR);</pre>
+     *
+     * @param filter The filter to test sessions
+     * @return The first session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * if no such session was found within this day
+     */
+    std::shared_ptr<Session> getFirstSession(const SessionFilter& filter) const noexcept;
+
+    /**
+     * Returns last session belonging to this day accepted by specified filter.
+     * This method does not cross the day boundary. If no such session was found
+     * within this day this method will return Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * <p>
+     * To find last trading session of any type use this code:
+     * <pre>auto session = day->getLastSession(SessionFilter::TRADING);</pre>
+     * To find last regular trading session use this code:
+     * <pre>auto session = day->getLastSession(SessionFilter::REGULAR);</pre>
+     *
+     * @param filter the filter to test sessions
+     * @return last session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * if no such session was found within this day
+     */
+    std::shared_ptr<Session> getLastSession(const SessionFilter& filter) const noexcept;
+
+    /**
+     * Returns first session belonging to this day accepted by specified filter.
+     * This method does not cross the day boundary. If no such session was found
+     * within this day this method will return Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * <p>
+     * To find first trading session of any type use this code:
+     * <pre>auto session = day->findFirstSession(SessionFilter::TRADING);</pre>
+     * To find first regular trading session use this code:
+     * <pre>auto session = day->findFirstSession(SessionFilter::REGULAR);</pre>
+     *
+     * @param filter the filter to test sessions
+     * @return first session that is accepted by the filter
+     */
+    std::shared_ptr<Session> findFirstSession(const SessionFilter& filter) const noexcept;
+
+    /**
+     * Returns last session belonging to this day accepted by specified filter.
+     * This method does not cross the day boundary. If no such session was found
+     * within this day this method will return Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * <p>
+     * To find last trading session of any type use this code:
+     * <pre>auto session = day->findLastSession(SessionFilter::TRADING);</pre>
+     * To find last regular trading session use this code:
+     * <pre>auto session = day->findLastSession(SessionFilter::REGULAR);</pre>
+     *
+     * @param filter the filter to test sessions
+     * @return last session that is accepted by the filter
+     */
+    std::shared_ptr<Session> findLastSession(const SessionFilter& filter) const noexcept;
+
     /**
      * Returns following day accepted by specified filter.
      * This method looks for appropriate day up to a year in the future. If no such day was found
-     * within one year this method will return <b>Day::Ptr{nullptr}</b>.
+     * within one year this method will return <b>Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr})</b>.
      *
      * @param filter the filter to test days
      * @return nearest following day that is accepted by the filter

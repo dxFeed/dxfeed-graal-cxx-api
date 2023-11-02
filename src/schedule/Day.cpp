@@ -131,6 +131,46 @@ std::int64_t Day::getResetTime() const noexcept {
     return isolated::schedule::Day::getResetTime(handle_.get());
 }
 
+std::shared_ptr<Session> Day::getSessionByTime(std::int64_t time) const noexcept {
+    if (!handle_) {
+        return {};
+    }
+
+    return Session::create(isolated::schedule::Day::getSessionByTime(handle_.get(), time));
+}
+
+std::shared_ptr<Session> Day::getFirstSession(const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    return Session::create(isolated::schedule::Day::getFirstSession(handle_.get(), filter.handle_.get()));
+}
+
+std::shared_ptr<Session> Day::getLastSession(const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    return Session::create(isolated::schedule::Day::getLastSession(handle_.get(), filter.handle_.get()));
+}
+
+std::shared_ptr<Session> Day::findFirstSession(const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    return Session::create(isolated::schedule::Day::findFirstSession(handle_.get(), filter.handle_.get()));
+}
+
+std::shared_ptr<Session> Day::findLastSession(const SessionFilter &filter) const noexcept {
+    if (!handle_ || !filter.handle_) {
+        return {};
+    }
+
+    return Session::create(isolated::schedule::Day::findLastSession(handle_.get(), filter.handle_.get()));
+}
+
 Day::Ptr Day::findNextDay(const DayFilter &filter) const noexcept {
     if (!handle_ || !filter.handle_) {
         return {};

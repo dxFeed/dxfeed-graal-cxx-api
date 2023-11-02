@@ -821,6 +821,70 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
         0, static_cast<dxfg_day_t *>(day));
 }
 
+/* dxfg_session_t* */ void *Day::getSessionByTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept {
+    if (!day) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&time) {
+            return dxfg_Day_getSessionByTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, time);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day), time));
+}
+
+/* dxfg_session_t* */ void *Day::getFirstSession(/* dxfg_day_t* */ void *day,
+                                                 /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!day || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&filter) {
+            return dxfg_Day_getFirstSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, filter);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_session_filter_t *>(filter)));
+}
+
+/* dxfg_session_t* */ void *Day::getLastSession(/* dxfg_day_t* */ void *day,
+                                                /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!day || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&filter) {
+            return dxfg_Day_getLastSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, filter);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_session_filter_t *>(filter)));
+}
+
+/* dxfg_session_t* */ void *Day::findFirstSession(/* dxfg_day_t* */ void *day,
+                                                  /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!day || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&filter) {
+            return dxfg_Day_findFirstSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, filter);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_session_filter_t *>(filter)));
+}
+
+/* dxfg_session_t* */ void *Day::findLastSession(/* dxfg_day_t* */ void *day,
+                                                 /* dxfg_session_filter_t* */ void *filter) noexcept {
+    if (!day || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&filter) {
+            return dxfg_Day_findLastSession(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, filter);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_session_filter_t *>(filter)));
+}
+
 /* dxfg_day_t* */ void *Day::findNextDay(/* dxfg_day_t* */ void *day, /* dxfg_day_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
         return nullptr;
