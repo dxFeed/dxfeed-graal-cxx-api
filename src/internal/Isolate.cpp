@@ -653,6 +653,30 @@ InstrumentProfileUpdateListener::create(/* dxfg_ipf_update_listener_function */ 
 
 namespace schedule {
 
+/* dxfg_schedule_t* */ void *Day::getSchedule(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getSchedule(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day)));
+}
+
+std::int32_t Day::getDayId(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getDayId(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, static_cast<dxfg_day_t *>(day));
+}
+
 std::int32_t Day::getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
         return 0;
@@ -661,6 +685,138 @@ std::int32_t Day::getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept {
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&day) {
             return dxfg_Day_getYearMonthDay(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, static_cast<dxfg_day_t *>(day));
+}
+
+std::int32_t Day::getYear(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getYear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, static_cast<dxfg_day_t *>(day));
+}
+
+std::int32_t Day::getMonthOfYear(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getMonthOfYear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, static_cast<dxfg_day_t *>(day));
+}
+
+std::int32_t Day::getDayOfMonth(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getDayOfMonth(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, static_cast<dxfg_day_t *>(day));
+}
+
+std::int32_t Day::getDayOfWeek(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getDayOfWeek(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, static_cast<dxfg_day_t *>(day));
+}
+
+bool Day::isHoliday(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_isHoliday(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day) == 1;
+        },
+        false, static_cast<dxfg_day_t *>(day));
+}
+
+bool Day::isShortDay(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_isShortDay(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day) == 1;
+        },
+        false, static_cast<dxfg_day_t *>(day));
+}
+
+bool Day::isTrading(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_isTrading(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day) == 1;
+        },
+        false, static_cast<dxfg_day_t *>(day));
+}
+
+std::int64_t Day::getStartTime(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getStartTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, static_cast<dxfg_day_t *>(day));
+}
+
+std::int64_t Day::getEndTime(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getEndTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, static_cast<dxfg_day_t *>(day));
+}
+
+bool Day::containsTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept {
+    if (!day) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&time) {
+            return dxfg_Day_containsTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, time) == 1;
+        },
+        false, static_cast<dxfg_day_t *>(day), time);
+}
+
+std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getResetTime(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
         },
         0, static_cast<dxfg_day_t *>(day));
 }
