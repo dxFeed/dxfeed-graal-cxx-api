@@ -79,7 +79,7 @@ struct IpfPropertyChangeListener {
 };
 
 struct InstrumentProfile {
-    static bool release(/* dxfg_instrument_profile_t* */ void* ip) noexcept;
+    static bool release(/* dxfg_instrument_profile_t* */ void *ip) noexcept;
 };
 
 struct InstrumentProfileList {
@@ -116,7 +116,9 @@ struct SessionFilter {
 
 struct Session {
     static /* dxfg_day_t* */ void *getDay(/* dxfg_session_t* */ void *session) noexcept;
+    static std::int32_t getType(/* dxfg_session_t* */ void *session) noexcept;
     static bool isTrading(/* dxfg_session_t* */ void *session) noexcept;
+    static bool isEmpty(/* dxfg_session_t* */ void *session) noexcept;
     static /* dxfg_session_t* */ void *getNextSession(/* dxfg_session_t* */ void *session,
                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
     static std::string toString(/* dxfg_session_t* */ void *session) noexcept;
@@ -134,7 +136,8 @@ struct Schedule {
                                                         std::int64_t time) noexcept;
     static /* dxfg_day_t* */ void *getDayByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time) noexcept;
     static /* dxfg_day_t* */ void *getDayById(/* dxfg_schedule_t* */ void *schedule, std::int32_t dayId) noexcept;
-    static /* dxfg_day_t* */ void *getDayByYearMonthDay(/* dxfg_schedule_t* */ void *schedule, std::int32_t yearMonthDay) noexcept;
+    static /* dxfg_day_t* */ void *getDayByYearMonthDay(/* dxfg_schedule_t* */ void *schedule,
+                                                        std::int32_t yearMonthDay) noexcept;
     static /* dxfg_session_t* */ void *getNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time,
                                                                /* dxfg_session_filter_t* */ void *filter) noexcept;
     static /* dxfg_session_t* */ void *findNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule,
