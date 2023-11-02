@@ -104,7 +104,20 @@ struct DayFilter {
 };
 
 struct Day {
+    static /* dxfg_schedule_t* */ void *getSchedule(/* dxfg_day_t* */ void *day) noexcept;
+    static std::int32_t getDayId(/* dxfg_day_t* */ void *day) noexcept;
     static std::int32_t getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept;
+    static std::int32_t getYear(/* dxfg_day_t* */ void *day) noexcept;
+    static std::int32_t getMonthOfYear(/* dxfg_day_t* */ void *day) noexcept;
+    static std::int32_t getDayOfMonth(/* dxfg_day_t* */ void *day) noexcept;
+    static std::int32_t getDayOfWeek(/* dxfg_day_t* */ void *day) noexcept;
+    static bool isHoliday(/* dxfg_day_t* */ void *day) noexcept;
+    static bool isShortDay(/* dxfg_day_t* */ void *day) noexcept;
+    static bool isTrading(/* dxfg_day_t* */ void *day) noexcept;
+    static std::int64_t getStartTime(/* dxfg_day_t* */ void *day) noexcept;
+    static std::int64_t getEndTime(/* dxfg_day_t* */ void *day) noexcept;
+    static bool containsTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
+    static std::int64_t getResetTime(/* dxfg_day_t* */ void *day) noexcept;
     static /* dxfg_day_t* */ void *findNextDay(/* dxfg_day_t* */ void *day,
                                                /* dxfg_day_filter_t* */ void *filter) noexcept;
     static std::string toString(/* dxfg_day_t* */ void *day) noexcept;

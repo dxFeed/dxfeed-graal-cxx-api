@@ -15,6 +15,8 @@ namespace dxfcpp {
  * trading hours of covered trading schedule.
  */
 struct DXFCPP_EXPORT Schedule {
+    friend struct Day;
+
     /// The alias to a type of shared pointer to the Schedule object
     using Ptr = std::shared_ptr<Schedule>;
 

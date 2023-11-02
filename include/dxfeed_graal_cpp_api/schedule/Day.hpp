@@ -53,6 +53,17 @@ struct DXFCPP_EXPORT Day {
 
   public:
     /**
+     * @return The schedule to which this day belongs.
+     */
+    std::shared_ptr<Schedule> getSchedule() const noexcept;
+
+    /**
+     * @return The number of this day since January 1, 1970 (that day has identifier of 0 and previous days have
+     * negative identifiers).
+     */
+    std::int32_t getDayId() const noexcept;
+
+    /**
      * Returns year, month and day numbers packed in the following way:
      * <pre>YearMonthDay = year * 10000 + month * 100 + day</pre>
      * For example, September 28, 1977 has value 19770928.
@@ -60,6 +71,65 @@ struct DXFCPP_EXPORT Day {
      * @return Packed year, month and day numbers
      */
     std::int32_t getYearMonthDay() const noexcept;
+
+    /**
+     * @return The calendar year - i.e. it returns <code>1977</code> for the year <code>1977</code>.
+     */
+    std::int32_t getYear() const noexcept;
+
+    /**
+     * @return The calendar month number in the year starting with <b>1=January</b> and ending with <b>12=December</b>.
+     */
+    std::int32_t getMonthOfYear() const noexcept;
+
+    /**
+     * @return The ordinal day number in the month starting with <b>1</b> for the first day of month.
+     */
+    std::int32_t getDayOfMonth() const noexcept;
+
+    /**
+     * @return The ordinal day number in the week starting with <b>1=Monday</b> and ending with <b>7=Sunday</b>.
+     */
+    std::int32_t getDayOfWeek() const noexcept;
+
+    /**
+     * @return <code>true</code> if this day is an exchange holiday.
+     * Usually there are no trading takes place on an exchange holiday.
+     */
+    bool isHoliday() const noexcept;
+
+    /**
+     * @return <code>true</code> if this day is a short day.
+     * Usually trading stops earlier on a short day.
+     */
+    bool isShortDay() const noexcept;
+
+    /**
+     * @return <code>true</code> if trading activity is allowed within this day.
+     * Positive result assumes that day has at least one trading session.
+     */
+    bool isTrading() const noexcept;
+
+    /**
+     * @return The start time of this day (inclusive).
+     */
+    std::int64_t getStartTime() const noexcept;
+
+    /**
+     * @return The end time of this day (exclusive).
+     */
+    std::int64_t getEndTime() const noexcept;
+
+    /**
+     * @return <code>true</code> if specified time belongs to this day.
+     */
+    bool containsTime(std::int64_t time) const noexcept;
+
+    /**
+     * @return The reset time for this day.
+     * Reset of daily data is performed on trading days only, the result has no meaning for non-trading days.
+     */
+    std::int64_t getResetTime() const noexcept;
 
     /**
      * Returns following day accepted by specified filter.
