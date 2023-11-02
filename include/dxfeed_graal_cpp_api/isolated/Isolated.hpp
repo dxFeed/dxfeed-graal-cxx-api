@@ -140,6 +140,9 @@ struct Schedule {
     static /* dxfg_session_t* */ void *findNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule,
                                                                 std::int64_t time,
                                                                 /* dxfg_session_filter_t* */ void *filter) noexcept;
+    static std::string getName(/* dxfg_schedule_t* */ void *schedule) noexcept;
+    static std::string getTimeZoneDisplayName(/* dxfg_schedule_t* */ void *schedule) noexcept;
+    static std::string getTimeZoneId(/* dxfg_schedule_t* */ void *schedule) noexcept;
 };
 } // namespace schedule
 } // namespace dxfcpp::isolated

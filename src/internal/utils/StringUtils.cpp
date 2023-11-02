@@ -26,7 +26,7 @@ std::string toString(bool b) noexcept {
 
 std::string toString(const char *chars) noexcept {
     if (chars == nullptr) {
-        return "";
+        return dxfcpp::String::EMPTY;
     }
 
     return chars;
