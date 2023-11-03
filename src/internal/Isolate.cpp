@@ -936,6 +936,34 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
         nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_day_filter_t *>(filter)));
 }
 
+std::size_t Day::getHashCode(/* dxfg_day_t* */ void *day) noexcept {
+    if (!day) {
+        return dxfcpp::bit_cast<std::size_t>(day);
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_hashCode(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        0, dxfcpp::bit_cast<dxfg_day_t *>(day));
+}
+
+bool Day::equals(/* dxfg_day_t* */ void *day, /* dxfg_day_t* */ void *otherDay) noexcept {
+    if (!day || !otherDay) {
+        return false;
+    }
+
+    if (day == otherDay) {
+        return true;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&otherDay) {
+            return dxfg_Day_equals(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, otherDay) == 1;
+        },
+        false, dxfcpp::bit_cast<dxfg_day_t *>(day), dxfcpp::bit_cast<dxfg_day_t *>(otherDay));
+}
+
 std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
         return dxfcpp::String::EMPTY;
@@ -1219,7 +1247,7 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
     StringList::release(graalStringList);
 
     return result;
-};
+}
 
 void Schedule::downloadDefaults(const std::string &downloadConfig) noexcept {
     runIsolatedOrElse(

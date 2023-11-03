@@ -135,7 +135,7 @@ struct DXFCPP_EXPORT Day {
      */
     std::int64_t getResetTime() const noexcept;
 
-    //TODO: implement
+    // TODO: implement
     /**
      * @return The list of sessions that constitute this day.
      * The list is ordered according to natural order of sessions - how they occur one after another.
@@ -166,10 +166,10 @@ struct DXFCPP_EXPORT Day {
      * <pre>Session session = day->getFirstSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The first session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
-     * if no such session was found within this day
+     * @return The first session that is accepted by the filter or Session::Ptr{nullptr}
+     * (std::shared_ptr<Session>{nullptr}) if no such session was found within this day
      */
-    std::shared_ptr<Session> getFirstSession(const SessionFilter& filter) const noexcept;
+    std::shared_ptr<Session> getFirstSession(const SessionFilter &filter) const noexcept;
 
     /**
      * Returns last session belonging to this day accepted by specified filter.
@@ -182,10 +182,10 @@ struct DXFCPP_EXPORT Day {
      * <pre>auto session = day->getLastSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The last session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
-     * if no such session was found within this day
+     * @return The last session that is accepted by the filter or Session::Ptr{nullptr}
+     * (std::shared_ptr<Session>{nullptr}) if no such session was found within this day
      */
-    std::shared_ptr<Session> getLastSession(const SessionFilter& filter) const noexcept;
+    std::shared_ptr<Session> getLastSession(const SessionFilter &filter) const noexcept;
 
     /**
      * Returns first session belonging to this day accepted by specified filter.
@@ -200,7 +200,7 @@ struct DXFCPP_EXPORT Day {
      * @param filter The filter to test sessions
      * @return The first session that is accepted by the filter
      */
-    std::shared_ptr<Session> findFirstSession(const SessionFilter& filter) const noexcept;
+    std::shared_ptr<Session> findFirstSession(const SessionFilter &filter) const noexcept;
 
     /**
      * Returns last session belonging to this day accepted by specified filter.
@@ -215,7 +215,7 @@ struct DXFCPP_EXPORT Day {
      * @param filter The filter to test sessions
      * @return The last session that is accepted by the filter
      */
-    std::shared_ptr<Session> findLastSession(const SessionFilter& filter) const noexcept;
+    std::shared_ptr<Session> findLastSession(const SessionFilter &filter) const noexcept;
 
     /**
      * Returns previous day accepted by specified filter.
@@ -223,8 +223,8 @@ struct DXFCPP_EXPORT Day {
      * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
      *
      * @param The filter the filter to test days
-     * @return The nearest previous day that is accepted by the filter or Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr})
-     * if no such day was found within one year
+     * @return The nearest previous day that is accepted by the filter or Day::Ptr{nullptr}
+     * (std::shared_ptr<Day>{nullptr}) if no such day was found within one year
      */
     Day::Ptr getPrevDay(const DayFilter &filter) const noexcept;
 
@@ -260,6 +260,29 @@ struct DXFCPP_EXPORT Day {
     Day::Ptr findNextDay(const DayFilter &filter) const noexcept;
 
     /**
+     * Returns `true` if this object is equal to `other` object
+     *
+     * @param other Another object
+     * @return `true` if this object is equal to `other` object
+     */
+    bool operator==(const Day &other) const noexcept;
+
+    /**
+     * Returns `true` if this object is equal to `other` object
+     *
+     * @param other Another object
+     * @return `true` if this object is equal to `other` object
+     */
+    bool operator==(const Day::Ptr &other) const noexcept {
+        return *this == *other;
+    }
+
+    /**
+     * @return A hash code value for this object.
+     */
+    std::size_t getHashCode() const noexcept;
+
+    /**
      * Returns a string representation of the current object.
      *
      * @return A string representation
@@ -268,3 +291,9 @@ struct DXFCPP_EXPORT Day {
 };
 
 } // namespace dxfcpp
+
+template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Day> {
+    std::size_t operator()(const dxfcpp::Day &day) const noexcept {
+        return day.getHashCode();
+    }
+};

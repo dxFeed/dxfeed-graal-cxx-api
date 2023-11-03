@@ -135,6 +135,8 @@ struct Day {
                                                /* dxfg_day_filter_t* */ void *filter) noexcept;
     static /* dxfg_day_t* */ void *findNextDay(/* dxfg_day_t* */ void *day,
                                                /* dxfg_day_filter_t* */ void *filter) noexcept;
+    static std::size_t getHashCode(/* dxfg_day_t* */ void *day) noexcept;
+    static bool equals(/* dxfg_day_t* */ void *day, /* dxfg_day_t* */ void *otherDay) noexcept;
     static std::string toString(/* dxfg_day_t* */ void *day) noexcept;
 };
 
