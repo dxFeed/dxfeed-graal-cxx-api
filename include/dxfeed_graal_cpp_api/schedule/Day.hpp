@@ -181,8 +181,8 @@ struct DXFCPP_EXPORT Day {
      * To find last regular trading session use this code:
      * <pre>auto session = day->getLastSession(SessionFilter::REGULAR);</pre>
      *
-     * @param filter the filter to test sessions
-     * @return last session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * @param filter The filter to test sessions
+     * @return The last session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
      * if no such session was found within this day
      */
     std::shared_ptr<Session> getLastSession(const SessionFilter& filter) const noexcept;
@@ -197,8 +197,8 @@ struct DXFCPP_EXPORT Day {
      * To find first regular trading session use this code:
      * <pre>auto session = day->findFirstSession(SessionFilter::REGULAR);</pre>
      *
-     * @param filter the filter to test sessions
-     * @return first session that is accepted by the filter
+     * @param filter The filter to test sessions
+     * @return The first session that is accepted by the filter
      */
     std::shared_ptr<Session> findFirstSession(const SessionFilter& filter) const noexcept;
 
@@ -212,25 +212,57 @@ struct DXFCPP_EXPORT Day {
      * To find last regular trading session use this code:
      * <pre>auto session = day->findLastSession(SessionFilter::REGULAR);</pre>
      *
-     * @param filter the filter to test sessions
-     * @return last session that is accepted by the filter
+     * @param filter The filter to test sessions
+     * @return The last session that is accepted by the filter
      */
     std::shared_ptr<Session> findLastSession(const SessionFilter& filter) const noexcept;
 
     /**
+     * Returns previous day accepted by specified filter.
+     * This method looks for appropriate day up to a year back in time. If no such day was found
+     * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
+     *
+     * @param The filter the filter to test days
+     * @return The nearest previous day that is accepted by the filter or Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr})
+     * if no such day was found within one year
+     */
+    Day::Ptr getPrevDay(const DayFilter &filter) const noexcept;
+
+    /**
      * Returns following day accepted by specified filter.
      * This method looks for appropriate day up to a year in the future. If no such day was found
-     * within one year this method will return <b>Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr})</b>.
+     * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
      *
-     * @param filter the filter to test days
-     * @return nearest following day that is accepted by the filter
+     * @param The filter the filter to test days
+     * @return The nearest following day that is accepted by the filter or Day::Ptr{nullptr}
+     * (std::shared_ptr<Day>{nullptr}) if no such day was found within one year
+     */
+    Day::Ptr getNextDay(const DayFilter &filter) const noexcept;
+
+    /**
+     * Returns previous day accepted by specified filter.
+     * This method looks for appropriate day up to a year back in time. If no such day was found
+     * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
+     *
+     * @param filter The filter to test days
+     * @return The nearest previous day that is accepted by the filter
+     */
+    Day::Ptr findPrevDay(const DayFilter &filter) const noexcept;
+
+    /**
+     * Returns following day accepted by specified filter.
+     * This method looks for appropriate day up to a year in the future. If no such day was found
+     * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
+     *
+     * @param filter The filter to test days
+     * @return The nearest following day that is accepted by the filter
      */
     Day::Ptr findNextDay(const DayFilter &filter) const noexcept;
 
     /**
      * Returns a string representation of the current object.
      *
-     * @return a string representation
+     * @return A string representation
      */
     std::string toString() const noexcept;
 };

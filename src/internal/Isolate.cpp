@@ -885,6 +885,45 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
         nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_session_filter_t *>(filter)));
 }
 
+/* dxfg_day_t* */ void *Day::getPrevDay(/* dxfg_day_t* */ void *day,
+                                        /* dxfg_day_filter_t* */ void *filter) noexcept {
+    if (!day || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&filter) {
+            return dxfg_Day_getPrevDay(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, filter);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_day_filter_t *>(filter)));
+}
+
+/* dxfg_day_t* */ void *Day::getNextDay(/* dxfg_day_t* */ void *day,
+                                        /* dxfg_day_filter_t* */ void *filter) noexcept {
+    if (!day || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&filter) {
+            return dxfg_Day_getNextDay(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, filter);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_day_filter_t *>(filter)));
+}
+
+/* dxfg_day_t* */ void *Day::findPrevDay(/* dxfg_day_t* */ void *day,
+                                         /* dxfg_day_filter_t* */ void *filter) noexcept {
+    if (!day || !filter) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day, auto &&filter) {
+            return dxfg_Day_findPrevDay(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), day, filter);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day), static_cast<dxfg_day_filter_t *>(filter)));
+}
+
 /* dxfg_day_t* */ void *Day::findNextDay(/* dxfg_day_t* */ void *day, /* dxfg_day_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
         return nullptr;
