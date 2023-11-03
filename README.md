@@ -271,6 +271,8 @@ versions)
   and `dxfeed.properties` file
 * [DxFeedLiveIpfSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp)
   This sample demonstrates how to an instrument profile URL and reads instrument profiles with support of streaming live updates.
+* [ScheduleSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp)
+  A sample program that demonstrates different use cases of Schedule API.
 
 ## Current State
 
@@ -439,12 +441,12 @@ versions)
 - [InstrumentProfile](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html) represents basic
   profile information about a market
   instrument ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedIpfConnect.java))
-    - [ ] dxFeed Graal C API
-    - [x] dxFeed Graal C++ API
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
 - [InstrumentProfileReader](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfileReader.html) reads 
   instrument profiles from the stream using Instrument Profile Format (IPF).
-    - [ ] dxFeed Graal C API
-    - [x] dxFeed Graal C++ API
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
 - [InstrumentProfileConnection](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileConnection.html) 
   connects to an instrument profile URL and reads instrument profiles with support of streaming live updates.
   - [ ] dxFeed Graal C API
@@ -452,13 +454,13 @@ versions)
 - [InstrumentProfileCollector](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileCollector.html)
   collects instrument profile updates and provides the live instrument profiles
   list ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedLiveIpfSample.java))
-    - [ ] dxFeed Graal C API
-    - [x] dxFeed Graal C++ API
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
 - [Schedule](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/schedule/Schedule.html) provides API to retrieve and
   explore various exchanges’ trading schedules and different financial instrument
   classes ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/schedule/ScheduleSample.java))
-    - [ ] dxFeed Graal C API
-    - [ ] dxFeed Graal C++ API
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
 
 ### Services
 

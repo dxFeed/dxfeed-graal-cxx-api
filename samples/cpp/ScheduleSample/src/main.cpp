@@ -179,6 +179,9 @@ void printNearestTradingSession(auto &&profile, auto time) {
     }
 }
 
+/**
+ * A sample program that demonstrates different use cases of Schedule API.
+ */
 int main(int argc, char *argv[]) {
     if (argc > 1 && (argv[1] == "-h"s || argv[1] == "--help"s)) {
         printUsage();
