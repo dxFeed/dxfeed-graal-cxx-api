@@ -203,6 +203,26 @@ Day::Ptr Day::findNextDay(const DayFilter &filter) const noexcept {
     return create(isolated::schedule::Day::findNextDay(handle_.get(), filter.handle_.get()));
 }
 
+bool Day::operator==(const Day &other) const noexcept {
+    if (!handle_ || !other.handle_) {
+        return false;
+    }
+
+    if (this == &other) {
+        return true;
+    }
+
+    return isolated::schedule::Day::equals(handle_.get(), other.handle_.get());
+}
+
+std::size_t Day::getHashCode() const noexcept {
+    if (!handle_) {
+        return dxfcpp::bit_cast<std::size_t>(this);
+    }
+
+    return isolated::schedule::Day::getHashCode(handle_.get());
+}
+
 std::string Day::toString() const noexcept {
     if (!handle_) {
         return dxfcpp::String::EMPTY;

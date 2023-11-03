@@ -156,12 +156,27 @@ struct DXFCPP_EXPORT Session {
      */
     Session::Ptr findNextSession(const SessionFilter &filter) const noexcept;
 
+    /**
+     * Returns `true` if this object is equal to `other` object
+     *
+     * @param other Another object
+     * @return `true` if this object is equal to `other` object
+     */
     bool operator==(const Session &other) const noexcept;
 
+    /**
+     * Returns `true` if this object is equal to `other` object
+     *
+     * @param other Another object
+     * @return `true` if this object is equal to `other` object
+     */
     bool operator==(const Session::Ptr &other) const noexcept {
         return *this == *other;
     }
 
+    /**
+     * @return A hash code value for this object.
+     */
     std::size_t getHashCode() const noexcept;
 
     /**
