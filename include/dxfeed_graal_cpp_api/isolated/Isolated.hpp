@@ -127,6 +127,12 @@ struct Day {
                                                         /* dxfg_session_filter_t* */ void *filter) noexcept;
     static /* dxfg_session_t* */ void *findLastSession(/* dxfg_day_t* */ void *day,
                                                        /* dxfg_session_filter_t* */ void *filter) noexcept;
+    static /* dxfg_day_t* */ void *getPrevDay(/* dxfg_day_t* */ void *day,
+                                              /* dxfg_day_filter_t* */ void *filter) noexcept;
+    static /* dxfg_day_t* */ void *getNextDay(/* dxfg_day_t* */ void *day,
+                                              /* dxfg_day_filter_t* */ void *filter) noexcept;
+    static /* dxfg_day_t* */ void *findPrevDay(/* dxfg_day_t* */ void *day,
+                                               /* dxfg_day_filter_t* */ void *filter) noexcept;
     static /* dxfg_day_t* */ void *findNextDay(/* dxfg_day_t* */ void *day,
                                                /* dxfg_day_filter_t* */ void *filter) noexcept;
     static std::string toString(/* dxfg_day_t* */ void *day) noexcept;
