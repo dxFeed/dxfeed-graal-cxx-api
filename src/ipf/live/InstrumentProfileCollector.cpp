@@ -59,24 +59,6 @@ struct NonOwningInstrumentProfileIterator {
 struct InstrumentProfileCollector::Impl {
     static void onInstrumentProfilesUpdate(graal_isolatethread_t *thread, dxfg_iterable_ip_t *profiles,
                                            void *userData) noexcept {
-        auto id =
-            Id<InstrumentProfileCollector>::from(dxfcpp::bit_cast<Id<InstrumentProfileCollector>::ValueType>(userData));
-        auto collector = ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->getEntity(id);
-
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate: id = " +
-                            std::to_string(id.getValue()));
-        }
-
-        if (collector) {
-            auto &&apiProfiles = NonOwningInstrumentProfileIterator{profiles}.collect();
-
-            collector->onInstrumentProfilesUpdate_(apiProfiles);
-        }
-    }
-
-    static void onInstrumentProfilesUpdate2(graal_isolatethread_t *thread, dxfg_iterable_ip_t *profiles,
-                                           void *userData) noexcept {
         auto [collectorId, listenerId] = dxfcpp::unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
         auto id =
@@ -101,29 +83,11 @@ struct InstrumentProfileCollector::Impl {
 };
 
 InstrumentProfileCollector::InstrumentProfileCollector() noexcept
-    : id_{Id<InstrumentProfileCollector>::UNKNOWN}, handle_{}, instrumentProfileUpdateListenerHandle_{},
-      onInstrumentProfilesUpdate_{} {
+    : id_{Id<InstrumentProfileCollector>::UNKNOWN}, handle_{} {
     handle_ = JavaObjectHandle<InstrumentProfileCollector>(dxfcpp::isolated::ipf::InstrumentProfileCollector::create());
 }
 
 void InstrumentProfileCollector::addListenerHandle(std::size_t id) noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    listenerHandles_.emplace(
-        id, JavaObjectHandle<InstrumentProfileUpdateListener>(isolated::ipf::InstrumentProfileUpdateListener::create(
-                dxfcpp::bit_cast<void *>(&InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate2),
-                dxfcpp::bit_cast<void *>(dxfcpp::pack(id_.getValue(), id)))));
-
-    if (!listenerHandles_[id]) {
-        return;
-    }
-
-    isolated::ipf::InstrumentProfileCollector::addUpdateListener(handle_.get(), listenerHandles_[id].get());
-}
-
-void InstrumentProfileCollector::removeListenerHandle(std::size_t id) noexcept {
     if (!handle_) {
         return;
     }
@@ -138,6 +102,18 @@ void InstrumentProfileCollector::removeListenerHandle(std::size_t id) noexcept {
     }
 
     isolated::ipf::InstrumentProfileCollector::addUpdateListener(handle_.get(), listenerHandles_[id].get());
+}
+
+void InstrumentProfileCollector::removeListenerHandle(std::size_t id) noexcept {
+    if (!handle_) {
+        return;
+    }
+
+    if (!listenerHandles_.contains(id) || !listenerHandles_[id]) {
+        return;
+    }
+
+    isolated::ipf::InstrumentProfileCollector::removeUpdateListener(handle_.get(), listenerHandles_[id].get());
 }
 
 InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
@@ -167,18 +143,6 @@ InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() noexcept {
 
     collector->id_ =
         ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->registerEntity(collector);
-
-    collector->instrumentProfileUpdateListenerHandle_ =
-        JavaObjectHandle<InstrumentProfileUpdateListener>(isolated::ipf::InstrumentProfileUpdateListener::create(
-            dxfcpp::bit_cast<void *>(&InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate),
-            dxfcpp::bit_cast<void *>(collector->id_.getValue())));
-
-    if (!collector->handle_ || !collector->instrumentProfileUpdateListenerHandle_) {
-        return collector;
-    }
-
-    isolated::ipf::InstrumentProfileCollector::addUpdateListener(
-        collector->handle_.get(), collector->instrumentProfileUpdateListenerHandle_.get());
 
     return collector;
 }

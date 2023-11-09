@@ -22,8 +22,6 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
 
     Id<InstrumentProfileCollector> id_;
     JavaObjectHandle<InstrumentProfileCollector> handle_;
-    JavaObjectHandle<InstrumentProfileUpdateListener> instrumentProfileUpdateListenerHandle_;
-    SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> onInstrumentProfilesUpdate_{};
 
     std::mutex listenersMutex_{};
     std::unordered_map<std::size_t, JavaObjectHandle<InstrumentProfileUpdateListener>> listenerHandles_{};
@@ -107,14 +105,15 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) -> void
-     * { for (const auto &p : profiles) { if (InstrumentProfileType::REMOVED->getName() == p->getType()) { std::cout <<
-     * p->getSymbol() + ": " + p->getType() + "\n"; } else { std::cout << p->getSymbol() + " (" + p->getDescription() +
-     * ")\n";
+     * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) -> void {
+     *     for (const auto &p : profiles) {
+     *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
+     *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
+     *         } else {
+     *             std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
      *         }
      *     }
      * });
-     * ```
      *
      * Example:
      * ```cpp
@@ -151,8 +150,6 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
         addListenerHandle(id);
 
         return id;
-
-        //return onInstrumentProfilesUpdate_ += listener;
     }
 
     /**
@@ -173,8 +170,6 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
         if (onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
             removeUpdateListenerImpl(listenerId);
         }
-
-        //onInstrumentProfilesUpdate_ -= listenerId;
     }
 };
 
