@@ -52,6 +52,8 @@ struct InstrumentProfileCollector {
         /* dxfg_instrument_profile_t * */ void *ip) noexcept;
     static bool addUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
                                   /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
+    static bool removeUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
+                                  /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
 };
 
 struct InstrumentProfileConnection {

@@ -501,7 +501,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
     JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_;
-    Handler<void(State, State)> onStateChange_{};
+    SimpleHandler<void(State, State)> onStateChange_{};
 
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties);
@@ -675,7 +675,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     }
 
     /**
-     * Returns the onStateChange @ref Handler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * Returns the onStateChange @ref SimpleHandler<void(ArgTypes...)> "handler" that can be used to add or remove
      * listeners.
      *
      * @return onStateChange handler with `void(State, State)` signature

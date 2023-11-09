@@ -56,7 +56,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     Id<InstrumentProfileConnection> id_;
     JavaObjectHandle<InstrumentProfileConnection> handle_;
     JavaObjectHandle<IpfPropertyChangeListener> stateChangeListenerHandle_;
-    Handler<void(State, State)> onStateChange_{};
+    SimpleHandler<void(State, State)> onStateChange_{};
 
     InstrumentProfileConnection() noexcept;
 
@@ -207,7 +207,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     }
 
     /**
-     * Returns the onStateChange @ref Handler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * Returns the onStateChange @ref SimpleHandler<void(ArgTypes...)> "handler" that can be used to add or remove
      * listeners.
      *
      * @return onStateChange handler with `void(State, State)` signature

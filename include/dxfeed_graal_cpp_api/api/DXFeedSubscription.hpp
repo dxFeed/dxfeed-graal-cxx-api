@@ -38,7 +38,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     std::unordered_set<EventTypeEnum> eventTypes_;
     JavaObjectHandle<DXFeedSubscription> handle_;
     JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
-    Handler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{1};
+    SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
 
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
@@ -54,7 +54,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : eventTypes_(begin, end), handle_{}, eventListenerHandle_{}, onEvent_{1} {
+        : eventTypes_(begin, end), handle_{}, eventListenerHandle_{}, onEvent_{} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }

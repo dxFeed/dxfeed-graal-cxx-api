@@ -359,7 +359,7 @@ template <typename... Ts> using Max = typename detail::MaxImpl<Ts...>::Type;
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V sar(V value, S shift);
+template <Integral V, Integral S> static constexpr V sar(V value, S shift) noexcept;
 
 /**
  * Performs a left arithmetic bit shift operation (<< in Java, C, etc).
@@ -375,7 +375,7 @@ template <Integral V, Integral S> static constexpr V sar(V value, S shift);
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value, S shift) {
+template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value, S shift) noexcept {
     if constexpr (std::is_signed_v<S>) {
         if (shift < 0) {
             return sar(value, -shift);
@@ -407,7 +407,7 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V sal(V value, S shift) {
+template <Integral V, Integral S> static constexpr V sal(V value, S shift) noexcept {
     return leftArithmeticShift(value, shift);
 }
 
@@ -426,7 +426,7 @@ template <Integral V, Integral S> static constexpr V sal(V value, S shift) {
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V rightArithmeticShift(V value, S shift) {
+template <Integral V, Integral S> static constexpr V rightArithmeticShift(V value, S shift) noexcept {
     if constexpr (std::is_signed_v<S>) {
         if (shift < 0) {
             return sal(value, -shift);
@@ -437,7 +437,7 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
         return value;
     }
 
-    if (shift >= sizeof(V) * 8) {
+    if (shift >= sizeof(V) * CHAR_BIT) {
         if (value < 0) {
             return -1;
         } else {
@@ -463,7 +463,7 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V sar(V value, S shift) {
+template <Integral V, Integral S> static constexpr V sar(V value, S shift) noexcept {
     return rightArithmeticShift(value, shift);
 }
 
@@ -481,7 +481,7 @@ template <Integral V, Integral S> static constexpr V sar(V value, S shift) {
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V shr(V value, S shift);
+template <Integral V, Integral S> static constexpr V shr(V value, S shift) noexcept;
 
 /**
  * Performs a left logical bit shift operation.
@@ -497,7 +497,7 @@ template <Integral V, Integral S> static constexpr V shr(V value, S shift);
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S shift) {
+template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S shift) noexcept {
     if constexpr (std::is_signed_v<S>) {
         if (shift < 0) {
             return shr(value, -shift);
@@ -508,7 +508,7 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * 8) {
+    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
@@ -529,7 +529,7 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V shl(V value, S shift) {
+template <Integral V, Integral S> static constexpr V shl(V value, S shift) noexcept {
     return leftLogicalShift(value, shift);
 }
 
@@ -547,7 +547,7 @@ template <Integral V, Integral S> static constexpr V shl(V value, S shift) {
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, S shift) {
+template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, S shift) noexcept {
     if constexpr (std::is_signed_v<S>) {
         if (shift < 0) {
             return shl(value, -shift);
@@ -558,7 +558,7 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * 8) {
+    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
@@ -579,33 +579,33 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V shr(V value, S shift) {
+template <Integral V, Integral S> static constexpr V shr(V value, S shift) noexcept {
     return rightLogicalShift(value, shift);
 }
 
-template <Integral A, Integral B> static constexpr A andOp(A a, B b) {
+template <Integral A, Integral B> static constexpr A andOp(A a, B b) noexcept {
     using Common = std::make_unsigned_t<Max<A, B>>;
 
     return static_cast<A>(static_cast<Common>(a) & static_cast<Common>(b));
 }
 
-template <Integral A, Integral B> static constexpr A orOp(A a, B b) {
+template <Integral A, Integral B> static constexpr A orOp(A a, B b) noexcept {
     using Common = std::make_unsigned_t<Max<A, B>>;
 
     return static_cast<A>(static_cast<Common>(a) | static_cast<Common>(b));
 }
 
-template <Integral A, Integral B> static constexpr A xorOp(A a, B b) {
+template <Integral A, Integral B> static constexpr A xorOp(A a, B b) noexcept {
     using Common = std::make_unsigned_t<Max<A, B>>;
 
     return static_cast<A>(static_cast<Common>(a) ^ static_cast<Common>(b));
 }
 
-template <Integral F, Integral M, Integral S> static constexpr F getBits(F flags, M mask, S shift) {
+template <Integral F, Integral M, Integral S> static constexpr F getBits(F flags, M mask, S shift) noexcept {
     return static_cast<F>(andOp(shr(flags, shift), mask));
 }
 
-template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bits) {
+template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bits) noexcept {
     if constexpr (std::is_signed_v<T>) {
         using U = std::make_unsigned_t<T>;
 
@@ -616,7 +616,8 @@ template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bit
     }
 }
 
-template <Integral F, Integral M, Integral S, Integral B> static constexpr F setBits(F flags, M mask, S shift, B bits) {
+template <Integral F, Integral M, Integral S, Integral B>
+static constexpr F setBits(F flags, M mask, S shift, B bits) noexcept {
     if constexpr (std::is_signed_v<F> || std::is_signed_v<M> || std::is_signed_v<S> || std::is_signed_v<B>) {
         using U = std::make_unsigned_t<Max<F, M, S, B>>;
 
@@ -664,6 +665,18 @@ constexpr static std::size_t hashMix(std::size_t v) noexcept {
 
 template <class T> constexpr void hashCombine(std::size_t &seed, const T &v) noexcept {
     seed = hashMix(seed + 0x9e3779b9 + std::hash<T>()(v));
+}
+
+template <Integral T, Integral U> constexpr std::size_t pack(T t, U u) noexcept {
+    constexpr auto sizeOfSize = sizeof(std::size_t) * CHAR_BIT;
+
+    return orOp(shl(t, sizeOfSize / 2), u);
+}
+
+constexpr std::pair<std::size_t, std::size_t> unpack(std::size_t v) noexcept {
+    constexpr auto sizeOfSize = sizeof(std::size_t) * CHAR_BIT;
+
+    return {shr(v, sizeOfSize / 2), andOp(v, shr(~std::size_t{}, sizeOfSize / 2))};
 }
 
 } // namespace dxfcpp

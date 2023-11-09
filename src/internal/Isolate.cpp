@@ -396,6 +396,22 @@ bool InstrumentProfileCollector::addUpdateListener(/* dxfg_ipf_collector_t* */ v
         dxfcpp::bit_cast<dxfg_ipf_update_listener_t *>(listener));
 }
 
+bool InstrumentProfileCollector::removeUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
+                                                   /* dxfg_ipf_update_listener_t* */ void *listener) noexcept {
+    if (!instrumentProfileCollectorHandle || !listener) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileCollectorHandle, auto &&listener) {
+            return dxfg_InstrumentProfileCollector_removeUpdateListener(
+                       dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), instrumentProfileCollectorHandle,
+                       listener) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle),
+        dxfcpp::bit_cast<dxfg_ipf_update_listener_t *>(listener));
+}
+
 /* dxfg_ipf_connection_t* */ void *InstrumentProfileConnection::createConnection(
     const std::string &address,
     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {

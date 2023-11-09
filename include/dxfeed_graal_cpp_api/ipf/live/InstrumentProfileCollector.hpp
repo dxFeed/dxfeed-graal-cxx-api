@@ -11,6 +11,8 @@
 
 #include "../../entity/SharedEntity.hpp"
 
+#include <unordered_map>
+
 namespace dxfcpp {
 
 class InstrumentProfileConnection;
@@ -21,11 +23,26 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     Id<InstrumentProfileCollector> id_;
     JavaObjectHandle<InstrumentProfileCollector> handle_;
     JavaObjectHandle<InstrumentProfileUpdateListener> instrumentProfileUpdateListenerHandle_;
-    Handler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> onInstrumentProfilesUpdate_{1};
+    SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> onInstrumentProfilesUpdate_{};
+
+    std::mutex listenersMutex_{};
+    std::unordered_map<std::size_t, JavaObjectHandle<InstrumentProfileUpdateListener>> listenerHandles_{};
+    std::unordered_map<std::size_t, SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)>>
+        onInstrumentProfilesUpdateHandlers_{};
 
     InstrumentProfileCollector() noexcept;
 
     struct Impl;
+
+    void addListenerHandle(std::size_t id) noexcept;
+    void removeListenerHandle(std::size_t id) noexcept;
+
+    void removeUpdateListenerImpl(std::size_t listenerId) noexcept {
+        removeListenerHandle(listenerId);
+
+        onInstrumentProfilesUpdateHandlers_[listenerId].remove(listenerId);
+        onInstrumentProfilesUpdateHandlers_.erase(listenerId);
+    }
 
   public:
     /// The alias to a type of shared pointer to the InstrumentProfileCollector object
@@ -33,6 +50,8 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
 
     /// The alias to a type of unique pointer to the InstrumentProfileCollector object
     using Unique = std::unique_ptr<InstrumentProfileCollector>;
+
+    ~InstrumentProfileCollector() noexcept;
 
     /**
      * Creates the new InstrumentProfileCollector
@@ -88,12 +107,10 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) -> void {
-     *     for (const auto &p : profiles) {
-     *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
-     *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
-     *         } else {
-     *             std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
+     * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) -> void
+     * { for (const auto &p : profiles) { if (InstrumentProfileType::REMOVED->getName() == p->getType()) { std::cout <<
+     * p->getSymbol() + ": " + p->getType() + "\n"; } else { std::cout << p->getSymbol() + " (" + p->getDescription() +
+     * ")\n";
      *         }
      *     }
      * });
@@ -110,7 +127,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *         }
      *     }
      * });
-    * ```
+     * ```
      * @tparam InstrumentProfileUpdateListener The listener type. Listener can be callable with signature: `void(const
      * std::vector<std::shared_ptr<InstrumentProfile>&)`
      * @param listener The profile update listener. The listener can be callable with signature: `void(const
@@ -125,7 +142,17 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
         }
 #endif
     {
-        return onInstrumentProfilesUpdate_ += listener;
+        std::lock_guard guard{listenersMutex_};
+
+        SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> h{};
+
+        std::size_t id = h.add(listener);
+        onInstrumentProfilesUpdateHandlers_.try_emplace(id, std::move(h));
+        addListenerHandle(id);
+
+        return id;
+
+        //return onInstrumentProfilesUpdate_ += listener;
     }
 
     /**
@@ -141,7 +168,13 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * @param listenerId The listener id
      */
     void removeUpdateListener(std::size_t listenerId) noexcept {
-        onInstrumentProfilesUpdate_ -= listenerId;
+        std::lock_guard guard{listenersMutex_};
+
+        if (onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
+            removeUpdateListenerImpl(listenerId);
+        }
+
+        //onInstrumentProfilesUpdate_ -= listenerId;
     }
 };
 

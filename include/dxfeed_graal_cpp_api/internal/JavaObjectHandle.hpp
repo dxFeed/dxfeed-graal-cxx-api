@@ -27,8 +27,10 @@ template <typename T> struct JavaObjectHandle {
         }
     }
 
-    JavaObjectHandle(JavaObjectHandle &&) = default;
-    JavaObjectHandle &operator=(JavaObjectHandle &&) = default;
+    JavaObjectHandle(const JavaObjectHandle &) = delete;
+    JavaObjectHandle(JavaObjectHandle &&) noexcept = default;
+    JavaObjectHandle &operator=(const JavaObjectHandle &) = delete;
+    JavaObjectHandle &operator=(JavaObjectHandle &&) noexcept = default;
     virtual ~JavaObjectHandle() noexcept = default;
 
     [[nodiscard]] std::string toString() const noexcept {
