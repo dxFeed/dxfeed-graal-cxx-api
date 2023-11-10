@@ -69,16 +69,27 @@ struct DumpTool {
 
             index++;
 
-            auto parsedTypes = TypesArg::parse(args);
+            std::optional<std::string> types;
+            std::optional<std::string> symbols;
 
-            if (parsedTypes.result.has_value()) {
-                index++;
-            }
+            if (args.size() > index && args[index].starts_with('-')) {
+                types = std::nullopt;
+                symbols = std::nullopt;
+            } else {
+                auto parsedTypes = TypesArg::parse(args);
 
-            auto parsedSymbols = SymbolsArg::parse(args);
+                if (parsedTypes.result.has_value()) {
+                    index++;
+                }
 
-            if (parsedSymbols.result.has_value()) {
-                index++;
+                auto parsedSymbols = SymbolsArg::parse(args);
+
+                if (parsedSymbols.result.has_value()) {
+                    index++;
+                }
+
+                types = parsedTypes.result;
+                symbols = parsedSymbols.result;
             }
 
             bool propertiesIsParsed{};
@@ -111,7 +122,7 @@ struct DumpTool {
             }
 
             return ParseResult<Args>::ok(
-                {parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties, tape, isQuite});
+                {parsedAddress.result, types, symbols, properties, tape, isQuite});
         }
     };
 

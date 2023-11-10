@@ -102,7 +102,8 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
             endpoint->onStateChange_(graalStateToState(oldState), graalStateToState(newState));
 
             if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
-                ApiContext::getInstance()->getManager<DXEndpointManager>()->unregisterEntity(id);
+                //TODO: fix endpoint lifetime
+                //ApiContext::getInstance()->getManager<DXEndpointManager>()->unregisterEntity(id);
             }
         }
     };
