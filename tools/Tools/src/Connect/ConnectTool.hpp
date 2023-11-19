@@ -162,7 +162,7 @@ struct ConnectTool {
         auto symbols = CmdArgsUtils::parseSymbols(args.symbols);
 
         if (args.fromTime.has_value()) {
-            auto fromTime = CmdArgsUtils::parseDateTime(args.fromTime.value());
+            auto fromTime = TimeFormat::DEFAULT.parse(args.fromTime.value());
 
             symbols = symbols | ranges::views::transform([fromTime](const auto &sw) {
                           return TimeSeriesSubscriptionSymbol{sw, fromTime};

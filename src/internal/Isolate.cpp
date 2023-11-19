@@ -171,6 +171,78 @@ bool StringList::release(/* dxfg_string_list* */ void *stringList) noexcept {
         false, dxfcpp::bit_cast<dxfg_string_list *>(stringList));
 }
 
+/* dxfg_time_format_t* */ void *TimeFormat::getDefault() noexcept {
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle) {
+            return dxfg_TimeFormat_DEFAULT(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle));
+        },
+        nullptr));
+}
+
+/* dxfg_time_format_t* */ void *TimeFormat::getGmt() noexcept {
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle) {
+            return dxfg_TimeFormat_GMT(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle));
+        },
+        nullptr));
+}
+
+/* dxfg_time_format_t* */ void *TimeFormat::withTimeZone(/* dxfg_time_format_t* */ void *timeFormat) noexcept {
+    if (!timeFormat) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&timeFormat) {
+            return dxfg_TimeFormat_withTimeZone(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), timeFormat);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat)));
+}
+
+/* dxfg_time_format_t* */ void *TimeFormat::withMillis(/* dxfg_time_format_t* */ void *timeFormat) noexcept {
+    if (!timeFormat) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&timeFormat) {
+            return dxfg_TimeFormat_withMillis(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), timeFormat);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat)));
+}
+
+std::int64_t TimeFormat::parse(/* dxfg_time_format_t* */ void *timeFormat, const std::string &value) noexcept {
+    if (!timeFormat) {
+        return 0;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&timeFormat, auto &&value) {
+            return dxfg_TimeFormat_parse(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), timeFormat,
+                                         value.c_str());
+        },
+        0, dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat), value);
+}
+
+std::string TimeFormat::format(/* dxfg_time_format_t* */ void *timeFormat, std::int64_t value) noexcept {
+    if (!timeFormat) {
+        return dxfcpp::String::EMPTY;
+    }
+
+    auto resolvedURL = runIsolatedOrElse(
+        [](auto threadHandle, auto &&timeFormat, auto &&value) {
+            return dxfg_TimeFormat_format(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                          dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat), value);
+        },
+        nullptr, timeFormat, value);
+
+    auto result = dxfcpp::toString(resolvedURL);
+
+    String::release(resolvedURL);
+
+    return result;
+}
+
 namespace api {
 
 static dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
@@ -396,8 +468,9 @@ bool InstrumentProfileCollector::addUpdateListener(/* dxfg_ipf_collector_t* */ v
         dxfcpp::bit_cast<dxfg_ipf_update_listener_t *>(listener));
 }
 
-bool InstrumentProfileCollector::removeUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
-                                                   /* dxfg_ipf_update_listener_t* */ void *listener) noexcept {
+bool InstrumentProfileCollector::removeUpdateListener(
+    /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
+    /* dxfg_ipf_update_listener_t* */ void *listener) noexcept {
     if (!instrumentProfileCollectorHandle || !listener) {
         return false;
     }

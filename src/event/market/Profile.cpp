@@ -115,15 +115,15 @@ std::string Profile::toString() const noexcept {
                        "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
                        "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
                        "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
-                       MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                       MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
                        getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(),
-                       getStatusReason(), formatTimeStamp(getHaltStartTime()), formatTimeStamp(getHaltEndTime()),
-                       dxfcpp::toString(getHighLimitPrice()), dxfcpp::toString(getLowLimitPrice()),
-                       dxfcpp::toString(getHigh52WeekPrice()), dxfcpp::toString(getLow52WeekPrice()),
-                       dxfcpp::toString(getBeta()), dxfcpp::toString(getEarningsPerShare()),
-                       dxfcpp::toString(getDividendFrequency()), dxfcpp::toString(getExDividendAmount()),
-                       day_util::getYearMonthDayByDayId(getExDividendDayId()), dxfcpp::toString(getShares()),
-                       dxfcpp::toString(getFreeFloat()));
+                       getStatusReason(), TimeFormat::DEFAULT.format(getHaltStartTime()),
+                       TimeFormat::DEFAULT.format(getHaltEndTime()), dxfcpp::toString(getHighLimitPrice()),
+                       dxfcpp::toString(getLowLimitPrice()), dxfcpp::toString(getHigh52WeekPrice()),
+                       dxfcpp::toString(getLow52WeekPrice()), dxfcpp::toString(getBeta()),
+                       dxfcpp::toString(getEarningsPerShare()), dxfcpp::toString(getDividendFrequency()),
+                       dxfcpp::toString(getExDividendAmount()), day_util::getYearMonthDayByDayId(getExDividendDayId()),
+                       dxfcpp::toString(getShares()), dxfcpp::toString(getFreeFloat()));
 }
 
 void *Profile::toGraal() const noexcept {

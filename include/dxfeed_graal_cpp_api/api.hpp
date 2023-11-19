@@ -30,10 +30,10 @@
 #include "internal/managers/EntityManager.hpp"
 #include "internal/managers/ErrorHandlingManager.hpp"
 
+#include "dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 #include "internal/utils/CmdArgsUtils.hpp"
 #include "internal/utils/EnumUtils.hpp"
 #include "internal/utils/StringUtils.hpp"
-#include "internal/utils/TimeFormat.hpp"
 #include "internal/utils/debug/Debug.hpp"
 
 #include "api/ApiModule.hpp"

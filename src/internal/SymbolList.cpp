@@ -124,7 +124,7 @@ std::string toString(const dxfg_symbol_t *graalSymbol) {
         auto symbol = !timeSeriesSubscriptionSymbol->symbol ? "null" : toString(timeSeriesSubscriptionSymbol->symbol);
 
         result += ",symbol = " + symbol;
-        result += ",from_time = " + formatTimeStampWithMillis(timeSeriesSubscriptionSymbol->from_time);
+        result += ",from_time = " + TimeFormat::DEFAULT_WITH_MILLIS.format(timeSeriesSubscriptionSymbol->from_time);
 
         break;
     }
