@@ -213,7 +213,7 @@ bool StringList::release(/* dxfg_string_list* */ void *stringList) noexcept {
 
 std::int64_t TimeFormat::parse(/* dxfg_time_format_t* */ void *timeFormat, const std::string &value) noexcept {
     if (!timeFormat) {
-        return -1;
+        return 0;
     }
 
     return runIsolatedOrElse(
@@ -221,7 +221,7 @@ std::int64_t TimeFormat::parse(/* dxfg_time_format_t* */ void *timeFormat, const
             return dxfg_TimeFormat_parse(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), timeFormat,
                                          value.c_str());
         },
-        -1, dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat), value);
+        0, dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat), value);
 }
 
 std::string TimeFormat::format(/* dxfg_time_format_t* */ void *timeFormat, std::int64_t value) noexcept {

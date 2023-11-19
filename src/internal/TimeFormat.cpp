@@ -20,7 +20,7 @@ const TimeFormat TimeFormat::GMT(isolated::TimeFormat::getGmt());
 
 std::int64_t TimeFormat::parse(const std::string &value) const noexcept {
     if (!handle_) {
-        return -1;
+        return 0;
     }
 
     return isolated::TimeFormat::parse(handle_.get(), value);

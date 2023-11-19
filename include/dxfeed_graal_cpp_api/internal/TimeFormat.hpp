@@ -108,7 +108,7 @@ struct DXFCPP_EXPORT TimeFormat {
      * </ul>
      *
      * @param value String value to parse.
-     * @return Date's timestamp parsed from <tt>value</tt> or `-1` if <tt>value</tt> has wrong format.
+     * @return Date's timestamp parsed from <tt>value</tt> or `0` if <tt>value</tt> has wrong format.
      */
     std::int64_t parse(const std::string& value) const noexcept;
 
