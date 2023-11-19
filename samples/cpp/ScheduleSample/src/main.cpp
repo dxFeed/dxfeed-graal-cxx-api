@@ -117,7 +117,8 @@ void printCurrentSession(auto &&profile, auto time) {
     auto session = schedule->getSessionByTime(time);
 
     if (!session) {
-        std::cerr << "Error getting session for time: " + formatTimeStampWithMillisWithTimeZone(time) << std::endl;
+        std::cerr << "Error getting session for time: " + TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(time)
+                  << std::endl;
 
         return;
     }
@@ -140,7 +141,8 @@ void printNextTradingSession(auto &&profile, auto time) {
     auto session = schedule->getSessionByTime(time);
 
     if (!session) {
-        std::cerr << "Error getting session for time: " + formatTimeStampWithMillisWithTimeZone(time) << std::endl;
+        std::cerr << "Error getting session for time: " + TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(time)
+                  << std::endl;
 
         return;
     }
@@ -214,9 +216,9 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Found profile for " + symbol + ": " + profile->getDescription() << std::endl;
 
-    auto time = argc < 5 ? dxfcpp::now() : CmdArgsUtils::parseDateTime(argv[4]);
+    auto time = argc < 5 ? dxfcpp::now() : TimeFormat::DEFAULT.parse(argv[4]);
 
-    std::cout << "Using timestamp " + formatTimeStampWithMillisWithTimeZone(time) << std::endl;
+    std::cout << "Using timestamp " + TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(time) << std::endl;
 
     printNext5Holidays(profile, time);
     printCurrentSession(profile, time);

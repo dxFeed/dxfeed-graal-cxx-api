@@ -61,8 +61,8 @@ std::string TradeBase::baseFieldsToString() const noexcept {
     return fmt::format("{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, price={}, "
                        "change={}, size={}, day={}, dayVolume={}, dayTurnover={}, "
                        "direction={}, ETH={}",
-                       MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                       formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(),
+                       MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(), getSequence(),
                        encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getChange()),
                        dxfcpp::toString(getSize()), day_util::getYearMonthDayByDayId(getDayId()),
                        dxfcpp::toString(getDayVolume()), dxfcpp::toString(getDayTurnover()),

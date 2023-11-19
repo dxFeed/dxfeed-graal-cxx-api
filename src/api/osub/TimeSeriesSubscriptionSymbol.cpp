@@ -62,9 +62,9 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
 std::string TimeSeriesSubscriptionSymbol::toString() const noexcept {
     if constexpr (Debugger::isDebug) {
         return "TimeSeriesSubscriptionSymbol{" + getEventSymbol()->toString() +
-               ", fromTime = " + formatTimeStampWithMillis(fromTime_) + "}";
+               ", fromTime = " + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     } else {
-        return getEventSymbol()->toString() + "{fromTime=" + formatTimeStampWithMillis(fromTime_) + "}";
+        return getEventSymbol()->toString() + "{fromTime=" + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     }
 }
 

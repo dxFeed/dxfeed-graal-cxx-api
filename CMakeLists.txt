@@ -102,12 +102,12 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/SymbolList.cpp
         src/internal/Common.cpp
         src/internal/Platform.cpp
+        src/internal/TimeFormat.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources
         src/internal/utils/StringUtils.cpp
         src/internal/utils/EnumUtils.cpp
-        src/internal/utils/TimeFormat.cpp
         src/internal/utils/CmdArgsUtils.cpp
 )
 

@@ -106,11 +106,12 @@ std::string Candle::toString() const noexcept {
     return fmt::format(
         "Candle{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, count={}, open={}, high={}, low={}, "
         "close={}, volume={}, vwap={}, bidVolume={}, askVolume={}, impVolatility={}, openInterest={}}}",
-        getEventSymbol().toString(), formatTimeStampWithMillis(getEventTime()), getEventFlagsMask().getMask(),
-        formatTimeStampWithMillis(getTime()), getSequence(), getCount(), dxfcpp::toString(getOpen()),
-        dxfcpp::toString(getHigh()), dxfcpp::toString(getLow()), dxfcpp::toString(getClose()),
-        dxfcpp::toString(getVolume()), dxfcpp::toString(getVWAP()), dxfcpp::toString(getBidVolume()),
-        dxfcpp::toString(getAskVolume()), dxfcpp::toString(getImpVolatility()), dxfcpp::toString(getOpenInterest()));
+        getEventSymbol().toString(), TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), getCount(),
+        dxfcpp::toString(getOpen()), dxfcpp::toString(getHigh()), dxfcpp::toString(getLow()),
+        dxfcpp::toString(getClose()), dxfcpp::toString(getVolume()), dxfcpp::toString(getVWAP()),
+        dxfcpp::toString(getBidVolume()), dxfcpp::toString(getAskVolume()), dxfcpp::toString(getImpVolatility()),
+        dxfcpp::toString(getOpenInterest()));
 }
 
 void *Candle::toGraal() const noexcept {

@@ -117,8 +117,8 @@ std::string OptionSale::toString() const noexcept {
         "OptionSale{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, timeNanoPart={}, sequence={}, "
         "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
         "validTick={}, type={}, underlyingPrice={}, volatility={}, delta={}, optionSymbol='{}'}}",
-        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), getIndex(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
         getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()),
         dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()), getExchangeSaleConditions(),
         encodeChar(getTradeThroughExempt()), getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(),

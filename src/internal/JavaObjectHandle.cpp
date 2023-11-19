@@ -51,4 +51,6 @@ template struct JavaObjectHandle<Session>;
 template struct JavaObjectHandle<SessionFilter>;
 template struct JavaObjectHandle<DayFilter>;
 
+template struct JavaObjectHandle<TimeFormat>;
+
 } // namespace dxfcpp

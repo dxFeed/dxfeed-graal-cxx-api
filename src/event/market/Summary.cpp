@@ -89,7 +89,7 @@ std::string Summary::toString() const noexcept {
     return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
                        "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
                        "prevDayVolume={}, openInterest={}}}",
-                       MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
+                       MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
                        day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
                        dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()),
                        dxfcpp::toString(getDayLowPrice()), dxfcpp::toString(getDayClosePrice()),

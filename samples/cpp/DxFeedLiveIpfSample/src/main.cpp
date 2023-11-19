@@ -72,22 +72,15 @@ int main(int argc, char *argv[]) {
                 // Profile was updated - collector only notifies us if profile was changed
                 profiles[profile->getSymbol()] = profile;
             }
-        };
+        }
 
         {
             std::lock_guard lock{mutex};
             std::cout << "Total number of profiles (1): " + std::to_string(profiles.size()) << std::endl;
         }
-        //
-        //        // (2) or access the concurrent view of instrument profiles
-        //        std::unordered_set<std::string> symbols =
-        //            StreamSupport.stream(collector->view().spliterator(), false)
-        //                .filter(profile->!InstrumentProfileType.REMOVED.name().equals(profile.getType()))
-        //                .map(InstrumentProfile::getSymbol)
-        //                .collect(Collectors.toSet());
-        //        std::cout << "Total number of profiles (2): " + std::to_string(symbols.size()) << std::endl;
-        //
-        std::cout << "Last modified: " + dxfcpp::formatTimeStampWithMillisWithTimeZone(self->getLastUpdateTime())
+
+        std::cout << "Last modified: " +
+                         dxfcpp::TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(self->getLastUpdateTime())
                   << std::endl;
     });
 

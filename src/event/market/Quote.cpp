@@ -24,7 +24,7 @@ std::int16_t Quote::getBidExchangeCode() const noexcept {
 }
 
 std::string Quote::getBidExchangeCodeString() const noexcept {
-    //TODO: cache
+    // TODO: cache
 
     return utf16toUtf8String(data_.bidExchangeCode);
 }
@@ -42,7 +42,7 @@ std::int16_t Quote::getAskExchangeCode() const noexcept {
 }
 
 std::string Quote::getAskExchangeCodeString() const noexcept {
-    //TODO: cache
+    // TODO: cache
 
     return utf16toUtf8String(data_.askExchangeCode);
 }
@@ -103,11 +103,11 @@ std::string Quote::toString() const noexcept {
     return fmt::format(
         "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
         "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
-        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        formatTimeStampWithMillis(getTime()), getTimeNanoPart(), getSequence(), formatTimeStamp(getBidTime()),
-        encodeChar(getBidExchangeCode()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getBidSize()),
-        formatTimeStamp(getAskTime()), encodeChar(getAskExchangeCode()), dxfcpp::toString(getAskPrice()),
-        dxfcpp::toString(getAskSize()));
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(), getSequence(),
+        TimeFormat::DEFAULT.format(getBidTime()), encodeChar(getBidExchangeCode()), dxfcpp::toString(getBidPrice()),
+        dxfcpp::toString(getBidSize()), TimeFormat::DEFAULT.format(getAskTime()), encodeChar(getAskExchangeCode()),
+        dxfcpp::toString(getAskPrice()), dxfcpp::toString(getAskSize()));
 }
 
 std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {

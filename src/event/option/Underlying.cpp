@@ -85,8 +85,8 @@ std::string Underlying::toString() const noexcept {
     return fmt::format(
         "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
         "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
-        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), formatTimeStampWithMillis(getTime()), getSequence(),
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
         dxfcpp::toString(getVolatility()), dxfcpp::toString(getFrontVolatility()),
         dxfcpp::toString(getBackVolatility()), dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()),
         dxfcpp::toString(getPutCallRatio()));
