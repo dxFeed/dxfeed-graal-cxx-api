@@ -29,14 +29,14 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
         .type = dxfcpp::toString(graalInstrumentProfile->type),
         .symbol = dxfcpp::toString(graalInstrumentProfile->symbol),
         .description = dxfcpp::toString(graalInstrumentProfile->description),
-        .localSymbol = dxfcpp::toString(graalInstrumentProfile->localSymbol),
-        .localDescription = dxfcpp::toString(graalInstrumentProfile->localDescription),
+        .localSymbol = dxfcpp::toString(graalInstrumentProfile->local_symbol),
+        .localDescription = dxfcpp::toString(graalInstrumentProfile->local_description),
         .country = dxfcpp::toString(graalInstrumentProfile->country),
         .opol = dxfcpp::toString(graalInstrumentProfile->opol),
-        .exchangeData = dxfcpp::toString(graalInstrumentProfile->exchangeData),
+        .exchangeData = dxfcpp::toString(graalInstrumentProfile->exchange_data),
         .exchanges = dxfcpp::toString(graalInstrumentProfile->exchanges),
         .currency = dxfcpp::toString(graalInstrumentProfile->currency),
-        .baseCurrency = dxfcpp::toString(graalInstrumentProfile->baseCurrency),
+        .baseCurrency = dxfcpp::toString(graalInstrumentProfile->base_currency),
         .cfi = dxfcpp::toString(graalInstrumentProfile->cfi),
         .isin = dxfcpp::toString(graalInstrumentProfile->isin),
         .sedol = dxfcpp::toString(graalInstrumentProfile->sedol),
@@ -47,31 +47,32 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
         .product = dxfcpp::toString(graalInstrumentProfile->product),
         .underlying = dxfcpp::toString(graalInstrumentProfile->underlying),
         .spc = graalInstrumentProfile->spc,
-        .additionalUnderlyings = dxfcpp::toString(graalInstrumentProfile->additionalUnderlyings),
+        .additionalUnderlyings = dxfcpp::toString(graalInstrumentProfile->additional_underlyings),
         .mmy = dxfcpp::toString(graalInstrumentProfile->mmy),
         .expiration = graalInstrumentProfile->expiration,
-        .lastTrade = graalInstrumentProfile->lastTrade,
+        .lastTrade = graalInstrumentProfile->last_trade,
         .strike = graalInstrumentProfile->strike,
-        .optionType = dxfcpp::toString(graalInstrumentProfile->optionType),
-        .expirationStyle = dxfcpp::toString(graalInstrumentProfile->expirationStyle),
-        .settlementStyle = dxfcpp::toString(graalInstrumentProfile->settlementStyle),
-        .priceIncrements = dxfcpp::toString(graalInstrumentProfile->priceIncrements),
-        .tradingHours = dxfcpp::toString(graalInstrumentProfile->tradingHours),
-        .rawCustomFields = [](dxfg_string_list *strings) {
-            std::vector<std::string> result{};
+        .optionType = dxfcpp::toString(graalInstrumentProfile->option_type),
+        .expirationStyle = dxfcpp::toString(graalInstrumentProfile->expiration_style),
+        .settlementStyle = dxfcpp::toString(graalInstrumentProfile->settlement_style),
+        .priceIncrements = dxfcpp::toString(graalInstrumentProfile->price_increments),
+        .tradingHours = dxfcpp::toString(graalInstrumentProfile->trading_hours),
+        .rawCustomFields =
+            [](dxfg_string_list *strings) {
+                std::vector<std::string> result{};
 
-            if (!strings || strings->size == 0) {
+                if (!strings || strings->size == 0) {
+                    return result;
+                }
+
+                result.resize(strings->size);
+
+                for (int i = 0; i < strings->size; i++) {
+                    result[i] = dxfcpp::toString(strings->elements[i]);
+                }
+
                 return result;
-            }
-
-            result.resize(strings->size);
-
-            for (int i = 0; i < strings->size; i ++) {
-                result[i] = dxfcpp::toString(strings->elements[i]);
-            }
-
-            return result;
-        }(graalInstrumentProfile->customFields),
+            }(graalInstrumentProfile->custom_fields),
         .customFields =
             [](dxfg_string_list *strings) {
                 std::unordered_map<std::string, std::string> result{};
@@ -91,7 +92,7 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
                 }
 
                 return result;
-            }(graalInstrumentProfile->customFields),
+            }(graalInstrumentProfile->custom_fields),
     };
 }
 
@@ -105,14 +106,14 @@ void InstrumentProfile::fillGraalData(void *graalNative) const noexcept {
     graalInstrumentProfile->type = createCString(data_.type);
     graalInstrumentProfile->symbol = createCString(data_.symbol);
     graalInstrumentProfile->description = createCString(data_.description);
-    graalInstrumentProfile->localSymbol = createCString(data_.localSymbol);
-    graalInstrumentProfile->localDescription = createCString(data_.localDescription);
+    graalInstrumentProfile->local_symbol = createCString(data_.localSymbol);
+    graalInstrumentProfile->local_description = createCString(data_.localDescription);
     graalInstrumentProfile->country = createCString(data_.country);
     graalInstrumentProfile->opol = createCString(data_.opol);
-    graalInstrumentProfile->exchangeData = createCString(data_.exchangeData);
+    graalInstrumentProfile->exchange_data = createCString(data_.exchangeData);
     graalInstrumentProfile->exchanges = createCString(data_.exchanges);
     graalInstrumentProfile->currency = createCString(data_.currency);
-    graalInstrumentProfile->baseCurrency = createCString(data_.baseCurrency);
+    graalInstrumentProfile->base_currency = createCString(data_.baseCurrency);
     graalInstrumentProfile->cfi = createCString(data_.cfi);
     graalInstrumentProfile->isin = createCString(data_.isin);
     graalInstrumentProfile->sedol = createCString(data_.sedol);
@@ -123,30 +124,31 @@ void InstrumentProfile::fillGraalData(void *graalNative) const noexcept {
     graalInstrumentProfile->product = createCString(data_.product);
     graalInstrumentProfile->underlying = createCString(data_.underlying);
     graalInstrumentProfile->spc = data_.spc;
-    graalInstrumentProfile->additionalUnderlyings = createCString(data_.additionalUnderlyings);
+    graalInstrumentProfile->additional_underlyings = createCString(data_.additionalUnderlyings);
     graalInstrumentProfile->mmy = createCString(data_.mmy);
     graalInstrumentProfile->expiration = data_.expiration;
-    graalInstrumentProfile->lastTrade = data_.lastTrade;
+    graalInstrumentProfile->last_trade = data_.lastTrade;
     graalInstrumentProfile->strike = data_.strike;
-    graalInstrumentProfile->optionType = createCString(data_.optionType);
-    graalInstrumentProfile->expirationStyle = createCString(data_.expirationStyle);
-    graalInstrumentProfile->settlementStyle = createCString(data_.settlementStyle);
-    graalInstrumentProfile->priceIncrements = createCString(data_.priceIncrements);
-    graalInstrumentProfile->tradingHours = createCString(data_.tradingHours);
+    graalInstrumentProfile->option_type = createCString(data_.optionType);
+    graalInstrumentProfile->expiration_style = createCString(data_.expirationStyle);
+    graalInstrumentProfile->settlement_style = createCString(data_.settlementStyle);
+    graalInstrumentProfile->price_increments = createCString(data_.priceIncrements);
+    graalInstrumentProfile->trading_hours = createCString(data_.tradingHours);
 
     if (data_.rawCustomFields.empty()) {
-        graalInstrumentProfile->customFields = nullptr;
+        graalInstrumentProfile->custom_fields = nullptr;
     } else {
-        graalInstrumentProfile->customFields = new (std::nothrow) dxfg_string_list{};
-        graalInstrumentProfile->customFields->size = static_cast<std::int32_t>(data_.rawCustomFields.size());
-        graalInstrumentProfile->customFields->elements = new (std::nothrow) const char *[data_.rawCustomFields.size()] {
-            nullptr
-        };
+        graalInstrumentProfile->custom_fields = new (std::nothrow) dxfg_string_list{};
+        graalInstrumentProfile->custom_fields->size = static_cast<std::int32_t>(data_.rawCustomFields.size());
+        graalInstrumentProfile->custom_fields->elements =
+            new (std::nothrow) const char *[data_.rawCustomFields.size()] {
+                nullptr
+            };
 
-        for (int i = 0; i < graalInstrumentProfile->customFields->size; i++) {
+        for (int i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
             // TODO: process null-strings. <null>?
             if (!data_.rawCustomFields[i].empty()) {
-                graalInstrumentProfile->customFields->elements[i] = createCString(data_.rawCustomFields[i]);
+                graalInstrumentProfile->custom_fields->elements[i] = createCString(data_.rawCustomFields[i]);
             }
         }
     }
@@ -156,44 +158,44 @@ void InstrumentProfile::freeGraalData(void *graalNative) noexcept {
     if (graalNative == nullptr) {
         return;
     }
-    
+
     auto graalInstrumentProfile = static_cast<dxfg_instrument_profile_t *>(graalNative);
 
     delete[] graalInstrumentProfile->type;
     delete[] graalInstrumentProfile->symbol;
     delete[] graalInstrumentProfile->description;
-    delete[] graalInstrumentProfile->localSymbol;
-    delete[] graalInstrumentProfile->localDescription;
+    delete[] graalInstrumentProfile->local_symbol;
+    delete[] graalInstrumentProfile->local_description;
     delete[] graalInstrumentProfile->country;
     delete[] graalInstrumentProfile->opol;
-    delete[] graalInstrumentProfile->exchangeData;
+    delete[] graalInstrumentProfile->exchange_data;
     delete[] graalInstrumentProfile->exchanges;
     delete[] graalInstrumentProfile->currency;
-    delete[] graalInstrumentProfile->baseCurrency;
+    delete[] graalInstrumentProfile->base_currency;
     delete[] graalInstrumentProfile->cfi;
     delete[] graalInstrumentProfile->isin;
     delete[] graalInstrumentProfile->sedol;
     delete[] graalInstrumentProfile->cusip;
     delete[] graalInstrumentProfile->product;
     delete[] graalInstrumentProfile->underlying;
-    delete[] graalInstrumentProfile->additionalUnderlyings;
+    delete[] graalInstrumentProfile->additional_underlyings;
     delete[] graalInstrumentProfile->mmy;
-    delete[] graalInstrumentProfile->optionType;
-    delete[] graalInstrumentProfile->expirationStyle;
-    delete[] graalInstrumentProfile->settlementStyle;
-    delete[] graalInstrumentProfile->priceIncrements;
-    delete[] graalInstrumentProfile->tradingHours;
+    delete[] graalInstrumentProfile->option_type;
+    delete[] graalInstrumentProfile->expiration_style;
+    delete[] graalInstrumentProfile->settlement_style;
+    delete[] graalInstrumentProfile->price_increments;
+    delete[] graalInstrumentProfile->trading_hours;
 
-    if (graalInstrumentProfile->customFields) {
-        if (graalInstrumentProfile->customFields->elements && graalInstrumentProfile->customFields->size > 0) {
-            for (int i = 0; i < graalInstrumentProfile->customFields->size; i++) {
-                delete[] graalInstrumentProfile->customFields->elements[i];
+    if (graalInstrumentProfile->custom_fields) {
+        if (graalInstrumentProfile->custom_fields->elements && graalInstrumentProfile->custom_fields->size > 0) {
+            for (int i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
+                delete[] graalInstrumentProfile->custom_fields->elements[i];
             }
 
-            delete[] graalInstrumentProfile->customFields->elements;
+            delete[] graalInstrumentProfile->custom_fields->elements;
         }
 
-        delete graalInstrumentProfile->customFields;
+        delete graalInstrumentProfile->custom_fields;
     }
 }
 
@@ -242,8 +244,7 @@ std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList
 }
 
 void *InstrumentProfile::toGraal() const noexcept {
-    auto *graalInstrumentProfile =
-        new (std::nothrow) dxfg_instrument_profile_t{};
+    auto *graalInstrumentProfile = new (std::nothrow) dxfg_instrument_profile_t{};
 
     if (!graalInstrumentProfile) {
         // TODO: error handling
