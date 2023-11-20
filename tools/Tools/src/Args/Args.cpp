@@ -23,8 +23,8 @@ const std::string SymbolsArg::NAME{"symbols"};
 const std::size_t SymbolsArg::POSITION{2};
 const std::string SymbolsArg::HELP_TEXT{R"(
 Comma-separated list of symbol names to get events for (e.g. "IBM, AAPL, MSFT").
-Use "all" for wildcard subscription.
-The "dxfeed.wildcard.enable" property must be set to true to enable wildcard subscription.
+Use "all" for wildcard subscription. The "dxfeed.wildcard.enable" property must be set to true to enable wildcard subscription.
+A symbol filter set format can also be used as symbols source, for example: "ipf[https://demo:demo@tools.dxfeed.com/ipf?TYPE=STOCK]"
 )"};
 
 const std::string PropertiesArg::NAME{"properties"};

@@ -243,6 +243,29 @@ std::string TimeFormat::format(/* dxfg_time_format_t* */ void *timeFormat, std::
     return result;
 }
 
+std::unordered_set<std::string> /* dxfg_string_list* */
+Tools::parseSymbols(const std::string &symbolList) noexcept {
+    std::unordered_set<std::string> result{};
+
+    auto graalStringList = runIsolatedOrElse(
+        [](auto threadHandle, auto &&symbolList) {
+            return dxfg_Tools_parseSymbols(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), symbolList.c_str());
+        },
+        nullptr, symbolList);
+
+    if (!graalStringList) {
+        return result;
+    }
+
+    for (auto i = 0; i < graalStringList->size; i++) {
+        result.emplace(dxfcpp::toString(graalStringList->elements[i]));
+    }
+
+    StringList::release(graalStringList);
+
+    return result;
+}
+
 namespace api {
 
 static dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
