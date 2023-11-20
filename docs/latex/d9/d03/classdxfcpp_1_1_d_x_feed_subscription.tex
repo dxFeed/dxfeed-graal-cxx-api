@@ -1,0 +1,846 @@
+\doxysubsection{dxfcpp\+::DXFeed\+Subscription Class Reference}
+\hypertarget{classdxfcpp_1_1_d_x_feed_subscription}{}\label{classdxfcpp_1_1_d_x_feed_subscription}\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+
+
+Subscription for a set of symbols and event types.  
+
+
+
+
+{\ttfamily \#include $<$DXFeed\+Subscription.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::DXFeed\+Subscription\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d9/d03/classdxfcpp_1_1_d_x_feed_subscription}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_aac050e687c066f7e76b48971798c3274}\label{classdxfcpp_1_1_d_x_feed_subscription_aac050e687c066f7e76b48971798c3274} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription} object. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a07e7721da188474fb189e34eaeec3182}\label{classdxfcpp_1_1_d_x_feed_subscription_a07e7721da188474fb189e34eaeec3182} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ab022c88abb0ac4c2090da5e85bdebd34}{attach}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}} $>$ feed) noexcept
+\begin{DoxyCompactList}\small\item\em Attaches subscription to the specified feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a66a071b089569e7b8b14c2a03a5f79f7}{detach}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}} $>$ feed) noexcept
+\begin{DoxyCompactList}\small\item\em Detaches subscription from the specified feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a3843aa7e4d0eefddbcdc695909566c45}{close}} () noexcept
+\begin{DoxyCompactList}\small\item\em Closes this subscription and makes it {\itshape permanently detached}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Listener $>$ }\\std\+::size\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a3cbf630dbc54ce3be50412392102f993}{add\+Event\+Listener}} (Event\+Listener \&\&listener) noexcept
+\begin{DoxyCompactList}\small\item\em Adds listener for events. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename EventT $>$ }\\std\+::size\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a5d47c3bf1b10e850ea9291522602d7dd}{add\+Event\+Listener}} (std\+::function$<$ void(const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ EventT $>$ $>$ \&)$>$ \&\&listener) noexcept
+\begin{DoxyCompactList}\small\item\em Adds typed listener for events. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a25d2c14d02d1435bf2fd3a5f185743e7}{remove\+Event\+Listener}} (std\+::size\+\_\+t listener\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Removes listener for events. \end{DoxyCompactList}\item 
+auto \& \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a041f81a28b078ca11aca1b11be0ecc2c}{on\+Event}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a reference to an incoming events\textquotesingle{} handler (delegate), to which listeners can be added and removed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a714eaf6fe6e4d032aeed6aa4de6d27f9}{add\+Symbols}} (const \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} \&symbol\+Wrapper) const noexcept
+\begin{DoxyCompactList}\small\item\em Adds the specified symbol to the set of subscribed symbols. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_abc1905b4894aa4b90d18a939120f0b94}{remove\+Symbols}} (const \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} \&symbol\+Wrapper) const noexcept
+\begin{DoxyCompactList}\small\item\em Removes the specified symbol from the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Symbol\+It $>$ }\\void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a6fbfaa0a6470a9612cded223cefcb978}{add\+Symbols}} (Symbol\+It begin, Symbol\+It end) const noexcept
+\begin{DoxyCompactList}\small\item\em Adds the specified collection (using iterators) of symbols to the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Convertible\+To\+Symbol\+Wrapper\+Collection Symbols\+Collection$>$ }\\void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a4f060880d62dbfea3cd81636bb442e1d}{add\+Symbols}} (const Symbols\+Collection \&collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Adds the specified collection of symbols to the set of subscribed symbols. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a807291d1915f261ab48605f68b4a93d6}{add\+Symbols}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$ collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Adds the specified collection (initializer list) of symbols to the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Symbol\+It $>$ }\\void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a1b86b06a9cda1d51463cc7dc1ed7b5b7}{remove\+Symbols}} (Symbol\+It begin, Symbol\+It end) const noexcept
+\begin{DoxyCompactList}\small\item\em Removes the specified collection (using iterators) of symbols from the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Convertible\+To\+Symbol\+Wrapper\+Collection Symbols\+Collection$>$ }\\void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a8c7a0f2ffcd32d89282bc7a5ee9ff11f}{remove\+Symbols}} (Symbols\+Collection \&\&collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Removes the specified collection of symbols from the set of subscribed symbols. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad63a7d72ba26e40683b21ec2b56eba21}{remove\+Symbols}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$ collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Removes the specified collection (initializer list) of symbols from the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Symbol\+It $>$ }\\void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a82ada54592bbc9195a3debc6070bc6df}{set\+Symbols}} (Symbol\+It begin, Symbol\+It end) const noexcept
+\begin{DoxyCompactList}\small\item\em Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using iterators). \end{DoxyCompactList}\item 
+{\footnotesize template$<$Convertible\+To\+Symbol\+Wrapper\+Collection Symbols\+Collection$>$ }\\void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a886bc9de1faa6602c2b2085da2c773ae}{set\+Symbols}} (Symbols\+Collection \&\&collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Changes the set of subscribed symbols so that it contains just the symbols from the specified collection. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a0c852c89fdcaf6c4e212e1c0f12a9aed}{set\+Symbols}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$ collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (initializer list). \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_ad08e170518df698e8cb640d0d51e81d9}\label{classdxfcpp_1_1_d_x_feed_subscription_ad08e170518df698e8cb640d0d51e81d9} 
+void {\bfseries clear} () const noexcept
+\begin{DoxyCompactList}\small\item\em Clears the set of subscribed symbols. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_af7f5a48d182d5bec9ed6d8b1325371e1}{is\+Closed}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this subscription is closed. \end{DoxyCompactList}\item 
+const std\+::unordered\+\_\+set$<$ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} $>$ \& \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_aaea4bf66cc92c0e01f63ea5fdd663956}{get\+Event\+Types}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a set of subscribed event types. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_aca0ef67ba62822be7cbedfc8cab5680a}{contains\+Event\+Type}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \&event\+Type) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this subscription contains the corresponding event type. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c}{get\+Symbols}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a set of subscribed symbols (depending on the actual implementation of subscription). \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a1cb510563f3fe49a8f9348b83012dfa8}{get\+Decorated\+Symbols}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a set of decorated symbols (depending on the actual implementation of subscription). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}{create}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \&event\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Creates {\itshape detached} subscription for a single event type. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Type\+It $>$ }\\static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{create}} (Event\+Type\+It begin, Event\+Type\+It end) noexcept
+\begin{DoxyCompactList}\small\item\em Creates {\itshape detached} subscription for the given collection of event types. \end{DoxyCompactList}\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_accf30348917f797b43ed401bcc521202}{create}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} $>$ event\+Types) noexcept
+\begin{DoxyCompactList}\small\item\em Creates {\itshape detached} subscription for the given collection of event types. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Types\+Collection $>$ }\\static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ac630f6080ba186e6aea9862e1581584f}{create}} (Event\+Types\+Collection \&\&event\+Types) noexcept
+\begin{DoxyCompactList}\small\item\em Creates {\itshape detached} subscription for the given collection of event types. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Subscription for a set of symbols and event types. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a3cbf630dbc54ce3be50412392102f993}\label{classdxfcpp_1_1_d_x_feed_subscription_a3cbf630dbc54ce3be50412392102f993} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!addEventListener@{addEventListener}}
+\index{addEventListener@{addEventListener}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addEventListener()}{addEventListener()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Event\+Listener $>$ \\
+std\+::size\+\_\+t dxfcpp\+::\+DXFeed\+Subscription\+::add\+Event\+Listener (\begin{DoxyParamCaption}\item[{Event\+Listener \&\&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds listener for events. 
+
+Event lister can be added only when subscription is not producing any events. The subscription must be either empty (its set of \doxylink{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c}{symbols} is empty or not \doxylink{classdxfcpp_1_1_d_x_feed_subscription_ab022c88abb0ac4c2090da5e85bdebd34}{attached} to any feed (its set of change listeners is empty).
+
+This method does nothing if this subscription is closed.
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}},\ \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_aa2801064f0d75ce152dc5dd6ab202ffa}{dxfcpp::TimeAndSale::TYPE}}\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addEventListener([](\textcolor{keyword}{auto}\ \&\&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}})\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{e}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{e}}-\/>template\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sharedAs<dxfcpp::Quote>}}();\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Q\ \ \ :\ "{}}\ +\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{tns}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{e}}-\/>template\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sharedAs<dxfcpp::TimeAndSale>}}();\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{tns}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}TnS\ :\ "{}}\ +\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{tns}}-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\{\textcolor{stringliteral}{"{}\$TOP10L/Q"{}},\ \textcolor{stringliteral}{"{}\$SP500\#45"{}},\ \textcolor{stringliteral}{"{}\$TICK"{}},\ \textcolor{stringliteral}{"{}SPX"{}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Listener} & The listener type. Listener can be callable with signature\+: {\ttfamily void(const std\+::vector\texorpdfstring{$<$}{<}std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{structdxfcpp_1_1_event_type}{Event\+Type}\texorpdfstring{$>$}{>}\&)} \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The event listener \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The listener id 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a5d47c3bf1b10e850ea9291522602d7dd}\label{classdxfcpp_1_1_d_x_feed_subscription_a5d47c3bf1b10e850ea9291522602d7dd} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!addEventListener@{addEventListener}}
+\index{addEventListener@{addEventListener}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addEventListener()}{addEventListener()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{EventT}} $>$ \\
+std\+::size\+\_\+t dxfcpp\+::\+DXFeed\+Subscription\+::add\+Event\+Listener (\begin{DoxyParamCaption}\item[{std\+::function$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}}(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{EventT}} $>$ $>$ \&)$>$ \&\&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds typed listener for events. 
+
+Event lister can be added only when subscription is not producing any events. The subscription must be either empty (its set of \doxylink{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c}{symbols} is empty or not \doxylink{classdxfcpp_1_1_d_x_feed_subscription_ab022c88abb0ac4c2090da5e85bdebd34}{attached} to any feed (its set of change listeners is empty).
+
+This method does nothing if this subscription is closed.
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}},\ \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_aa2801064f0d75ce152dc5dd6ab202ffa}{dxfcpp::TimeAndSale::TYPE}}\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addEventListener(std::function([](\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<dxfcpp::Quotes>>\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quotes}})\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{q}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quotes}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Q\ \ \ \ :\ "{}}\ +\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{q}}-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}));}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addEventListener<\mbox{\hyperlink{classdxfcpp_1_1_time_and_sale}{dxfcpp::TimeAndSale}}>([](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{timeAndSales}})\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{tns}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{timeAndSales}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}TnS\ :\ "{}}\ +\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{tns}}-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addEventListener<\mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp::MarketEvent}}>([](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{marketEvents}})\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{me}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{marketEvents}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Market\ Event's\ symbol:\ "{}}\ +\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{me}}-\/>getEventSymbol()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\{\textcolor{stringliteral}{"{}\$TOP10L/Q"{}},\ \textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}\$TICK"{}},\ \textcolor{stringliteral}{"{}SPX"{}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em EventT} & The event type (\doxylink{structdxfcpp_1_1_event_type}{Event\+Type}\textquotesingle{}s child with field TYPE, convertible to \doxylink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum} or \doxylink{structdxfcpp_1_1_market_event}{Market\+Event} or \doxylink{structdxfcpp_1_1_lasting_event}{Lasting\+Event} or \doxylink{structdxfcpp_1_1_time_series_event}{Time\+Series\+Event} or \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener. Listener can be callable with signature\+: {\ttfamily void(const std\+::vector\texorpdfstring{$<$}{<}std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}EventT\texorpdfstring{$>$}{>}\&)} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The listener id 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a4f060880d62dbfea3cd81636bb442e1d}\label{classdxfcpp_1_1_d_x_feed_subscription_a4f060880d62dbfea3cd81636bb442e1d} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!addSymbols@{addSymbols}}
+\index{addSymbols@{addSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addSymbols()}{addSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily template$<$Convertible\+To\+Symbol\+Wrapper\+Collection Symbols\+Collection$>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::add\+Symbols (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbols\+Collection}} \&}]{collection }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds the specified collection of symbols to the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(std::vector\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbols\+Collection} & The symbols collection\textquotesingle{}s type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a714eaf6fe6e4d032aeed6aa4de6d27f9}\label{classdxfcpp_1_1_d_x_feed_subscription_a714eaf6fe6e4d032aeed6aa4de6d27f9} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!addSymbols@{addSymbols}}
+\index{addSymbols@{addSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addSymbols()}{addSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::add\+Symbols (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} \&}]{symbol\+Wrapper }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds the specified symbol to the set of subscribed symbols. 
+
+This is a convenience method to subscribe to one symbol at a time that has a return fast-\/path for a case when the symbol is already in the set. When subscribing to multiple symbols at once it is preferable to use add\+Symbols(symbols) method.
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\textcolor{stringliteral}{"{}TSLA"{}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol\+Wrapper} & The symbol. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a807291d1915f261ab48605f68b4a93d6}\label{classdxfcpp_1_1_d_x_feed_subscription_a807291d1915f261ab48605f68b4a93d6} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!addSymbols@{addSymbols}}
+\index{addSymbols@{addSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addSymbols()}{addSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::add\+Symbols (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$}]{collection }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds the specified collection (initializer list) of symbols to the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a6fbfaa0a6470a9612cded223cefcb978}\label{classdxfcpp_1_1_d_x_feed_subscription_a6fbfaa0a6470a9612cded223cefcb978} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!addSymbols@{addSymbols}}
+\index{addSymbols@{addSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addSymbols()}{addSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}} $>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::add\+Symbols (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}}}]{begin,  }\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}}}]{end }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds the specified collection (using iterators) of symbols to the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}.begin(),\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of symbols. \\
+\hline
+{\em end} & The end of symbol collection. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_ab022c88abb0ac4c2090da5e85bdebd34}\label{classdxfcpp_1_1_d_x_feed_subscription_ab022c88abb0ac4c2090da5e85bdebd34} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!attach@{attach}}
+\index{attach@{attach}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{attach()}{attach()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::attach (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}} $>$}]{feed }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Attaches subscription to the specified feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em feed} & The feed to attach to. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a3843aa7e4d0eefddbcdc695909566c45}\label{classdxfcpp_1_1_d_x_feed_subscription_a3843aa7e4d0eefddbcdc695909566c45} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!close@{close}}
+\index{close@{close}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Closes this subscription and makes it {\itshape permanently detached}. 
+
+This method notifies all installed instances of subscription change listeners by invoking {\ttfamily subscription\+Closed} while holding the lock for this subscription. This method clears lists of all installed event listeners and subscription change listeners and makes sure that no more listeners can be added. \Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_aca0ef67ba62822be7cbedfc8cab5680a}\label{classdxfcpp_1_1_d_x_feed_subscription_aca0ef67ba62822be7cbedfc8cab5680a} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!containsEventType@{containsEventType}}
+\index{containsEventType@{containsEventType}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{containsEventType()}{containsEventType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} dxfcpp\+::\+DXFeed\+Subscription\+::contains\+Event\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \&}]{event\+Type }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this subscription contains the corresponding event type. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this subscription contains the corresponding event type.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_d_x_feed_subscription_aaea4bf66cc92c0e01f63ea5fdd663956}{DXFeed\+Subscription\+::get\+Event\+Types()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}\label{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!create@{create}}
+\index{create@{create}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ dxfcpp\+::\+DXFeed\+Subscription\+::create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \&}]{event\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Creates {\itshape detached} subscription for a single event type. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}{dxfcpp::DXFeedSubscription::create}}(\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type} & the event type. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}\label{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!create@{create}}
+\index{create@{create}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+Type\+It}} $>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ dxfcpp\+::\+DXFeed\+Subscription\+::create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+Type\+It}}}]{begin,  }\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+Type\+It}}}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Creates {\itshape detached} subscription for the given collection of event types. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{eventTypes}}\ =\ \{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}},\ \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_aa2801064f0d75ce152dc5dd6ab202ffa}{dxfcpp::TimeAndSale::TYPE}}\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}{dxfcpp::DXFeedSubscription::create}}(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{eventTypes}}.begin(),\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{eventTypes}}.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{std::vector\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{types}}\{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}},\ \mbox{\hyperlink{classdxfcpp_1_1_trade_a9fcaf1ac1ea410b336be7ae55a97609c}{dxfcpp::Trade::TYPE}},\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a047356cbfbb3279928463abec2823339}{dxfcpp::Summary::TYPE}}\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}{dxfcpp::DXFeedSubscription::create}}(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{types}}.begin(),\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{types}}.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Type\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of event types. \\
+\hline
+{\em end} & The end of event type collection. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new {\itshape detached} subscription for the given collection of event types. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_ac630f6080ba186e6aea9862e1581584f}\label{classdxfcpp_1_1_d_x_feed_subscription_ac630f6080ba186e6aea9862e1581584f} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!create@{create}}
+\index{create@{create}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+Types\+Collection}} $>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ dxfcpp\+::\+DXFeed\+Subscription\+::create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+Types\+Collection}} \&\&}]{event\+Types }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Creates {\itshape detached} subscription for the given collection of event types. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}{dxfcpp::DXFeedSubscription::create}}(std::unordered\_set\{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}},}
+\DoxyCodeLine{\mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_aa2801064f0d75ce152dc5dd6ab202ffa}{dxfcpp::TimeAndSale::TYPE}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{std::vector\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{types}}\ =\ \{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}},\ \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_aa2801064f0d75ce152dc5dd6ab202ffa}{dxfcpp::TimeAndSale::TYPE}}\};}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}{dxfcpp::DXFeedSubscription::create}}(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{types}});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Types\+Collection} & The type of the collection of event types \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Types} & The event type collection. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new {\itshape detached} subscription for the given collection of event types. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_accf30348917f797b43ed401bcc521202}\label{classdxfcpp_1_1_d_x_feed_subscription_accf30348917f797b43ed401bcc521202} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!create@{create}}
+\index{create@{create}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ dxfcpp\+::\+DXFeed\+Subscription\+::create (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} $>$}]{event\+Types }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Creates {\itshape detached} subscription for the given collection of event types. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}{dxfcpp::DXFeedSubscription::create}}(\{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}},\ \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_aa2801064f0d75ce152dc5dd6ab202ffa}{dxfcpp::TimeAndSale::TYPE}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Types} & The event type collection. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new {\itshape detached} subscription for the given collection of event types. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a66a071b089569e7b8b14c2a03a5f79f7}\label{classdxfcpp_1_1_d_x_feed_subscription_a66a071b089569e7b8b14c2a03a5f79f7} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!detach@{detach}}
+\index{detach@{detach}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{detach()}{detach()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::detach (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}} $>$}]{feed }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Detaches subscription from the specified feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em feed} & The feed to detach from. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a1cb510563f3fe49a8f9348b83012dfa8}\label{classdxfcpp_1_1_d_x_feed_subscription_a1cb510563f3fe49a8f9348b83012dfa8} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!getDecoratedSymbols@{getDecoratedSymbols}}
+\index{getDecoratedSymbols@{getDecoratedSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{getDecoratedSymbols()}{getDecoratedSymbols()}}
+{\footnotesize\ttfamily std\+::vector$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$ dxfcpp\+::\+DXFeed\+Subscription\+::get\+Decorated\+Symbols (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a set of decorated symbols (depending on the actual implementation of subscription). 
+
+The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a weakly consistent view of the set.
+
+\begin{DoxyReturn}{Returns}
+A set of decorated subscribed symbols. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_aaea4bf66cc92c0e01f63ea5fdd663956}\label{classdxfcpp_1_1_d_x_feed_subscription_aaea4bf66cc92c0e01f63ea5fdd663956} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!getEventTypes@{getEventTypes}}
+\index{getEventTypes@{getEventTypes}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{getEventTypes()}{getEventTypes()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::unordered\+\_\+set$<$ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} $>$ \& dxfcpp\+::\+DXFeed\+Subscription\+::get\+Event\+Types (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a set of subscribed event types. 
+
+\begin{DoxyReturn}{Returns}
+A set of subscribed event types. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c}\label{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!getSymbols@{getSymbols}}
+\index{getSymbols@{getSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{getSymbols()}{getSymbols()}}
+{\footnotesize\ttfamily std\+::vector$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$ dxfcpp\+::\+DXFeed\+Subscription\+::get\+Symbols (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a set of subscribed symbols (depending on the actual implementation of subscription). 
+
+The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a weakly consistent view of the set.
+
+\begin{DoxyReturn}{Returns}
+A set of subscribed symbols. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_af7f5a48d182d5bec9ed6d8b1325371e1}\label{classdxfcpp_1_1_d_x_feed_subscription_af7f5a48d182d5bec9ed6d8b1325371e1} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!isClosed@{isClosed}}
+\index{isClosed@{isClosed}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{isClosed()}{isClosed()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} dxfcpp\+::\+DXFeed\+Subscription\+::is\+Closed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this subscription is closed. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this subscription is closed.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_d_x_feed_subscription_a3843aa7e4d0eefddbcdc695909566c45}{DXFeed\+Subscription\+::close()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a041f81a28b078ca11aca1b11be0ecc2c}\label{classdxfcpp_1_1_d_x_feed_subscription_a041f81a28b078ca11aca1b11be0ecc2c} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!onEvent@{onEvent}}
+\index{onEvent@{onEvent}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{onEvent()}{onEvent()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{auto}} \& dxfcpp\+::\+DXFeed\+Subscription\+::on\+Event (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a reference to an incoming events\textquotesingle{} handler (delegate), to which listeners can be added and removed. 
+
+Listener can be callable with signature\+: {\ttfamily void(const std\+::vector\texorpdfstring{$<$}{<}std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{structdxfcpp_1_1_event_type}{Event\+Type}\texorpdfstring{$>$}{>}\&)}
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{dxfcpp::Quote::TYPE}},\ \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_aa2801064f0d75ce152dc5dd6ab202ffa}{dxfcpp::TimeAndSale::TYPE}}\});}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \textcolor{keywordtype}{id}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>onEvent()\ +=\ [](\textcolor{keyword}{auto}\ \&\&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}})\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{e}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{e}}-\/>template\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sharedAs<dxfcpp::Quote>}}();\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Q\ \ \ :\ "{}}\ +\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{tns}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{e}}-\/>template\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sharedAs<dxfcpp::TimeAndSale>}}();\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{tns}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}TnS\ :\ "{}}\ +\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{tns}}-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\{\textcolor{stringliteral}{"{}\$TOP10L/Q"{}},\ \textcolor{stringliteral}{"{}\$SP500\#45"{}},\ \textcolor{stringliteral}{"{}\$TICK"{}},\ \textcolor{stringliteral}{"{}SPX"{}}\});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>onEvent()\ -\/=\ id;}
+
+\end{DoxyCode}
+
+
+\begin{DoxyReturn}{Returns}
+The incoming events\textquotesingle{} handler (delegate) 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a25d2c14d02d1435bf2fd3a5f185743e7}\label{classdxfcpp_1_1_d_x_feed_subscription_a25d2c14d02d1435bf2fd3a5f185743e7} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!removeEventListener@{removeEventListener}}
+\index{removeEventListener@{removeEventListener}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeEventListener()}{removeEventListener()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::remove\+Event\+Listener (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{listener\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes listener for events. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \textcolor{keywordtype}{id}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addEventListener([](\textcolor{keyword}{auto})\{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>removeEventListener(\textcolor{keywordtype}{id});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener\+Id} & The listener id \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_abc1905b4894aa4b90d18a939120f0b94}\label{classdxfcpp_1_1_d_x_feed_subscription_abc1905b4894aa4b90d18a939120f0b94} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!removeSymbols@{removeSymbols}}
+\index{removeSymbols@{removeSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeSymbols()}{removeSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::remove\+Symbols (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} \&}]{symbol\+Wrapper }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes the specified symbol from the set of subscribed symbols. 
+
+To conveniently remove one or few symbols you can use remove\+Symbols(symbols) method.
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>removeSymbols(\textcolor{stringliteral}{"{}TSLA"{}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>removeSymbols(\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>removeSymbols(\textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol\+Wrapper} & The symbol. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_ad63a7d72ba26e40683b21ec2b56eba21}\label{classdxfcpp_1_1_d_x_feed_subscription_ad63a7d72ba26e40683b21ec2b56eba21} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!removeSymbols@{removeSymbols}}
+\index{removeSymbols@{removeSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeSymbols()}{removeSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::remove\+Symbols (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$}]{collection }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes the specified collection (initializer list) of symbols from the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>removeSymbols(\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a1b86b06a9cda1d51463cc7dc1ed7b5b7}\label{classdxfcpp_1_1_d_x_feed_subscription_a1b86b06a9cda1d51463cc7dc1ed7b5b7} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!removeSymbols@{removeSymbols}}
+\index{removeSymbols@{removeSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeSymbols()}{removeSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}} $>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::remove\+Symbols (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}}}]{begin,  }\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}}}]{end }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes the specified collection (using iterators) of symbols from the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>removeSymbols(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}.begin(),\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of symbols. \\
+\hline
+{\em end} & The end of symbol collection. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a8c7a0f2ffcd32d89282bc7a5ee9ff11f}\label{classdxfcpp_1_1_d_x_feed_subscription_a8c7a0f2ffcd32d89282bc7a5ee9ff11f} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!removeSymbols@{removeSymbols}}
+\index{removeSymbols@{removeSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeSymbols()}{removeSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily template$<$Convertible\+To\+Symbol\+Wrapper\+Collection Symbols\+Collection$>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::remove\+Symbols (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbols\+Collection}} \&\&}]{collection }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes the specified collection of symbols from the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>removeSymbols(std::vector\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>removeSymbols(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbols\+Collection} & The symbols collection\textquotesingle{}s type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a0c852c89fdcaf6c4e212e1c0f12a9aed}\label{classdxfcpp_1_1_d_x_feed_subscription_a0c852c89fdcaf6c4e212e1c0f12a9aed} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!setSymbols@{setSymbols}}
+\index{setSymbols@{setSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{setSymbols()}{setSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::set\+Symbols (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper}} $>$}]{collection }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (initializer list). 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>setSymbols(\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a82ada54592bbc9195a3debc6070bc6df}\label{classdxfcpp_1_1_d_x_feed_subscription_a82ada54592bbc9195a3debc6070bc6df} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!setSymbols@{setSymbols}}
+\index{setSymbols@{setSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{setSymbols()}{setSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}} $>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::set\+Symbols (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}}}]{begin,  }\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbol\+It}}}]{end }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using iterators). 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>setSymbols(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}.begin(),\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of symbols. \\
+\hline
+{\em end} & The end of symbol collection. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a886bc9de1faa6602c2b2085da2c773ae}\label{classdxfcpp_1_1_d_x_feed_subscription_a886bc9de1faa6602c2b2085da2c773ae} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!setSymbols@{setSymbols}}
+\index{setSymbols@{setSymbols}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{setSymbols()}{setSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$Convertible\+To\+Symbol\+Wrapper\+Collection Symbols\+Collection$>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXFeed\+Subscription\+::set\+Symbols (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Symbols\+Collection}} \&\&}]{collection }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the set of subscribed symbols so that it contains just the symbols from the specified collection. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}}\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{s}},\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sv}},\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{\_s}}\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>setSymbols(std::vector\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>setSymbols(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{v}});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbols\+Collection} & The symbols collection\textquotesingle{}s type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}\label{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4} 
+\index{dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::DXFeedSubscription@{dxfcpp::DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+DXFeed\+Subscription\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{dxfcpp\+::\+Shared\+Entity}}.
+

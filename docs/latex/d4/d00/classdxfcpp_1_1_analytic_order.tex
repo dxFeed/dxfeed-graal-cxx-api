@@ -1,0 +1,630 @@
+\doxysubsection{dxfcpp\+::Analytic\+Order Class Reference}
+\hypertarget{classdxfcpp_1_1_analytic_order}{}\label{classdxfcpp_1_1_analytic_order}\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+
+
+Represents an extension of \doxylink{classdxfcpp_1_1_order}{Order} introducing analytic information, e.\+g.  
+
+
+
+
+{\ttfamily \#include $<$Analytic\+Order.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Analytic\+Order\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=8.000000cm]{d4/d00/classdxfcpp_1_1_analytic_order}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_analytic_order_a0c7f48655bae9b0216f4c1b369a4403b}\label{classdxfcpp_1_1_analytic_order_a0c7f48655bae9b0216f4c1b369a4403b} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order}{Analytic\+Order}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{classdxfcpp_1_1_analytic_order}{Analytic\+Order} object. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_analytic_order_a4ab923147cbda214f72e4cef57505918}\label{classdxfcpp_1_1_analytic_order_a4ab923147cbda214f72e4cef57505918} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order}{Analytic\+Order}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{classdxfcpp_1_1_analytic_order}{Analytic\+Order} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{classdxfcpp_1_1_order}{dxfcpp\+::\+Order}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{classdxfcpp_1_1_order}{Order} object. \end{DoxyCompactList}\item 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{classdxfcpp_1_1_order}{Order} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{Market\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_market_event}{Market\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{dxfcpp\+::\+Event\+Type\+With\+Symbol$<$ std\+::string $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ std\+::string $>$ $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type}{dxfcpp\+::\+Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5bf3751f5b5b4b8260044b4f88109c15}{to\+Graal}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_analytic_order_aac3d006dfeb19a3d229d579aee14b914}\label{classdxfcpp_1_1_analytic_order_aac3d006dfeb19a3d229d579aee14b914} 
+{\bfseries Analytic\+Order} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new analytic order event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a883f7829852c19c0168af1e23df009bc}{Analytic\+Order}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new analytic order event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_analytic_order}{Analytic\+Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a40581b2d88d9d8df4d0163d7aa51988b}{with\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a0c7f48655bae9b0216f4c1b369a4403b}{Analytic\+Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a04b193ba806900f0941a83da6df6d259}{with\+Event\+Symbol\+Shared}} (const std\+::string \&event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns a shared pointer to the current analytic order. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_addb54c9116da813afb4977be1a397edb}{get\+Iceberg\+Peak\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns iceberg peak size of this analytic order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a0a0e525c32b56a4c09dd970d1321d7f3}{set\+Iceberg\+Peak\+Size}} (double iceberg\+Peak\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg peak size of this analytic order. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a4cc58d9fab2f2d133d4a6ede581ff9be}{get\+Iceberg\+Hidden\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns iceberg hidden size of this analytic order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5e166c7e1dac5c2151346f20d8787e96}{set\+Iceberg\+Hidden\+Size}} (double iceberg\+Hidden\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg hidden size of this analytic order. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5c61a823f7b121e25d92613c7726b9f2}{get\+Iceberg\+Executed\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns iceberg executed size of this analytic order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a8d3632fabc7b03649156c1c1c962d2a2}{set\+Iceberg\+Executed\+Size}} (double iceberg\+Executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg executed size of this analytic order. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{Iceberg\+Type}} \& \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a862b8dc95362052bde3464b02fd86384}{get\+Iceberg\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns iceberg type of this analytic order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a137855592a41188136020d63b1fe1935}{set\+Iceberg\+Type}} (const \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{Iceberg\+Type}} \&iceberg\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg type of this analytic order. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5349a206b3ebcf72f412685588064eb1}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{classdxfcpp_1_1_order}{dxfcpp\+::\+Order}}}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classdxfcpp_1_1_order_aff2c9d717969967a1ccf4fbb70813c4f}{to\+Graal}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+{\bfseries Order} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new order event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{Order}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new order event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a1849f2ca31e6349c4fbd98ddb4764f5f}{with\+Event\+Symbol\+Shared}} (const std\+::string \&event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns a shared pointer to the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a34fc1146dec2f86c512c8478972c4db7}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a216107e58a65282aec886c8959e0b399}{with\+Event\+Time\+Shared}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns a shared pointer to the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a38f12f739fc7dd4226674f85b8aad603}{with\+Source}} (const Order\+Source \&source) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s source and returns the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_acc32eafdd0ec25913ce058181f87913f}{with\+Source\+Shared}} (const Order\+Source \&source) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s source and returns a shared pointer to the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_add681d381d436be2dedef9271da6a2c6}{with\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a8d32cc9f40d71b052a5ffdb9daeff771}{with\+Event\+Flags\+Shared}} (std\+::int32\+\_\+t event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns a shared pointer to the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a9d167b678843600e1eb0ecef1b4de8e4}{with\+Event\+Flags}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a6886b9a3a1ff88386f2ab3e5ce024630}{with\+Event\+Flags\+Shared}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns a shared pointer to the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a72cad9f98d5215097f4729c0708479ef}{with\+Index}} (std\+::int64\+\_\+t index) noexcept
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a16a898275f2c48f95a6a99e8c810a914}{with\+Index\+Shared}} (std\+::int64\+\_\+t index) noexcept
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this order and returns a shared pointer to it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_acc55c04ca2740db2e6189b9f800eac60}{with\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_acfc206d46e32006a1b498d9117d79636}{with\+Time\+Shared}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order and returns a shared pointer to it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_ad48e252735199b90ed2ebc5ecb49bda5}{with\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a38b740402f6f09a34fefd583937683a2}{with\+Time\+Nano\+Part\+Shared}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a46f5a0a2af26b254931517cc032c6a02}{with\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{classdxfcpp_1_1_order_base_aef0e8dd63d54105ad9c2c62f3f5766fa}{sequence number} of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a20fb15b4f9c2feb224fc42ba9cfb53bb}{with\+Sequence\+Shared}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{classdxfcpp_1_1_order_base_aef0e8dd63d54105ad9c2c62f3f5766fa}{sequence number} of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a55cd8ed27d1dbd62fbb3cd726d24b9ed}{with\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_adf05fdb01af70d25bd68843c71831948}{with\+Time\+Nanos\+Shared}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a409bddd21123a2d22c14784686185bee}{with\+Action}} (const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \&action) noexcept
+\begin{DoxyCompactList}\small\item\em Changes action of this order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_af5a5ba6a1fdfc8c66a7a75767a31f2a2}{with\+Action\+Shared}} (const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \&action) noexcept
+\begin{DoxyCompactList}\small\item\em Changes action of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a95f72e96e87a2ed0ea8381d84d427a33}{with\+Action\+Time}} (std\+::int64\+\_\+t action\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last action and returns current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a215ae8b0ae3fa64ff0bfc35c1f36d78f}{with\+Action\+Time\+Shared}} (std\+::int64\+\_\+t action\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last action and returns a shared pointer to the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_ad1d108ca37beceee348ca28610f32e30}{with\+Order\+Id}} (std\+::int64\+\_\+t order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a09f7642abc4270a6505e34820a582ad9}{with\+Order\+Id\+Shared}} (std\+::int64\+\_\+t order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_aafc941ad63d3ec802c20e44606beaf58}{with\+Aux\+Order\+Id}} (std\+::int64\+\_\+t aux\+Order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes auxiliary order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_aba9d14eca5d78995436770004acb496d}{with\+Aux\+Order\+Id\+Shared}} (std\+::int64\+\_\+t aux\+Order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes auxiliary order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_aba7c8a7d5069c625fdb6950be75d4c8d}{with\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a9557b326b71dbeb5818bb033958eecee}{with\+Price\+Shared}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a7da1f50ca1405b6af9aa6a4912d17f82}{with\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_aeed46d7128a3ac38268ef3db66ac8c1c}{with\+Size\+Shared}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a7e7d8b3dc51c50b18c752d892dc097e5}{with\+Executed\+Size}} (double executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes executed size of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_af809f858dc6a58bd0573e94a9de2d7f6}{with\+Executed\+Size\+Shared}} (double executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes executed size of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_ab19f0b05eebb35b51a12608a3af57223}{with\+Count}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a052d2ee15b771cd65d11371294c32c91}{with\+Count\+Shared}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a375d8ae6ef9a3539fd5f4b884ce3b4c7}{with\+Trade\+Id}} (std\+::int64\+\_\+t trade\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a1f85087d1e1dd214308b7f6ac31fc3c9}{with\+Trade\+Shared}} (std\+::int64\+\_\+t trade\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_ac0f695d982844d74cffd316054fbef67}{with\+Trade\+Price}} (double trade\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a64e841a57e96fbd9f646f57c9b37515d}{with\+Trade\+Price\+Shared}} (double trade\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a2cb83e90336799463ce70a73fc1a248e}{with\+Trade\+Size}} (double trade\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_aa18bab121bafc2eb08bcb06c9ceb5e21}{with\+Trade\+Size\+Shared}} (double trade\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a858b5f6d4f5e42f387cd246c59d80d46}{with\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_adca23105b8335e3e4c73d2785b859669}{with\+Exchange\+Code\+Shared}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a5bed301bfbf78e9ccfe13f4bda3dc8bb}{with\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a8e409725ff46574fff289f285ce12eaf}{with\+Exchange\+Code\+Shared}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a9ed3eeb1c3bc3bbfe4543eafe69e9f5c}{with\+Order\+Side}} (const \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}} \&side) noexcept
+\begin{DoxyCompactList}\small\item\em Changes side of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_a6d1df1d81c67be511b1590e2b3115edc}{with\+Order\+Side\+Shared}} (const \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}} \&side) noexcept
+\begin{DoxyCompactList}\small\item\em Changes side of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a6f50244abd44b6021453e06af53b78b7}{with\+Scope}} (const \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}} \&scope) noexcept
+\begin{DoxyCompactList}\small\item\em Changes scope of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_aafff82e635eaa743021773252d6b4c08}{with\+Scope\+Shared}} (const \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}} \&scope) noexcept
+\begin{DoxyCompactList}\small\item\em Changes scope of this order. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classdxfcpp_1_1_order_ad24c0f02010548131f8a3f99e12a3da5}{get\+Market\+Maker}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns market maker or other aggregate identifier of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_aa90a84f25b8d4c065cc9b7d52e454d82}{set\+Market\+Maker}} (std\+::string market\+Maker) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market maker or other aggregate identifier of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_a6a3b826e1e95fe471976293dcfcd45de}{with\+Market\+Maker}} (std\+::string market\+Maker) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market maker or other aggregate identifier of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_aecb17d4d7b106ad51566805e8956d44a}{Order\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_order_ad1fb5a8134f1c6f938406bde28121206}{with\+Market\+Maker\+Shared}} (std\+::string market\+Maker) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market maker or other aggregate identifier of this order. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_order_a62de3f2d3e1f66409a2ab57e4303f806}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{classdxfcpp_1_1_order_base}{dxfcpp\+::\+Order\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Order\+Base} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new order event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_order_base_a7f7a28d1386e9a83d761af33dc5fa4f5}{Order\+Base}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new order event with the specified event symbol. \end{DoxyCompactList}\item 
+const Order\+Source \& \mbox{\hyperlink{classdxfcpp_1_1_order_base_ab1943c5bee398eda008d0330dcc58a87}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns source of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{set\+Source}} (const Order\+Source \&source) noexcept
+\begin{DoxyCompactList}\small\item\em Changes source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_a6d1da10a6ba9bb4fcc3466a5c0b07ac5}{get\+Event\+Flags}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classdxfcpp_1_1_order_base_a9a987f817602b6780dff3469535211ca}{get\+Event\+Flags\+Mask}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_ab6e0134ade33190df88411efdcd27a33}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a806df7dbd1e21a0e6f84317ad17d5796}{set\+Event\+Flags}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{set\+Index}} (std\+::int64\+\_\+t index) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_ae40f5bf3aadb65c03f0d512569a23b74}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_a70df46f908c7d2eb7ac0c31b77ff35cd}{get\+Time\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time and sequence of this order packaged into single long value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a02fa5a6147ce8ed12ca9a12bf9eb0944}{set\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time and sequence of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_a308b77988c003f4dc2845ee3617b4f42}{get\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{set\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of this order. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_a3425c057e5888b0659e5c54b3143ad04}{get\+Time\+Nano\+Part}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns microseconds and nanoseconds time part of this order. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_aef0e8dd63d54105ad9c2c62f3f5766fa}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns sequence number of this order to distinguish orders that have the same \doxylink{classdxfcpp_1_1_order_base_a308b77988c003f4dc2845ee3617b4f42}{time}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{set\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{classdxfcpp_1_1_order_base_aef0e8dd63d54105ad9c2c62f3f5766fa}{sequence number} of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_aea5093409aadc8e4df46e4ab0e2b18d3}{get\+Time\+Nanos}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of this order in nanoseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{set\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_base_aff0a313897bac1d5a6b44bdb2f0d8240}{get\+Action}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns order action if available, otherwise -\/ \doxylink{structdxfcpp_1_1_order_action_aaef7a67cc76d76b2791d31d9edda5395}{Order\+Action\+::\+UNDEFINED}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{set\+Action}} (const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \&action) noexcept
+\begin{DoxyCompactList}\small\item\em Changes action of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_ad0fefa9a0e727e3379fa46e48ec81a36}{get\+Action\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last \doxylink{classdxfcpp_1_1_order_base_aff0a313897bac1d5a6b44bdb2f0d8240}{action}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{set\+Action\+Time}} (std\+::int64\+\_\+t action\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last action. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{get\+Order\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns order ID if available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{set\+Order\+Id}} (std\+::int64\+\_\+t order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes order ID. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_a75d038d6b513acc94c14682a500ea4b7}{get\+Aux\+Order\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns auxiliary order ID if available\+: \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{set\+Aux\+Order\+Id}} (std\+::int64\+\_\+t aux\+Order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes auxiliary order ID. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_order_base_a4aa5233359086d4abf1681b2d8c2936d}{get\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns price of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{set\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this order. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_order_base_a3772a63a9d2a79b8cb9a687a2b2c0a7a}{get\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns size of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{set\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of this order. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classdxfcpp_1_1_order_base_aa7c935513d5717625af3563761703350}{has\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this order has some size (size\+As\+Double is neither {\ttfamily 0} nor {\ttfamily NaN}). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_order_base_ae63959b4fad491605a6fecbb3a962187}{get\+Executed\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns executed size of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{set\+Executed\+Size}} (double executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes executed size of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_ab08ca39768f1805b909dda6fa20e61c4}{get\+Count}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{set\+Count}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_a8126c09bef8190cfab44f3d25b124018}{get\+Trade\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns trade (order execution) ID for events containing trade-\/related action. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{set\+Trade\+Id}} (std\+::int64\+\_\+t trade\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade ID. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_order_base_a20b0b786ec5032bc8c139037a75c7f31}{get\+Trade\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns trade price for events containing trade-\/related action. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{set\+Trade\+Price}} (double trade\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade price. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classdxfcpp_1_1_order_base_a5cf9284cc1be543529e8d492d5fc7dc6}{get\+Trade\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns trade size for events containing trade-\/related action. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{set\+Trade\+Size}} (double trade\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade size. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_aa5e88e61e39f5716d1ab7a41775fdad0}{get\+Exchange\+Code}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of this order. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_order_base_a5f0325d572de8695f64e3b710eb2609d}{get\+Exchange\+Code\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of this order as UTF8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a5c7f49b4ed39331942da4a7a8b98718a}{set\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a7198ca55a830c1c29c8d3b2c8105b58e}{set\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_base_afc38f2af6ad278508c949695c9f154d8}{get\+Order\+Side}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns side of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{set\+Order\+Side}} (const \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}} \&side) noexcept
+\begin{DoxyCompactList}\small\item\em Changes side of this order. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}} \& \mbox{\hyperlink{classdxfcpp_1_1_order_base_a9504b4283cea506a30b47c148318d31d}{get\+Scope}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns scope of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{set\+Scope}} (const \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}} \&scope) noexcept
+\begin{DoxyCompactList}\small\item\em Changes scope of this order. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_order_base_ab23a7bb4ba4aba697e6c9d9dcaf61ba6}{base\+Fields\+To\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this order event\textquotesingle{}s fields. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_market_event_a62b3475e3dc13476c57553cc354a2915}{get\+Event\+Symbol}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes symbol of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_market_event_a4dde8cfbc3163d9ea5c4b1346b8b861d}{get\+Event\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a4cfde053dfe70de645227ab31baf5d6d}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native) noexcept
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Member Functions inherited from \mbox{\hyperlink{classdxfcpp_1_1_order}{dxfcpp\+::\+Order}}}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classdxfcpp_1_1_order_a362238c83fc87eb026e13f6441d19a25}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native) noexcept
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_analytic_order_ac2b80d4718a7790e48174a0cf1d8a793}\label{classdxfcpp_1_1_analytic_order_ac2b80d4718a7790e48174a0cf1d8a793} 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+ANALYTIC\+\_\+\+ORDER
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{classdxfcpp_1_1_order}{dxfcpp\+::\+Order}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+ORDER
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{classdxfcpp_1_1_order_base}{dxfcpp\+::\+Order\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_order_base_a37a525baa7dab5dad92d638175d1dd70}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}{TX\+\_\+\+PENDING}} = Event\+Flag\+::\+TX\+\_\+\+PENDING
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{REMOVE\+\_\+\+EVENT}} = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{SNAPSHOT\+\_\+\+BEGIN}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{SNAPSHOT\+\_\+\+END}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}{SNAPSHOT\+\_\+\+SNIP}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829}{SNAPSHOT\+\_\+\+MODE}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of \doxylink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{event\+Flags} property.   \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{Market\+Event}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents an extension of \doxylink{classdxfcpp_1_1_order}{Order} introducing analytic information, e.\+g. 
+
+adding to this order iceberg related information (\doxylink{classdxfcpp_1_1_analytic_order_addb54c9116da813afb4977be1a397edb}{iceberg\+Peak\+Size}, \doxylink{classdxfcpp_1_1_analytic_order_a4cc58d9fab2f2d133d4a6ede581ff9be}{iceberg\+Hidden\+Size}, \doxylink{classdxfcpp_1_1_analytic_order_a5c61a823f7b121e25d92613c7726b9f2}{iceberg\+Executed\+Size}). The collection of analytic order events of a symbol represents the most recent analytic information that is available about orders on the market at any given moment of time.
+
+Analytic order is similar to a regular \doxylink{classdxfcpp_1_1_order}{Order}. In addition this event has few additional properties\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_analytic_order_addb54c9116da813afb4977be1a397edb}{iceberg\+Peak\+Size} -\/ the size of the peak, i.\+e. the visible part of the iceberg, that is being continually refilled until the order is fully traded or cancelled; 
+\item \doxylink{classdxfcpp_1_1_analytic_order_a4cc58d9fab2f2d133d4a6ede581ff9be}{iceberg\+Hidden\+Size} -\/ the prediction of current hidden size of the iceberg, as inferred by the model; 
+\item \doxylink{classdxfcpp_1_1_analytic_order_a5c61a823f7b121e25d92613c7726b9f2}{iceberg\+Executed\+Size} -\/ the executed size of the iceberg order. For \doxylink{structdxfcpp_1_1_iceberg_type_a0182dd8f548bff25aba7b9b598b94ae4}{Iceberg\+Type\+::\+SYNTHETIC} type represents total executed size of all orders composing current iceberg; 
+\item \doxylink{classdxfcpp_1_1_analytic_order_a862b8dc95362052bde3464b02fd86384}{Analytic\+Order\+::get\+Iceberg\+Type()} -\/ type of the iceberg, either native (exchange-\/managed) or synthetic (managed outside of the exchange). 
+\end{DoxyItemize}
+
+\doxyparagraph*{Implementation details}
+
+This event is implemented on top of QDS records {\ttfamily \doxylink{classdxfcpp_1_1_analytic_order}{Analytic\+Order}\#\texorpdfstring{$<$}{<}source-\/id\texorpdfstring{$>$}{>}}, where {\ttfamily \texorpdfstring{$<$}{<}source-\/id\texorpdfstring{$>$}{>}} is up to 4 ASCII characters with a mnemonic for the source like "{}\+GLBX"{}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a883f7829852c19c0168af1e23df009bc}\label{classdxfcpp_1_1_analytic_order_a883f7829852c19c0168af1e23df009bc} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!AnalyticOrder@{AnalyticOrder}}
+\index{AnalyticOrder@{AnalyticOrder}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{AnalyticOrder()}{AnalyticOrder()}}
+{\footnotesize\ttfamily dxfcpp\+::\+Analytic\+Order\+::\+Analytic\+Order (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new analytic order event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a4cfde053dfe70de645227ab31baf5d6d}\label{classdxfcpp_1_1_analytic_order_a4cfde053dfe70de645227ab31baf5d6d} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Analytic\+Order\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a5c61a823f7b121e25d92613c7726b9f2}\label{classdxfcpp_1_1_analytic_order_a5c61a823f7b121e25d92613c7726b9f2} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!getIcebergExecutedSize@{getIcebergExecutedSize}}
+\index{getIcebergExecutedSize@{getIcebergExecutedSize}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{getIcebergExecutedSize()}{getIcebergExecutedSize()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Analytic\+Order\+::get\+Iceberg\+Executed\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns iceberg executed size of this analytic order. 
+
+\begin{DoxyReturn}{Returns}
+iceberg executed size of this analytic order. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a4cc58d9fab2f2d133d4a6ede581ff9be}\label{classdxfcpp_1_1_analytic_order_a4cc58d9fab2f2d133d4a6ede581ff9be} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!getIcebergHiddenSize@{getIcebergHiddenSize}}
+\index{getIcebergHiddenSize@{getIcebergHiddenSize}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{getIcebergHiddenSize()}{getIcebergHiddenSize()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Analytic\+Order\+::get\+Iceberg\+Hidden\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns iceberg hidden size of this analytic order. 
+
+\begin{DoxyReturn}{Returns}
+iceberg hidden size of this analytic order. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_analytic_order_addb54c9116da813afb4977be1a397edb}\label{classdxfcpp_1_1_analytic_order_addb54c9116da813afb4977be1a397edb} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!getIcebergPeakSize@{getIcebergPeakSize}}
+\index{getIcebergPeakSize@{getIcebergPeakSize}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{getIcebergPeakSize()}{getIcebergPeakSize()}}
+{\footnotesize\ttfamily double dxfcpp\+::\+Analytic\+Order\+::get\+Iceberg\+Peak\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns iceberg peak size of this analytic order. 
+
+\begin{DoxyReturn}{Returns}
+iceberg peak size of this analytic order. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a862b8dc95362052bde3464b02fd86384}\label{classdxfcpp_1_1_analytic_order_a862b8dc95362052bde3464b02fd86384} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!getIcebergType@{getIcebergType}}
+\index{getIcebergType@{getIcebergType}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{getIcebergType()}{getIcebergType()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{Iceberg\+Type}} \& dxfcpp\+::\+Analytic\+Order\+::get\+Iceberg\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns iceberg type of this analytic order. 
+
+\begin{DoxyReturn}{Returns}
+iceberg type of this analytic order. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a8d3632fabc7b03649156c1c1c962d2a2}\label{classdxfcpp_1_1_analytic_order_a8d3632fabc7b03649156c1c1c962d2a2} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!setIcebergExecutedSize@{setIcebergExecutedSize}}
+\index{setIcebergExecutedSize@{setIcebergExecutedSize}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{setIcebergExecutedSize()}{setIcebergExecutedSize()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Analytic\+Order\+::set\+Iceberg\+Executed\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Executed\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg executed size of this analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Executed\+Size} & iceberg executed size of this analytic order. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a5e166c7e1dac5c2151346f20d8787e96}\label{classdxfcpp_1_1_analytic_order_a5e166c7e1dac5c2151346f20d8787e96} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!setIcebergHiddenSize@{setIcebergHiddenSize}}
+\index{setIcebergHiddenSize@{setIcebergHiddenSize}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{setIcebergHiddenSize()}{setIcebergHiddenSize()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Analytic\+Order\+::set\+Iceberg\+Hidden\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Hidden\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg hidden size of this analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Hidden\+Size} & iceberg hidden size of this analytic order. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a0a0e525c32b56a4c09dd970d1321d7f3}\label{classdxfcpp_1_1_analytic_order_a0a0e525c32b56a4c09dd970d1321d7f3} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!setIcebergPeakSize@{setIcebergPeakSize}}
+\index{setIcebergPeakSize@{setIcebergPeakSize}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{setIcebergPeakSize()}{setIcebergPeakSize()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Analytic\+Order\+::set\+Iceberg\+Peak\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Peak\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg peak size of this analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Peak\+Size} & iceberg peak size of this analytic order. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a137855592a41188136020d63b1fe1935}\label{classdxfcpp_1_1_analytic_order_a137855592a41188136020d63b1fe1935} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!setIcebergType@{setIcebergType}}
+\index{setIcebergType@{setIcebergType}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{setIcebergType()}{setIcebergType()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Analytic\+Order\+::set\+Iceberg\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{Iceberg\+Type}} \&}]{iceberg\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg type of this analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Type} & iceberg type of this analytic order. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_analytic_order_a5bf3751f5b5b4b8260044b4f88109c15}\label{classdxfcpp_1_1_analytic_order_a5bf3751f5b5b4b8260044b4f88109c15} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} dxfcpp\+::\+Analytic\+Order\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_event_type_af1f3b585ac540d9bfe1d649ef1835811}{dxfcpp\+::\+Event\+Type}}.
+
+\Hypertarget{classdxfcpp_1_1_analytic_order_a5349a206b3ebcf72f412685588064eb1}\label{classdxfcpp_1_1_analytic_order_a5349a206b3ebcf72f412685588064eb1} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Analytic\+Order\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{dxfcpp\+::\+Shared\+Entity}}.
+
+\Hypertarget{classdxfcpp_1_1_analytic_order_a40581b2d88d9d8df4d0163d7aa51988b}\label{classdxfcpp_1_1_analytic_order_a40581b2d88d9d8df4d0163d7aa51988b} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_analytic_order}{Analytic\+Order}} \& dxfcpp\+::\+Analytic\+Order\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classdxfcpp_1_1_order_a2887e4a834a70a6087b0f17bab8119d5}{dxfcpp\+::\+Order}}.
+
+\Hypertarget{classdxfcpp_1_1_analytic_order_a04b193ba806900f0941a83da6df6d259}\label{classdxfcpp_1_1_analytic_order_a04b193ba806900f0941a83da6df6d259} 
+\index{dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}!withEventSymbolShared@{withEventSymbolShared}}
+\index{withEventSymbolShared@{withEventSymbolShared}!dxfcpp::AnalyticOrder@{dxfcpp::AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withEventSymbolShared()}{withEventSymbolShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a0c7f48655bae9b0216f4c1b369a4403b}{Analytic\+Order\+::\+Ptr}} dxfcpp\+::\+Analytic\+Order\+::with\+Event\+Symbol\+Shared (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns a shared pointer to the current analytic order. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_order}{Order}\texorpdfstring{$>$}{>}(new Order(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_order}{Order}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current order. 
+\end{DoxyReturn}

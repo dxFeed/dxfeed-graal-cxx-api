@@ -1,0 +1,51 @@
+\doxysubsection{Price\+Type.\+hpp}
+\hypertarget{_price_type_8hpp_source}{}\label{_price_type_8hpp_source}\index{PriceType.hpp@{PriceType.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Enum.hpp"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ Type\ of\ the\ price\ value.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{Enum}}<\mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}},\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_price_type}{uint32\_t}}>\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{Enum}}::\mbox{\hyperlink{structdxfcpp_1_1_price_type}{Enum}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ *\ Regular\ price.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type_a3b8b623b2c7152112d2fb686afa3888e}{REGULAR}};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ *\ Indicative\ price\ (derived\ via\ math\ formula).}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type_a2317da2d1576d28678b89db492609b84}{INDICATIVE}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Preliminary\ price\ (preliminary\ settlement\ price),\ usually\ posted\ prior\ to\ PriceType::FINAL\ price.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type_a6c3ceac783d44449248884e13703ec72}{PRELIMINARY}};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ Final\ price\ (final\ settlement\ price).}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type_a0ec9a5b67db188770f434003e2d0ab71}{FINAL}};}
+\DoxyCodeLine{00040\ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00043\ \textcolor{keyword}{const}\ std::unordered\_map<PriceType::CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ PriceType>>\ PriceType::ParentType::ALL;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

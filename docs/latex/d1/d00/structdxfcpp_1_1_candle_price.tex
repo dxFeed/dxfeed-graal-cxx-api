@@ -1,0 +1,184 @@
+\doxysubsection{dxfcpp\+::Candle\+Price Struct Reference}
+\hypertarget{structdxfcpp_1_1_candle_price}{}\label{structdxfcpp_1_1_candle_price}\index{dxfcpp::CandlePrice@{dxfcpp::CandlePrice}}
+
+
+Price type attribute of \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol} defines price that is used to build the candles.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Price.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Candle\+Price\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d1/d00/structdxfcpp_1_1_candle_price}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_candle_price_ae1c0765cd3b4901320fd6077b58a0d8c}{change\+Attribute\+For\+Symbol}} (const std\+::string \&symbol) const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns candle event symbol string with this candle price type set. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_candle_price_ae596d9a9e2659597879825ed8cedbed3}{to\+String}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this candle price type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::optional$<$ std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} $>$ $>$ \mbox{\hyperlink{structdxfcpp_1_1_candle_price_aa04e3400630c90ec5379697d90d3e40a}{parse}} (const std\+::string \&s) noexcept
+\begin{DoxyCompactList}\small\item\em Parses string representation of candle price type into object. \end{DoxyCompactList}\item 
+static std\+::optional$<$ std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} $>$ $>$ \mbox{\hyperlink{structdxfcpp_1_1_candle_price_a1bfe7d24e7a1a369dacc2a959f9b00d2}{get\+Attribute\+For\+Symbol}} (const std\+::string \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns candle price type of the given candle symbol string. \end{DoxyCompactList}\item 
+static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string \mbox{\hyperlink{structdxfcpp_1_1_candle_price_ac995fef48cbe387621ccdfea0c5c8413}{normalize\+Attribute\+For\+Symbol}} (const std\+::string \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns candle symbol string with the normalized representation of the candle price type attribute. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_candle_price_a9d5bf8c9bdc65c37a7ebebc9db1aae63}\label{structdxfcpp_1_1_candle_price_a9d5bf8c9bdc65c37a7ebebc9db1aae63} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} {\bfseries LAST} \{"{}last"{}\}
+\begin{DoxyCompactList}\small\item\em Last trading price. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_price_acccfac2281824a593a55b20bb622c886}\label{structdxfcpp_1_1_candle_price_acccfac2281824a593a55b20bb622c886} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} {\bfseries BID} \{"{}bid"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{classdxfcpp_1_1_quote}{Quote} bid price. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_price_a211b648f1da56a094450fdbdfbacb86a}\label{structdxfcpp_1_1_candle_price_a211b648f1da56a094450fdbdfbacb86a} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} {\bfseries ASK} \{"{}ask"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{classdxfcpp_1_1_quote}{Quote} ask price. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_price_a147c42cc38e8a7371994ed4f31ca00ca}\label{structdxfcpp_1_1_candle_price_a147c42cc38e8a7371994ed4f31ca00ca} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} {\bfseries MARK} \{"{}mark"{}\}
+\begin{DoxyCompactList}\small\item\em Market price defined as average between quote bid and ask prices. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} \mbox{\hyperlink{structdxfcpp_1_1_candle_price_a12106fe368553fc82190896877ad4042}{SETTLEMENT}} \{"{}s"{}\}
+\begin{DoxyCompactList}\small\item\em Official settlement price that is defined by exchange or last trading price otherwise. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_price_ae40a6f09e02d8e37f4cb36f8a22ecd6c}\label{structdxfcpp_1_1_candle_price_ae40a6f09e02d8e37f4cb36f8a22ecd6c} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} {\bfseries DEFAULT} = \mbox{\hyperlink{structdxfcpp_1_1_candle_price_a9d5bf8c9bdc65c37a7ebebc9db1aae63}{LAST}}
+\begin{DoxyCompactList}\small\item\em Default price type is \doxylink{structdxfcpp_1_1_candle_price_a9d5bf8c9bdc65c37a7ebebc9db1aae63}{Candle\+Price\+::\+LAST}. \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{structdxfcpp_1_1_candle_price_a911189d05dde81679dd3b59cb38ead84}{ATTRIBUTE\+\_\+\+KEY}} \{"{}price"{}\}
+\begin{DoxyCompactList}\small\item\em The attribute key that is used to store the value of {\ttfamily \doxylink{structdxfcpp_1_1_candle_price}{Candle\+Price}} in a symbol string using methods of \doxylink{structdxfcpp_1_1_market_event_symbols}{Market\+Event\+Symbols} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Price type attribute of \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol} defines price that is used to build the candles. 
+
+\doxyparagraph*{Implementation details}
+
+This attribute is encoded in a symbol string with \doxylink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{Market\+Event\+Symbols.get\+Attribute\+String\+By\+Key}, \doxylink{structdxfcpp_1_1_market_event_symbols_a05f9118ae0d921489495dec94159e8f0}{change\+Attribute\+String\+By\+Key}, and \doxylink{structdxfcpp_1_1_market_event_symbols_a0f662cf613e3e6decd079d9782d9742d}{remove\+Attribute\+String\+By\+Key} methods. The key to use with these methods is available via \doxylink{structdxfcpp_1_1_candle_price_a911189d05dde81679dd3b59cb38ead84}{Candle\+Price\+::\+ATTRIBUTE\+\_\+\+KEY} constant. The value that this key shall be set to is equal to the corresponding \doxylink{structdxfcpp_1_1_candle_price_ae596d9a9e2659597879825ed8cedbed3}{Candle\+Price\+::to\+String()} 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_candle_price_ae1c0765cd3b4901320fd6077b58a0d8c}\label{structdxfcpp_1_1_candle_price_ae1c0765cd3b4901320fd6077b58a0d8c} 
+\index{dxfcpp::CandlePrice@{dxfcpp::CandlePrice}!changeAttributeForSymbol@{changeAttributeForSymbol}}
+\index{changeAttributeForSymbol@{changeAttributeForSymbol}!dxfcpp::CandlePrice@{dxfcpp::CandlePrice}}
+\doxyparagraph{\texorpdfstring{changeAttributeForSymbol()}{changeAttributeForSymbol()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Candle\+Price\+::change\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle event symbol string with this candle price type set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & original candle event symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle event symbol string with this candle price type set. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol_attribute_a8bc7479d490e06e17239af515f58420e}{dxfcpp\+::\+Candle\+Symbol\+Attribute}}.
+
+\Hypertarget{structdxfcpp_1_1_candle_price_a1bfe7d24e7a1a369dacc2a959f9b00d2}\label{structdxfcpp_1_1_candle_price_a1bfe7d24e7a1a369dacc2a959f9b00d2} 
+\index{dxfcpp::CandlePrice@{dxfcpp::CandlePrice}!getAttributeForSymbol@{getAttributeForSymbol}}
+\index{getAttributeForSymbol@{getAttributeForSymbol}!dxfcpp::CandlePrice@{dxfcpp::CandlePrice}}
+\doxyparagraph{\texorpdfstring{getAttributeForSymbol()}{getAttributeForSymbol()}}
+{\footnotesize\ttfamily static std\+::optional$<$ std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} $>$ $>$ dxfcpp\+::\+Candle\+Price\+::get\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle price type of the given candle symbol string. 
+
+The result is \doxylink{structdxfcpp_1_1_candle_price_ae40a6f09e02d8e37f4cb36f8a22ecd6c}{Candle\+Price\+::\+DEFAULT} if the symbol does not have candle price type attribute or std\+::nullopt if there is no supported attribute\textquotesingle{}s value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle price type of the given candle symbol string or std\+::nullopt if there is no supported attribute\textquotesingle{}s value. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_price_ac995fef48cbe387621ccdfea0c5c8413}\label{structdxfcpp_1_1_candle_price_ac995fef48cbe387621ccdfea0c5c8413} 
+\index{dxfcpp::CandlePrice@{dxfcpp::CandlePrice}!normalizeAttributeForSymbol@{normalizeAttributeForSymbol}}
+\index{normalizeAttributeForSymbol@{normalizeAttributeForSymbol}!dxfcpp::CandlePrice@{dxfcpp::CandlePrice}}
+\doxyparagraph{\texorpdfstring{normalizeAttributeForSymbol()}{normalizeAttributeForSymbol()}}
+{\footnotesize\ttfamily static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string dxfcpp\+::\+Candle\+Price\+::normalize\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle symbol string with the normalized representation of the candle price type attribute. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle symbol string with the normalized representation of the the candle price type attribute. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_price_aa04e3400630c90ec5379697d90d3e40a}\label{structdxfcpp_1_1_candle_price_aa04e3400630c90ec5379697d90d3e40a} 
+\index{dxfcpp::CandlePrice@{dxfcpp::CandlePrice}!parse@{parse}}
+\index{parse@{parse}!dxfcpp::CandlePrice@{dxfcpp::CandlePrice}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily static std\+::optional$<$ std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} $>$ $>$ dxfcpp\+::\+Candle\+Price\+::parse (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Parses string representation of candle price type into object. 
+
+Any string that was returned by \doxylink{structdxfcpp_1_1_candle_price_ae596d9a9e2659597879825ed8cedbed3}{Candle\+Price\+::to\+String()} can be parsed and case is ignored for parsing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string representation of candle price type. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The candle price type (reference) or std\+::nullopt if there is no supported attribute\textquotesingle{}s value. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_price_ae596d9a9e2659597879825ed8cedbed3}\label{structdxfcpp_1_1_candle_price_ae596d9a9e2659597879825ed8cedbed3} 
+\index{dxfcpp::CandlePrice@{dxfcpp::CandlePrice}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::CandlePrice@{dxfcpp::CandlePrice}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily const std\+::string \& dxfcpp\+::\+Candle\+Price\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this candle price type. 
+
+The string representation of candle price type is a lower case string that corresponds to its name. For example, \doxylink{structdxfcpp_1_1_candle_price_a9d5bf8c9bdc65c37a7ebebc9db1aae63}{Candle\+Price\+::\+LAST} is represented as "{}last"{}.
+
+\begin{DoxyReturn}{Returns}
+string representation of this candle price type. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{structdxfcpp_1_1_candle_price_a911189d05dde81679dd3b59cb38ead84}\label{structdxfcpp_1_1_candle_price_a911189d05dde81679dd3b59cb38ead84} 
+\index{dxfcpp::CandlePrice@{dxfcpp::CandlePrice}!ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}}
+\index{ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}!dxfcpp::CandlePrice@{dxfcpp::CandlePrice}}
+\doxyparagraph{\texorpdfstring{ATTRIBUTE\_KEY}{ATTRIBUTE\_KEY}}
+{\footnotesize\ttfamily const std\+::string dxfcpp\+::\+Candle\+Price\+::\+ATTRIBUTE\+\_\+\+KEY \{"{}price"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The attribute key that is used to store the value of {\ttfamily \doxylink{structdxfcpp_1_1_candle_price}{Candle\+Price}} in a symbol string using methods of \doxylink{structdxfcpp_1_1_market_event_symbols}{Market\+Event\+Symbols} class. 
+
+The value of this constant is "{}price"{}. The value that this key shall be set to is equal to the corresponding \doxylink{structdxfcpp_1_1_candle_price_ae596d9a9e2659597879825ed8cedbed3}{Candle\+Price\+::to\+String()} \Hypertarget{structdxfcpp_1_1_candle_price_a12106fe368553fc82190896877ad4042}\label{structdxfcpp_1_1_candle_price_a12106fe368553fc82190896877ad4042} 
+\index{dxfcpp::CandlePrice@{dxfcpp::CandlePrice}!SETTLEMENT@{SETTLEMENT}}
+\index{SETTLEMENT@{SETTLEMENT}!dxfcpp::CandlePrice@{dxfcpp::CandlePrice}}
+\doxyparagraph{\texorpdfstring{SETTLEMENT}{SETTLEMENT}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_candle_price}{Candle\+Price}} dxfcpp\+::\+Candle\+Price\+::\+SETTLEMENT \{"{}s"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Official settlement price that is defined by exchange or last trading price otherwise. 
+
+It updates based on all \doxylink{structdxfcpp_1_1_price_type}{Price\+Type} values\+: \doxylink{structdxfcpp_1_1_price_type_a2317da2d1576d28678b89db492609b84}{Price\+Type\+::\+INDICATIVE}, \doxylink{structdxfcpp_1_1_price_type_a6c3ceac783d44449248884e13703ec72}{Price\+Type\+::\+PRELIMINARY}, and \doxylink{structdxfcpp_1_1_price_type_a0ec9a5b67db188770f434003e2d0ab71}{Price\+Type\+::\+FINAL}\}. 

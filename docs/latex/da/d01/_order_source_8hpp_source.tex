@@ -1,0 +1,515 @@
+\doxysubsection{Order\+Source.\+hpp}
+\hypertarget{_order_source_8hpp_source}{}\label{_order_source_8hpp_source}\index{OrderSource.hpp@{OrderSource.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../IndexedEventSource.hpp"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ TODO:\ implement}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ OrderSource\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \{}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ PUB\_ORDER\ =\ 0x0001U;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ PUB\_ANALYTIC\_ORDER\ =\ 0x0002U;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ PUB\_SPREAD\_ORDER\ =\ 0x0004U;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ FULL\_ORDER\_BOOK\ =\ 0x0008U;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ FLAGS\_SIZE\ =\ 4U;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::variant<std::int32\_t,\ std::string>,\ std::reference\_wrapper<\textcolor{keyword}{const}\ OrderSource>>\ PREDEFINED\_SOURCES;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ std::mutex\ MTX\_\{\};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::int32\_t,\ OrderSource>\ USER\_SOURCES\_;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ std::uint32\_t\ pubFlags\_\{\};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ builtin\_\{\};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ OrderSource(std::int32\_t\ id,\ std::string\ name,\ std::uint32\_t\ pubFlags)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ :\ IndexedEventSource(id,\ std::move(name)),\ pubFlags\_\{pubFlags\},\ builtin\_\{\textcolor{keyword}{true}\}\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ OrderSource(\textcolor{keyword}{const}\ std::string\ \&name,\ std::uint32\_t\ pubFlags)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ :\ OrderSource(composeId(name),\ name,\ pubFlags)\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ OrderSource(std::int32\_t\ id,\ \textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ :\ IndexedEventSource(id,\ name),\ pubFlags\_\{0\},\ builtin\_\{\textcolor{keyword}{false}\}\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ composeId(\textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ std::int32\_t\ sourceId\ =\ 0;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ n\ =\ name.length();}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ ==\ 0\ ||\ n\ >\ 4)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling:\ IllegalArgumentException("{}Source\ name\ must\ contain\ from\ 1\ to\ 4\ characters"{});}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ c\ :\ name)\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!checkChar(c))\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ sourceId\ =\ orOp(sal(sourceId,\ 8),\ c);}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sourceId;}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ checkChar(\textcolor{keywordtype}{char}\ c)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ >=\ \textcolor{stringliteral}{'A'}\ \&\&\ c\ <=\ \textcolor{stringliteral}{'Z'}\ ||\ c\ >=\ \textcolor{stringliteral}{'a'}\ \&\&\ c\ <=\ \textcolor{stringliteral}{'z'}\ ||\ c\ >=\ \textcolor{stringliteral}{'0'}\ \&\&\ c\ <=\ \textcolor{stringliteral}{'9'})\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling:\ IllegalArgumentException("{}Source\ name\ must\ contain\ only\ alphanumeric\ characters"{});}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00084\ \ \ \ \ \}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ decodeName(\textcolor{keywordtype}{int}\ id)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (id\ ==\ 0)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling:\ throw\ IllegalArgumentException("{}Source\ name\ must\ contain\ from\ 1\ to\ 4\ characters"{});}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ std::string\ name(4,\ \textcolor{stringliteral}{'\(\backslash\)0'});}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ std::size\_t\ n\ =\ 0;}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 24;\ i\ >=\ 0;\ i\ -\/=\ 8)\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sar(id,\ i)\ ==\ 0)\ \{\ \textcolor{comment}{//\ skip\ highest\ contiguous\ zeros}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ c\ =\ \textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{char}>(andOp(sar(id,\ i),\ 0xff));}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!checkChar(c))\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ name[n++]\ =\ c;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name.substr(0,\ n);}
+\DoxyCodeLine{00112\ \ \ \ \ \}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keyword}{static}\ std::uint32\_t\ getEventTypeMask(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventType)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (eventType\ ==\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}::ORDER)\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ PUB\_ORDER;}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (eventType\ ==\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}::ANALYTIC\_ORDER)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ PUB\_ANALYTIC\_ORDER;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (eventType\ ==\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}::SPREAD\_ORDER)\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ PUB\_SPREAD\_ORDER;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling:\ throw\ IllegalArgumentException("{}Invalid\ order\ event\ type:\ "{}\ +\ eventType);}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00130\ \ \ \ \ \}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{void}\ *toGraal()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ Bid\ side\ of\ a\ composite\ Quote.}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ a\ <em>synthetic</em>\ source.}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ The\ subscription\ on\ composite\ Quote\ event\ is\ observed\ when\ this\ source\ is\ subscribed\ to.}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ COMPOSITE\_BID;}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ Ask\ side\ of\ a\ composite\ Quote.}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ a\ <em>synthetic</em>\ source.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ The\ subscription\ on\ composite\ Quote\ event\ is\ observed\ when\ this\ source\ is\ subscribed\ to.}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ COMPOSITE\_ASK;}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ Bid\ side\ of\ a\ regional\ Quote.}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ a\ <em>synthetic</em>\ source.}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ The\ subscription\ on\ regional\ Quote\ event\ is\ observed\ when\ this\ source\ is\ subscribed\ to.}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ REGIONAL\_BID;}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ Ask\ side\ of\ a\ regional\ Quote.}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ a\ <em>synthetic</em>\ source.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ The\ subscription\ on\ regional\ Quote\ event\ is\ observed\ when\ this\ source\ is\ subscribed\ to.}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ REGIONAL\_ASK;}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *\ Bid\ side\ of\ an\ aggregate\ order\ book\ (futures\ depth\ and\ NASDAQ\ Level\ II).}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ This\ source\ cannot\ be\ directly\ published\ via\ dxFeed\ API,\ but\ otherwise\ it\ is\ fully\ operational.}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ AGGREGATE\_BID;}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ Ask\ side\ of\ an\ aggregate\ order\ book\ (futures\ depth\ and\ NASDAQ\ Level\ II).}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ This\ source\ cannot\ be\ directly\ published\ via\ dxFeed\ API,\ but\ otherwise\ it\ is\ fully\ operational.}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ AGGREGATE\_ASK;}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ Default\ source\ for\ publishing\ custom\ order\ books.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ Order,\ AnalyticOrder\ and\ SpreadOrder\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ DEFAULT;}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ NASDAQ\ Total\ View.}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ NTV;}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ NASDAQ\ Total\ View.\ Record\ for\ price\ level\ book.}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ ntv;}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ NASDAQ\ Futures\ Exchange.}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ NFX;}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ NASDAQ\ eSpeed.}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ ESPD;}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ NASDAQ\ Fixed\ Income.}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ XNFI;}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ Intercontinental\ Exchange.}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ ICE;}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *\ International\ Securities\ Exchange.}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ *\ Order\ and\ SpreadOrder\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ subscription\ can\ be\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ ISE;}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ Direct-\/Edge\ EDGA\ Exchange.}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ DEA;}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *\ Direct-\/Edge\ EDGX\ Exchange.}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ DEX;}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *\ Direct-\/Edge\ EDGX\ Exchange.\ Record\ for\ price\ level\ book.}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ dex;}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ *\ Bats\ BYX\ Exchange.}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ BYX;}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ Bats\ BZX\ Exchange.}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ BZX;}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *\ Bats\ BZX\ Exchange.\ Record\ for\ price\ level\ book.}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ bzx;}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ Bats\ Europe\ BXE\ Exchange.}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ BATE;}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00303\ \textcolor{comment}{\ \ \ \ \ *\ Bats\ Europe\ CXE\ Exchange.}}
+\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00308\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ CHIX;}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ Bats\ Europe\ DXE\ Exchange.}}
+\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ CEUX;}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ *\ Bats\ Europe\ TRF.}}
+\DoxyCodeLine{00320\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00321\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ BXTR;}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ *\ Borsa\ Istanbul\ Exchange.}}
+\DoxyCodeLine{00328\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00329\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00330\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00331\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ IST;}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ Borsa\ Istanbul\ Exchange.\ Record\ for\ particular\ top\ 20\ order\ book.}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00340\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ BI20;}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *\ ABE\ (abe.io)\ exchange.}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00347\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00348\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ ABE;}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ FAIR\ (FairX)\ exchange.}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ FAIR;}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00359\ \textcolor{comment}{\ \ \ \ \ *\ CME\ Globex.}}
+\DoxyCodeLine{00360\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00361\ \textcolor{comment}{\ \ \ \ \ *\ Order\ and\ AnalyticOrder\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding}}
+\DoxyCodeLine{00362\ \textcolor{comment}{\ \ \ \ \ *\ subscription\ can\ be\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00363\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00364\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ GLBX;}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ *\ CME\ Globex.\ Record\ for\ price\ level\ book.}}
+\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00372\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ glbx;}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ *\ Eris\ Exchange\ group\ of\ companies.}}
+\DoxyCodeLine{00376\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00377\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00378\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00379\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ ERIS;}
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *\ Eurex\ Exchange.}}
+\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00388\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ XEUR;}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00390\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00391\ \textcolor{comment}{\ \ \ \ \ *\ Eurex\ Exchange.\ Record\ for\ price\ level\ book.}}
+\DoxyCodeLine{00392\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00393\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00396\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ xeur;}
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *\ CBOE\ Futures\ Exchange.}}
+\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00404\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ CFE;}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00407\ \textcolor{comment}{\ \ \ \ \ *\ CBOE\ Options\ C2\ Exchange.}}
+\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00409\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00412\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ C2OX;}
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00414\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00415\ \textcolor{comment}{\ \ \ \ \ *\ Small\ Exchange.}}
+\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00417\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00418\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00419\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00420\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ SMFE;}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00423\ \textcolor{comment}{\ \ \ \ \ *\ Small\ Exchange.\ Record\ for\ price\ level\ book.}}
+\DoxyCodeLine{00424\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00428\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ smfe;}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00431\ \textcolor{comment}{\ \ \ \ \ *\ Investors\ exchange.\ Record\ for\ price\ level\ book.}}
+\DoxyCodeLine{00432\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00433\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00434\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00435\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00436\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ iex;}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00439\ \textcolor{comment}{\ \ \ \ \ *\ Members\ Exchange.}}
+\DoxyCodeLine{00440\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00444\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ MEMX;}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00447\ \textcolor{comment}{\ \ \ \ \ *\ Members\ Exchange.\ Record\ for\ price\ level\ book.}}
+\DoxyCodeLine{00448\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00449\ \textcolor{comment}{\ \ \ \ \ *\ Order\ events\ are\ @ref\ ::isPublishable()\ "{}publishable"{}\ on\ this\ source\ and\ the\ corresponding\ subscription\ can\ be}}
+\DoxyCodeLine{00450\ \textcolor{comment}{\ \ \ \ \ *\ observed\ via\ DXPublisher.}}
+\DoxyCodeLine{00451\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00452\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ memx;}
+\DoxyCodeLine{00453\ }
+\DoxyCodeLine{00454\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ *\ Determines\ whether\ specified\ source\ identifier\ refers\ to\ special\ order\ source.}}
+\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ *\ Special\ order\ sources\ are\ used\ for\ wrapping\ non-\/order\ events\ into\ order\ events.}}
+\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sourceId\ the\ source\ identifier.}}
+\DoxyCodeLine{00459\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ it\ is\ a\ special\ source\ identifier}}
+\DoxyCodeLine{00460\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00461\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isSpecialSourceId(std::int32\_t\ sourceId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sourceId\ >=\ COMPOSITE\_BID\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{.}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{id}}()\ \&\&\ sourceId\ <=\ AGGREGATE\_ASK\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{.}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{id}}();}
+\DoxyCodeLine{00463\ \ \ \ \ \}}
+\DoxyCodeLine{00464\ }
+\DoxyCodeLine{00465\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00466\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ order\ source\ for\ the\ specified\ source\ identifier.}}
+\DoxyCodeLine{00467\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00468\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sourceId\ the\ source\ identifier.}}
+\DoxyCodeLine{00469\ \textcolor{comment}{\ \ \ \ \ *\ @return\ order\ source.}}
+\DoxyCodeLine{00470\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00471\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ \&valueOf(std::int32\_t\ sourceId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ found\ =\ PREDEFINED\_SOURCES.find(sourceId);\ found\ !=\ PREDEFINED\_SOURCES.end())\ \{}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ std::lock\_guard\ lock(MTX\_);}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ found\ =\ USER\_SOURCES\_.find(sourceId);\ found\ !=\ USER\_SOURCES\_.end())\ \{}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00481\ }
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ USER\_SOURCES\_.try\_emplace(sourceId,\ OrderSource(sourceId,\ decodeName(sourceId))).first-\/>second;}
+\DoxyCodeLine{00483\ \ \ \ \ \}}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00486\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ order\ source\ for\ the\ specified\ source\ name.}}
+\DoxyCodeLine{00487\ \textcolor{comment}{\ \ \ \ \ *\ The\ name\ must\ be\ either\ predefined,\ or\ contain\ at\ most\ 4\ alphanumeric\ characters.}}
+\DoxyCodeLine{00488\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00489\ \textcolor{comment}{\ \ \ \ \ *\ @param\ name\ the\ name\ of\ the\ source.}}
+\DoxyCodeLine{00490\ \textcolor{comment}{\ \ \ \ \ *\ @return\ order\ source.}}
+\DoxyCodeLine{00491\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00492\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ OrderSource\ \&valueOf(\textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ found\ =\ PREDEFINED\_SOURCES.find(name);\ found\ !=\ PREDEFINED\_SOURCES.end())\ \{}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00496\ }
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ std::lock\_guard\ lock(MTX\_);}
+\DoxyCodeLine{00498\ }
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ sourceId\ =\ composeId(name);}
+\DoxyCodeLine{00500\ }
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ found\ =\ USER\_SOURCES\_.find(sourceId);\ found\ !=\ USER\_SOURCES\_.end())\ \{}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00504\ }
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ USER\_SOURCES\_.try\_emplace(sourceId,\ OrderSource(sourceId,\ name)).first-\/>second;}
+\DoxyCodeLine{00506\ \ \ \ \ \}}
+\DoxyCodeLine{00507\ \};}
+\DoxyCodeLine{00508\ }
+\DoxyCodeLine{00509\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

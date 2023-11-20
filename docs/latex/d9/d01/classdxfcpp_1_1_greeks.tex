@@ -1,0 +1,710 @@
+\doxysubsection{dxfcpp\+::Greeks Class Reference}
+\hypertarget{classdxfcpp_1_1_greeks}{}\label{classdxfcpp_1_1_greeks}\index{dxfcpp::Greeks@{dxfcpp::Greeks}}
+
+
+\doxylink{classdxfcpp_1_1_greeks}{Greeks} event is a snapshot of the option price, Black-\/\+Scholes volatility and greeks.  
+
+
+
+
+{\ttfamily \#include $<$Greeks.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Greeks\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.210526cm]{d9/d01/classdxfcpp_1_1_greeks}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_greeks_a6c457c1fb73999194d1cd38063275c21}\label{classdxfcpp_1_1_greeks_a6c457c1fb73999194d1cd38063275c21} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_greeks}{Greeks}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{classdxfcpp_1_1_greeks}{Greeks} object. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_greeks_aec3774b048e6825522bd2ec90c493cf5}\label{classdxfcpp_1_1_greeks_aec3774b048e6825522bd2ec90c493cf5} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_greeks}{Greeks}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{classdxfcpp_1_1_greeks}{Greeks} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{Market\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_market_event}{Market\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{dxfcpp\+::\+Event\+Type\+With\+Symbol$<$ std\+::string $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ std\+::string $>$ $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type}{dxfcpp\+::\+Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_time_series_event}{dxfcpp\+::\+Time\+Series\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_time_series_event}{Time\+Series\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_time_series_event}{Time\+Series\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{dxfcpp\+::\+Lasting\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{Lasting\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_lasting_event}{Lasting\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classdxfcpp_1_1_greeks_ac70e573459a8240731a6c5a9be0d7c05}{to\+Graal}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_greeks_a9d81e079adbe74adfec721eb20fb183b}\label{classdxfcpp_1_1_greeks_a9d81e079adbe74adfec721eb20fb183b} 
+{\bfseries Greeks} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}=\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{default}}
+\begin{DoxyCompactList}\small\item\em Creates new greeks event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_greeks_a18d66b2b9e0051907298ddc3ae1c4730}{Greeks}} (std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Creates new greeks event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{classdxfcpp_1_1_greeks_ac02eb424b84ac82345cf01bcd443c9cb}{get\+Source}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns the source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_greeks_aec185ec2c069dc9ea59266dcbca519f2}{get\+Event\+Flags}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a89ff251a16f199faec23def17ee33eca}{get\+Event\+Flags\+Mask}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a2d5db42c974dddef600868950e1b40fa}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a2a213de9d63a45b2aeb6ea15b3d4f92a}{set\+Event\+Flags}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_greeks_a194071b049145e17c46c643735227c26}{get\+Index}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_afd1b77af33c2d0856b525c437cfcf816}{set\+Index}} (std\+::int64\+\_\+t index) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}{get\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a42e392b22d525348b2e8509843c9f26c}{set\+Time}} (std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{time}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_greeks_a9e03488782447a4eb4b51afc2c32e006}{get\+Sequence}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns the sequence number of this event to distinguish events that have the same \doxylink{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}{time}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a46ca7b98904f9ced8702c18cecdfd886}{set\+Sequence}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{int}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sequence}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{classdxfcpp_1_1_greeks_a9e03488782447a4eb4b51afc2c32e006}{sequence number} of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a7420c472b0b730bae94de1574315c9ab}{get\+Price}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns option market price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a85accce448580ac55e0eec0b14069e24}{set\+Price}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} price) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes option market price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_aa0d4a3f8395c9f28815eb21f4db5fdf4}{get\+Volatility}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns Black-\/\+Scholes implied volatility of the option. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a578022b5162cac3c1111e736a5f7d447}{set\+Volatility}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} volatility) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes Black-\/\+Scholes implied volatility of the option. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a5b40de93269908fa94947e3cb14f4a1f}{get\+Delta}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Return option delta. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_acca44777f24db27db3c9b190e7e1633f}{set\+Delta}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} delta) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes option delta. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a0bcea62d00e1ccba9840893975bcc233}{get\+Gamma}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns option gamma. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a1264e731f73242659a02cb0122bae1dd}{set\+Gamma}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} gamma) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes option gamma. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a5a6ba040ba1885557a44b13c9d554a80}{get\+Theta}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns option theta. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a9d6cd5b5aeab51636455805cb9f451a0}{set\+Theta}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} theta) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes option theta. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a02c7b2711885385e98ffe84f7c6887b1}{get\+Rho}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns option rho. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_ab8ab08f02b1936ca52344a0b4da02cd7}{set\+Rho}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} rho) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes option rho. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_ad6b42c01998dbc83ed76349d7fd0ccd9}{get\+Vega}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns option vega. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_a865e14e9ea17648c6eae0583966aa848}{set\+Vega}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} vega) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes option vega. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_greeks_ab9d50946f51e0b534ec2cb3ab12f3958}{to\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_market_event_a62b3475e3dc13476c57553cc354a2915}{get\+Event\+Symbol}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{set\+Event\+Symbol}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes symbol of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_market_event_a4dde8cfbc3163d9ea5c4b1346b8b861d}{get\+Event\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} T $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_time_series_event}{dxfcpp\+::\+Time\+Series\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_a9a57a9c2bcb8de5457275edf8781e626}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source identifier for this event, which is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT} for time-\/series events. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_ac387c8c64f3fcfe2163d1e42e89cdbb1}{get\+Event\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_greeks_ab46c708343869df3dd56725a4fa70884}{free\+Graal}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{graal\+Native}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{constexpr}} std\+::uint32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_greeks_abafe35776b52baf3096c43b2e86df2b3}{MAX\+\_\+\+SEQUENCE}} = (1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}} $<$$<$ 22\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}) -\/ 1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_greeks_a694362a12185f016ae4cebe5000ccfcb}\label{classdxfcpp_1_1_greeks_a694362a12185f016ae4cebe5000ccfcb} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+GREEKS
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}{TX\+\_\+\+PENDING}} = Event\+Flag\+::\+TX\+\_\+\+PENDING
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{REMOVE\+\_\+\+EVENT}} = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{SNAPSHOT\+\_\+\+BEGIN}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{SNAPSHOT\+\_\+\+END}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}{SNAPSHOT\+\_\+\+SNIP}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829}{SNAPSHOT\+\_\+\+MODE}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of \doxylink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{event\+Flags} property.   \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{Market\+Event}} (std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{classdxfcpp_1_1_greeks}{Greeks} event is a snapshot of the option price, Black-\/\+Scholes volatility and greeks. 
+
+It represents the most recent information that is available about the corresponding values on the market at any given moment of time.
+
+\doxyparagraph*{\label{classdxfcpp_1_1_underlying_eventFlagsSection}%
+\Hypertarget{classdxfcpp_1_1_underlying_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+Some greeks sources provide a consistent view of the set of known greeks. The corresponding information is carried in \doxylink{classdxfcpp_1_1_greeks_aec185ec2c069dc9ea59266dcbca519f2}{event\+Flags} property. The logic behind this property is detailed in \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} class documentation. Multiple event sources for the same symbol are not supported for greeks, thus \doxylink{classdxfcpp_1_1_greeks_ac02eb424b84ac82345cf01bcd443c9cb}{source} property is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT}.
+
+Time\+Series\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list current of time-\/series events order by their \doxylink{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}{time}. It relies on the code of Abstract\+Indexed\+Event\+Model to handle this logic. Use the source code of Abstract\+Indexed\+Event\+Model for clarification on transactions and snapshot logic.
+
+\doxyparagraph*{Publishing \doxylink{classdxfcpp_1_1_greeks}{Greeks}}
+
+Publishing of greeks events follows the general rules explained in \doxylink{structdxfcpp_1_1_time_series_event}{Time\+Series\+Event} class documentation. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdxfcpp_1_1_greeks_a18d66b2b9e0051907298ddc3ae1c4730}\label{classdxfcpp_1_1_greeks_a18d66b2b9e0051907298ddc3ae1c4730} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!Greeks@{Greeks}}
+\index{Greeks@{Greeks}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{Greeks()}{Greeks()}}
+{\footnotesize\ttfamily dxfcpp\+::\+Greeks\+::\+Greeks (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new greeks event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_greeks_ab46c708343869df3dd56725a4fa70884}\label{classdxfcpp_1_1_greeks_ab46c708343869df3dd56725a4fa70884} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::free\+Graal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*}}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_greeks_a5b40de93269908fa94947e3cb14f4a1f}\label{classdxfcpp_1_1_greeks_a5b40de93269908fa94947e3cb14f4a1f} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getDelta@{getDelta}}
+\index{getDelta@{getDelta}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getDelta()}{getDelta()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Greeks\+::get\+Delta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Return option delta. 
+
+Delta is the first derivative of an option price by an underlying price.
+
+\begin{DoxyReturn}{Returns}
+option delta. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_greeks_aec185ec2c069dc9ea59266dcbca519f2}\label{classdxfcpp_1_1_greeks_aec185ec2c069dc9ea59266dcbca519f2} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Greeks\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_a89ff251a16f199faec23def17ee33eca}\label{classdxfcpp_1_1_greeks_a89ff251a16f199faec23def17ee33eca} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} dxfcpp\+::\+Greeks\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a1f3de1d60a04b7fb2649c4e82bfa31eb}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_a0bcea62d00e1ccba9840893975bcc233}\label{classdxfcpp_1_1_greeks_a0bcea62d00e1ccba9840893975bcc233} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getGamma@{getGamma}}
+\index{getGamma@{getGamma}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getGamma()}{getGamma()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Greeks\+::get\+Gamma (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option gamma. 
+
+Gamma is the second derivative of an option price by an underlying price.
+
+\begin{DoxyReturn}{Returns}
+option gamma. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_greeks_a194071b049145e17c46c643735227c26}\label{classdxfcpp_1_1_greeks_a194071b049145e17c46c643735227c26} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Greeks\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+The index is composed of \doxylink{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}{time} and \doxylink{classdxfcpp_1_1_greeks_a9e03488782447a4eb4b51afc2c32e006}{sequence}. Changing either time or sequence changes event index.
+
+\begin{DoxyReturn}{Returns}
+unique index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ad5a71500687f8cebb2a15964144638dc}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_a7420c472b0b730bae94de1574315c9ab}\label{classdxfcpp_1_1_greeks_a7420c472b0b730bae94de1574315c9ab} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Greeks\+::get\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option market price. 
+
+\begin{DoxyReturn}{Returns}
+option market price. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_greeks_a02c7b2711885385e98ffe84f7c6887b1}\label{classdxfcpp_1_1_greeks_a02c7b2711885385e98ffe84f7c6887b1} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getRho@{getRho}}
+\index{getRho@{getRho}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getRho()}{getRho()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Greeks\+::get\+Rho (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option rho. 
+
+Rho is the first derivative of an option price by percentage interest rate.
+
+\begin{DoxyReturn}{Returns}
+option rho. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_greeks_a9e03488782447a4eb4b51afc2c32e006}\label{classdxfcpp_1_1_greeks_a9e03488782447a4eb4b51afc2c32e006} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Greeks\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the sequence number of this event to distinguish events that have the same \doxylink{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}{time}. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \doxylink{classdxfcpp_1_1_greeks_abafe35776b52baf3096c43b2e86df2b3}{MAX\+\_\+\+SEQUENCE}.
+
+\begin{DoxyReturn}{Returns}
+The sequence number of this event 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_greeks_ac02eb424b84ac82345cf01bcd443c9cb}\label{classdxfcpp_1_1_greeks_ac02eb424b84ac82345cf01bcd443c9cb} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getSource@{getSource}}
+\index{getSource@{getSource}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& dxfcpp\+::\+Greeks\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source of this event. 
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_a5a6ba040ba1885557a44b13c9d554a80}\label{classdxfcpp_1_1_greeks_a5a6ba040ba1885557a44b13c9d554a80} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getTheta@{getTheta}}
+\index{getTheta@{getTheta}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getTheta()}{getTheta()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Greeks\+::get\+Theta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option theta. 
+
+Theta is the first derivative of an option price by a number of days to expiration.
+
+\begin{DoxyReturn}{Returns}
+option theta. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}\label{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getTime@{getTime}}
+\index{getTime@{getTime}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Greeks\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns timestamp of the event in milliseconds. 
+
+\begin{DoxyReturn}{Returns}
+timestamp of the event in milliseconds 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{dxfcpp\+::\+Time\+Series\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_ad6b42c01998dbc83ed76349d7fd0ccd9}\label{classdxfcpp_1_1_greeks_ad6b42c01998dbc83ed76349d7fd0ccd9} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getVega@{getVega}}
+\index{getVega@{getVega}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getVega()}{getVega()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Greeks\+::get\+Vega (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option vega. 
+
+Vega is the first derivative of an option price by percentage volatility.
+
+\begin{DoxyReturn}{Returns}
+option vega. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_greeks_aa0d4a3f8395c9f28815eb21f4db5fdf4}\label{classdxfcpp_1_1_greeks_aa0d4a3f8395c9f28815eb21f4db5fdf4} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!getVolatility@{getVolatility}}
+\index{getVolatility@{getVolatility}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{getVolatility()}{getVolatility()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Greeks\+::get\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Black-\/\+Scholes implied volatility of the option. 
+
+\begin{DoxyReturn}{Returns}
+Black-\/\+Scholes implied volatility of the option. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_greeks_acca44777f24db27db3c9b190e7e1633f}\label{classdxfcpp_1_1_greeks_acca44777f24db27db3c9b190e7e1633f} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setDelta@{setDelta}}
+\index{setDelta@{setDelta}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setDelta()}{setDelta()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Delta (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{delta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option delta. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta} & option delta. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_greeks_a2a213de9d63a45b2aeb6ea15b3d4f92a}\label{classdxfcpp_1_1_greeks_a2a213de9d63a45b2aeb6ea15b3d4f92a} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4489465bbf9f78734289f7cf57ad7d34}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_a2d5db42c974dddef600868950e1b40fa}\label{classdxfcpp_1_1_greeks_a2d5db42c974dddef600868950e1b40fa} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_a1264e731f73242659a02cb0122bae1dd}\label{classdxfcpp_1_1_greeks_a1264e731f73242659a02cb0122bae1dd} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setGamma@{setGamma}}
+\index{setGamma@{setGamma}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setGamma()}{setGamma()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Gamma (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{gamma }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option gamma. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamma} & option gamma. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_greeks_afd1b77af33c2d0856b525c437cfcf816}\label{classdxfcpp_1_1_greeks_afd1b77af33c2d0856b525c437cfcf816} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+The index is composed of \doxylink{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}{time} and \doxylink{classdxfcpp_1_1_greeks_a9e03488782447a4eb4b51afc2c32e006}{sequence} and invocation of this method changes time and sequence. {\bfseries{Do not use this method directly.}} Change \doxylink{classdxfcpp_1_1_greeks_a42e392b22d525348b2e8509843c9f26c}{time} and/or \doxylink{classdxfcpp_1_1_greeks_a46ca7b98904f9ced8702c18cecdfd886}{sequence}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the event index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_greeks_a194071b049145e17c46c643735227c26}{get\+Index()} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a5467b31a73a69502b6590656980b108d}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_a85accce448580ac55e0eec0b14069e24}\label{classdxfcpp_1_1_greeks_a85accce448580ac55e0eec0b14069e24} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setPrice@{setPrice}}
+\index{setPrice@{setPrice}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setPrice()}{setPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Price (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option market price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & option market price. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_greeks_ab8ab08f02b1936ca52344a0b4da02cd7}\label{classdxfcpp_1_1_greeks_ab8ab08f02b1936ca52344a0b4da02cd7} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setRho@{setRho}}
+\index{setRho@{setRho}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setRho()}{setRho()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Rho (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{rho }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option rho. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rho} & option rho. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_greeks_a46ca7b98904f9ced8702c18cecdfd886}\label{classdxfcpp_1_1_greeks_a46ca7b98904f9ced8702c18cecdfd886} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Sequence (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{int}}}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{classdxfcpp_1_1_greeks_a9e03488782447a4eb4b51afc2c32e006}{sequence number} of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_greeks_a9e03488782447a4eb4b51afc2c32e006}{get\+Sequence()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_greeks_a9d6cd5b5aeab51636455805cb9f451a0}\label{classdxfcpp_1_1_greeks_a9d6cd5b5aeab51636455805cb9f451a0} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setTheta@{setTheta}}
+\index{setTheta@{setTheta}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setTheta()}{setTheta()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Theta (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{theta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option theta. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em theta} & option theta. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_greeks_a42e392b22d525348b2e8509843c9f26c}\label{classdxfcpp_1_1_greeks_a42e392b22d525348b2e8509843c9f26c} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setTime@{setTime}}
+\index{setTime@{setTime}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes timestamp of the event in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & timestamp of the event in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}{get\+Time()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_greeks_a865e14e9ea17648c6eae0583966aa848}\label{classdxfcpp_1_1_greeks_a865e14e9ea17648c6eae0583966aa848} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setVega@{setVega}}
+\index{setVega@{setVega}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setVega()}{setVega()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Vega (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{vega }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option vega. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vega} & option vega. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_greeks_a578022b5162cac3c1111e736a5f7d447}\label{classdxfcpp_1_1_greeks_a578022b5162cac3c1111e736a5f7d447} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!setVolatility@{setVolatility}}
+\index{setVolatility@{setVolatility}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{setVolatility()}{setVolatility()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Greeks\+::set\+Volatility (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Black-\/\+Scholes implied volatility of the option. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volatility} & Black-\/\+Scholes implied volatility of the option. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_greeks_ac70e573459a8240731a6c5a9be0d7c05}\label{classdxfcpp_1_1_greeks_ac70e573459a8240731a6c5a9be0d7c05} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*} dxfcpp\+::\+Greeks\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_event_type_af1f3b585ac540d9bfe1d649ef1835811}{dxfcpp\+::\+Event\+Type}}.
+
+\Hypertarget{classdxfcpp_1_1_greeks_ab9d50946f51e0b534ec2cb3ab12f3958}\label{classdxfcpp_1_1_greeks_ab9d50946f51e0b534ec2cb3ab12f3958} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Greeks\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_event_type_a54c84141d4eff181553b9064db6500e9}{dxfcpp\+::\+Event\+Type}}.
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{classdxfcpp_1_1_greeks_abafe35776b52baf3096c43b2e86df2b3}\label{classdxfcpp_1_1_greeks_abafe35776b52baf3096c43b2e86df2b3} 
+\index{dxfcpp::Greeks@{dxfcpp::Greeks}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!dxfcpp::Greeks@{dxfcpp::Greeks}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{constexpr}} std\+::uint32\+\_\+t dxfcpp\+::\+Greeks\+::\+MAX\+\_\+\+SEQUENCE = (1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}} $<$$<$ 22\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}) -\/ 1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_greeks_a46ca7b98904f9ced8702c18cecdfd886}{set\+Sequence()} 
+\end{DoxySeeAlso}

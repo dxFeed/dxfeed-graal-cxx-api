@@ -1,0 +1,1259 @@
+\doxysubsection{dxfcpp\+::Quote Class Reference}
+\hypertarget{classdxfcpp_1_1_quote}{}\label{classdxfcpp_1_1_quote}\index{dxfcpp::Quote@{dxfcpp::Quote}}
+
+
+\doxylink{classdxfcpp_1_1_quote}{Quote} event is a snapshot of the best bid and ask prices, and other fields that change with each quote.  
+
+
+
+
+{\ttfamily \#include $<$Quote.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Quote\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{df/d03/classdxfcpp_1_1_quote}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}\label{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{classdxfcpp_1_1_quote}{Quote} object. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_quote_a9e3bfaf034fdbe98cdc5c204eea230db}\label{classdxfcpp_1_1_quote_a9e3bfaf034fdbe98cdc5c204eea230db} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{classdxfcpp_1_1_quote}{Quote} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{Market\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_market_event}{Market\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{dxfcpp\+::\+Event\+Type\+With\+Symbol$<$ std\+::string $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ std\+::string $>$ $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type}{dxfcpp\+::\+Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{dxfcpp\+::\+Lasting\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{Lasting\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_lasting_event}{Lasting\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classdxfcpp_1_1_quote_a613deec3e5faef26a10575e3f72e9339}{to\+Graal}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_quote_a19a1eec7c4dc03300771ce15da23a17d}\label{classdxfcpp_1_1_quote_a19a1eec7c4dc03300771ce15da23a17d} 
+{\bfseries Quote} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}=\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{default}}
+\begin{DoxyCompactList}\small\item\em Creates new quote event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_aafab284549a0d091da0e12a91d87caa2}{Quote}} (std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Creates new quote event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a83205d4567859b1f37b365b8669968e9}{with\+Event\+Symbol}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a8039e3b913137f344a7d543ba3125a73}{with\+Event\+Symbol\+Shared}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a911e17c114dce5e2dcd787706f597ccc}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_abb762e7b57c1cfc0005eddd18e717cd6}{with\+Event\+Time\+Shared}} (std\+::int64\+\_\+t event\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{get\+Sequence}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns sequence number of this quote to distinguish quotes that have the same \doxylink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{time}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ac95ca334088170a0f20119bb00eb5b62}{set\+Sequence}} (std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sequence}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{sequence number} of this quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_ae4ab5fb216a5e15b46cdfdad5e3fb868}{with\+Sequence}} (std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sequence}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{sequence number} of this quote and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a9c2d4239c2ec4200c3404720d2c8fd80}{with\+Sequence\+Shared}} (std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sequence}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{sequence number} of this quote and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{get\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns time of the last bid or ask change. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_ada048effd88030a743bf14ef0427660c}{get\+Time\+Nanos}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns time of the last bid or ask change in nanoseconds. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_add808a76261cd6ffb98bc1268ac03aed}{get\+Time\+Nano\+Part}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns microseconds and nanoseconds part of time of the last bid or ask change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a3f510fca9e007429b98893ddf99a3120}{set\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds part of time of the last bid or ask change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a363263be1d7e9d8643a54e0def82d62a}{with\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds part of time of the last bid or ask change and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a67eac50cfdb9b6880370a0648ad6ca75}{with\+Time\+Nano\+Part\+Shared}} (std\+::int32\+\_\+t time\+Nano\+Part) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds part of time of the last bid or ask change and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_a0aa57b2c66433bef10127ef1f8466b2b}{get\+Bid\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns time of the last bid change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a3421d285b864fc5d56da0fbc28ca3420}{set\+Bid\+Time}} (std\+::int64\+\_\+t bid\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes time of the last bid change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a62fa9373f523b0ab4d6c029e4cdea5d9}{with\+Bid\+Time}} (std\+::int64\+\_\+t bid\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes time of the last bid change and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ab6eb2657de7acf051319b2859313aa93}{with\+Bid\+Time\+Shared}} (std\+::int64\+\_\+t bid\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes time of the last bid change and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_a85c1b6ba7f68e6715f648ba9a28e9116}{get\+Bid\+Exchange\+Code}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns bid exchange code. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_quote_af93ccd15035841ce2064c0c4ee23ecb4}{get\+Bid\+Exchange\+Code\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns bid exchange code as UTF8 string. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ac9e56faa552791e2b829ba6a6ddb2abb}{set\+Bid\+Exchange\+Code}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}} bid\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_ac0beb8afbc6e13e08ec05dbd5377d86f}{with\+Bid\+Exchange\+Code}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}} bid\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a2c1a3492aa451aaf42e2d8dcd5712f1b}{with\+Bid\+Exchange\+Code\+Shared}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}} bid\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a5165b484a4a3d82f4d25572a65a83309}{set\+Bid\+Exchange\+Code}} (std\+::int16\+\_\+t bid\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a30fac8cd512d4ba9efbc484e64b779ad}{with\+Bid\+Exchange\+Code}} (std\+::int16\+\_\+t bid\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a8e4052fe711a9484518dcc1d4d53282f}{with\+Bid\+Exchange\+Code\+Shared}} (std\+::int16\+\_\+t bid\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a16ab9141010f9912f6637525f3a6ff80}{get\+Bid\+Price}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns bid price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ab3c2ac0171dc1b26eadc4aec00f61ce0}{set\+Bid\+Price}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} bid\+Price) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a5fd7034807e7a77e0329bc91e99b5994}{with\+Bid\+Price}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} bid\+Price) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid price and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a1cc25998f2fc2d301aa457ba3b302bb4}{with\+Bid\+Price\+Shared}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} bid\+Price) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid price and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a2057aad7615824b4941d5dc8f219a32d}{get\+Bid\+Size}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns bid size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a2bd869996ba22bcd28a4fa4c3e42efa0}{set\+Bid\+Size}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} bid\+Size) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a7be78db0365495500159a89bdc5d60d6}{with\+Bid\+Size}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} bid\+Size) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid size and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ae67aee0f85e2e2d13b6c0fc49729854d}{with\+Bid\+Size\+Shared}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} bid\+Size) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes bid size and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_aad31bf77818e44221605734030483253}{get\+Ask\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns time of the last ask change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a8006ab30eac90d7b507c98fe71536387}{set\+Ask\+Time}} (std\+::int64\+\_\+t ask\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes time of the last ask change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a95f45a968e3d547e5a201d3a07a9ded9}{with\+Ask\+Time}} (std\+::int64\+\_\+t ask\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes time of the last ask change and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ad64fce1fb4ccfd174f9e50a48b329f93}{with\+Ask\+Time\+Shared}} (std\+::int64\+\_\+t ask\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes time of the last ask change and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_aacf6120ae69ad2a7cc242351cf5396d7}{get\+Ask\+Exchange\+Code}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns ask exchange code. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_quote_afc0ec9154a31803ba1fbab9f02bd6b54}{get\+Ask\+Exchange\+Code\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns ask exchange code as UTF8 string. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a0f301d9560e08567ac5d6ddcf716137d}{set\+Ask\+Exchange\+Code}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}} ask\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a2b997acfb3932a893ba3bdb9eb99e0cc}{with\+Ask\+Exchange\+Code}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}} ask\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ab1fcff243aa558d4f659f62a1e22088f}{with\+Ask\+Exchange\+Code\+Shared}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}} ask\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_aab8dc0b9616377fe4ff0f51acdf8e2d0}{set\+Ask\+Exchange\+Code}} (std\+::int16\+\_\+t ask\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a1b0d0325369a8dd37d1da7d370fe913b}{with\+Ask\+Exchange\+Code}} (std\+::int16\+\_\+t ask\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a5ca219c3cffe4839826337b67a7272b3}{with\+Ask\+Exchange\+Code\+Shared}} (std\+::int16\+\_\+t ask\+Exchange\+Code) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ac6a1f492385d6c4b48e9dd71a5ee8247}{get\+Ask\+Price}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}}
+\begin{DoxyCompactList}\small\item\em Returns ask price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_afe4eb444569eac2e8ffbd43496ee0f4f}{set\+Ask\+Price}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} ask\+Price)
+\begin{DoxyCompactList}\small\item\em Changes ask price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_a39644f1dde9d47711f5bfe42e44f8a48}{with\+Ask\+Price}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} ask\+Price) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask price and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a492960c1f2cd70e0d7c752ff3348a393}{with\+Ask\+Price\+Shared}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} ask\+Price) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask price and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_quote_a3e62311b4e1c9fc666f4249f15c51b08}{get\+Ask\+Size}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}}
+\begin{DoxyCompactList}\small\item\em Returns ask size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_aff46f467cc6a8f167aa6ad6f81ff2bc6}{set\+Ask\+Size}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} ask\+Size)
+\begin{DoxyCompactList}\small\item\em Changes ask size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& \mbox{\hyperlink{classdxfcpp_1_1_quote_af59d9ae8f18e3f1d2c665753b49de84d}{with\+Ask\+Size}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} ask\+Size) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask size and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_quote_aa0846c2b0455b73869990ccd8f9512c2}{with\+Ask\+Size\+Shared}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} ask\+Size) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ask size and returns a shared pointer to the current quote. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_quote_a43c3ae1440afdc970e557002b96854a0}{to\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_market_event_a62b3475e3dc13476c57553cc354a2915}{get\+Event\+Symbol}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{set\+Event\+Symbol}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes symbol of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_market_event_a4dde8cfbc3163d9ea5c4b1346b8b861d}{get\+Event\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} T $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_quote_ab925970cfeefd9eac1f4a186f22da724}{free\+Graal}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{graal\+Native}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{constexpr}} std\+::uint32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_quote_a7559909df497fc5e47c13f90a10ff964}{MAX\+\_\+\+SEQUENCE}} = (1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}} $<$$<$ 22\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}) -\/ 1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}\label{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+QUOTE
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{Market\+Event}} (std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{classdxfcpp_1_1_quote}{Quote} event is a snapshot of the best bid and ask prices, and other fields that change with each quote. 
+
+It represents the most recent information that is available about the best quote on the market at any given moment of time.
+
+Bid corresponds to the best (maximal price) order to buy, ask corresponds to the best (minimal price) order to sell. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdxfcpp_1_1_quote_aafab284549a0d091da0e12a91d87caa2}\label{classdxfcpp_1_1_quote_aafab284549a0d091da0e12a91d87caa2} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!Quote@{Quote}}
+\index{Quote@{Quote}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{Quote()}{Quote()}}
+{\footnotesize\ttfamily dxfcpp\+::\+Quote\+::\+Quote (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new quote event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_quote_ab925970cfeefd9eac1f4a186f22da724}\label{classdxfcpp_1_1_quote_ab925970cfeefd9eac1f4a186f22da724} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::free\+Graal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*}}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_aacf6120ae69ad2a7cc242351cf5396d7}\label{classdxfcpp_1_1_quote_aacf6120ae69ad2a7cc242351cf5396d7} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getAskExchangeCode@{getAskExchangeCode}}
+\index{getAskExchangeCode@{getAskExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getAskExchangeCode()}{getAskExchangeCode()}}
+{\footnotesize\ttfamily std\+::int16\+\_\+t dxfcpp\+::\+Quote\+::get\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns ask exchange code. 
+
+\begin{DoxyReturn}{Returns}
+The ask exchange code. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_afc0ec9154a31803ba1fbab9f02bd6b54}\label{classdxfcpp_1_1_quote_afc0ec9154a31803ba1fbab9f02bd6b54} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getAskExchangeCodeString@{getAskExchangeCodeString}}
+\index{getAskExchangeCodeString@{getAskExchangeCodeString}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getAskExchangeCodeString()}{getAskExchangeCodeString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Quote\+::get\+Ask\+Exchange\+Code\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns ask exchange code as UTF8 string. 
+
+\begin{DoxyReturn}{Returns}
+The ask exchange code as UTF8 string. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_ac6a1f492385d6c4b48e9dd71a5ee8247}\label{classdxfcpp_1_1_quote_ac6a1f492385d6c4b48e9dd71a5ee8247} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getAskPrice@{getAskPrice}}
+\index{getAskPrice@{getAskPrice}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getAskPrice()}{getAskPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Quote\+::get\+Ask\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns ask price. 
+
+\begin{DoxyReturn}{Returns}
+The ask price. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a3e62311b4e1c9fc666f4249f15c51b08}\label{classdxfcpp_1_1_quote_a3e62311b4e1c9fc666f4249f15c51b08} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getAskSize@{getAskSize}}
+\index{getAskSize@{getAskSize}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getAskSize()}{getAskSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Quote\+::get\+Ask\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns ask size. 
+
+\begin{DoxyReturn}{Returns}
+The ask size 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_aad31bf77818e44221605734030483253}\label{classdxfcpp_1_1_quote_aad31bf77818e44221605734030483253} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getAskTime@{getAskTime}}
+\index{getAskTime@{getAskTime}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getAskTime()}{getAskTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Quote\+::get\+Ask\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last ask change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+{\bfseries{This time is always transmitted with seconds precision, so the result of this method is usually a multiple of 1000.}}
+
+\begin{DoxyReturn}{Returns}
+The time of the last ask change. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a85c1b6ba7f68e6715f648ba9a28e9116}\label{classdxfcpp_1_1_quote_a85c1b6ba7f68e6715f648ba9a28e9116} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getBidExchangeCode@{getBidExchangeCode}}
+\index{getBidExchangeCode@{getBidExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getBidExchangeCode()}{getBidExchangeCode()}}
+{\footnotesize\ttfamily std\+::int16\+\_\+t dxfcpp\+::\+Quote\+::get\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns bid exchange code. 
+
+\begin{DoxyReturn}{Returns}
+The bid exchange code. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_af93ccd15035841ce2064c0c4ee23ecb4}\label{classdxfcpp_1_1_quote_af93ccd15035841ce2064c0c4ee23ecb4} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getBidExchangeCodeString@{getBidExchangeCodeString}}
+\index{getBidExchangeCodeString@{getBidExchangeCodeString}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getBidExchangeCodeString()}{getBidExchangeCodeString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Quote\+::get\+Bid\+Exchange\+Code\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns bid exchange code as UTF8 string. 
+
+\begin{DoxyReturn}{Returns}
+The bid exchange code as UTF8 string. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a16ab9141010f9912f6637525f3a6ff80}\label{classdxfcpp_1_1_quote_a16ab9141010f9912f6637525f3a6ff80} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getBidPrice@{getBidPrice}}
+\index{getBidPrice@{getBidPrice}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getBidPrice()}{getBidPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Quote\+::get\+Bid\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns bid price. 
+
+\begin{DoxyReturn}{Returns}
+The bid price. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a2057aad7615824b4941d5dc8f219a32d}\label{classdxfcpp_1_1_quote_a2057aad7615824b4941d5dc8f219a32d} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getBidSize@{getBidSize}}
+\index{getBidSize@{getBidSize}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getBidSize()}{getBidSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Quote\+::get\+Bid\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns bid size. 
+
+\begin{DoxyReturn}{Returns}
+The bid size 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a0aa57b2c66433bef10127ef1f8466b2b}\label{classdxfcpp_1_1_quote_a0aa57b2c66433bef10127ef1f8466b2b} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getBidTime@{getBidTime}}
+\index{getBidTime@{getBidTime}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getBidTime()}{getBidTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Quote\+::get\+Bid\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last bid change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+{\bfseries{This time is always transmitted with seconds precision, so the result of this method is usually a multiple of 1000.}}
+
+\begin{DoxyReturn}{Returns}
+The time of the last bid change. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}\label{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Quote\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns sequence number of this quote to distinguish quotes that have the same \doxylink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{time}. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \doxylink{classdxfcpp_1_1_quote_a7559909df497fc5e47c13f90a10ff964}{Quote\+::\+MAX\+\_\+\+SEQUENCE}.
+
+\begin{DoxyReturn}{Returns}
+sequence of this quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}\label{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getTime@{getTime}}
+\index{getTime@{getTime}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Quote\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last bid or ask change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+The time of the last bid or ask change. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_add808a76261cd6ffb98bc1268ac03aed}\label{classdxfcpp_1_1_quote_add808a76261cd6ffb98bc1268ac03aed} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getTimeNanoPart@{getTimeNanoPart}}
+\index{getTimeNanoPart@{getTimeNanoPart}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getTimeNanoPart()}{getTimeNanoPart()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Quote\+::get\+Time\+Nano\+Part (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns microseconds and nanoseconds part of time of the last bid or ask change. 
+
+\begin{DoxyReturn}{Returns}
+The microseconds and nanoseconds part of time of the last bid or ask change. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_ada048effd88030a743bf14ef0427660c}\label{classdxfcpp_1_1_quote_ada048effd88030a743bf14ef0427660c} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!getTimeNanos@{getTimeNanos}}
+\index{getTimeNanos@{getTimeNanos}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{getTimeNanos()}{getTimeNanos()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Quote\+::get\+Time\+Nanos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last bid or ask change in nanoseconds. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+The time of the last bid or ask change in nanoseconds. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a0f301d9560e08567ac5d6ddcf716137d}\label{classdxfcpp_1_1_quote_a0f301d9560e08567ac5d6ddcf716137d} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setAskExchangeCode@{setAskExchangeCode}}
+\index{setAskExchangeCode@{setAskExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setAskExchangeCode()}{setAskExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}}}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_aab8dc0b9616377fe4ff0f51acdf8e2d0}\label{classdxfcpp_1_1_quote_aab8dc0b9616377fe4ff0f51acdf8e2d0} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setAskExchangeCode@{setAskExchangeCode}}
+\index{setAskExchangeCode@{setAskExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setAskExchangeCode()}{setAskExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_afe4eb444569eac2e8ffbd43496ee0f4f}\label{classdxfcpp_1_1_quote_afe4eb444569eac2e8ffbd43496ee0f4f} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setAskPrice@{setAskPrice}}
+\index{setAskPrice@{setAskPrice}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setAskPrice()}{setAskPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Ask\+Price (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{ask\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes ask price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Price} & The ask price. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_aff46f467cc6a8f167aa6ad6f81ff2bc6}\label{classdxfcpp_1_1_quote_aff46f467cc6a8f167aa6ad6f81ff2bc6} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setAskSize@{setAskSize}}
+\index{setAskSize@{setAskSize}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setAskSize()}{setAskSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Ask\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{ask\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes ask size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Size} & The ask size. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_a8006ab30eac90d7b507c98fe71536387}\label{classdxfcpp_1_1_quote_a8006ab30eac90d7b507c98fe71536387} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setAskTime@{setAskTime}}
+\index{setAskTime@{setAskTime}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setAskTime()}{setAskTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Ask\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ask\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last ask change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \doxylink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{Quote\+::get\+Time()} of this quote even precise up to a millisecond.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Time} & The time of the last ask change. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_ac9e56faa552791e2b829ba6a6ddb2abb}\label{classdxfcpp_1_1_quote_ac9e56faa552791e2b829ba6a6ddb2abb} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setBidExchangeCode@{setBidExchangeCode}}
+\index{setBidExchangeCode@{setBidExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setBidExchangeCode()}{setBidExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}}}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & The bid exchange code. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_a5165b484a4a3d82f4d25572a65a83309}\label{classdxfcpp_1_1_quote_a5165b484a4a3d82f4d25572a65a83309} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setBidExchangeCode@{setBidExchangeCode}}
+\index{setBidExchangeCode@{setBidExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setBidExchangeCode()}{setBidExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & bid exchange code. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_ab3c2ac0171dc1b26eadc4aec00f61ce0}\label{classdxfcpp_1_1_quote_ab3c2ac0171dc1b26eadc4aec00f61ce0} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setBidPrice@{setBidPrice}}
+\index{setBidPrice@{setBidPrice}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setBidPrice()}{setBidPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Bid\+Price (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{bid\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Price} & The bid price. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_a2bd869996ba22bcd28a4fa4c3e42efa0}\label{classdxfcpp_1_1_quote_a2bd869996ba22bcd28a4fa4c3e42efa0} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setBidSize@{setBidSize}}
+\index{setBidSize@{setBidSize}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setBidSize()}{setBidSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Bid\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{bid\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Size} & The bid size. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_a3421d285b864fc5d56da0fbc28ca3420}\label{classdxfcpp_1_1_quote_a3421d285b864fc5d56da0fbc28ca3420} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setBidTime@{setBidTime}}
+\index{setBidTime@{setBidTime}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setBidTime()}{setBidTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Bid\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{bid\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last bid change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \doxylink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{Quote\+::get\+Time()} of this quote even precise up to a millisecond.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Time} & The time of the last bid change. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_ac95ca334088170a0f20119bb00eb5b62}\label{classdxfcpp_1_1_quote_ac95ca334088170a0f20119bb00eb5b62} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{sequence number} of this quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & The sequence.\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{Quote\+::get\+Sequence()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_quote_a3f510fca9e007429b98893ddf99a3120}\label{classdxfcpp_1_1_quote_a3f510fca9e007429b98893ddf99a3120} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!setTimeNanoPart@{setTimeNanoPart}}
+\index{setTimeNanoPart@{setTimeNanoPart}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{setTimeNanoPart()}{setTimeNanoPart()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Quote\+::set\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds part of time of the last bid or ask change. 
+
+{\bfseries{This method changes \doxylink{classdxfcpp_1_1_quote_ada048effd88030a743bf14ef0427660c}{Quote\+::get\+Time\+Nanos()} result.}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & The microseconds and nanoseconds part of time of the last bid or ask change. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_a613deec3e5faef26a10575e3f72e9339}\label{classdxfcpp_1_1_quote_a613deec3e5faef26a10575e3f72e9339} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*} dxfcpp\+::\+Quote\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_event_type_af1f3b585ac540d9bfe1d649ef1835811}{dxfcpp\+::\+Event\+Type}}.
+
+\Hypertarget{classdxfcpp_1_1_quote_a43c3ae1440afdc970e557002b96854a0}\label{classdxfcpp_1_1_quote_a43c3ae1440afdc970e557002b96854a0} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Quote\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+A string representation. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_event_type_a54c84141d4eff181553b9064db6500e9}{dxfcpp\+::\+Event\+Type}}.
+
+\Hypertarget{classdxfcpp_1_1_quote_a2b997acfb3932a893ba3bdb9eb99e0cc}\label{classdxfcpp_1_1_quote_a2b997acfb3932a893ba3bdb9eb99e0cc} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskExchangeCode@{withAskExchangeCode}}
+\index{withAskExchangeCode@{withAskExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskExchangeCode()}{withAskExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}}}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a1b0d0325369a8dd37d1da7d370fe913b}\label{classdxfcpp_1_1_quote_a1b0d0325369a8dd37d1da7d370fe913b} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskExchangeCode@{withAskExchangeCode}}
+\index{withAskExchangeCode@{withAskExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskExchangeCode()}{withAskExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_ab1fcff243aa558d4f659f62a1e22088f}\label{classdxfcpp_1_1_quote_ab1fcff243aa558d4f659f62a1e22088f} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskExchangeCodeShared@{withAskExchangeCodeShared}}
+\index{withAskExchangeCodeShared@{withAskExchangeCodeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskExchangeCodeShared()}{withAskExchangeCodeShared()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Ask\+Exchange\+Code\+Shared (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}}}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a5ca219c3cffe4839826337b67a7272b3}\label{classdxfcpp_1_1_quote_a5ca219c3cffe4839826337b67a7272b3} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskExchangeCodeShared@{withAskExchangeCodeShared}}
+\index{withAskExchangeCodeShared@{withAskExchangeCodeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskExchangeCodeShared()}{withAskExchangeCodeShared()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Ask\+Exchange\+Code\+Shared (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a39644f1dde9d47711f5bfe42e44f8a48}\label{classdxfcpp_1_1_quote_a39644f1dde9d47711f5bfe42e44f8a48} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskPrice@{withAskPrice}}
+\index{withAskPrice@{withAskPrice}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskPrice()}{withAskPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Ask\+Price (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{ask\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask price and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Price} & The ask price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a492960c1f2cd70e0d7c752ff3348a393}\label{classdxfcpp_1_1_quote_a492960c1f2cd70e0d7c752ff3348a393} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskPriceShared@{withAskPriceShared}}
+\index{withAskPriceShared@{withAskPriceShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskPriceShared()}{withAskPriceShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Ask\+Price\+Shared (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{ask\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask price and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Price} & The ask price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_af59d9ae8f18e3f1d2c665753b49de84d}\label{classdxfcpp_1_1_quote_af59d9ae8f18e3f1d2c665753b49de84d} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskSize@{withAskSize}}
+\index{withAskSize@{withAskSize}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskSize()}{withAskSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Ask\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{ask\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask size and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Size} & The ask size. @retrun The current quote. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_aa0846c2b0455b73869990ccd8f9512c2}\label{classdxfcpp_1_1_quote_aa0846c2b0455b73869990ccd8f9512c2} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskSizeShared@{withAskSizeShared}}
+\index{withAskSizeShared@{withAskSizeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskSizeShared()}{withAskSizeShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Ask\+Size\+Shared (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{ask\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask size and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Size} & The ask size. @retrun A shared pointer to the current quote. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_a95f45a968e3d547e5a201d3a07a9ded9}\label{classdxfcpp_1_1_quote_a95f45a968e3d547e5a201d3a07a9ded9} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskTime@{withAskTime}}
+\index{withAskTime@{withAskTime}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskTime()}{withAskTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Ask\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ask\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last ask change and returns the current quote. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \doxylink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{Quote\+::get\+Time()} of this quote even precise up to a millisecond.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Time} & The time of the last ask change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_ad64fce1fb4ccfd174f9e50a48b329f93}\label{classdxfcpp_1_1_quote_ad64fce1fb4ccfd174f9e50a48b329f93} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withAskTimeShared@{withAskTimeShared}}
+\index{withAskTimeShared@{withAskTimeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withAskTimeShared()}{withAskTimeShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Ask\+Time\+Shared (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ask\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last ask change and returns a shared pointer to the current quote. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \doxylink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{Quote\+::get\+Time()} of this quote even precise up to a millisecond.
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Time} & The time of the last ask change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_ac0beb8afbc6e13e08ec05dbd5377d86f}\label{classdxfcpp_1_1_quote_ac0beb8afbc6e13e08ec05dbd5377d86f} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidExchangeCode@{withBidExchangeCode}}
+\index{withBidExchangeCode@{withBidExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidExchangeCode()}{withBidExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}}}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & The bid exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a30fac8cd512d4ba9efbc484e64b779ad}\label{classdxfcpp_1_1_quote_a30fac8cd512d4ba9efbc484e64b779ad} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidExchangeCode@{withBidExchangeCode}}
+\index{withBidExchangeCode@{withBidExchangeCode}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidExchangeCode()}{withBidExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & The bid exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a2c1a3492aa451aaf42e2d8dcd5712f1b}\label{classdxfcpp_1_1_quote_a2c1a3492aa451aaf42e2d8dcd5712f1b} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidExchangeCodeShared@{withBidExchangeCodeShared}}
+\index{withBidExchangeCodeShared@{withBidExchangeCodeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidExchangeCodeShared()}{withBidExchangeCodeShared()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Bid\+Exchange\+Code\+Shared (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{char}}}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & The bid exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a8e4052fe711a9484518dcc1d4d53282f}\label{classdxfcpp_1_1_quote_a8e4052fe711a9484518dcc1d4d53282f} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidExchangeCodeShared@{withBidExchangeCodeShared}}
+\index{withBidExchangeCodeShared@{withBidExchangeCodeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidExchangeCodeShared()}{withBidExchangeCodeShared()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Bid\+Exchange\+Code\+Shared (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & The bid exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a5fd7034807e7a77e0329bc91e99b5994}\label{classdxfcpp_1_1_quote_a5fd7034807e7a77e0329bc91e99b5994} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidPrice@{withBidPrice}}
+\index{withBidPrice@{withBidPrice}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidPrice()}{withBidPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Bid\+Price (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{bid\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid price and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Price} & The bid price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a1cc25998f2fc2d301aa457ba3b302bb4}\label{classdxfcpp_1_1_quote_a1cc25998f2fc2d301aa457ba3b302bb4} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidPriceShared@{withBidPriceShared}}
+\index{withBidPriceShared@{withBidPriceShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidPriceShared()}{withBidPriceShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Bid\+Price\+Shared (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{bid\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid price and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Price} & The bid price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a7be78db0365495500159a89bdc5d60d6}\label{classdxfcpp_1_1_quote_a7be78db0365495500159a89bdc5d60d6} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidSize@{withBidSize}}
+\index{withBidSize@{withBidSize}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidSize()}{withBidSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Bid\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{bid\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid size and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Size} & The bid size. @retrun The current quote. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_ae67aee0f85e2e2d13b6c0fc49729854d}\label{classdxfcpp_1_1_quote_ae67aee0f85e2e2d13b6c0fc49729854d} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidSizeShared@{withBidSizeShared}}
+\index{withBidSizeShared@{withBidSizeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidSizeShared()}{withBidSizeShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Bid\+Size\+Shared (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{bid\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid size and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Size} & The bid size. @retrun A shared pointer to the current quote. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_quote_a62fa9373f523b0ab4d6c029e4cdea5d9}\label{classdxfcpp_1_1_quote_a62fa9373f523b0ab4d6c029e4cdea5d9} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidTime@{withBidTime}}
+\index{withBidTime@{withBidTime}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidTime()}{withBidTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Bid\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{bid\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last bid change and returns the current quote. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \doxylink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{Quote\+::get\+Time()} of this quote even precise up to a millisecond.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Time} & The time of the last bid change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_ab6eb2657de7acf051319b2859313aa93}\label{classdxfcpp_1_1_quote_ab6eb2657de7acf051319b2859313aa93} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withBidTimeShared@{withBidTimeShared}}
+\index{withBidTimeShared@{withBidTimeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withBidTimeShared()}{withBidTimeShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Bid\+Time\+Shared (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{bid\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last bid change and returns a shared pointer to the current quote. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \doxylink{classdxfcpp_1_1_quote_ab95775e9df58cbbb2196b40e4cdd970b}{Quote\+::get\+Time()} of this quote even precise up to a millisecond.
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Time} & The time of the last bid change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a83205d4567859b1f37b365b8669968e9}\label{classdxfcpp_1_1_quote_a83205d4567859b1f37b365b8669968e9} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a8039e3b913137f344a7d543ba3125a73}\label{classdxfcpp_1_1_quote_a8039e3b913137f344a7d543ba3125a73} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withEventSymbolShared@{withEventSymbolShared}}
+\index{withEventSymbolShared@{withEventSymbolShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withEventSymbolShared()}{withEventSymbolShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Event\+Symbol\+Shared (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a911e17c114dce5e2dcd787706f597ccc}\label{classdxfcpp_1_1_quote_a911e17c114dce5e2dcd787706f597ccc} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withEventTime@{withEventTime}}
+\index{withEventTime@{withEventTime}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withEventTime()}{withEventTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_abb762e7b57c1cfc0005eddd18e717cd6}\label{classdxfcpp_1_1_quote_abb762e7b57c1cfc0005eddd18e717cd6} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withEventTimeShared@{withEventTimeShared}}
+\index{withEventTimeShared@{withEventTimeShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withEventTimeShared()}{withEventTimeShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Event\+Time\+Shared (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_ae4ab5fb216a5e15b46cdfdad5e3fb868}\label{classdxfcpp_1_1_quote_ae4ab5fb216a5e15b46cdfdad5e3fb868} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withSequence@{withSequence}}
+\index{withSequence@{withSequence}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withSequence()}{withSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{sequence number} of this quote and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & The sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{Quote\+::get\+Sequence()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_quote_a9c2d4239c2ec4200c3404720d2c8fd80}\label{classdxfcpp_1_1_quote_a9c2d4239c2ec4200c3404720d2c8fd80} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withSequenceShared@{withSequenceShared}}
+\index{withSequenceShared@{withSequenceShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withSequenceShared()}{withSequenceShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Sequence\+Shared (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{sequence number} of this quote and returns a shared pointer to the current quote. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & The sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_quote_a3229eec2f6ccda3211e5efd80f581675}{Quote\+::get\+Sequence()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_quote_a363263be1d7e9d8643a54e0def82d62a}\label{classdxfcpp_1_1_quote_a363263be1d7e9d8643a54e0def82d62a} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withTimeNanoPart@{withTimeNanoPart}}
+\index{withTimeNanoPart@{withTimeNanoPart}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withTimeNanoPart()}{withTimeNanoPart()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote}{Quote}} \& dxfcpp\+::\+Quote\+::with\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds part of time of the last bid or ask change and returns the current quote. 
+
+{\bfseries{This method changes \doxylink{classdxfcpp_1_1_quote_ada048effd88030a743bf14ef0427660c}{Quote\+::get\+Time\+Nanos()} result.}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & The microseconds and nanoseconds part of time of the last bid or ask change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_quote_a67eac50cfdb9b6880370a0648ad6ca75}\label{classdxfcpp_1_1_quote_a67eac50cfdb9b6880370a0648ad6ca75} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!withTimeNanoPartShared@{withTimeNanoPartShared}}
+\index{withTimeNanoPartShared@{withTimeNanoPartShared}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{withTimeNanoPartShared()}{withTimeNanoPartShared()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_quote_a5657dd906625503074cfc9ec413ec2e1}{Quote\+::\+Ptr}} dxfcpp\+::\+Quote\+::with\+Time\+Nano\+Part\+Shared (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds part of time of the last bid or ask change and returns a shared pointer to the current quote. 
+
+{\bfseries{This method changes \doxylink{classdxfcpp_1_1_quote_ada048effd88030a743bf14ef0427660c}{Quote\+::get\+Time\+Nanos()} result.}}
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(new Quote(...))} or {\ttfamily std\+::make\+\_\+shared\texorpdfstring{$<$}{<}\doxylink{classdxfcpp_1_1_quote}{Quote}\texorpdfstring{$>$}{>}(...)}
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & The microseconds and nanoseconds part of time of the last bid or ask change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A shared pointer to the current quote. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{classdxfcpp_1_1_quote_a7559909df497fc5e47c13f90a10ff964}\label{classdxfcpp_1_1_quote_a7559909df497fc5e47c13f90a10ff964} 
+\index{dxfcpp::Quote@{dxfcpp::Quote}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!dxfcpp::Quote@{dxfcpp::Quote}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{constexpr}} std\+::uint32\+\_\+t dxfcpp\+::\+Quote\+::\+MAX\+\_\+\+SEQUENCE = (1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}} $<$$<$ 22\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}) -\/ 1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_quote_ac95ca334088170a0f20119bb00eb5b62}{Quote\+::set\+Sequence()} 
+\end{DoxySeeAlso}

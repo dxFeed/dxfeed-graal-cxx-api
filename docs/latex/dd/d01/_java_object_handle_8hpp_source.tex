@@ -1,0 +1,61 @@
+\doxysubsection{Java\+Object\+Handle.\+hpp}
+\hypertarget{_java_object_handle_8hpp_source}{}\label{_java_object_handle_8hpp_source}\index{JavaObjectHandle.hpp@{JavaObjectHandle.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}utils/StringUtils.hpp"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct}\ JavaObjectHandle\ \{}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \mbox{\hyperlink{_debug_8hpp_a6025368b5d52d392182828fbcc18a424}{DXFCPP\_DEBUG}}\ \textcolor{preprocessor}{==}\ 1}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{auto}\ getDebugName()\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::string(\textcolor{stringliteral}{"{}JavaObjectHandle<"{}})\ +\ \textcolor{keyword}{typeid}(T).name()\ +\ \textcolor{stringliteral}{"{}>"{}};}
+\DoxyCodeLine{00019\ \ \ \ \ \}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using}\ Type\ =\ T;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \textcolor{keywordtype}{void}\ deleter(\textcolor{keywordtype}{void}\ *handle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{explicit}\ JavaObjectHandle(\textcolor{keywordtype}{void}\ *handle\ =\ \textcolor{keywordtype}{nullptr})\ \textcolor{keyword}{noexcept}\ :\ impl\_\{handle,\ \&deleter\}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(getDebugName()\ +\ \textcolor{stringliteral}{"{}(handle\ =\ "{}}\ +\ dxfcpp::toString(handle)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ JavaObjectHandle(\textcolor{keyword}{const}\ JavaObjectHandle\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00031\ \ \ \ \ JavaObjectHandle(JavaObjectHandle\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00032\ \ \ \ \ JavaObjectHandle\ \&operator=(\textcolor{keyword}{const}\ JavaObjectHandle\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00033\ \ \ \ \ JavaObjectHandle\ \&operator=(JavaObjectHandle\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~JavaObjectHandle()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ [[nodiscard]]\ std::string\ toString()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (impl\_)}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::toString(impl\_.get());}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}nullptr"{}};}
+\DoxyCodeLine{00041\ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{void}\ *get()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ impl\_.get();}
+\DoxyCodeLine{00045\ \ \ \ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{explicit}\ operator\ \textcolor{keywordtype}{bool}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{bool}>(impl\_);}
+\DoxyCodeLine{00049\ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00052\ \ \ \ \ std::unique\_ptr<\textcolor{keywordtype}{void},\ \textcolor{keyword}{decltype}(\&deleter)>\ impl\_;}
+\DoxyCodeLine{00053\ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

@@ -1,0 +1,400 @@
+\doxysubsection{Trade\+Base.\+hpp}
+\hypertarget{_trade_base_8hpp_source}{}\label{_trade_base_8hpp_source}\index{TradeBase.hpp@{TradeBase.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Base\ class\ for\ common\ fields\ of\ Trade\}\ and\ TradeETH\ events.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Trade\ events\ represent\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ last\ trade\ on\ the\ market\ at\ any}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Trade\ event\ represents\ last\ trade\ information\ for\ <b>regular\ trading\ hours</b>\ (RTH)\ with\ an\ official\ volume\ and}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ turnover\ <b>for\ the\ whole\ trading\ day</b>\ identified\ by\ @ref\ TradeBase::getDayId()\ "{}dayId"{}\ field.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ TradeETH\ event\ is\ defined\ only\ for\ symbols\ (typically\ stocks\ and\ ETFs)\ with\ a\ designated}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <b>extended\ trading\ hours</b>\ (ETH,\ pre\ market\ and\ post\ market\ trading\ sessions).\ It\ represents\ last\ trade\ price}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ during\ ETH\ and\ also\ accumulated\ volume\ and\ turnover\ during\ ETH\ for\ current\ trading\ day.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00034\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base}{TradeBase}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ SECONDS\_SHIFT\ =\ 32ULL;}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_SHIFT\ =\ 22ULL;}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_MASK\ =\ 0x3ffULL;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Flags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *\ \ \ 31..4\ \ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ |\ \ Direction\ \ \ |\ ETH|}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ DIRECTION\ values\ are\ taken\ from\ Direction\ enum.}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int32\_t\ DIRECTION\_MASK\ =\ 7;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int32\_t\ DIRECTION\_SHIFT\ =\ 1;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::int32\_t\ ETH\ =\ 1;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{struct}\ TradeBaseData\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ std::int64\_t\ timeSequence\{\};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ std::int32\_t\ timeNanoPart\{\};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ std::int16\_t\ exchangeCode\{\};}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ price\ =\ math::NaN;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ change\ =\ math::NaN;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ size\ =\ math::NaN;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ std::int32\_t\ dayId\{\};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayVolume\{\};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayTurnover\{\};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ std::int32\_t\ flags\{\};}
+\DoxyCodeLine{00067\ \ \ \ \ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ TradeBaseData\ tradeBaseData\_\{\};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ Maximum\ allowed\ sequence\ value.}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ @see\ TradeBase::setSequence()}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a5b2a21a413d01613757151188417715b}{MAX\_SEQUENCE}}\ =\ (1U\ <<\ 22U)\ -\/\ 1U;}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ trade\ event\ with\ default\ values.}}
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a745dd0dd648b0b4b94db5585a4380d22}{TradeBase}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ trade\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_aa2c14ca3644e13d88c7a8d861c91ab11}{TradeBase}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{(}}std::move(eventSymbol)\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{)}}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ and\ sequence\ of\ last\ trade\ packaged\ into\ single\ long\ value.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ and\ sequence\ of\ last\ trade.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00098\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9e9abacec4e8d46afdb04d1259aa2aee}{getTimeSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.timeSequence;}
+\DoxyCodeLine{00100\ \ \ \ \ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ and\ sequence\ of\ last\ trade.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ <b>Do\ not\ use\ this\ method\ directly.</b>}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ Change\ @ref\ TradeBase::setTime()\ "{}time"{}\ and/or\ @ref\ TradeBase::setSequence()\ "{}sequence"{}.}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeSequence\ the\ time\ and\ sequence.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ @see\ TradeBase::getTimeSequence()}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a0183911aeb8773a04801750e5bb63427}{setTimeSequence}}(std::int64\_t\ timeSequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ tradeBaseData\_.timeSequence\ =\ timeSequence;}
+\DoxyCodeLine{00112\ \ \ \ \ \}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00120\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_af5def7c30701690b60bc3ef9ecc3e2e4}{getTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sar(tradeBaseData\_.timeSequence,\ SECONDS\_SHIFT)\ *\ 1000\ +}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ andOp(sar(tradeBaseData\_.timeSequence,\ MILLISECONDS\_SHIFT),\ MILLISECONDS\_MASK);}
+\DoxyCodeLine{00123\ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a4285521e8bf51e311496009fa834b2c8}{setTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ tradeBaseData\_.timeSequence\ =\ orOp(}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getSecondsFromTime(time)),\ SECONDS\_SHIFT),}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ orOp(sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getMillisFromTime(time)),\ MILLISECONDS\_MASK),\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9c2a0a6140c2f7685cd722a8e70cb517}{getSequence}}\mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9c2a0a6140c2f7685cd722a8e70cb517}{(}}\mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9c2a0a6140c2f7685cd722a8e70cb517}{)}}));}
+\DoxyCodeLine{00135\ \ \ \ \ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ of\ the\ last\ trade\ in\ nanoseconds.}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ of\ the\ last\ trade\ in\ nanoseconds.}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00143\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a1276cd16081a8790648eb2d56c87f4fc}{getTimeNanos}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ time\_nanos\_util::getNanosFromMillisAndNanoPart(\mbox{\hyperlink{classdxfcpp_1_1_trade_base_af5def7c30701690b60bc3ef9ecc3e2e4}{getTime}}\mbox{\hyperlink{classdxfcpp_1_1_trade_base_af5def7c30701690b60bc3ef9ecc3e2e4}{(}}\mbox{\hyperlink{classdxfcpp_1_1_trade_base_af5def7c30701690b60bc3ef9ecc3e2e4}{)}},\ tradeBaseData\_.timeNanoPart);}
+\DoxyCodeLine{00145\ \ \ \ \ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ time\ of\ the\ last\ trade\ in\ nanoseconds.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a3abf14052142b5e15de71c048762c136}{setTimeNanos}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a4285521e8bf51e311496009fa834b2c8}{setTime}}\mbox{\hyperlink{classdxfcpp_1_1_trade_base_a4285521e8bf51e311496009fa834b2c8}{(}}time\_nanos\_util::getMillisFromNanos(timeNanos)\mbox{\hyperlink{classdxfcpp_1_1_trade_base_a4285521e8bf51e311496009fa834b2c8}{)}};}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ tradeBaseData\_.timeNanoPart\ =\ time\_nanos\_util::getNanoPartFromNanos(timeNanos);}
+\DoxyCodeLine{00156\ \ \ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ microseconds\ and\ nanoseconds\ time\ part\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a59c96e11b04d70f8454585d49abbf0a6}{setTimeNanoPart}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ tradeBaseData\_.timeNanoPart\ =\ timeNanoPart;}
+\DoxyCodeLine{00165\ \ \ \ \ \}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ microseconds\ and\ nanoseconds\ time\ part\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ @return\ microseconds\ and\ nanoseconds\ time\ part\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00172\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a83b4392e3c0503aed2f83c707f0b0fc4}{getTimeNanoPart}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.timeNanoPart;}
+\DoxyCodeLine{00174\ \ \ \ \ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ sequence\ number\ of\ the\ last\ trade\ to\ distinguish\ trades\ that\ have\ the\ same}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ TradeBase::getTime()\ "{}time"{}.\ This\ sequence\ number\ does\ not\ have\ to\ be\ unique\ and}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ does\ not\ need\ to\ be\ sequential.\ Sequence\ can\ range\ from\ 0\ to\ TradeBase::MAX\_SEQUENCE.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ @return\ sequence\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00183\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9c2a0a6140c2f7685cd722a8e70cb517}{getSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(andOp(tradeBaseData\_.timeSequence,\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a5b2a21a413d01613757151188417715b}{MAX\_SEQUENCE}}));}
+\DoxyCodeLine{00185\ \ \ \ \ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ TradeBase::getSequence()\ "{}sequence\ number"{}\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ @see\ TradeBase::getSequence()}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a650813196c892ea289c782cf0cae7281}{setSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ sequence\ <=\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a5b2a21a413d01613757151188417715b}{MAX\_SEQUENCE}});}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ tradeBaseData\_.timeSequence\ =\ orOp(andOp(tradeBaseData\_.timeSequence,\ \string~\mbox{\hyperlink{classdxfcpp_1_1_trade_base_a5b2a21a413d01613757151188417715b}{MAX\_SEQUENCE}}),\ sequence);}
+\DoxyCodeLine{00198\ \ \ \ \ \}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ code\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ code\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00205\ \ \ \ \ std::int16\_t\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_ab8069584ccd268a1670ebfcf8294dbbd}{getExchangeCode}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.exchangeCode;}
+\DoxyCodeLine{00207\ \ \ \ \ \}}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ code\ of\ last\ trade\ as\ UTF8\ string.}}
+\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ code\ of\ last\ trade\ as\ UTF8\ string.}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00214\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_aaa26e07694ac55e0f19d7a8033cfb9ed}{getExchangeCodeString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TODO:\ cache}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::utf16toUtf8String(tradeBaseData\_.exchangeCode);}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ exchange\ code\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a7ebd027e215c3804b9ee44b57501173b}{setExchangeCode}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ tradeBaseData\_.exchangeCode\ =\ utf8to16(exchangeCode);}
+\DoxyCodeLine{00227\ \ \ \ \ \}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ exchange\ code\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_afd887007783cd05b4bddc6eed4e458d5}{setExchangeCode}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ tradeBaseData\_.exchangeCode\ =\ exchangeCode;}
+\DoxyCodeLine{00236\ \ \ \ \ \}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ price\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ @return\ price\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_ab62ed854fb2de1e4b905575374029c4a}{getPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.price;}
+\DoxyCodeLine{00245\ \ \ \ \ \}}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ price\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a618e034171f93d01bbfbc0199efebef2}{setPrice}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ tradeBaseData\_.price\ =\ price;}
+\DoxyCodeLine{00254\ \ \ \ \ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ size\ of\ the\ last\ trade\ as\ floating\ number\ with\ fractions.}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ *\ @return\ size\ of\ the\ last\ trade\ as\ floating\ number\ with\ fractions.}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9568e902c69285d548a005d778aadc6b}{getSize}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.size;}
+\DoxyCodeLine{00263\ \ \ \ \ \}}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ the\ last\ trade\ as\ floating\ number\ with\ fractions.}}
+\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ size\ of\ the\ last\ trade\ as\ floating\ number\ with\ fractions.}}
+\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a18117ffa89cfe50aed5b3cd6b96f7dc9}{setSize}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ tradeBaseData\_.size\ =\ size;}
+\DoxyCodeLine{00272\ \ \ \ \ \}}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ identifier\ of\ the\ current\ trading\ day.}}
+\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ @return\ identifier\ of\ the\ current\ trading\ day.}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00280\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a624e8620427f7e525d84a6d3a87f4cfc}{getDayId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.dayId;}
+\DoxyCodeLine{00282\ \ \ \ \ \}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ identifier\ of\ the\ current\ trading\ day.}}
+\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayId\ identifier\ of\ the\ current\ trading\ day.}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9596168061d99ae4559a7df3703d07ab}{setDayId}}(std::int32\_t\ dayId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ tradeBaseData\_.dayId\ =\ dayId;}
+\DoxyCodeLine{00292\ \ \ \ \ \}}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ total\ volume\ traded\ for\ a\ day\ as\ floating\ number\ with\ fractions.}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ @return\ total\ volume\ traded\ for\ a\ day\ as\ floating\ number\ with\ fractions.}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a05dc10a230f3c6c733cb11a04b0ecf53}{getDayVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.dayVolume;}
+\DoxyCodeLine{00301\ \ \ \ \ \}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ volume\ traded\ for\ a\ day\ as\ floating\ number\ with\ fractions.}}
+\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayVolume\ total\ volume\ traded\ for\ a\ day\ as\ floating\ number\ with\ fractions.}}
+\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00308\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a8217fe86989da7aef479b74f095c8c69}{setDayVolume}}(\textcolor{keywordtype}{double}\ dayVolume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ tradeBaseData\_.dayVolume\ =\ dayVolume;}
+\DoxyCodeLine{00310\ \ \ \ \ \}}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ total\ turnover\ traded\ for\ a\ day.}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ Day\ VWAP\ can\ be\ computed\ with\ \`{}getDayTurnover()\ /\ getDayVolume()`.}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ *\ @return\ total\ turnover\ traded\ for\ a\ day.}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_ad7530dc14b38d8e4c86acd51f51a3c12}{getDayTurnover}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.dayTurnover;}
+\DoxyCodeLine{00320\ \ \ \ \ \}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ turnover\ traded\ for\ a\ day.}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayTurnover\ total\ turnover\ traded\ for\ a\ day.}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00327\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a5b9431e0f877488087e2fbbef8bc7a0a}{setDayTurnover}}(\textcolor{keywordtype}{double}\ dayTurnover)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ tradeBaseData\_.dayTurnover\ =\ dayTurnover;}
+\DoxyCodeLine{00329\ \ \ \ \ \}}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ tick\ direction\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *\ @return\ tick\ direction\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00336\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9731cd106422167be74d9810d92671c6}{Direction}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_trade_base_a9731cd106422167be74d9810d92671c6}{getTickDirection}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Direction::valueOf(getBits(tradeBaseData\_.flags,\ DIRECTION\_MASK,\ DIRECTION\_SHIFT));}
+\DoxyCodeLine{00338\ \ \ \ \ \}}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ tick\ direction\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *\ @param\ direction\ tick\ direction\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00345\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_ab215b976bbf3afcf82d56079ff67f897}{setTickDirection}}(\textcolor{keyword}{const}\ Direction\ \&direction)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ tradeBaseData\_.flags\ =\ setBits(tradeBaseData\_.flags,\ DIRECTION\_MASK,\ DIRECTION\_SHIFT,\ direction.getCode());}
+\DoxyCodeLine{00347\ \ \ \ \ \}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00350\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ whether\ last\ trade\ was\ in\ extended\ trading\ hours.}}
+\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ last\ trade\ was\ in\ extended\ trading\ hours.}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a4edeabe4466107f4ba0aba1cf03a99d4}{isExtendedTradingHours}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ andOp(tradeBaseData\_.flags,\ ETH)\ !=\ 0;}
+\DoxyCodeLine{00356\ \ \ \ \ \}}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00359\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ last\ trade\ was\ in\ extended\ trading\ hours.}}
+\DoxyCodeLine{00360\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00361\ \textcolor{comment}{\ \ \ \ \ *\ @param\ extendedTradingHours\ \`{}true`\ if\ last\ trade\ was\ in\ extended\ trading\ hours.}}
+\DoxyCodeLine{00362\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00363\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_ad32047ef428470ab9482479e99e2c5a3}{setExtendedTradingHours}}(\textcolor{keywordtype}{bool}\ extendedTradingHours)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ tradeBaseData\_.flags\ =}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ extendedTradingHours\ ?\ orOp(tradeBaseData\_.flags,\ ETH)\ :\ andOp(tradeBaseData\_.flags,\ \string~ETH);}
+\DoxyCodeLine{00366\ \ \ \ \ \}}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ change\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *\ @return\ change\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00373\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a7216cb91ede511a4b0c8f2069d592f21}{getChange}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tradeBaseData\_.change;}
+\DoxyCodeLine{00375\ \ \ \ \ \}}
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00377\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00378\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ change\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00379\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00380\ \textcolor{comment}{\ \ \ \ \ *\ @param\ change\ price\ of\ the\ last\ trade.}}
+\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00382\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_ab9f833ed575b4cd1a53730393e984661}{setChange}}(\textcolor{keywordtype}{double}\ change)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ tradeBaseData\_.change\ =\ change;}
+\DoxyCodeLine{00384\ \ \ \ \ \}}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ trade\ event's\ fields.}}
+\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00389\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ trade\ event's\ fields.}}
+\DoxyCodeLine{00390\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00391\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base_a52ae73ef41cf03060509cddecc2d48de}{baseFieldsToString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00392\ \};}
+\DoxyCodeLine{00393\ }
+\DoxyCodeLine{00394\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

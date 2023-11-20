@@ -1,0 +1,198 @@
+\doxysubsection{String\+Utils.\+hpp}
+\hypertarget{_string_utils_8hpp_source}{}\label{_string_utils_8hpp_source}\index{StringUtils.hpp@{StringUtils.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstddef}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iterator}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{locale}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{thread}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ String\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ EMPTY\{\};}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ toString(\textcolor{keywordtype}{bool}\ b)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ toString(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *chars)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ toString(std::thread::id\ theadId);}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ toString(\textcolor{keywordtype}{void}\ *ptr);}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ toString(\textcolor{keywordtype}{double}\ d);}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ std::string\ toStringAny(T\ \&\&t);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U>\ std::string\ toString(\textcolor{keyword}{const}\ std::pair<T,\ U>\ \&p)\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\{"{}}\ +\ toStringAny(p.first)\ +\ \textcolor{stringliteral}{"{},\ "{}}\ +\ toStringAny(p.second)\ +\ \textcolor{stringliteral}{"{}\}"{}};}
+\DoxyCodeLine{00035\ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ std::string\ toStringAny(T\ \&\&t)\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ t.toString();\ \})\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ t.toString();}
+\DoxyCodeLine{00040\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ t-\/>toString();\ \})\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ t-\/>toString();}
+\DoxyCodeLine{00042\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ toString(t);\ \})\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ toString(t);}
+\DoxyCodeLine{00044\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ std::to\_string(t);\ \})\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::to\_string(t);}
+\DoxyCodeLine{00046\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ std::string(t);\ \})\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::string(t);}
+\DoxyCodeLine{00048\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}unknown"{}};}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ Tries\ to\ convert\ UTF16\ char\ to\ ASCII\ (part\ of\ UTF8)\ char.}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ @param\ in\ The\ UTF16\ char}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ @return\ ASCII\ char}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00059\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \textcolor{keywordtype}{char}\ utf16to8(std::int16\_t\ in)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ Converts\ UTF16\ char\ to\ UTF8\ string}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ @param\ in\ The\ UTF16\ char}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ @return\ UTF8\ string}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00067\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ utf16toUtf8String(std::int16\_t\ in)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ Converts\ UTF16\ string\ to\ UTF8\ string}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ *\ @param\ in\ The\ UTF16\ string}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ *\ @return\ UTF8\ string}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00075\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ utf16toUtf8String(\textcolor{keyword}{const}\ std::u16string\ \&in)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ Converts\ vector\ of\ UTF16\ chars\ to\ UTF8\ string}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ @param\ in\ The\ UTF16\ string}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ @return\ UTF8\ string}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00083\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ utf16toUtf8String(\textcolor{keyword}{const}\ std::vector<std::int16\_t>\ \&in)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ Tries\ to\ convert\ ASCII\ (part\ of\ UTF8)\ char\ to\ UTF16\ char.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ *\ @param\ in\ The\ ASCII\ char}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ *\ @return\ The\ UTF16\ char}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00091\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::int16\_t\ utf8to16(\textcolor{keywordtype}{char}\ in)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ formatTimeStamp(std::int64\_t\ timestamp);}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ formatTimeStampWithTimeZone(std::int64\_t\ timestamp);}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ formatTimeStampWithMillis(std::int64\_t\ timestamp);}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ formatTimeStampWithMillisWithTimeZone(std::int64\_t\ timestamp);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \textcolor{keywordtype}{char}\ *createCString(\textcolor{keyword}{const}\ std::string\ \&s)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ It>}
+\DoxyCodeLine{00104\ \ \ \ \ requires\ requires\ \{\ std::is\_same\_v<std::decay\_t<\textcolor{keyword}{decltype}(It\ \{\}\ -\/>\ getName())>,\ std::string>;\ \}}
+\DoxyCodeLine{00105\ std::string\ namesToString(It\ begin,\ It\ end)\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ std::string\ result\{\textcolor{stringliteral}{"{}["{}}\};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ begin;\ it\ !=\ end;\ it++)\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ result\ +=\ String::EMPTY\ +\ \textcolor{stringliteral}{"{}'"{}}\ +\ it-\/>getName()\ +\ \textcolor{stringliteral}{"{}'"{}}\ +\ (std::next(it)\ ==\ end\ ?\ \textcolor{stringliteral}{"{}"{}}\ :\ \textcolor{stringliteral}{"{},\ "{}});}
+\DoxyCodeLine{00110\ \ \ \ \ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordflow}{return}\ result\ +\ \textcolor{stringliteral}{"{}]"{}};}
+\DoxyCodeLine{00113\ \}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ It>}
+\DoxyCodeLine{00116\ \ \ \ \ requires\ requires\ \{\ std::is\_same\_v<std::decay\_t<\textcolor{keyword}{decltype}(It\ \{\}\ -\/>\ get().getName())>,\ std::string>;\ \}}
+\DoxyCodeLine{00117\ std::string\ namesToString(It\ begin,\ It\ end)\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ std::string\ result\{\textcolor{stringliteral}{"{}["{}}\};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ begin;\ it\ !=\ end;\ it++)\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ result\ +=\ String::EMPTY\ +\ \textcolor{stringliteral}{"{}'"{}}\ +\ it-\/>get().getName()\ +\ \textcolor{stringliteral}{"{}'"{}}\ +\ (std::next(it)\ ==\ end\ ?\ \textcolor{stringliteral}{"{}"{}}\ :\ \textcolor{stringliteral}{"{},\ "{}});}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordflow}{return}\ result\ +\ \textcolor{stringliteral}{"{}]"{}};}
+\DoxyCodeLine{00125\ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ It>\ std::string\ elementsToString(It\ begin,\ It\ end)\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ std::string\ result\{\textcolor{stringliteral}{"{}["{}}\};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ begin;\ it\ !=\ end;\ it++)\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ result\ +=\ String::EMPTY\ +\ toStringAny(*it)\ +\ (std::next(it)\ ==\ end\ ?\ \textcolor{stringliteral}{"{}"{}}\ :\ \textcolor{stringliteral}{"{},\ "{}});}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordflow}{return}\ result\ +\ \textcolor{stringliteral}{"{}]"{}};}
+\DoxyCodeLine{00135\ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ encodeChar(std::int16\_t\ c);}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \textcolor{keyword}{inline}\ std::string\ encodeChar(\textcolor{keywordtype}{char}\ c)\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordflow}{return}\ encodeChar(\textcolor{keyword}{static\_cast}<std::int16\_t>(\textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}>(c)));}
+\DoxyCodeLine{00141\ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{keyword}{namespace}\ detail\ \{}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{keyword}{class}\ IsIEqual\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ std::locale\ locale\_;}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{explicit}\ IsIEqual(\textcolor{keyword}{const}\ std::locale\ \&locale\ =\ std::locale())\ :\ locale\_\{locale\}\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U>\ \textcolor{keywordtype}{bool}\ operator()(\textcolor{keyword}{const}\ T\ \&t,\ \textcolor{keyword}{const}\ U\ \&u)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::tolower<T>(t,\ locale\_)\ ==\ std::tolower<U>(u,\ locale\_);}
+\DoxyCodeLine{00154\ \ \ \ \ \}}
+\DoxyCodeLine{00155\ \};}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \}\ \textcolor{comment}{//\ namespace\ detail}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Range1,\ \textcolor{keyword}{typename}\ Range2,\ \textcolor{keyword}{typename}\ Predicate>}
+\DoxyCodeLine{00160\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ equals(\textcolor{keyword}{const}\ Range1\ \&first,\ \textcolor{keyword}{const}\ Range2\ \&second,\ Predicate\ cmp)\ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keyword}{auto}\ firstIt\ =\ std::begin(first);}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{auto}\ secondIt\ =\ std::begin(second);}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ firstIt\ !=\ std::end(first)\ \&\&\ secondIt\ !=\ std::end(second);\ ++firstIt,\ ++secondIt)\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!cmp(*firstIt,\ *secondIt))\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ \ \ \ \ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordflow}{return}\ (secondIt\ ==\ std::end(second))\ \&\&\ (firstIt\ ==\ std::end(first));}
+\DoxyCodeLine{00171\ \}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ iEquals(\textcolor{keyword}{const}\ std::string\ \&first,\ \textcolor{keyword}{const}\ std::string\ \&second)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{const}\ std::locale\ \&locale\ =\ std::locale();}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordflow}{return}\ equals(first,\ second,\ detail::IsIEqual(locale));}
+\DoxyCodeLine{00177\ \}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \textcolor{keyword}{inline}\ std::size\_t\ icHash(\textcolor{keyword}{const}\ std::string\ \&s)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keyword}{const}\ std::locale\ \&locale\ =\ std::locale();}
+\DoxyCodeLine{00181\ \ \ \ \ std::string\ result\{\};}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ c\ :\ s)\ \{}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ result\ +=\ std::tolower(c,\ locale);}
+\DoxyCodeLine{00185\ \ \ \ \ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>()(result);}
+\DoxyCodeLine{00188\ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::string\ trimStr(\textcolor{keyword}{const}\ std::string\ \&s)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

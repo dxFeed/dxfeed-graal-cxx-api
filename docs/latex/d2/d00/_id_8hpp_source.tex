@@ -1,0 +1,65 @@
+\doxysubsection{Id.\+hpp}
+\hypertarget{_id_8hpp_source}{}\label{_id_8hpp_source}\index{Id.hpp@{Id.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{atomic}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct}\ Id\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{using}\ ValueType\ =\ std::size\_t;}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ Id\ UNKNOWN;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00018\ \ \ \ \ ValueType\ value\_\{\};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{explicit}\ Id(ValueType\ value)\ :\ value\_\{value\}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ Id<T>\ getNext()\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::atomic<ValueType>\ value\{1\};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Id<T>\{value++\};}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ [[nodiscard]]\ ValueType\ getValue()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value\_;}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{explicit}\ operator\ ValueType()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value\_;}
+\DoxyCodeLine{00036\ \ \ \ \ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ Id<T>\ from(ValueType\ value)\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Id<T>\{value\};}
+\DoxyCodeLine{00040\ \ \ \ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ U>\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ Id<U>\ \&id)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getValue()\ ==\ id.getValue();}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ U>\ \textcolor{keyword}{auto}\ operator<=>(\textcolor{keyword}{const}\ Id<U>\ \&id)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getValue()\ <=>\ id.getValue();}
+\DoxyCodeLine{00048\ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{const}\ Id<T>\ Id<T>::UNKNOWN\{\textcolor{keyword}{static\_cast}<Id<T>::ValueType>(-\/1)\};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::Id<T>>\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::Id<T>\ \&id)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id.getValue();}
+\DoxyCodeLine{00058\ \ \ \ \ \}}
+\DoxyCodeLine{00059\ \};}
+
+\end{DoxyCode}

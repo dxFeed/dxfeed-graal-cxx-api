@@ -1,0 +1,23 @@
+\doxysubsection{dxfcpp\+::Handler\texorpdfstring{$<$}{<} Signature \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structdxfcpp_1_1_handler}{}\label{structdxfcpp_1_1_handler}\index{dxfcpp::Handler$<$ Signature $>$@{dxfcpp::Handler$<$ Signature $>$}}
+
+
+A thread-\/safe class that allows to asynchronously notify listeners with a given signature.  
+
+
+
+
+\doxysubsubsection{Detailed Description}
+\subsubsection*{template$<$typename Signature$>$\newline
+struct dxfcpp\+::\+Handler$<$ Signature $>$}
+A thread-\/safe class that allows to asynchronously notify listeners with a given signature. 
+
+Listeners can be any callable entities. Listeners are placed in a future. Within one batch, listeners will be called sequentially. Futures are placed in a circular buffer and executed asynchronously.
+
+If you need synchronous execution of listeners, but it was possible to execute them in another thread, then limit the buffer size to one.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Signature} & The arguments "{}signature"{} (example\+: {\ttfamily void(int, int)}) \\
+\hline
+\end{DoxyTemplParams}

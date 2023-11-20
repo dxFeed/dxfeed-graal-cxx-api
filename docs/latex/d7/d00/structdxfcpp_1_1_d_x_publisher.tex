@@ -1,0 +1,252 @@
+\doxysubsection{dxfcpp\+::DXPublisher Struct Reference}
+\hypertarget{structdxfcpp_1_1_d_x_publisher}{}\label{structdxfcpp_1_1_d_x_publisher}\index{dxfcpp::DXPublisher@{dxfcpp::DXPublisher}}
+
+
+Provides API for publishing of events to local or remote \doxylink{structdxfcpp_1_1_d_x_feed}{DXFeed}.  
+
+
+
+
+{\ttfamily \#include $<$DXPublisher.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::DXPublisher\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d7/d00/structdxfcpp_1_1_d_x_publisher}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_d_x_publisher_ad164e526e2f5d509f4c58c5b8978811a}\label{structdxfcpp_1_1_d_x_publisher_ad164e526e2f5d509f4c58c5b8978811a} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_d_x_publisher}{DXPublisher} object. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_d_x_publisher_adc3f0e7e893a20d164cb3c7fd788d2a4}\label{structdxfcpp_1_1_d_x_publisher_adc3f0e7e893a20d164cb3c7fd788d2a4} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{structdxfcpp_1_1_d_x_publisher}{DXPublisher} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Events\+Collection}} $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a9ec3ba1e21e011c21c5d9f30c21305f1}{publish\+Events}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Events\+Collection}} \&\&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Publishes events to the corresponding feed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a989c1cf7c5d9b5a1f2633f3d70ac5f7a}{publish\+Events}} (std\+::initializer\+\_\+list$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$ $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Publishes events to the corresponding feed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a9be38a4431a7185c826b99d88ec927b1}{publish\+Events}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Publishes an event to the corresponding feed. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+It}} $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_aefb40bdf2a89e6e44fcf2b83c7f1bee2}{publish\+Events}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+It}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{begin}}, \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+It}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{end}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Publishes events to the corresponding feed. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a3b21f65e2744e795e14fe352a80906db}{to\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} T $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a8c124e524c9918e23f7a89f26c09584f}{get\+Instance}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns a default application-\/wide singleton instance of \doxylink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Provides API for publishing of events to local or remote \doxylink{structdxfcpp_1_1_d_x_feed}{DXFeed}. 
+
+\doxyparagraph*{Sample usage}
+
+This section gives sample usage scenarios.
+
+\doxysubparagraph*{Default singleton instance}
+
+There is a singleton instance of the publisher that is returned by \doxylink{structdxfcpp_1_1_d_x_publisher_a8c124e524c9918e23f7a89f26c09584f}{DXPublisher\+::get\+Instance()} method. It is created on the first use with default configuration properties that are explained in detail in documentation for \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} class in the "{}\+Default properties"{} section. In particular, you can provide a default address to connect using \textquotesingle{}\doxylink{structdxfcpp_1_1_d_x_endpoint_a7494f59e150133d36b87c0184c2179eb}{dxpublisher.address}\textquotesingle{} system property or by putting it into \textquotesingle{}\doxylink{structdxfcpp_1_1_d_x_endpoint_a200a1641fd464f782b6715fc7d1c1d69}{dxpublisher.properties}\textquotesingle{} file in the current directory.
+
+\doxysubparagraph*{Publish a single event}
+
+The following code publishes a single quote for a "{}\+A\+:\+TEST"{} symbol\+: 
+\begin{DoxyPre}{\ttfamily 
+auto \doxylink{classdxfcpp_1_1_quote}{quote} = std::make\_shared<\doxylink{classdxfcpp_1_1_quote}{Quote}>("{}A:TEST"{});
+quote-\/>\doxylink{classdxfcpp_1_1_quote_ab3c2ac0171dc1b26eadc4aec00f61ce0}{setBidPrice}(100);
+quote-\/>\doxylink{classdxfcpp_1_1_quote_afe4eb444569eac2e8ffbd43496ee0f4f}{setAskPrice}(101);
+\doxylink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}::\doxylink{structdxfcpp_1_1_d_x_publisher_a8c124e524c9918e23f7a89f26c09584f}{getInstance}()-\/>\doxylink{structdxfcpp_1_1_d_x_publisher_a9ec3ba1e21e011c21c5d9f30c21305f1}{publishEvents}(quote);}\end{DoxyPre}
+
+
+\doxyparagraph*{Threads and locks}
+
+This class is thread-\/safe and can be used concurrently from multiple threads without external synchronization. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_d_x_publisher_a8c124e524c9918e23f7a89f26c09584f}\label{structdxfcpp_1_1_d_x_publisher_a8c124e524c9918e23f7a89f26c09584f} 
+\index{dxfcpp::DXPublisher@{dxfcpp::DXPublisher}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!dxfcpp::DXPublisher@{dxfcpp::DXPublisher}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}} $>$ dxfcpp\+::\+DXPublisher\+::get\+Instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a default application-\/wide singleton instance of \doxylink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}. 
+
+Most applications use only a single data-\/sink and should rely on this method to get one. This is a shortcut to \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}\+::\doxylink{structdxfcpp_1_1_d_x_endpoint_a6b190bf5c614f618a80ae359c6334cb6}{get\+Instance}(\doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da02c25714ac6e2973dfb530a7520c80ae}{DXEndpoint\+::\+Role\+::\+PUBLISHER})-\/\texorpdfstring{$>$}{>}\doxylink{structdxfcpp_1_1_d_x_endpoint_a87837f50c5e4f0828998c79ac32d3539}{get\+Publisher}(). \Hypertarget{structdxfcpp_1_1_d_x_publisher_aefb40bdf2a89e6e44fcf2b83c7f1bee2}\label{structdxfcpp_1_1_d_x_publisher_aefb40bdf2a89e6e44fcf2b83c7f1bee2} 
+\index{dxfcpp::DXPublisher@{dxfcpp::DXPublisher}!publishEvents@{publishEvents}}
+\index{publishEvents@{publishEvents}!dxfcpp::DXPublisher@{dxfcpp::DXPublisher}}
+\doxyparagraph{\texorpdfstring{publishEvents()}{publishEvents()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+It}} $>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXPublisher\+::publish\+Events (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+It}}}]{begin,  }\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Event\+It}}}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Publishes events to the corresponding feed. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of events. \\
+\hline
+{\em end} & The end of events collection. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_d_x_publisher_a9ec3ba1e21e011c21c5d9f30c21305f1}\label{structdxfcpp_1_1_d_x_publisher_a9ec3ba1e21e011c21c5d9f30c21305f1} 
+\index{dxfcpp::DXPublisher@{dxfcpp::DXPublisher}!publishEvents@{publishEvents}}
+\index{publishEvents@{publishEvents}!dxfcpp::DXPublisher@{dxfcpp::DXPublisher}}
+\doxyparagraph{\texorpdfstring{publishEvents()}{publishEvents()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Events\+Collection}} $>$ \\
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXPublisher\+::publish\+Events (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{Events\+Collection}} \&\&}]{events }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Publishes events to the corresponding feed. 
+
+If the \doxylink{structdxfcpp_1_1_d_x_endpoint}{endpoint} of this publisher has \doxylink{structdxfcpp_1_1_d_x_endpoint_a8532cb77e64847d745d727a6ef5f2751}{role} of \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da02c25714ac6e2973dfb530a7520c80ae}{DXEndpoint\+::\+Role\+::\+PUBLISHER} and it is connected, the published events will be delivered to the remote endpoints. Local \doxylink{structdxfcpp_1_1_d_x_endpoint_aadf6d4f1eeb73b91c4f7f1deca4bb61f}{feed} will always receive published events.
+
+This method serializes all events into internal representation, so that the instance of the collection as well as the instances of events can be reused after invocation of this method returns.
+
+\doxylink{structdxfcpp_1_1_d_x_feed}{DXFeed} instances that are connected to this publisher either locally or via network receive published events if and only if they are subscribed to the corresponding symbols, or they are subscribed via \doxylink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{Wildcard\+Symbol\+::\+ALL}, or, in case of \doxylink{structdxfcpp_1_1_time_series_event}{Time\+Series\+Event} type, they are subscribed via DXFeed\+Time\+Series\+Subscription for the corresponding symbol and time frame.
+
+Published events are not stored and get immediately lost if there is no subscription. Last published events of \doxylink{structdxfcpp_1_1_lasting_event}{Lasting\+Event} types are cached as long as subscription to them is maintained via a specific event symbol (\doxylink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{Wildcard\+Symbol\+::\+ALL} does not count) and the cache is discarded as soon as subscription disappears.
+
+Example\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{using\ namespace\ }dxfcpp;}
+\DoxyCodeLine{\textcolor{keyword}{using\ namespace\ }dxfcpp::literals;}
+\DoxyCodeLine{\textcolor{keyword}{using\ namespace\ }std::literals;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_system_aac369091e4fd1d35efcfc018db452905}{System::setProperty}}(\textcolor{stringliteral}{"{}dxendpoint.eventTime"{}},\ \textcolor{stringliteral}{"{}true"{}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_system_aac369091e4fd1d35efcfc018db452905}{System::setProperty}}(\textcolor{stringliteral}{"{}dxscheme.nanoTime"{}},\ \textcolor{stringliteral}{"{}true"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ endpoint\ =\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a4933409731472ca5aa39d0c83d542428}{DXEndpoint::create}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{DXEndpoint::Role::FEED}});}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{feed}}\ =\ endpoint-\/>getFeed();}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{publisher}}\ =\ endpoint-\/>getPublisher();}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{feed}}-\/>createSubscription(\{\mbox{\hyperlink{classdxfcpp_1_1_quote_ac881f63bd1164e30e255e23ff49a3d1a}{Quote::TYPE}}\});}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}\ =\ std::make\_shared<Quote>(\textcolor{stringliteral}{"{}AAPL"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setEventTime(1692975409000);}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setTimeNanoPart(123);}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setSequence(123);}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setBidTime(1692975409000);}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setBidExchangeCode(\textcolor{charliteral}{'B'});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setBidPrice(176.08);}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setBidSize(1.0);}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setAskTime(1692975409000);}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setAskExchangeCode(\textcolor{charliteral}{'A'});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setAskPrice(176.16);}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}-\/>setAskSize(2.0);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addEventListener([](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}})\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{e}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{q}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{e}}-\/>template\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sharedAs<Quote>}}();\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{q}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{q}}\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sub}}-\/>addSymbols(\textcolor{stringliteral}{"{}AAPL"{}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{publisher}}-\/>publishEvents(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{publisher}}-\/>publishEvents(\{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}},\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}}\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{std::vector<EventType::Ptr>\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}}\{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}}.push\_back(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}}.push\_back(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{quote}});}
+\DoxyCodeLine{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{publisher}}-\/>publishEvents(\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{events}});}
+\DoxyCodeLine{std::this\_thread::sleep\_for(1000\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{ms}});}
+\DoxyCodeLine{endpoint-\/>close();}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Events\+Collection} & The type of events collection (for example\+: std\+::vector$<$\+::\+Event\+Type\+::\+Ptr$>$) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em events} & The collection of events to publish. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_d_x_publisher_a989c1cf7c5d9b5a1f2633f3d70ac5f7a}\label{structdxfcpp_1_1_d_x_publisher_a989c1cf7c5d9b5a1f2633f3d70ac5f7a} 
+\index{dxfcpp::DXPublisher@{dxfcpp::DXPublisher}!publishEvents@{publishEvents}}
+\index{publishEvents@{publishEvents}!dxfcpp::DXPublisher@{dxfcpp::DXPublisher}}
+\doxyparagraph{\texorpdfstring{publishEvents()}{publishEvents()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXPublisher\+::publish\+Events (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$ $>$}]{events }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Publishes events to the corresponding feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The collection of events to publish. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_d_x_publisher_a9be38a4431a7185c826b99d88ec927b1}\label{structdxfcpp_1_1_d_x_publisher_a9be38a4431a7185c826b99d88ec927b1} 
+\index{dxfcpp::DXPublisher@{dxfcpp::DXPublisher}!publishEvents@{publishEvents}}
+\index{publishEvents@{publishEvents}!dxfcpp::DXPublisher@{dxfcpp::DXPublisher}}
+\doxyparagraph{\texorpdfstring{publishEvents()}{publishEvents()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+DXPublisher\+::publish\+Events (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Publishes an event to the corresponding feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The event to publish. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_d_x_publisher_a3b21f65e2744e795e14fe352a80906db}\label{structdxfcpp_1_1_d_x_publisher_a3b21f65e2744e795e14fe352a80906db} 
+\index{dxfcpp::DXPublisher@{dxfcpp::DXPublisher}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::DXPublisher@{dxfcpp::DXPublisher}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+DXPublisher\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{dxfcpp\+::\+Shared\+Entity}}.
+

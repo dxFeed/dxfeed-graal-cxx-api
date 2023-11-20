@@ -1,0 +1,323 @@
+\doxysubsection{Market\+Event\+Symbols.\+hpp}
+\hypertarget{_market_event_symbols_8hpp_source}{}\label{_market_event_symbols_8hpp_source}\index{MarketEventSymbols.hpp@{MarketEventSymbols.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ Helper\ class\ to\ compose\ and\ parse\ symbols\ for\ market\ events.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ <h3>Regional\ symbols</h3>}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ Regional\ symbol\ subscription\ receives\ events\ only\ from\ a\ designated\ exchange,\ marketplace,\ or\ venue}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ instead\ of\ receiving\ composite\ events\ from\ all\ venues\ (by\ default).\ Regional\ symbol\ is\ composed\ from\ a}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ <i>base\ symbol</i>,\ ampersand\ character\ ('\&amp;'),\ and\ an\ exchange\ code\ character.\ For\ example,}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ <li>"{}SPY"{}\ is\ the\ symbol\ for\ composite\ events\ for\ SPDR\ S\&amp;P\ 500\ ETF\ from\ all\ exchanges,}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ <li>"{}SPY\&amp;N"{}\ is\ the\ symbol\ for\ event\ for\ SPDR\ S\&amp;P\ 500\ ETF\ that\ originate\ only\ from\ NYSE\ marketplace.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ <h3>Symbol\ attributes</h3>}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ Market\ event\ symbols\ can\ have\ a\ number\ of\ attributes\ attached\ to\ then\ in\ curly\ braces}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ with\ \`{}<key>=<value>`\ paris\ separated\ by\ commas.\ For\ example,}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ <li>"{}SPY\{price=bid\}"{}\ is\ the\ market\ symbol\ "{}SPY"{}\ with\ an\ attribute\ key\ "{}price"{}\ set\ to\ value\ "{}bid"{}.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ <li>"{}SPY(=5m,tho=true\}"{}\ is\ the\ market\ symbol\ "{}SPY"{}\ with\ two\ attributes.\ One\ has\ an\ empty\ key\ and}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ value\ "{}5m"{},\ while\ the\ other\ has\ key\ "{}tho"{}\ and\ value\ "{}true"{}.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ The\ methods\ in\ this\ class\ always\ maintain\ attribute\ keys\ in\ alphabetic\ order.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00034\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols}{MarketEventSymbols}}\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ is\ the\ specified\ symbol\ has\ the\ exchange\ code\ specification.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ symbol.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ is\ the\ specified\ symbol\ has\ the\ exchange\ code\ specification.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a4ccb56f5ce03ee56b9f8183e3d8189a5}{hasExchangeCode}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ hasExchangeCodeInternal(symbol,\ getLengthWithoutAttributesInternal(symbol));}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ code\ of\ the\ specified\ symbol\ or\ \`{}'\(\backslash\)0'`\ if\ none\ is\ defined.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ symbol.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ code\ of\ the\ specified\ symbol\ or\ \`{}'\(\backslash\)0'`\ if\ none\ is\ defined.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6}{getExchangeCode}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ hasExchangeCode(symbol)\ ?\ symbol[getLengthWithoutAttributesInternal(symbol)\ -\/\ 1]\ :\ 0;}
+\DoxyCodeLine{00053\ \ \ \ \ \}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ the\ specified\ symbol\ or\ removes\ it\ if\ new\ exchange\ code\ is\ \`{}'\(\backslash\)0'`.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ old\ symbol.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ new\ exchange\ code.}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ @return\ new\ symbol\ with\ the\ changed\ exchange\ code.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_acb0ae852bceb8ffe82e4478fdce0745b}{changeExchangeCode}}(\textcolor{keyword}{const}\ std::string\ \&symbol,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ i\ =\ getLengthWithoutAttributesInternal(symbol);}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ result\ =\ exchangeCode\ ==\ 0\ ?\ getBaseSymbolInternal(symbol,\ i)}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ getBaseSymbolInternal(symbol,\ i)\ +\ EXCHANGE\_SEPARATOR\ +\ exchangeCode;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ i\ ==\ symbol.length()\ ?\ result\ :\ result\ +\ symbol.substr(i);}
+\DoxyCodeLine{00068\ \ \ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ base\ symbol\ without\ exchange\ code\ and\ attributes.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ symbol.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ @return\ base\ symbol\ without\ exchange\ code\ and\ attributes.}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a47194475eca124562e72216d6ef04851}{getBaseSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getBaseSymbolInternal(symbol,\ getLengthWithoutAttributesInternal(symbol));}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ base\ symbol\ while\ leaving\ exchange\ code\ and\ attributes\ intact.}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ old\ symbol.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ @param\ baseSymbol\ new\ base\ symbol.}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ @return\ new\ symbol\ with\ new\ base\ symbol\ and\ old\ symbol's\ exchange\ code\ and\ attributes.}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a505a47fa6f596eaea5cd1697ded66b50}{changeBaseSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol,}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&baseSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ i\ =\ getLengthWithoutAttributesInternal(symbol);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ hasExchangeCodeInternal(symbol,\ i)\ ?\ baseSymbol\ +\ EXCHANGE\_SEPARATOR\ +\ symbol[i\ -\/\ 1]\ +\ symbol.substr(i)}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ i\ ==\ symbol.length()\ \ \ \ \ \ \ \ \ \ \ \ \ ?\ baseSymbol}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ baseSymbol\ +\ symbol.substr(i);}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ value\ of\ the\ attribute\ with\ the\ specified\ key.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ std::nullopt\ if\ attribute\ with\ the\ specified\ key\ is\ not\ found.}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ symbol.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ attribute\ key.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ @return\ value\ of\ the\ attribute\ with\ the\ specified\ key\ |\ std::nullopt\ if\ attribute\ with\ the\ specified\ key\ is\ not}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ found.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{string}}>}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{getAttributeStringByKey}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{symbol}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{key}})\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getAttributeInternal(symbol,\ getLengthWithoutAttributesInternal(symbol),\ key);}
+\DoxyCodeLine{00107\ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ value\ of\ one\ attribute\ value\ while\ leaving\ exchange\ code\ and\ other\ attributes\ intact.}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ old\ symbol.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ attribute\ key.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @param\ value\ attribute\ value.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ @return\ new\ symbol\ with\ key\ attribute\ with\ the\ specified\ value\ and\ everything\ else\ from\ the\ old\ symbol.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string}
+\DoxyCodeLine{00119\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a05f9118ae0d921489495dec94159e8f0}{changeAttributeStringByKey}}(\textcolor{keyword}{const}\ std::string\ \&symbol,\ \textcolor{keyword}{const}\ std::string\ \&key,\ \textcolor{keyword}{const}\ std::string\ \&value)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ i\ =\ getLengthWithoutAttributesInternal(symbol);}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ symbol.length())}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\ +\ ATTRIBUTES\_OPEN\ +\ key\ +\ ATTRIBUTE\_VALUE\ +\ value\ +\ ATTRIBUTES\_CLOSE;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ addAttributeInternal(symbol,\ i,\ key,\ value);}
+\DoxyCodeLine{00125\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ one\ attribute\ with\ the\ specified\ key\ while\ leaving\ exchange\ code\ and\ other\ attributes\ intact.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ old\ symbol.}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ attribute\ key.}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ @return\ new\ symbol\ without\ the\ specified\ key\ and\ everything\ else\ from\ the\ old\ symbol.}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a0f662cf613e3e6decd079d9782d9742d}{removeAttributeStringByKey}}(\textcolor{keyword}{const}\ std::string\ \&symbol,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&key)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ removeAttributeInternal(symbol,\ getLengthWithoutAttributesInternal(symbol),\ key);}
+\DoxyCodeLine{00137\ \ \ \ \ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ EXCHANGE\_SEPARATOR\ =\ \textcolor{stringliteral}{'\&'};}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ ATTRIBUTES\_OPEN\ =\ \textcolor{stringliteral}{'\{'};}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ ATTRIBUTES\_CLOSE\ =\ \textcolor{stringliteral}{'\}'};}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ ATTRIBUTES\_SEPARATOR\ =\ \textcolor{stringliteral}{','};}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ ATTRIBUTE\_VALUE\ =\ \textcolor{stringliteral}{'='};}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ hasExchangeCodeInternal(\textcolor{keyword}{const}\ std::string\ \&symbol,\ std::size\_t\ length)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ length\ >=\ 2\ \&\&\ symbol[length\ -\/\ 2]\ ==\ EXCHANGE\_SEPARATOR;}
+\DoxyCodeLine{00148\ \ \ \ \ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ getBaseSymbolInternal(\textcolor{keyword}{const}\ std::string\ \&symbol,}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ length)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ hasExchangeCodeInternal(symbol,\ length)\ ?\ symbol.substr(0,\ length\ -\/\ 2)\ :\ symbol.substr(0,\ length);}
+\DoxyCodeLine{00153\ \ \ \ \ \}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ \textcolor{keywordtype}{bool}\ hasAttributesInternal(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (symbol.length()\ >=\ 3\ \textcolor{comment}{/*\ ATTRIBUTES\_OPEN\ +\ ATTRIBUTES\_CLOSE\ +\ ATTRIBUTE\ */}\ \&\&}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ symbol[symbol.length()\ -\/\ 1]\ ==\ ATTRIBUTES\_CLOSE)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ attributesOpenPos\ =\ symbol.find\_last\_of(ATTRIBUTES\_OPEN,\ symbol.length()\ -\/\ 2);}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ attributesOpenPos\ !=\ std::string::npos\ \&\&\ attributesOpenPos\ <\ symbol.length()\ -\/\ 2;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00164\ \ \ \ \ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::size\_t}
+\DoxyCodeLine{00167\ \ \ \ \ getLengthWithoutAttributesInternal(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ hasAttributesInternal(symbol)\ ?\ symbol.find\_last\_of(ATTRIBUTES\_OPEN)\ :\ symbol.length();}
+\DoxyCodeLine{00169\ \ \ \ \ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::optional<std::string>\ getKeyInternal(\textcolor{keyword}{const}\ std::string\ \&symbol,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ i)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ found\ =\ symbol.find\_first\_of(ATTRIBUTE\_VALUE,\ i);\ found\ !=\ std::string::npos)\ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol.substr(i,\ found\ -\/\ i);}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ \ \ \ \ \}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::size\_t\ getNextKeyInternal(\textcolor{keyword}{const}\ std::string\ \&symbol,}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ i)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ valuePos\ =\ symbol.find\_first\_of(ATTRIBUTE\_VALUE,\ i)\ +\ 1;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ separatorPos\ =\ symbol.find\_first\_of(ATTRIBUTES\_SEPARATOR,\ valuePos);}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ separatorPos\ ==\ std::string::npos\ ?\ symbol.length()\ :\ separatorPos\ +\ 1;}
+\DoxyCodeLine{00190\ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ getValueInternal(\textcolor{keyword}{const}\ std::string\ \&symbol,\ std::size\_t\ i,}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ j)\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ valueOffset\ =\ symbol.find\_first\_of(ATTRIBUTE\_VALUE,\ i)\ +\ 1;}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol.substr(valueOffset,\ j\ -\/\ 1\ -\/\ valueOffset);}
+\DoxyCodeLine{00197\ \ \ \ \ \}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string}
+\DoxyCodeLine{00200\ \ \ \ \ dropKeyAndValueInternal(\textcolor{keyword}{const}\ std::string\ \&symbol,\ std::size\_t\ length,\ std::size\_t\ i,\ std::size\_t\ j)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (j\ ==\ symbol.length())\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ length\ +\ 1)\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol.substr(0,\ length);}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol.substr(0,\ i\ -\/\ 1)\ +\ symbol.substr(j\ -\/\ 1);}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol.substr(0,\ i)\ +\ symbol.substr(j);}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00214\ \ \ \ \ \}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::optional<std::string>}
+\DoxyCodeLine{00217\ \ \ \ \ getAttributeInternal(\textcolor{keyword}{const}\ std::string\ \&symbol,\ std::size\_t\ lengthWithoutAttributes,\ \textcolor{keyword}{const}\ std::string\ \&key)\ \{}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lengthWithoutAttributes\ ==\ symbol.length())\ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ i\ =\ lengthWithoutAttributes\ +\ 1;}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (i\ <\ symbol.length())\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ currentKey\ =\ getKeyInternal(symbol,\ i);}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!currentKey)\ \{}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ j\ =\ getNextKeyInternal(symbol,\ i);}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (key\ ==\ currentKey.value())\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getValueInternal(symbol,\ i,\ j);}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ j;}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
+\DoxyCodeLine{00241\ \ \ \ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string}
+\DoxyCodeLine{00244\ \ \ \ \ removeAttributeInternal(std::string\ symbol,\ std::size\_t\ lengthWithoutAttributes,\ \textcolor{keyword}{const}\ std::string\ \&key)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lengthWithoutAttributes\ ==\ symbol.length())\ \{}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ i\ =\ lengthWithoutAttributes\ +\ 1;}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (i\ <\ symbol.length())\ \{}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ currentKey\ =\ getKeyInternal(symbol,\ i);}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!currentKey)\ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ j\ =\ getNextKeyInternal(symbol,\ i);}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (key\ ==\ currentKey.value())\ \{}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ symbol\ =\ dropKeyAndValueInternal(symbol,\ lengthWithoutAttributes,\ i,\ j);}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ j;}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00268\ \ \ \ \ \}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ addAttributeInternal(std::string\ symbol,}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ lengthWithoutAttributes,}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&key,}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&value)\ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lengthWithoutAttributes\ ==\ symbol.length())\ \{}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\ +\ ATTRIBUTES\_OPEN\ +\ key\ +\ ATTRIBUTE\_VALUE\ +\ value\ +\ ATTRIBUTES\_CLOSE;}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ i\ =\ lengthWithoutAttributes\ +\ 1;}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ added\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (i\ <\ symbol.length())\ \{}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ currentKey\ =\ getKeyInternal(symbol,\ i);}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!currentKey)\ \{}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ j\ =\ getNextKeyInternal(symbol,\ i);}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ cmp\ =\ currentKey.value().compare(key);}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cmp\ ==\ 0)\ \{}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (added)\ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ drop,\ since\ we've\ already\ added\ this\ key}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ symbol\ =\ dropKeyAndValueInternal(symbol,\ lengthWithoutAttributes,\ i,\ j);}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ replace\ value}}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ symbol\ =\ symbol.substr(0,\ i)\ +\ key\ +\ ATTRIBUTE\_VALUE\ +\ value\ +\ symbol.substr(j\ -\/\ 1);}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ added\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ key.length()\ +\ value.length()\ +\ 2;}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (cmp\ >\ 0\ \&\&\ !added)\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ insert\ value\ here}}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ symbol\ =\ symbol.substr(0,\ i)\ +\ key\ +\ ATTRIBUTE\_VALUE\ +\ value\ +\ ATTRIBUTES\_SEPARATOR\ +\ symbol.substr(i);}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ added\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ key.length()\ +\ value.length()\ +\ 2;}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ j;}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ added\ ?\ symbol}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ symbol.substr(0,\ i\ -\/\ 1)\ +\ ATTRIBUTES\_SEPARATOR\ +\ key\ +\ ATTRIBUTE\_VALUE\ +\ value\ +}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ symbol.substr(i\ -\/\ 1);}
+\DoxyCodeLine{00314\ \ \ \ \ \}}
+\DoxyCodeLine{00315\ \};}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

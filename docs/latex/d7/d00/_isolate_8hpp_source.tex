@@ -1,0 +1,243 @@
+\doxysubsection{Isolate.\+hpp}
+\hypertarget{_isolate_8hpp_source}{}\label{_isolate_8hpp_source}\index{Isolate.hpp@{Isolate.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_c_entry_point_errors_8hpp}{"{}CEntryPointErrors.hpp"{}}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_common_8hpp}{"{}Common.hpp"{}}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}utils/StringUtils.hpp"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{concepts}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{thread}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{NO\_ERROR}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{NO\_ERROR}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{using}\ GraalIsolateHandle\ =\ \textcolor{keywordtype}{void}\ *;}
+\DoxyCodeLine{00026\ \textcolor{keyword}{using}\ GraalIsolateThreadHandle\ =\ \textcolor{keywordtype}{void}\ *;}
+\DoxyCodeLine{00027\ \textcolor{keyword}{using}\ ConstGraalIsolateThreadHandle\ =\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{void}\ *;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class}\ Isolate\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{struct}\ IsolateThread\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ GraalIsolateThreadHandle\ handle\{\};}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isMain\{\};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ std::thread::id\ tid\{\};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ std::size\_t\ idx\{\};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ IsolateThread(GraalIsolateThreadHandle\ handle\ =\ \textcolor{keywordtype}{nullptr},\ \textcolor{keywordtype}{bool}\ isMain\ =\ \textcolor{keyword}{false})\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ :\ handle\{handle\},\ isMain\{isMain\},\ tid\{std::this\_thread::get\_id()\}\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{this}-\/>idx\ =\ Id<IsolateThread>::getNext().getValue();}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(\textcolor{stringliteral}{"{}IsolateThread\{"{}}\ +\ dxfcpp::toString(dxfcpp::bit\_cast<\textcolor{keywordtype}{void}\ *>(handle))\ +}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ isMain\ =\ "{}}\ +\ dxfcpp::toString(isMain)\ +\ \textcolor{stringliteral}{"{},\ tid\ =\ "{}}\ +\ dxfcpp::toString(tid)\ +}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ idx\ =\ "{}}\ +\ std::to\_string(idx)\ +\ \textcolor{stringliteral}{"{}\}()"{}});}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ CEntryPointErrorsEnum\ detach()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ CEntryPointErrorsEnum\ detachAllThreadsAndTearDownIsolate()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \string~IsolateThread()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(toString()\ +\ \textcolor{stringliteral}{"{}::\string~()"{}});}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isMain)\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(toString()\ +\ \textcolor{stringliteral}{"{}::\string~():\ isMain\ =>\ This\ is\ the\ main\ thread"{}});}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ detach();}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ std::string\ toString()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::string(\textcolor{stringliteral}{"{}IsolateThread\{"{}})\ +\ dxfcpp::toString(dxfcpp::bit\_cast<\textcolor{keywordtype}{void}\ *>(handle))\ +}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ isMain\ =\ "{}}\ +\ dxfcpp::toString(isMain)\ +\ \textcolor{stringliteral}{"{},\ tid\ =\ "{}}\ +\ dxfcpp::toString(tid)\ +}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ idx\ =\ "{}}\ +\ std::to\_string(idx)\ +\ \textcolor{stringliteral}{"{}\}"{}};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00072\ \ \ \ \ \};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{mutable}\ std::recursive\_mutex\ mtx\_\{\};}
+\DoxyCodeLine{00075\ \ \ \ \ ConstGraalIsolateThreadHandle\ handle\_;}
+\DoxyCodeLine{00076\ \ \ \ \ IsolateThread\ mainIsolateThread\_;}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ IsolateThread\ currentIsolateThread\_;}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ Isolate(GraalIsolateHandle\ handle,\ GraalIsolateThreadHandle\ mainIsolateThreadHandle)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ :\ mtx\_\{\},\ handle\_\{handle\},\ mainIsolateThread\_\{mainIsolateThreadHandle,\ \textcolor{keyword}{true}\}\ \{}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ currentIsolateThread\_.handle\ =\ mainIsolateThreadHandle;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ currentIsolateThread\_.isMain\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(\textcolor{stringliteral}{"{}Isolate\{"{}}\ +\ dxfcpp::toString(dxfcpp::bit\_cast<\textcolor{keywordtype}{void}\ *>(handle))\ +\ \textcolor{stringliteral}{"{},\ main\ =\ "{}}\ +}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainIsolateThread\_.toString()\ +\ \textcolor{stringliteral}{"{},\ current\ =\ "{}}\ +\ currentIsolateThread\_.toString()\ +\ \textcolor{stringliteral}{"{}\}()"{}});}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Isolate>\ create()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ CEntryPointErrorsEnum\ attach()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ GraalIsolateThreadHandle\ get()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00098\ \ \ \ \ Isolate()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00099\ \ \ \ \ Isolate(\textcolor{keyword}{const}\ Isolate\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00100\ \ \ \ \ Isolate\ \&operator=(\textcolor{keyword}{const}\ Isolate\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Isolate>\ getInstance()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(\textcolor{stringliteral}{"{}Isolate::getInstance()"{}});}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Isolate>\ instance\ =\ create();}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(\textcolor{stringliteral}{"{}Isolate::getInstance()\ -\/>\ *"{}}\ +\ instance-\/>toString());}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{00114\ \ \ \ \ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ F>}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{auto}\ runIsolated(F\ \&\&f)}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ -\/>\ std::variant<CEntryPointErrorsEnum,\ std::invoke\_result\_t<F\ \&\&,\ GraalIsolateThreadHandle>>\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(toString()\ +\ \textcolor{stringliteral}{"{}::runIsolated("{}}\ +\ \textcolor{keyword}{typeid}(f).name()\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Perhaps\ the\ code\ is\ already\ running\ within\ the\ GraalVM\ thread\ (for\ example,\ we\ are\ in\ a\ listener)}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ currentThreadHandle\ =\ get();\ currentThreadHandle\ !=\ \textcolor{keywordtype}{nullptr})\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::invoke(std::forward<F>(f),\ currentThreadHandle);}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ result\ =\ attach();\ result\ !=\ CEntryPointErrorsEnum::NO\_ERROR)\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(toString()\ +\ \textcolor{stringliteral}{"{}::runIsolated("{}}\ +\ \textcolor{keyword}{typeid}(f).name()\ +}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}):\ result\ !=\ CEntryPointErrorsEnum::NO\_ERROR\ -\/>\ "{}}\ +}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CEntryPointErrors::valueOf(result).getDescription());}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::invoke(std::forward<F>(f),\ currentIsolateThread\_.handle);}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ F,\ \textcolor{keyword}{typename}\ Arg,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{auto}\ runIsolated(F\ \&\&f,\ Arg\ \&\&arg,\ Args\ \&\&...args)}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ -\/>\ std::variant<CEntryPointErrorsEnum,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::invoke\_result\_t<F\ \&\&,\ GraalIsolateThreadHandle,\ Arg\ \&\&,\ Args\ \&\&...>>\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(toString()\ +\ \textcolor{stringliteral}{"{}::runIsolated("{}}\ +\ \textcolor{keyword}{typeid}(f).name()\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Perhaps\ the\ code\ is\ already\ running\ within\ the\ GraalVM\ thread\ (for\ example,\ we\ are\ in\ a\ listener)}}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ currentThreadHandle\ =\ get();\ currentThreadHandle\ !=\ \textcolor{keywordtype}{nullptr})\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::invoke(std::forward<F>(f),\ currentThreadHandle,\ std::forward<Arg>(arg),}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::forward<Args>(args)...);}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ result\ =\ attach();\ result\ !=\ CEntryPointErrorsEnum::NO\_ERROR)\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(toString()\ +\ \textcolor{stringliteral}{"{}::runIsolated("{}}\ +\ \textcolor{keyword}{typeid}(f).name()\ +}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}):\ result\ !=\ CEntryPointErrorsEnum::NO\_ERROR\ -\/>\ "{}}\ +}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CEntryPointErrors::valueOf(result).getDescription());}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::invoke(std::forward<F>(f),\ currentIsolateThread\_.handle,\ std::forward<Arg>(arg),}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::forward<Args>(args)...);}
+\DoxyCodeLine{00167\ \ \ \ \ \}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ F,\ \textcolor{keyword}{typename}\ R>}
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ requires\ dxfcpp::ConvertibleTo<R,\ std::invoke\_result\_t<F\ \&\&,\ GraalIsolateThreadHandle>>}
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{auto}\ runIsolatedOrElse(F\ \&\&f,\ R\ defaultValue)\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::visit(}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ [defaultValue\ =}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::move(defaultValue)]<\textcolor{keyword}{typename}\ T>(T\ \&\&arg)\ -\/>\ std::invoke\_result\_t<F\ \&\&,\ GraalIsolateThreadHandle>\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_same\_v<T,\ CEntryPointErrorsEnum>)\ \{}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ defaultValue;}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ arg;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ Isolate::getInstance()-\/>runIsolated(std::forward<F>(f)));}
+\DoxyCodeLine{00184\ \ \ \ \ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ F,\ \textcolor{keyword}{typename}\ R,\ \textcolor{keyword}{typename}\ Arg,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00187\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ requires\ dxfcpp::ConvertibleTo<R,\ std::invoke\_result\_t<F\ \&\&,\ GraalIsolateThreadHandle,\ Arg\ \&\&,\ Args\ \&\&...>>}
+\DoxyCodeLine{00189\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keyword}{auto}\ runIsolatedOrElse(F\ \&\&f,\ R\ defaultValue,\ Arg\ \&\&arg,\ Args\ \&\&...args)\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::visit(}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ [defaultValue\ =}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::move(defaultValue)]<\textcolor{keyword}{typename}\ T>(T\ \&\&arg)\ -\/>\ std::invoke\_result\_t<F\ \&\&,\ GraalIsolateThreadHandle,\ Arg\ \&\&,\ Args\ \&\&...>\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_same\_v<T,\ CEntryPointErrorsEnum>)\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ defaultValue;}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ arg;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ Isolate::getInstance()-\/>runIsolated(std::forward<F>(f),\ std::forward<Arg>(arg),}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::forward<Args>(args)...));}
+\DoxyCodeLine{00202\ \ \ \ \ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \string~Isolate()\ \{}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::traceIsolates)\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::trace(\textcolor{stringliteral}{"{}\string~Isolate()"{}});}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00208\ \ \ \ \ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ std::string\ toString()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::string(\textcolor{stringliteral}{"{}Isolate\{"{}})\ +\ dxfcpp::toString(dxfcpp::bit\_cast<\textcolor{keywordtype}{void}\ *>(handle\_))\ +}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ main\ =\ "{}}\ +\ mainIsolateThread\_.toString()\ +\ \textcolor{stringliteral}{"{},\ current\ =\ "{}}\ +\ currentIsolateThread\_.toString()\ +\ \textcolor{stringliteral}{"{}\}"{}};}
+\DoxyCodeLine{00213\ \ \ \ \ \}}
+\DoxyCodeLine{00214\ \};}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ F>\ \textcolor{keyword}{auto}\ runIsolated(F\ \&\&f)\ \{}
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordflow}{return}\ Isolate::getInstance()-\/>runIsolated(std::forward<F>(f));}
+\DoxyCodeLine{00218\ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ F,\ \textcolor{keyword}{typename}\ R>}
+\DoxyCodeLine{00221\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00222\ \ \ \ \ requires\ dxfcpp::ConvertibleTo<R,\ std::invoke\_result\_t<F\ \&\&,\ GraalIsolateThreadHandle>>}
+\DoxyCodeLine{00223\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00224\ \textcolor{keyword}{auto}\ runIsolatedOrElse(F\ \&\&f,\ R\ defaultValue)\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordflow}{return}\ Isolate::getInstance()-\/>runIsolatedOrElse(std::forward<F>(f),\ std::move(defaultValue));}
+\DoxyCodeLine{00226\ \}}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ F,\ \textcolor{keyword}{typename}\ R,\ \textcolor{keyword}{typename}\ Arg,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00229\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00230\ \ \ \ \ requires\ dxfcpp::ConvertibleTo<R,\ std::invoke\_result\_t<F\ \&\&,\ GraalIsolateThreadHandle,\ Arg\ \&\&,\ Args\ \&\&...>>}
+\DoxyCodeLine{00231\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00232\ \textcolor{keyword}{auto}\ runIsolatedOrElse(F\ \&\&f,\ R\ defaultValue,\ Arg\ \&\&arg,\ Args\ \&\&...args)\ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keywordflow}{return}\ Isolate::getInstance()-\/>runIsolatedOrElse(std::forward<F>(f),\ std::move(defaultValue),}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::forward<Arg>(arg),\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00235\ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

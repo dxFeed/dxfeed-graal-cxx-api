@@ -1,0 +1,303 @@
+\doxysubsection{dxfcpp\+::Indexed\+Event Struct Reference}
+\hypertarget{structdxfcpp_1_1_indexed_event}{}\label{structdxfcpp_1_1_indexed_event}\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+
+
+Represents an indexed collection of up-\/to-\/date information about some condition or state of an external entity that updates in real-\/time.  
+
+
+
+
+{\ttfamily \#include $<$Indexed\+Event.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Indexed\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.772152cm]{da/d01/structdxfcpp_1_1_indexed_event}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_indexed_event_ae11dfc2d415ed6c039c7745a2acf4683}\label{structdxfcpp_1_1_indexed_event_ae11dfc2d415ed6c039c7745a2acf4683} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}{get\+Source}} () const \&noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns the source of this event. \end{DoxyCompactList}\item 
+virtual std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{get\+Event\+Flags}} () const noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a1f3de1d60a04b7fb2649c4e82bfa31eb}{get\+Event\+Flags\+Mask}} () const noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept=0
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4489465bbf9f78734289f7cf57ad7d34}{set\+Event\+Flags}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept=0
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ad5a71500687f8cebb2a15964144638dc}{get\+Index}} () const noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a5467b31a73a69502b6590656980b108d}{set\+Index}} (std\+::int64\+\_\+t index) noexcept=0
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}{TX\+\_\+\+PENDING}} = Event\+Flag\+::\+TX\+\_\+\+PENDING
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{REMOVE\+\_\+\+EVENT}} = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{SNAPSHOT\+\_\+\+BEGIN}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{SNAPSHOT\+\_\+\+END}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}{SNAPSHOT\+\_\+\+SNIP}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829}{SNAPSHOT\+\_\+\+MODE}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of \doxylink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{event\+Flags} property.   \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents an indexed collection of up-\/to-\/date information about some condition or state of an external entity that updates in real-\/time. 
+
+For example, \+::\+Order represents an order to buy or to sell some market instrument that is currently active on a market exchange and multiple orders are active for each symbol at any given moment in time. \+::\+Candle represent snapshots of aggregate information about trading over a specific time period and there are multiple periods available. The \+::\+Candle is also an example of \+::\+Time\+Series\+Event that is a more specific event type.
+
+Index for each event is available via \doxylink{structdxfcpp_1_1_indexed_event_ad5a71500687f8cebb2a15964144638dc}{index} property. Indexed events retain information about multiple events per symbol based on the event index and are conflated based on the event index. Last indexed event for each symbol and index is always delivered to event listeners on subscription, but intermediate (next-\/to-\/last) events for each symbol+index pair are not queued anywhere, they are simply discarded as stale events. More recent events represent an up-\/to-\/date information about some external entity.
+
+Some indexed events, like \+::\+Order, support multiple sources of information for the same symbol. The event source is available via \doxylink{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}{source} property. The value of \doxylink{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}{source} property is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT} for time-\/series events and other singe-\/sourced events like \+::\+Series, that do not support this feature.
+
+See also the \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ "{}\+Event Flags"{} section}} 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}\label{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily virtual std\+::int32\+\_\+t dxfcpp\+::\+Indexed\+Event\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classdxfcpp_1_1_candle_a7ba850252e025efbd427207c0bfc7de4}{dxfcpp\+::\+Candle}}, \mbox{\hyperlink{classdxfcpp_1_1_option_sale_afc6217f0e312d5d1e3abc6e43bbcf847}{dxfcpp\+::\+Option\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_order_base_a6d1da10a6ba9bb4fcc3466a5c0b07ac5}{dxfcpp\+::\+Order\+Base}}, \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_a3af53742a393a348eb3646e61f38cb6f}{dxfcpp\+::\+Time\+And\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_greeks_aec185ec2c069dc9ea59266dcbca519f2}{dxfcpp\+::\+Greeks}}, \mbox{\hyperlink{classdxfcpp_1_1_series_aa9c1ea427a9724e12fbfbb39315fbec5}{dxfcpp\+::\+Series}}, \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a0c336c08711ef6c5ae0758f5bd47a3b0}{dxfcpp\+::\+Theo\+Price}}, and \mbox{\hyperlink{classdxfcpp_1_1_underlying_a33ac7e578de3e04991b67bddd3bacd25}{dxfcpp\+::\+Underlying}}.
+
+\Hypertarget{structdxfcpp_1_1_indexed_event_a1f3de1d60a04b7fb2649c4e82bfa31eb}\label{structdxfcpp_1_1_indexed_event_a1f3de1d60a04b7fb2649c4e82bfa31eb} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} dxfcpp\+::\+Indexed\+Event\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classdxfcpp_1_1_candle_a60cdc12148d5eb165d5f820b573da973}{dxfcpp\+::\+Candle}}, \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a2405ea5fca56c6136fda028f12c1f628}{dxfcpp\+::\+Option\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_order_base_a9a987f817602b6780dff3469535211ca}{dxfcpp\+::\+Order\+Base}}, \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_a13ae0a27b4d099506ca1ee8ce0d0c28c}{dxfcpp\+::\+Time\+And\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_greeks_a89ff251a16f199faec23def17ee33eca}{dxfcpp\+::\+Greeks}}, \mbox{\hyperlink{classdxfcpp_1_1_series_a39c3e3ae494dc444de30e3d903eebaac}{dxfcpp\+::\+Series}}, \mbox{\hyperlink{classdxfcpp_1_1_theo_price_add29202f4998b8f060fc39b2b3ecf95e}{dxfcpp\+::\+Theo\+Price}}, and \mbox{\hyperlink{classdxfcpp_1_1_underlying_a11514eb1e2b85dadf06d318f2bbbe992}{dxfcpp\+::\+Underlying}}.
+
+\Hypertarget{structdxfcpp_1_1_indexed_event_ad5a71500687f8cebb2a15964144638dc}\label{structdxfcpp_1_1_indexed_event_ad5a71500687f8cebb2a15964144638dc} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily virtual std\+::int64\+\_\+t dxfcpp\+::\+Indexed\+Event\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+\begin{DoxyReturn}{Returns}
+unique per-\/symbol index of this event. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classdxfcpp_1_1_candle_a58d8460e2fd9a808dba96f293764156d}{dxfcpp\+::\+Candle}}, \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a2b08a54a6d18bfb8b40a4937d9c19ef8}{dxfcpp\+::\+Option\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_order_base_ae40f5bf3aadb65c03f0d512569a23b74}{dxfcpp\+::\+Order\+Base}}, \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_abf75fa731da1eb1d19edd23da3db83b0}{dxfcpp\+::\+Time\+And\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_greeks_a194071b049145e17c46c643735227c26}{dxfcpp\+::\+Greeks}}, \mbox{\hyperlink{classdxfcpp_1_1_series_ac6144eb907c3f037c8eda1d8b08de5d0}{dxfcpp\+::\+Series}}, \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a588c8eadce607761dfaf35f394aaf36d}{dxfcpp\+::\+Theo\+Price}}, \mbox{\hyperlink{classdxfcpp_1_1_underlying_a7c9492943d011108c23266d7b0deb8d5}{dxfcpp\+::\+Underlying}}, and \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{dxfcpp\+::\+Time\+Series\+Event}}.
+
+\Hypertarget{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}\label{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!getSource@{getSource}}
+\index{getSource@{getSource}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily virtual const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& dxfcpp\+::\+Indexed\+Event\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source of this event. 
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a835aade380c30d38c885ca0aebccc270}{dxfcpp\+::\+Option\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_order_base_ab1943c5bee398eda008d0330dcc58a87}{dxfcpp\+::\+Order\+Base}}, \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_a8334c2a4f39ac7750b4dec9a107ffcd5}{dxfcpp\+::\+Time\+And\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_greeks_ac02eb424b84ac82345cf01bcd443c9cb}{dxfcpp\+::\+Greeks}}, \mbox{\hyperlink{classdxfcpp_1_1_series_aaaa8e2016b3aff845df96c386f24f396}{dxfcpp\+::\+Series}}, \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a41ac1ef1fc6b203ae1230c542f0eebd6}{dxfcpp\+::\+Theo\+Price}}, \mbox{\hyperlink{classdxfcpp_1_1_underlying_ad854e8cc9d69f40573e1ebc8da09b54b}{dxfcpp\+::\+Underlying}}, and \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_a9a57a9c2bcb8de5457275edf8781e626}{dxfcpp\+::\+Time\+Series\+Event}}.
+
+\Hypertarget{structdxfcpp_1_1_indexed_event_a4489465bbf9f78734289f7cf57ad7d34}\label{structdxfcpp_1_1_indexed_event_a4489465bbf9f78734289f7cf57ad7d34} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily virtual void dxfcpp\+::\+Indexed\+Event\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{dxfcpp\+::\+Candle}}, \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a3b926b89d44cc84e439581c5a65ed86c}{dxfcpp\+::\+Option\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_order_base_a806df7dbd1e21a0e6f84317ad17d5796}{dxfcpp\+::\+Order\+Base}}, \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_ab88c8b980018edb0ef7aacdc57785ff3}{dxfcpp\+::\+Time\+And\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_greeks_a2a213de9d63a45b2aeb6ea15b3d4f92a}{dxfcpp\+::\+Greeks}}, \mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{dxfcpp\+::\+Series}}, \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a4b0fdb1c093e128e97be5affbabff5cf}{dxfcpp\+::\+Theo\+Price}}, and \mbox{\hyperlink{classdxfcpp_1_1_underlying_a2fd83b36a57a86ecf03ae4052718ef9b}{dxfcpp\+::\+Underlying}}.
+
+\Hypertarget{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}\label{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily virtual void dxfcpp\+::\+Indexed\+Event\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{dxfcpp\+::\+Candle}}, \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a98fcabe830c04128c8108a00795e3f85}{dxfcpp\+::\+Option\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_order_base_ab6e0134ade33190df88411efdcd27a33}{dxfcpp\+::\+Order\+Base}}, \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_af815d0a240b931f9e33cb01fd6e3463e}{dxfcpp\+::\+Time\+And\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_greeks_a2d5db42c974dddef600868950e1b40fa}{dxfcpp\+::\+Greeks}}, \mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{dxfcpp\+::\+Series}}, \mbox{\hyperlink{classdxfcpp_1_1_theo_price_aa03866fd384c044255d9e232d9428c34}{dxfcpp\+::\+Theo\+Price}}, and \mbox{\hyperlink{classdxfcpp_1_1_underlying_a3bdc7776d3b3c24a57b5e1adf465f37f}{dxfcpp\+::\+Underlying}}.
+
+\Hypertarget{structdxfcpp_1_1_indexed_event_a5467b31a73a69502b6590656980b108d}\label{structdxfcpp_1_1_indexed_event_a5467b31a73a69502b6590656980b108d} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily virtual void dxfcpp\+::\+Indexed\+Event\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & unique per-\/symbol index of this event. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{dxfcpp\+::\+Candle}}, \mbox{\hyperlink{classdxfcpp_1_1_option_sale_a6004c3f33b86392742aceef16d12c8d1}{dxfcpp\+::\+Option\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{dxfcpp\+::\+Order\+Base}}, \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_a68a47b34e73804fbd9d4d0f8fa505b7f}{dxfcpp\+::\+Time\+And\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_greeks_afd1b77af33c2d0856b525c437cfcf816}{dxfcpp\+::\+Greeks}}, \mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{dxfcpp\+::\+Series}}, \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a074ea9e7efa4f1b721398a62481caa96}{dxfcpp\+::\+Theo\+Price}}, and \mbox{\hyperlink{classdxfcpp_1_1_underlying_a770902ed833fcea9f9d5f5d979e5de07}{dxfcpp\+::\+Underlying}}.
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}\label{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!REMOVE\_EVENT@{REMOVE\_EVENT}}
+\index{REMOVE\_EVENT@{REMOVE\_EVENT}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{REMOVE\_EVENT}{REMOVE\_EVENT}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} dxfcpp\+::\+Indexed\+Event\+::\+REMOVE\+\_\+\+EVENT = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool}\ removeEvent\ =\ (\textcolor{keyword}{event}-\/>\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{getEventFlags}}()\ \&\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{IndexedEvent::REMOVE\_EVENT}})\ !=\ 0;}
+
+\end{DoxyCode}
+
+
+See \href{\#eventFlagsSection}{\texttt{ "{}\+Event Flags"{} section}}   \Hypertarget{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}\label{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!SNAPSHOT\_BEGIN@{SNAPSHOT\_BEGIN}}
+\index{SNAPSHOT\_BEGIN@{SNAPSHOT\_BEGIN}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{SNAPSHOT\_BEGIN}{SNAPSHOT\_BEGIN}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} dxfcpp\+::\+Indexed\+Event\+::\+SNAPSHOT\+\_\+\+BEGIN = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool}\ snapshotBegin\ =\ (\textcolor{keyword}{event}-\/>\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{getEventFlags}}()\ \&\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{IndexedEvent::SNAPSHOT\_BEGIN}})\ !=\ 0;}
+
+\end{DoxyCode}
+
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ "{}\+Event Flags"{} section}}   \Hypertarget{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}\label{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!SNAPSHOT\_END@{SNAPSHOT\_END}}
+\index{SNAPSHOT\_END@{SNAPSHOT\_END}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{SNAPSHOT\_END}{SNAPSHOT\_END}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} dxfcpp\+::\+Indexed\+Event\+::\+SNAPSHOT\+\_\+\+END = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool}\ snapshotEnd\ =\ (\textcolor{keyword}{event}-\/>\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{getEventFlags}}()\ \&\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{IndexedEvent::SNAPSHOT\_END}})\ !=\ 0;}
+
+\end{DoxyCode}
+
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ "{}\+Event Flags"{} section}}   \Hypertarget{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829}\label{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!SNAPSHOT\_MODE@{SNAPSHOT\_MODE}}
+\index{SNAPSHOT\_MODE@{SNAPSHOT\_MODE}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{SNAPSHOT\_MODE}{SNAPSHOT\_MODE}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} dxfcpp\+::\+Indexed\+Event\+::\+SNAPSHOT\+\_\+\+MODE = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of \doxylink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{event\+Flags} property.   
+
+This flag is intended for publishing only.
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ "{}\+Event Flags"{} section}}   \Hypertarget{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}\label{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!SNAPSHOT\_SNIP@{SNAPSHOT\_SNIP}}
+\index{SNAPSHOT\_SNIP@{SNAPSHOT\_SNIP}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{SNAPSHOT\_SNIP}{SNAPSHOT\_SNIP}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} dxfcpp\+::\+Indexed\+Event\+::\+SNAPSHOT\+\_\+\+SNIP = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool}\ snapshotSnip\ =\ (\textcolor{keyword}{event}-\/>\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{getEventFlags}}()\ \&\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}{IndexedEvent::SNAPSHOT\_SNIP}})\ !=\ 0;}
+
+\end{DoxyCode}
+
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ "{}\+Event Flags"{} section}}   \Hypertarget{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}\label{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3} 
+\index{dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}!TX\_PENDING@{TX\_PENDING}}
+\index{TX\_PENDING@{TX\_PENDING}!dxfcpp::IndexedEvent@{dxfcpp::IndexedEvent}}
+\doxyparagraph{\texorpdfstring{TX\_PENDING}{TX\_PENDING}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} dxfcpp\+::\+Indexed\+Event\+::\+TX\+\_\+\+PENDING = Event\+Flag\+::\+TX\+\_\+\+PENDING\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool}\ txPending\ =\ (\textcolor{keyword}{event}-\/>\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{getEventFlags}}()\ \&\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}{IndexedEvent::TX\_PENDING}})\ !=\ 0;}
+
+\end{DoxyCode}
+
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ "{}\+Event Flags"{} section}}   

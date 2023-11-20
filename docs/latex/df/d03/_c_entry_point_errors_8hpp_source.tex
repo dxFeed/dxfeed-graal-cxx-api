@@ -1,0 +1,240 @@
+\doxysubsection{CEntry\+Point\+Errors.\+hpp}
+\hypertarget{_c_entry_point_errors_8hpp_source}{}\label{_c_entry_point_errors_8hpp_source}\index{CEntryPointErrors.hpp@{CEntryPointErrors.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{compare}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_common_8hpp}{"{}Common.hpp"{}}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{NO\_ERROR}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{NO\_ERROR}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Enum\ of\ the\ possible\ error\ codes\ returned\ by\ internal\ GraalVM\ functions}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ \ [Graal:CEntryPointErrors](https://github.com/oracle/graal/blob/96a1a66347bd4e5e00ae4e8e79812ebaf8cd5e33/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/c/function/CEntryPointErrors.java\#L43)}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00027\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ CEntryPointErrorsEnum\ :\ uint32\_t\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{///\ 0\ -\/\ No\ error\ occurred.}}
+\DoxyCodeLine{00029\ \ \ \ \ NO\_ERROR,}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{///\ 1\ -\/\ An\ unspecified\ error\ occurred.}}
+\DoxyCodeLine{00032\ \ \ \ \ UNSPECIFIED\ =\ 0,}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ 2\ -\/\ An\ argument\ was\ NULL\ (nullptr).}}
+\DoxyCodeLine{00035\ \ \ \ \ NULL\_ARGUMENT\ =\ 2,}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{///\ 4\ -\/\ The\ specified\ thread\ is\ not\ attached\ to\ the\ isolate.}}
+\DoxyCodeLine{00038\ \ \ \ \ UNATTACHED\_THREAD\ =\ 4,}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ 5\ -\/\ The\ specified\ isolate\ is\ unknown.}}
+\DoxyCodeLine{00041\ \ \ \ \ UNINITIALIZED\_ISOLATE\ =\ 5,}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{///\ 6\ -\/\ Locating\ the\ image\ file\ failed.}}
+\DoxyCodeLine{00044\ \ \ \ \ LOCATE\_IMAGE\_FAILED\ =\ 6,}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ 7\ -\/\ Opening\ the\ located\ image\ file\ failed.}}
+\DoxyCodeLine{00047\ \ \ \ \ OPEN\_IMAGE\_FAILED\ =\ 7,}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ 8\ -\/\ Mapping\ the\ heap\ from\ the\ image\ file\ into\ memory\ failed.}}
+\DoxyCodeLine{00050\ \ \ \ \ MAP\_HEAP\_FAILED\ =\ 8,}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{///\ 801\ -\/\ Reserving\ address\ space\ for\ the\ new\ isolate\ failed.}}
+\DoxyCodeLine{00053\ \ \ \ \ RESERVE\_ADDRESS\_SPACE\_FAILED\ =\ 801,}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{///\ 802\ -\/\ The\ image\ heap\ does\ not\ fit\ in\ the\ available\ address\ space.}}
+\DoxyCodeLine{00056\ \ \ \ \ INSUFFICIENT\_ADDRESS\_SPACE\ =\ 802,}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ 9\ -\/\ Setting\ the\ protection\ of\ the\ heap\ memory\ failed.}}
+\DoxyCodeLine{00059\ \ \ \ \ PROTECT\_HEAP\_FAILED\ =\ 9,}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{///\ 10\ -\/\ The\ version\ of\ the\ specified\ isolate\ parameters\ is\ unsupported.}}
+\DoxyCodeLine{00062\ \ \ \ \ UNSUPPORTED\_ISOLATE\_PARAMETERS\_VERSION\ =\ 10,}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ 11\ -\/\ Initialization\ of\ threading\ in\ the\ isolate\ failed.}}
+\DoxyCodeLine{00065\ \ \ \ \ THREADING\_INITIALIZATION\_FAILED\ =\ 11,}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{///\ 12\ -\/\ Some\ exception\ is\ not\ caught.}}
+\DoxyCodeLine{00068\ \ \ \ \ UNCAUGHT\_EXCEPTION\ =\ 12,}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{///\ 13\ -\/\ Initialization\ the\ isolate\ failed.}}
+\DoxyCodeLine{00071\ \ \ \ \ ISOLATE\_INITIALIZATION\_FAILED\ =\ 13,}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{///\ 14\ -\/\ Opening\ the\ located\ auxiliary\ image\ file\ failed.}}
+\DoxyCodeLine{00074\ \ \ \ \ OPEN\_AUX\_IMAGE\_FAILED\ =\ 14,}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{///\ 15\ -\/\ Reading\ the\ opened\ auxiliary\ image\ file\ failed.}}
+\DoxyCodeLine{00077\ \ \ \ \ READ\_AUX\_IMAGE\_META\_FAILED\ =\ 15,}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{///\ 16\ -\/\ Mapping\ the\ auxiliary\ image\ file\ into\ memory\ failed.}}
+\DoxyCodeLine{00080\ \ \ \ \ MAP\_AUX\_IMAGE\_FAILED\ =\ 16,}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{///\ 17\ -\/\ Insufficient\ memory\ for\ the\ auxiliary\ image.}}
+\DoxyCodeLine{00083\ \ \ \ \ INSUFFICIENT\_AUX\_IMAGE\_MEMORY\ =\ 17,}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{///\ 18\ -\/\ Auxiliary\ images\ are\ not\ supported\ on\ this\ platform\ or\ edition.}}
+\DoxyCodeLine{00086\ \ \ \ \ AUX\_IMAGE\_UNSUPPORTED\ =\ 18,}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{///\ 19\ -\/\ Releasing\ the\ isolate's\ address\ space\ failed.}}
+\DoxyCodeLine{00089\ \ \ \ \ FREE\_ADDRESS\_SPACE\_FAILED\ =\ 19,}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{///\ 20\ -\/\ Releasing\ the\ isolate's\ image\ heap\ memory\ failed.}}
+\DoxyCodeLine{00092\ \ \ \ \ FREE\_IMAGE\_HEAP\_FAILED\ =\ 20,}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{///\ 21\ -\/\ The\ auxiliary\ image\ was\ built\ from\ a\ different\ primary\ image.}}
+\DoxyCodeLine{00095\ \ \ \ \ AUX\_IMAGE\_PRIMARY\_IMAGE\_MISMATCH\ =\ 21,}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{///\ 22\ -\/\ The\ isolate\ arguments\ could\ not\ be\ parsed.}}
+\DoxyCodeLine{00098\ \ \ \ \ ARGUMENT\_PARSING\_FAILED\ =\ 22,}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{///\ 23\ -\/\ Current\ target\ does\ not\ support\ the\ following\ CPU\ features\ that\ are\ required\ by\ the\ image.}}
+\DoxyCodeLine{00101\ \ \ \ \ CPU\_FEATURE\_CHECK\_FAILED\ =\ 23,}
+\DoxyCodeLine{00102\ \};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ *\ Possible\ error\ codes\ returned\ by\ internal\ GraalVM\ functions}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ *\ \ [Graal:CEntryPointErrors](https://github.com/oracle/graal/blob/96a1a66347bd4e5e00ae4e8e79812ebaf8cd5e33/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/c/function/CEntryPointErrors.java\#L43)}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00109\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{using}\ CodeType\ =\ CEntryPointErrorsEnum;}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00113\ \ \ \ \ CodeType\ code\_\{\};}
+\DoxyCodeLine{00114\ \ \ \ \ std::string\ description\_\{\};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ Code>}
+\DoxyCodeLine{00117\ \ \ \ \ CEntryPointErrors(Code\ code,\ std::string\ description)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{code\_}}\{\textcolor{keyword}{static\_cast}<\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CodeType}}>(\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{code}})\},\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{description\_}}\{\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{move}}(\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{description}})\}\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{template}\ <EnumConcept\ Code>}
+\DoxyCodeLine{00122\ \ \ \ \ CEntryPointErrors(Code\ code,\ std::string\ description)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{code\_}}\{\textcolor{keyword}{static\_cast}<\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CodeType}}>(\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{code}})\},\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{description\_}}\{\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{move}}(\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{description}})\}\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{///\ 0\ -\/\ No\ error\ occurred.}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a3038e46b7a5b28af7e69094ca9f4e84c}{NO\_ERROR}};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{///\ 1\ -\/\ An\ unspecified\ error\ occurred.}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a64426a10151f32b6c708c1dca6265152}{UNSPECIFIED}};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{///\ 2\ -\/\ An\ argument\ was\ NULL\ (nullptr).}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_aed4e1a84d0ac1422ba8f4fafbcbefab6}{NULL\_ARGUMENT}};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{///\ 4\ -\/\ The\ specified\ thread\ is\ not\ attached\ to\ the\ isolate.}}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a73fef068db152a57799f076b4f8d7cb3}{UNATTACHED\_THREAD}};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{///\ 5\ -\/\ The\ specified\ isolate\ is\ unknown.}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_af8932884e26b6fc56cf5a5231b0b142c}{UNINITIALIZED\_ISOLATE}};}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{///\ 6\ -\/\ Locating\ the\ image\ file\ failed.}}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a3f839f29c7590e942bf9f0f4dd92a204}{LOCATE\_IMAGE\_FAILED}};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{///\ 7\ -\/\ Opening\ the\ located\ image\ file\ failed.}}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_ae227a97e9315f8a1f4bf66b85ef94da8}{OPEN\_IMAGE\_FAILED}};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{///\ 8\ -\/\ Mapping\ the\ heap\ from\ the\ image\ file\ into\ memory\ failed.}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a4730d75b19c07ed124132b0c52c6c711}{MAP\_HEAP\_FAILED}};}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{///\ 801\ -\/\ Reserving\ address\ space\ for\ the\ new\ isolate\ failed.}}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_abd0b640e1af379be55cec1e541898f37}{RESERVE\_ADDRESS\_SPACE\_FAILED}};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{///\ 802\ -\/\ The\ image\ heap\ does\ not\ fit\ in\ the\ available\ address\ space.}}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a08daf13d4d342f499df866c9b365e9fd}{INSUFFICIENT\_ADDRESS\_SPACE}};}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{///\ 9\ -\/\ Setting\ the\ protection\ of\ the\ heap\ memory\ failed.}}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a694f24336e4806bef18f2449133bb01e}{PROTECT\_HEAP\_FAILED}};}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{///\ 10\ -\/\ The\ version\ of\ the\ specified\ isolate\ parameters\ is\ unsupported.}}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_ae0016a8ba5ce623fafcab1863ae78841}{UNSUPPORTED\_ISOLATE\_PARAMETERS\_VERSION}};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{///\ 11\ -\/\ Initialization\ of\ threading\ in\ the\ isolate\ failed.}}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_adc073907d0ad0b0a1af6b7d374e2aadc}{THREADING\_INITIALIZATION\_FAILED}};}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{///\ 12\ -\/\ Some\ exception\ is\ not\ caught.}}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_ac3e9e07f0359860762bc5ff96c52a270}{UNCAUGHT\_EXCEPTION}};}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{///\ 13\ -\/\ Initialization\ the\ isolate\ failed.}}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a303dee0aac5f56b0daeee6b37b1ba30b}{ISOLATE\_INITIALIZATION\_FAILED}};}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{comment}{///\ 14\ -\/\ Opening\ the\ located\ auxiliary\ image\ file\ failed.}}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a4115a25d9683dc92224a6cc63a33e4b8}{OPEN\_AUX\_IMAGE\_FAILED}};}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{comment}{///\ 15\ -\/\ Reading\ the\ opened\ auxiliary\ image\ file\ failed.}}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a3d6f257c44e21c2f23bab2b2dec4116b}{READ\_AUX\_IMAGE\_META\_FAILED}};}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{comment}{///\ 16\ -\/\ Mapping\ the\ auxiliary\ image\ file\ into\ memory\ failed.}}
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_aa66ac46e87838dd1f134f7347e5bd552}{MAP\_AUX\_IMAGE\_FAILED}};}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{comment}{///\ 17\ -\/\ Insufficient\ memory\ for\ the\ auxiliary\ image.}}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_aec6096e62222b65058b17485a4364793}{INSUFFICIENT\_AUX\_IMAGE\_MEMORY}};}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{comment}{///\ 18\ -\/\ Auxiliary\ images\ are\ not\ supported\ on\ this\ platform\ or\ edition.}}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a59ee692e38cf4d93d3eec5ee6e2c33b9}{AUX\_IMAGE\_UNSUPPORTED}};}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{comment}{///\ 19\ -\/\ Releasing\ the\ isolate's\ address\ space\ failed.}}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_aa1ef8cd33abd8958c12e04cff4ec90fd}{FREE\_ADDRESS\_SPACE\_FAILED}};}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{///\ 20\ -\/\ Releasing\ the\ isolate's\ image\ heap\ memory\ failed.}}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a323d1aaefd23b3b1d3b3c56329767f80}{FREE\_IMAGE\_HEAP\_FAILED}};}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{///\ 21\ -\/\ The\ auxiliary\ image\ was\ built\ from\ a\ different\ primary\ image.}}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a90fbb14ae1ef9525157809538c0b12f0}{AUX\_IMAGE\_PRIMARY\_IMAGE\_MISMATCH}};}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{comment}{///\ 22\ -\/\ The\ isolate\ arguments\ could\ not\ be\ parsed.}}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a5480767c2f85a4fbac6a2497e9b74654}{ARGUMENT\_PARSING\_FAILED}};}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{///\ 23\ -\/\ Current\ target\ does\ not\ support\ the\ following\ CPU\ features\ that\ are\ required\ by\ the\ image.}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_abb1021d4b2abd795435253c890beb2cd}{CPU\_FEATURE\_CHECK\_FAILED}};}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ CEntryPointErrors>>\ ALL;}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ Code>\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \&valueOf(Code\ code)\ \{}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{found}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{ALL}}.\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{find}}(\textcolor{keyword}{static\_cast}<\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CodeType}}>(\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{code}}));\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{found}}\ !=\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{ALL}}.\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{end}}())\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{found}}-\/>\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{second}};}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{UNSPECIFIED}};}
+\DoxyCodeLine{00210\ \ \ \ \ \}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keyword}{template}\ <EnumConcept\ Code>\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \&valueOf(Code\ code)\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{found}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{ALL}}.\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{find}}(\textcolor{keyword}{static\_cast}<\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CodeType}}>(\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{code}}));\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{found}}\ !=\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{ALL}}.\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{end}}())\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{found}}-\/>\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{second}};}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{UNSPECIFIED}};}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{///\ Returns\ the\ code}}
+\DoxyCodeLine{00221\ \ \ \ \ [[\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{nodiscard}}]]\ CodeType\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{getCode}}()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ code\_;}
+\DoxyCodeLine{00223\ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{///\ Returns\ the\ description}}
+\DoxyCodeLine{00226\ \ \ \ \ [[\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{nodiscard}}]]\ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_adc73b1177b9d3d10545e9b14d55898c9}{getDescription}}()\ \textcolor{keyword}{const}\ \&\ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ description\_;}
+\DoxyCodeLine{00228\ \ \ \ \ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntryPointErrors}}\ \&errors)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this}\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{-\/>}}\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{getCode}}\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{(}}\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{)}}\ ==\ errors\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{.}}\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{getCode}}\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{(}}\mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}{)}};}
+\DoxyCodeLine{00232\ \ \ \ \ \}}
+\DoxyCodeLine{00233\ \};}
+\DoxyCodeLine{00234\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

@@ -1,0 +1,157 @@
+\doxysubsection{Trade\+ETH.\+hpp}
+\hypertarget{_trade_e_t_h_8hpp_source}{}\label{_trade_e_t_h_8hpp_source}\index{TradeETH.hpp@{TradeETH.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_trade_base_8hpp}{"{}TradeBase.hpp"{}}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ TradeETH\ event\ is\ a\ snapshot\ of\ the\ price\ and\ size\ of\ the\ last\ trade\ during}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ extended\ trading\ hours\ and\ the\ extended\ trading\ hours\ day\ volume\ and\ day\ turnover.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ event\ is\ defined\ only\ for\ symbols\ (typically\ stocks\ and\ ETFs)\ with\ a\ designated}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ <b>extended\ trading\ hours</b>\ \ (ETH,\ pre\ market\ and\ post\ market\ trading\ sessions).}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ ETH\ last\ trade\ on\ the\ market\ at\ any\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <h3>Trading\ sessions</h3>}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ The\ TradeETH\ event\ defines\ last\ trade\ @ref\ TradeETH::getPrice()\ "{}price"{}\ as\ officially\ defined}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ by\ the\ corresponding\ exchange\ for\ its\ <b>extended\ trading\ hours</b>\ (ETH).}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ It\ also\ includes\ @ref\ TradeETH::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ ::getDayTurnover()\ "{}dayTurnover"{}}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ <b>for\ the\ extended\ trading\ hours\ only</b>\ of\ the\ trading\ day\ identified\ by\ @ref\ TradeETH::getDayId\ "{}dayId"{}.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ This\ event\ is\ not\ defined\ for\ symbols\ that\ has\ no\ concept\ of\ ETH.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ <p>When\ the\ first\ trade\ of\ <b>regular\ trading\ hours</b>\ (RTH)\ happens,\ then\ TradeETH\ event\ is\ generated}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ with\ @ref\ TradeETH::isExtendedTradingHours()\ "{}extendedTradingHours"{}\ property\ set\ to\ \`{}false`.\ Afterwards,\ during\ RTH,}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ TradeETH\ event\ is\ not\ updated\ and\ retains\ information\ about\ the\ last\ trade,\ volume\ and\ turnover\ of\ the\ pre\ market}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ trading\ session.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ <p>When\ the\ first\ trade\ of\ <b>extended\ trading\ hours</b>\ (ETH)\ happens,\ then\ TradeETH\ event\ is\ generated}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ with\ @ref\ TradeETH::isExtendedTradingHours()\ "{}extendedTradingHours"{}\ property\ set\ to\ \`{}true`.\ Afterwards,\ during\ ETH,}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ TradeETH\ event\ is\ updated\ on\ each\ trade\ with\ the\ last\ trade\ information\ from\ post\ market\ trading\ session}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ and\ total\ volume\ and\ turnover\ of\ the\ pre\ and\ post\ market\ trading\ session\ (excluding\ the\ volume\ and\ turnover\ of\ a}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ regular\ trading\ session).}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ Note,\ that\ during\ pre-\/\ and\ post-\/market\ sessions,\ Trade\ event\ also\ updates,\ but\ only\ its}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ Trade::getDayTurnover()\ "{}dayTurnover"{}\ properties\ change}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ to\ reflect\ the\ overall\ official\ volume\ and\ turnover\ as\ reported\ by\ exchanges.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ During\ post\ market\ trading\ session,\ exchanges\ may\ correct\ their\ official\ RTH\ last\ trading\ price,\ which\ results}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ in\ the\ update\ to\ Trade\ event.}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ <h3>Volume\ and\ Turnover</h3>}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ <p>Note\ that\ one\ can\ compute\ volume-\/weighted\ average\ price\ (VWAP)\ for\ extended\ trading\ hours\ by\ this\ formula:}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ <br><code>vwap\ =\ @ref\ TradeETH::getDayTurnover()\ "{}dayTurnover"{}\ /\ @ref\ ::getDayVolume()\ "{}dayVolume"{};</code>}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ <h3>Daily\ reset</h3>}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ Daily\ reset\ procedure\ that\ happens\ on\ a\ schedule\ during\ non-\/trading\ hours\ resets\ TradeETH}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ @ref\ TradeETH::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ TradeETH::getDayTurnover()\ "{}dayTurnover"{}\ to\ math::NaN}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ and\ sets\ @ref\ TradeETH::getDayId()\ "{}dayId"{}\ to\ the\ next\ trading\ day\ in\ preparation\ to\ the\ next\ day's\ pre-\/market}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ trading\ session\ (or\ for\ regular\ trading\ if\ there\ is\ no\ pre-\/market)\ while\ leaving\ all\ other\ properties\ intact.\ They}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ reflect\ information\ about\ the\ last\ known\ ETH\ trade\ until\ the\ next\ ETH\ trade\ happens.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ <h3>The\ most\ recent\ last\ trade\ price</h3>}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *\ The\ most\ recent\ last\ trade\ price\ ("{}extended\ last\ price"{})\ in\ the\ market\ can\ be\ found\ by\ combining\ information\ from}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ *\ both\ Trade\ and\ TradeETH\ events\ using\ @ref\ TradeETH::isExtendedTradingHours()\ "{}isExtendedTradingHours"{}\ method\ to}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ *\ figure\ out\ which\ trading\ session\ had\ the\ most\ recent\ trade.\ The\ following\ piece\ of\ code\ finds\ the\ most\ recent\ last}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ *\ trade\ price\ from\ the\ given\ @ref\ DXFeed\ "{}feed"{}\ for\ a\ given\ \`{}symbol`,\ assuming\ there\ is\ a\ @ref\ DXFeedSubscription}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ *\ "{}subscription"{}\ for\ both\ Trade\ and\ TradeETH\ events\ for\ the\ given\ \`{}symbol`:}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ <pre><tt>}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ \ \ \ \ auto\ @ref\ Trade\ "{}trade"{}\ =\ feed-\/>@ref\ DXFeed::getLastEvent()\ "{}getLastEvent"{}(Trade::create(symbol));}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ \ \ \ \ auto\ @ref\ TradeETH\ "{}tradeEth"{}\ =\ feed-\/>@ref\ DXFeed::getLastEvent()\ "{}getLastEvent"{}(TradeETH::create(symbol));}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ \ \ \ \ <b>double</b>\ extLast\ =\ tradeEth-\/>@ref\ TradeETH::isExtendedTradingHours()\ "{}isExtendedTradingHours"{}()\ ?}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ tradeEth-\/>@ref\ TradeETH::getPrice()\ "{}getPrice"{}()\ :\ trade-\/>@ref\ Trade::getPrice()\ "{}getPrice"{}();}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ *\ </tt></pre>}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ *\ Note,\ that\ the\ above\ code\ works\ correctly\ for\ symbols\ that\ has\ no\ concept\ of\ ETH,\ too,\ because\ in\ this}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ *\ case\ the\ DXFeed::getLastEvent()\ leaves\ default\ values\ in\ TradeETH}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ event\ properties,\ which\ means\ that\ @ref\ TradeETH::isExtendedTradingHours()\ "{}extendedTradingHours"{}\ flag\ is\ \`{}false`}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ *\ and\ a\ regular\ Trade::getPrice()\ is\ used.}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ record\ \`{}TradeETH`\ and\ \`{}TradeETH\&X`}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ *\ for\ regional\ exchange\ extended\ trade\ hours.}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ *\ @ref\ TradeETH::isExtendedTradingHours()\ "{}extendedTradingHours"{}\ property\ is\ internally\ represented\ as\ a\ last\ bit\ of}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ *\ the\ "{}Flags"{}\ field\ of\ the\ record.\ Regional\ records\ do\ not\ explicitly\ store\ a\ field\ for\ @ref}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ *\ TradeETH::getExchangeCode()\ "{}exchangeCode"{}\ property.}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00097\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ TradeETH\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base}{TradeBase}}\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<TradeETH>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_trade_e_t_h_ada70cd206318d158b321a5052cfbb0b0}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_e_t_h_a448803761faec0fc56b5dbc333908fa4}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ TradeETH\ object}}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<TradeETH>;}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ TradeETH\ object}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<TradeETH>;}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_trade_e_t_h_a00cf46e8cf2c5cb3c9fefebba8923e64}{TYPE}};}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ trade\ event\ with\ default\ values.}}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_trade_e_t_h_a6ef056d1d4835b4fc02445f3950a495d}{TradeETH}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ trade\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_e_t_h_a6d115e3cc1595cb161eed12b1c264057}{TradeETH}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base}{TradeBase}}\mbox{\hyperlink{classdxfcpp_1_1_trade_base_aa2c14ca3644e13d88c7a8d861c91ab11}{(}}std::move(eventSymbol)\mbox{\hyperlink{classdxfcpp_1_1_trade_base_aa2c14ca3644e13d88c7a8d861c91ab11}{)}}\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00148\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_trade_e_t_h_a6879f4255df067502dc490e90919a3cd}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00149\ \};}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

@@ -1,0 +1,296 @@
+\doxysubsection{dxfcpp\+::Session Struct Reference}
+\hypertarget{structdxfcpp_1_1_session}{}\label{structdxfcpp_1_1_session}\index{dxfcpp::Session@{dxfcpp::Session}}
+
+
+{\bfseries{\doxylink{structdxfcpp_1_1_session}{Session}}} represents a continuous period of time during which apply same rules regarding trading activity.  
+
+
+
+
+{\ttfamily \#include $<$Session.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}\label{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_session}{Session} object. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_session_a9dd793d67ff5dd7adbd06063457daed8}\label{structdxfcpp_1_1_session_a9dd793d67ff5dd7adbd06063457daed8} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{structdxfcpp_1_1_session}{Session} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_session_a94e5f139def2d12bb50232cbdca17d67}{get\+Day}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns day to which this session belongs. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structdxfcpp_1_1_session_type}{Session\+Type}} \& \mbox{\hyperlink{structdxfcpp_1_1_session_a84c08f0f1261952f05fc8808684f18d8}{get\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns type of this session. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_session_a0536eadc2c4eaeed2ea1430e383bb6e2}{is\+Trading}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_session_aeb0f0284745b3cfd183fa4c87ec40036}{is\+Empty}} () const noexcept
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_session_adabe3703f659775a75f8731564859d8c}{get\+Start\+Time}} () const noexcept
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_session_a085ed3a2a357bc25294ed97b266f05d0}{get\+End\+Time}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_session_ad654e9dc061997aee73cd455fe159a34}{contains\+Time}} (std\+::int64\+\_\+t time) const noexcept
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_session_aac77318948c38e00cef14e2aea765e95}{get\+Prev\+Session}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns previous session accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_session_a71a058f0a8f9cce027ff7c7186ec7f5b}{get\+Next\+Session}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns following session accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_session_a2ac6fe8a940256e6975c83491d8c86f7}{find\+Prev\+Session}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns previous session accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_session_a059b3892176e959027e6c52a83c19d5c}{find\+Next\+Session}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns following session accepted by specified filter. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_session_aa584b48aa1bdd3a105035e82f03789cf}{operator==}} (const \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} \&other) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_session_a445f1125b414ef88630e147d2f08f57d}{operator==}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} \&other) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_session_a89fd962df189fa47d97c0e6e030ce0d6}{get\+Hash\+Code}} () const noexcept
+\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_session_a72f5c5b050e696180bb640adb3518d70}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+{\bfseries{\doxylink{structdxfcpp_1_1_session}{Session}}} represents a continuous period of time during which apply same rules regarding trading activity. 
+
+For example, {\ttfamily regular trading session} is a period of time consisting of one day of business activities in a financial market, from the opening bell to the closing bell, when regular trading occurs. 
+
+Sessions can be either {\bfseries{trading}} or {\bfseries{non-\/trading}}, with different sets of rules and reasons to exist. Sessions do not overlap with each other -\/ rather they form consecutive chain of adjacent periods of time that cover entire time scale. The point on a border line is considered to belong to following session that starts there. Each session completely fits inside a certain day. \doxylink{structdxfcpp_1_1_day}{Day} may contain sessions with zero duration -\/ e.\+g. indices that post value once a day. Such sessions can be of any appropriate type, trading or non-\/trading. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_session_ad654e9dc061997aee73cd455fe159a34}\label{structdxfcpp_1_1_session_ad654e9dc061997aee73cd455fe159a34} 
+\index{dxfcpp::Session@{dxfcpp::Session}!containsTime@{containsTime}}
+\index{containsTime@{containsTime}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{containsTime()}{containsTime()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Session\+::contains\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if specified time belongs to this session. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a059b3892176e959027e6c52a83c19d5c}\label{structdxfcpp_1_1_session_a059b3892176e959027e6c52a83c19d5c} 
+\index{dxfcpp::Session@{dxfcpp::Session}!findNextSession@{findNextSession}}
+\index{findNextSession@{findNextSession}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{findNextSession()}{findNextSession()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} dxfcpp\+::\+Session\+::find\+Next\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns following session accepted by specified filter. 
+
+This method may cross the day boundary and return appropriate session from following days -\/ up to a year in the future. If no such session was found within one year this method will return {\ttfamily \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}). 
+
+To find following trading session of any type use this code\+: 
+\begin{DoxyPre}session = session-\/>findNextSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find following regular trading session use this code\+: 
+\begin{DoxyPre}session = session-\/>findNextSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+nearest following session that is accepted by the filter 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a2ac6fe8a940256e6975c83491d8c86f7}\label{structdxfcpp_1_1_session_a2ac6fe8a940256e6975c83491d8c86f7} 
+\index{dxfcpp::Session@{dxfcpp::Session}!findPrevSession@{findPrevSession}}
+\index{findPrevSession@{findPrevSession}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{findPrevSession()}{findPrevSession()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} dxfcpp\+::\+Session\+::find\+Prev\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns previous session accepted by specified filter. 
+
+This method may cross the day boundary and return appropriate session from previous days -\/ up to a year back in time. If no such session was found within one year this method will return {\ttfamily \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}). 
+
+To find previous trading session of any type use this code\+: 
+\begin{DoxyPre}session = session-\/>findPrevSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find previous regular trading session use this code\+: 
+\begin{DoxyPre}session = session-\/>findPrevSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+nearest previous session that is accepted by the filter 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a94e5f139def2d12bb50232cbdca17d67}\label{structdxfcpp_1_1_session_a94e5f139def2d12bb50232cbdca17d67} 
+\index{dxfcpp::Session@{dxfcpp::Session}!getDay@{getDay}}
+\index{getDay@{getDay}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{getDay()}{getDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} dxfcpp\+::\+Session\+::get\+Day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns day to which this session belongs. 
+
+\begin{DoxyReturn}{Returns}
+The day to which this session belongs. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a085ed3a2a357bc25294ed97b266f05d0}\label{structdxfcpp_1_1_session_a085ed3a2a357bc25294ed97b266f05d0} 
+\index{dxfcpp::Session@{dxfcpp::Session}!getEndTime@{getEndTime}}
+\index{getEndTime@{getEndTime}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{getEndTime()}{getEndTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Session\+::get\+End\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+end time of this session (exclusive). For normal sessions the end time is greater than the start time, for empty sessions they are equal. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a89fd962df189fa47d97c0e6e030ce0d6}\label{structdxfcpp_1_1_session_a89fd962df189fa47d97c0e6e030ce0d6} 
+\index{dxfcpp::Session@{dxfcpp::Session}!getHashCode@{getHashCode}}
+\index{getHashCode@{getHashCode}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{getHashCode()}{getHashCode()}}
+{\footnotesize\ttfamily std\+::size\+\_\+t dxfcpp\+::\+Session\+::get\+Hash\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+A hash code value for this object. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a71a058f0a8f9cce027ff7c7186ec7f5b}\label{structdxfcpp_1_1_session_a71a058f0a8f9cce027ff7c7186ec7f5b} 
+\index{dxfcpp::Session@{dxfcpp::Session}!getNextSession@{getNextSession}}
+\index{getNextSession@{getNextSession}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{getNextSession()}{getNextSession()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} dxfcpp\+::\+Session\+::get\+Next\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns following session accepted by specified filter. 
+
+This method may cross the day boundary and return appropriate session from following days -\/ up to a year in the future. If no such session was found within one year this method will return {\ttfamily \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}). 
+
+To find following trading session of any type use this code\+: 
+\begin{DoxyPre}session = session-\/>getNextSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find following regular trading session use this code\+: 
+\begin{DoxyPre}session = session-\/>getNextSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest following session that is accepted by the filter or {\ttfamily \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within one year 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_aac77318948c38e00cef14e2aea765e95}\label{structdxfcpp_1_1_session_aac77318948c38e00cef14e2aea765e95} 
+\index{dxfcpp::Session@{dxfcpp::Session}!getPrevSession@{getPrevSession}}
+\index{getPrevSession@{getPrevSession}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{getPrevSession()}{getPrevSession()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} dxfcpp\+::\+Session\+::get\+Prev\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns previous session accepted by specified filter. 
+
+This method may cross the day boundary and return appropriate session from previous days -\/ up to a year back in time. If no such session was found within one year this method will return {\ttfamily \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}). 
+
+To find previous trading session of any type use this code\+: 
+\begin{DoxyPre}session = session-\/>getPrevSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find previous regular trading session use this code\+: 
+\begin{DoxyPre}session = session-\/>getPrevSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest previous session that is accepted by the filter or {\ttfamily \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within one year 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_adabe3703f659775a75f8731564859d8c}\label{structdxfcpp_1_1_session_adabe3703f659775a75f8731564859d8c} 
+\index{dxfcpp::Session@{dxfcpp::Session}!getStartTime@{getStartTime}}
+\index{getStartTime@{getStartTime}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{getStartTime()}{getStartTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Session\+::get\+Start\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+start time of this session (inclusive). For normal sessions the start time is less than the end time, for empty sessions they are equal. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a84c08f0f1261952f05fc8808684f18d8}\label{structdxfcpp_1_1_session_a84c08f0f1261952f05fc8808684f18d8} 
+\index{dxfcpp::Session@{dxfcpp::Session}!getType@{getType}}
+\index{getType@{getType}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_session_type}{Session\+Type}} \& dxfcpp\+::\+Session\+::get\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns type of this session. 
+
+\begin{DoxyReturn}{Returns}
+The type of this session. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_aeb0f0284745b3cfd183fa4c87ec40036}\label{structdxfcpp_1_1_session_aeb0f0284745b3cfd183fa4c87ec40036} 
+\index{dxfcpp::Session@{dxfcpp::Session}!isEmpty@{isEmpty}}
+\index{isEmpty@{isEmpty}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{isEmpty()}{isEmpty()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Session\+::is\+Empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this session has zero duration. Empty sessions can be used for indices that post value once a day or for convenience. Such sessions can be of any appropriate type, trading or non-\/trading. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a0536eadc2c4eaeed2ea1430e383bb6e2}\label{structdxfcpp_1_1_session_a0536eadc2c4eaeed2ea1430e383bb6e2} 
+\index{dxfcpp::Session@{dxfcpp::Session}!isTrading@{isTrading}}
+\index{isTrading@{isTrading}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{isTrading()}{isTrading()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Session\+::is\+Trading (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if trading activity is allowed within this session. This method is equivalent to expression \doxylink{structdxfcpp_1_1_session_type_aba906f02e0e56f416d88bc31ca2621df}{get\+Type().is\+Trading()}. 
+\end{DoxyReturn}
+Some sessions may have zero duration -\/ e.\+g. indices that post value once a day. Such sessions can be of any appropriate type, trading or non-\/trading. \Hypertarget{structdxfcpp_1_1_session_aa584b48aa1bdd3a105035e82f03789cf}\label{structdxfcpp_1_1_session_aa584b48aa1bdd3a105035e82f03789cf} 
+\index{dxfcpp::Session@{dxfcpp::Session}!operator==@{operator==}}
+\index{operator==@{operator==}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Session\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & Another object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this object is equal to {\ttfamily other} object 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a445f1125b414ef88630e147d2f08f57d}\label{structdxfcpp_1_1_session_a445f1125b414ef88630e147d2f08f57d} 
+\index{dxfcpp::Session@{dxfcpp::Session}!operator==@{operator==}}
+\index{operator==@{operator==}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Session\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & Another object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this object is equal to {\ttfamily other} object 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_session_a72f5c5b050e696180bb640adb3518d70}\label{structdxfcpp_1_1_session_a72f5c5b050e696180bb640adb3518d70} 
+\index{dxfcpp::Session@{dxfcpp::Session}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::Session@{dxfcpp::Session}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Session\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}

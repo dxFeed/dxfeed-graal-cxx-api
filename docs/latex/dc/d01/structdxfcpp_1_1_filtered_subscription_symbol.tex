@@ -1,0 +1,25 @@
+\doxysubsection{dxfcpp\+::Filtered\+Subscription\+Symbol Struct Reference}
+\hypertarget{structdxfcpp_1_1_filtered_subscription_symbol}{}\label{structdxfcpp_1_1_filtered_subscription_symbol}\index{dxfcpp::FilteredSubscriptionSymbol@{dxfcpp::FilteredSubscriptionSymbol}}
+
+
+This marker interface marks subscription symbol classes (like \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}) that attach "{}filters"{} to the actual symbols.  
+
+
+
+
+{\ttfamily \#include $<$Filtered\+Subscription\+Symbol.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Filtered\+Subscription\+Symbol\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{dc/d01/structdxfcpp_1_1_filtered_subscription_symbol}
+\end{center}
+\end{figure}
+
+
+\doxysubsubsection{Detailed Description}
+This marker interface marks subscription symbol classes (like \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}) that attach "{}filters"{} to the actual symbols. 
+
+Filtered subscription symbols implement their {\ttfamily operator ==} and {\ttfamily std\+::hash\texorpdfstring{$<$}{<}\texorpdfstring{$>$}{>}} based on their symbol only, without considering their "{}filter"{} part (for example, a \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} has a \doxylink{classdxfcpp_1_1_time_series_subscription_symbol_adbeb8e314ec42ca8ac99946dd0140730}{from\+Time} filter on a time range of events).
+
+\doxylink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription} has the following behavior for filtered symbols. There can be only one active filter per symbol. Adding new filtered symbol with the same symbol but different filter removes the old one from subscription, adds the new one, and {\itshape notifies} Observable\+Subscription\+Change\+Listener {\itshape about this subscription change}. The later is a special behaviour for filtered subscription symbols, because on other types of symbols (like \doxylink{structdxfcpp_1_1_string_symbol}{String\+Symbol}, for example) there is no notification when replacing one symbol with the other that is "{}equal"{} to the first one. 

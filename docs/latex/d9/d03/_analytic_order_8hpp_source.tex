@@ -1,0 +1,230 @@
+\doxysubsection{Analytic\+Order.\+hpp}
+\hypertarget{_analytic_order_8hpp_source}{}\label{_analytic_order_8hpp_source}\index{AnalyticOrder.hpp@{AnalyticOrder.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_iceberg_type_8hpp}{"{}IcebergType.hpp"{}}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_order_8hpp}{"{}Order.hpp"{}}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Represents\ an\ extension\ of\ Order\ introducing\ analytic\ information,\ e.g.\ adding\ to\ this\ order\ iceberg\ related}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ information\ (@ref\ AnalyticOrder::getIcebergPeakSize()\ "{}icebergPeakSize"{},\ @ref\ AnalyticOrder::getIcebergHiddenSize()}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ "{}icebergHiddenSize"{},}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ @ref\ AnalyticOrder::getIcebergExecutedSize()\ "{}icebergExecutedSize"{}).}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ The\ collection\ of\ analytic\ order\ events\ of\ a\ symbol\ represents\ the\ most\ recent\ analytic\ information}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ that\ is\ available\ about\ orders\ on\ the\ market\ at\ any\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <p>\ Analytic\ order\ is\ similar\ to\ a\ regular\ Order.\ In\ addition\ this\ event\ has\ few\ additional\ properties:}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ \ \ \ \ <li>@ref\ AnalyticOrder::getIcebergPeakSize()\ "{}icebergPeakSize"{}\ -\/\ the\ size\ of\ the\ peak,\ i.e.\ the\ visible\ part\ of}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ the\ iceberg,\ that\ is\ being\ continually\ refilled\ until\ the\ order\ is\ fully\ traded\ or\ cancelled;\ <li>@ref}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ AnalyticOrder::getIcebergHiddenSize()\ "{}icebergHiddenSize"{}\ -\/\ the\ prediction\ of\ current\ hidden\ size\ of\ the\ iceberg,\ as}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ inferred\ by\ the\ model;\ <li>@ref\ AnalyticOrder::getIcebergExecutedSize()\ "{}icebergExecutedSize"{}\ -\/\ the\ executed\ size\ of}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ the\ iceberg\ order.\ For\ IcebergType::SYNTHETIC\ type\ represents\ total\ executed\ size\ of\ all\ orders\ composing\ current}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ iceberg;\ <li>AnalyticOrder::getIcebergType()\ -\/\ type\ of\ the\ iceberg,\ either\ native\ (exchange-\/managed)\ or\ synthetic}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ (managed\ outside\ of\ the\ exchange).}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ <p>}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ records\ \`{}AnalyticOrder\#<source-\/id>`,}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ where\ \`{}<source-\/id>`\ is\ up\ to\ 4\ ASCII\ characters\ with\ a\ mnemonic\ for\ the\ source\ like\ "{}GLBX"{}.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00047\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ AnalyticOrder\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ Analytic\ flags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ 31...2\ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/+}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ \ \ IcebergType\ |}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/+}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ TYPE\ values\ are\ taken\ from\ Type\ enum.}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ ICEBERG\_TYPE\_MASK\ =\ 3U;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ ICEBERG\_TYPE\_SHIFT\ =\ 0U;}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{struct}\ AnalyticOrderData\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ icebergPeakSize\ =\ math::NaN;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ icebergHiddenSize\ =\ math::NaN;}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ icebergExecutedSize\ =\ math::NaN;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ std::int32\_t\ icebergFlags\{\};}
+\DoxyCodeLine{00068\ \ \ \ \ \};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ AnalyticOrderData\ analyticOrderData\_\{\};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<AnalyticOrder>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5bf3751f5b5b4b8260044b4f88109c15}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5bf3751f5b5b4b8260044b4f88109c15}{override}};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a4cfde053dfe70de645227ab31baf5d6d}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ AnalyticOrder\ object}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<AnalyticOrder>;}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ AnalyticOrder\ object}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<AnalyticOrder>;}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_ac2b80d4718a7790e48174a0cf1d8a793}{TYPE}};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ analytic\ order\ event\ with\ default\ values.}}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_aac3d006dfeb19a3d229d579aee14b914}{AnalyticOrder}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ analytic\ order\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a883f7829852c19c0168af1e23df009bc}{AnalyticOrder}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a883f7829852c19c0168af1e23df009bc}{Order}}(\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a883f7829852c19c0168af1e23df009bc}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a883f7829852c19c0168af1e23df009bc}{move}}(\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a883f7829852c19c0168af1e23df009bc}{eventSymbol}}))\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ analytic\ order.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ analytic\ order.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00121\ \ \ \ \ AnalyticOrder\ \&\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a40581b2d88d9d8df4d0163d7aa51988b}{withEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00125\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ analytic\ order.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00136\ \ \ \ \ AnalyticOrder::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a04b193ba806900f0941a83da6df6d259}{withEventSymbolShared}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<AnalyticOrder>();}
+\DoxyCodeLine{00140\ \ \ \ \ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ iceberg\ peak\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ @return\ iceberg\ peak\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_addb54c9116da813afb4977be1a397edb}{getIcebergPeakSize}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ analyticOrderData\_.icebergPeakSize;}
+\DoxyCodeLine{00149\ \ \ \ \ \}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ iceberg\ peak\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ @param\ icebergPeakSize\ iceberg\ peak\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a0a0e525c32b56a4c09dd970d1321d7f3}{setIcebergPeakSize}}(\textcolor{keywordtype}{double}\ icebergPeakSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ analyticOrderData\_.icebergPeakSize\ =\ icebergPeakSize;}
+\DoxyCodeLine{00158\ \ \ \ \ \}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ iceberg\ hidden\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @return\ iceberg\ hidden\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a4cc58d9fab2f2d133d4a6ede581ff9be}{getIcebergHiddenSize}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ analyticOrderData\_.icebergHiddenSize;}
+\DoxyCodeLine{00167\ \ \ \ \ \}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ iceberg\ hidden\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ @param\ icebergHiddenSize\ iceberg\ hidden\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5e166c7e1dac5c2151346f20d8787e96}{setIcebergHiddenSize}}(\textcolor{keywordtype}{double}\ icebergHiddenSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ analyticOrderData\_.icebergHiddenSize\ =\ icebergHiddenSize;}
+\DoxyCodeLine{00176\ \ \ \ \ \}}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ iceberg\ executed\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ @return\ iceberg\ executed\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5c61a823f7b121e25d92613c7726b9f2}{getIcebergExecutedSize}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ analyticOrderData\_.icebergExecutedSize;}
+\DoxyCodeLine{00186\ \ \ \ \ \}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ iceberg\ executed\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ @param\ icebergExecutedSize\ iceberg\ executed\ size\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a8d3632fabc7b03649156c1c1c962d2a2}{setIcebergExecutedSize}}(\textcolor{keywordtype}{double}\ icebergExecutedSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ analyticOrderData\_.icebergExecutedSize\ =\ icebergExecutedSize;}
+\DoxyCodeLine{00195\ \ \ \ \ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ iceberg\ type\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ @return\ iceberg\ type\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{IcebergType}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a862b8dc95362052bde3464b02fd86384}{getIcebergType}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ IcebergType::valueOf(getBits(analyticOrderData\_.icebergFlags,\ ICEBERG\_TYPE\_MASK,\ ICEBERG\_TYPE\_SHIFT));}
+\DoxyCodeLine{00204\ \ \ \ \ \}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ iceberg\ type\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ @param\ icebergType\ iceberg\ type\ of\ this\ analytic\ order.}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a137855592a41188136020d63b1fe1935}{setIcebergType}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{IcebergType}}\ \&icebergType)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ analyticOrderData\_.icebergFlags\ =}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ setBits(analyticOrderData\_.icebergFlags,\ ICEBERG\_TYPE\_MASK,\ ICEBERG\_TYPE\_SHIFT,\ icebergType.getCode());}
+\DoxyCodeLine{00214\ \ \ \ \ \}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00221\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5349a206b3ebcf72f412685588064eb1}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_analytic_order_a5349a206b3ebcf72f412685588064eb1}{override}};}
+\DoxyCodeLine{00222\ \};}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

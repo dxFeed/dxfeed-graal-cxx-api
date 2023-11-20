@@ -1,0 +1,111 @@
+\doxysubsection{dxfcpp\+::String\+Symbol Struct Reference}
+\hypertarget{structdxfcpp_1_1_string_symbol}{}\label{structdxfcpp_1_1_string_symbol}\index{dxfcpp::StringSymbol@{dxfcpp::StringSymbol}}
+
+
+A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal Graal representation.  
+
+
+
+
+{\ttfamily \#include $<$String\+Symbol.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_string_symbol_a054ab49873566cfd421238e39f87e9fc}{String\+Symbol}} (const char \texorpdfstring{$\ast$}{*}chars) noexcept
+\begin{DoxyCompactList}\small\item\em Constructs \doxylink{structdxfcpp_1_1_string_symbol}{String\+Symbol} from a char array. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_string_symbol_ad27c3824b7d002e5bddc9b8e78d3a426}{String\+Symbol}} (std\+::string\+\_\+view string\+View) noexcept
+\begin{DoxyCompactList}\small\item\em Constructs \doxylink{structdxfcpp_1_1_string_symbol}{String\+Symbol} from a std\+::string\+\_\+view. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structdxfcpp_1_1_string_symbol_aa811a382233f8ceae44a4c6db2a80aae}{to\+Graal}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_string_symbol_a78c305e1c16c623b5cf636850f83ff40}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{structdxfcpp_1_1_string_symbol_a259d6679c4bbb44ec595da094d81a57b}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native) noexcept
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal Graal representation. 
+
+The current implementation is suboptimal (by memory usage) and will be enhanced. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structdxfcpp_1_1_string_symbol_a054ab49873566cfd421238e39f87e9fc}\label{structdxfcpp_1_1_string_symbol_a054ab49873566cfd421238e39f87e9fc} 
+\index{dxfcpp::StringSymbol@{dxfcpp::StringSymbol}!StringSymbol@{StringSymbol}}
+\index{StringSymbol@{StringSymbol}!dxfcpp::StringSymbol@{dxfcpp::StringSymbol}}
+\doxyparagraph{\texorpdfstring{StringSymbol()}{StringSymbol()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily dxfcpp\+::\+String\+Symbol\+::\+String\+Symbol (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{chars }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructs \doxylink{structdxfcpp_1_1_string_symbol}{String\+Symbol} from a char array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em chars} & The array of chars \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_string_symbol_ad27c3824b7d002e5bddc9b8e78d3a426}\label{structdxfcpp_1_1_string_symbol_ad27c3824b7d002e5bddc9b8e78d3a426} 
+\index{dxfcpp::StringSymbol@{dxfcpp::StringSymbol}!StringSymbol@{StringSymbol}}
+\index{StringSymbol@{StringSymbol}!dxfcpp::StringSymbol@{dxfcpp::StringSymbol}}
+\doxyparagraph{\texorpdfstring{StringSymbol()}{StringSymbol()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily dxfcpp\+::\+String\+Symbol\+::\+String\+Symbol (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{string\+View }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructs \doxylink{structdxfcpp_1_1_string_symbol}{String\+Symbol} from a std\+::string\+\_\+view. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string\+View} & The string view \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_string_symbol_a259d6679c4bbb44ec595da094d81a57b}\label{structdxfcpp_1_1_string_symbol_a259d6679c4bbb44ec595da094d81a57b} 
+\index{dxfcpp::StringSymbol@{dxfcpp::StringSymbol}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!dxfcpp::StringSymbol@{dxfcpp::StringSymbol}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+String\+Symbol\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_string_symbol_aa811a382233f8ceae44a4c6db2a80aae}\label{structdxfcpp_1_1_string_symbol_aa811a382233f8ceae44a4c6db2a80aae} 
+\index{dxfcpp::StringSymbol@{dxfcpp::StringSymbol}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!dxfcpp::StringSymbol@{dxfcpp::StringSymbol}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} dxfcpp\+::\+String\+Symbol\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_string_symbol_a78c305e1c16c623b5cf636850f83ff40}\label{structdxfcpp_1_1_string_symbol_a78c305e1c16c623b5cf636850f83ff40} 
+\index{dxfcpp::StringSymbol@{dxfcpp::StringSymbol}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::StringSymbol@{dxfcpp::StringSymbol}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+String\+Symbol\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}

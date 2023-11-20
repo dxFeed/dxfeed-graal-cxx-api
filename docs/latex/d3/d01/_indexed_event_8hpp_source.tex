@@ -1,0 +1,121 @@
+\doxysubsection{Indexed\+Event.\+hpp}
+\hypertarget{_indexed_event_8hpp_source}{}\label{_indexed_event_8hpp_source}\index{IndexedEvent.hpp@{IndexedEvent.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_event_flag_8hpp}{"{}EventFlag.hpp"{}}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_indexed_event_source_8hpp}{"{}IndexedEventSource.hpp"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ Represents\ an\ indexed\ collection\ of\ up-\/to-\/date\ information\ about\ some}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ condition\ or\ state\ of\ an\ external\ entity\ that\ updates\ in\ real-\/time.\ For\ example,\ ::Order\ represents\ an\ order\ to\ buy}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ or\ to\ sell\ some\ market\ instrument\ that\ is\ currently\ active\ on\ a\ market\ exchange\ and\ multiple}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ orders\ are\ active\ for\ each\ symbol\ at\ any\ given\ moment\ in\ time.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ ::Candle\ represent\ snapshots\ of\ aggregate\ information\ about\ trading\ over\ a\ specific\ time\ period\ and\ there\ are}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ multiple\ periods\ available.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ The\ ::Candle\ is\ also\ an\ example\ of\ ::TimeSeriesEvent\ that\ is\ a\ more\ specific\ event\ type.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ Index\ for\ each\ event\ is\ available\ via\ @ref\ ::getIndex()\ "{}index"{}\ property.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ Indexed\ events\ retain\ information\ about\ multiple\ events\ per\ symbol\ based\ on\ the\ event\ index}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ and\ are\ conflated\ based\ on\ the\ event\ index.\ Last\ indexed\ event\ for\ each\ symbol\ and\ index\ is\ always}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ delivered\ to\ event\ listeners\ on\ subscription,\ but\ intermediate\ (next-\/to-\/last)\ events\ for\ each}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ symbol+index\ pair\ are\ not\ queued\ anywhere,\ they\ are\ simply\ discarded\ as\ stale\ events.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ More\ recent\ events\ represent\ an\ up-\/to-\/date\ information\ about\ some\ external\ entity.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ Some\ indexed\ events,\ like\ ::Order,\ support\ multiple\ sources\ of\ information\ for\ the}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ same\ symbol.\ The\ event\ source\ is\ available\ via\ @ref\ IndexedEvent::getSource()\ "{}source"{}\ property.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ The\ value\ of\ @ref\ IndexedEvent::getSource()\ "{}source"{}\ property\ is\ always\ @ref\ IndexedEventSource::DEFAULT\ "{}DEFAULT"{}}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ for\ time-\/series\ events\ and\ other\ singe-\/sourced\ events\ like\ ::Series,\ that\ do\ not\ support\ this\ feature.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ See\ also\ the\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00039\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{IndexedEvent}}\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ IndexedEvent\ object}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{IndexedEvent}}>;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{///\ @copydoc\ EventFlag::TX\_PENDING}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}{TX\_PENDING}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{///\ @copydoc\ EventFlag::REMOVE\_EVENT}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{REMOVE\_EVENT}};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ @copydoc\ EventFlag::SNAPSHOT\_BEGIN}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{SNAPSHOT\_BEGIN}};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{///\ @copydoc\ EventFlag::SNAPSHOT\_END}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{SNAPSHOT\_END}};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{///\ @copydoc\ EventFlag::SNAPSHOT\_SNIP}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}{SNAPSHOT\_SNIP}};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{///\ @copydoc\ EventFlag::SNAPSHOT\_MODE}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829}{SNAPSHOT\_MODE}};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ source\ of\ this\ event.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ source\ of\ this\ event.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}{getSource}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ transactional\ event\ flags.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ transactional\ event\ flags.}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{virtual}\ std::int32\_t\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{getEventFlags}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ transactional\ event\ flags.}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{virtual}\ EventFlagsMask\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a1f3de1d60a04b7fb2649c4e82bfa31eb}{getEventFlagsMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{setEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4489465bbf9f78734289f7cf57ad7d34}{setEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ @return\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{virtual}\ std::int64\_t\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ad5a71500687f8cebb2a15964144638dc}{getIndex}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a5467b31a73a69502b6590656980b108d}{setIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00113\ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

@@ -1,0 +1,178 @@
+\doxysubsection{dxfcpp\+::Event\+Flags\+Mask Class Reference}
+\hypertarget{classdxfcpp_1_1_event_flags_mask}{}\label{classdxfcpp_1_1_event_flags_mask}\index{dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}}
+
+
+The event flags\textquotesingle{} mask (a set of bit flags)  
+
+
+
+
+{\ttfamily \#include $<$Event\+Flag.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_event_flags_mask_a14e333f9f07916341a23cd9f4fadc405}\label{classdxfcpp_1_1_event_flags_mask_a14e333f9f07916341a23cd9f4fadc405} 
+{\bfseries Event\+Flags\+Mask} () noexcept
+\begin{DoxyCompactList}\small\item\em Creates an empty event flags mask. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Integral Mask\+Type$>$ }\\\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a87155c7656f499821851481cd8193229}{Event\+Flags\+Mask}} (Mask\+Type mask) noexcept
+\begin{DoxyCompactList}\small\item\em Create event flags mask by integer value. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Flag\+It $>$ }\\\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a9a18895cd0ac1ce9d043061fa0a5de08}{Event\+Flags\+Mask}} (Event\+Flag\+It begin, Event\+Flag\+It end) noexcept
+\begin{DoxyCompactList}\small\item\em Creates event flags mask by iterators of container with flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7}{Event\+Flags\+Mask}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} $>$ event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Creates event flags mask by initializer list with flags. \end{DoxyCompactList}\item 
+constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{get\+Mask}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns an integer representation of event mask. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a6f4e131b6f4b547d98ca52c3f6d1b9e1}{operator\texorpdfstring{$\vert$}{|}}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags\+Mask, const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \&event\+Flag) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily or} operation with an event flags\textquotesingle{} mask and an event flag. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_ae683f6c55ced9dd5a338d3e00a2fa93a}{operator\&}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags\+Mask, const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \&event\+Flag) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily and} operation with an event flags\textquotesingle{} mask and an event flag. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_abf6d59fc04b8ae48fd8ffe9d171433a2}{operator\texorpdfstring{$\vert$}{|}}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \&event\+Flag1, const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \&event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily or} operation with two event flags. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+The event flags\textquotesingle{} mask (a set of bit flags) 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdxfcpp_1_1_event_flags_mask_a87155c7656f499821851481cd8193229}\label{classdxfcpp_1_1_event_flags_mask_a87155c7656f499821851481cd8193229} 
+\index{dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\index{EventFlagsMask@{EventFlagsMask}!dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{EventFlagsMask()}{EventFlagsMask()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$Integral Mask\+Type$>$ \\
+dxfcpp\+::\+Event\+Flags\+Mask\+::\+Event\+Flags\+Mask (\begin{DoxyParamCaption}\item[{Mask\+Type}]{mask }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Create event flags mask by integer value. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Mask\+Type} & The type of integer mask \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em mask} & The integer mask value \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_event_flags_mask_a9a18895cd0ac1ce9d043061fa0a5de08}\label{classdxfcpp_1_1_event_flags_mask_a9a18895cd0ac1ce9d043061fa0a5de08} 
+\index{dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\index{EventFlagsMask@{EventFlagsMask}!dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{EventFlagsMask()}{EventFlagsMask()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename Event\+Flag\+It $>$ \\
+dxfcpp\+::\+Event\+Flags\+Mask\+::\+Event\+Flags\+Mask (\begin{DoxyParamCaption}\item[{Event\+Flag\+It}]{begin,  }\item[{Event\+Flag\+It}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Creates event flags mask by iterators of container with flags. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Flag\+It} & The iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The start position \\
+\hline
+{\em end} & The end position \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7}\label{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7} 
+\index{dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\index{EventFlagsMask@{EventFlagsMask}!dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{EventFlagsMask()}{EventFlagsMask()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily dxfcpp\+::\+Event\+Flags\+Mask\+::\+Event\+Flags\+Mask (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} $>$}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Creates event flags mask by initializer list with flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Types} & The list with flags \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}\label{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977} 
+\index{dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}!getMask@{getMask}}
+\index{getMask@{getMask}!dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{getMask()}{getMask()}}
+{\footnotesize\ttfamily constexpr std\+::uint32\+\_\+t dxfcpp\+::\+Event\+Flags\+Mask\+::get\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Returns an integer representation of event mask. 
+
+\begin{DoxyReturn}{Returns}
+an integer representation 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Friends And Related Symbol Documentation}
+\Hypertarget{classdxfcpp_1_1_event_flags_mask_ae683f6c55ced9dd5a338d3e00a2fa93a}\label{classdxfcpp_1_1_event_flags_mask_ae683f6c55ced9dd5a338d3e00a2fa93a} 
+\index{dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}!operator\&@{operator\&}}
+\index{operator\&@{operator\&}!dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{operator\&}{operator\&}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} operator\& (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags\+Mask,  }\item[{const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \&}]{event\+Flag }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily and} operation with an event flags\textquotesingle{} mask and an event flag. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags\+Mask} & The event flags\textquotesingle{} mask \\
+\hline
+{\em event\+Flag} & The event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (event flags\textquotesingle{} mask) 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_event_flags_mask_abf6d59fc04b8ae48fd8ffe9d171433a2}\label{classdxfcpp_1_1_event_flags_mask_abf6d59fc04b8ae48fd8ffe9d171433a2} 
+\index{dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}!operator\texttt{"|}@{operator\texttt{"|}}}
+\index{operator\texttt{"|}@{operator\texttt{"|}}!dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{operator\texttt{"|}}{operator|}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} operator\texorpdfstring{$\vert$}{|} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \&}]{event\+Flag1,  }\item[{const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \&}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily or} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag \\
+\hline
+{\em event\+Type2} & The second event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (event flags\textquotesingle{} mask ) 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_event_flags_mask_a6f4e131b6f4b547d98ca52c3f6d1b9e1}\label{classdxfcpp_1_1_event_flags_mask_a6f4e131b6f4b547d98ca52c3f6d1b9e1} 
+\index{dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}!operator\texttt{"|}@{operator\texttt{"|}}}
+\index{operator\texttt{"|}@{operator\texttt{"|}}!dxfcpp::EventFlagsMask@{dxfcpp::EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{operator\texttt{"|}}{operator|}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} operator\texorpdfstring{$\vert$}{|} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags\+Mask,  }\item[{const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \&}]{event\+Flag }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily or} operation with an event flags\textquotesingle{} mask and an event flag. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags\+Mask} & The event flags\textquotesingle{} mask \\
+\hline
+{\em event\+Flag} & The event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (event flags\textquotesingle{} mask) 
+\end{DoxyReturn}

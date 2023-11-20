@@ -1,0 +1,766 @@
+\doxysubsection{dxfcpp\+::Series Class Reference}
+\hypertarget{classdxfcpp_1_1_series}{}\label{classdxfcpp_1_1_series}\index{dxfcpp::Series@{dxfcpp::Series}}
+
+
+\doxylink{classdxfcpp_1_1_series}{Series} event is a snapshot of computed values that are available for all option series for a given underlying symbol based on the option prices on the market.  
+
+
+
+
+{\ttfamily \#include $<$Series.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Series\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{d1/d02/classdxfcpp_1_1_series}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_series_ae6798e75a7db3056a0468818e428936c}\label{classdxfcpp_1_1_series_ae6798e75a7db3056a0468818e428936c} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_series}{Series}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{classdxfcpp_1_1_series}{Series} object. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_series_a689e1bbfd344628a62e9007b0aca1acd}\label{classdxfcpp_1_1_series_a689e1bbfd344628a62e9007b0aca1acd} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_series}{Series}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{classdxfcpp_1_1_series}{Series} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{Market\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_market_event}{Market\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{dxfcpp\+::\+Event\+Type\+With\+Symbol$<$ std\+::string $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ std\+::string $>$ $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_event_type}{dxfcpp\+::\+Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classdxfcpp_1_1_series_a7c711320747079dbd506d63c1d4730d7}{to\+Graal}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_series_a8d353ffbfcfaf1f7e3cb2b1bb9add279}\label{classdxfcpp_1_1_series_a8d353ffbfcfaf1f7e3cb2b1bb9add279} 
+{\bfseries Series} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}=\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{default}}
+\begin{DoxyCompactList}\small\item\em Creates new series event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_series_aac06ab7c3783e1c2b70065c1ba7b555f}{Series}} (std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Creates new series event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{classdxfcpp_1_1_series_aaaa8e2016b3aff845df96c386f24f396}{get\+Source}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns the source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_series_aa9c1ea427a9724e12fbfbb39315fbec5}{get\+Event\+Flags}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classdxfcpp_1_1_series_a39c3e3ae494dc444de30e3d903eebaac}{get\+Event\+Flags\+Mask}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{set\+Event\+Flags}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_series_ac6144eb907c3f037c8eda1d8b08de5d0}{get\+Index}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{set\+Index}} (std\+::int64\+\_\+t index) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_series_a75be339f644dedc21b176f173d7fc3e5}{get\+Time\+Sequence}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns time and sequence of this event packaged into single long value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a4f865ebe992d1759467c93a55fce9b76}{set\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes time and sequence of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc}{get\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns time of this series event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{set\+Time}} (std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{time}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes time of this series event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{get\+Sequence}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns sequence number of this series event to distinguish trades that have the same \doxylink{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc}{time}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{set\+Sequence}} (std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{sequence}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{sequence number} of this series event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_series_a3bc261f83f17749d4ae046b24a6120fd}{get\+Expiration}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns day id of expiration. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_aa5dc46654a661bcbdc707234410a88c2}{set\+Expiration}} (std\+::int32\+\_\+t expiration) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes day id of expiration. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_series_ab26ee45ec0b39d911692edcd3d79d8ce}{get\+Volatility}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns implied volatility index for this series based on VIX methodology. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a03e81c865f159f206a6d363303a86424}{set\+Volatility}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} volatility) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes implied volatility index for this series based on VIX methodology. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_series_accbd9d05dc739bd07ddceddc36dd6d75}{get\+Call\+Volume}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns call options traded volume for a day. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_ab0c23da6fff1762a57566061f8f10c5f}{set\+Call\+Volume}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} call\+Volume) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes call options traded volume for a day. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_series_a4c27787992bbbc878cb906ab1b85c3c5}{get\+Put\+Volume}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns put options traded volume for a day. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a92201c531d5d82ea95d9cc55eff2b05f}{set\+Put\+Volume}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} put\+Volume) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes put options traded volume for a day. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_series_a07390cabc0b7ec0acb72e52d21f98eff}{get\+Option\+Volume}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns options traded volume for a day. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_series_a1bf2420dba428269bd0863a081d33fc0}{get\+Put\+Call\+Ratio}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns ratio of put options traded volume to call options traded volume for a day. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_acdb92c62f7e31a89b5c06eeb2250ac30}{set\+Put\+Call\+Ratio}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} put\+Call\+Ratio) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes ratio of put options traded volume to call options traded volume for a day. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_series_a3c63d3ffb26064d6597346d072570744}{get\+Forward\+Price}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns implied forward price for this option series. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a0f53c43f923258b79453c6f8f56410b3}{set\+Forward\+Price}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} forward\+Price) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes implied forward price for this option series. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_series_a183ae4f58f76e1a06cd7f38c336f0c37}{get\+Dividend}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns implied simple dividend return of the corresponding option series. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_aaa2f448d57e93c007171687d9e39c3f1}{set\+Dividend}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dividend) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes implied simple dividend return of the corresponding option series. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{classdxfcpp_1_1_series_ae89100c3e45f0f122a06eb65d7d93de6}{get\+Interest}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns implied simple interest return of the corresponding option series. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a2bc17da785219a714ba37693153b96fd}{set\+Interest}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} interest) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes implied simple interest return of the corresponding option series. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_series_a2b964d3b9d9275abbc2dc962d6e73578}{to\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_market_event_a62b3475e3dc13476c57553cc354a2915}{get\+Event\+Symbol}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{set\+Event\+Symbol}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes symbol of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_market_event_a4dde8cfbc3163d9ea5c4b1346b8b861d}{get\+Event\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{override}}
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} T $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_series_a80f5ae4807e6db084a60c93d7b2f3319}{free\+Graal}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{graal\+Native}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{constexpr}} std\+::uint32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}{MAX\+\_\+\+SEQUENCE}} = (1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}} $<$$<$ 22\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}) -\/ 1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_series_a27dbc1ca5b0aaf446714a7500df0073f}\label{classdxfcpp_1_1_series_a27dbc1ca5b0aaf446714a7500df0073f} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+SERIES
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}{TX\+\_\+\+PENDING}} = Event\+Flag\+::\+TX\+\_\+\+PENDING
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{REMOVE\+\_\+\+EVENT}} = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{SNAPSHOT\+\_\+\+BEGIN}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{SNAPSHOT\+\_\+\+END}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}{SNAPSHOT\+\_\+\+SNIP}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829}{SNAPSHOT\+\_\+\+MODE}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of \doxylink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{event\+Flags} property.   \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_market_event}{dxfcpp\+::\+Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{Market\+Event}} (std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{event\+Symbol}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{classdxfcpp_1_1_series}{Series} event is a snapshot of computed values that are available for all option series for a given underlying symbol based on the option prices on the market. 
+
+It represents the most recent information that is available about the corresponding values on the market at any given moment of time.
+
+\doxylink{classdxfcpp_1_1_series}{Series} is an \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} with multiple instances of event available for each underlying symbol. Each series event instance corresponds to an Option\+Series of the corresponding underlying. The correspondence between a series event instance and an Option\+Series is established via \doxylink{classdxfcpp_1_1_series_a3bc261f83f17749d4ae046b24a6120fd}{expiration} property. If case where there are multiple series at the same expiration day id, then series events are are ordered by their \doxylink{classdxfcpp_1_1_series_ac6144eb907c3f037c8eda1d8b08de5d0}{index} in the same order as the corresponding Option\+Series are ordered by their attributes.
+
+\doxyparagraph*{\label{classdxfcpp_1_1_underlying_eventFlagsSection}%
+\Hypertarget{classdxfcpp_1_1_underlying_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+\doxylink{classdxfcpp_1_1_series}{Series} data source provides a consistent view of the set of known series. The corresponding information is carried in \doxylink{classdxfcpp_1_1_series_aa9c1ea427a9724e12fbfbb39315fbec5}{event\+Flags} property. The logic behind this property is detailed in \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} class documentation. Multiple event sources for the same symbol are not supported for series, thus \doxylink{classdxfcpp_1_1_series_aaaa8e2016b3aff845df96c386f24f396}{source} property is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT}.
+
+Indexed\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list current of events.
+
+\doxyparagraph*{Implementation details}
+
+This event is implemented on top of QDS records {\ttfamily \doxylink{classdxfcpp_1_1_series}{Series}}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdxfcpp_1_1_series_aac06ab7c3783e1c2b70065c1ba7b555f}\label{classdxfcpp_1_1_series_aac06ab7c3783e1c2b70065c1ba7b555f} 
+\index{dxfcpp::Series@{dxfcpp::Series}!Series@{Series}}
+\index{Series@{Series}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{Series()}{Series()}}
+{\footnotesize\ttfamily dxfcpp\+::\+Series\+::\+Series (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new series event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_series_a80f5ae4807e6db084a60c93d7b2f3319}\label{classdxfcpp_1_1_series_a80f5ae4807e6db084a60c93d7b2f3319} 
+\index{dxfcpp::Series@{dxfcpp::Series}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::free\+Graal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*}}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_accbd9d05dc739bd07ddceddc36dd6d75}\label{classdxfcpp_1_1_series_accbd9d05dc739bd07ddceddc36dd6d75} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getCallVolume@{getCallVolume}}
+\index{getCallVolume@{getCallVolume}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getCallVolume()}{getCallVolume()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Series\+::get\+Call\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns call options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+call options traded volume for a day. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_a183ae4f58f76e1a06cd7f38c336f0c37}\label{classdxfcpp_1_1_series_a183ae4f58f76e1a06cd7f38c336f0c37} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getDividend@{getDividend}}
+\index{getDividend@{getDividend}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getDividend()}{getDividend()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Series\+::get\+Dividend (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied simple dividend return of the corresponding option series. 
+
+\begin{DoxyReturn}{Returns}
+implied simple dividend return of the corresponding option series. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_aa9c1ea427a9724e12fbfbb39315fbec5}\label{classdxfcpp_1_1_series_aa9c1ea427a9724e12fbfbb39315fbec5} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Series\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_series_a39c3e3ae494dc444de30e3d903eebaac}\label{classdxfcpp_1_1_series_a39c3e3ae494dc444de30e3d903eebaac} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} dxfcpp\+::\+Series\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a1f3de1d60a04b7fb2649c4e82bfa31eb}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_series_a3bc261f83f17749d4ae046b24a6120fd}\label{classdxfcpp_1_1_series_a3bc261f83f17749d4ae046b24a6120fd} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getExpiration@{getExpiration}}
+\index{getExpiration@{getExpiration}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getExpiration()}{getExpiration()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Series\+::get\+Expiration (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns day id of expiration. 
+
+Example\+: day\+\_\+util\+:\+:\#get\+Day\+Id\+By\+Year\+Month\+Day() "{}dxfcpp\+::day\+\_\+util\+::get\+Day\+Id\+By\+Year\+Month\+Day"{}(20090117).
+
+\begin{DoxyReturn}{Returns}
+day id of expiration. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_a3c63d3ffb26064d6597346d072570744}\label{classdxfcpp_1_1_series_a3c63d3ffb26064d6597346d072570744} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getForwardPrice@{getForwardPrice}}
+\index{getForwardPrice@{getForwardPrice}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getForwardPrice()}{getForwardPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Series\+::get\+Forward\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied forward price for this option series. 
+
+\begin{DoxyReturn}{Returns}
+implied forward price for this option series. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_ac6144eb907c3f037c8eda1d8b08de5d0}\label{classdxfcpp_1_1_series_ac6144eb907c3f037c8eda1d8b08de5d0} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Series\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+The index is composed of \doxylink{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc}{time} and \doxylink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{sequence}. Changing either time or sequence changes event index.
+
+\begin{DoxyReturn}{Returns}
+unique index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ad5a71500687f8cebb2a15964144638dc}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_series_ae89100c3e45f0f122a06eb65d7d93de6}\label{classdxfcpp_1_1_series_ae89100c3e45f0f122a06eb65d7d93de6} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getInterest@{getInterest}}
+\index{getInterest@{getInterest}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getInterest()}{getInterest()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Series\+::get\+Interest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied simple interest return of the corresponding option series. 
+
+\begin{DoxyReturn}{Returns}
+implied simple interest return of the corresponding option series. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_a07390cabc0b7ec0acb72e52d21f98eff}\label{classdxfcpp_1_1_series_a07390cabc0b7ec0acb72e52d21f98eff} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getOptionVolume@{getOptionVolume}}
+\index{getOptionVolume@{getOptionVolume}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getOptionVolume()}{getOptionVolume()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Series\+::get\+Option\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+options traded volume for a day. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_a1bf2420dba428269bd0863a081d33fc0}\label{classdxfcpp_1_1_series_a1bf2420dba428269bd0863a081d33fc0} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getPutCallRatio@{getPutCallRatio}}
+\index{getPutCallRatio@{getPutCallRatio}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getPutCallRatio()}{getPutCallRatio()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Series\+::get\+Put\+Call\+Ratio (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns ratio of put options traded volume to call options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+ratio of put options traded volume to call options traded volume for a day. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_a4c27787992bbbc878cb906ab1b85c3c5}\label{classdxfcpp_1_1_series_a4c27787992bbbc878cb906ab1b85c3c5} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getPutVolume@{getPutVolume}}
+\index{getPutVolume@{getPutVolume}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getPutVolume()}{getPutVolume()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Series\+::get\+Put\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns put options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+put options traded volume for a day. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}\label{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Series\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns sequence number of this series event to distinguish trades that have the same \doxylink{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc}{time}. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \doxylink{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}{MAX\+\_\+\+SEQUENCE}.
+
+\begin{DoxyReturn}{Returns}
+sequence of this series event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_aaaa8e2016b3aff845df96c386f24f396}\label{classdxfcpp_1_1_series_aaaa8e2016b3aff845df96c386f24f396} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getSource@{getSource}}
+\index{getSource@{getSource}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& dxfcpp\+::\+Series\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source of this event. 
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc}\label{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getTime@{getTime}}
+\index{getTime@{getTime}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Series\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of this series event. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+time of this series event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_a75be339f644dedc21b176f173d7fc3e5}\label{classdxfcpp_1_1_series_a75be339f644dedc21b176f173d7fc3e5} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getTimeSequence@{getTimeSequence}}
+\index{getTimeSequence@{getTimeSequence}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getTimeSequence()}{getTimeSequence()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Series\+::get\+Time\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time and sequence of this event packaged into single long value. 
+
+\begin{DoxyReturn}{Returns}
+time and sequence of this event. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_ab26ee45ec0b39d911692edcd3d79d8ce}\label{classdxfcpp_1_1_series_ab26ee45ec0b39d911692edcd3d79d8ce} 
+\index{dxfcpp::Series@{dxfcpp::Series}!getVolatility@{getVolatility}}
+\index{getVolatility@{getVolatility}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{getVolatility()}{getVolatility()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+Series\+::get\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied volatility index for this series based on VIX methodology. 
+
+\begin{DoxyReturn}{Returns}
+implied volatility index for this series based on VIX methodology. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_series_ab0c23da6fff1762a57566061f8f10c5f}\label{classdxfcpp_1_1_series_ab0c23da6fff1762a57566061f8f10c5f} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setCallVolume@{setCallVolume}}
+\index{setCallVolume@{setCallVolume}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setCallVolume()}{setCallVolume()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Call\+Volume (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{call\+Volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes call options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em call\+Volume} & call options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_aaa2f448d57e93c007171687d9e39c3f1}\label{classdxfcpp_1_1_series_aaa2f448d57e93c007171687d9e39c3f1} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setDividend@{setDividend}}
+\index{setDividend@{setDividend}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setDividend()}{setDividend()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Dividend (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{dividend }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied simple dividend return of the corresponding option series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dividend} & implied simple dividend return of the corresponding option series. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}\label{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4489465bbf9f78734289f7cf57ad7d34}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}\label{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \doxylink{classdxfcpp_1_1_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_series_aa5dc46654a661bcbdc707234410a88c2}\label{classdxfcpp_1_1_series_aa5dc46654a661bcbdc707234410a88c2} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setExpiration@{setExpiration}}
+\index{setExpiration@{setExpiration}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setExpiration()}{setExpiration()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Expiration (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{expiration }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes day id of expiration. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em expiration} & day id of expiration. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_a0f53c43f923258b79453c6f8f56410b3}\label{classdxfcpp_1_1_series_a0f53c43f923258b79453c6f8f56410b3} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setForwardPrice@{setForwardPrice}}
+\index{setForwardPrice@{setForwardPrice}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setForwardPrice()}{setForwardPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Forward\+Price (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{forward\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied forward price for this option series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em forward\+Price} & implied forward price for this option series. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}\label{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+The index is composed of \doxylink{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc}{time} and \doxylink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{sequence} and invocation of this method changes time and sequence. {\bfseries{Do not use this method directly.}} Change \doxylink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{time} and/or \doxylink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{sequence}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the event index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_series_ac6144eb907c3f037c8eda1d8b08de5d0}{get\+Index()} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a5467b31a73a69502b6590656980b108d}{dxfcpp\+::\+Indexed\+Event}}.
+
+\Hypertarget{classdxfcpp_1_1_series_a2bc17da785219a714ba37693153b96fd}\label{classdxfcpp_1_1_series_a2bc17da785219a714ba37693153b96fd} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setInterest@{setInterest}}
+\index{setInterest@{setInterest}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setInterest()}{setInterest()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Interest (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{interest }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied simple interest return of the corresponding option series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em interest} & implied simple interest return of the corresponding option series. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_acdb92c62f7e31a89b5c06eeb2250ac30}\label{classdxfcpp_1_1_series_acdb92c62f7e31a89b5c06eeb2250ac30} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setPutCallRatio@{setPutCallRatio}}
+\index{setPutCallRatio@{setPutCallRatio}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setPutCallRatio()}{setPutCallRatio()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Put\+Call\+Ratio (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{put\+Call\+Ratio }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ratio of put options traded volume to call options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em put\+Call\+Ratio} & ratio of put options traded volume to call options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_a92201c531d5d82ea95d9cc55eff2b05f}\label{classdxfcpp_1_1_series_a92201c531d5d82ea95d9cc55eff2b05f} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setPutVolume@{setPutVolume}}
+\index{setPutVolume@{setPutVolume}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setPutVolume()}{setPutVolume()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Put\+Volume (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{put\+Volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes put options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em put\+Volume} & put options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}\label{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{sequence number} of this series event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{get\+Sequence()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}\label{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setTime@{setTime}}
+\index{setTime@{setTime}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this series event. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time of this series event. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_a4f865ebe992d1759467c93a55fce9b76}\label{classdxfcpp_1_1_series_a4f865ebe992d1759467c93a55fce9b76} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setTimeSequence@{setTimeSequence}}
+\index{setTimeSequence@{setTimeSequence}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setTimeSequence()}{setTimeSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Time\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time and sequence of this event. 
+
+{\bfseries{Do not use this method directly.}} Change \doxylink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{time} and/or \doxylink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{sequence}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Sequence} & the time and sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_series_a75be339f644dedc21b176f173d7fc3e5}{get\+Time\+Sequence()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_series_a03e81c865f159f206a6d363303a86424}\label{classdxfcpp_1_1_series_a03e81c865f159f206a6d363303a86424} 
+\index{dxfcpp::Series@{dxfcpp::Series}!setVolatility@{setVolatility}}
+\index{setVolatility@{setVolatility}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{setVolatility()}{setVolatility()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Series\+::set\+Volatility (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied volatility index for this series based on VIX methodology. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volatility} & implied volatility index for this series based on VIX methodology. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_series_a7c711320747079dbd506d63c1d4730d7}\label{classdxfcpp_1_1_series_a7c711320747079dbd506d63c1d4730d7} 
+\index{dxfcpp::Series@{dxfcpp::Series}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \texorpdfstring{$\ast$}{*} dxfcpp\+::\+Series\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_event_type_af1f3b585ac540d9bfe1d649ef1835811}{dxfcpp\+::\+Event\+Type}}.
+
+\Hypertarget{classdxfcpp_1_1_series_a2b964d3b9d9275abbc2dc962d6e73578}\label{classdxfcpp_1_1_series_a2b964d3b9d9275abbc2dc962d6e73578} 
+\index{dxfcpp::Series@{dxfcpp::Series}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Series\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structdxfcpp_1_1_event_type_a54c84141d4eff181553b9064db6500e9}{dxfcpp\+::\+Event\+Type}}.
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}\label{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58} 
+\index{dxfcpp::Series@{dxfcpp::Series}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!dxfcpp::Series@{dxfcpp::Series}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{constexpr}} std\+::uint32\+\_\+t dxfcpp\+::\+Series\+::\+MAX\+\_\+\+SEQUENCE = (1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}} $<$$<$ 22\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}) -\/ 1\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{U}}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{set\+Sequence()} 
+\end{DoxySeeAlso}

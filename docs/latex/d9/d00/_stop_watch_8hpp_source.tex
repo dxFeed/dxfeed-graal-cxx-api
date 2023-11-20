@@ -1,0 +1,93 @@
+\doxysubsection{Stop\+Watch.\+hpp}
+\hypertarget{_stop_watch_8hpp_source}{}\label{_stop_watch_8hpp_source}\index{StopWatch.hpp@{StopWatch.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{chrono}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{deque}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{future}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_common_8hpp}{"{}Common.hpp"{}}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ StopWatch\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{mutable}\ std::mutex\ mutex\_\{\};}
+\DoxyCodeLine{00023\ \ \ \ \ std::chrono::milliseconds\ elapsed\_\{\};}
+\DoxyCodeLine{00024\ \ \ \ \ std::chrono::steady\_clock::time\_point\ startTimeStamp\_\{\};}
+\DoxyCodeLine{00025\ \ \ \ \ std::atomic<\textcolor{keywordtype}{bool}>\ isRunning\_\{\};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ StopWatch()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ reset();}
+\DoxyCodeLine{00030\ \ \ \ \ \}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ start()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!isRunning\_)\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ std::lock\_guard\ lock\{mutex\_\};}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ startTimeStamp\_\ =\ std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ isRunning\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ stop()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isRunning\_)\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ endTimestamp\ =\ std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ std::lock\_guard\ lock\{mutex\_\};}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ elapsedThisPeriod\ =\ endTimestamp\ -\/\ startTimeStamp\_;}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ elapsed\_\ +=\ std::chrono::duration\_cast<std::chrono::milliseconds>(elapsedThisPeriod);}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ isRunning\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ reset()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ std::lock\_guard\ lock\{mutex\_\};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ elapsed\_\ =\ std::chrono::milliseconds::zero();}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ isRunning\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ startTimeStamp\_\ =\ std::chrono::steady\_clock::time\_point\{\};}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ restart()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ std::lock\_guard\ lock\{mutex\_\};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ elapsed\_\ =\ std::chrono::milliseconds::zero();}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ isRunning\_\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ startTimeStamp\_\ =\ std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{bool}\ isRunning()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isRunning\_;}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ std::chrono::milliseconds\ elapsed()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ std::lock\_guard\ lock\{mutex\_\};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ elapsed\ =\ elapsed\_;}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isRunning\_)\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ currentTimestamp\ =\ std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ elapsedUntilNow\ =\ currentTimestamp\ -\/\ startTimeStamp\_;}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ elapsed\ +=\ std::chrono::duration\_cast<std::chrono::milliseconds>(elapsedUntilNow);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ elapsed;}
+\DoxyCodeLine{00084\ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

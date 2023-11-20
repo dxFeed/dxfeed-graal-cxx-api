@@ -1,0 +1,91 @@
+\doxysubsection{Error\+Handling\+Manager.\+hpp}
+\hypertarget{_error_handling_manager_8hpp_source}{}\label{_error_handling_manager_8hpp_source}\index{ErrorHandlingManager.hpp@{ErrorHandlingManager.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../Conf.hpp"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{thread}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{NO\_ERROR}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{undef}\ \textcolor{preprocessor}{NO\_ERROR}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ TODO:\ serialization}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Error\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ UNKNOWN\_ID\{\textcolor{keyword}{static\_cast}<std::size\_t>(-\/1)\};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ std::size\_t\ id\{UNKNOWN\_ID\};}
+\DoxyCodeLine{00022\ \ \ \ \ std::size\_t\ causeId\{UNKNOWN\_ID\};}
+\DoxyCodeLine{00023\ \ \ \ \ std::thread::id\ threadId\{\};}
+\DoxyCodeLine{00024\ \ \ \ \ std::size\_t\ groupId\{\};}
+\DoxyCodeLine{00025\ \ \ \ \ std::string\ location\{\};}
+\DoxyCodeLine{00026\ \ \ \ \ std::string\ message\{\};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ Error(\textcolor{keyword}{const}\ Error\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00029\ \ \ \ \ Error\ \&operator=(\textcolor{keyword}{const}\ Error\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00030\ \ \ \ \ Error(Error\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00031\ \ \ \ \ Error\ \&operator=(Error\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00032\ \ \ \ \ \string~Error()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ Error()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ Error(std::size\_t\ causeId,\ std::size\_t\ groupId,\ std::string\ location,\ std::string\ message)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ :\ causeId\{causeId\},\ threadId\{std::this\_thread::get\_id()\},\ groupId\{groupId\},\ location\{std::move(location)\},}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ message\{std::move(message)\}\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \}}
+\DoxyCodeLine{00040\ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{comment}{//\ TODO:\ implement\ retrieving,\ grouping\ methods}}
+\DoxyCodeLine{00043\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ ErrorHandlingManager\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ DEFAULT\_ERROR\_COLLECTION\_CAPACITY\{1024ULL\};}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ Error\ NO\_ERROR\{Error::UNKNOWN\_ID,\ 0,\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{stringliteral}{"{}NO\ ERROR"{}}\};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ std::mutex\ errorCollectionMutex\_\{\};}
+\DoxyCodeLine{00048\ \ \ \ \ std::unordered\_map<std::size\_t,\ Error>\ errorCollection\_\{\};}
+\DoxyCodeLine{00049\ \ \ \ \ std::size\_t\ maxErrorCollectionCapacity\_\{DEFAULT\_ERROR\_COLLECTION\_CAPACITY\};}
+\DoxyCodeLine{00050\ \ \ \ \ std::atomic<std::size\_t>\ nextId\{0\};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ ErrorHandlingManager()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00055\ \ \ \ \ ErrorHandlingManager(\textcolor{keyword}{const}\ ErrorHandlingManager\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00056\ \ \ \ \ ErrorHandlingManager\ \&operator=(\textcolor{keyword}{const}\ ErrorHandlingManager\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00057\ \ \ \ \ \string~ErrorHandlingManager()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<ErrorHandlingManager>\ getInstance()\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<ErrorHandlingManager>\ instance\{\textcolor{keyword}{new}\ ErrorHandlingManager\};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{const}\ Error\ \&registerError(Error\ error)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ std::lock\_guard\ lock\{errorCollectionMutex\_\};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ std::size\_t\ id\ =\ nextId++;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ error.id\ =\ id;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ errorCollection\_[id]\ =\ std::move(error);}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (errorCollection\_.size()\ >\ maxErrorCollectionCapacity\_)\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ errorCollection\_.erase(id\ -\/\ maxErrorCollectionCapacity\_);}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ errorCollection\_[id];}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{const}\ Error\ \&getLastError()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ errorCollection\_[nextId\ -\/\ 1];}
+\DoxyCodeLine{00082\ \ \ \ \ \}}
+\DoxyCodeLine{00083\ \};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

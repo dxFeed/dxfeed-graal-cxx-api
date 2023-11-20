@@ -1,0 +1,50 @@
+\doxysubsection{Instrument\+Profile\+Type.\+hpp}
+\hypertarget{_instrument_profile_type_8hpp_source}{}\label{_instrument_profile_type_8hpp_source}\index{InstrumentProfileType.hpp@{InstrumentProfileType.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ Defines\ standard\ types\ of\ InstrumentProfile.\ Note\ that\ other\ (unknown)\ types}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ can\ be\ used\ without\ listing\ in\ this\ class\ -\/\ use\ it\ for\ convenience\ only.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ Please\ see\ <b>Instrument\ Profile\ Format</b>\ documentation\ for\ complete\ description.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{Enum}}<\mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}},\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{uint32\_t}}>\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{Enum}}::\mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{Enum}};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ CURRENCY;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ FOREX;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ BOND;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ INDEX;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ STOCK;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ ETF;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ MUTUAL\_FUND;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ MONEY\_MARKET\_FUND;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ PRODUCT;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ FUTURE;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ OPTION;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ WARRANT;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ CFD;}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ SPREAD;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ OTHER;}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_instrument_profile_type}{InstrumentProfileType}}\ REMOVED;}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00041\ \textcolor{keyword}{const}\ std::unordered\_map<InstrumentProfileType::CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ InstrumentProfileType>>}
+\DoxyCodeLine{00042\ \ \ \ \ InstrumentProfileType::ParentType::ALL;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

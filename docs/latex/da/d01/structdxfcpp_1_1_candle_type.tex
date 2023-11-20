@@ -1,0 +1,184 @@
+\doxysubsection{dxfcpp\+::Candle\+Type Struct Reference}
+\hypertarget{structdxfcpp_1_1_candle_type}{}\label{structdxfcpp_1_1_candle_type}\index{dxfcpp::CandleType@{dxfcpp::CandleType}}
+
+
+Type of the candle aggregation period constitutes \doxylink{structdxfcpp_1_1_candle_period}{Candle\+Period} type together its actual \doxylink{structdxfcpp_1_1_candle_period_a81e8e7abc6a7ebd418559ff00cb2d515}{value}.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Type.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_candle_type_aa2bff8561644f003a80dd08f9fe4b47b}{get\+Period\+Interval\+Millis}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns candle type period in milliseconds as closely as possible. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a7e28347d7b408b12808be47b5f100c75}{get\+Name}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns a name of this candle type. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{to\+String}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this candle type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::optional$<$ std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} $>$ $>$ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{parse}} (const std\+::string \&s) noexcept
+\begin{DoxyCompactList}\small\item\em Parses string representation of candle type into object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae}\label{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries TICK} \{"{}TICK"{}, "{}t"{}, 0\+LL\}
+\begin{DoxyCompactList}\small\item\em Certain number of ticks. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_aeece720e4fdfa6327079903f8f245140}\label{structdxfcpp_1_1_candle_type_aeece720e4fdfa6327079903f8f245140} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries SECOND} \{"{}SECOND"{}, "{}s"{}, 1000\+LL\}
+\begin{DoxyCompactList}\small\item\em Certain number of seconds. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_a210b2f75d94ae26b976e9a85336f2138}\label{structdxfcpp_1_1_candle_type_a210b2f75d94ae26b976e9a85336f2138} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries MINUTE} \{"{}MINUTE"{}, "{}m"{}, 60\+LL \texorpdfstring{$\ast$}{*} 1000\+LL\}
+\begin{DoxyCompactList}\small\item\em Certain number of minutes. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_a63f3a5169d35f002232f6c712c6779eb}\label{structdxfcpp_1_1_candle_type_a63f3a5169d35f002232f6c712c6779eb} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries HOUR} \{"{}HOUR"{}, "{}h"{}, 60\+LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 1000L\}
+\begin{DoxyCompactList}\small\item\em Certain number of hours. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_a93dd1684cf1f987fa18cab8f0df86e62}\label{structdxfcpp_1_1_candle_type_a93dd1684cf1f987fa18cab8f0df86e62} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries DAY} \{"{}DAY"{}, "{}d"{}, 24LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 1000L\}
+\begin{DoxyCompactList}\small\item\em Certain number of days. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_a38a962983a42004f94dd20fe3e94a45d}\label{structdxfcpp_1_1_candle_type_a38a962983a42004f94dd20fe3e94a45d} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries WEEK} \{"{}WEEK"{}, "{}w"{}, 7LL \texorpdfstring{$\ast$}{*} 24LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 1000\+LL\}
+\begin{DoxyCompactList}\small\item\em Certain number of weeks. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_ad697b3735c337c3e1c984fe6d7fbce48}\label{structdxfcpp_1_1_candle_type_ad697b3735c337c3e1c984fe6d7fbce48} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries MONTH}
+\begin{DoxyCompactList}\small\item\em Certain number of months. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_a93551c4f29d5c3a6df6afa12314ace0f}\label{structdxfcpp_1_1_candle_type_a93551c4f29d5c3a6df6afa12314ace0f} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries OPTEXP}
+\begin{DoxyCompactList}\small\item\em Certain number of option expirations. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_a38d150332769454b25fada01c86b5a15}\label{structdxfcpp_1_1_candle_type_a38d150332769454b25fada01c86b5a15} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries YEAR}
+\begin{DoxyCompactList}\small\item\em Certain number of years. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_type_a43403ff8ae9205efbf44f6e188d2f85c}\label{structdxfcpp_1_1_candle_type_a43403ff8ae9205efbf44f6e188d2f85c} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} {\bfseries VOLUME}
+\begin{DoxyCompactList}\small\item\em Certain volume of trades. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} \mbox{\hyperlink{structdxfcpp_1_1_candle_type_ab8cb67de68ca6279c774605cc07cf808}{PRICE}}
+\begin{DoxyCompactList}\small\item\em Certain price change, calculated according to the following rules\+: \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a8a3ec1642188afc6d4bd8c2b4f9c28c2}{PRICE\+\_\+\+MOMENTUM}}
+\begin{DoxyCompactList}\small\item\em Certain price change, calculated according to the following rules\+: \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a776a9b674ffe3013e751f3baca064caa}{PRICE\+\_\+\+RENKO}}
+\begin{DoxyCompactList}\small\item\em Certain price change, calculated according to the following rules\+: \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Type of the candle aggregation period constitutes \doxylink{structdxfcpp_1_1_candle_period}{Candle\+Period} type together its actual \doxylink{structdxfcpp_1_1_candle_period_a81e8e7abc6a7ebd418559ff00cb2d515}{value}. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_candle_type_a7e28347d7b408b12808be47b5f100c75}\label{structdxfcpp_1_1_candle_type_a7e28347d7b408b12808be47b5f100c75} 
+\index{dxfcpp::CandleType@{dxfcpp::CandleType}!getName@{getName}}
+\index{getName@{getName}!dxfcpp::CandleType@{dxfcpp::CandleType}}
+\doxyparagraph{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily const std\+::string \& dxfcpp\+::\+Candle\+Type\+::get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a name of this candle type. 
+
+\begin{DoxyReturn}{Returns}
+A name of this candle type 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_type_aa2bff8561644f003a80dd08f9fe4b47b}\label{structdxfcpp_1_1_candle_type_aa2bff8561644f003a80dd08f9fe4b47b} 
+\index{dxfcpp::CandleType@{dxfcpp::CandleType}!getPeriodIntervalMillis@{getPeriodIntervalMillis}}
+\index{getPeriodIntervalMillis@{getPeriodIntervalMillis}!dxfcpp::CandleType@{dxfcpp::CandleType}}
+\doxyparagraph{\texorpdfstring{getPeriodIntervalMillis()}{getPeriodIntervalMillis()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Candle\+Type\+::get\+Period\+Interval\+Millis (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle type period in milliseconds as closely as possible. 
+
+Certain types like \doxylink{structdxfcpp_1_1_candle_type_aeece720e4fdfa6327079903f8f245140}{Candle\+Type\+::\+SECOND} and \doxylink{structdxfcpp_1_1_candle_type_a93dd1684cf1f987fa18cab8f0df86e62}{Candle\+Type\+::\+DAY} span a specific number of milliseconds. \doxylink{structdxfcpp_1_1_candle_type_ad697b3735c337c3e1c984fe6d7fbce48}{Candle\+Type\+::\+MONTH}, \doxylink{structdxfcpp_1_1_candle_type_a93551c4f29d5c3a6df6afa12314ace0f}{Candle\+Type\+::\+OPTEXP} and \doxylink{structdxfcpp_1_1_candle_type_a38d150332769454b25fada01c86b5a15}{Candle\+Type\+::\+YEAR} are approximate. \doxylink{classdxfcpp_1_1_candle}{Candle} type period of \doxylink{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae}{Candle\+Type\+::\+TICK}, \doxylink{structdxfcpp_1_1_candle_type_a43403ff8ae9205efbf44f6e188d2f85c}{Candle\+Type\+::\+VOLUME}, \doxylink{structdxfcpp_1_1_candle_type_ab8cb67de68ca6279c774605cc07cf808}{Candle\+Type\+::\+PRICE}, \doxylink{structdxfcpp_1_1_candle_type_a8a3ec1642188afc6d4bd8c2b4f9c28c2}{Candle\+Type\+::\+PRICE\+\_\+\+MOMENTUM} and \doxylink{structdxfcpp_1_1_candle_type_a776a9b674ffe3013e751f3baca064caa}{Candle\+Type\+::\+PRICE\+\_\+\+RENKO} is not defined and this method returns {\ttfamily 0}.
+
+\begin{DoxyReturn}{Returns}
+aggregation period in milliseconds. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}\label{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f} 
+\index{dxfcpp::CandleType@{dxfcpp::CandleType}!parse@{parse}}
+\index{parse@{parse}!dxfcpp::CandleType@{dxfcpp::CandleType}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily static std\+::optional$<$ std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} $>$ $>$ dxfcpp\+::\+Candle\+Type\+::parse (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Parses string representation of candle type into object. 
+
+Any string that that is a prefix of candle type \doxylink{structdxfcpp_1_1_candle_type_a7e28347d7b408b12808be47b5f100c75}{Candle\+Type\+::get\+Name()} can be parsed (including the one that was returned by \doxylink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{Candle\+Type\+::to\+String()}) and case is ignored for parsing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string representation of candle type. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A candle type or std\+::nullopt if the string representation is invalid. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}\label{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4} 
+\index{dxfcpp::CandleType@{dxfcpp::CandleType}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::CandleType@{dxfcpp::CandleType}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily const std\+::string \& dxfcpp\+::\+Candle\+Type\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this candle type. 
+
+The string representation of candle type is the shortest unique prefix of the lower case string that corresponds to its \doxylink{structdxfcpp_1_1_candle_type_a7e28347d7b408b12808be47b5f100c75}{name}. For example, \doxylink{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae}{Candle\+Type\+::\+TICK} is represented as {\ttfamily "{}t"{}}, while \doxylink{structdxfcpp_1_1_candle_type_ad697b3735c337c3e1c984fe6d7fbce48}{Candle\+Type\+::\+MONTH} is represented as {\ttfamily "{}mo"{}} to distinguish it from \doxylink{structdxfcpp_1_1_candle_type_a210b2f75d94ae26b976e9a85336f2138}{Candle\+Type\+::\+MINUTE} that is represented as {\ttfamily "{}m"{}}.
+
+\begin{DoxyReturn}{Returns}
+string representation of this candle price type. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{structdxfcpp_1_1_candle_type_ab8cb67de68ca6279c774605cc07cf808}\label{structdxfcpp_1_1_candle_type_ab8cb67de68ca6279c774605cc07cf808} 
+\index{dxfcpp::CandleType@{dxfcpp::CandleType}!PRICE@{PRICE}}
+\index{PRICE@{PRICE}!dxfcpp::CandleType@{dxfcpp::CandleType}}
+\doxyparagraph{\texorpdfstring{PRICE}{PRICE}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} dxfcpp\+::\+Candle\+Type\+::\+PRICE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Certain price change, calculated according to the following rules\+: 
+
+
+\begin{DoxyEnumerate}
+\item high(n) -\/ low(n) = price range 
+\item close(n) = high(n) or close(n) = low(n) 
+\item open(n+1) = close(n) 
+\end{DoxyEnumerate}where n is the number of the bar. \Hypertarget{structdxfcpp_1_1_candle_type_a8a3ec1642188afc6d4bd8c2b4f9c28c2}\label{structdxfcpp_1_1_candle_type_a8a3ec1642188afc6d4bd8c2b4f9c28c2} 
+\index{dxfcpp::CandleType@{dxfcpp::CandleType}!PRICE\_MOMENTUM@{PRICE\_MOMENTUM}}
+\index{PRICE\_MOMENTUM@{PRICE\_MOMENTUM}!dxfcpp::CandleType@{dxfcpp::CandleType}}
+\doxyparagraph{\texorpdfstring{PRICE\_MOMENTUM}{PRICE\_MOMENTUM}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} dxfcpp\+::\+Candle\+Type\+::\+PRICE\+\_\+\+MOMENTUM\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Certain price change, calculated according to the following rules\+: 
+
+
+\begin{DoxyEnumerate}
+\item high(n) -\/ low(n) = price range 
+\item close(n) = high(n) or close(n) = low(n) 
+\item open(n+1) = close(n) + tick size, if close(n) = high(n) 
+\item open(n+1) = close(n) -\/ tick size, if close(n) = low(n) 
+\end{DoxyEnumerate}where n is the number of the bar. \Hypertarget{structdxfcpp_1_1_candle_type_a776a9b674ffe3013e751f3baca064caa}\label{structdxfcpp_1_1_candle_type_a776a9b674ffe3013e751f3baca064caa} 
+\index{dxfcpp::CandleType@{dxfcpp::CandleType}!PRICE\_RENKO@{PRICE\_RENKO}}
+\index{PRICE\_RENKO@{PRICE\_RENKO}!dxfcpp::CandleType@{dxfcpp::CandleType}}
+\doxyparagraph{\texorpdfstring{PRICE\_RENKO}{PRICE\_RENKO}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{Candle\+Type}} dxfcpp\+::\+Candle\+Type\+::\+PRICE\+\_\+\+RENKO\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Certain price change, calculated according to the following rules\+: 
+
+
+\begin{DoxyEnumerate}
+\item high(n+1) -\/ high(n) = price range or low(n) -\/ low(n+1) = price range 
+\item close(n) = high(n) or close(n) = low(n) 
+\item open(n+1) = high(n), if high(n+1) -\/ high(n) = price range 
+\item open(n+1) = low(n), if low(n) -\/ low(n+1) = price range 
+\end{DoxyEnumerate}where n is the number of the bar. 

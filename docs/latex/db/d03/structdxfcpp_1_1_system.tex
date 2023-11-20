@@ -1,0 +1,62 @@
+\doxysubsection{dxfcpp\+::System Struct Reference}
+\hypertarget{structdxfcpp_1_1_system}{}\label{structdxfcpp_1_1_system}\index{dxfcpp::System@{dxfcpp::System}}
+
+
+A class that allows to set JVM system properties and get the values of JVM system properties.  
+
+
+
+
+{\ttfamily \#include $<$System.\+hpp$>$}
+
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{structdxfcpp_1_1_system_aac369091e4fd1d35efcfc018db452905}{set\+Property}} (const std\+::string \&key, const std\+::string \&value)
+\begin{DoxyCompactList}\small\item\em Sets the JVM system property indicated by the specified key. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{structdxfcpp_1_1_system_af2918454df4b12fa0d26476ac800d208}{get\+Property}} (const std\+::string \&key)
+\begin{DoxyCompactList}\small\item\em Gets the system property indicated by the specified key. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A class that allows to set JVM system properties and get the values of JVM system properties. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_system_af2918454df4b12fa0d26476ac800d208}\label{structdxfcpp_1_1_system_af2918454df4b12fa0d26476ac800d208} 
+\index{dxfcpp::System@{dxfcpp::System}!getProperty@{getProperty}}
+\index{getProperty@{getProperty}!dxfcpp::System@{dxfcpp::System}}
+\doxyparagraph{\texorpdfstring{getProperty()}{getProperty()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+System\+::get\+Property (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Gets the system property indicated by the specified key. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The name of the system property (UTF-\/8 string). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value of a JVM system property (UTF-\/8 string), or an empty string. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_system_aac369091e4fd1d35efcfc018db452905}\label{structdxfcpp_1_1_system_aac369091e4fd1d35efcfc018db452905} 
+\index{dxfcpp::System@{dxfcpp::System}!setProperty@{setProperty}}
+\index{setProperty@{setProperty}!dxfcpp::System@{dxfcpp::System}}
+\doxyparagraph{\texorpdfstring{setProperty()}{setProperty()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+System\+::set\+Property (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key,  }\item[{const std\+::string \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Sets the JVM system property indicated by the specified key. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The name of the system property (UTF-\/8 string). \\
+\hline
+{\em value} & The value of the system property (UTF-\/8 string). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the setting of the JVM system property succeeded. 
+\end{DoxyReturn}

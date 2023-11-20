@@ -1,0 +1,104 @@
+\doxysubsection{dxfcpp\+::CEntry\+Point\+Errors Struct Reference}
+\hypertarget{structdxfcpp_1_1_c_entry_point_errors}{}\label{structdxfcpp_1_1_c_entry_point_errors}\index{dxfcpp::CEntryPointErrors@{dxfcpp::CEntryPointErrors}}
+
+
+Possible error codes returned by internal Graal\+VM functions.  
+
+
+
+
+{\ttfamily \#include $<$CEntry\+Point\+Errors.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd}\label{structdxfcpp_1_1_c_entry_point_errors_a2f0281effe38d5901cadc750aef8cacd} 
+Code\+Type {\bfseries get\+Code} () const
+\begin{DoxyCompactList}\small\item\em Returns the code. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_adc73b1177b9d3d10545e9b14d55898c9}\label{structdxfcpp_1_1_c_entry_point_errors_adc73b1177b9d3d10545e9b14d55898c9} 
+const std\+::string \& {\bfseries get\+Description} () const \&
+\begin{DoxyCompactList}\small\item\em Returns the description. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a3038e46b7a5b28af7e69094ca9f4e84c}\label{structdxfcpp_1_1_c_entry_point_errors_a3038e46b7a5b28af7e69094ca9f4e84c} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries NO\+\_\+\+ERROR}
+\begin{DoxyCompactList}\small\item\em 0 -\/ No error occurred. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a64426a10151f32b6c708c1dca6265152}\label{structdxfcpp_1_1_c_entry_point_errors_a64426a10151f32b6c708c1dca6265152} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries UNSPECIFIED}
+\begin{DoxyCompactList}\small\item\em 1 -\/ An unspecified error occurred. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_aed4e1a84d0ac1422ba8f4fafbcbefab6}\label{structdxfcpp_1_1_c_entry_point_errors_aed4e1a84d0ac1422ba8f4fafbcbefab6} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries NULL\+\_\+\+ARGUMENT}
+\begin{DoxyCompactList}\small\item\em 2 -\/ An argument was NULL (nullptr). \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a73fef068db152a57799f076b4f8d7cb3}\label{structdxfcpp_1_1_c_entry_point_errors_a73fef068db152a57799f076b4f8d7cb3} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries UNATTACHED\+\_\+\+THREAD}
+\begin{DoxyCompactList}\small\item\em 4 -\/ The specified thread is not attached to the isolate. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_af8932884e26b6fc56cf5a5231b0b142c}\label{structdxfcpp_1_1_c_entry_point_errors_af8932884e26b6fc56cf5a5231b0b142c} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries UNINITIALIZED\+\_\+\+ISOLATE}
+\begin{DoxyCompactList}\small\item\em 5 -\/ The specified isolate is unknown. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a3f839f29c7590e942bf9f0f4dd92a204}\label{structdxfcpp_1_1_c_entry_point_errors_a3f839f29c7590e942bf9f0f4dd92a204} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries LOCATE\+\_\+\+IMAGE\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 6 -\/ Locating the image file failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_ae227a97e9315f8a1f4bf66b85ef94da8}\label{structdxfcpp_1_1_c_entry_point_errors_ae227a97e9315f8a1f4bf66b85ef94da8} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries OPEN\+\_\+\+IMAGE\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 7 -\/ Opening the located image file failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a4730d75b19c07ed124132b0c52c6c711}\label{structdxfcpp_1_1_c_entry_point_errors_a4730d75b19c07ed124132b0c52c6c711} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries MAP\+\_\+\+HEAP\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 8 -\/ Mapping the heap from the image file into memory failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_abd0b640e1af379be55cec1e541898f37}\label{structdxfcpp_1_1_c_entry_point_errors_abd0b640e1af379be55cec1e541898f37} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries RESERVE\+\_\+\+ADDRESS\+\_\+\+SPACE\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 801 -\/ Reserving address space for the new isolate failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a08daf13d4d342f499df866c9b365e9fd}\label{structdxfcpp_1_1_c_entry_point_errors_a08daf13d4d342f499df866c9b365e9fd} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries INSUFFICIENT\+\_\+\+ADDRESS\+\_\+\+SPACE}
+\begin{DoxyCompactList}\small\item\em 802 -\/ The image heap does not fit in the available address space. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a694f24336e4806bef18f2449133bb01e}\label{structdxfcpp_1_1_c_entry_point_errors_a694f24336e4806bef18f2449133bb01e} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries PROTECT\+\_\+\+HEAP\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 9 -\/ Setting the protection of the heap memory failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_ae0016a8ba5ce623fafcab1863ae78841}\label{structdxfcpp_1_1_c_entry_point_errors_ae0016a8ba5ce623fafcab1863ae78841} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries UNSUPPORTED\+\_\+\+ISOLATE\+\_\+\+PARAMETERS\+\_\+\+VERSION}
+\begin{DoxyCompactList}\small\item\em 10 -\/ The version of the specified isolate parameters is unsupported. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_adc073907d0ad0b0a1af6b7d374e2aadc}\label{structdxfcpp_1_1_c_entry_point_errors_adc073907d0ad0b0a1af6b7d374e2aadc} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries THREADING\+\_\+\+INITIALIZATION\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 11 -\/ Initialization of threading in the isolate failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_ac3e9e07f0359860762bc5ff96c52a270}\label{structdxfcpp_1_1_c_entry_point_errors_ac3e9e07f0359860762bc5ff96c52a270} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries UNCAUGHT\+\_\+\+EXCEPTION}
+\begin{DoxyCompactList}\small\item\em 12 -\/ Some exception is not caught. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a303dee0aac5f56b0daeee6b37b1ba30b}\label{structdxfcpp_1_1_c_entry_point_errors_a303dee0aac5f56b0daeee6b37b1ba30b} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries ISOLATE\+\_\+\+INITIALIZATION\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 13 -\/ Initialization the isolate failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a4115a25d9683dc92224a6cc63a33e4b8}\label{structdxfcpp_1_1_c_entry_point_errors_a4115a25d9683dc92224a6cc63a33e4b8} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries OPEN\+\_\+\+AUX\+\_\+\+IMAGE\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 14 -\/ Opening the located auxiliary image file failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a3d6f257c44e21c2f23bab2b2dec4116b}\label{structdxfcpp_1_1_c_entry_point_errors_a3d6f257c44e21c2f23bab2b2dec4116b} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries READ\+\_\+\+AUX\+\_\+\+IMAGE\+\_\+\+META\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 15 -\/ Reading the opened auxiliary image file failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_aa66ac46e87838dd1f134f7347e5bd552}\label{structdxfcpp_1_1_c_entry_point_errors_aa66ac46e87838dd1f134f7347e5bd552} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries MAP\+\_\+\+AUX\+\_\+\+IMAGE\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 16 -\/ Mapping the auxiliary image file into memory failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_aec6096e62222b65058b17485a4364793}\label{structdxfcpp_1_1_c_entry_point_errors_aec6096e62222b65058b17485a4364793} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries INSUFFICIENT\+\_\+\+AUX\+\_\+\+IMAGE\+\_\+\+MEMORY}
+\begin{DoxyCompactList}\small\item\em 17 -\/ Insufficient memory for the auxiliary image. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a59ee692e38cf4d93d3eec5ee6e2c33b9}\label{structdxfcpp_1_1_c_entry_point_errors_a59ee692e38cf4d93d3eec5ee6e2c33b9} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries AUX\+\_\+\+IMAGE\+\_\+\+UNSUPPORTED}
+\begin{DoxyCompactList}\small\item\em 18 -\/ Auxiliary images are not supported on this platform or edition. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_aa1ef8cd33abd8958c12e04cff4ec90fd}\label{structdxfcpp_1_1_c_entry_point_errors_aa1ef8cd33abd8958c12e04cff4ec90fd} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries FREE\+\_\+\+ADDRESS\+\_\+\+SPACE\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 19 -\/ Releasing the isolate\textquotesingle{}s address space failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a323d1aaefd23b3b1d3b3c56329767f80}\label{structdxfcpp_1_1_c_entry_point_errors_a323d1aaefd23b3b1d3b3c56329767f80} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries FREE\+\_\+\+IMAGE\+\_\+\+HEAP\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 20 -\/ Releasing the isolate\textquotesingle{}s image heap memory failed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a90fbb14ae1ef9525157809538c0b12f0}\label{structdxfcpp_1_1_c_entry_point_errors_a90fbb14ae1ef9525157809538c0b12f0} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries AUX\+\_\+\+IMAGE\+\_\+\+PRIMARY\+\_\+\+IMAGE\+\_\+\+MISMATCH}
+\begin{DoxyCompactList}\small\item\em 21 -\/ The auxiliary image was built from a different primary image. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_a5480767c2f85a4fbac6a2497e9b74654}\label{structdxfcpp_1_1_c_entry_point_errors_a5480767c2f85a4fbac6a2497e9b74654} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries ARGUMENT\+\_\+\+PARSING\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 22 -\/ The isolate arguments could not be parsed. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_c_entry_point_errors_abb1021d4b2abd795435253c890beb2cd}\label{structdxfcpp_1_1_c_entry_point_errors_abb1021d4b2abd795435253c890beb2cd} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_c_entry_point_errors}{CEntry\+Point\+Errors}} {\bfseries CPU\+\_\+\+FEATURE\+\_\+\+CHECK\+\_\+\+FAILED}
+\begin{DoxyCompactList}\small\item\em 23 -\/ Current target does not support the following CPU features that are required by the image. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Possible error codes returned by internal Graal\+VM functions. 
+
+\href{https://github.com/oracle/graal/blob/96a1a66347bd4e5e00ae4e8e79812ebaf8cd5e33/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/c/function/CEntryPointErrors.java\#L43}{\texttt{ Graal\+:CEntry\+Point\+Errors}} 

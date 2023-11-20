@@ -1,0 +1,500 @@
+\doxysubsection{dxfcpp\+::Day Struct Reference}
+\hypertarget{structdxfcpp_1_1_day}{}\label{structdxfcpp_1_1_day}\index{dxfcpp::Day@{dxfcpp::Day}}
+
+
+{\bfseries{\doxylink{structdxfcpp_1_1_day}{Day}}} represents a continuous period of time approximately 24 hours long.  
+
+
+
+
+{\ttfamily \#include $<$Day.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}\label{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_day}{Day}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_day}{Day} object. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_day_ac75b9da9d9dcd6642f828440947b53e6}\label{structdxfcpp_1_1_day_ac75b9da9d9dcd6642f828440947b53e6} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_day}{Day}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{structdxfcpp_1_1_day}{Day} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_schedule}{Schedule}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_a38c1d9f7a3d2df0d9ccbd4b0b45f7653}{get\+Schedule}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_a28ececa6393a8b38bbae66e0e654d240}{get\+Day\+Id}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_a66c22ef75baab14cc4b806dee3deeb37}{get\+Year\+Month\+Day}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns year, month and day numbers packed in the following way\+: \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_a813a042676cb54a7aa8bac5182d23750}{get\+Year}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_a5f58d8bff108141fc1658a25894ec9d8}{get\+Month\+Of\+Year}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_a3a5c3576023105ce6de335de80f6544b}{get\+Day\+Of\+Month}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_a6c53bad15f198857dbc77f465cb5333d}{get\+Day\+Of\+Week}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_day_ad1c6191676319ac0b7dc1608f64cca55}{is\+Holiday}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_day_ac5a77944f25f2f11bfdb2b9f7743d5aa}{is\+Short\+Day}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_day_ab3d7616b4def4e511828a292024c2d7b}{is\+Trading}} () const noexcept
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_ae3c4cf3680a5aab9e01efbdec0fbb5a3}{get\+Start\+Time}} () const noexcept
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_af4e8fd01377aa9e00f6acbb1f0c32385}{get\+End\+Time}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_day_a12998de2d48f183e2cea7e6a617553e6}{contains\+Time}} (std\+::int64\+\_\+t time) const noexcept
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_ac0992b490b763d1ca63215aad987254b}{get\+Reset\+Time}} () const noexcept
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_a3f33d3cdf1e7cabf3efb65f02075c3ac}{get\+Sessions}} () const noexcept
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_acc17caa1b96904ac5226fc0df2ea89e5}{get\+Session\+By\+Time}} (std\+::int64\+\_\+t time) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns session belonging to this day that contains specified time. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_a28bd0cffd5b7f34cb98c2cf12c8ebb80}{get\+First\+Session}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns first session belonging to this day accepted by specified filter. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_a7c5c0e89dccebb8cfec96a073e8ed201}{get\+Last\+Session}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns last session belonging to this day accepted by specified filter. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_a62cfef47befceb052c7f6042bd3a1be8}{find\+First\+Session}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns first session belonging to this day accepted by specified filter. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_aa6953f6249bd26dee5a695c7712645fc}{find\+Last\+Session}} (const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns last session belonging to this day accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_day_a57d52fc6340e85997b20f8af6098134d}{get\+Prev\+Day}} (const \mbox{\hyperlink{structdxfcpp_1_1_day_filter}{Day\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns previous day accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_day_ab31d2f070a390235047fda52d2404a9f}{get\+Next\+Day}} (const \mbox{\hyperlink{structdxfcpp_1_1_day_filter}{Day\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns following day accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_day_ab0ce3a41f103b4591345894ce7b2a01f}{find\+Prev\+Day}} (const \mbox{\hyperlink{structdxfcpp_1_1_day_filter}{Day\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns previous day accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_day_a389b82d72574288e0d65e00b99eab063}{find\+Next\+Day}} (const \mbox{\hyperlink{structdxfcpp_1_1_day_filter}{Day\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns following day accepted by specified filter. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_day_a0990f3a41160a8474473f8e5b5205c80}{operator==}} (const \mbox{\hyperlink{structdxfcpp_1_1_day}{Day}} \&other) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_day_a41b2ed51fa96d9cc2b04bb7e9e9d6dca}{operator==}} (const \mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} \&other) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_a5a2709328521a36824c7aac735e14782}{get\+Hash\+Code}} () const noexcept
+\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_day_a32da719d8d21db2c0a3d025f3e4a2f87}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+{\bfseries{\doxylink{structdxfcpp_1_1_day}{Day}}} represents a continuous period of time approximately 24 hours long. 
+
+The day is aligned to the start and the end of business activities of a certain business entity or business process. For example, the day may be aligned to a trading schedule of a particular instrument on an exchange. Thus, different days may start and end at various local times depending on the related trading schedules. 
+
+The length of the day depends on the trading schedule and other circumstances. For example, it is possible that day for Monday is longer than 24 hours because it includes part of Sunday; consequently, the day for Sunday will be shorter than 24 hours to avoid overlapping with Monday. 
+
+Days do not overlap with each other -\/ rather they form consecutive chain of adjacent periods of time that cover entire time scale. The point on a border line is considered to belong to following day that starts there. 
+
+Each day consists of sessions that cover entire duration of the day. If day contains at least one trading session (i.\+e. session within which trading activity is allowed), then the day is considered trading day. Otherwise the day is considered non-\/trading day (e.\+g. weekend or holiday). 
+
+\doxylink{structdxfcpp_1_1_day}{Day} may contain sessions with zero duration -\/ e.\+g. indices that post value once a day. Such sessions can be of any appropriate type, trading or non-\/trading. \doxylink{structdxfcpp_1_1_day}{Day} may have zero duration as well -\/ e.\+g. when all time within it is transferred to other days. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_day_a12998de2d48f183e2cea7e6a617553e6}\label{structdxfcpp_1_1_day_a12998de2d48f183e2cea7e6a617553e6} 
+\index{dxfcpp::Day@{dxfcpp::Day}!containsTime@{containsTime}}
+\index{containsTime@{containsTime}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{containsTime()}{containsTime()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Day\+::contains\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if specified time belongs to this day. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a62cfef47befceb052c7f6042bd3a1be8}\label{structdxfcpp_1_1_day_a62cfef47befceb052c7f6042bd3a1be8} 
+\index{dxfcpp::Day@{dxfcpp::Day}!findFirstSession@{findFirstSession}}
+\index{findFirstSession@{findFirstSession}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{findFirstSession()}{findFirstSession()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ dxfcpp\+::\+Day\+::find\+First\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns first session belonging to this day accepted by specified filter. 
+
+This method does not cross the day boundary. If no such session was found within this day this method will return \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) 
+
+To find first trading session of any type use this code\+: 
+\begin{DoxyPre}auto session = day-\/>findFirstSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find first regular trading session use this code\+: 
+\begin{DoxyPre}auto session = day-\/>findFirstSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first session that is accepted by the filter 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_aa6953f6249bd26dee5a695c7712645fc}\label{structdxfcpp_1_1_day_aa6953f6249bd26dee5a695c7712645fc} 
+\index{dxfcpp::Day@{dxfcpp::Day}!findLastSession@{findLastSession}}
+\index{findLastSession@{findLastSession}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{findLastSession()}{findLastSession()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ dxfcpp\+::\+Day\+::find\+Last\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns last session belonging to this day accepted by specified filter. 
+
+This method does not cross the day boundary. If no such session was found within this day this method will return \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) 
+
+To find last trading session of any type use this code\+: 
+\begin{DoxyPre}auto session = day-\/>findLastSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find last regular trading session use this code\+: 
+\begin{DoxyPre}auto session = day-\/>findLastSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The last session that is accepted by the filter 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a389b82d72574288e0d65e00b99eab063}\label{structdxfcpp_1_1_day_a389b82d72574288e0d65e00b99eab063} 
+\index{dxfcpp::Day@{dxfcpp::Day}!findNextDay@{findNextDay}}
+\index{findNextDay@{findNextDay}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{findNextDay()}{findNextDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} dxfcpp\+::\+Day\+::find\+Next\+Day (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_day_filter}{Day\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns following day accepted by specified filter. 
+
+This method looks for appropriate day up to a year in the future. If no such day was found within one year this method will return \doxylink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test days \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest following day that is accepted by the filter 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_ab0ce3a41f103b4591345894ce7b2a01f}\label{structdxfcpp_1_1_day_ab0ce3a41f103b4591345894ce7b2a01f} 
+\index{dxfcpp::Day@{dxfcpp::Day}!findPrevDay@{findPrevDay}}
+\index{findPrevDay@{findPrevDay}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{findPrevDay()}{findPrevDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} dxfcpp\+::\+Day\+::find\+Prev\+Day (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_day_filter}{Day\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns previous day accepted by specified filter. 
+
+This method looks for appropriate day up to a year back in time. If no such day was found within one year this method will return \doxylink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test days \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest previous day that is accepted by the filter 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a28ececa6393a8b38bbae66e0e654d240}\label{structdxfcpp_1_1_day_a28ececa6393a8b38bbae66e0e654d240} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getDayId@{getDayId}}
+\index{getDayId@{getDayId}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getDayId()}{getDayId()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Day\+::get\+Day\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The number of this day since January 1, 1970 (that day has identifier of 0 and previous days have negative identifiers). 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a3a5c3576023105ce6de335de80f6544b}\label{structdxfcpp_1_1_day_a3a5c3576023105ce6de335de80f6544b} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getDayOfMonth@{getDayOfMonth}}
+\index{getDayOfMonth@{getDayOfMonth}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getDayOfMonth()}{getDayOfMonth()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Day\+::get\+Day\+Of\+Month (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The ordinal day number in the month starting with {\bfseries{1}} for the first day of month. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a6c53bad15f198857dbc77f465cb5333d}\label{structdxfcpp_1_1_day_a6c53bad15f198857dbc77f465cb5333d} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getDayOfWeek@{getDayOfWeek}}
+\index{getDayOfWeek@{getDayOfWeek}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getDayOfWeek()}{getDayOfWeek()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Day\+::get\+Day\+Of\+Week (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The ordinal day number in the week starting with {\bfseries{1=Monday}} and ending with {\bfseries{7=Sunday}}. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_af4e8fd01377aa9e00f6acbb1f0c32385}\label{structdxfcpp_1_1_day_af4e8fd01377aa9e00f6acbb1f0c32385} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getEndTime@{getEndTime}}
+\index{getEndTime@{getEndTime}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getEndTime()}{getEndTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Day\+::get\+End\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The end time of this day (exclusive). 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a28bd0cffd5b7f34cb98c2cf12c8ebb80}\label{structdxfcpp_1_1_day_a28bd0cffd5b7f34cb98c2cf12c8ebb80} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getFirstSession@{getFirstSession}}
+\index{getFirstSession@{getFirstSession}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getFirstSession()}{getFirstSession()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ dxfcpp\+::\+Day\+::get\+First\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns first session belonging to this day accepted by specified filter. 
+
+This method does not cross the day boundary. If no such session was found within this day this method will return \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) 
+
+To find first trading session of any type use this code\+: 
+\begin{DoxyPre}\doxylink{structdxfcpp_1_1_session}{Session} session = day-\/>getFirstSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find first regular trading session use this code\+: 
+\begin{DoxyPre}\doxylink{structdxfcpp_1_1_session}{Session} session = day-\/>getFirstSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first session that is accepted by the filter or \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within this day 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a5a2709328521a36824c7aac735e14782}\label{structdxfcpp_1_1_day_a5a2709328521a36824c7aac735e14782} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getHashCode@{getHashCode}}
+\index{getHashCode@{getHashCode}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getHashCode()}{getHashCode()}}
+{\footnotesize\ttfamily std\+::size\+\_\+t dxfcpp\+::\+Day\+::get\+Hash\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+A hash code value for this object. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a7c5c0e89dccebb8cfec96a073e8ed201}\label{structdxfcpp_1_1_day_a7c5c0e89dccebb8cfec96a073e8ed201} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getLastSession@{getLastSession}}
+\index{getLastSession@{getLastSession}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getLastSession()}{getLastSession()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ dxfcpp\+::\+Day\+::get\+Last\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns last session belonging to this day accepted by specified filter. 
+
+This method does not cross the day boundary. If no such session was found within this day this method will return \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) 
+
+To find last trading session of any type use this code\+: 
+\begin{DoxyPre}auto session = day-\/>getLastSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find last regular trading session use this code\+: 
+\begin{DoxyPre}auto session = day-\/>getLastSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The last session that is accepted by the filter or \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within this day 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a5f58d8bff108141fc1658a25894ec9d8}\label{structdxfcpp_1_1_day_a5f58d8bff108141fc1658a25894ec9d8} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getMonthOfYear@{getMonthOfYear}}
+\index{getMonthOfYear@{getMonthOfYear}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getMonthOfYear()}{getMonthOfYear()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Day\+::get\+Month\+Of\+Year (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The calendar month number in the year starting with {\bfseries{1=January}} and ending with {\bfseries{12=December}}. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_ab31d2f070a390235047fda52d2404a9f}\label{structdxfcpp_1_1_day_ab31d2f070a390235047fda52d2404a9f} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getNextDay@{getNextDay}}
+\index{getNextDay@{getNextDay}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getNextDay()}{getNextDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} dxfcpp\+::\+Day\+::get\+Next\+Day (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_day_filter}{Day\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns following day accepted by specified filter. 
+
+This method looks for appropriate day up to a year in the future. If no such day was found within one year this method will return \doxylink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em The} & filter the filter to test days \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest following day that is accepted by the filter or \doxylink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if no such day was found within one year 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a57d52fc6340e85997b20f8af6098134d}\label{structdxfcpp_1_1_day_a57d52fc6340e85997b20f8af6098134d} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getPrevDay@{getPrevDay}}
+\index{getPrevDay@{getPrevDay}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getPrevDay()}{getPrevDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} dxfcpp\+::\+Day\+::get\+Prev\+Day (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_day_filter}{Day\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns previous day accepted by specified filter. 
+
+This method looks for appropriate day up to a year back in time. If no such day was found within one year this method will return \doxylink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em The} & filter the filter to test days \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest previous day that is accepted by the filter or \doxylink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if no such day was found within one year 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_ac0992b490b763d1ca63215aad987254b}\label{structdxfcpp_1_1_day_ac0992b490b763d1ca63215aad987254b} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getResetTime@{getResetTime}}
+\index{getResetTime@{getResetTime}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getResetTime()}{getResetTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Day\+::get\+Reset\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The reset time for this day. Reset of daily data is performed on trading days only, the result has no meaning for non-\/trading days. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a38c1d9f7a3d2df0d9ccbd4b0b45f7653}\label{structdxfcpp_1_1_day_a38c1d9f7a3d2df0d9ccbd4b0b45f7653} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getSchedule@{getSchedule}}
+\index{getSchedule@{getSchedule}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getSchedule()}{getSchedule()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_schedule}{Schedule}} $>$ dxfcpp\+::\+Day\+::get\+Schedule (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The schedule to which this day belongs. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_acc17caa1b96904ac5226fc0df2ea89e5}\label{structdxfcpp_1_1_day_acc17caa1b96904ac5226fc0df2ea89e5} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getSessionByTime@{getSessionByTime}}
+\index{getSessionByTime@{getSessionByTime}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getSessionByTime()}{getSessionByTime()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ dxfcpp\+::\+Day\+::get\+Session\+By\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns session belonging to this day that contains specified time. 
+
+If no such session was found within this day this method will return \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The time to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The session that contains specified time or \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within this day 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a3f33d3cdf1e7cabf3efb65f02075c3ac}\label{structdxfcpp_1_1_day_a3f33d3cdf1e7cabf3efb65f02075c3ac} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getSessions@{getSessions}}
+\index{getSessions@{getSessions}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getSessions()}{getSessions()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ $>$ dxfcpp\+::\+Day\+::get\+Sessions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The list of sessions that constitute this day. The list is ordered according to natural order of sessions -\/ how they occur one after another. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_ae3c4cf3680a5aab9e01efbdec0fbb5a3}\label{structdxfcpp_1_1_day_ae3c4cf3680a5aab9e01efbdec0fbb5a3} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getStartTime@{getStartTime}}
+\index{getStartTime@{getStartTime}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getStartTime()}{getStartTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Day\+::get\+Start\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The start time of this day (inclusive). 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a813a042676cb54a7aa8bac5182d23750}\label{structdxfcpp_1_1_day_a813a042676cb54a7aa8bac5182d23750} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getYear@{getYear}}
+\index{getYear@{getYear}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getYear()}{getYear()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Day\+::get\+Year (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The calendar year -\/ i.\+e. it returns {\ttfamily 1977} for the year {\ttfamily 1977}. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a66c22ef75baab14cc4b806dee3deeb37}\label{structdxfcpp_1_1_day_a66c22ef75baab14cc4b806dee3deeb37} 
+\index{dxfcpp::Day@{dxfcpp::Day}!getYearMonthDay@{getYearMonthDay}}
+\index{getYearMonthDay@{getYearMonthDay}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{getYearMonthDay()}{getYearMonthDay()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Day\+::get\+Year\+Month\+Day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns year, month and day numbers packed in the following way\+: 
+
+
+\begin{DoxyPre}YearMonthDay = year * 10000 + month * 100 + day\end{DoxyPre}
+ For example, September 28, 1977 has value 19770928.
+
+\begin{DoxyReturn}{Returns}
+Packed year, month and day numbers 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_ad1c6191676319ac0b7dc1608f64cca55}\label{structdxfcpp_1_1_day_ad1c6191676319ac0b7dc1608f64cca55} 
+\index{dxfcpp::Day@{dxfcpp::Day}!isHoliday@{isHoliday}}
+\index{isHoliday@{isHoliday}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{isHoliday()}{isHoliday()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Day\+::is\+Holiday (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this day is an exchange holiday. Usually there are no trading takes place on an exchange holiday. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_ac5a77944f25f2f11bfdb2b9f7743d5aa}\label{structdxfcpp_1_1_day_ac5a77944f25f2f11bfdb2b9f7743d5aa} 
+\index{dxfcpp::Day@{dxfcpp::Day}!isShortDay@{isShortDay}}
+\index{isShortDay@{isShortDay}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{isShortDay()}{isShortDay()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Day\+::is\+Short\+Day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this day is a short day. Usually trading stops earlier on a short day. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_ab3d7616b4def4e511828a292024c2d7b}\label{structdxfcpp_1_1_day_ab3d7616b4def4e511828a292024c2d7b} 
+\index{dxfcpp::Day@{dxfcpp::Day}!isTrading@{isTrading}}
+\index{isTrading@{isTrading}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{isTrading()}{isTrading()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Day\+::is\+Trading (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if trading activity is allowed within this day. Positive result assumes that day has at least one trading session. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a0990f3a41160a8474473f8e5b5205c80}\label{structdxfcpp_1_1_day_a0990f3a41160a8474473f8e5b5205c80} 
+\index{dxfcpp::Day@{dxfcpp::Day}!operator==@{operator==}}
+\index{operator==@{operator==}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Day\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_day}{Day}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & Another object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this object is equal to {\ttfamily other} object 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a41b2ed51fa96d9cc2b04bb7e9e9d6dca}\label{structdxfcpp_1_1_day_a41b2ed51fa96d9cc2b04bb7e9e9d6dca} 
+\index{dxfcpp::Day@{dxfcpp::Day}!operator==@{operator==}}
+\index{operator==@{operator==}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Day\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}{Day\+::\+Ptr}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & Another object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this object is equal to {\ttfamily other} object 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_day_a32da719d8d21db2c0a3d025f3e4a2f87}\label{structdxfcpp_1_1_day_a32da719d8d21db2c0a3d025f3e4a2f87} 
+\index{dxfcpp::Day@{dxfcpp::Day}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::Day@{dxfcpp::Day}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Day\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+A string representation 
+\end{DoxyReturn}

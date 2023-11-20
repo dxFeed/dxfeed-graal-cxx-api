@@ -1,0 +1,73 @@
+\doxysubsection{Event\+Mapper.\+hpp}
+\hypertarget{_event_mapper_8hpp_source}{}\label{_event_mapper_8hpp_source}\index{EventMapper.hpp@{EventMapper.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_event_type_8hpp}{"{}EventType.hpp"{}}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ EventMapper\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{static}\ std::vector<std::shared\_ptr<EventType>>\ fromGraalList(\textcolor{keywordtype}{void}\ *graalNativeList)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//\ TODO:\ check\ that\ EventIt\ is\ iterator\ of\ EventType*\ or\ shared\_ptr<EventType>\ or\ T*\ or\ shared\_ptr<T>,\ where\ T\ is}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//\ child\ of\ EventType}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventIt>\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *toGraalList(EventIt\ begin,\ EventIt\ end)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}EventMapper::toGraalList(symbols\ =\ "{}}\ +\ elementsToString(begin,\ end)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ size\ =\ calculateGraalListSize(std::distance(begin,\ end));}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ size\ is\ needed,\ for\ example,\ to\ clear\ the\ list\ of\ symbols.}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *list\ =\ newGraalList(size);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!list\ ||\ size\ ==\ 0)\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ list;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ std::ptrdiff\_t\ elementIdx\ =\ 0;}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ needToFree\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ begin;\ it\ !=\ end\ \&\&\ elementIdx\ <\ size;\ it++,\ elementIdx++)\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ it-\/>toGraal();\ \})\ \{\ \textcolor{comment}{//\ It<EventType>}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ needToFree\ =\ setGraalListElement(list,\ elementIdx,\ it-\/>toGraal())\ ==\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ (*it)-\/>toGraal();\ \})\ \{\ \textcolor{comment}{//\ It<Ptr<EventType>>}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ needToFree\ =\ setGraalListElement(list,\ elementIdx,\ (*it)-\/>toGraal())\ ==\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (needToFree)\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (needToFree)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ freeGraalListElements(list,\ elementIdx);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ list;}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalList(\textcolor{keywordtype}{void}\ *graalList)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{static}\ std::ptrdiff\_t\ calculateGraalListSize(std::ptrdiff\_t\ initSize)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *newGraalList(std::ptrdiff\_t\ size)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ setGraalListElement(\textcolor{keywordtype}{void}\ *graalList,\ std::ptrdiff\_t\ elementIdx,\ \textcolor{keywordtype}{void}\ *element)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ freeGraalListElements(\textcolor{keywordtype}{void}\ *graalList,\ std::ptrdiff\_t\ count)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

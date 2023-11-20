@@ -1,0 +1,744 @@
+\doxysubsection{DXFeed\+Subscription.\+hpp}
+\hypertarget{_d_x_feed_subscription_8hpp_source}{}\label{_d_x_feed_subscription_8hpp_source}\index{DXFeedSubscription.hpp@{DXFeedSubscription.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../entity/EntityModule.hpp"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../event/EventType.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../event/EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Handler.hpp"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/JavaObjectHandle.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../symbols/StringSymbol.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../symbols/SymbolWrapper.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}osub/WildcardSymbol.hpp"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{concepts}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}};}
+\DoxyCodeLine{00028\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{IndexedEvent}};}
+\DoxyCodeLine{00029\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_time_series_event}{TimeSeriesEvent}};}
+\DoxyCodeLine{00030\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Subscription\ for\ a\ set\ of\ symbols\ and\ event\ types.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00035\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ std::unordered\_set<EventTypeEnum>\ eventTypes\_;}
+\DoxyCodeLine{00039\ \ \ \ \ JavaObjectHandle<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>\ handle\_;}
+\DoxyCodeLine{00040\ \ \ \ \ JavaObjectHandle<DXFeedEventListener>\ eventListenerHandle\_;}
+\DoxyCodeLine{00041\ \ \ \ \ SimpleHandler<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<EventType>>\ \&)>\ onEvent\_\{\};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{explicit}\ DXFeedSubscription(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventType)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ JavaObjectHandle<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>}
+\DoxyCodeLine{00046\ \ \ \ \ createSubscriptionHandleFromEventClassList(\textcolor{keyword}{const}\ std::unique\_ptr<EventClassList>\ \&list)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ setEventListenerHandle(Id<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>\ id)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventTypeIt>}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ requires\ requires(EventTypeIt\ iter)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ *iter\ \}\ -\/>\ dxfcpp::ConvertibleTo<EventTypeEnum>;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00056\ \ \ \ \ DXFeedSubscription(EventTypeIt\ begin,\ EventTypeIt\ end)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventTypes\_}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}}),\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{handle\_}}\{\},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventListenerHandle\_}}\{\},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{onEvent\_}}\{\}\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{isDebug}})\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{debug}}(\textcolor{stringliteral}{"{}DXFeedSubscription(eventTypes\ =\ "{}}\ +\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{namesToString}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}})\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventClassList}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{create}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventTypes\_}}.\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}}(),\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventTypes\_}}.\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}}());}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}})\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{handle\_}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{createSubscriptionHandleFromEventClassList}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}});}
+\DoxyCodeLine{00070\ \ \ \ \ \}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ DXFeedSubscription(std::initializer\_list<\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ eventTypes)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ :\ DXFeedSubscription(eventTypes.begin(),\ eventTypes.end())\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventTypesCollection>}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{explicit}\ DXFeedSubscription(EventTypesCollection\ \&\&eventTypes)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{requires}}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{requires}}\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{forward}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventTypesCollection}}>(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventTypes}})),}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{forward}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventTypesCollection}}>(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventTypes}})))}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{forward}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventTypesCollection}}>(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventTypes}})),}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{forward}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventTypesCollection}}>(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventTypes}})))\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ closeImpl()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ clearImpl()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{bool}\ isClosedImpl()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{void}\ addSymbolImpl(\textcolor{keywordtype}{void}\ *graalSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ addSymbolsImpl(\textcolor{keywordtype}{void}\ *graalSymbolList)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ removeSymbolImpl(\textcolor{keywordtype}{void}\ *graalSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ removeSymbolsImpl(\textcolor{keywordtype}{void}\ *graalSymbolList)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ setSymbolsImpl(\textcolor{keywordtype}{void}\ *graalSymbolList)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ std::vector<SymbolWrapper>\ getSymbolsImpl()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ std::vector<SymbolWrapper>\ getDecoratedSymbolsImpl()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ DXFeedSubscription\ object}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>;}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ DXFeedSubscription\ object}}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Unique}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{unique\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>;}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00118\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \string~DXFeedSubscription()\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXFeedSubscription\{"{}}\ +\ handle\_.toString()\ +\ \textcolor{stringliteral}{"{}\}::\string~DXFeedSubscription()"{}});}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ closeImpl();}
+\DoxyCodeLine{00126\ \ \ \ \ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ <i>detached</i>\ subscription\ for\ a\ single\ event\ type.}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ dxfcpp::DXFeedSubscription::create(dxfcpp::Quote::TYPE);}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType\ the\ event\ type.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a49b2bc2cb75f94bf9c49920a7cf94286}{create}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventType)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXFeedSubscription::create(eventType\ =\ "{}}\ +\ eventType\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a8127eddaa8b2a9e6511831d795880c7f}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a8127eddaa8b2a9e6511831d795880c7f}{getName}}\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a8127eddaa8b2a9e6511831d795880c7f}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a8127eddaa8b2a9e6511831d795880c7f}{)}}\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ sub\ =\ std::shared\_ptr<DXFeedSubscription>(\textcolor{keyword}{new}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}(eventType));}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ApiContext::getInstance()-\/>getManager<DXFeedSubscriptionManager>()-\/>registerEntity(sub);}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ sub-\/>setEventListenerHandle(id);}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sub;}
+\DoxyCodeLine{00149\ \ \ \ \ \}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ <i>detached</i>\ subscription\ for\ the\ given\ collection\ of\ event\ types.}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ auto\ eventTypes\ =\ \{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\};}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ dxfcpp::DXFeedSubscription::create(eventTypes.begin(),\ eventTypes.end());}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ std::vector\ types\{dxfcpp::Quote::TYPE,\ dxfcpp::Trade::TYPE,\ dxfcpp::Summary::TYPE\};}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ dxfcpp::DXFeedSubscription::create(types.begin(),\ types.end());}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventTypeIt\ The\ collection's\ iterator\ type}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ @param\ begin\ The\ beginning\ of\ the\ collection\ of\ event\ types.}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ @param\ end\ The\ end\ of\ event\ type\ collection.}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ new\ <i>detached</i>\ subscription\ for\ the\ given\ collection\ of\ event\ types.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventTypeIt>}
+\DoxyCodeLine{00173\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{requires}}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{requires}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{EventTypeIt}}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{iter}})\ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ *\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{iter}}\ \}\ -\/>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{dxfcpp}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{ConvertibleTo}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{EventTypeEnum}}>;}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad29cf904c88e2c175b7dd0c980d36a2b}{create}}(EventTypeIt\ begin,\ EventTypeIt\ end)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{isDebug}})\ \{}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{debug}}(\textcolor{stringliteral}{"{}DXFeedSubscription::create(eventTypes\ =\ "{}}\ +\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{namesToString}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}})\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sub}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{shared\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>(\textcolor{keyword}{new}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}}));}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{id}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{ApiContext}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{getInstance}}()-\/>\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{getManager}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscriptionManager}}>()-\/>\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{registerEntity}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sub}});}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sub}}-\/>\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{setEventListenerHandle}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{id}});}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sub}};}
+\DoxyCodeLine{00189\ \ \ \ \ \}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ <i>detached</i>\ subscription\ for\ the\ given\ collection\ of\ event\ types.}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ dxfcpp::DXFeedSubscription::create(\{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\});}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTypes\ The\ event\ type\ collection.}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ new\ <i>detached</i>\ subscription\ for\ the\ given\ collection\ of\ event\ types.}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_accf30348917f797b43ed401bcc521202}{create}}(std::initializer\_list<\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ eventTypes)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ sub\ =\ std::shared\_ptr<DXFeedSubscription>(\textcolor{keyword}{new}\ DXFeedSubscription(eventTypes));}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ApiContext::getInstance()-\/>getManager<DXFeedSubscriptionManager>()-\/>registerEntity(sub);}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ sub-\/>setEventListenerHandle(id);}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sub;}
+\DoxyCodeLine{00209\ \ \ \ \ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ <i>detached</i>\ subscription\ for\ the\ given\ collection\ of\ event\ types.}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ dxfcpp::DXFeedSubscription::create(std::unordered\_set\{dxfcpp::Quote::TYPE,}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ dxfcpp::TimeAndSale::TYPE\});}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ std::vector\ types\ =\ \{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\};}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ dxfcpp::DXFeedSubscription::create(types);}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventTypesCollection\ The\ type\ of\ the\ collection\ of\ event\ types}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTypes\ The\ event\ type\ collection.}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ new\ <i>detached</i>\ subscription\ for\ the\ given\ collection\ of\ event\ types.}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventTypesCollection>}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ac630f6080ba186e6aea9862e1581584f}{create}}(EventTypesCollection\ \&\&eventTypes)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sub}}\ =}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{shared\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}>(\textcolor{keyword}{new}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscription}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{forward}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventTypesCollection}}>(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{eventTypes}})));}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{id}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{ApiContext}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{getInstance}}()-\/>\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{getManager}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeedSubscriptionManager}}>()-\/>\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{registerEntity}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sub}});}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sub}}-\/>\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{setEventListenerHandle}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{id}});}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sub}};}
+\DoxyCodeLine{00238\ \ \ \ \ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ Attaches\ subscription\ to\ the\ specified\ feed.}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *\ @param\ feed\ The\ feed\ to\ attach\ to.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ab022c88abb0ac4c2090da5e85bdebd34}{attach}}(std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}}>\ feed)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ Detaches\ subscription\ from\ the\ specified\ feed.}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ @param\ feed\ The\ feed\ to\ detach\ from.}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a66a071b089569e7b8b14c2a03a5f79f7}{detach}}(std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_feed}{DXFeed}}>\ feed)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ *\ Closes\ this\ subscription\ and\ makes\ it\ <i>permanently\ detached</i>.}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ notifies\ all\ installed\ instances\ of\ subscription\ change\ listeners\ by\ invoking\ \`{}subscriptionClosed`}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ while\ holding\ the\ lock\ for\ this\ subscription.\ This\ method\ clears\ lists\ of\ all\ installed}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *\ event\ listeners\ and\ subscription\ change\ listeners\ and\ makes\ sure\ that\ no\ more\ listeners}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ *\ can\ be\ added.}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a3843aa7e4d0eefddbcdc695909566c45}{close}}()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{toString}}()\ +\ \textcolor{stringliteral}{"{}::close()"{}});}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ closeImpl();}
+\DoxyCodeLine{00267\ \ \ \ \ \}}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00270\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ listener\ for\ events.}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ *\ Event\ lister\ can\ be\ added\ only\ when\ subscription\ is\ not\ producing\ any\ events.}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ *\ The\ subscription\ must\ be\ either\ empty}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *\ (its\ set\ of\ @ref\ DXFeedSubscription::getSymbols()\ "{}symbols"{}\ is\ empty\ or\ not\ @ref\ DXFeedSubscription::attach()}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ *\ "{}attached"{}\ to\ any\ feed\ (its\ set\ of\ change\ listeners\ is\ empty).}}
+\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ does\ nothing\ if\ this\ subscription\ is\ closed.}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\});}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addEventListener([](auto\ \&\&events)\ \{}}
+\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&e\ :\ events)\ \{}}
+\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ (auto\ quote\ =\ e-\/>template\ sharedAs<dxfcpp::Quote>();\ quote)\ \{}}
+\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ "{}Q\ \ \ :\ "{}\ +\ quote-\/>toString()\ <<\ std::endl;}}
+\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}\ else\ if\ (auto\ tns\ =\ e-\/>template\ sharedAs<dxfcpp::TimeAndSale>();\ tns)\ \{}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ "{}TnS\ :\ "{}\ +\ tns-\/>toString()\ <<\ std::endl;}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols(\{"{}\$TOP10L/Q"{},\ "{}\$SP500\#45"{},\ "{}\$TICK"{},\ "{}SPX"{}\});}}
+\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventListener\ The\ listener\ type.\ Listener\ can\ be\ callable\ with\ signature:\ \`{}void(const}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ *\ std::vector<std::shared\_ptr<EventType>\&)`}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ event\ listener}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventListener>}
+\DoxyCodeLine{00301\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a3cbf630dbc54ce3be50412392102f993}{addEventListener}}(EventListener\ \&\&listener)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00302\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{requires}}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{requires}}\ \{}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{listener}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{vector}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{shared\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventType}}>>\{\})\ \}\ -\/>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{same\_as}}<\textcolor{keywordtype}{void}>;}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00306\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00307\ \ \ \ \ \{}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{onEvent\_}}\ +=\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{listener}};}
+\DoxyCodeLine{00309\ \ \ \ \ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ typed\ listener\ for\ events.}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ Event\ lister\ can\ be\ added\ only\ when\ subscription\ is\ not\ producing\ any\ events.}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ The\ subscription\ must\ be\ either\ empty}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *\ (its\ set\ of\ @ref\ DXFeedSubscription::getSymbols()\ "{}symbols"{}\ is\ empty\ or\ not\ @ref\ DXFeedSubscription::attach()}}
+\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ *\ "{}attached"{}\ to\ any\ feed\ (its\ set\ of\ change\ listeners\ is\ empty).}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ does\ nothing\ if\ this\ subscription\ is\ closed.}}
+\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00320\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00321\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\});}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addEventListener(std::function([](const\ std::vector<std::shared\_ptr<dxfcpp::Quotes>>\ \&quotes)\ -\/>\ void\ \{}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&q\ :\ quotes)\ \{}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ std::cout\ <<\ "{}Q\ \ \ \ :\ "{}\ +\ q-\/>toString()\ <<\ std::endl;}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
+\DoxyCodeLine{00328\ \textcolor{comment}{\ \ \ \ \ *\ \}));}}
+\DoxyCodeLine{00329\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00330\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addEventListener<dxfcpp::TimeAndSale>([](const\ auto\ \&timeAndSales)\ -\/>\ void\ \{}}
+\DoxyCodeLine{00331\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&tns\ :\ timeAndSales)\ \{}}
+\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ std::cout\ <<\ "{}TnS\ :\ "{}\ +\ tns-\/>toString()\ <<\ std::endl;}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addEventListener<dxfcpp::MarketEvent>([](const\ auto\ \&marketEvents)\ -\/>\ void\ \{}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&me\ :\ marketEvents)\ \{}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ std::cout\ <<\ "{}Market\ Event's\ symbol:\ "{}\ +\ me-\/>getEventSymbol()\ <<\ std::endl;}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
+\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols(\{"{}\$TOP10L/Q"{},\ "{}AAPL"{},\ "{}\$TICK"{},\ "{}SPX"{}\});}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventT\ The\ event\ type\ (EventType's\ child\ with\ field\ TYPE,\ convertible\ to\ EventTypeEnum\ or\ MarketEvent\ or}}
+\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ *\ LastingEvent\ or\ TimeSeriesEvent\ or\ IndexedEvent)}}
+\DoxyCodeLine{00347\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener.\ Listener\ can\ be\ callable\ with\ signature:\ \`{}void(const}}
+\DoxyCodeLine{00348\ \textcolor{comment}{\ \ \ \ \ *\ std::vector<std::shared\_ptr<EventT>\&)`}}
+\DoxyCodeLine{00349\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00350\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00351\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventT>}
+\DoxyCodeLine{00352\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a5d47c3bf1b10e850ea9291522602d7dd}{addEventListener}}(std::function<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<EventT>>\ \&)>\ \&\&listener)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00353\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{requires}}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{is\_base\_of\_v}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventType}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventT}}>\ \&\&}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{requires}}\ \{}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventT}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{TYPE}}\ \}\ -\/>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{dxfcpp}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{ConvertibleTo}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventTypeEnum}}>;}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ ||\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{is\_same\_v}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventT}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{MarketEvent}}>\ ||\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{is\_same\_v}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventT}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{LastingEvent}}>\ ||}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{is\_same\_v}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventT}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{TimeSeriesEvent}}>\ ||\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{is\_same\_v}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventT}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{IndexedEvent}}>)}
+\DoxyCodeLine{00359\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00360\ \ \ \ \ \{}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{onEvent\_}}\ +=\ [\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{l}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{listener}}](\textcolor{keyword}{auto}\ \&\&\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{events}})\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{vector}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{shared\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventT}}>>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{filteredEvents}}\{\};}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{filteredEvents}}.\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{reserve}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{events}}.\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{size}}());}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{e}}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{events}})\ \{}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{expected}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{e}}-\/>\textcolor{keyword}{template}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{sharedAs}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{EventT}}>();\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{expected}})\ \{}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{filteredEvents}}.\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{emplace\_back}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{expected}});}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{l}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{filteredEvents}});}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00374\ \ \ \ \ \}}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00377\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ listener\ for\ events.}}
+\DoxyCodeLine{00378\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00379\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00380\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ *\ auto\ id\ =\ sub-\/>addEventListener([](auto)\{\});}}
+\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>removeEventListener(id);}}
+\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listenerId\ The\ listener\ id}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00388\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a25d2c14d02d1435bf2fd3a5f185743e7}{removeEventListener}}(std::size\_t\ listenerId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ onEvent\_\ -\/=\ listenerId;}
+\DoxyCodeLine{00390\ \ \ \ \ \}}
+\DoxyCodeLine{00391\ }
+\DoxyCodeLine{00392\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00393\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ reference\ to\ an\ incoming\ events'\ handler\ (delegate),\ to\ which\ listeners\ can\ be\ added\ and\ removed.}}
+\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *\ Listener\ can\ be\ callable\ with\ signature:\ \`{}void(const\ std::vector<std::shared\_ptr<EventType>\&)`}}
+\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\});}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *\ auto\ id\ =\ sub-\/>onEvent()\ +=\ [](auto\ \&\&events)\ \{}}
+\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&e\ :\ events)\ \{}}
+\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ (auto\ quote\ =\ e-\/>template\ sharedAs<dxfcpp::Quote>();\ quote)\ \{}}
+\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ "{}Q\ \ \ :\ "{}\ +\ quote-\/>toString()\ <<\ std::endl;}}
+\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}\ else\ if\ (auto\ tns\ =\ e-\/>template\ sharedAs<dxfcpp::TimeAndSale>();\ tns)\ \{}}
+\DoxyCodeLine{00404\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ "{}TnS\ :\ "{}\ +\ tns-\/>toString()\ <<\ std::endl;}}
+\DoxyCodeLine{00405\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00406\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
+\DoxyCodeLine{00407\ \textcolor{comment}{\ \ \ \ \ *\ \};}}
+\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00409\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols(\{"{}\$TOP10L/Q"{},\ "{}\$SP500\#45"{},\ "{}\$TICK"{},\ "{}SPX"{}\});}}
+\DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>onEvent()\ -\/=\ id;}}
+\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ incoming\ events'\ handler\ (delegate)}}
+\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00415\ \ \ \ \ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a041f81a28b078ca11aca1b11be0ecc2c}{onEvent}}()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ onEvent\_;}
+\DoxyCodeLine{00417\ \ \ \ \ \}}
+\DoxyCodeLine{00418\ }
+\DoxyCodeLine{00419\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00420\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ specified\ symbol\ to\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00421\ \textcolor{comment}{\ \ \ \ \ *\ This\ is\ a\ convenience\ method\ to\ subscribe\ to\ one\ symbol\ at\ a\ time\ that\ has\ a\ return\ fast-\/path\ for\ a\ case\ when}}
+\DoxyCodeLine{00422\ \textcolor{comment}{\ \ \ \ \ *\ the\ symbol\ is\ already\ in\ the\ set.}}
+\DoxyCodeLine{00423\ \textcolor{comment}{\ \ \ \ \ *\ When\ subscribing\ to\ multiple\ symbols\ at\ once\ it\ is\ preferable\ to\ use\ @ref\ DXFeedSubscription::addSymbols(const}}
+\DoxyCodeLine{00424\ \textcolor{comment}{\ \ \ \ \ *\ SymbolsCollection\ \&collection)\ "{}addSymbols(symbols)"{}\ method.}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols("{}TSLA"{});}}
+\DoxyCodeLine{00429\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols("{}XBT/USD:GDAX"{}s);}}
+\DoxyCodeLine{00430\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols("{}BTC/EUR:CXBITF"{}sv);}}
+\DoxyCodeLine{00431\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00432\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00433\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbolWrapper\ The\ symbol.}}
+\DoxyCodeLine{00434\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00435\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a714eaf6fe6e4d032aeed6aa4de6d27f9}{addSymbols}}(\textcolor{keyword}{const}\ SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{toString}}()\ +\ \textcolor{stringliteral}{"{}::addSymbols(symbolWrapper\ =\ "{}}\ +\ toStringAny(symbolWrapper)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ graal\ =\ symbolWrapper.toGraalUnique();}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ addSymbolImpl(graal.get());}
+\DoxyCodeLine{00443\ \ \ \ \ \}}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00446\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ the\ specified\ symbol\ from\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00447\ \textcolor{comment}{\ \ \ \ \ *\ To\ conveniently\ remove\ one\ or\ few\ symbols\ you\ can\ use\ @ref\ DXFeedSubscription::removeSymbols(const}}
+\DoxyCodeLine{00448\ \textcolor{comment}{\ \ \ \ \ *\ SymbolsCollection\ \&collection)\ "{}removeSymbols(symbols)"{}\ method.}}
+\DoxyCodeLine{00449\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00450\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00451\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00452\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>removeSymbols("{}TSLA"{});}}
+\DoxyCodeLine{00453\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>removeSymbols("{}XBT/USD:GDAX"{}s);}}
+\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>removeSymbols("{}BTC/EUR:CXBITF"{}sv);}}
+\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbolWrapper\ The\ symbol.}}
+\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00459\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_abc1905b4894aa4b90d18a939120f0b94}{removeSymbols}}(\textcolor{keyword}{const}\ SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{toString}}()\ +\ \textcolor{stringliteral}{"{}::removeSymbols(symbolWrapper\ =\ "{}}\ +\ toStringAny(symbolWrapper)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00463\ }
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ graal\ =\ symbolWrapper.toGraalUnique();}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ removeSymbolImpl(graal.get());}
+\DoxyCodeLine{00467\ \ \ \ \ \}}
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00470\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ specified\ collection\ (using\ iterators)\ of\ symbols\ to\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00473\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00474\ \textcolor{comment}{\ \ \ \ \ *\ auto\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{"{}XBT/USD:GDAX"{}s,\ "{}BTC/EUR:CXBITF"{}sv,\ "{}TSLA"{},\ "{}GOOG"{}\_s\};}}
+\DoxyCodeLine{00475\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00476\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols(v.begin(),\ v.end());}}
+\DoxyCodeLine{00477\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00478\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00479\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ SymbolIt\ The\ collection's\ iterator\ type}}
+\DoxyCodeLine{00480\ \textcolor{comment}{\ \ \ \ \ *\ @param\ begin\ The\ beginning\ of\ the\ collection\ of\ symbols.}}
+\DoxyCodeLine{00481\ \textcolor{comment}{\ \ \ \ \ *\ @param\ end\ The\ end\ of\ symbol\ collection.}}
+\DoxyCodeLine{00482\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00483\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ SymbolIt>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a6fbfaa0a6470a9612cded223cefcb978}{addSymbols}}(SymbolIt\ begin,\ SymbolIt\ end)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{isDebug}})\ \{}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{debug}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{toString}}()\ +\ \textcolor{stringliteral}{"{}::addSymbols(symbols\ =\ "{}}\ +\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{elementsToString}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}})\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolWrapper}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolListUtils}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{toGraalList}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}});}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{addSymbolsImpl}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}});}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolWrapper}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolListUtils}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{freeGraalList}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}});}
+\DoxyCodeLine{00492\ \ \ \ \ \}}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00495\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ specified\ collection\ of\ symbols\ to\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00496\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00497\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00498\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00499\ \textcolor{comment}{\ \ \ \ \ *\ auto\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{"{}XBT/USD:GDAX"{}s,\ "{}BTC/EUR:CXBITF"{}sv,\ "{}TSLA"{},\ "{}GOOG"{}\_s\};}}
+\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00501\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols(std::vector\{"{}AAPL"{},\ "{}IBM"{}\});}}
+\DoxyCodeLine{00502\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols(v);}}
+\DoxyCodeLine{00503\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00504\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00505\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ SymbolsCollection\ The\ symbols\ collection's\ type}}
+\DoxyCodeLine{00506\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collection\ The\ symbols\ collection}}
+\DoxyCodeLine{00507\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00508\ \ \ \ \ \textcolor{keyword}{template}\ <ConvertibleToSymbolWrapperCollection\ SymbolsCollection>}
+\DoxyCodeLine{00509\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a4f060880d62dbfea3cd81636bb442e1d}{addSymbols}}(\textcolor{keyword}{const}\ SymbolsCollection\ \&collection)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{addSymbols}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{collection}}),\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{collection}}));}
+\DoxyCodeLine{00511\ \ \ \ \ \}}
+\DoxyCodeLine{00512\ }
+\DoxyCodeLine{00513\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00514\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ specified\ collection\ (initializer\ list)\ of\ symbols\ to\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00515\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00516\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00517\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00518\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols(\{"{}AAPL"{},\ "{}IBM"{}sv,\ "{}TSLA"{}s,\ "{}GOOG"{}\_s\});}}
+\DoxyCodeLine{00519\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00520\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00521\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collection\ The\ symbols\ collection}}
+\DoxyCodeLine{00522\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00523\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a807291d1915f261ab48605f68b4a93d6}{addSymbols}}(std::initializer\_list<SymbolWrapper>\ collection)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ addSymbols(collection.begin(),\ collection.end());}
+\DoxyCodeLine{00525\ \ \ \ \ \}}
+\DoxyCodeLine{00526\ }
+\DoxyCodeLine{00527\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ the\ specified\ collection\ (using\ iterators)\ of\ symbols\ from\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00529\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00530\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00531\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00532\ \textcolor{comment}{\ \ \ \ \ *\ auto\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{"{}XBT/USD:GDAX"{}s,\ "{}BTC/EUR:CXBITF"{}sv,\ "{}TSLA"{},\ "{}GOOG"{}\_s\};}}
+\DoxyCodeLine{00533\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00534\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>removeSymbols(v.begin(),\ v.end());}}
+\DoxyCodeLine{00535\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00536\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00537\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ SymbolIt\ The\ collection's\ iterator\ type}}
+\DoxyCodeLine{00538\ \textcolor{comment}{\ \ \ \ \ *\ @param\ begin\ The\ beginning\ of\ the\ collection\ of\ symbols.}}
+\DoxyCodeLine{00539\ \textcolor{comment}{\ \ \ \ \ *\ @param\ end\ The\ end\ of\ symbol\ collection.}}
+\DoxyCodeLine{00540\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00541\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ SymbolIt>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a1b86b06a9cda1d51463cc7dc1ed7b5b7}{removeSymbols}}(SymbolIt\ begin,\ SymbolIt\ end)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{isDebug}})\ \{}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{debug}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{toString}}()\ +\ \textcolor{stringliteral}{"{}::removeSymbols(symbols\ =\ "{}}\ +\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{elementsToString}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}})\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00545\ }
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolWrapper}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolListUtils}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{toGraalList}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}});}
+\DoxyCodeLine{00547\ }
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{removeSymbolsImpl}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}});}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolWrapper}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolListUtils}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{freeGraalList}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}});}
+\DoxyCodeLine{00550\ \ \ \ \ \}}
+\DoxyCodeLine{00551\ }
+\DoxyCodeLine{00552\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00553\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ the\ specified\ collection\ of\ symbols\ from\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00554\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00555\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00556\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00557\ \textcolor{comment}{\ \ \ \ \ *\ auto\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{"{}XBT/USD:GDAX"{}s,\ "{}BTC/EUR:CXBITF"{}sv,\ "{}TSLA"{},\ "{}GOOG"{}\_s\};}}
+\DoxyCodeLine{00558\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00559\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>removeSymbols(std::vector\{"{}AAPL"{},\ "{}IBM"{}\});}}
+\DoxyCodeLine{00560\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>removeSymbols(v);}}
+\DoxyCodeLine{00561\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00562\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00563\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ SymbolsCollection\ The\ symbols\ collection's\ type}}
+\DoxyCodeLine{00564\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collection\ The\ symbols\ collection}}
+\DoxyCodeLine{00565\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00566\ \ \ \ \ \textcolor{keyword}{template}\ <ConvertibleToSymbolWrapperCollection\ SymbolsCollection>}
+\DoxyCodeLine{00567\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a8c7a0f2ffcd32d89282bc7a5ee9ff11f}{removeSymbols}}(SymbolsCollection\ \&\&collection)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{removeSymbols}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{collection}}),\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{collection}}));}
+\DoxyCodeLine{00569\ \ \ \ \ \}}
+\DoxyCodeLine{00570\ }
+\DoxyCodeLine{00571\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00572\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ the\ specified\ collection\ (initializer\ list)\ of\ symbols\ from\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00573\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00574\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00575\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00576\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>removeSymbols(\{"{}AAPL"{},\ "{}IBM"{}sv,\ "{}TSLA"{}s,\ "{}GOOG"{}\_s\});}}
+\DoxyCodeLine{00577\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00578\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00579\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collection\ The\ symbols\ collection}}
+\DoxyCodeLine{00580\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00581\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad63a7d72ba26e40683b21ec2b56eba21}{removeSymbols}}(std::initializer\_list<SymbolWrapper>\ collection)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ removeSymbols(collection.begin(),\ collection.end());}
+\DoxyCodeLine{00583\ \ \ \ \ \}}
+\DoxyCodeLine{00584\ }
+\DoxyCodeLine{00585\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00586\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ set\ of\ subscribed\ symbols\ so\ that\ it\ contains\ just\ the\ symbols\ from\ the\ specified\ collection\ (using}}
+\DoxyCodeLine{00587\ \textcolor{comment}{\ \ \ \ \ *\ iterators).}}
+\DoxyCodeLine{00588\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00589\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00590\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00591\ \textcolor{comment}{\ \ \ \ \ *\ auto\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{"{}XBT/USD:GDAX"{}s,\ "{}BTC/EUR:CXBITF"{}sv,\ "{}TSLA"{},\ "{}GOOG"{}\_s\};}}
+\DoxyCodeLine{00592\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00593\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>setSymbols(v.begin(),\ v.end());}}
+\DoxyCodeLine{00594\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00595\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00596\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ SymbolIt\ The\ collection's\ iterator\ type}}
+\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ *\ @param\ begin\ The\ beginning\ of\ the\ collection\ of\ symbols.}}
+\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ *\ @param\ end\ The\ end\ of\ symbol\ collection.}}
+\DoxyCodeLine{00599\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00600\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ SymbolIt>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a82ada54592bbc9195a3debc6070bc6df}{setSymbols}}(SymbolIt\ begin,\ SymbolIt\ end)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{isDebug}})\ \{}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{Debugger}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{debug}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{toString}}()\ +\ \textcolor{stringliteral}{"{}::setSymbols(symbols\ =\ "{}}\ +\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{elementsToString}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}})\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00604\ }
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolWrapper}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolListUtils}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{toGraalList}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}},\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}});}
+\DoxyCodeLine{00606\ }
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{setSymbolsImpl}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}});}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolWrapper}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{SymbolListUtils}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{freeGraalList}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{list}});}
+\DoxyCodeLine{00609\ \ \ \ \ \}}
+\DoxyCodeLine{00610\ }
+\DoxyCodeLine{00611\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00612\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ set\ of\ subscribed\ symbols\ so\ that\ it\ contains\ just\ the\ symbols\ from\ the\ specified\ collection.}}
+\DoxyCodeLine{00613\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00614\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00615\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ *\ auto\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{"{}XBT/USD:GDAX"{}s,\ "{}BTC/EUR:CXBITF"{}sv,\ "{}TSLA"{},\ "{}GOOG"{}\_s\};}}
+\DoxyCodeLine{00617\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00618\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>setSymbols(std::vector\{"{}AAPL"{},\ "{}IBM"{}\});}}
+\DoxyCodeLine{00619\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>setSymbols(v);}}
+\DoxyCodeLine{00620\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00621\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00622\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ SymbolsCollection\ The\ symbols\ collection's\ type}}
+\DoxyCodeLine{00623\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collection\ The\ symbols\ collection}}
+\DoxyCodeLine{00624\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00625\ \ \ \ \ \textcolor{keyword}{template}\ <ConvertibleToSymbolWrapperCollection\ SymbolsCollection>}
+\DoxyCodeLine{00626\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a886bc9de1faa6602c2b2085da2c773ae}{setSymbols}}(SymbolsCollection\ \&\&collection)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{setSymbols}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{begin}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{collection}}),\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{end}}(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription}{collection}}));}
+\DoxyCodeLine{00628\ \ \ \ \ \}}
+\DoxyCodeLine{00629\ }
+\DoxyCodeLine{00630\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00631\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ set\ of\ subscribed\ symbols\ so\ that\ it\ contains\ just\ the\ symbols\ from\ the\ specified\ collection}}
+\DoxyCodeLine{00632\ \textcolor{comment}{\ \ \ \ \ *\ (initializer\ list).}}
+\DoxyCodeLine{00633\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00634\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00635\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00636\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>setSymbols(\{"{}AAPL"{},\ "{}IBM"{}sv,\ "{}TSLA"{}s,\ "{}GOOG"{}\_s\});}}
+\DoxyCodeLine{00637\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00638\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00639\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collection\ The\ symbols\ collection}}
+\DoxyCodeLine{00640\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00641\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a0c852c89fdcaf6c4e212e1c0f12a9aed}{setSymbols}}(std::initializer\_list<SymbolWrapper>\ collection)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ setSymbols(collection.begin(),\ collection.end());}
+\DoxyCodeLine{00643\ \ \ \ \ \}}
+\DoxyCodeLine{00644\ }
+\DoxyCodeLine{00645\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00646\ \textcolor{comment}{\ \ \ \ \ *\ Clears\ the\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00647\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00648\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_ad08e170518df698e8cb640d0d51e81d9}{clear}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{toString}}()\ +\ \textcolor{stringliteral}{"{}::clear()"{}});}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00652\ }
+\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ clearImpl();}
+\DoxyCodeLine{00654\ \ \ \ \ \}}
+\DoxyCodeLine{00655\ }
+\DoxyCodeLine{00656\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00657\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ if\ this\ subscription\ is\ closed.}}
+\DoxyCodeLine{00658\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00659\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ this\ subscription\ is\ closed.}}
+\DoxyCodeLine{00660\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00661\ \textcolor{comment}{\ \ \ \ \ *\ @see\ DXFeedSubscription::close()}}
+\DoxyCodeLine{00662\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00663\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_af7f5a48d182d5bec9ed6d8b1325371e1}{isClosed}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{toString}}()\ +\ \textcolor{stringliteral}{"{}::isClosed()"{}});}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00667\ }
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isClosedImpl();}
+\DoxyCodeLine{00669\ \ \ \ \ \}}
+\DoxyCodeLine{00670\ }
+\DoxyCodeLine{00671\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00672\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ set\ of\ subscribed\ event\ types.}}
+\DoxyCodeLine{00673\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00674\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ set\ of\ subscribed\ event\ types.}}
+\DoxyCodeLine{00675\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00676\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_aaea4bf66cc92c0e01f63ea5fdd663956}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_aaea4bf66cc92c0e01f63ea5fdd663956}{unordered\_set}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_aaea4bf66cc92c0e01f63ea5fdd663956}{EventTypeEnum}}>\ \&\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_aaea4bf66cc92c0e01f63ea5fdd663956}{getEventTypes}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypes\_;}
+\DoxyCodeLine{00678\ \ \ \ \ \}}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00680\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00681\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ if\ this\ subscription\ contains\ the\ corresponding\ event\ type.}}
+\DoxyCodeLine{00682\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00683\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ this\ subscription\ contains\ the\ corresponding\ event\ type.}}
+\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *\ @see\ DXFeedSubscription::getEventTypes()}}
+\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00687\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_aca0ef67ba62822be7cbedfc8cab5680a}{containsEventType}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypes\_.contains(eventType);}
+\DoxyCodeLine{00689\ \ \ \ \ \}}
+\DoxyCodeLine{00690\ }
+\DoxyCodeLine{00691\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00692\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ set\ of\ subscribed\ symbols\ (depending\ on\ the\ actual\ implementation\ of\ subscription).}}
+\DoxyCodeLine{00693\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00694\ \textcolor{comment}{\ \ \ \ \ *\ The\ resulting\ set\ maybe\ either\ a\ snapshot\ of\ the\ set\ of\ the\ subscribed\ symbols\ at\ the\ time\ of\ invocation\ or\ a}}
+\DoxyCodeLine{00695\ \textcolor{comment}{\ \ \ \ \ *\ weakly\ consistent\ view\ of\ the\ set.}}
+\DoxyCodeLine{00696\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00697\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ set\ of\ subscribed\ symbols.}}
+\DoxyCodeLine{00698\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00699\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c}{vector}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c}{SymbolWrapper}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_af784ad48ccfa271e713817a4d1af823c}{getSymbols}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00701\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{toString}}()\ +\ \textcolor{stringliteral}{"{}::getSymbols()"{}});}
+\DoxyCodeLine{00702\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00703\ }
+\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getSymbolsImpl();}
+\DoxyCodeLine{00705\ \ \ \ \ \}}
+\DoxyCodeLine{00706\ }
+\DoxyCodeLine{00707\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00708\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ set\ of\ decorated\ symbols\ (depending\ on\ the\ actual\ implementation\ of\ subscription).}}
+\DoxyCodeLine{00709\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00710\ \textcolor{comment}{\ \ \ \ \ *\ The\ resulting\ set\ maybe\ either\ a\ snapshot\ of\ the\ set\ of\ the\ subscribed\ symbols\ at\ the\ time\ of\ invocation\ or\ a}}
+\DoxyCodeLine{00711\ \textcolor{comment}{\ \ \ \ \ *\ weakly\ consistent\ view\ of\ the\ set.}}
+\DoxyCodeLine{00712\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00713\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ set\ of\ decorated\ subscribed\ symbols.}}
+\DoxyCodeLine{00714\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00715\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a1cb510563f3fe49a8f9348b83012dfa8}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a1cb510563f3fe49a8f9348b83012dfa8}{vector}}<\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a1cb510563f3fe49a8f9348b83012dfa8}{SymbolWrapper}}>\ \mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a1cb510563f3fe49a8f9348b83012dfa8}{getDecoratedSymbols}}()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\mbox{\hyperlink{classdxfcpp_1_1_d_x_feed_subscription_a33916dff655c409093c0f9bf72ac9eb4}{toString}}()\ +\ \textcolor{stringliteral}{"{}::getDecoratedSymbols()"{}});}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00719\ }
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDecoratedSymbolsImpl();}
+\DoxyCodeLine{00721\ \ \ \ \ \}}
+\DoxyCodeLine{00722\ }
+\DoxyCodeLine{00723\ \ \ \ \ \textcolor{keyword}{auto}\ getExecutor()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00724\ }
+\DoxyCodeLine{00725\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Executor>\ \textcolor{keywordtype}{void}\ setExecutor(Executor\ \&\&executor)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00726\ }
+\DoxyCodeLine{00727\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ ChangeListener>\ std::size\_t\ addChangeListener(ChangeListener\ \&\&changeListener)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00728\ }
+\DoxyCodeLine{00729\ \ \ \ \ \textcolor{keywordtype}{void}\ removeChangeListener(std::size\_t\ changeListenerId)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00730\ }
+\DoxyCodeLine{00731\ \ \ \ \ \textcolor{keyword}{auto}\ onSymbolsAdded()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00732\ }
+\DoxyCodeLine{00733\ \ \ \ \ \textcolor{keyword}{auto}\ onSymbolsRemoved()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00734\ }
+\DoxyCodeLine{00735\ \ \ \ \ \textcolor{keyword}{auto}\ onSubscriptionClosed()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00736\ \};}
+\DoxyCodeLine{00737\ }
+\DoxyCodeLine{00738\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

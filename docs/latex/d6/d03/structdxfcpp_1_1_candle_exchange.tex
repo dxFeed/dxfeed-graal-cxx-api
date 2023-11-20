@@ -1,0 +1,140 @@
+\doxysubsection{dxfcpp\+::Candle\+Exchange Struct Reference}
+\hypertarget{structdxfcpp_1_1_candle_exchange}{}\label{structdxfcpp_1_1_candle_exchange}\index{dxfcpp::CandleExchange@{dxfcpp::CandleExchange}}
+
+
+Exchange attribute of \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol} defines exchange identifier where data is taken from to build the candles.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Exchange.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Candle\+Exchange\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d6/d03/structdxfcpp_1_1_candle_exchange}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+char \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_acf30f33b07df147b14c743857c270f03}{get\+Exchange\+Code}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a32012ba2908d5cd87eec3163148c8fe3}{change\+Attribute\+For\+Symbol}} (const std\+::string \&symbol) const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns candle event symbol string with this exchange set. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a21ccb20b2fa4ae11393237b8d4727647}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this exchange. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{Candle\+Exchange}} \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a2cf28d6f038e4e7378a1b11282036b6c}{value\+Of}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange attribute object that corresponds to the specified exchange code character. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{Candle\+Exchange}} \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a040434e0c8d6ea47b93ae7b2eb768dca}{get\+Attribute\+For\+Symbol}} (const std\+::string \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange attribute object of the given candle symbol string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_candle_exchange_a72332d8d4d7b0de34b1163bffe8cee0c}\label{structdxfcpp_1_1_candle_exchange_a72332d8d4d7b0de34b1163bffe8cee0c} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{Candle\+Exchange}} {\bfseries COMPOSITE} \{\textquotesingle{}\textbackslash{}0\textquotesingle{}\}
+\begin{DoxyCompactList}\small\item\em Composite exchange where data is taken from all exchanges. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_candle_exchange_a48786dbb8df952519bc62ffac3f728b4}\label{structdxfcpp_1_1_candle_exchange_a48786dbb8df952519bc62ffac3f728b4} 
+static const \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{Candle\+Exchange}} {\bfseries DEFAULT} = \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a72332d8d4d7b0de34b1163bffe8cee0c}{COMPOSITE}}
+\begin{DoxyCompactList}\small\item\em Default exchange is \doxylink{structdxfcpp_1_1_candle_exchange_a72332d8d4d7b0de34b1163bffe8cee0c}{Candle\+Exchange\+::\+COMPOSITE}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Exchange attribute of \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol} defines exchange identifier where data is taken from to build the candles. 
+
+\doxyparagraph*{Implementation details}
+
+This attribute is encoded in a symbol string with \doxylink{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6}{Market\+Event\+Symbols.get\+Exchange\+Code} and \doxylink{structdxfcpp_1_1_market_event_symbols_acb0ae852bceb8ffe82e4478fdce0745b}{change\+Exchange\+Code} methods. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_candle_exchange_a32012ba2908d5cd87eec3163148c8fe3}\label{structdxfcpp_1_1_candle_exchange_a32012ba2908d5cd87eec3163148c8fe3} 
+\index{dxfcpp::CandleExchange@{dxfcpp::CandleExchange}!changeAttributeForSymbol@{changeAttributeForSymbol}}
+\index{changeAttributeForSymbol@{changeAttributeForSymbol}!dxfcpp::CandleExchange@{dxfcpp::CandleExchange}}
+\doxyparagraph{\texorpdfstring{changeAttributeForSymbol()}{changeAttributeForSymbol()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Candle\+Exchange\+::change\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle event symbol string with this exchange set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The original candle event symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle event symbol string with this exchange set. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol_attribute_a8bc7479d490e06e17239af515f58420e}{dxfcpp\+::\+Candle\+Symbol\+Attribute}}.
+
+\Hypertarget{structdxfcpp_1_1_candle_exchange_a040434e0c8d6ea47b93ae7b2eb768dca}\label{structdxfcpp_1_1_candle_exchange_a040434e0c8d6ea47b93ae7b2eb768dca} 
+\index{dxfcpp::CandleExchange@{dxfcpp::CandleExchange}!getAttributeForSymbol@{getAttributeForSymbol}}
+\index{getAttributeForSymbol@{getAttributeForSymbol}!dxfcpp::CandleExchange@{dxfcpp::CandleExchange}}
+\doxyparagraph{\texorpdfstring{getAttributeForSymbol()}{getAttributeForSymbol()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{Candle\+Exchange}} dxfcpp\+::\+Candle\+Exchange\+::get\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange attribute object of the given candle symbol string. 
+
+The result is \doxylink{structdxfcpp_1_1_candle_exchange_a48786dbb8df952519bc62ffac3f728b4}{Candle\+Exchange\+::\+DEFAULT} if the symbol does not have exchange attribute.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+exchange attribute object of the given candle symbol string. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_exchange_acf30f33b07df147b14c743857c270f03}\label{structdxfcpp_1_1_candle_exchange_acf30f33b07df147b14c743857c270f03} 
+\index{dxfcpp::CandleExchange@{dxfcpp::CandleExchange}!getExchangeCode@{getExchangeCode}}
+\index{getExchangeCode@{getExchangeCode}!dxfcpp::CandleExchange@{dxfcpp::CandleExchange}}
+\doxyparagraph{\texorpdfstring{getExchangeCode()}{getExchangeCode()}}
+{\footnotesize\ttfamily char dxfcpp\+::\+Candle\+Exchange\+::get\+Exchange\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange code. 
+
+It is `'\textbackslash{}0\textquotesingle{}\`{} for \doxylink{structdxfcpp_1_1_candle_exchange_a72332d8d4d7b0de34b1163bffe8cee0c}{Candle\+Exchange\+::\+COMPOSITE} exchange. \begin{DoxyReturn}{Returns}
+exchange code. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_exchange_a21ccb20b2fa4ae11393237b8d4727647}\label{structdxfcpp_1_1_candle_exchange_a21ccb20b2fa4ae11393237b8d4727647} 
+\index{dxfcpp::CandleExchange@{dxfcpp::CandleExchange}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::CandleExchange@{dxfcpp::CandleExchange}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Candle\+Exchange\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this exchange. 
+
+It is the string {\ttfamily "{}\+COMPOSITE"{}} for \doxylink{structdxfcpp_1_1_candle_exchange_a72332d8d4d7b0de34b1163bffe8cee0c}{Candle\+Exchange\+::\+COMPOSITE} exchange or exchange character otherwise.
+
+\begin{DoxyReturn}{Returns}
+string representation of this exchange. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_candle_exchange_a2cf28d6f038e4e7378a1b11282036b6c}\label{structdxfcpp_1_1_candle_exchange_a2cf28d6f038e4e7378a1b11282036b6c} 
+\index{dxfcpp::CandleExchange@{dxfcpp::CandleExchange}!valueOf@{valueOf}}
+\index{valueOf@{valueOf}!dxfcpp::CandleExchange@{dxfcpp::CandleExchange}}
+\doxyparagraph{\texorpdfstring{valueOf()}{valueOf()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{Candle\+Exchange}} dxfcpp\+::\+Candle\+Exchange\+::value\+Of (\begin{DoxyParamCaption}\item[{char}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange attribute object that corresponds to the specified exchange code character. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & The exchange code character. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+exchange attribute object. 
+\end{DoxyReturn}

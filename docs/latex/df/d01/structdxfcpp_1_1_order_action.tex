@@ -1,0 +1,189 @@
+\doxysubsection{dxfcpp\+::Order\+Action Struct Reference}
+\hypertarget{structdxfcpp_1_1_order_action}{}\label{structdxfcpp_1_1_order_action}\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+
+
+Action enum for the Full \doxylink{classdxfcpp_1_1_order}{Order} Book (FOB) Orders.  
+
+
+
+
+{\ttfamily \#include $<$Order\+Action.\+hpp$>$}
+
+
+
+Inherits dxfcpp\+::\+Enum$<$ Child, Code $>$.
+
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_aaef7a67cc76d76b2791d31d9edda5395}{UNDEFINED}} \{0, "{}UNDEFINED"{}\}
+\begin{DoxyCompactList}\small\item\em Default enum value for orders that do not support "{}\+Full Order Book"{} and for backward compatibility -\/ action must be derived from other \doxylink{classdxfcpp_1_1_order}{Order} fields. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_aac1fd0f48425534b713fc7eb98e1c5a6}{NEW}} \{1, "{}NEW"{}\}
+\begin{DoxyCompactList}\small\item\em New \doxylink{classdxfcpp_1_1_order}{Order} is added to \doxylink{classdxfcpp_1_1_order}{Order} Book. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_a05e01f8ed0d08c332351ad9349b7ddd3}{REPLACE}} \{2, "{}REPLACE"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{classdxfcpp_1_1_order}{Order} is modified and price-\/time-\/priority is not maintained (i.\+e. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_aca2545ff580de3ff27a25a2cc5469e6f}{MODIFY}} \{3, "{}MODIFY"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{classdxfcpp_1_1_order}{Order} is modified without changing its price-\/time-\/priority (usually due to partial cancel by user). \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_a71b595aae402059f8dd65b312079da4f}{DELETE}} \{4, "{}DELETE"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{classdxfcpp_1_1_order}{Order} is fully canceled and removed from \doxylink{classdxfcpp_1_1_order}{Order} Book. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_a85eadf4613bcb638bd2a39d2ac61b7ba}{PARTIAL}} \{5, "{}PARTIAL"{}\}
+\begin{DoxyCompactList}\small\item\em Size is changed (usually reduced) due to partial order execution. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_ad904daf87e661dc4c63346a8528872da}{EXECUTE}} \{6, "{}EXECUTE"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{classdxfcpp_1_1_order}{Order} is fully executed and removed from \doxylink{classdxfcpp_1_1_order}{Order} Book. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_ab4c73a8c4dc7163cffed6866d5748c86}{TRADE}} \{7, "{}TRADE"{}\}
+\begin{DoxyCompactList}\small\item\em Non-\/\+Book \doxylink{classdxfcpp_1_1_trade}{Trade} -\/ this \doxylink{classdxfcpp_1_1_trade}{Trade} not refers to any entry in \doxylink{classdxfcpp_1_1_order}{Order} Book. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} \mbox{\hyperlink{structdxfcpp_1_1_order_action_aeee341d0df903c0aaafe08ff4828e42f}{BUST}} \{8, "{}BUST"{}\}
+\begin{DoxyCompactList}\small\item\em Prior Trade/\+Order Execution bust. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Action enum for the Full \doxylink{classdxfcpp_1_1_order}{Order} Book (FOB) Orders. 
+
+Action describes business meaning of the \doxylink{classdxfcpp_1_1_order}{Order} event\+: whether order was added or replaced, partially or fully executed, etc. 
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{structdxfcpp_1_1_order_action_aeee341d0df903c0aaafe08ff4828e42f}\label{structdxfcpp_1_1_order_action_aeee341d0df903c0aaafe08ff4828e42f} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!BUST@{BUST}}
+\index{BUST@{BUST}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{BUST}{BUST}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+BUST \{8, "{}BUST"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Prior Trade/\+Order Execution bust. 
+
+\doxylink{classdxfcpp_1_1_order}{Order}\textquotesingle{}s \doxylink{classdxfcpp_1_1_order_base_a3772a63a9d2a79b8cb9a687a2b2c0a7a}{size} and \doxylink{classdxfcpp_1_1_order_base_a4aa5233359086d4abf1681b2d8c2936d}{price} will be equals to 0.
+
+Full \doxylink{classdxfcpp_1_1_order}{Order} Book fields\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{order\+Id} -\/ always empty 
+\item \doxylink{classdxfcpp_1_1_order_base_a8126c09bef8190cfab44f3d25b124018}{trade\+Id} -\/ always present 
+\item \doxylink{classdxfcpp_1_1_order_base_a5cf9284cc1be543529e8d492d5fc7dc6}{trade\+Size} and \doxylink{classdxfcpp_1_1_order_base_a20b0b786ec5032bc8c139037a75c7f31}{trade\+Price} -\/ always empty 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_order_action_a71b595aae402059f8dd65b312079da4f}\label{structdxfcpp_1_1_order_action_a71b595aae402059f8dd65b312079da4f} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!DELETE@{DELETE}}
+\index{DELETE@{DELETE}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{DELETE}{DELETE}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+DELETE \{4, "{}DELETE"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\doxylink{classdxfcpp_1_1_order}{Order} is fully canceled and removed from \doxylink{classdxfcpp_1_1_order}{Order} Book. 
+
+\doxylink{classdxfcpp_1_1_order}{Order}\textquotesingle{}s \doxylink{classdxfcpp_1_1_order_base_a3772a63a9d2a79b8cb9a687a2b2c0a7a}{size} will be equal to 0.
+
+Full \doxylink{classdxfcpp_1_1_order}{Order} Book fields\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{order\+Id} -\/ always present 
+\item \doxylink{classdxfcpp_1_1_order_base_a75d038d6b513acc94c14682a500ea4b7}{aux\+Order\+Id} -\/ ID of the new order replacing this order -\/ if available. 
+\item \doxylink{classdxfcpp_1_1_trade}{Trade} fields will be empty 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_order_action_ad904daf87e661dc4c63346a8528872da}\label{structdxfcpp_1_1_order_action_ad904daf87e661dc4c63346a8528872da} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!EXECUTE@{EXECUTE}}
+\index{EXECUTE@{EXECUTE}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{EXECUTE}{EXECUTE}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+EXECUTE \{6, "{}EXECUTE"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\doxylink{classdxfcpp_1_1_order}{Order} is fully executed and removed from \doxylink{classdxfcpp_1_1_order}{Order} Book. 
+
+\doxylink{classdxfcpp_1_1_order}{Order}\textquotesingle{}s \{\doxylink{classdxfcpp_1_1_order_base_a3772a63a9d2a79b8cb9a687a2b2c0a7a}{Order\+::get\+Size()} size\} will be equals to 0.
+
+Full \doxylink{classdxfcpp_1_1_order}{Order} Book fields\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{order\+Id} -\/ always present 
+\item \doxylink{classdxfcpp_1_1_order_base_a75d038d6b513acc94c14682a500ea4b7}{aux\+Order\+Id} -\/ aggressor order ID, if available 
+\item \doxylink{classdxfcpp_1_1_order_base_a8126c09bef8190cfab44f3d25b124018}{trade\+Id} -\/ if available 
+\item \doxylink{classdxfcpp_1_1_order_base_a5cf9284cc1be543529e8d492d5fc7dc6}{trade\+Size} and \doxylink{classdxfcpp_1_1_order_base_a20b0b786ec5032bc8c139037a75c7f31}{trade\+Price} -\/ contain size and price of this execution -\/ always present 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_order_action_aca2545ff580de3ff27a25a2cc5469e6f}\label{structdxfcpp_1_1_order_action_aca2545ff580de3ff27a25a2cc5469e6f} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!MODIFY@{MODIFY}}
+\index{MODIFY@{MODIFY}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{MODIFY}{MODIFY}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+MODIFY \{3, "{}MODIFY"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\doxylink{classdxfcpp_1_1_order}{Order} is modified without changing its price-\/time-\/priority (usually due to partial cancel by user). 
+
+\doxylink{classdxfcpp_1_1_order}{Order}\textquotesingle{}s \doxylink{classdxfcpp_1_1_order_base_a3772a63a9d2a79b8cb9a687a2b2c0a7a}{size} will contain new updated size.
+
+Full \doxylink{classdxfcpp_1_1_order}{Order} Book fields\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{order\+Id} -\/ always present 
+\item \doxylink{classdxfcpp_1_1_trade}{Trade} fields will be empty 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_order_action_aac1fd0f48425534b713fc7eb98e1c5a6}\label{structdxfcpp_1_1_order_action_aac1fd0f48425534b713fc7eb98e1c5a6} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!NEW@{NEW}}
+\index{NEW@{NEW}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{NEW}{NEW}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+NEW \{1, "{}NEW"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+New \doxylink{classdxfcpp_1_1_order}{Order} is added to \doxylink{classdxfcpp_1_1_order}{Order} Book. 
+
+Full \doxylink{classdxfcpp_1_1_order}{Order} Book fields\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{order\+Id} -\/ always present 
+\item \doxylink{classdxfcpp_1_1_order_base_a75d038d6b513acc94c14682a500ea4b7}{aux\+Order\+Id} -\/ ID of the order replaced by this new order -\/ if available. 
+\item \doxylink{classdxfcpp_1_1_trade}{Trade} fields will be empty 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_order_action_a85eadf4613bcb638bd2a39d2ac61b7ba}\label{structdxfcpp_1_1_order_action_a85eadf4613bcb638bd2a39d2ac61b7ba} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!PARTIAL@{PARTIAL}}
+\index{PARTIAL@{PARTIAL}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{PARTIAL}{PARTIAL}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+PARTIAL \{5, "{}PARTIAL"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Size is changed (usually reduced) due to partial order execution. 
+
+\doxylink{classdxfcpp_1_1_order}{Order}\textquotesingle{}s \doxylink{classdxfcpp_1_1_order_base_a3772a63a9d2a79b8cb9a687a2b2c0a7a}{size} will be updated to show current outstanding size.
+
+Full \doxylink{classdxfcpp_1_1_order}{Order} Book fields\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{order\+Id} -\/ always present 
+\item \doxylink{classdxfcpp_1_1_order_base_a75d038d6b513acc94c14682a500ea4b7}{aux\+Order\+Id} -\/ aggressor order ID, if available 
+\item \doxylink{classdxfcpp_1_1_order_base_a8126c09bef8190cfab44f3d25b124018}{trade\+Id} -\/ if available 
+\item \doxylink{classdxfcpp_1_1_order_base_a5cf9284cc1be543529e8d492d5fc7dc6}{trade\+Size} and \doxylink{classdxfcpp_1_1_order_base_a20b0b786ec5032bc8c139037a75c7f31}{trade\+Price} -\/ contain size and price of this execution 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_order_action_a05e01f8ed0d08c332351ad9349b7ddd3}\label{structdxfcpp_1_1_order_action_a05e01f8ed0d08c332351ad9349b7ddd3} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!REPLACE@{REPLACE}}
+\index{REPLACE@{REPLACE}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{REPLACE}{REPLACE}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+REPLACE \{2, "{}REPLACE"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\doxylink{classdxfcpp_1_1_order}{Order} is modified and price-\/time-\/priority is not maintained (i.\+e. 
+
+order has re-\/entered \doxylink{classdxfcpp_1_1_order}{Order} Book). \doxylink{classdxfcpp_1_1_order}{Order} \doxylink{structdxfcpp_1_1_market_event_a62b3475e3dc13476c57553cc354a2915}{symbol} and \doxylink{classdxfcpp_1_1_order_base_afc38f2af6ad278508c949695c9f154d8}{side} will remain the same.
+
+Full \doxylink{classdxfcpp_1_1_order}{Order} Book fields\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{order\+Id} -\/ always present 
+\item \doxylink{classdxfcpp_1_1_trade}{Trade} fields will be empty 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_order_action_ab4c73a8c4dc7163cffed6866d5748c86}\label{structdxfcpp_1_1_order_action_ab4c73a8c4dc7163cffed6866d5748c86} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!TRADE@{TRADE}}
+\index{TRADE@{TRADE}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{TRADE}{TRADE}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+TRADE \{7, "{}TRADE"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Non-\/\+Book \doxylink{classdxfcpp_1_1_trade}{Trade} -\/ this \doxylink{classdxfcpp_1_1_trade}{Trade} not refers to any entry in \doxylink{classdxfcpp_1_1_order}{Order} Book. 
+
+\doxylink{classdxfcpp_1_1_order}{Order}\textquotesingle{}s \doxylink{classdxfcpp_1_1_order_base_a3772a63a9d2a79b8cb9a687a2b2c0a7a}{size} and \doxylink{classdxfcpp_1_1_order_base_a4aa5233359086d4abf1681b2d8c2936d}{price} will be equals to 0.
+
+Full \doxylink{classdxfcpp_1_1_order}{Order} Book fields\+: 
+\begin{DoxyItemize}
+\item \doxylink{classdxfcpp_1_1_order_base_a95444e9de035938611e1421be0a3e68f}{order\+Id} -\/ always empty 
+\item \doxylink{classdxfcpp_1_1_order_base_a8126c09bef8190cfab44f3d25b124018}{trade\+Id} -\/ if available 
+\item \doxylink{classdxfcpp_1_1_order_base_a5cf9284cc1be543529e8d492d5fc7dc6}{trade\+Size} and \doxylink{classdxfcpp_1_1_order_base_a20b0b786ec5032bc8c139037a75c7f31}{trade\+Price} -\/ contain size and price of this trade -\/ always present 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_order_action_aaef7a67cc76d76b2791d31d9edda5395}\label{structdxfcpp_1_1_order_action_aaef7a67cc76d76b2791d31d9edda5395} 
+\index{dxfcpp::OrderAction@{dxfcpp::OrderAction}!UNDEFINED@{UNDEFINED}}
+\index{UNDEFINED@{UNDEFINED}!dxfcpp::OrderAction@{dxfcpp::OrderAction}}
+\doxyparagraph{\texorpdfstring{UNDEFINED}{UNDEFINED}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Order\+Action}} dxfcpp\+::\+Order\+Action\+::\+UNDEFINED \{0, "{}UNDEFINED"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Default enum value for orders that do not support "{}\+Full Order Book"{} and for backward compatibility -\/ action must be derived from other \doxylink{classdxfcpp_1_1_order}{Order} fields. 
+
+All Full \doxylink{classdxfcpp_1_1_order}{Order} Book related fields for this action will be empty. 

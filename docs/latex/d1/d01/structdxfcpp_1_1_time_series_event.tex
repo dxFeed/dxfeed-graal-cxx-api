@@ -1,0 +1,180 @@
+\doxysubsection{dxfcpp\+::Time\+Series\+Event Struct Reference}
+\hypertarget{structdxfcpp_1_1_time_series_event}{}\label{structdxfcpp_1_1_time_series_event}\index{dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}}
+
+
+Represents time-\/series snapshots of some process that is evolving in time or actual events in some external system that have an associated time stamp and can be uniquely identified.  
+
+
+
+
+{\ttfamily \#include $<$Time\+Series\+Event.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Time\+Series\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.126582cm]{d1/d01/structdxfcpp_1_1_time_series_event}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_time_series_event_a5c647f31ab9acefb87b6fe51ac244e64}\label{structdxfcpp_1_1_time_series_event_a5c647f31ab9acefb87b6fe51ac244e64} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_time_series_event}{Time\+Series\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_time_series_event}{Time\+Series\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_a9a57a9c2bcb8de5457275edf8781e626}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source identifier for this event, which is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT} for time-\/series events. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_ac387c8c64f3fcfe2163d1e42e89cdbb1}{get\+Event\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{get\+Time}} () const noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns timestamp of the event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::int32\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{get\+Event\+Flags}} () const noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a1f3de1d60a04b7fb2649c4e82bfa31eb}{get\+Event\+Flags\+Mask}} () const noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept=0
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a4489465bbf9f78734289f7cf57ad7d34}{set\+Event\+Flags}} (const \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept=0
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a5467b31a73a69502b6590656980b108d}{set\+Index}} (std\+::int64\+\_\+t index) noexcept=0
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{structdxfcpp_1_1_indexed_event}{dxfcpp\+::\+Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aa0fa82f8632275341f08649124aa89e3}{TX\+\_\+\+PENDING}} = Event\+Flag\+::\+TX\+\_\+\+PENDING
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{REMOVE\+\_\+\+EVENT}} = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{SNAPSHOT\+\_\+\+BEGIN}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{SNAPSHOT\+\_\+\+END}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a0615ae7acfc0032e03ada68c26433aa5}{SNAPSHOT\+\_\+\+SNIP}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} property.   \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classdxfcpp_1_1_event_flag}{Event\+Flag}} \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_a70abbd72b7c45f74886a902df5928829}{SNAPSHOT\+\_\+\+MODE}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of \doxylink{structdxfcpp_1_1_indexed_event_a4d226b81523c2f8a0f634ed9797865b0}{event\+Flags} property.   \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents time-\/series snapshots of some process that is evolving in time or actual events in some external system that have an associated time stamp and can be uniquely identified. 
+
+For example, \doxylink{classdxfcpp_1_1_time_and_sale}{Time\+And\+Sale} events represent the actual sales that happen on a market exchange at specific time moments, while \doxylink{classdxfcpp_1_1_candle}{Candle} events represent snapshots of aggregate information about trading over a specific time period.
+
+Time-\/series events can be used with DXFeed\+Time\+Series\+Subscription to receive a time-\/series history of past events. Time-\/series events are conflated based on unique \doxylink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{index} for each symbol. Last indexed event for each symbol and index is always delivered to event listeners on subscription, but intermediate (next-\/to-\/last) events for each symbol+index pair are not queued anywhere, they are simply discarded as stale events.
+
+Timestamp of an event is available via \doxylink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{time} property with a millisecond precision. Some events may happen multiple times per millisecond. In this case they have the same \doxylink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{time}, but different \doxylink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{index}. An ordering of \doxylink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{index} is the same as an ordering of \doxylink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{time}. That is, an collection of time-\/series events that is ordered by \doxylink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{index} is ascending order will be also ordered by \doxylink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{time} in ascending order.
+
+Time-\/series events are a more specific subtype of \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}. All general documentation and \href{IndexedEvent.html\#eventFlagsSection}{\texttt{ Event Flags}} section, in particular, applies to time-\/series events. However, the time-\/series events never come from multiple sources for the same symbol and their \doxylink{structdxfcpp_1_1_time_series_event_a9a57a9c2bcb8de5457275edf8781e626}{source} is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT}.
+
+Unlike a general \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event} that is subscribed to via \doxylink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription}\} using a plain symbol to receive all events for all indices, time-\/series events are typically subscribed to using \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} class to specific time range of the subscription. There is a dedicated DXFeed\+Time\+Series\+Subscription class that is designed to simplify the task of subscribing for time-\/series events.
+
+Time\+Series\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list of current time-\/series events ordered by their \doxylink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{time}. It relies on the code of Abstract\+Indexed\+Event\+Model to handle this logic. Use the source code of Abstract\+Indexed\+Event\+Model for clarification on transactions and snapshot logic.
+
+Classes that implement this interface may also implement \doxylink{structdxfcpp_1_1_lasting_event}{Lasting\+Event} interface, which makes it possible to use \doxylink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{DXFeed\+::get\+Last\+Event()} method to retrieve the last event for the corresponding symbol.
+
+\doxyparagraph*{Publishing time-\/series}
+
+When publishing time-\/series event with \doxylink{structdxfcpp_1_1_d_x_publisher_a9ec3ba1e21e011c21c5d9f30c21305f1}{DXPublisher\+::publish\+Events()} method on incoming \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} the snapshot of currently known events for the requested time range has to be published first.
+
+A snapshot is published in the {\itshape descending} order of \doxylink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{index} (which is the same as the descending order of \doxylink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{time}), starting with an event with the largest index and marking it with \doxylink{structdxfcpp_1_1_indexed_event_aacdbdadf8af938b9edbe9a59830aa0b5}{Time\+Series\+Event\+::\+SNAPSHOT\+\_\+\+BEGIN} bit in \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags}. All other event follow with default, zero \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags}. If there is no actual event at the time that was specified in subscription \doxylink{classdxfcpp_1_1_time_series_subscription_symbol_adbeb8e314ec42ca8ac99946dd0140730}{from\+Time} property, then event with the corresponding time has to be created anyway and published. To distinguish it from the actual event, it has to be marked with \doxylink{structdxfcpp_1_1_indexed_event_ae3cd8ed3be94e645913ccd23bfc07edd}{Time\+Series\+Event\+::\+REMOVE\+\_\+\+EVENT} bit in \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags}. \doxylink{structdxfcpp_1_1_indexed_event_a8140c207eb5efb3f656842509700366f}{Time\+Series\+Event\+::\+SNAPSHOT\+\_\+\+END} bit in this event\textquotesingle{}s \doxylink{structdxfcpp_1_1_indexed_event_a45ece86bfc828bf8a40ef1def0ec625e}{event\+Flags} s optional during publishing. It will be properly set on receiving end anyway. Note, that publishing any event with time that is below subscription \doxylink{classdxfcpp_1_1_time_series_subscription_symbol_adbeb8e314ec42ca8ac99946dd0140730}{from\+Time} also works as a legal indicator for the end of the snapshot.
+
+Both \doxylink{classdxfcpp_1_1_time_and_sale}{Time\+And\+Sale} and \doxylink{classdxfcpp_1_1_candle}{Candle} time-\/series events define a sequence property that is mixed into an \doxylink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{index} property. It provides a way to distinguish different events at the same time. For a snapshot end event the sequence has to be left at its default zero value. It means, that if there is an actual event to be published at subscription \doxylink{classdxfcpp_1_1_time_series_subscription_symbol_adbeb8e314ec42ca8ac99946dd0140730}{from\+Time} with non-\/zero sequence, then generation of an additional snapshot end event with the subscription \doxylink{classdxfcpp_1_1_time_series_subscription_symbol_adbeb8e314ec42ca8ac99946dd0140730}{from\+Time} and zero sequence is still required. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_time_series_event_ac387c8c64f3fcfe2163d1e42e89cdbb1}\label{structdxfcpp_1_1_time_series_event_ac387c8c64f3fcfe2163d1e42e89cdbb1} 
+\index{dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}!getEventId@{getEventId}}
+\index{getEventId@{getEventId}!dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}}
+\doxyparagraph{\texorpdfstring{getEventId()}{getEventId()}}
+{\footnotesize\ttfamily virtual std\+::int64\+\_\+t dxfcpp\+::\+Time\+Series\+Event\+::get\+Event\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+\begin{DoxyReturn}{Returns}
+unique per-\/symbol index of this event. 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Deprecated}
+\item[\mbox{\hyperlink{deprecated__deprecated000001}{Deprecated}}]Use \doxylink{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}{get\+Index()} \end{DoxyRefDesc}
+\Hypertarget{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab}\label{structdxfcpp_1_1_time_series_event_a3644682dc63411ac2ef4739a3bba42ab} 
+\index{dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Time\+Series\+Event\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+Event indices are unique within event symbol. Typically event index for a time series event includes \doxylink{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}{time} inside.
+
+\doxyparagraph*{Implementation notes}
+
+The most common scheme for event indices is to set highest 32 bits of event index to event timestamp in seconds. The lowest 32 bits are then split as follows. Bits 22 to 31 encode milliseconds of time stamp, and bits 0 to 21 encode some kind of a sequence number.
+
+Ultimately, the scheme for event indices is specific for each even type. The actual classes for specific event types perform the corresponding encoding.
+
+\begin{DoxyReturn}{Returns}
+unique per-\/symbol index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_ad5a71500687f8cebb2a15964144638dc}{dxfcpp\+::\+Indexed\+Event}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{classdxfcpp_1_1_underlying_a7c9492943d011108c23266d7b0deb8d5}{dxfcpp\+::\+Underlying}}.
+
+\Hypertarget{structdxfcpp_1_1_time_series_event_a9a57a9c2bcb8de5457275edf8781e626}\label{structdxfcpp_1_1_time_series_event_a9a57a9c2bcb8de5457275edf8781e626} 
+\index{dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}!getSource@{getSource}}
+\index{getSource@{getSource}!dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} \& dxfcpp\+::\+Time\+Series\+Event\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source identifier for this event, which is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT} for time-\/series events. 
+
+\begin{DoxyReturn}{Returns}
+The source identifier for this event, which is always \doxylink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT} for time-\/series events. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}{dxfcpp\+::\+Indexed\+Event}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{classdxfcpp_1_1_underlying_ad854e8cc9d69f40573e1ebc8da09b54b}{dxfcpp\+::\+Underlying}}.
+
+\Hypertarget{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554}\label{structdxfcpp_1_1_time_series_event_a0946cef283e17bf4fb2a4fd42d8d3554} 
+\index{dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}!getTime@{getTime}}
+\index{getTime@{getTime}!dxfcpp::TimeSeriesEvent@{dxfcpp::TimeSeriesEvent}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily virtual std\+::int64\+\_\+t dxfcpp\+::\+Time\+Series\+Event\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns timestamp of the event. 
+
+The timestamp is in milliseconds from midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+timestamp of the event. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classdxfcpp_1_1_candle_a7439fe39a66e26ec0d4ae5aacd632f3a}{dxfcpp\+::\+Candle}}, \mbox{\hyperlink{classdxfcpp_1_1_time_and_sale_a8d6b0e7d3a349b11f3eabd5b8768d604}{dxfcpp\+::\+Time\+And\+Sale}}, \mbox{\hyperlink{classdxfcpp_1_1_greeks_a65ed5282ee947f0d50f67acc14c072f2}{dxfcpp\+::\+Greeks}}, \mbox{\hyperlink{classdxfcpp_1_1_theo_price_ae0613b3cd9e24ed38687e6b99b4fdc14}{dxfcpp\+::\+Theo\+Price}}, and \mbox{\hyperlink{classdxfcpp_1_1_underlying_a976f14e478a007a93eb6b0b4a5e71aab}{dxfcpp\+::\+Underlying}}.
+

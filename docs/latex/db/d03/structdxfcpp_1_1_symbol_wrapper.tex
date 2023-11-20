@@ -1,0 +1,297 @@
+\doxysubsection{dxfcpp\+::Symbol\+Wrapper Struct Reference}
+\hypertarget{structdxfcpp_1_1_symbol_wrapper}{}\label{structdxfcpp_1_1_symbol_wrapper}\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+
+
+A helper wrapper class needed to pass heterogeneous symbols using a container and convert them to internal Graal representation.  
+
+
+
+
+{\ttfamily \#include $<$Symbol\+Wrapper.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$Convertible\+To\+String\+Symbol Symbol$>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_aa0c460f7b372d483d640ee6185151bb5}{Symbol\+Wrapper}} (Symbol \&\&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Constructor for any wrapped symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ae375f48ae03c0ca8ecefd74b3a453550}{Symbol\+Wrapper}} (const \mbox{\hyperlink{structdxfcpp_1_1_string_symbol}{String\+Symbol}} \&string\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Constructor for any wrapped string symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a4cfd220f2179f060b049c7d827c3ba75}{Symbol\+Wrapper}} (const \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol}} \&wildcard\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Constructor for any wrapped wildcard (\texorpdfstring{$\ast$}{*}) symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a552e5f88fb5b70de20d22db53b411a8c}{Symbol\+Wrapper}} (const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol}} \&indexed\+Event\+Subscription\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ab84480a33ed72862da9954d99157051d}{Symbol\+Wrapper}} (const \mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}} \&time\+Series\+Subscription\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a091b83b8c4be49ca4286a92d88cd9dfc}{Symbol\+Wrapper}} (const \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol}} \&candle\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol}. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ad03d863399bab0ae75b25b326c03f096}{to\+Graal}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a628e57fb22575fe2b3f6cf06c7d40f0d}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a0f66038aa88942094d6a34838e3bafa4}{is\+String\+Symbol}} () const noexcept
+\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a9ed87465e80386fc45dcd1ffc3c5b6a6}{as\+String\+Symbol}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8f39830e71468fb50a80b5a56750db42}{is\+Wildcard\+Symbol}} () const noexcept
+\item 
+std\+::optional$<$ \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{as\+Wildcard\+Symbol}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a3e77002d8946d22008ca2a0772d7bd7b}{is\+Indexed\+Event\+Subscription\+Symbol}} () const noexcept
+\item 
+std\+::optional$<$ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac8464ee4c91839bc4544d0c447752c78}{as\+Indexed\+Event\+Subscription\+Symbol}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8e6657db1f3a1d24ca921829b08561a6}{is\+Time\+Series\+Subscription\+Symbol}} () const noexcept
+\item 
+std\+::optional$<$ \mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a1380ed23b11c5153f35bda91b4891c85}{as\+Time\+Series\+Subscription\+Symbol}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a4fb50df341ceb4ce7614852099c719d8}{is\+Candle\+Symbol}} () const noexcept
+\item 
+std\+::optional$<$ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac795898b422401c5f464014eaa43e5fd}{as\+Candle\+Symbol}} () const noexcept
+\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a677727f5ece51214d768b2447aa5736a}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native) noexcept
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A helper wrapper class needed to pass heterogeneous symbols using a container and convert them to internal Graal representation. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_aa0c460f7b372d483d640ee6185151bb5}\label{structdxfcpp_1_1_symbol_wrapper_aa0c460f7b372d483d640ee6185151bb5} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!SymbolWrapper@{SymbolWrapper}}
+\index{SymbolWrapper@{SymbolWrapper}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{SymbolWrapper()}{SymbolWrapper()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily template$<$Convertible\+To\+String\+Symbol Symbol$>$ \\
+dxfcpp\+::\+Symbol\+Wrapper\+::\+Symbol\+Wrapper (\begin{DoxyParamCaption}\item[{Symbol \&\&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructor for any wrapped symbol. 
+
+Must be implicit to wrap symbols passed to collection or container
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol} & The symbol type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The symbol \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_ae375f48ae03c0ca8ecefd74b3a453550}\label{structdxfcpp_1_1_symbol_wrapper_ae375f48ae03c0ca8ecefd74b3a453550} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!SymbolWrapper@{SymbolWrapper}}
+\index{SymbolWrapper@{SymbolWrapper}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{SymbolWrapper()}{SymbolWrapper()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily dxfcpp\+::\+Symbol\+Wrapper\+::\+Symbol\+Wrapper (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_string_symbol}{String\+Symbol}} \&}]{string\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructor for any wrapped string symbol. 
+
+Must be implicit to wrap symbols passed to collection or container
+
+
+\begin{DoxyParams}{Parameters}
+{\em string\+Symbol} & The wrapped string (std\+::string, std\+::string\+\_\+view, const char\texorpdfstring{$\ast$}{*}) symbol \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a4cfd220f2179f060b049c7d827c3ba75}\label{structdxfcpp_1_1_symbol_wrapper_a4cfd220f2179f060b049c7d827c3ba75} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!SymbolWrapper@{SymbolWrapper}}
+\index{SymbolWrapper@{SymbolWrapper}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{SymbolWrapper()}{SymbolWrapper()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily dxfcpp\+::\+Symbol\+Wrapper\+::\+Symbol\+Wrapper (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol}} \&}]{wildcard\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructor for any wrapped wildcard (\texorpdfstring{$\ast$}{*}) symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em wildcard\+Symbol} & The wrapped wildcard symbol \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a552e5f88fb5b70de20d22db53b411a8c}\label{structdxfcpp_1_1_symbol_wrapper_a552e5f88fb5b70de20d22db53b411a8c} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!SymbolWrapper@{SymbolWrapper}}
+\index{SymbolWrapper@{SymbolWrapper}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{SymbolWrapper()}{SymbolWrapper()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily dxfcpp\+::\+Symbol\+Wrapper\+::\+Symbol\+Wrapper (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol}} \&}]{indexed\+Event\+Subscription\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructor for \doxylink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em indexed\+Event\+Subscription\+Symbol} & The \doxylink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol} \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_ab84480a33ed72862da9954d99157051d}\label{structdxfcpp_1_1_symbol_wrapper_ab84480a33ed72862da9954d99157051d} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!SymbolWrapper@{SymbolWrapper}}
+\index{SymbolWrapper@{SymbolWrapper}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{SymbolWrapper()}{SymbolWrapper()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily dxfcpp\+::\+Symbol\+Wrapper\+::\+Symbol\+Wrapper (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}} \&}]{time\+Series\+Subscription\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructor for \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Series\+Subscription\+Symbol} & The \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a091b83b8c4be49ca4286a92d88cd9dfc}\label{structdxfcpp_1_1_symbol_wrapper_a091b83b8c4be49ca4286a92d88cd9dfc} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!SymbolWrapper@{SymbolWrapper}}
+\index{SymbolWrapper@{SymbolWrapper}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{SymbolWrapper()}{SymbolWrapper()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily dxfcpp\+::\+Symbol\+Wrapper\+::\+Symbol\+Wrapper (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol}} \&}]{candle\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructor for \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em candle\+Symbol} & The \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol} \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_ac795898b422401c5f464014eaa43e5fd}\label{structdxfcpp_1_1_symbol_wrapper_ac795898b422401c5f464014eaa43e5fd} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!asCandleSymbol@{asCandleSymbol}}
+\index{asCandleSymbol@{asCandleSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{asCandleSymbol()}{asCandleSymbol()}}
+{\footnotesize\ttfamily std\+::optional$<$ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol}} $>$ dxfcpp\+::\+Symbol\+Wrapper\+::as\+Candle\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+\doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol} (optional) or std\+::nullopt if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} doesn\textquotesingle{}t hold \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_ac8464ee4c91839bc4544d0c447752c78}\label{structdxfcpp_1_1_symbol_wrapper_ac8464ee4c91839bc4544d0c447752c78} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!asIndexedEventSubscriptionSymbol@{asIndexedEventSubscriptionSymbol}}
+\index{asIndexedEventSubscriptionSymbol@{asIndexedEventSubscriptionSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{asIndexedEventSubscriptionSymbol()}{asIndexedEventSubscriptionSymbol()}}
+{\footnotesize\ttfamily std\+::optional$<$ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol}} $>$ dxfcpp\+::\+Symbol\+Wrapper\+::as\+Indexed\+Event\+Subscription\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+\doxylink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol} (optional) or std\+::nullopt if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} doesn\textquotesingle{}t hold \doxylink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a9ed87465e80386fc45dcd1ffc3c5b6a6}\label{structdxfcpp_1_1_symbol_wrapper_a9ed87465e80386fc45dcd1ffc3c5b6a6} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!asStringSymbol@{asStringSymbol}}
+\index{asStringSymbol@{asStringSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{asStringSymbol()}{asStringSymbol()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Symbol\+Wrapper\+::as\+String\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+String representation of \doxylink{structdxfcpp_1_1_string_symbol}{String\+Symbol} or an empty string 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a1380ed23b11c5153f35bda91b4891c85}\label{structdxfcpp_1_1_symbol_wrapper_a1380ed23b11c5153f35bda91b4891c85} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!asTimeSeriesSubscriptionSymbol@{asTimeSeriesSubscriptionSymbol}}
+\index{asTimeSeriesSubscriptionSymbol@{asTimeSeriesSubscriptionSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{asTimeSeriesSubscriptionSymbol()}{asTimeSeriesSubscriptionSymbol()}}
+{\footnotesize\ttfamily std\+::optional$<$ \mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}} $>$ dxfcpp\+::\+Symbol\+Wrapper\+::as\+Time\+Series\+Subscription\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+\doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} (optional) or std\+::nullopt if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} doesn\textquotesingle{}t hold \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}\label{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!asWildcardSymbol@{asWildcardSymbol}}
+\index{asWildcardSymbol@{asWildcardSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{asWildcardSymbol()}{asWildcardSymbol()}}
+{\footnotesize\ttfamily std\+::optional$<$ \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol}} $>$ dxfcpp\+::\+Symbol\+Wrapper\+::as\+Wildcard\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+\doxylink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol} (optional) or std\+::nullopt if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} doesn\textquotesingle{}t hold \doxylink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a677727f5ece51214d768b2447aa5736a}\label{structdxfcpp_1_1_symbol_wrapper_a677727f5ece51214d768b2447aa5736a} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Symbol\+Wrapper\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a4fb50df341ceb4ce7614852099c719d8}\label{structdxfcpp_1_1_symbol_wrapper_a4fb50df341ceb4ce7614852099c719d8} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!isCandleSymbol@{isCandleSymbol}}
+\index{isCandleSymbol@{isCandleSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{isCandleSymbol()}{isCandleSymbol()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Symbol\+Wrapper\+::is\+Candle\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} holds a \doxylink{structdxfcpp_1_1_candle_symbol}{Candle\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a3e77002d8946d22008ca2a0772d7bd7b}\label{structdxfcpp_1_1_symbol_wrapper_a3e77002d8946d22008ca2a0772d7bd7b} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!isIndexedEventSubscriptionSymbol@{isIndexedEventSubscriptionSymbol}}
+\index{isIndexedEventSubscriptionSymbol@{isIndexedEventSubscriptionSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{isIndexedEventSubscriptionSymbol()}{isIndexedEventSubscriptionSymbol()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Symbol\+Wrapper\+::is\+Indexed\+Event\+Subscription\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} holds a \doxylink{classdxfcpp_1_1_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a0f66038aa88942094d6a34838e3bafa4}\label{structdxfcpp_1_1_symbol_wrapper_a0f66038aa88942094d6a34838e3bafa4} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!isStringSymbol@{isStringSymbol}}
+\index{isStringSymbol@{isStringSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{isStringSymbol()}{isStringSymbol()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Symbol\+Wrapper\+::is\+String\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} holds a \doxylink{structdxfcpp_1_1_string_symbol}{String\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a8e6657db1f3a1d24ca921829b08561a6}\label{structdxfcpp_1_1_symbol_wrapper_a8e6657db1f3a1d24ca921829b08561a6} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!isTimeSeriesSubscriptionSymbol@{isTimeSeriesSubscriptionSymbol}}
+\index{isTimeSeriesSubscriptionSymbol@{isTimeSeriesSubscriptionSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{isTimeSeriesSubscriptionSymbol()}{isTimeSeriesSubscriptionSymbol()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Symbol\+Wrapper\+::is\+Time\+Series\+Subscription\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} holds a \doxylink{classdxfcpp_1_1_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a8f39830e71468fb50a80b5a56750db42}\label{structdxfcpp_1_1_symbol_wrapper_a8f39830e71468fb50a80b5a56750db42} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!isWildcardSymbol@{isWildcardSymbol}}
+\index{isWildcardSymbol@{isWildcardSymbol}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{isWildcardSymbol()}{isWildcardSymbol()}}
+{\footnotesize\ttfamily bool dxfcpp\+::\+Symbol\+Wrapper\+::is\+Wildcard\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if current \doxylink{structdxfcpp_1_1_symbol_wrapper}{Symbol\+Wrapper} holds a \doxylink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol} 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_ad03d863399bab0ae75b25b326c03f096}\label{structdxfcpp_1_1_symbol_wrapper_ad03d863399bab0ae75b25b326c03f096} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} dxfcpp\+::\+Symbol\+Wrapper\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_symbol_wrapper_a628e57fb22575fe2b3f6cf06c7d40f0d}\label{structdxfcpp_1_1_symbol_wrapper_a628e57fb22575fe2b3f6cf06c7d40f0d} 
+\index{dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::SymbolWrapper@{dxfcpp::SymbolWrapper}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Symbol\+Wrapper\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}

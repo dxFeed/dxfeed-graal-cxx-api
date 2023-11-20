@@ -1,0 +1,109 @@
+\doxysubsection{Time\+Series\+Subscription\+Symbol.\+hpp}
+\hypertarget{_time_series_subscription_symbol_8hpp_source}{}\label{_time_series_subscription_symbol_8hpp_source}\index{TimeSeriesSubscriptionSymbol.hpp@{TimeSeriesSubscriptionSymbol.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../symbols/SymbolWrapper.hpp"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../FilteredSubscriptionSymbol.hpp"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{struct}\ SymbolWrapper;}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ Represents\ subscription\ to\ time-\/series\ of\ events.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ This\ is\ symbol\ is\ observed\ by\ ObservableSubscriptionChangeListener}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ methods\ @ref\ ObservableSubscriptionChangeListener::symbolsAdded()\ "{}symbolsAdded"{}}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ and\ @ref\ ObservableSubscriptionChangeListener::symbolsRemoved()\ "{}symbolsRemoved"{}}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ when\ time-\/series\ subscription\ is\ created\ via\ DXFeedTimeSeriesSubscription\ class.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ <p>Instances\ of\ this\ class\ can\ be\ used\ with\ DXFeedSubscription\ to\ specify\ subscription}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ for\ time\ series\ events\ from\ a\ specific\ time.\ By\ default,\ subscribing\ to\ time-\/series\ events\ by}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ their\ event\ symbol\ object,\ the\ subscription\ is\ performed\ to\ a\ stream\ of\ new\ events\ as\ they\ happen\ only.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <p>TimeSeriesEvent\ represents\ a\ special\ subtype\ of\ IndexedEvent.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ The\ source\ identifier\ of\ a\ time-\/series\ event\ is\ always\ zero\ and\ thus}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <h3>Equality\ and\ hash\ codes</h3>}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ This\ is\ a\ FilteredSubscriptionSymbol.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ Time-\/series\ subscription\ symbols\ are\ compared\ based\ on\ their\ @ref\ TimeSeriesSubscriptionSymbol::getEventSymbol()}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ "{}eventSymbol"{}\ only.\ It\ means,\ that\ a\ set\ of\ time-\/series\ subscription\ symbols\ can\ contain\ at\ most\ one\ time-\/series}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ subscription\ for\ each\ event\ symbol.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00041\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ TimeSeriesSubscriptionSymbol\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}},}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_filtered_subscription_symbol}{FilteredSubscriptionSymbol}}\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ std::int64\_t\ fromTime\_;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ time-\/series\ subscription\ symbol\ with\ a\ specified\ event\ symbol\ and\ subscription\ time.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ the\ wrapped\ event\ symbol\ (CandleSymbol,\ WildcardSymbol,\ etc).}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ @param\ fromTime\ the\ subscription\ time.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol_aac083bfa4ee478efa7cc7983577f39d6}{TimeSeriesSubscriptionSymbol}}(\textcolor{keyword}{const}\ SymbolWrapper\ \&eventSymbol,\ std::int64\_t\ fromTime)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ TimeSeriesSubscriptionSymbol(\textcolor{keyword}{const}\ TimeSeriesSubscriptionSymbol\ \&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00054\ \ \ \ \ TimeSeriesSubscriptionSymbol(TimeSeriesSubscriptionSymbol\ \&\&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00055\ \ \ \ \ TimeSeriesSubscriptionSymbol\ \&operator=(\textcolor{keyword}{const}\ TimeSeriesSubscriptionSymbol\ \&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00056\ \ \ \ \ TimeSeriesSubscriptionSymbol\ \&operator=(TimeSeriesSubscriptionSymbol\ \&\&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00057\ \ \ \ \ TimeSeriesSubscriptionSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~TimeSeriesSubscriptionSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ subscription\ time.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ subscription\ time.}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00065\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol_adbeb8e314ec42ca8ac99946dd0140730}{getFromTime}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol_aa0186ef0d66b6c791fc09dbd89567f7a}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol_a7a575172db1b099adbaad03aa8efb370}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{static}\ TimeSeriesSubscriptionSymbol\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ time-\/series\ subscription\ symbol.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ time-\/series\ subscription\ symbol.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_time_series_subscription_symbol_a43b48765c36979319dbea3d2d679c7eb}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ TimeSeriesSubscriptionSymbol\ \&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ TimeSeriesSubscriptionSymbol\ \&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00095\ \};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<dxfcpp::TimeSeriesSubscriptionSymbol>\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::TimeSeriesSubscriptionSymbol\ \&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::unique\_ptr<dxfcpp::SymbolWrapper>>\{\}(timeSeriesSubscriptionSymbol.getEventSymbol());}
+\DoxyCodeLine{00102\ \ \ \ \ \}}
+\DoxyCodeLine{00103\ \};}
+
+\end{DoxyCode}

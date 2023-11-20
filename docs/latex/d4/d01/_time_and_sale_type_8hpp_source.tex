@@ -1,0 +1,49 @@
+\doxysubsection{Time\+And\+Sale\+Type.\+hpp}
+\hypertarget{_time_and_sale_type_8hpp_source}{}\label{_time_and_sale_type_8hpp_source}\index{TimeAndSaleType.hpp@{TimeAndSaleType.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Enum.hpp"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ Type\ of\ a\ time\ and\ sale\ event.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{TimeAndSaleType}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{Enum}}<\mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{TimeAndSaleType}},\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{uint32\_t}}>\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{Enum}}::\mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{Enum}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ new\ time\ and\ sale\ event.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{TimeAndSaleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type_ad758f07ab3714f84473d5f8b83628ed2}{NEW}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ correction\ time\ and\ sale\ event.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{TimeAndSaleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type_a7e2c0901dc3dd99de9dc03dc3e56e933}{CORRECTION}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ cancel\ time\ and\ sale\ event.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type}{TimeAndSaleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_and_sale_type_ac1fe63bfd6b7ecd97aaf84a30fffca20}{CANCEL}};}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00041\ \textcolor{keyword}{const}\ std::unordered\_map<TimeAndSaleType::CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ TimeAndSaleType>>}
+\DoxyCodeLine{00042\ \ \ \ \ TimeAndSaleType::ParentType::ALL;}
+\DoxyCodeLine{00043\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

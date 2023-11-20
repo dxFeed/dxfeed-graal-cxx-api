@@ -1,0 +1,50 @@
+\doxysubsection{Short\+Sale\+Restriction.\+hpp}
+\hypertarget{_short_sale_restriction_8hpp_source}{}\label{_short_sale_restriction_8hpp_source}\index{ShortSaleRestriction.hpp@{ShortSaleRestriction.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Enum.hpp"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ Short\ sale\ restriction\ on\ an\ instrument.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{Enum}}<\mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}},\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{uint32\_t}}>\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{Enum}}::\mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{Enum}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ Short\ sale\ restriction\ is\ undefined,\ unknown\ or\ inapplicable.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction_a89d854a50c0d747621bbf7d436ee8e44}{UNDEFINED}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ *\ Short\ sale\ restriction\ is\ active.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction_a9aaad37646ab7ea16488735538d1a927}{ACTIVE}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ Short\ sale\ restriction\ is\ inactive.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction_abfecd1c4b4c3e62fb8da97ec10d9c4ea}{INACTIVE}};}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00041\ \textcolor{keyword}{const}\ std::unordered\_map<ShortSaleRestriction::CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ ShortSaleRestriction>>}
+\DoxyCodeLine{00042\ \ \ \ \ ShortSaleRestriction::ParentType::ALL;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+
+\end{DoxyCode}

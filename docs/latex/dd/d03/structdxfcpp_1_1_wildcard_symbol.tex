@@ -1,0 +1,110 @@
+\doxysubsection{dxfcpp\+::Wildcard\+Symbol Struct Reference}
+\hypertarget{structdxfcpp_1_1_wildcard_symbol}{}\label{structdxfcpp_1_1_wildcard_symbol}\index{dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}}
+
+
+Represents \mbox{[}wildcard\mbox{]} subscription to all events of the specific event type.  
+
+
+
+
+{\ttfamily \#include $<$Wildcard\+Symbol.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_af4f788ef0081564f7dd43a3f31dc6356}{to\+Graal}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_abf66f8219e5531a935b6ca6cef55b5e7}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this wildcard subscription symbol. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7b77516d5f7cebc3081a703ead663b51}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native) noexcept
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::string \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7f505307b422fd8eb15c2acf79b724ad}{RESERVED\+\_\+\+PREFIX}} = "{}\texorpdfstring{$\ast$}{*}"{}
+\begin{DoxyCompactList}\small\item\em Symbol prefix that is reserved for wildcard subscriptions. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol}} \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{ALL}} \{\mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7f505307b422fd8eb15c2acf79b724ad}{RESERVED\+\_\+\+PREFIX}}\}
+\begin{DoxyCompactList}\small\item\em Represents \mbox{[}wildcard\mbox{]} subscription to all events of the specific event type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents \mbox{[}wildcard\mbox{]} subscription to all events of the specific event type. 
+
+The \doxylink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{Wildcard\+Symbol\+::\+ALL} constant can be added to any \doxylink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription} instance with \doxylink{classdxfcpp_1_1_d_x_feed_subscription_a714eaf6fe6e4d032aeed6aa4de6d27f9}{add\+Symbols} method to the effect of subscribing to all possible event symbols. The corresponding subscription will start receiving all published events of the corresponding types. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_wildcard_symbol_a7b77516d5f7cebc3081a703ead663b51}\label{structdxfcpp_1_1_wildcard_symbol_a7b77516d5f7cebc3081a703ead663b51} 
+\index{dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Wildcard\+Symbol\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_wildcard_symbol_af4f788ef0081564f7dd43a3f31dc6356}\label{structdxfcpp_1_1_wildcard_symbol_af4f788ef0081564f7dd43a3f31dc6356} 
+\index{dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} dxfcpp\+::\+Wildcard\+Symbol\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_wildcard_symbol_abf66f8219e5531a935b6ca6cef55b5e7}\label{structdxfcpp_1_1_wildcard_symbol_abf66f8219e5531a935b6ca6cef55b5e7} 
+\index{dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Wildcard\+Symbol\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this wildcard subscription symbol. 
+
+\begin{DoxyReturn}{Returns}
+string representation of this wildcard subscription symbol. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}\label{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c} 
+\index{dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}!ALL@{ALL}}
+\index{ALL@{ALL}!dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{ALL}{ALL}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol}} dxfcpp\+::\+Wildcard\+Symbol\+::\+ALL \{\mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7f505307b422fd8eb15c2acf79b724ad}{RESERVED\+\_\+\+PREFIX}}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Represents \mbox{[}wildcard\mbox{]} subscription to all events of the specific event type. 
+
+{\bfseries{NOTE\+:}} Wildcard subscription can create extremely high network and CPU load for certain kinds of high-\/frequency events like quotes. It requires a special arrangement on the side of upstream data provider and is disabled by default in upstream feed configuration. Make that sure you have adequate resources and understand the impact before using it. It can be used for low-\/frequency events only (like Forex quotes), because each instance of \doxylink{classdxfcpp_1_1_d_x_feed_subscription}{DXFeed\+Subscription} processes events in a single thread and there is no provision to load-\/balance wildcard subscription amongst multiple threads. Contact your data provider for the corresponding configuration arrangement if needed.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol} 
+\end{DoxySeeAlso}
+\Hypertarget{structdxfcpp_1_1_wildcard_symbol_a7f505307b422fd8eb15c2acf79b724ad}\label{structdxfcpp_1_1_wildcard_symbol_a7f505307b422fd8eb15c2acf79b724ad} 
+\index{dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}!RESERVED\_PREFIX@{RESERVED\_PREFIX}}
+\index{RESERVED\_PREFIX@{RESERVED\_PREFIX}!dxfcpp::WildcardSymbol@{dxfcpp::WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{RESERVED\_PREFIX}{RESERVED\_PREFIX}}
+{\footnotesize\ttfamily const std\+::string dxfcpp\+::\+Wildcard\+Symbol\+::\+RESERVED\+\_\+\+PREFIX = "{}\texorpdfstring{$\ast$}{*}"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Symbol prefix that is reserved for wildcard subscriptions. 
+
+Any subscription starting with "{}\texorpdfstring{$\ast$}{*}"{} is ignored with the exception of \doxylink{structdxfcpp_1_1_wildcard_symbol}{Wildcard\+Symbol} subscription. 

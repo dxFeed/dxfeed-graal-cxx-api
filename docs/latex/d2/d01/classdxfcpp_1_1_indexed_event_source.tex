@@ -1,0 +1,138 @@
+\doxysubsection{dxfcpp\+::Indexed\+Event\+Source Class Reference}
+\hypertarget{classdxfcpp_1_1_indexed_event_source}{}\label{classdxfcpp_1_1_indexed_event_source}\index{dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}}
+
+
+Source identifier for \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}.  
+
+
+
+
+{\ttfamily \#include $<$Indexed\+Event\+Source.\+hpp$>$}
+
+
+
+Inherited by dxfcpp\+::\+Order\+Source.
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a36c6e14bc7e4127c9c5e9107fefeb0a6}{Indexed\+Event\+Source}} (std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{id}}, std\+::string \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a60876eb77d249937307e31a13d6d8bf2}{name}}) noexcept
+\begin{DoxyCompactList}\small\item\em Creates the new \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}\textquotesingle{}s source by id and name. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the source identifier. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a60876eb77d249937307e31a13d6d8bf2}{name}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the string representation of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a9f85ac6b75cd3898d328b8bf819e5b2b}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the string representation of the object. \end{DoxyCompactList}\item 
+virtual void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a44b6e026dd50b88abbd75398d89c62b5}{to\+Graal}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_abe173d77031f9da60e23db7b84e635be}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native) noexcept
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}\label{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb} 
+static const \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{Indexed\+Event\+Source}} {\bfseries DEFAULT} \{0, "{}DEFAULT"{}\}
+\begin{DoxyCompactList}\small\item\em The default source with zero \doxylink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{identifier} for all events that do not support multiple sources. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Source identifier for \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}. 
+
+See \doxylink{structdxfcpp_1_1_indexed_event_af9f56273cba451eb0653e8236f6b2748}{Indexed\+Event\+::get\+Source()}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdxfcpp_1_1_indexed_event_source_a36c6e14bc7e4127c9c5e9107fefeb0a6}\label{classdxfcpp_1_1_indexed_event_source_a36c6e14bc7e4127c9c5e9107fefeb0a6} 
+\index{dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}!IndexedEventSource@{IndexedEventSource}}
+\index{IndexedEventSource@{IndexedEventSource}!dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}}
+\doxyparagraph{\texorpdfstring{IndexedEventSource()}{IndexedEventSource()}}
+{\footnotesize\ttfamily dxfcpp\+::\+Indexed\+Event\+Source\+::\+Indexed\+Event\+Source (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{id,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Creates the new \doxylink{structdxfcpp_1_1_indexed_event}{Indexed\+Event}\textquotesingle{}s source by id and name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The source id \\
+\hline
+{\em name} & The source name \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_indexed_event_source_abe173d77031f9da60e23db7b84e635be}\label{classdxfcpp_1_1_indexed_event_source_abe173d77031f9da60e23db7b84e635be} 
+\index{dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void dxfcpp\+::\+Indexed\+Event\+Source\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}\label{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413} 
+\index{dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}!id@{id}}
+\index{id@{id}!dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}}
+\doxyparagraph{\texorpdfstring{id()}{id()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t dxfcpp\+::\+Indexed\+Event\+Source\+::id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source identifier. 
+
+Source identifier is non-\/negative.
+
+\begin{DoxyReturn}{Returns}
+The source identifier. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_indexed_event_source_a60876eb77d249937307e31a13d6d8bf2}\label{classdxfcpp_1_1_indexed_event_source_a60876eb77d249937307e31a13d6d8bf2} 
+\index{dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}!name@{name}}
+\index{name@{name}!dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}}
+\doxyparagraph{\texorpdfstring{name()}{name()}}
+{\footnotesize\ttfamily const std\+::string \& dxfcpp\+::\+Indexed\+Event\+Source\+::name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the string representation of the object. 
+
+\begin{DoxyReturn}{Returns}
+The string representation of the object. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_indexed_event_source_a44b6e026dd50b88abbd75398d89c62b5}\label{classdxfcpp_1_1_indexed_event_source_a44b6e026dd50b88abbd75398d89c62b5} 
+\index{dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} dxfcpp\+::\+Indexed\+Event\+Source\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_indexed_event_source_a9f85ac6b75cd3898d328b8bf819e5b2b}\label{classdxfcpp_1_1_indexed_event_source_a9f85ac6b75cd3898d328b8bf819e5b2b} 
+\index{dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}!toString@{toString}}
+\index{toString@{toString}!dxfcpp::IndexedEventSource@{dxfcpp::IndexedEventSource}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Indexed\+Event\+Source\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the string representation of the object. 
+
+\begin{DoxyReturn}{Returns}
+The string representation of the object. 
+\end{DoxyReturn}

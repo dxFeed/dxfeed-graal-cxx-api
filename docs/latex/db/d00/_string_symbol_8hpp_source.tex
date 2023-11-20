@@ -1,0 +1,145 @@
+\doxysubsection{String\+Symbol.\+hpp}
+\hypertarget{_string_symbol_8hpp_source}{}\label{_string_symbol_8hpp_source}\index{StringSymbol.hpp@{StringSymbol.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ A\ helper\ wrapper\ class\ needed\ to\ pass\ heterogeneous\ string\ symbols\ using\ a\ container\ and\ convert\ them\ to\ internal}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ Graal\ representation.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ The\ current\ implementation\ is\ suboptimal\ (by\ memory\ usage)\ and\ will\ be\ enhanced.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ StringSymbol\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00023\ \ \ \ \ std::string\ data\_;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ StringSymbol(\textcolor{keyword}{const}\ StringSymbol\ \&stringSymbol)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00027\ \ \ \ \ StringSymbol(StringSymbol\ \&\&)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00028\ \ \ \ \ StringSymbol\ \&operator=(\textcolor{keyword}{const}\ StringSymbol\ \&stringSymbol)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00029\ \ \ \ \ StringSymbol\ \&operator=(StringSymbol\ \&\&)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00030\ \ \ \ \ StringSymbol()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~StringSymbol()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ Constructs\ StringSymbol\ from\ a\ char\ array}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ @param\ chars\ The\ array\ of\ chars}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_string_symbol_a054ab49873566cfd421238e39f87e9fc}{StringSymbol}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *chars)\ \textcolor{keyword}{noexcept}\ :\ StringSymbol()\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}StringSymbol(chars\ =\ "{}}\ +\ toStringAny(chars)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ data\_\ =\ std::string(chars);}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ Constructs\ StringSymbol\ from\ a\ std::string\_view}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ @param\ stringView\ The\ string\ view}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_string_symbol_ad27c3824b7d002e5bddc9b8e78d3a426}{StringSymbol}}(std::string\_view\ stringView)\ \textcolor{keyword}{noexcept}\ :\ StringSymbol()\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}StringSymbol(stringView\ =\ "{}}\ +\ toStringAny(stringView)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ data\_\ =\ std::string(stringView);}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ StringSymbol(std::string\ string)\ \textcolor{keyword}{noexcept}\ :\ StringSymbol()\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}StringSymbol(string\ =\ "{}}\ +\ toStringAny(string)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ data\_\ =\ std::move(string);}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{structdxfcpp_1_1_string_symbol_aa811a382233f8ceae44a4c6db2a80aae}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_string_symbol_a259d6679c4bbb44ec595da094d81a57b}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{static}\ StringSymbol\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_string_symbol_a78c305e1c16c623b5cf636850f83ff40}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}StringSymbol\{"{}}\ +\ data\_\ +\ \textcolor{stringliteral}{"{}\}"{}};}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&getData()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ StringSymbol\ \&stringSymbol)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getData()\ ==\ stringSymbol.getData();}
+\DoxyCodeLine{00102\ \ \ \ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ StringSymbol\ \&stringSymbol)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getData()\ <\ stringSymbol.getData();}
+\DoxyCodeLine{00106\ \ \ \ \ \}}
+\DoxyCodeLine{00107\ \};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ *\ A\ concept\ describing\ a\ string\ that\ can\ be\ wrapped.}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ *\ @tparam\ T\ Probable\ string\ symbol\ type}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00114\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00115\ concept\ ConvertibleToStringSymbol\ =}
+\DoxyCodeLine{00116\ \ \ \ \ std::is\_convertible\_v<std::decay\_t<T>,\ std::string>\ ||\ std::is\_convertible\_v<std::decay\_t<T>,\ std::string\_view>;}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{keyword}{inline}\ \textcolor{keyword}{namespace}\ literals\ \{}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ *\ String\ literal\ that\ helps\ to\ construct\ StringSymbol\ from\ a\ char\ array.}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ *\ @param\ string\ The\ char\ array}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ *\ @param\ length\ Tha\ char\ array's\ length}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ *\ @return\ Wrapped\ string\ view\ built\ on\ char\ array}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00127\ \textcolor{keyword}{inline}\ StringSymbol\ operator\textcolor{stringliteral}{"{}"{}\_s}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *string,\ size\_t\ length)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordflow}{return}\ \{std::string\_view\{string,\ length\}\};}
+\DoxyCodeLine{00129\ \}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \}\ \textcolor{comment}{//\ namespace\ literals}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<dxfcpp::StringSymbol>\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::StringSymbol\ \&stringSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(stringSymbol.getData());}
+\DoxyCodeLine{00138\ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \};}
+
+\end{DoxyCode}

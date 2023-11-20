@@ -1,0 +1,210 @@
+\doxysubsection{dxfcpp\+::Market\+Event\+Symbols Struct Reference}
+\hypertarget{structdxfcpp_1_1_market_event_symbols}{}\label{structdxfcpp_1_1_market_event_symbols}\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+
+
+Helper class to compose and parse symbols for market events.  
+
+
+
+
+{\ttfamily \#include $<$Market\+Event\+Symbols.\+hpp$>$}
+
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a4ccb56f5ce03ee56b9f8183e3d8189a5}{has\+Exchange\+Code}} (const std\+::string \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} is the specified symbol has the exchange code specification. \end{DoxyCompactList}\item 
+static char \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6}{get\+Exchange\+Code}} (const std\+::string \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of the specified symbol or `'\textbackslash{}0\textquotesingle{}\`{} if none is defined. \end{DoxyCompactList}\item 
+static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_acb0ae852bceb8ffe82e4478fdce0745b}{change\+Exchange\+Code}} (const std\+::string \&symbol, char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of the specified symbol or removes it if new exchange code is `'\textbackslash{}0\textquotesingle{}\`{}. \end{DoxyCompactList}\item 
+static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a47194475eca124562e72216d6ef04851}{get\+Base\+Symbol}} (const std\+::string \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns base symbol without exchange code and attributes. \end{DoxyCompactList}\item 
+static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a505a47fa6f596eaea5cd1697ded66b50}{change\+Base\+Symbol}} (const std\+::string \&symbol, const std\+::string \&base\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes base symbol while leaving exchange code and attributes intact. \end{DoxyCompactList}\item 
+static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::optional$<$ std\+::string $>$ \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}{get\+Attribute\+String\+By\+Key}} (const std\+::string \&symbol, const std\+::string \&key) noexcept
+\begin{DoxyCompactList}\small\item\em Returns value of the attribute with the specified key. \end{DoxyCompactList}\item 
+static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a05f9118ae0d921489495dec94159e8f0}{change\+Attribute\+String\+By\+Key}} (const std\+::string \&symbol, const std\+::string \&key, const std\+::string \&value) noexcept
+\begin{DoxyCompactList}\small\item\em Changes value of one attribute value while leaving exchange code and other attributes intact. \end{DoxyCompactList}\item 
+static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string \mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_a0f662cf613e3e6decd079d9782d9742d}{remove\+Attribute\+String\+By\+Key}} (const std\+::string \&symbol, const std\+::string \&key) noexcept
+\begin{DoxyCompactList}\small\item\em Removes one attribute with the specified key while leaving exchange code and other attributes intact. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Helper class to compose and parse symbols for market events. 
+
+\doxyparagraph*{Regional symbols}
+
+Regional symbol subscription receives events only from a designated exchange, marketplace, or venue instead of receiving composite events from all venues (by default). Regional symbol is composed from a {\itshape base symbol}, ampersand character (\textquotesingle{}\&\textquotesingle{}), and an exchange code character. For example, 
+\begin{DoxyItemize}
+\item "{}\+SPY"{} is the symbol for composite events for SPDR S\&P 500 ETF from all exchanges, 
+\item "{}\+SPY\&\+N"{} is the symbol for event for SPDR S\&P 500 ETF that originate only from NYSE marketplace. 
+\end{DoxyItemize}
+
+\doxyparagraph*{Symbol attributes}
+
+Market event symbols can have a number of attributes attached to then in curly braces with {\ttfamily \texorpdfstring{$<$}{<}key\texorpdfstring{$>$}{>}=\texorpdfstring{$<$}{<}value\texorpdfstring{$>$}{>}} paris separated by commas. For example, 
+\begin{DoxyItemize}
+\item "{}\+SPY\{price=bid\}"{} is the market symbol "{}\+SPY"{} with an attribute key "{}price"{} set to value "{}bid"{}. 
+\item "{}\+SPY(=5m,tho=true\}"{} is the market symbol "{}\+SPY"{} with two attributes. One has an empty key and value "{}5m"{}, while the other has key "{}tho"{} and value "{}true"{}. 
+\end{DoxyItemize}The methods in this class always maintain attribute keys in alphabetic order. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_market_event_symbols_a05f9118ae0d921489495dec94159e8f0}\label{structdxfcpp_1_1_market_event_symbols_a05f9118ae0d921489495dec94159e8f0} 
+\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}!changeAttributeStringByKey@{changeAttributeStringByKey}}
+\index{changeAttributeStringByKey@{changeAttributeStringByKey}!dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+\doxyparagraph{\texorpdfstring{changeAttributeStringByKey()}{changeAttributeStringByKey()}}
+{\footnotesize\ttfamily static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string dxfcpp\+::\+Market\+Event\+Symbols\+::change\+Attribute\+String\+By\+Key (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol,  }\item[{const std\+::string \&}]{key,  }\item[{const std\+::string \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Changes value of one attribute value while leaving exchange code and other attributes intact. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & old symbol. \\
+\hline
+{\em key} & attribute key. \\
+\hline
+{\em value} & attribute value.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new symbol with key attribute with the specified value and everything else from the old symbol. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_market_event_symbols_a505a47fa6f596eaea5cd1697ded66b50}\label{structdxfcpp_1_1_market_event_symbols_a505a47fa6f596eaea5cd1697ded66b50} 
+\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}!changeBaseSymbol@{changeBaseSymbol}}
+\index{changeBaseSymbol@{changeBaseSymbol}!dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+\doxyparagraph{\texorpdfstring{changeBaseSymbol()}{changeBaseSymbol()}}
+{\footnotesize\ttfamily static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string dxfcpp\+::\+Market\+Event\+Symbols\+::change\+Base\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol,  }\item[{const std\+::string \&}]{base\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Changes base symbol while leaving exchange code and attributes intact. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & old symbol. \\
+\hline
+{\em base\+Symbol} & new base symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new symbol with new base symbol and old symbol\textquotesingle{}s exchange code and attributes. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_market_event_symbols_acb0ae852bceb8ffe82e4478fdce0745b}\label{structdxfcpp_1_1_market_event_symbols_acb0ae852bceb8ffe82e4478fdce0745b} 
+\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}!changeExchangeCode@{changeExchangeCode}}
+\index{changeExchangeCode@{changeExchangeCode}!dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+\doxyparagraph{\texorpdfstring{changeExchangeCode()}{changeExchangeCode()}}
+{\footnotesize\ttfamily static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string dxfcpp\+::\+Market\+Event\+Symbols\+::change\+Exchange\+Code (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol,  }\item[{char}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of the specified symbol or removes it if new exchange code is `'\textbackslash{}0\textquotesingle{}\`{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The old symbol. \\
+\hline
+{\em exchange\+Code} & The new exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new symbol with the changed exchange code. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf}\label{structdxfcpp_1_1_market_event_symbols_a20d43c86ae4261b48eae338b9a53e3cf} 
+\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}!getAttributeStringByKey@{getAttributeStringByKey}}
+\index{getAttributeStringByKey@{getAttributeStringByKey}!dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+\doxyparagraph{\texorpdfstring{getAttributeStringByKey()}{getAttributeStringByKey()}}
+{\footnotesize\ttfamily static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::optional$<$ std\+::string $>$ dxfcpp\+::\+Market\+Event\+Symbols\+::get\+Attribute\+String\+By\+Key (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol,  }\item[{const std\+::string \&}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns value of the attribute with the specified key. 
+
+The result is std\+::nullopt if attribute with the specified key is not found.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & symbol. \\
+\hline
+{\em key} & attribute key. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+value of the attribute with the specified key \texorpdfstring{$\vert$}{|} std\+::nullopt if attribute with the specified key is not found. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_market_event_symbols_a47194475eca124562e72216d6ef04851}\label{structdxfcpp_1_1_market_event_symbols_a47194475eca124562e72216d6ef04851} 
+\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}!getBaseSymbol@{getBaseSymbol}}
+\index{getBaseSymbol@{getBaseSymbol}!dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+\doxyparagraph{\texorpdfstring{getBaseSymbol()}{getBaseSymbol()}}
+{\footnotesize\ttfamily static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string dxfcpp\+::\+Market\+Event\+Symbols\+::get\+Base\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns base symbol without exchange code and attributes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+base symbol without exchange code and attributes. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6}\label{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6} 
+\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}!getExchangeCode@{getExchangeCode}}
+\index{getExchangeCode@{getExchangeCode}!dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+\doxyparagraph{\texorpdfstring{getExchangeCode()}{getExchangeCode()}}
+{\footnotesize\ttfamily static char dxfcpp\+::\+Market\+Event\+Symbols\+::get\+Exchange\+Code (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange code of the specified symbol or `'\textbackslash{}0\textquotesingle{}\`{} if none is defined. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+exchange code of the specified symbol or `'\textbackslash{}0\textquotesingle{}\`{} if none is defined. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_market_event_symbols_a4ccb56f5ce03ee56b9f8183e3d8189a5}\label{structdxfcpp_1_1_market_event_symbols_a4ccb56f5ce03ee56b9f8183e3d8189a5} 
+\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}!hasExchangeCode@{hasExchangeCode}}
+\index{hasExchangeCode@{hasExchangeCode}!dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+\doxyparagraph{\texorpdfstring{hasExchangeCode()}{hasExchangeCode()}}
+{\footnotesize\ttfamily static bool dxfcpp\+::\+Market\+Event\+Symbols\+::has\+Exchange\+Code (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} is the specified symbol has the exchange code specification. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} is the specified symbol has the exchange code specification. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_market_event_symbols_a0f662cf613e3e6decd079d9782d9742d}\label{structdxfcpp_1_1_market_event_symbols_a0f662cf613e3e6decd079d9782d9742d} 
+\index{dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}!removeAttributeStringByKey@{removeAttributeStringByKey}}
+\index{removeAttributeStringByKey@{removeAttributeStringByKey}!dxfcpp::MarketEventSymbols@{dxfcpp::MarketEventSymbols}}
+\doxyparagraph{\texorpdfstring{removeAttributeStringByKey()}{removeAttributeStringByKey()}}
+{\footnotesize\ttfamily static DXFCPP\+\_\+\+CXX20\+\_\+\+CONSTEXPR\+\_\+\+STRING std\+::string dxfcpp\+::\+Market\+Event\+Symbols\+::remove\+Attribute\+String\+By\+Key (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol,  }\item[{const std\+::string \&}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Removes one attribute with the specified key while leaving exchange code and other attributes intact. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & old symbol. \\
+\hline
+{\em key} & attribute key. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new symbol without the specified key and everything else from the old symbol. 
+\end{DoxyReturn}
