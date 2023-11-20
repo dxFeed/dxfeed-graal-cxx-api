@@ -15,12 +15,16 @@ struct StringList {
 };
 
 struct TimeFormat {
-    static /* dxfg_time_format_t* */ void* getDefault() noexcept;
-    static /* dxfg_time_format_t* */ void* getGmt() noexcept;
-    static /* dxfg_time_format_t* */ void* withTimeZone(/* dxfg_time_format_t* */ void* timeFormat) noexcept;
-    static /* dxfg_time_format_t* */ void* withMillis(/* dxfg_time_format_t* */ void* timeFormat) noexcept;
-    static std::int64_t parse(/* dxfg_time_format_t* */ void* timeFormat, const std::string& value) noexcept;
-    static std::string format(/* dxfg_time_format_t* */ void* timeFormat, std::int64_t value) noexcept;
+    static /* dxfg_time_format_t* */ void *getDefault() noexcept;
+    static /* dxfg_time_format_t* */ void *getGmt() noexcept;
+    static /* dxfg_time_format_t* */ void *withTimeZone(/* dxfg_time_format_t* */ void *timeFormat) noexcept;
+    static /* dxfg_time_format_t* */ void *withMillis(/* dxfg_time_format_t* */ void *timeFormat) noexcept;
+    static std::int64_t parse(/* dxfg_time_format_t* */ void *timeFormat, const std::string &value) noexcept;
+    static std::string format(/* dxfg_time_format_t* */ void *timeFormat, std::int64_t value) noexcept;
+};
+
+struct Tools {
+    static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(const std::string &symbolList) noexcept;
 };
 
 namespace api {
@@ -62,7 +66,7 @@ struct InstrumentProfileCollector {
     static bool addUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
                                   /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
     static bool removeUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
-                                  /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
+                                     /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
 };
 
 struct InstrumentProfileConnection {
