@@ -54,7 +54,7 @@ void Candle::fillGraalData(void *graalNative) const noexcept {
 
     auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
-    graalCandle->event_symbol = createCString(eventSymbol_.toString());
+    graalCandle->event_symbol = createCString(eventSymbol_.value_or(CandleSymbol::NUL).toString());
     graalCandle->event_time = data_.eventTime;
     graalCandle->event_flags = data_.eventFlags;
     graalCandle->index = data_.index;
