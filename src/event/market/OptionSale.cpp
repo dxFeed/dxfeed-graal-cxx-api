@@ -39,12 +39,12 @@ void OptionSale::fillData(void *graalNative) noexcept {
         .size = graalOptionSale->size,
         .bidPrice = graalOptionSale->bid_price,
         .askPrice = graalOptionSale->ask_price,
-        .exchangeSaleConditions = dxfcpp::toString(graalOptionSale->exchange_sale_conditions),
+        .exchangeSaleConditions = dxfcpp::toStringOpt(graalOptionSale->exchange_sale_conditions),
         .flags = graalOptionSale->flags,
         .underlyingPrice = graalOptionSale->underlying_price,
         .volatility = graalOptionSale->volatility,
         .delta = graalOptionSale->delta,
-        .optionSymbol = dxfcpp::toString(graalOptionSale->option_symbol),
+        .optionSymbol = dxfcpp::toStringOpt(graalOptionSale->option_symbol),
     };
 }
 

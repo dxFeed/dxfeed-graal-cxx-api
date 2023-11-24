@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <optional>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
@@ -68,12 +69,12 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
         double size = math::NaN;
         double bidPrice = math::NaN;
         double askPrice = math::NaN;
-        std::string exchangeSaleConditions{};
+        std::optional<std::string> exchangeSaleConditions{};
         std::int32_t flags{};
         double underlyingPrice = math::NaN;
         double volatility = math::NaN;
         double delta = math::NaN;
-        std::string optionSymbol{};
+        std::optional<std::string> optionSymbol{};
     };
 
     Data data_{};
@@ -301,7 +302,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @return exchange code of this option sale as UTF8 string.
      */
     std::string getExchangeCodeString() const noexcept {
-        //TODO: cache
+        // TODO: cache
 
         return dxfcpp::utf16toUtf8String(data_.exchangeCode);
     }
@@ -399,9 +400,23 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * Returns sale conditions provided for this event by data feed.
      * This field format is specific for every particular data feed.
      *
-     * @return sale conditions.
+     * @return sale conditions or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getExchangeSaleConditions() const & noexcept {
+        if (!data_.exchangeSaleConditions) {
+            return dxfcpp::String::NUL;
+        }
+
+        return data_.exchangeSaleConditions.value();
+    }
+
+    /**
+     * Returns sale conditions provided for this event by data feed.
+     * This field format is specific for every particular data feed.
+     *
+     * @return sale conditions or `std::nullopt`.
+     */
+    const std::optional<std::string> &getExchangeSaleConditionsOpt() const & noexcept {
         return data_.exchangeSaleConditions;
     }
 
@@ -617,9 +632,22 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     /**
      * Returns option symbol of this event.
      *
-     * @return option symbol of this event.
+     * @return option symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getOptionSymbol() const & noexcept {
+        if (!data_.optionSymbol) {
+            return dxfcpp::String::NUL;
+        }
+
+        return data_.optionSymbol.value();
+    }
+
+    /**
+     * Returns option symbol of this event.
+     *
+     * @return option symbol of this event or std::nullopt
+     */
+    const std::optional<std::string> &getOptionSymbolOpt() const & noexcept {
         return data_.optionSymbol;
     }
 

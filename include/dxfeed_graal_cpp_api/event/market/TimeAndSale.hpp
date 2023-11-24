@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <optional>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
@@ -98,10 +99,10 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
         double size = math::NaN;
         double bidPrice = math::NaN;
         double askPrice = math::NaN;
-        std::string exchangeSaleConditions{};
+        std::optional<std::string> exchangeSaleConditions{};
         std::int32_t flags{};
-        std::string buyer{};
-        std::string seller{};
+        std::optional<std::string> buyer{};
+        std::optional<std::string> seller{};
     };
 
     Data data_{};
@@ -306,7 +307,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @return exchange code of this time and sale event as UTF8 string.
      */
     std::string getExchangeCodeString() const noexcept {
-        //TODO: cache
+        // TODO: cache
 
         return dxfcpp::utf16toUtf8String(data_.exchangeCode);
     }
@@ -404,9 +405,23 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * Returns sale conditions provided for this event by data feed.
      * This field format is specific for every particular data feed.
      *
-     * @return sale conditions.
+     * @return sale conditions or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getExchangeSaleConditions() const & noexcept {
+        if (!data_.exchangeSaleConditions) {
+            return dxfcpp::String::NUL;
+        }
+
+        return data_.exchangeSaleConditions.value();
+    }
+
+    /**
+     * Returns sale conditions provided for this event by data feed.
+     * This field format is specific for every particular data feed.
+     *
+     * @return sale conditions or std::nullopt
+     */
+    const std::optional<std::string> &getExchangeSaleConditionsOpt() const & noexcept {
         return data_.exchangeSaleConditions;
     }
 
@@ -563,9 +578,22 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     /**
      * Returns buyer of this time and sale event.
      *
-     * @return buyer of this time and sale event.
+     * @return buyer of this time and sale event or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getBuyer() const & noexcept {
+        if (!data_.buyer) {
+            return dxfcpp::String::NUL;
+        }
+
+        return data_.buyer.value();
+    }
+
+    /**
+     * Returns buyer of this time and sale event.
+     *
+     * @return buyer of this time and sale event or std::nullopt
+     */
+    const std::optional<std::string> &getBuyerOpt() const & noexcept {
         return data_.buyer;
     }
 
@@ -581,9 +609,22 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     /**
      * Returns seller of this time and sale event.
      *
-     * @return seller of this time and sale event.
+     * @return seller of this time and sale event or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getSeller() const & noexcept {
+        if (!data_.seller) {
+            return dxfcpp::String::NUL;
+        }
+
+        return data_.seller.value();
+    }
+
+    /**
+     * Returns seller of this time and sale event.
+     *
+     * @return seller of this time and sale event or std::nullopt
+     */
+    const std::optional<std::string> &getSellerOpt() const & noexcept {
         return data_.seller;
     }
 

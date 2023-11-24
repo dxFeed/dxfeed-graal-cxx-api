@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <optional>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
@@ -93,7 +94,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
 
   protected:
     struct SpreadOrderData {
-        std::string spreadSymbol{};
+        std::optional<std::string> spreadSymbol{};
     };
 
     SpreadOrderData spreadOrderData_{};
@@ -868,14 +869,25 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
-    // -----------
+    /**
+     * Returns spread symbol of this event.
+     *
+     * @return spread symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`).
+     */
+    const std::string &getSpreadSymbol() const & noexcept {
+        if (!spreadOrderData_.spreadSymbol) {
+            return dxfcpp::String::NUL;
+        }
+
+        return spreadOrderData_.spreadSymbol.value();
+    }
 
     /**
      * Returns spread symbol of this event.
      *
-     * @return spread symbol of this event.
+     * @return spread symbol of this event or std::nullopt
      */
-    const std::string &getSpreadSymbol() const & noexcept {
+    const std::optional<std::string> &getSpreadSymbolOpt() const & noexcept {
         return spreadOrderData_.spreadSymbol;
     }
 

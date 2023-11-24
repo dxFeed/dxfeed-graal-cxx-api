@@ -5,6 +5,9 @@
 
 #include "../../internal/Conf.hpp"
 
+#include <string>
+#include <optional>
+
 namespace dxfcpp {
 
 /**

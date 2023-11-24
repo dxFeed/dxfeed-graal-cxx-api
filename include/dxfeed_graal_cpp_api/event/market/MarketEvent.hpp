@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <optional>
 
 #include "../EventType.hpp"
 
@@ -24,7 +25,7 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     using Ptr = std::shared_ptr<MarketEvent>;
 
   private:
-    std::string eventSymbol_{};
+    std::optional<std::string> eventSymbol_{};
     std::int64_t eventTime_{};
 
   protected:
@@ -46,9 +47,22 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     /**
      * Returns symbol of this event.
      *
-     * @return symbol of this event.
+     * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
-    const std::string &getEventSymbol() const noexcept override {
+    const std::string &getEventSymbol() const & noexcept override {
+        if (!eventSymbol_) {
+            return dxfcpp::String::NUL;
+        }
+
+        return eventSymbol_.value();
+    }
+
+    /**
+     * Returns symbol of this event.
+     *
+     * @return symbol of this event or `std::nullopt`.
+     */
+    const std::optional<std::string> &getEventSymbolOpt() const & noexcept override {
         return eventSymbol_;
     }
 

@@ -25,8 +25,20 @@ std::string toString(bool b) noexcept {
 }
 
 std::string toString(const char *chars) noexcept {
+    //TODO: cache
+
     if (chars == nullptr) {
-        return dxfcpp::String::EMPTY;
+        return dxfcpp::String::NUL;
+    }
+
+    return chars;
+}
+
+std::optional<std::string> toStringOpt(const char *chars) noexcept {
+    //TODO: cache
+
+    if (chars == nullptr) {
+        return std::nullopt;
     }
 
     return chars;
@@ -187,6 +199,10 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
 }
 
 char *createCString(const std::string &s) noexcept {
+    if (s == dxfcpp::String::NUL) {
+        return nullptr;
+    }
+
     char *cString = new (std::nothrow) char[s.size() + 1];
 
     if (!cString) {
@@ -197,6 +213,14 @@ char *createCString(const std::string &s) noexcept {
     cString[s.size()] = '\0';
 
     return cString;
+}
+
+DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) noexcept {
+    if (!s) {
+        return nullptr;
+    }
+
+    return createCString(s.value());
 }
 
 std::string trimStr(const std::string &s) noexcept {

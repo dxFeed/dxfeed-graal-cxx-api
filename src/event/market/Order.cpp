@@ -25,7 +25,7 @@ void Order::fillData(void *graalNative) noexcept {
 
     auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
 
-    orderData_ = {.marketMaker = dxfcpp::toString(graalOrder->market_maker)};
+    orderData_ = {.marketMaker = dxfcpp::toStringOpt(graalOrder->market_maker)};
 }
 
 void Order::fillGraalData(void *graalNative) const noexcept {
@@ -37,7 +37,7 @@ void Order::fillGraalData(void *graalNative) const noexcept {
 
     auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
 
-    graalOrder->market_maker = createCString(getMarketMaker());
+    graalOrder->market_maker = createCString(orderData_.marketMaker);
 }
 
 void Order::freeGraalData(void *graalNative) noexcept {

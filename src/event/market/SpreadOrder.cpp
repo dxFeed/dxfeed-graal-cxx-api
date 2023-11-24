@@ -25,7 +25,7 @@ void SpreadOrder::fillData(void *graalNative) noexcept {
 
     auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
 
-    spreadOrderData_ = {.spreadSymbol = dxfcpp::toString(graalSpreadOrder->spread_symbol)};
+    spreadOrderData_ = {.spreadSymbol = dxfcpp::toStringOpt(graalSpreadOrder->spread_symbol)};
 }
 
 void SpreadOrder::fillGraalData(void *graalNative) const noexcept {
@@ -37,7 +37,7 @@ void SpreadOrder::fillGraalData(void *graalNative) const noexcept {
 
     auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
 
-    graalSpreadOrder->spread_symbol = createCString(getSpreadSymbol());
+    graalSpreadOrder->spread_symbol = createCString(spreadOrderData_.spreadSymbol);
 }
 
 void SpreadOrder::freeGraalData(void *graalNative) noexcept {

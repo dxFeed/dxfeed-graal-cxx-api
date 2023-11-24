@@ -10,17 +10,21 @@
 #include <iterator>
 #include <locale>
 #include <string>
+#include <optional>
 #include <thread>
 
 namespace dxfcpp {
 
 struct DXFCPP_EXPORT String {
     inline static const std::string EMPTY{};
+    inline static const std::string NUL{"<null>"};
 };
 
 DXFCPP_EXPORT std::string toString(bool b) noexcept;
 
 DXFCPP_EXPORT std::string toString(const char *chars) noexcept;
+
+DXFCPP_EXPORT std::optional<std::string> toStringOpt(const char *chars) noexcept;
 
 DXFCPP_EXPORT std::string toString(std::thread::id theadId);
 
@@ -99,6 +103,8 @@ DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
 DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
 
 DXFCPP_EXPORT char *createCString(const std::string &s) noexcept;
+
+DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) noexcept;
 
 template <typename It>
     requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }

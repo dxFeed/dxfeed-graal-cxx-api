@@ -42,10 +42,10 @@ void TimeAndSale::fillData(void *graalNative) noexcept {
         .size = graalTimeAndSale->size,
         .bidPrice = graalTimeAndSale->bid_price,
         .askPrice = graalTimeAndSale->ask_price,
-        .exchangeSaleConditions = dxfcpp::toString(graalTimeAndSale->exchange_sale_conditions),
+        .exchangeSaleConditions = dxfcpp::toStringOpt(graalTimeAndSale->exchange_sale_conditions),
         .flags = graalTimeAndSale->flags,
-        .buyer = dxfcpp::toString(graalTimeAndSale->buyer),
-        .seller = dxfcpp::toString(graalTimeAndSale->seller),
+        .buyer = dxfcpp::toStringOpt(graalTimeAndSale->buyer),
+        .seller = dxfcpp::toStringOpt(graalTimeAndSale->seller),
     };
 }
 
