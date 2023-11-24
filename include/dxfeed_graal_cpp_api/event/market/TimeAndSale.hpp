@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <optional>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"

@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <optional>
 
 #include "../EventType.hpp"
 
