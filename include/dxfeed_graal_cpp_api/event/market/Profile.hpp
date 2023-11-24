@@ -45,8 +45,8 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     static const std::uint32_t STATUS_SHIFT = 0;
 
     struct Data {
-        std::string description{};
-        std::string statusReason{};
+        std::optional<std::string> description{};
+        std::optional<std::string> statusReason{};
         std::int64_t haltStartTime{};
         std::int64_t haltEndTime{};
         double highLimitPrice = math::NaN;
@@ -112,9 +112,22 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     /**
      * Returns description of the security instrument.
      *
-     * @return description of the security instrument.
+     * @return description of the security instrument or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getDescription() const & noexcept {
+        if (!data_.description) {
+            return dxfcpp::String::NUL;
+        }
+
+        return data_.description.value();
+    }
+
+    /**
+     * Returns description of the security instrument.
+     *
+     * @return description of the security instrument or std::nullopt
+     */
+    const std::optional<std::string> &getDescriptionOpt() const & noexcept {
         return data_.description;
     }
 
@@ -184,9 +197,22 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     /**
      * Returns description of the reason that trading was halted.
      *
-     * @return description of the reason that trading was halted.
+     * @return description of the reason that trading was halted or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getStatusReason() const & noexcept {
+        if (!data_.statusReason) {
+            return dxfcpp::String::NUL;
+        }
+
+        return data_.statusReason.value();
+    }
+
+    /**
+     * Returns description of the reason that trading was halted.
+     *
+     * @return description of the reason that trading was halted or std::nullopt.
+     */
+    const std::optional<std::string> &getStatusReasonOpt() const & noexcept {
         return data_.statusReason;
     }
 

@@ -47,6 +47,8 @@ CandleSymbol CandleSymbol::fromGraal(void *graalNative) noexcept {
     return CandleSymbol{graalSymbol->symbol};
 }
 
+const CandleSymbol CandleSymbol::NUL{"<null>"};
+
 CandleSymbol::CandleSymbol(const CandleSymbol &candleSymbol) noexcept {
     symbol_ = candleSymbol.symbol_;
     initTransientFields(true);

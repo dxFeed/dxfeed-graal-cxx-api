@@ -84,6 +84,7 @@ struct SymbolWrapper;
  * their shortest possible form.
  */
 struct DXFCPP_EXPORT CandleSymbol {
+    static const CandleSymbol NUL;
 
   private:
     std::string symbol_{};

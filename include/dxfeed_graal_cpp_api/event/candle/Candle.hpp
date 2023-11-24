@@ -75,7 +75,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * +---------+----+----+----+----+----+----+----+
      */
 
-    CandleSymbol eventSymbol_{};
+    std::optional<CandleSymbol> eventSymbol_{};
 
     struct Data {
         // dxfg_event_type_t event_type;
@@ -150,8 +150,25 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     explicit Candle(CandleSymbol eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
     }
 
-    ///
-    const CandleSymbol &getEventSymbol() const noexcept override {
+    /**
+     * Returns symbol of this event.
+     *
+     * @return symbol of this event or dxfcpp::CandleSymbol::NUL (`dxfcpp::CandleSymbol{"<null>"}`)
+     */
+    const CandleSymbol &getEventSymbol() const& noexcept override {
+        if (!eventSymbol_) {
+            return CandleSymbol::NUL;
+        }
+
+        return eventSymbol_.value();
+    }
+
+    /**
+     * Returns symbol of this event.
+     *
+     * @return symbol of this event or `std::nullopt`.
+     */
+    const std::optional<CandleSymbol> &getEventSymbolOpt() const& noexcept override {
         return eventSymbol_;
     }
 

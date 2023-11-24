@@ -109,7 +109,14 @@ template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public Eve
      *
      * @return The event symbol.
      */
-    virtual const Symbol &getEventSymbol() const noexcept = 0;
+    virtual const Symbol &getEventSymbol() const& noexcept = 0;
+
+    /**
+     * Returns event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @return The event symbol or std::nullopt.
+     */
+    virtual const std::optional<Symbol> &getEventSymbolOpt() const& noexcept = 0;
 
     /**
      * Changes event symbol that identifies this event type in @ref DXFeedSubscription "subscription".

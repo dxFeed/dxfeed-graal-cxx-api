@@ -30,8 +30,8 @@ void Profile::fillData(void *graalNative) noexcept {
     auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
 
     data_ = {
-        .description = dxfcpp::toString(graalProfile->description),
-        .statusReason = dxfcpp::toString(graalProfile->status_reason),
+        .description = dxfcpp::toStringOpt(graalProfile->description),
+        .statusReason = dxfcpp::toStringOpt(graalProfile->status_reason),
         .haltStartTime = graalProfile->halt_start_time,
         .haltEndTime = graalProfile->halt_end_time,
         .highLimitPrice = graalProfile->high_limit_price,

@@ -94,7 +94,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
 
   protected:
     struct OrderData {
-        std::string marketMaker{};
+        std::optional<std::string> marketMaker{};
     };
 
     OrderData orderData_{};
@@ -875,9 +875,24 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * Returns market maker or other aggregate identifier of this order.
      * This value is defined for Scope::AGGREGATE and Scope::ORDER orders.
      *
-     * @return market maker or other aggregate identifier of this order.
+     * @return market maker or other aggregate identifier of this order or dxfcpp::String::NUL
+     * (`std::string{"<null>"}`).
      */
     const std::string &getMarketMaker() const & noexcept {
+        if (!orderData_.marketMaker) {
+            return dxfcpp::String::NUL;
+        }
+
+        return orderData_.marketMaker.value();
+    }
+
+    /**
+     * Returns market maker or other aggregate identifier of this order.
+     * This value is defined for Scope::AGGREGATE and Scope::ORDER orders.
+     *
+     * @return market maker or other aggregate identifier of this order or `std::nullopt`.
+     */
+    const std::optional<std::string> &getMarketMakerOpt() const & noexcept {
         return orderData_.marketMaker;
     }
 
