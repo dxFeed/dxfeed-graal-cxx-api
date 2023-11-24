@@ -10,6 +10,7 @@
 #include <iterator>
 #include <locale>
 #include <string>
+#include <optional>
 #include <thread>
 
 namespace dxfcpp {
