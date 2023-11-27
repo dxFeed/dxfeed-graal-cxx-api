@@ -16,7 +16,6 @@
 #include "internal/Platform.hpp"
 #include "internal/RawListWrapper.hpp"
 #include "internal/StopWatch.hpp"
-#include "internal/SymbolList.hpp"
 #include "internal/Timer.hpp"
 #include "internal/context/ApiContext.hpp"
 

@@ -140,6 +140,14 @@ std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &
     return parsed | ranges::to<std::unordered_set<SymbolWrapper>>();
 }
 
+std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(std::optional<std::string> symbols) noexcept {
+    if (symbols.has_value()) {
+        return parseSymbols(symbols.value());
+    }
+
+    return {};
+}
+
 std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::string &symbols) noexcept {
     auto trimmedSymbols = trimStr(symbols);
 
@@ -153,6 +161,14 @@ std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::str
                return CandleSymbol::valueOf(s);
            }) |
            ranges::to<std::unordered_set<CandleSymbol>>();
+}
+
+std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(std::optional<std::string> symbols) noexcept {
+    if (symbols.has_value()) {
+        return parseCandleSymbols(symbols.value());
+    }
+
+    return {};
 }
 
 std::unordered_set<std::reference_wrapper<const EventTypeEnum>>

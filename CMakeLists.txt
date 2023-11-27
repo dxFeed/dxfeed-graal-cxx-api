@@ -99,7 +99,6 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/Isolate.cpp
         src/internal/JavaObjectHandle.cpp
         src/internal/EventClassList.cpp
-        src/internal/SymbolList.cpp
         src/internal/Common.cpp
         src/internal/Platform.cpp
         src/internal/TimeFormat.cpp

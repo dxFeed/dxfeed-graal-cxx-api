@@ -8,12 +8,12 @@ on:
     inputs:
       publish:
         description: 'Publish The Release'
-        default: 'true'
+        default: true
         required: true
         type: boolean
       use_latest_tag:
         description: 'Try To Use The Latest Git Tag'
-        default: 'false'
+        default: false
         required: true
         type: boolean
   push:
@@ -49,11 +49,8 @@ jobs:
     needs: [ get_version ]
     strategy:
       matrix:
-        #        os: [windows-latest, macos-latest, ubuntu-latest]
         os: [ windows-latest, macos-13, ubuntu-22.04 ]
-        #os: [ ubuntu-22.04 ]
-        buildType: [ Release, MinSizeRel ]
-        #buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
+        buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
     runs-on: ${{ matrix.os }}
     env:
       XCODE_VERSION: '15.0'

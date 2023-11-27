@@ -14,6 +14,8 @@
 #include <type_traits>
 #include <unordered_set>
 
+#include "../../symbols/SymbolWrapper.hpp"
+
 namespace dxfcpp {
 
 struct DXFCPP_EXPORT CmdArgsUtils final {
@@ -59,13 +61,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(std::optional<std::string> symbols) noexcept {
-        if (symbols.has_value()) {
-            return parseSymbols(symbols.value());
-        }
-
-        return {};
-    }
+    static std::unordered_set<SymbolWrapper> parseSymbols(std::optional<std::string> symbols) noexcept;
 
     /**
      * Parses an input string and returns a set of candle symbols.
@@ -101,13 +97,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::optional<std::string> symbols) noexcept {
-        if (symbols.has_value()) {
-            return parseCandleSymbols(symbols.value());
-        }
-
-        return {};
-    }
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::optional<std::string> symbols) noexcept;
 
     /**
      * Parses an input string and returns a set of event types.
