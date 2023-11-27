@@ -31,6 +31,7 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
 }
 
 template struct JavaObjectHandle<DXEndpoint>;
+template struct JavaObjectHandle<ObservableSubscriptionChangeListener>;
 template struct JavaObjectHandle<DXEndpoint::Builder>;
 template struct JavaObjectHandle<DXEndpointStateChangeListener>;
 

@@ -28,6 +28,7 @@ struct MarketEvent;
 struct IndexedEvent;
 struct TimeSeriesEvent;
 struct LastingEvent;
+struct ObservableSubscriptionChangeListener;
 
 /**
  * Subscription for a set of symbols and event types.
@@ -35,11 +36,18 @@ struct LastingEvent;
 class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     friend struct DXFeed;
 
-    std::unordered_set<EventTypeEnum> eventTypes_;
     JavaObjectHandle<DXFeedSubscription> handle_;
     JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
+    JavaObjectHandle<ObservableSubscriptionChangeListener> osubChangeListenerHandle_;
     SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
 
+    struct Impl;
+
+    std::unique_ptr<Impl> impl_;
+    std::unordered_set<std::reference_wrapper<const EventTypeEnum>> eventTypes_;
+
+
+    DXFeedSubscription() noexcept;
     explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
 
     static JavaObjectHandle<DXFeedSubscription>
@@ -54,7 +62,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
-        : eventTypes_(begin, end), handle_{}, eventListenerHandle_{}, onEvent_{} {
+        : DXFeedSubscription(std::unordered_set<std::reference_wrapper<const EventTypeEnum>>{begin, end}) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
@@ -69,9 +77,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         handle_ = createSubscriptionHandleFromEventClassList(list);
     }
 
-    DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
-        : DXFeedSubscription(eventTypes.begin(), eventTypes.end()) {
-    }
+    explicit DXFeedSubscription(const std::unordered_set<std::reference_wrapper<const EventTypeEnum>>& eventTypes) noexcept;
 
     template <typename EventTypesCollection>
     explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
@@ -117,13 +123,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     ///
     std::string toString() const noexcept override;
 
-    ~DXFeedSubscription() override {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
-        }
-
-        closeImpl();
-    }
+    virtual ~DXFeedSubscription() noexcept override;
 
     /**
      * Creates <i>detached</i> subscription for a single event type.
@@ -673,7 +673,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return A set of subscribed event types.
      */
-    const std::unordered_set<EventTypeEnum> &getEventTypes() const noexcept {
+    const std::unordered_set<std::reference_wrapper<const EventTypeEnum>> &getEventTypes() const noexcept {
         return eventTypes_;
     }
 

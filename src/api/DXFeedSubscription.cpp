@@ -178,8 +178,18 @@ bool DXFeedSubscription::isClosedImpl() const noexcept {
         false);
 }
 
+struct DXFeedSubscription::Impl {
+
+};
+
+DXFeedSubscription::DXFeedSubscription() noexcept : handle_{}, eventListenerHandle_{}, osubChangeListenerHandle_{}, onEvent_{}, impl_{std::make_unique<DXFeedSubscription::Impl>()} {}
+
+DXFeedSubscription::DXFeedSubscription(const std::unordered_set<std::reference_wrapper<const EventTypeEnum>>& eventTypes) noexcept : DXFeedSubscription() {
+    eventTypes_ = eventTypes;
+}
+
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
-    : eventTypes_{eventType}, handle_{}, eventListenerHandle_{}, onEvent_{} {
+    : DXFeedSubscription({eventType}) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
@@ -234,6 +244,14 @@ void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexc
 
 std::string DXFeedSubscription::toString() const noexcept {
     return fmt::format("DXFeedSubscription{{{}}}", handle_.toString());
+}
+
+DXFeedSubscription::~DXFeedSubscription() noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
+    }
+
+    closeImpl();
 }
 
 } // namespace dxfcpp

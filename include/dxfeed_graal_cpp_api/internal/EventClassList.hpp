@@ -29,7 +29,7 @@ struct DXFCPP_EXPORT EventClassList {
         std::size_t i = 0;
 
         for (auto it = begin; it != end; it++, i++) {
-            list->set(i, it->getId());
+            list->set(i, it->get().getId());
         }
 
         return list;

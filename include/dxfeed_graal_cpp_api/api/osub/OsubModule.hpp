@@ -7,5 +7,6 @@
 
 #include "IndexedEventSubscriptionSymbol.hpp"
 #include "ObservableSubscription.hpp"
+#include "ObservableSubscriptionChangeListener.hpp"
 #include "TimeSeriesSubscriptionSymbol.hpp"
 #include "WildcardSymbol.hpp"
