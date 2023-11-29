@@ -10,5 +10,6 @@
 #include "InstrumentProfileReader.hpp"
 #include "InstrumentProfileType.hpp"
 
+#include "live/IterableInstrumentProfile.hpp"
 #include "live/InstrumentProfileCollector.hpp"
 #include "live/InstrumentProfileConnection.hpp"

@@ -79,6 +79,20 @@ int main(int argc, char *argv[]) {
             std::cout << "Total number of profiles (1): " + std::to_string(profiles.size()) << std::endl;
         }
 
+        // (2) or access the concurrent view of instrument profiles
+        std::unordered_set<std::string> symbols{};
+        auto view = self->view();
+
+        while (view->hasNext()) {
+            auto ip = view->next();
+
+            if (ip->getType() != InstrumentProfileType::REMOVED.getName()) {
+                symbols.emplace(ip->getSymbol());
+            }
+        }
+
+        std::cout << "Total number of profiles (2): " + std::to_string(symbols.size()) << std::endl;
+
         std::cout << "Last modified: " +
                          dxfcpp::TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(self->getLastUpdateTime())
                   << std::endl;

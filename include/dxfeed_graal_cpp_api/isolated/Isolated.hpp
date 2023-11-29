@@ -5,6 +5,15 @@
 
 #include "../internal/Conf.hpp"
 
+#include "../api/DXEndpoint.hpp"
+
+#include "../ipf/live/InstrumentProfileConnection.hpp"
+
+#include <unordered_set>
+#include <string>
+#include <cstdint>
+#include <vector>
+
 namespace dxfcpp::isolated {
 struct String {
     static bool release(const char *string) noexcept;
@@ -63,6 +72,8 @@ struct InstrumentProfileCollector {
     static bool updateInstrumentProfile(
         /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
         /* dxfg_instrument_profile_t * */ void *ip) noexcept;
+    static /* dxfg_iterable_ip_t* */ void *
+    view(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept;
     static bool addUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
                                   /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
     static bool removeUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
