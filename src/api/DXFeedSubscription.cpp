@@ -232,6 +232,22 @@ void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexc
     }
 }
 
+bool DXFeedSubscription::tryToSetEventListenerHandle() noexcept {
+    std::lock_guard lock{listenerMutex_};
+
+    if (!eventListenerHandle_) {
+        auto idOpt = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getId(sharedAs<DXFeedSubscription>());
+
+        if (!idOpt) {
+            return false;
+        }
+
+        setEventListenerHandle(idOpt.value());
+    }
+
+    return true;
+}
+
 std::string DXFeedSubscription::toString() const noexcept {
     return fmt::format("DXFeedSubscription{{{}}}", handle_.toString());
 }
