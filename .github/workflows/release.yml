@@ -50,7 +50,8 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest, macos-13, ubuntu-22.04 ]
-        buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
+        #buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
+        buildType: [ Release, Debug ]
     runs-on: ${{ matrix.os }}
     env:
       XCODE_VERSION: '15.0'
