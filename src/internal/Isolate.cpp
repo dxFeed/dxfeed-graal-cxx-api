@@ -475,6 +475,20 @@ bool InstrumentProfileCollector::updateInstrumentProfile(
         dxfcpp::bit_cast<dxfg_instrument_profile_t *>(ip));
 }
 
+/* dxfg_iterable_ip_t* */ void *
+InstrumentProfileCollector::view(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {
+    if (!instrumentProfileCollectorHandle) {
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&instrumentProfileCollectorHandle) {
+            return dxfg_InstrumentProfileCollector_view(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                                        instrumentProfileCollectorHandle);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle)));
+}
+
 bool InstrumentProfileCollector::addUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
                                                    /* dxfg_ipf_update_listener_t* */ void *listener) noexcept {
     if (!instrumentProfileCollectorHandle || !listener) {

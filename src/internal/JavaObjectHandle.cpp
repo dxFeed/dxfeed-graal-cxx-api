@@ -44,6 +44,7 @@ template struct JavaObjectHandle<InstrumentProfileCollector>;
 template struct JavaObjectHandle<InstrumentProfileConnection>;
 template struct JavaObjectHandle<IpfPropertyChangeListener>;
 template struct JavaObjectHandle<InstrumentProfileUpdateListener>;
+template struct JavaObjectHandle<IterableInstrumentProfile>;
 
 template struct JavaObjectHandle<Schedule>;
 template struct JavaObjectHandle<Day>;

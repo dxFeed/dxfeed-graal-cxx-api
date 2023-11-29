@@ -12,6 +12,8 @@
 
 #include "../Common.hpp"
 
+#include "../NonCopyable.hpp"
+
 namespace dxfcpp {
 
 template <typename EntityType_> struct EntityManager : private NonCopyable<EntityManager<EntityType_>> {

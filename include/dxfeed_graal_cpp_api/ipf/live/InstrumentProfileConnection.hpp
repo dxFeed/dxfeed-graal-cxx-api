@@ -10,9 +10,15 @@
 #include "../../internal/JavaObjectHandle.hpp"
 
 #include "../../entity/SharedEntity.hpp"
+#include "InstrumentProfileCollector.hpp"
 
 namespace dxfcpp {
 
+/**
+ * Connects to an instrument profile URL and reads instrument profiles with support of
+ * streaming live updates.
+ * Please see <b>Instrument Profile Format</b> documentation for complete description.
+ */
 class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
   public:
     /// The alias to a type of shared pointer to the InstrumentProfileConnection object

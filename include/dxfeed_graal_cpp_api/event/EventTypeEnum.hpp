@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <string>
 #include <type_traits>
+#include <unordered_set>
 
 namespace dxfcpp {
 

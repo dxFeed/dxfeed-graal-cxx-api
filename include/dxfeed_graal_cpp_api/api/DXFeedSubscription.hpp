@@ -5,6 +5,9 @@
 
 #include "../internal/Conf.hpp"
 
+#include "../internal/EventClassList.hpp"
+#include "../internal/context/ApiContext.hpp"
+
 #include "../entity/EntityModule.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"

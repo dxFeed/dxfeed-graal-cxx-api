@@ -1,6 +1,7 @@
 // Copyright (c) 2023 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "dxfeed_graal_cpp_api/isolated/Isolated.hpp"
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -61,8 +62,7 @@ struct InstrumentProfileCollector::Impl {
                                            void *userData) noexcept {
         auto [collectorId, listenerId] = dxfcpp::unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
-        auto id =
-            Id<InstrumentProfileCollector>::from(collectorId);
+        auto id = Id<InstrumentProfileCollector>::from(collectorId);
         auto collector = ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
@@ -181,6 +181,16 @@ void InstrumentProfileCollector::updateInstrumentProfile(const InstrumentProfile
 
         InstrumentProfile::freeGraal(graal);
     }
+}
+
+std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() const noexcept {
+    if (!handle_) {
+        return {};
+    }
+
+    auto iterable = dxfcpp::isolated::ipf::InstrumentProfileCollector::view(handle_.get());
+
+    return IterableInstrumentProfile::create(iterable);
 }
 
 } // namespace dxfcpp

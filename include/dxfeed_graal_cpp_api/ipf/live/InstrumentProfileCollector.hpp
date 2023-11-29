@@ -10,6 +10,8 @@
 #include "../../internal/JavaObjectHandle.hpp"
 
 #include "../../entity/SharedEntity.hpp"
+#include "../InstrumentProfile.hpp"
+#include "IterableInstrumentProfile.hpp"
 
 #include <unordered_map>
 
@@ -17,6 +19,22 @@ namespace dxfcpp {
 
 class InstrumentProfileConnection;
 
+/**
+ * Collects instrument profile updates and provides the live list of instrument profiles.
+ * This class contains a map that keeps a unique instrument profile per symbol.
+ * This class is intended to be used with InstrumentProfileConnection as a repository that keeps
+ * profiles of all known instruments. See InstrumentProfileConnection for a usage example.
+ *
+ * <p>As set of instrument profiles stored in this collector can be accessed with @ref InstrumentProfileCollector::view() "view" method.
+ * A snapshot plus a live stream of updates can be accessed with
+ * @ref InstrumentProfileCollector::addUpdateListener() "addUpdateListener" method.
+ *
+ * <p>Removal of instrument profile is represented by an InstrumentProfile instance with a
+ * @ref InstrumentProfile::getType() "type" equal to
+ * <code>@ref InstrumentProfileType "InstrumentProfileType"::@ref InstrumentProfileType::REMOVED "REMOVED".@ref InstrumentProfileType::getName() "getName()"</code>.
+ *
+ * <p><b>This class is thread-safe.</b>
+ */
 class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     friend InstrumentProfileConnection;
 
@@ -49,7 +67,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     /// The alias to a type of unique pointer to the InstrumentProfileCollector object
     using Unique = std::unique_ptr<InstrumentProfileCollector>;
 
-    ~InstrumentProfileCollector() noexcept;
+    ~InstrumentProfileCollector() noexcept override;
 
     /**
      * Creates the new InstrumentProfileCollector
@@ -98,6 +116,19 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     void updateInstrumentProfile(const InstrumentProfile &ip) const noexcept;
 
     /**
+     * Returns a concurrent view of the set of instrument profiles.
+     * Note, that removal of instrument profile is represented by an InstrumentProfile instance with a
+     * @ref InstrumentProfile::getType() "type" equal to
+     * <code>@ref InstrumentProfileType "InstrumentProfileType"::@ref InstrumentProfileType::REMOVED "REMOVED".@ref
+     * InstrumentProfileType::getName() "getName()"</code>. Normally, this view exposes only non-removed profiles.
+     * However, if iteration is concurrent with removal, then a removed instrument profile (with a removed type) can be
+     * exposed by this view.
+     *
+     * @return A concurrent view of the set of instrument profiles.
+     */
+    std::shared_ptr<IterableInstrumentProfile> view() const noexcept;
+
+    /**
      * Adds listener that is notified about any updates in the set of instrument profiles.
      * If a set of instrument profiles is not empty, then this listener will be immediately notified.
      *
@@ -105,7 +136,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * Example:
      * ```cpp
-     * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) -> void {
+     * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) {
      *     for (const auto &p : profiles) {
      *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
      *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
