@@ -68,7 +68,7 @@ std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) noexcept 
 
         return spreadOrder;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -86,7 +86,7 @@ void *SpreadOrder::toGraal() const noexcept {
         .order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER}}}};
 
     if (!graalSpreadOrder) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

@@ -52,7 +52,7 @@ std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) noexcept {
 
         return trade;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -70,7 +70,7 @@ void *Trade::toGraal() const noexcept {
         dxfg_trade_t{.trade_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE}}}};
 
     if (!graalTrade) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

@@ -76,7 +76,7 @@ std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) noexcept {
 
         return theoPrice;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -100,7 +100,7 @@ void *TheoPrice::toGraal() const noexcept {
         dxfg_theo_price_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE}}};
 
     if (!graalTheoPrice) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

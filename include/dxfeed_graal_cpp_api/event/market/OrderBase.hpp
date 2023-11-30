@@ -235,7 +235,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      */
     void setIndex(std::int64_t index) noexcept override {
         if (index < 0) {
-            // TODO: error handling: throw IllegalArgumentException("Negative index: " + index);
+            // TODO: error handling: [EN-8232] throw IllegalArgumentException("Negative index: " + index);
             return;
         }
 
@@ -334,7 +334,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      */
     void setSequence(std::int32_t sequence) noexcept {
         if (sequence < 0 || sequence > MAX_SEQUENCE) {
-            // TODO: error handling: throw IllegalArgumentException();
+            // TODO: error handling: [EN-8232] throw IllegalArgumentException();
 
             return;
         }
@@ -600,7 +600,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @return exchange code of this order as UTF8 string.
      */
     std::string getExchangeCodeString() const noexcept {
-        //TODO: cache
+        //TODO: cache [EN-8231]
 
         return std::string(1ULL, static_cast<char>(
                           static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
@@ -612,7 +612,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @param exchangeCode exchange code of this order.
      */
     void setExchangeCode(char exchangeCode) noexcept {
-        // TODO: error handling: Util.checkChar(exchangeCode, EXCHANGE_MASK, "exchangeCode");
+        // TODO: error handling: [EN-8232] Util.checkChar(exchangeCode, EXCHANGE_MASK, "exchangeCode");
 
         orderBaseData_.flags =
             setBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT, static_cast<unsigned char>(exchangeCode));

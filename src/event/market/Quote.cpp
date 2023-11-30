@@ -24,7 +24,7 @@ std::int16_t Quote::getBidExchangeCode() const noexcept {
 }
 
 std::string Quote::getBidExchangeCodeString() const noexcept {
-    // TODO: cache
+    // TODO: cache [EN-8231]
 
     return utf16toUtf8String(data_.bidExchangeCode);
 }
@@ -42,7 +42,7 @@ std::int16_t Quote::getAskExchangeCode() const noexcept {
 }
 
 std::string Quote::getAskExchangeCodeString() const noexcept {
-    // TODO: cache
+    // TODO: cache [EN-8231]
 
     return utf16toUtf8String(data_.askExchangeCode);
 }
@@ -128,7 +128,7 @@ std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {
 
         return quote;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -142,7 +142,7 @@ void *Quote::toGraal() const noexcept {
         dxfg_quote_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_QUOTE}}};
 
     if (!graalQuote) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

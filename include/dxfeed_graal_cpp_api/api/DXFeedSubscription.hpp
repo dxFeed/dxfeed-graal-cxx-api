@@ -69,7 +69,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
 
         if (!list) {
-            // TODO: error handling
+            // TODO: error handling [EN-8232]
             return;
         }
 

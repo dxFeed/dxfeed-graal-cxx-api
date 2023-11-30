@@ -77,7 +77,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     std::shared_ptr<DXEndpoint> endpoint{new (std::nothrow) DXEndpoint{}};
 
     if (!endpoint) {
-        // TODO: dummy endpoint & error handling;
+        // TODO: dummy endpoint & error handling [EN-8232];
 
         return endpoint;
     }

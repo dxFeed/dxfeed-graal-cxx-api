@@ -34,7 +34,7 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *feedHandle) noexcept {
     auto id = ApiContext::getInstance()->getManager<DXPublisherManager>()->registerEntity(publisher);
     ignore_unused(id);
 
-    // TODO: error handling
+    // TODO: error handling [EN-8232]
 
     if (publisher) {
         publisher->handle_ = JavaObjectHandle<DXPublisher>(feedHandle);

@@ -220,7 +220,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      * @see ::getSequence()
      */
     void setSequence(int sequence) noexcept {
-        // TODO: Improve error handling
+        // TODO: Improve error handling [EN-8232]
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);

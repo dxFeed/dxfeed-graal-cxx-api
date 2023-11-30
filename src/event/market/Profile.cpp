@@ -105,7 +105,7 @@ std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) noexcept {
 
         return profile;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -135,7 +135,7 @@ void *Profile::toGraal() const noexcept {
         dxfg_profile_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_PROFILE}}};
 
     if (!graalProfile) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

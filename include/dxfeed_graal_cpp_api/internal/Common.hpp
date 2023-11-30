@@ -108,7 +108,7 @@ template <typename M, typename F, typename... Args> inline void callWithLock(M &
 
         return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
     }
 }
 
@@ -306,7 +306,7 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
 }
 
 constexpr static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
-    // TODO: error handling
+    // TODO: error handling [EN-8232]
     if (month < 1 || month > 12) {
         return -1;
     }

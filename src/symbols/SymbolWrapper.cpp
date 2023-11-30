@@ -29,7 +29,7 @@ void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) noexcept
     auto *list = new (std::nothrow) ListType{static_cast<SizeType>(size), nullptr};
 
     if (!list) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return nullptr;
     }
 
@@ -42,7 +42,7 @@ void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) noexcept
     };
 
     if (!list->elements) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         delete list;
 
         return nullptr;
@@ -79,7 +79,7 @@ bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std:
     auto *list = dxfcpp::bit_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         SymbolWrapper::freeGraal(dxfcpp::bit_cast<void *>(list->elements[i]));
     }
 

@@ -19,7 +19,7 @@ EventClassList::EventClassList() noexcept : impl_(std::make_unique<EventClassLis
 std::unique_ptr<EventClassList> EventClassList::create(std::size_t size) noexcept {
     auto result = std::unique_ptr<EventClassList>(new (std::nothrow) EventClassList{});
 
-    // TODO: error handling
+    // TODO: error handling [EN-8232]
     if (result) {
         result->impl_->init(static_cast<std::uint32_t>(size));
     }

@@ -211,7 +211,7 @@ std::shared_ptr<InstrumentProfile> InstrumentProfile::fromGraal(void *graalNativ
 
         return instrumentProfile;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 
@@ -247,7 +247,7 @@ void *InstrumentProfile::toGraal() const noexcept {
     auto *graalInstrumentProfile = new (std::nothrow) dxfg_instrument_profile_t{};
 
     if (!graalInstrumentProfile) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

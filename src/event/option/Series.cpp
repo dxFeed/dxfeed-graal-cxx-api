@@ -82,7 +82,7 @@ std::shared_ptr<Series> Series::fromGraal(void *graalNative) noexcept {
 
         return series;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -107,7 +107,7 @@ void *Series::toGraal() const noexcept {
         dxfg_series_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SERIES}}};
 
     if (!graalSeries) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

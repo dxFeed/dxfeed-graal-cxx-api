@@ -55,14 +55,14 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         auto n = name.length();
 
         if (n == 0 || n > 4) {
-            // TODO: error handling: IllegalArgumentException("Source name must contain from 1 to 4 characters");
+            // TODO: error handling: [EN-8232] IllegalArgumentException("Source name must contain from 1 to 4 characters");
 
             return -1;
         }
 
         for (auto c : name) {
             if (!checkChar(c)) {
-                // TODO: error handling
+                // TODO: error handling [EN-8232]
 
                 return -1;
             }
@@ -78,14 +78,14 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
             return true;
         }
 
-        // TODO: error handling: IllegalArgumentException("Source name must contain only alphanumeric characters");
+        // TODO: error handling: [EN-8232] IllegalArgumentException("Source name must contain only alphanumeric characters");
 
         return false;
     }
 
     static std::string decodeName(int id) noexcept {
         if (id == 0) {
-            // TODO: error handling: throw IllegalArgumentException("Source name must contain from 1 to 4 characters");
+            // TODO: error handling: [EN-8232] throw IllegalArgumentException("Source name must contain from 1 to 4 characters");
 
             return "";
         }
@@ -124,7 +124,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
             return PUB_SPREAD_ORDER;
         }
 
-        // TODO: error handling: throw IllegalArgumentException("Invalid order event type: " + eventType);
+        // TODO: error handling: [EN-8232] throw IllegalArgumentException("Invalid order event type: " + eventType);
 
         return 0;
     }

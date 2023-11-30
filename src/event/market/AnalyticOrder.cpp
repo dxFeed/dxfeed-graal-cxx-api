@@ -62,7 +62,7 @@ std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) noexc
 
         return analyticOrder;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -84,7 +84,7 @@ void *AnalyticOrder::toGraal() const noexcept {
             .order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER}}}}};
 
     if (!graalAnalyticOrder) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

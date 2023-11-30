@@ -14,7 +14,7 @@
 
 namespace dxfcpp {
 
-// TODO: serialization
+// TODO: serialization [EN-8232]
 struct DXFCPP_EXPORT Error {
     static constexpr std::size_t UNKNOWN_ID{static_cast<std::size_t>(-1)};
 
@@ -39,7 +39,7 @@ struct DXFCPP_EXPORT Error {
     }
 };
 
-// TODO: implement retrieving, grouping methods
+// TODO: implement retrieving, grouping methods [EN-8232]
 class DXFCPP_EXPORT ErrorHandlingManager {
     static constexpr std::size_t DEFAULT_ERROR_COLLECTION_CAPACITY{1024ULL};
     static inline const Error NO_ERROR{Error::UNKNOWN_ID, 0, "", "NO ERROR"};

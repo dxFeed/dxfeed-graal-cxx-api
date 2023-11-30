@@ -97,7 +97,7 @@ std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) noexcept {
 
         return candle;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -123,7 +123,7 @@ void *Candle::toGraal() const noexcept {
         new (std::nothrow) dxfg_candle_t{.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_CANDLE}};
 
     if (!graalCandle) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

@@ -116,7 +116,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
         auto n = s.length();
 
         if (n == 0) {
-            // TODO: error handling throw IllegalArgumentException("Missing candle session");
+            // TODO: error handling [EN-8232] throw IllegalArgumentException("Missing candle session");
 
             return std::nullopt;
         }
@@ -135,7 +135,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
             }
         }
 
-        // TODO: error handling throw IllegalArgumentException("Unknown candle session: " + s);
+        // TODO: error handling [EN-8232] throw IllegalArgumentException("Unknown candle session: " + s);
 
         return std::nullopt;
     }

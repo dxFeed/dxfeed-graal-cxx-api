@@ -286,7 +286,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @see ::getSequence()
      */
     void setSequence(int sequence) noexcept {
-        // TODO: Improve error handling
+        // TODO: Improve error handling [EN-8232]
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
@@ -307,7 +307,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @return exchange code of this time and sale event as UTF8 string.
      */
     std::string getExchangeCodeString() const noexcept {
-        // TODO: cache
+        // TODO: cache [EN-8231]
 
         return dxfcpp::utf16toUtf8String(data_.exchangeCode);
     }
@@ -449,7 +449,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @param tradeThroughExempt TradeThroughExempt flag of this time and sale event.
      */
     void setTradeThroughExempt(char tradeThroughExempt) noexcept {
-        // TODO: error handling //util::checkChar(tradeThroughExempt, TTE_MASK, "tradeThroughExempt");
+        // TODO: error handling [EN-8232] //util::checkChar(tradeThroughExempt, TTE_MASK, "tradeThroughExempt");
 
         data_.flags = setBits(data_.flags, TTE_MASK, TTE_SHIFT, tradeThroughExempt);
     }

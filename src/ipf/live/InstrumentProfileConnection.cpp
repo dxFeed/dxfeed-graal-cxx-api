@@ -66,7 +66,7 @@ InstrumentProfileConnection::createConnection(const std::string &address,
     std::shared_ptr<InstrumentProfileConnection> connection(new (std::nothrow) InstrumentProfileConnection{});
 
     if (!connection || !collector->handle_) {
-        // TODO: dummy connection & error handling;
+        // TODO: dummy connection & error handling [EN-8232];
 
         return connection;
     }

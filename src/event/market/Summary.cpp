@@ -80,7 +80,7 @@ std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) noexcept {
 
         return summary;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -107,7 +107,7 @@ void *Summary::toGraal() const noexcept {
         dxfg_summary_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SUMMARY}}};
 
     if (!graalSummary) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

@@ -76,7 +76,7 @@ std::shared_ptr<Underlying> Underlying::fromGraal(void *graalNative) noexcept {
 
         return underlying;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -101,7 +101,7 @@ void *Underlying::toGraal() const noexcept {
         dxfg_underlying_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_UNDERLYING}}};
 
     if (!graalUnderlying) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

@@ -78,7 +78,7 @@ std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) noexcept {
 
         return greeks;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -103,7 +103,7 @@ void *Greeks::toGraal() const noexcept {
         dxfg_greeks_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_GREEKS}}};
 
     if (!graalGreeks) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

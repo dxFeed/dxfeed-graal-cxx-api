@@ -103,7 +103,7 @@ std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) noexcept {
 
         return optionSale;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -135,7 +135,7 @@ void *OptionSale::toGraal() const noexcept {
         dxfg_option_sale_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE}}};
 
     if (!graalOptionSale) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

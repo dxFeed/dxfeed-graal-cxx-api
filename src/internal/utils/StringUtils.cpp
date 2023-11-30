@@ -25,7 +25,7 @@ std::string toString(bool b) noexcept {
 }
 
 std::string toString(const char *chars) noexcept {
-    //TODO: cache
+    //TODO: cache [EN-8231]
 
     if (chars == nullptr) {
         return dxfcpp::String::NUL;
@@ -35,7 +35,7 @@ std::string toString(const char *chars) noexcept {
 }
 
 std::optional<std::string> toStringOpt(const char *chars) noexcept {
-    //TODO: cache
+    //TODO: cache [EN-8231]
 
     if (chars == nullptr) {
         return std::nullopt;
@@ -92,7 +92,7 @@ char utf16to8(std::int16_t in) noexcept {
 
         return out.empty() ? char{} : out[0];
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return char{};
     }
 }
@@ -106,7 +106,7 @@ std::string utf16toUtf8String(std::int16_t in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return "";
     }
 }
@@ -119,7 +119,7 @@ std::string utf16toUtf8String(const std::u16string &in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return "";
     }
 }
@@ -132,7 +132,7 @@ std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return "";
     }
 }
@@ -146,7 +146,7 @@ std::int16_t utf8to16(char in) noexcept {
 
         return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return std::int16_t{};
     }
 }

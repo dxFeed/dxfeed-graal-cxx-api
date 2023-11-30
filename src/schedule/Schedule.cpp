@@ -21,7 +21,7 @@ Schedule::Ptr Schedule::create(void *handle) noexcept {
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) noexcept {
     if (!profile) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 
@@ -38,7 +38,7 @@ Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) noexc
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) noexcept {
     if (!profile) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 
@@ -51,7 +51,7 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, 
 
 std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) noexcept {
     if (!profile) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 

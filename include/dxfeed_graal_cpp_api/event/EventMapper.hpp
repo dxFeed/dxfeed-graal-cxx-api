@@ -15,8 +15,6 @@ namespace dxfcpp {
 struct DXFCPP_EXPORT EventMapper {
     static std::vector<std::shared_ptr<EventType>> fromGraalList(void *graalNativeList) noexcept;
 
-    // TODO: check that EventIt is iterator of EventType* or shared_ptr<EventType> or T* or shared_ptr<T>, where T is
-    // child of EventType
     template <typename EventIt> static void *toGraalList(EventIt begin, EventIt end) noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("EventMapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");

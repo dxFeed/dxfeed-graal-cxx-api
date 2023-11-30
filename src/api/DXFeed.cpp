@@ -123,7 +123,7 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
     auto id = ApiContext::getInstance()->getManager<DXFeedManager>()->registerEntity(feed);
     ignore_unused(id);
 
-    // TODO: error handling
+    // TODO: error handling [EN-8232]
 
     if (feed) {
         feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);

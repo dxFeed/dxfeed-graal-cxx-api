@@ -25,7 +25,6 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
     }
 #endif
 
-    // TODO: Boost.Bimap
     std::unordered_map<Id<EntityType>, std::shared_ptr<EntityType>> entitiesById_;
     std::unordered_map<std::shared_ptr<EntityType>, Id<EntityType>> idsByEntities_;
     std::mutex mutex_;

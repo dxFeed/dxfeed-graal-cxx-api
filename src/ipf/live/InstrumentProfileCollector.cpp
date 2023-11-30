@@ -136,7 +136,7 @@ InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() noexcept {
     auto collector = std::shared_ptr<InstrumentProfileCollector>(new (std::nothrow) InstrumentProfileCollector());
 
     if (!collector) {
-        // TODO: dummy collector & error handling;
+        // TODO: dummy collector & error handling [EN-8232];
 
         return collector;
     }

@@ -113,7 +113,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
             }
         }
 
-        // TODO: error handling throw IllegalArgumentException("Unknown candle alignment: " + s);
+        // TODO: error handling [EN-8232] throw IllegalArgumentException("Unknown candle alignment: " + s);
 
         return std::nullopt;
     }

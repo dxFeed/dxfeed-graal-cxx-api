@@ -102,7 +102,7 @@ std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) noexcept 
 
         return timeAndSale;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -130,7 +130,7 @@ void *TimeAndSale::toGraal() const noexcept {
         dxfg_time_and_sale_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE}}};
 
     if (!graalTimeAndSale) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
 
         return nullptr;
     }

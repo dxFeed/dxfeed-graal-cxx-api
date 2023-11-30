@@ -191,7 +191,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @see TradeBase::getSequence()
      */
     void setSequence(std::int32_t sequence) noexcept {
-        // TODO: Improve error handling
+        // TODO: Improve error handling [EN-8232]
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
         tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
@@ -212,7 +212,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @return exchange code of last trade as UTF8 string.
      */
     std::string getExchangeCodeString() const noexcept {
-        //TODO: cache
+        //TODO: cache [EN-8231]
 
         return dxfcpp::utf16toUtf8String(tradeBaseData_.exchangeCode);
     }
