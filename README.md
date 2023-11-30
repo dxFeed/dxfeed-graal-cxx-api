@@ -186,7 +186,7 @@ Only x64 versions are supported.
 
 [Nano-Server]: https://learn.microsoft.com/windows-server/get-started/getting-started-with-nano-server
 
-[vc_redist]: [https://aka.ms/vs/17/release/vc_redist.x64.exe]
+[vc_redist]: https://aka.ms/vs/17/release/vc_redist.x64.exe
 
 ### Linux
 
