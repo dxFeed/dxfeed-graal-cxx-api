@@ -11,14 +11,14 @@ and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) 
 
 :information_source: If you already use [dxFeed C API](https://github.com/dxFeed/dxfeed-c-api), please see
 the [Overview](#overview) section.<br>
-:warning: It’s a **beta** version and still under active development. **Don’t use it in a production environment.**
+:warning: It’s a **beta** version and still under active development.
 
-[![Release](https://img.shields.io/github/v/release/dxFeed/dxfeed-graal-cxx-api)](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest)
 [![Build](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml)
-![](https://img.shields.io/badge/C++%20standard-C++20-blueviolet) ![](https://img.shields.io/badge/C%20standard-C11-blueviolet)
 ![Platform](https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20osx--x64%20%7C%20osx--aarch64-lightgrey)
+![](https://img.shields.io/badge/C++%20standard-C++20-blueviolet) ![](https://img.shields.io/badge/C%20standard-C11-blueviolet)
+[![Release](https://img.shields.io/github/v/release/dxFeed/dxfeed-graal-cxx-api)](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest)
 [![License](https://img.shields.io/badge/license-MPL--2.0-orange)](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/master/LICENSE)
-[![Downloads](https://img.shields.io/github/downloads/dxFeed/dxfeed-graal-cxx-api/total)](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest)
+<!-- [![Downloads](https://img.shields.io/github/downloads/dxFeed/dxfeed-graal-cxx-api/total)](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest) -->
 
 ## Table of Contents
 
@@ -34,8 +34,7 @@ the [Overview](#overview) section.<br>
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-    * [How to connect to demo](#how-to-connect-to-demo)
-    * [How to connect with token based authorization](#how-to-connect-with-token-based-authorization)
+    * [How to connect to QD endpoint](#how-to-connect-to-qd-endpoint)
     * [How to connect to dxLink](#how-to-connect-to-dxlink)
 - [Tools](#tools)
 - [Samples](#samples)
@@ -166,15 +165,54 @@ Find useful information in our self-service dxFeed Knowledge Base or .NET API do
 
 ### Windows
 
-[Visual C++ Redistributable 2015](https://www.microsoft.com/en-us/download/details.aspx?id=52685)
+Only x64 versions are supported.
+
+| OS                                    | Version        | Architectures |
+|---------------------------------------|----------------|---------------|
+| [Windows][Windows-client]             | 8, 8.1         | x64           |
+| [Windows 10][Windows-client]          | Version 1607+  | x64           |
+| [Windows 11][Windows-client]          | Version 22000+ | x64           |
+| [Windows Server][Windows-Server]      | 2012+          | x64           |
+| [Windows Server Core][Windows-Server] | 2012+          | x64           |
+| [Nano Server][Nano-Server]            | Version 1809+  | x64           |
+
+#### Requirements
+
+* [Visual C++ Redistributable for Visual Studio 2015][vc_redist]
+
+[Windows-client]: https://www.microsoft.com/windows/
+
+[Windows-Server]: https://learn.microsoft.com/windows-server/
+
+[Nano-Server]: https://learn.microsoft.com/windows-server/get-started/getting-started-with-nano-server
+
+[vc_redist]: [https://aka.ms/vs/17/release/vc_redist.x64.exe]
 
 ### Linux
 
-gcc 12.1+
+Only x64 versions are supported.
 
-### MacOS
+#### Libc compatibility
 
-Xcode 14.3+
+- [glibc][glibc]: 2.35+ (from Ubuntu 22.04)
+- [musl][musl]: temporarily unsupported
+
+#### Libpthread compatibility
+
+A symlink on libpthread.so, libpthread.so.0, or libcoreclr.so must exist.
+
+[glibc]: https://www.gnu.org/software/libc/
+
+[musl]: https://musl.libc.org/
+
+### macOS
+
+| OS             | Version | Architectures |
+|----------------|---------|---------------|
+| [macOS][macOS] | 10.15+  | x64           |
+| [macOS][macOS] | 11+     | Arm64         |
+
+[macOS]: https://support.apple.com/macos
 
 ## Installation
 
@@ -185,7 +223,8 @@ one (`dxFeedGraalCxxApi_static.a|lib`).
 Also, it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH` (Or use `RPATH`, `LD_LIBRARY_PATH`).
 
 ## Usage
-### How to connect to demo
+
+### How to connect to QD endpoint
 
 To use the dynamic library define the `DXFCPP_USE_DLLS` preprocessor directive.
 
@@ -196,6 +235,8 @@ To use the dynamic library define the `DXFCPP_USE_DLLS` preprocessor directive.
 int main() {
     using namespace dxfcpp;
     
+    // For token based authorization, use the following address format:
+    // "demo.dxfeed.com:7300[login=entitle:token]"
     auto endpoint = DXEndpoint::newBuilder()
             ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
             ->build();
@@ -234,22 +275,55 @@ Quote{AAPL, eventTime=0, time=20221219-223312.000, timeNanoPart=0, sequence=0, b
 
 </details>
 
-### How to connect with token based authorization
-<details>
-<summary>Output</summary>
-<br>
-
-```
-```
-
-</details>
-
 ### How to connect to dxLink
+
+```cpp
+#include <iostream>
+#include <dxfeed_graal_cpp_api/api.hpp>
+
+int main() {
+    using namespace dxfcpp;
+    
+    // The experimental property must be enabled.
+    System::setProperty("dxfeed.experimental.dxlink.enable", "true");
+    
+    // For token based authorization, use the following address format:
+    // "demo.dxfeed.com:7300[login=entitle:token]"
+    auto endpoint = DXEndpoint::newBuilder()
+            ->withProperty("dxfeed.address", "dxlink:wss://demo.dxfeed.com/dxlink-ws")
+            ->build();
+    
+    auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
+    
+    subscription->addEventListener([](auto&& events) {
+        for (auto&& e : events) {
+            std::cout << e << "\n";
+        }
+    });
+    
+    subscription->addSymbols({"AAPL"});
+    
+    std::cin.get();
+}
+```
+
 <details>
 <summary>Output</summary>
 <br>
 
 ```
+I 231130 154554.594 [main] QD - Using QDS-3.325+file-UNKNOWN, (C) Devexperts
+I 231130 154554.602 [main] QD - Using scheme com.dxfeed.api.impl.DXFeedScheme slfwemJduh1J7ibvy9oo8DABTNhNALFQfw0KmE40CMI
+I 231130 154555.094 [main] MARS - Started time synchronization tracker using multicast 239.192.51.45:5145 with gixCx
+I 231130 154555.100 [main] MARS - Started JVM self-monitoring
+I 231130 154555.100 [main] QD - monitoring with collectors [Ticker, Stream, History]
+I 231130 154555.103 [main] QD - monitoring DXEndpoint with dxfeed.address=dxlink:wss://demo.dxfeed.com/dxlink-ws
+I 231130 154555.105 [main] DxLinkClientWebSocket-Distributor - Starting DxLinkClientWebSocketConnector to wss://demo.dxfeed.com/dxlink-ws
+I 231130 154555.107 [wss://demo.dxfeed.com/dxlink-ws-Writer] DxLinkClientWebSocket-Distributor - Connecting to wss://demo.dxfeed.com/dxlink-ws
+I 231130 154556.640 [wss://demo.dxfeed.com/dxlink-ws-Writer] DxLinkClientWebSocket-Distributor - Connected to wss://demo.dxfeed.com/dxlink-ws
+D 231130 154557.801 [oioEventLoopGroup-2-1] QD - Distributor received protocol descriptor [type=dxlink, version=0.1-0.18-20231017-133150, keepaliveTimeout=120, acceptKeepaliveTimeout=5] sending [] from wss://demo.dxfeed.com/dxlink-ws
+D 231130 154557.802 [oioEventLoopGroup-2-1] QD - Distributor received protocol descriptor [type=dxlink, version=0.1-0.18-20231017-133150, keepaliveTimeout=120, acceptKeepaliveTimeout=5, authentication=] sending [] from wss://demo.dxfeed.com/dxlink-ws
+Quote{AAPL, eventTime=0, time=20231130-152903.000, timeNanoPart=0, sequence=0, bidTime=20231130-152903, bidExchange=P, bidPrice=189.9, bidSize=5.0, askTime=20231130-152854, askExchange=K, askPrice=189.98, askSize=10.0}
 ```
 
 </details>
