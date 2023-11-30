@@ -235,7 +235,7 @@ To use the dynamic library define the `DXFCPP_USE_DLLS` preprocessor directive.
 int main() {
     using namespace dxfcpp;
     
-    // For token based authorization, use the following address format:
+    // For token-based authorization, use the following address format:
     // "demo.dxfeed.com:7300[login=entitle:token]"
     auto endpoint = DXEndpoint::newBuilder()
             ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
@@ -287,7 +287,7 @@ int main() {
     // The experimental property must be enabled.
     System::setProperty("dxfeed.experimental.dxlink.enable", "true");
     
-    // For token based authorization, use the following address format:
+    // For token-based authorization, use the following address format:
     // "demo.dxfeed.com:7300[login=entitle:token]"
     auto endpoint = DXEndpoint::newBuilder()
             ->withProperty("dxfeed.address", "dxlink:wss://demo.dxfeed.com/dxlink-ws")
