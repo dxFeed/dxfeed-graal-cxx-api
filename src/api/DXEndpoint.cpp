@@ -152,7 +152,7 @@ void DXEndpoint::closeImpl() {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::user(user = " + user + ")");
     }
@@ -167,7 +167,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::password(password = " + password + ")");
     }
@@ -182,7 +182,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + address + ")");
     }
@@ -431,7 +431,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
                                                                        const std::string &value) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperty(key = " + key +
                         ", value = " + value + ")");
@@ -455,7 +455,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 }
 
 bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::supportsProperty(key = " + key + ")");
     }

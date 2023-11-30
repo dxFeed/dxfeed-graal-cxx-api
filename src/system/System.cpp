@@ -16,7 +16,7 @@
 namespace dxfcpp {
 
 bool System::setProperty(const std::string &key, const std::string &value) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "')");
     }
@@ -37,7 +37,7 @@ bool System::setProperty(const std::string &key, const std::string &value) {
 }
 
 std::string System::getProperty(const std::string &key) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("System::getProperty(key = " + key + ")");
     }
@@ -67,7 +67,7 @@ std::string System::getProperty(const std::string &key) {
 } // namespace dxfcpp
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
 
     return dxfcpp::System::setProperty(key, value) ? DXFC_EC_SUCCESS : DXFC_EC_ERROR;
 }

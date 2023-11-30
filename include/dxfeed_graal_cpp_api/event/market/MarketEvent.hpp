@@ -72,7 +72,7 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol The symbol of this event.
      */
     void setEventSymbol(const std::string &eventSymbol) noexcept override {
-        // TODO: check invalid utf-8
+        // TODO: check invalid utf-8 [EN-8233]
         eventSymbol_ = eventSymbol;
     }
 

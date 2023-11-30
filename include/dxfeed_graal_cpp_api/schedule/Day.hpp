@@ -135,15 +135,6 @@ struct DXFCPP_EXPORT Day {
      */
     std::int64_t getResetTime() const noexcept;
 
-    // TODO: implement
-    /**
-     * @return The list of sessions that constitute this day.
-     * The list is ordered according to natural order of sessions - how they occur one after another.
-     */
-    std::vector<std::shared_ptr<Session>> getSessions() const noexcept {
-        return {};
-    }
-
     /**
      * Returns session belonging to this day that contains specified time.
      * If no such session was found within this day this method will return Session::Ptr{nullptr}

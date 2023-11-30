@@ -684,10 +684,6 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
         return onStateChange_;
     }
 
-    // TODO: implement
-    template <typename Executor> void executor(Executor &&) {
-    }
-
     /**
      * Changes user name for this endpoint.
      * This method shall be called before @ref DXEndpoint::connect(const std::string&) "connect" together
@@ -834,7 +830,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      */
     void closeAndAwaitTermination();
 
-    // TODO: implement
+    // TODO: implement [EN-8234]
     std::unordered_set<EventTypeEnum> getEventTypes() {
         return {};
     }
@@ -899,7 +895,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          * @return `this` endpoint builder.
          */
         std::shared_ptr<Builder> withName(const std::string &name) {
-            // TODO: check invalid utf-8
+            // TODO: check invalid utf-8 [EN-8233]
             if constexpr (Debugger::isDebug) {
                 Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");
             }

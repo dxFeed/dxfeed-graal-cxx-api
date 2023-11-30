@@ -124,7 +124,7 @@ void EventMapper::freeGraalList(void *graalList) noexcept {
             if (list->elements[elementIndex]) {
                 auto *e = list->elements[elementIndex];
 
-                // TODO: implement other types
+                // TODO: implement other types [EN-8235] [EN-8236]
                 // TODO: type traits
                 switch (e->clazz) {
                 case DXFG_EVENT_QUOTE:
@@ -279,7 +279,7 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
         if (list->elements[i]) {
             auto *e = list->elements[i];
 
-            // TODO: implement other types
+            // TODO: implement other types [EN-8235] [EN-8236]
             // TODO: type traits
             switch (e->clazz) {
             case DXFG_EVENT_QUOTE:
