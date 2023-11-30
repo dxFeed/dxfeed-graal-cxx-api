@@ -17,7 +17,20 @@
 
 namespace dxfcpp {
 
-// TODO: implement
+/**
+ * Identifies source of Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events.
+ * There are the following kinds of order sources:
+ * <ul>
+ * <li><em>Synthetic</em> sources OrderSource::COMPOSITE_BID, OrderSource::COMPOSITE_ASK,
+ *     OrderSource::REGIONAL_BID, and OrderSource::REGIONAL_ASK are provided for convenience of a consolidated
+ *     order book and are automatically generated based on the corresponding Quote events.
+ * <li><em>Aggregate</em> sources OrderSource::AGGREGATE_BID and OrderSource::AGGREGATE_ASK provide
+ *     futures depth (aggregated by price level) and NASDAQ Level II (top of book for each market maker).
+ *     These source cannot be directly published to via dxFeed API.
+ * <li><em>Publishable</em> sources OrderSource::DEFAULT, OrderSource::NTV, OrderSource::ISE etc
+ *     support full range of dxFeed API features.
+ * </ul>
+ */
 class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     static constexpr std::uint32_t PUB_ORDER = 0x0001U;
