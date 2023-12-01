@@ -99,11 +99,11 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
   <div class="headertitle"><div class="title">dxFeed Graal CXX API </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__c_1_2w3_2graal_2dxfeed-graal-cxx-api_2_r_e_a_d_m_e"></a> &lt;picture&gt; &lt;source media="(prefers-color-scheme: dark)" srcset="docs/images/logo_dark.svg"&gt; <img src="docs/images/logo_light.svg" alt="light" style="pointer-events: none;" class="inline"/> &lt;/picture&gt;</p>
+<div class="textblock"><p><a class="anchor" id="md__c_1_2w3_2dxfeed-graal-cxx-api_2_r_e_a_d_m_e"></a> &lt;picture&gt; &lt;source media="(prefers-color-scheme: dark)" srcset="docs/images/logo_dark.svg"&gt; <img src="docs/images/logo_light.svg" alt="light" style="pointer-events: none;" class="inline"/> &lt;/picture&gt;</p>
 <p>This package provides access to <a href="https://dxfeed.com/market-data/">dxFeed market data</a>. The library is built as a language-specific wrapper over the <a href="https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-api/">dxFeed Graal Native</a> library, which was compiled with <a href="https://www.graalvm.org/latest/reference-manual/native-image/">GraalVM Native Image</a> and <a href="https://docs.dxfeed.com/dxfeed/api/overview-summary.html">dxFeed Java API</a> (our flagman API).</p>
 <p>:information_source: If you already use <a href="https://github.com/dxFeed/dxfeed-c-api">dxFeed C API</a>, please see the Overview section.<br  />
- :warning: It’s an <b>alpha</b> version and still under active development. <b>Don’t use it in a production environment.</b></p>
-<p><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest"><img src="https://img.shields.io/github/v/release/dxFeed/dxfeed-graal-cxx-api" alt="Release" class="inline"/></a> <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml"><img src="https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main" alt="Build" style="pointer-events: none;" class="inline"/></a> <img src="https://img.shields.io/badge/C++%20standard-C++20-blueviolet" alt="" class="inline"/> <img src="https://img.shields.io/badge/C%20standard-C11-blueviolet" alt="" class="inline"/> <img src="https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20osx--x64%20%7C%20osx--aarch64-lightgrey" alt="Platform" class="inline"/> <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-orange" alt="License" class="inline"/></a> <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest"><img src="https://img.shields.io/github/downloads/dxFeed/dxfeed-graal-cxx-api/total" alt="Downloads" class="inline"/></a></p>
+ :warning: It’s a <b>beta</b> version and still under active development.</p>
+<p><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml"><img src="https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main" alt="Build" style="pointer-events: none;" class="inline"/></a> <img src="https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20osx--x64%20%7C%20osx--aarch64-lightgrey" alt="Platform" class="inline"/> <img src="https://img.shields.io/badge/C++%20standard-C++20-blueviolet" alt="" class="inline"/> <img src="https://img.shields.io/badge/C%20standard-C11-blueviolet" alt="" class="inline"/> <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest"><img src="https://img.shields.io/github/v/release/dxFeed/dxfeed-graal-cxx-api" alt="Release" class="inline"/></a> <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MPL--2.0-orange" alt="License" class="inline"/></a></p>
 <h2><a class="anchor" id="autotoc_md0"></a>
 Table of Contents</h2>
 <ul>
@@ -120,7 +120,12 @@ Table of Contents</h2>
 <li>Documentation</li>
 <li>Requirements</li>
 <li>Installation</li>
-<li>Usage</li>
+<li>Usage<ul>
+<li>How to connect to QD endpoint</li>
+<li>How to connect to dxLink</li>
+</ul>
+</li>
+<li>Tools</li>
 <li>Samples</li>
 <li>Current State</li>
 <li>Dependencies</li>
@@ -143,7 +148,7 @@ Benefits of the New Version</h3>
 <h3><a class="anchor" id="autotoc_md4"></a>
 Milestones</h3>
 <p>Feature development has already stopped for the <a href="https://github.com/dxFeed/dxfeed-c-api">old version</a> of dxFeed C API.</p>
-<p>We expect the new repository to go into production in Q4’2023. At the same time, the old version will be considered deprecated, and at the end of 2024, we plan to end the service. If you’re already our customer and have difficulty with a future transition, please contact us via our <a href="https://jira.in.devexperts.com/servicedesk/customer/portal/1/create/122">customer portal</a>.</p>
+<p>We expect the new repository to go into production in Q1’2024. At the same time, the old version will be considered deprecated, and at the end of 2024, we plan to end the service. If you’re already our customer and have difficulty with a future transition, please contact us via our <a href="https://jira.in.devexperts.com/servicedesk/customer/portal/1/create/122">customer portal</a>.</p>
 <h3><a class="anchor" id="autotoc_md5"></a>
 Future Development</h3>
 <p>Features planned with <b>high priority</b>:</p>
@@ -170,31 +175,21 @@ Sample Mapping</h4>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadCenter">#   </th><th class="markdownTableHeadLeft">Sample   </th><th class="markdownTableHeadLeft">Old Version   </th><th class="markdownTableHeadLeft">New Version    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">1   </td><td class="markdownTableBodyLeft">How to subscribe to <code>Quote</code>, <code>Trade</code>, <code>TradeETH</code>, <code>Order</code>, <code>SpreadOrder</code>, <code>AnalyticOrder</code>, <code>TimeAndSale</code> events   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CommandLineSample">CommandLineSample</a>   </td><td class="markdownTableBodyLeft"><a href="samples/cpp/DxFeedConnect/src/main.cpp">DxFeedConnect</a>    </td></tr>
+<td class="markdownTableBodyCenter">1   </td><td class="markdownTableBodyLeft">How to subscribe to <code>Order</code>, <code>SpreadOrder</code>, <code>Candle</code>, <code>TimeAndSale</code>, <code>Greeks</code>, <code>Series</code> snapshots   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample">SnapshotConsoleSample</a>   </td><td class="markdownTableBodyLeft"><em>Q1’2024</em>, please see TBD section    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">2   </td><td class="markdownTableBodyLeft">How to subscribe to <code>Candle</code> event   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/CandleSample">CandleSample</a>   </td><td class="markdownTableBodyLeft"><em>Q2’2023</em>, please see TBD section    </td></tr>
+<td class="markdownTableBodyCenter">2   </td><td class="markdownTableBodyLeft">How to subscribe to depth of market   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample">PriceLevelBookSample</a>   </td><td class="markdownTableBodyLeft"><em>Q1’2024</em>, please see TBD section    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">3   </td><td class="markdownTableBodyLeft">How to subscribe to <code>Order</code>, <code>SpreadOrder</code>, <code>Candle</code>, <code>TimeAndSale</code>, <code>Greeks</code>, <code>Series</code> snapshots   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample">SnapshotConsoleSample</a>   </td><td class="markdownTableBodyLeft"><em>Q2’2023</em>, please see TBD section    </td></tr>
+<td class="markdownTableBodyCenter">3   </td><td class="markdownTableBodyLeft">How to subscribe to order snapshot with incremental updates   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample">IncSnapshotConsoleSample</a>   </td><td class="markdownTableBodyLeft"><em>Q1’2024</em>, please see TBD section    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">4   </td><td class="markdownTableBodyLeft">How to subscribe to depth of market   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample">PriceLevelBookSample</a>   </td><td class="markdownTableBodyLeft"><em>Q2’2023</em>, please see TBD section    </td></tr>
+<td class="markdownTableBodyCenter">4   </td><td class="markdownTableBodyLeft">How to get and display the full order book   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/FullOrderBookSample">FullOrderBookSample</a>   </td><td class="markdownTableBodyLeft"><em>Q1’2024</em>, please see TBD section    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">5   </td><td class="markdownTableBodyLeft">How to subscribe to order snapshot with incremental updates   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample">IncSnapshotConsoleSample</a>   </td><td class="markdownTableBodyLeft"><em>Q2’2023</em>, please see TBD section    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">6   </td><td class="markdownTableBodyLeft">How to write tape files   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft"><a href="samples/cpp/WriteTapeFile/src/main.cpp">WriteTapeFile</a>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">7   </td><td class="markdownTableBodyLeft">How to convert tape file   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft"><a href="samples/cpp/ConvertTapeFile/src/main.cpp">ConvertTapeFile</a>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">8   </td><td class="markdownTableBodyLeft">How to create multiple event listeners and subscribe to <code>Quote</code> and <code>Trade</code> events (using the "dxfeed.properties" file).   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft"><a href="samples/cpp/DxFeedSample/src/main.cpp">DxFeedSample</a>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">9   </td><td class="markdownTableBodyLeft">How to parse files   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft"><a href="samples/cpp/DxFeedFileParser/src/main.cpp">DxFeedFileParser</a>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">10   </td><td class="markdownTableBodyLeft">A simple sample that shows how to subscribe to quotes for one instrument and print all received quotes to the console.   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft"><a href="samples/cpp/PrintQuoteEvents/src/main.cpp">PrintQuoteEvents</a>   </td></tr>
+<td class="markdownTableBodyCenter">5   </td><td class="markdownTableBodyLeft">How to access and visualize regional market data   </td><td class="markdownTableBodyLeft"><a href="https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/RegionalBookSample">RegionalBookSample</a>   </td><td class="markdownTableBodyLeft"><em>Q1’2024</em>, please see TBD section   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md9"></a>
 Implementation Details</h3>
 <p>We use <a href="https://www.graalvm.org/latest/reference-manual/native-image/">GraalVM Native Image</a> technology and specially written code that <em>wraps</em> Java methods into native ones to get dynamically linked libraries for different platforms (Linux, macOS, and Windows) based on the <a href="https://dxfeed.jfrog.io/artifactory/maven-open/com/devexperts/qd/dxfeed-api/">latest Java API package</a>.</p>
 <p>Then, the resulting dynamic link library (dxFeed Graal-native) is used through C <a href="https://en.wikipedia.org/wiki/Application_binary_interface">ABI</a> (application binary interface), and we write programming interfaces that describe our business model (similar to Java API).</p>
-<p>As a result, we get a full-featured, similar performance as with Java API. Regardless of the language, writing the final application logic using API calls will be very similar (only the syntax will be amended, *"best practices"*, specific language restrictions)</p>
+<p>As a result, we get a full-featured, similar performance as with Java API. Regardless of the language, writing the final application logic using API calls will be very similar (only the syntax will be amended, *"best practices"*, specific language restrictions).</p>
 <p>Below is a scheme of this process:</p>
 <p>&lt;picture&gt; &lt;source media="(prefers-color-scheme: dark)" srcset="docs/images/scheme_dark.svg"&gt; <img src="docs/images/scheme_light.svg" alt="light" style="pointer-events: none;" class="inline"/> &lt;/picture&gt;</p>
 <h3><a class="anchor" id="autotoc_md10"></a>
@@ -203,24 +198,24 @@ Architectural Restrictions and Other Limitations of the Old Version</h3>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadCenter">#   </th><th class="markdownTableHeadNone">Limitation   </th><th class="markdownTableHeadNone">How It’s Solved in the New Version    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">1   </td><td class="markdownTableBodyNone">Single-threaded architecture limiting throughput.   </td><td class="markdownTableBodyNone">Based on the Java API, each subscription object (<a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html">DXFeedSubscription</a>) <em>can</em> run on its own thread.    </td></tr>
+<td class="markdownTableBodyCenter">1   </td><td class="markdownTableBodyNone">Single-threaded architecture limiting throughput   </td><td class="markdownTableBodyNone">Based on the Java API, each subscription object (<a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html">DXFeedSubscription</a>) <em>can</em> run on its own thread    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">2   </td><td class="markdownTableBodyNone">User code in event callbacks (for example, <a href="https://docs.dxfeed.com/c-api/group__event-data-structures-event-subscription-stuff.html#gac8bcb70cd4c8857f286f4be65e9522c6">dxf_event_listener_t</a>) is executed in the socket read thread, which can significantly reduce throughput.   </td><td class="markdownTableBodyNone">Socket processing threads and callback threads are separated.    </td></tr>
+<td class="markdownTableBodyCenter">2   </td><td class="markdownTableBodyNone">User code in event callbacks (for example, <a href="https://docs.dxfeed.com/c-api/group__event-data-structures-event-subscription-stuff.html#gac8bcb70cd4c8857f286f4be65e9522c6">dxf_event_listener_t</a>) is executed in the socket read thread, which can significantly reduce throughput   </td><td class="markdownTableBodyNone">Socket processing threads and callback threads are separated    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">3   </td><td class="markdownTableBodyNone">In event callbacks, one market event type and one data portion always arrive (excluding snapshot subscription), which increases the load on the CPU with a large amount of incoming data.   </td><td class="markdownTableBodyNone">Event callbacks can receive different market event types, and more than one by batch.    </td></tr>
+<td class="markdownTableBodyCenter">3   </td><td class="markdownTableBodyNone">In event callbacks, one market event type and one data portion always arrive (excluding snapshot subscription), which increases the load on the CPU with a large amount of incoming data   </td><td class="markdownTableBodyNone">Event callbacks can receive different market event types, and more than one by batch    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">4   </td><td class="markdownTableBodyNone">It’s impossible to subscribe to data without getting <a href="https://kb.dxfeed.com/en/data-model/exchange-codes.html">regionals</a> (if it is available for the market event) or only for a certain regional.   </td><td class="markdownTableBodyNone"><code>subscription-&gt;addSymbols({"AAPL"});</code> - <a href="https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-47603">composite</a><br  />
-<code>subscription-&gt;addSymbols({"AAPL&amp;Q"});</code> - <a href="https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-x--regional-quote-">regional</a>.    </td></tr>
+<td class="markdownTableBodyCenter">4   </td><td class="markdownTableBodyNone">It’s impossible to subscribe to data without getting <a href="https://kb.dxfeed.com/en/data-model/exchange-codes.html">regionals</a> (if it is available for the market event) or only for a certain regional   </td><td class="markdownTableBodyNone"><code>subscription-&gt;addSymbols({"AAPL"});</code> - <a href="https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-47603">composite</a><br  />
+<code>subscription-&gt;addSymbols({"AAPL&amp;Q"});</code> - <a href="https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-x--regional-quote-">regional</a>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">5   </td><td class="markdownTableBodyNone">It’s impossible to subscribe to Order event (excluding snapshot subscription) without getting: all <a href="https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#order-x">sources</a>, Order by Quote (including regionals), Order by <a href="https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#marketmaker-47603">MarketMaker</a>.   </td><td class="markdownTableBodyNone"><code>subscription-&gt;addSymbols(IndexedEventSubscriptionSymbol::create("AAPL", OrderSource::NTV));</code> - <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/include/dxfeed_graal_native_cpp_api/event/market/OrderSource.hpp">OrderSource</a> determines which data is being subscribed to.    </td></tr>
+<td class="markdownTableBodyCenter">5   </td><td class="markdownTableBodyNone">It’s impossible to subscribe to Order event (excluding snapshot subscription) without getting: all <a href="https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#order-x">sources</a>, Order by Quote (including regionals), Order by <a href="https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#marketmaker-47603">MarketMaker</a>   </td><td class="markdownTableBodyNone"><code>subscription-&gt;addSymbols(IndexedEventSubscriptionSymbol::create("AAPL", OrderSource::NTV));</code> - <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/include/dxfeed_graal_native_cpp_api/event/market/OrderSource.hpp">OrderSource</a> determines which data is being subscribed to    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">6   </td><td class="markdownTableBodyNone">Data is mixed up when creating two subscriptions (regular and time series) for the same market event type. Both regular and time series data go to both subscriptions.   </td><td class="markdownTableBodyNone">Each subscription instance receives only the data requested.    </td></tr>
+<td class="markdownTableBodyCenter">6   </td><td class="markdownTableBodyNone">Data is mixed up when creating two subscriptions (regular and time series) for the same market event type. Both regular and time series data go to both subscriptions   </td><td class="markdownTableBodyNone">Each subscription instance receives only the data requested    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">7   </td><td class="markdownTableBodyNone">Each subsequent request for the same symbol set in a subscription instance overwrites the existing one in another subscription instance.   </td><td class="markdownTableBodyNone">Subscription instances and the data they receive are independent of each other.    </td></tr>
+<td class="markdownTableBodyCenter">7   </td><td class="markdownTableBodyNone">Each subsequent request for the same symbol set in a subscription instance overwrites the existing one in another subscription instance   </td><td class="markdownTableBodyNone">Subscription instances and the data they receive are independent of each other    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter">8   </td><td class="markdownTableBodyNone">Removing a symbol from one subscription instance caused it to be removed from all others.   </td><td class="markdownTableBodyNone">Subscription instances and the data they receive are independent of each other.    </td></tr>
+<td class="markdownTableBodyCenter">8   </td><td class="markdownTableBodyNone">Removing a symbol from one subscription instance caused it to be removed from all others   </td><td class="markdownTableBodyNone">Subscription instances and the data they receive are independent of each other    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter">9   </td><td class="markdownTableBodyNone">Incorrect behavior when reading from a file (if a market event in the file hasn’t been subscribed to). Reading from a file always occurs at maximum speed. The supported format is binary only.   </td><td class="markdownTableBodyNone"><code>endpoint-&gt;connect("file:tape.txt[format=text]");</code> - processing a text file with at it's "real" speed by timestamps&lt;br&gt;<code>endpoint-&gt;connect("file:tape.bin[format=binary,speed=max]");</code> - processing a binary file with max speed.   </td></tr>
+<td class="markdownTableBodyCenter">9   </td><td class="markdownTableBodyNone">Incorrect behavior when reading from a file (if a market event in the file hasn’t been subscribed to). Reading from a file always occurs at maximum speed. The supported format is binary only   </td><td class="markdownTableBodyNone"><code>endpoint-&gt;connect("file:tape.txt[format=text]");</code> - processing a text file with at it's "real" speed by timestamps&lt;br&gt;<code>endpoint-&gt;connect("file:tape.bin[format=binary,speed=max]");</code> - processing a binary file with max speed   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md11"></a>
 Documentation</h2>
@@ -244,19 +239,58 @@ Documentation</h2>
 Requirements</h2>
 <h3><a class="anchor" id="autotoc_md13"></a>
 Windows</h3>
-<p><a href="https://www.microsoft.com/en-us/download/details.aspx?id=52685">Visual C++ Redistributable 2015</a></p>
-<h3><a class="anchor" id="autotoc_md14"></a>
-Linux</h3>
-<p>gcc 12.1+</p>
+<p>Only x64 versions are supported.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">OS   </th><th class="markdownTableHeadNone">Version   </th><th class="markdownTableHeadNone">Architectures    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="https://www.microsoft.com/windows/">Windows</a>   </td><td class="markdownTableBodyNone">8, 8.1   </td><td class="markdownTableBodyNone">x64    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="https://www.microsoft.com/windows/">Windows 10</a>   </td><td class="markdownTableBodyNone">Version 1607+   </td><td class="markdownTableBodyNone">x64    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="https://www.microsoft.com/windows/">Windows 11</a>   </td><td class="markdownTableBodyNone">Version 22000+   </td><td class="markdownTableBodyNone">x64    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="https://learn.microsoft.com/windows-server/">Windows Server</a>   </td><td class="markdownTableBodyNone">2012+   </td><td class="markdownTableBodyNone">x64    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="https://learn.microsoft.com/windows-server/">Windows Server Core</a>   </td><td class="markdownTableBodyNone">2012+   </td><td class="markdownTableBodyNone">x64    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="https://learn.microsoft.com/windows-server/get-started/getting-started-with-nano-server">Nano Server</a>   </td><td class="markdownTableBodyNone">Version 1809+   </td><td class="markdownTableBodyNone">x64   </td></tr>
+</table>
+<h4><a class="anchor" id="autotoc_md14"></a>
+Requirements</h4>
+<ul>
+<li><a href="https://aka.ms/vs/17/release/vc_redist.x64.exe">Visual C++ Redistributable for Visual Studio 2015</a></li>
+</ul>
 <h3><a class="anchor" id="autotoc_md15"></a>
-MacOS</h3>
-<p>Xcode 14.3+</p>
-<h2><a class="anchor" id="autotoc_md16"></a>
+Linux</h3>
+<p>Only x64 versions are supported.</p>
+<h4><a class="anchor" id="autotoc_md16"></a>
+Libc compatibility</h4>
+<ul>
+<li><a href="https://www.gnu.org/software/libc/">glibc</a>: 2.35+ (from Ubuntu 22.04)</li>
+<li><a href="https://musl.libc.org/">musl</a>: temporarily unsupported</li>
+</ul>
+<h4><a class="anchor" id="autotoc_md17"></a>
+Libpthread compatibility</h4>
+<p>A symlink on libpthread.so, libpthread.so.0, or libcoreclr.so must exist.</p>
+<h3><a class="anchor" id="autotoc_md18"></a>
+macOS</h3>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">OS   </th><th class="markdownTableHeadNone">Version   </th><th class="markdownTableHeadNone">Architectures    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="https://support.apple.com/macos">macOS</a>   </td><td class="markdownTableBodyNone">10.15+   </td><td class="markdownTableBodyNone">x64    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="https://support.apple.com/macos">macOS</a>   </td><td class="markdownTableBodyNone">11+   </td><td class="markdownTableBodyNone">Arm64   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md19"></a>
 Installation</h2>
 <p>Examples of how to install the library and integrate with the library can be found <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api-samples">here</a>.</p>
 <p>The API is delivered as a dynamic library (<code>dxFeedGraalCxxApi.so|dll|dylib</code>) and a static one (<code>dxFeedGraalCxxApi_static.a|lib</code>). Also, it depends on <code>DxFeedGraalNativeSdk.so|dll|dylib</code>. Please place it nearby or available on <code>PATH</code> (Or use <code>RPATH</code>, <code>LD_LIBRARY_PATH</code>).</p>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 Usage</h2>
+<h3><a class="anchor" id="autotoc_md21"></a>
+How to connect to QD endpoint</h3>
 <p>To use the dynamic library define the <code>DXFCPP_USE_DLLS</code> preprocessor directive.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;dxfeed_graal_cpp_api/api.hpp&gt;</span></div>
@@ -264,6 +298,8 @@ Usage</h2>
 <div class="line"><span class="keywordtype">int</span> main() {</div>
 <div class="line">    <span class="keyword">using namespace </span>dxfcpp;</div>
 <div class="line">    </div>
+<div class="line">    <span class="comment">// For token-based authorization, use the following address format:</span></div>
+<div class="line">    <span class="comment">// &quot;demo.dxfeed.com:7300[login=entitle:token]&quot;</span></div>
 <div class="line">    <span class="keyword">auto</span> endpoint = DXEndpoint::newBuilder()</div>
 <div class="line">            -&gt;withProperty(<span class="stringliteral">&quot;dxfeed.address&quot;</span>, <span class="stringliteral">&quot;demo.dxfeed.com:7300&quot;</span>)</div>
 <div class="line">            -&gt;build();</div>
@@ -298,31 +334,114 @@ Output</summary>
 <div class="line">Quote{AAPL, eventTime=0, time=20221219-223312.000, timeNanoPart=0, sequence=0, bidTime=20221219-223312, bidExchange=K, bidPrice=132.16, bidSize=10, askTime=20221219-223312, askExchange=V, askPrice=132.17, askSize=4}</div>
 </div><!-- fragment --><p></p>
 </details>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h3><a class="anchor" id="autotoc_md22"></a>
+How to connect to dxLink</h3>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;dxfeed_graal_cpp_api/api.hpp&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main() {</div>
+<div class="line">    <span class="keyword">using namespace </span>dxfcpp;</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// The experimental property must be enabled.</span></div>
+<div class="line">    System::setProperty(<span class="stringliteral">&quot;dxfeed.experimental.dxlink.enable&quot;</span>, <span class="stringliteral">&quot;true&quot;</span>);</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// For token-based authorization, use the following address format:</span></div>
+<div class="line">    <span class="comment">// &quot;demo.dxfeed.com:7300[login=entitle:token]&quot;</span></div>
+<div class="line">    <span class="keyword">auto</span> endpoint = DXEndpoint::newBuilder()</div>
+<div class="line">            -&gt;withProperty(<span class="stringliteral">&quot;dxfeed.address&quot;</span>, <span class="stringliteral">&quot;dxlink:wss://demo.dxfeed.com/dxlink-ws&quot;</span>)</div>
+<div class="line">            -&gt;build();</div>
+<div class="line">    </div>
+<div class="line">    <span class="keyword">auto</span> subscription = endpoint-&gt;getFeed()-&gt;createSubscription(Quote::TYPE);</div>
+<div class="line">    </div>
+<div class="line">    subscription-&gt;addEventListener([](<span class="keyword">auto</span>&amp;&amp; events) {</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp;&amp; e : events) {</div>
+<div class="line">            std::cout &lt;&lt; e &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">        }</div>
+<div class="line">    });</div>
+<div class="line">    </div>
+<div class="line">    subscription-&gt;addSymbols({<span class="stringliteral">&quot;AAPL&quot;</span>});</div>
+<div class="line">    </div>
+<div class="line">    std::cin.get();</div>
+<div class="line">}</div>
+</div><!-- fragment --><details >
+<summary >
+Output</summary>
+<p><br  />
+</p>
+<div class="fragment"><div class="line">I 231130 154554.594 [main] QD - Using QDS-3.325+file-UNKNOWN, (C) Devexperts</div>
+<div class="line">I 231130 154554.602 [main] QD - Using scheme com.dxfeed.api.impl.DXFeedScheme slfwemJduh1J7ibvy9oo8DABTNhNALFQfw0KmE40CMI</div>
+<div class="line">I 231130 154555.094 [main] MARS - Started time synchronization tracker using multicast 239.192.51.45:5145 with gixCx</div>
+<div class="line">I 231130 154555.100 [main] MARS - Started JVM self-monitoring</div>
+<div class="line">I 231130 154555.100 [main] QD - monitoring with collectors [Ticker, Stream, History]</div>
+<div class="line">I 231130 154555.103 [main] QD - monitoring DXEndpoint with dxfeed.address=dxlink:wss://demo.dxfeed.com/dxlink-ws</div>
+<div class="line">I 231130 154555.105 [main] DxLinkClientWebSocket-Distributor - Starting DxLinkClientWebSocketConnector to wss://demo.dxfeed.com/dxlink-ws</div>
+<div class="line">I 231130 154555.107 [wss://demo.dxfeed.com/dxlink-ws-Writer] DxLinkClientWebSocket-Distributor - Connecting to wss://demo.dxfeed.com/dxlink-ws</div>
+<div class="line">I 231130 154556.640 [wss://demo.dxfeed.com/dxlink-ws-Writer] DxLinkClientWebSocket-Distributor - Connected to wss://demo.dxfeed.com/dxlink-ws</div>
+<div class="line">D 231130 154557.801 [oioEventLoopGroup-2-1] QD - Distributor received protocol descriptor [type=dxlink, version=0.1-0.18-20231017-133150, keepaliveTimeout=120, acceptKeepaliveTimeout=5] sending [] from wss://demo.dxfeed.com/dxlink-ws</div>
+<div class="line">D 231130 154557.802 [oioEventLoopGroup-2-1] QD - Distributor received protocol descriptor [type=dxlink, version=0.1-0.18-20231017-133150, keepaliveTimeout=120, acceptKeepaliveTimeout=5, authentication=] sending [] from wss://demo.dxfeed.com/dxlink-ws</div>
+<div class="line">Quote{AAPL, eventTime=0, time=20231130-152903.000, timeNanoPart=0, sequence=0, bidTime=20231130-152903, bidExchange=P, bidPrice=189.9, bidSize=5.0, askTime=20231130-152854, askExchange=K, askPrice=189.98, askSize=10.0}</div>
+</div><!-- fragment --><p></p>
+</details>
+<p>To familiarize with the dxLink protocol, please click <a href="https://demo.dxfeed.com/dxlink-ws/debug/#/protocol">here</a>.</p>
+<h2><a class="anchor" id="autotoc_md23"></a>
 Tools</h2>
-<p><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/">Tools</a> is a collection of tools that allow you to subscribe to various market events for the specified symbols. The tools can be downloaded from <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/releases">Release</a> (including self-contained versions)</p>
+<p><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/">Tools</a> is a collection of utilities that allow you to subscribe to various market events for the specified symbols. The tools can be downloaded from <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/releases">Release</a> (including self-contained versions):</p>
 <ul>
 <li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Connect/ConnectTool.hpp">Connect</a> connects to the specified address(es) and subscribes to the specified events with the specified symbol</li>
 <li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Dump/DumpTool.hpp">Dump</a> dumps all events received from address. This was designed to retrieve data from a file</li>
 <li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/PerfTest/PerfTestTool.hpp">PerfTest</a> connects to the specified address(es) and calculates performance counters (events per second, memory usage, CPU usage, etc.)</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/LatencyTest/LatencyTestTool.hpp">LatencyTest</a> connects to the specified address(es) and calculates latency.</li>
+<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/LatencyTest/LatencyTestTool.hpp">LatencyTest</a> connects to the specified address(es) and calculates latency</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Samples</h2>
 <ul>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ConvertTapeFile/src/main.cpp">ConvertTapeFile</a> demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedConnect/src/main.cpp">DxFeedConnect</a> demonstrates how to subscribe various market events for the specified symbols</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedFileParser/src/main.cpp">DxFeedFileParser</a> is a simple demonstration of how events are read form a tape file</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedSample/src/main.cpp">DxFeedSample</a> is a simple demonstration of how to create multiple event listeners and subscribe to <code>Quote</code> and <code>Trade</code> events</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PrintQuoteEvents/src/main.cpp">PrintQuoteEvents</a> is a simple demonstration of how to subscribe to the <code>Quote</code> event, using a <code>DxFeed</code> instance singleton and <code>dxfeed.properties</code> file</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp">WriteTapeFile</a> is a simple demonstration of how to write events to a tape file</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedIpfConnect/src/main.cpp">DxFeedIpfConnect</a> This sample demonstrates how to subscribe to available symbols using IPF. It uses a <code>DxFeed</code> instance singleton and <code>dxfeed.properties</code> file</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp">DxFeedLiveIpfSample</a> This sample demonstrates how to an instrument profile URL and reads instrument profiles with support of streaming live updates.</li>
-<li><a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp">ScheduleSample</a> A sample program that demonstrates different use cases of Schedule API.</li>
+<li>[x] <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ConvertTapeFile/src/main.cpp">ConvertTapeFile</a> demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering</li>
+<li>[x] <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedFileParser/src/main.cpp">DxFeedFileParser</a> is a simple demonstration of how events are read form a tape file</li>
+<li>[x] <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedSample/src/main.cpp">DxFeedSample</a> is a simple demonstration of how to create multiple event listeners and subscribe to <code>Quote</code> and <code>Trade</code> events</li>
+<li>[x] <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PrintQuoteEvents/src/main.cpp">PrintQuoteEvents</a> is a simple demonstration of how to subscribe to the <code>Quote</code> event, using a <code>DxFeed</code> instance singleton and <code>dxfeed.properties</code> file</li>
+<li>[x] <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp">WriteTapeFile</a> is a simple demonstration of how to write events to a tape file</li>
+<li>[x] <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedIpfConnect/src/main.cpp">DxFeedIpfConnect</a> is a simple demonstration of how to get Instrument Profiles</li>
+<li>[x] <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp">DxFeedLiveIpfSample</a> is a simple demonstration of how to get live updates for Instrument Profiles</li>
+<li>[ ] DxFeedPublishProfiles is a simple demonstration of how to publish market events</li>
+<li>[x] <a href="https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp">ScheduleSample</a> is a simple demonstration of how to get various scheduling information for instruments</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md25"></a>
 Current State</h2>
-<h3><a class="anchor" id="autotoc_md21"></a>
+<h3><a class="anchor" id="autotoc_md26"></a>
+Endpoint Roles</h3>
+<ul>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#FEED">FEED</a> connects to the remote data feed provider and is optimized for real-time or delayed data processing (<b>this is a default role</b>)<ul>
+<li>[ ] dxFeed Graal C API</li>
+<li>[x] dxFeed Graal C++ API</li>
+</ul>
+</li>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_FEED">STREAM_FEED</a> is similar to FEED and also connects to the remote data feed provider but is designed for bulk data parsing from files<ul>
+<li>[ ] dxFeed Graal C API</li>
+<li>[x] dxFeed Graal C++ API</li>
+</ul>
+</li>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#PUBLISHER">PUBLISHER</a> connects to the remote publisher hub (also known as multiplexor) or creates a publisher on the local host (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/WriteTapeFile.java">Java API sample</a>)<ul>
+<li>[ ] dxFeed Graal C API</li>
+<li>[x] dxFeed Graal C++ API</li>
+</ul>
+</li>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_PUBLISHER">STREAM_PUBLISHER</a> is similar to PUBLISHER and also connects to the remote publisher hub, but is designed for bulk data publishing<ul>
+<li>[ ] dxFeed Graal C API</li>
+<li>[x] dxFeed Graal C++ API</li>
+</ul>
+</li>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#LOCAL_HUB">LOCAL_HUB</a> is a local hub without the ability to establish network connections. Events published via publisher are delivered to local feed only.<ul>
+<li>[ ] dxFeed Graal C API</li>
+<li>[x] dxFeed Graal C++ API</li>
+</ul>
+</li>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#ON_DEMAND_FEED">ON_DEMAND_FEED</a> is similar to FEED, but it is designed to be used with OnDemandService for historical data replay only<ul>
+<li>[ ] dxFeed Graal C API</li>
+<li>[ ] dxFeed Graal C++ API</li>
+</ul>
+</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md27"></a>
 Event Types</h3>
 <ul>
 <li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Order.html">Order</a> is a snapshot of the full available market depth for a symbol<ul>
@@ -406,44 +525,49 @@ Event Types</h3>
 </ul>
 </li>
 </ul>
-<h3><a class="anchor" id="autotoc_md22"></a>
+<h3><a class="anchor" id="autotoc_md28"></a>
 Subscription Symbols</h3>
 <ul>
-<li>String<ul>
+<li><a href="https://en.cppreference.com/w/cpp/string/basic_string">String</a> is a string representation of the symbol<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[x] dxFeed Graal C++ API</li>
 </ul>
 </li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/TimeSeriesSubscriptionSymbol.html">TimeSeriesSubscriptionSymbol</a> - represents subscription to time-series events<ul>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/TimeSeriesSubscriptionSymbol.html">TimeSeriesSubscriptionSymbol</a> represents subscription to time-series events<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[x] dxFeed Graal C++ API</li>
 </ul>
 </li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/IndexedEventSubscriptionSymbol.html">IndexedSubscriptionSymbol</a> - represents subscription to a specific source of indexed events<ul>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/IndexedEventSubscriptionSymbol.html">IndexedSubscriptionSymbol</a> represents subscription to a specific source of indexed events<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[x] dxFeed Graal C++ API</li>
 </ul>
 </li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/WildcardSymbol.html">WildcardSymbol.ALL</a> - represents a <em>wildcard</em> subscription to all events of the specific event type<ul>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/WildcardSymbol.html">WildcardSymbol.ALL</a> represents a <em>wildcard</em> subscription to all events of the specific event type<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[x] dxFeed Graal C++ API</li>
 </ul>
 </li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/CandleSymbol.html">CandleSymbol</a> - symbol used with <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html">DXFeedSubscription</a> class to subscribe for <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html">Candle</a> events<ul>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/CandleSymbol.html">CandleSymbol</a> symbol used with <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html">DXFeedSubscription</a> class to subscribe for <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html">Candle</a> events<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[x] dxFeed Graal C++ API</li>
 </ul>
 </li>
 </ul>
-<h3><a class="anchor" id="autotoc_md23"></a>
+<h3><a class="anchor" id="autotoc_md29"></a>
 Subscriptions &amp; Models</h3>
 <ul>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html">CreateSubscription</a> creates a new subscription for multiple event types <em>attached</em> to a specified feed<ul>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html">DXFeedSubscription</a> is a subscription for a set of symbols and event types<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[x] dxFeed Graal C++ API</li>
 </ul>
 </li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedTimeSeriesSubscription.html">CreateTimeSeriesSubscription</a> extends DXFeedSubscription to conveniently subscribe to time series of events for a set of symbols and event types (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/api/DXFeedConnect.java">Java API sample</a>)<ul>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedTimeSeriesSubscription.html">DXFeedTimeSeriesSubscription</a> extends DXFeedSubscription to conveniently subscribe to time series of events for a set of symbols and event types (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/api/DXFeedConnect.java">Java API sample</a>)<ul>
+<li>[ ] dxFeed Graal C API</li>
+<li>[ ] dxFeed Graal C++ API</li>
+</ul>
+</li>
+<li><a href="https://github.com/devexperts/QD/blob/master/dxfeed-api/src/main/java/com/dxfeed/api/osub/ObservableSubscription.java">ObservableSubscription</a> is an observable set of subscription symbols for the specific event type (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/PublishProfiles.java">Java API sample</a>)<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[ ] dxFeed Graal C++ API</li>
 </ul>
@@ -509,7 +633,7 @@ Subscriptions &amp; Models</h3>
 </ul>
 </li>
 </ul>
-<h3><a class="anchor" id="autotoc_md24"></a>
+<h3><a class="anchor" id="autotoc_md30"></a>
 IPF &amp; Schedule</h3>
 <ul>
 <li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html">InstrumentProfile</a> represents basic profile information about a market instrument (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedIpfConnect.java">Java API sample</a>)<ul>
@@ -537,45 +661,16 @@ IPF &amp; Schedule</h3>
 <li>[x] dxFeed Graal C++ API</li>
 </ul>
 </li>
-</ul>
-<h3><a class="anchor" id="autotoc_md25"></a>
-Services</h3>
-<ul>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ondemand/OnDemandService.html">OnDemandService</a> provides on-demand historical tick data replay controls (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ondemand/OnDemandSample.java">Java API sample</a>)<ul>
+<li><a href="https://github.com/devexperts/QD/blob/master/dxfeed-api/src/main/java/com/dxfeed/ipf/option/OptionSeries.java">Option Series</a> is a series of call and put options with different strike sharing the same attributes of expiration, last trading day, spc, multiplies, etc. (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/schedule/ScheduleSample.java">Java API sample</a>)<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[ ] dxFeed Graal C++ API</li>
 </ul>
 </li>
 </ul>
-<h3><a class="anchor" id="autotoc_md26"></a>
-Endpoint Roles</h3>
+<h3><a class="anchor" id="autotoc_md31"></a>
+Services</h3>
 <ul>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#FEED">FEED</a> connects to the remote data feed provider and is optimized for real-time or delayed data processing (<b>this is a default role</b>)<ul>
-<li>[ ] dxFeed Graal C API</li>
-<li>[x] dxFeed Graal C++ API</li>
-</ul>
-</li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_FEED">STREAM_FEED</a> is similar to FEED and also connects to the remote data feed provider but is designed for bulk data parsing from files<ul>
-<li>[ ] dxFeed Graal C API</li>
-<li>[x] dxFeed Graal C++ API</li>
-</ul>
-</li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#LOCAL_HUB">LOCAL_HUB</a> is a local hub without the ability to establish network connections. Events published via publisher are delivered to local feed only.<ul>
-<li>[ ] dxFeed Graal C API</li>
-<li>[x] dxFeed Graal C++ API</li>
-</ul>
-</li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#PUBLISHER">PUBLISHER</a> connects to the remote publisher hub (also known as multiplexor) or creates a publisher on the local host (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/WriteTapeFile.java">Java API sample</a>)<ul>
-<li>[ ] dxFeed Graal C API</li>
-<li>[x] dxFeed Graal C++ API</li>
-</ul>
-</li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_PUBLISHER">STREAM_PUBLISHER</a> is similar to PUBLISHER and also connects to the remote publisher hub, but is designed for bulk data publishing<ul>
-<li>[ ] dxFeed Graal C API</li>
-<li>[x] dxFeed Graal C++ API</li>
-</ul>
-</li>
-<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#ON_DEMAND_FEED">ON_DEMAND_FEED</a> is similar to FEED, but it is designed to be used with OnDemandService for historical data replay only<ul>
+<li><a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ondemand/OnDemandService.html">OnDemandService</a> provides on-demand historical tick data replay controls (<a href="https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ondemand/OnDemandSample.java">Java API sample</a>)<ul>
 <li>[ ] dxFeed Graal C API</li>
 <li>[ ] dxFeed Graal C++ API </li>
 </ul>

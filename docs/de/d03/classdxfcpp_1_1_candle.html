@@ -181,9 +181,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8a20e127796da60258ea6d990ebcea61" id="r_a8a20e127796da60258ea6d990ebcea61"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d03/classdxfcpp_1_1_candle.html#a8a20e127796da60258ea6d990ebcea61">Candle</a> (<a class="el" href="../../da/d01/structdxfcpp_1_1_candle_symbol.html">CandleSymbol</a> eventSymbol) noexcept</td></tr>
 <tr class="memdesc:a8a20e127796da60258ea6d990ebcea61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new candle with the specified candle event symbol.  <br /></td></tr>
 <tr class="separator:a8a20e127796da60258ea6d990ebcea61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad65e0529910195d76dffb3a99b004e78" id="r_ad65e0529910195d76dffb3a99b004e78"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../da/d01/structdxfcpp_1_1_candle_symbol.html">CandleSymbol</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d03/classdxfcpp_1_1_candle.html#ad65e0529910195d76dffb3a99b004e78">getEventSymbol</a> () const noexcept override</td></tr>
-<tr class="memdesc:ad65e0529910195d76dffb3a99b004e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns event symbol that identifies this event type in <a class="el" href="../../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html">subscription</a>.  <br /></td></tr>
-<tr class="separator:ad65e0529910195d76dffb3a99b004e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af01cf5f6c103644bf46142bbd6e345cc" id="r_af01cf5f6c103644bf46142bbd6e345cc"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../da/d01/structdxfcpp_1_1_candle_symbol.html">CandleSymbol</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d03/classdxfcpp_1_1_candle.html#af01cf5f6c103644bf46142bbd6e345cc">getEventSymbol</a> () const &amp;noexcept override</td></tr>
+<tr class="memdesc:af01cf5f6c103644bf46142bbd6e345cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns symbol of this event.  <br /></td></tr>
+<tr class="separator:af01cf5f6c103644bf46142bbd6e345cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab17e5610a2a84ef6c3df26c70b54ea86" id="r_ab17e5610a2a84ef6c3df26c70b54ea86"><td class="memItemLeft" align="right" valign="top">const std::optional&lt; <a class="el" href="../../da/d01/structdxfcpp_1_1_candle_symbol.html">CandleSymbol</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d03/classdxfcpp_1_1_candle.html#ab17e5610a2a84ef6c3df26c70b54ea86">getEventSymbolOpt</a> () const &amp;noexcept override</td></tr>
+<tr class="memdesc:ab17e5610a2a84ef6c3df26c70b54ea86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns symbol of this event.  <br /></td></tr>
+<tr class="separator:ab17e5610a2a84ef6c3df26c70b54ea86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33b6f27e8fa586b23741109d9dc83bd9" id="r_a33b6f27e8fa586b23741109d9dc83bd9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d03/classdxfcpp_1_1_candle.html#a33b6f27e8fa586b23741109d9dc83bd9">setEventSymbol</a> (const <a class="el" href="../../da/d01/structdxfcpp_1_1_candle_symbol.html">CandleSymbol</a> &amp;eventSymbol) noexcept override</td></tr>
 <tr class="memdesc:a33b6f27e8fa586b23741109d9dc83bd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes event symbol that identifies this event type in <a class="el" href="../../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html">subscription</a>.  <br /></td></tr>
 <tr class="separator:a33b6f27e8fa586b23741109d9dc83bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -723,8 +726,8 @@ static const <a class="el" href="../../d9/d00/classdxfcpp_1_1_event_type_enum.ht
 
 </div>
 </div>
-<a id="ad65e0529910195d76dffb3a99b004e78" name="ad65e0529910195d76dffb3a99b004e78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad65e0529910195d76dffb3a99b004e78">&#9670;&#160;</a></span>getEventSymbol()</h2>
+<a id="af01cf5f6c103644bf46142bbd6e345cc" name="af01cf5f6c103644bf46142bbd6e345cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af01cf5f6c103644bf46142bbd6e345cc">&#9670;&#160;</a></span>getEventSymbol()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -736,7 +739,7 @@ static const <a class="el" href="../../d9/d00/classdxfcpp_1_1_event_type_enum.ht
           <td class="memname">const <a class="el" href="../../da/d01/structdxfcpp_1_1_candle_symbol.html">CandleSymbol</a> &amp; dxfcpp::Candle::getEventSymbol </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const &amp;</td>
         </tr>
       </table>
   </td>
@@ -746,10 +749,40 @@ static const <a class="el" href="../../d9/d00/classdxfcpp_1_1_event_type_enum.ht
 </table>
 </div><div class="memdoc">
 
-<p>Returns event symbol that identifies this event type in <a class="el" href="../../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html">subscription</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>The event symbol. </dd></dl>
+<p>Returns symbol of this event. </p>
+<dl class="section return"><dt>Returns</dt><dd>symbol of this event or dxfcpp::CandleSymbol::NUL (<code><a class="el" href="../../da/d01/structdxfcpp_1_1_candle_symbol.html" title="Symbol that should be used with DXFeedSubscription class to subscribe for Candle events.">dxfcpp::CandleSymbol</a>{"&lt;null&gt;"}</code>) </dd></dl>
 
-<p>Implements <a class="el" href="../../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html#a8f016c83c211cdd2cf50e61307f3ac4c">dxfcpp::EventTypeWithSymbol&lt; CandleSymbol &gt;</a>.</p>
+<p>Implements <a class="el" href="../../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html#ac538c22b9db24c92494e600a97ea4f16">dxfcpp::EventTypeWithSymbol&lt; CandleSymbol &gt;</a>.</p>
+
+</div>
+</div>
+<a id="ab17e5610a2a84ef6c3df26c70b54ea86" name="ab17e5610a2a84ef6c3df26c70b54ea86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab17e5610a2a84ef6c3df26c70b54ea86">&#9670;&#160;</a></span>getEventSymbolOpt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::optional&lt; <a class="el" href="../../da/d01/structdxfcpp_1_1_candle_symbol.html">CandleSymbol</a> &gt; &amp; dxfcpp::Candle::getEventSymbolOpt </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const &amp;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns symbol of this event. </p>
+<dl class="section return"><dt>Returns</dt><dd>symbol of this event or <code>std::nullopt</code>. </dd></dl>
+
+<p>Implements <a class="el" href="../../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html#a5ac37797f3b17ec18876ccc381638044">dxfcpp::EventTypeWithSymbol&lt; CandleSymbol &gt;</a>.</p>
 
 </div>
 </div>

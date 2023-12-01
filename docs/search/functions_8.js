@@ -21,12 +21,13 @@ var searchData=
   ['isonlyindexed_18',['isOnlyIndexed',['../d9/d00/classdxfcpp_1_1_event_type_enum.html#abf850871484b8212eb536d2b8f85a992',1,'dxfcpp::EventTypeEnum']]],
   ['isshortday_19',['isShortDay',['../dc/d01/structdxfcpp_1_1_day.html#ac5a77944f25f2f11bfdb2b9f7743d5aa',1,'dxfcpp::Day']]],
   ['isshortsalerestricted_20',['isShortSaleRestricted',['../db/d00/classdxfcpp_1_1_profile.html#afdb8200924e421b8d221290baf3de447',1,'dxfcpp::Profile']]],
-  ['isspreadleg_21',['isspreadleg',['../de/d02/classdxfcpp_1_1_option_sale.html#ab66f7dc0cb9edcaba39223d37ef00e34',1,'dxfcpp::OptionSale::isSpreadLeg()'],['../d3/d00/classdxfcpp_1_1_time_and_sale.html#a7cf19805aab24f33fe16f31544def899',1,'dxfcpp::TimeAndSale::isSpreadLeg()']]],
-  ['isstringsymbol_22',['isStringSymbol',['../db/d03/structdxfcpp_1_1_symbol_wrapper.html#a0f66038aa88942094d6a34838e3bafa4',1,'dxfcpp::SymbolWrapper']]],
-  ['istimeseries_23',['isTimeSeries',['../d9/d00/classdxfcpp_1_1_event_type_enum.html#a3bfd1a0aef9d454e03632391bb4619ce',1,'dxfcpp::EventTypeEnum']]],
-  ['istimeseriessubscriptionsymbol_24',['isTimeSeriesSubscriptionSymbol',['../db/d03/structdxfcpp_1_1_symbol_wrapper.html#a8e6657db1f3a1d24ca921829b08561a6',1,'dxfcpp::SymbolWrapper']]],
-  ['istrading_25',['istrading',['../d5/d02/structdxfcpp_1_1_session_type.html#aba906f02e0e56f416d88bc31ca2621df',1,'dxfcpp::SessionType::isTrading()'],['../dc/d01/structdxfcpp_1_1_day.html#ab3d7616b4def4e511828a292024c2d7b',1,'dxfcpp::Day::isTrading()'],['../dd/d03/structdxfcpp_1_1_session.html#a0536eadc2c4eaeed2ea1430e383bb6e2',1,'dxfcpp::Session::isTrading()']]],
-  ['istradinghalted_26',['isTradingHalted',['../db/d00/classdxfcpp_1_1_profile.html#a46302b3f64b88162be137d5d8b2bbddb',1,'dxfcpp::Profile']]],
-  ['isvalidtick_27',['isvalidtick',['../de/d02/classdxfcpp_1_1_option_sale.html#a2dfc7d136f1e6c4d29d0ca77d9e2c8cb',1,'dxfcpp::OptionSale::isValidTick()'],['../d3/d00/classdxfcpp_1_1_time_and_sale.html#a378647b10d8a2a9ff2df256a6d8a26bf',1,'dxfcpp::TimeAndSale::isValidTick()']]],
-  ['iswildcardsymbol_28',['isWildcardSymbol',['../db/d03/structdxfcpp_1_1_symbol_wrapper.html#a8f39830e71468fb50a80b5a56750db42',1,'dxfcpp::SymbolWrapper']]]
+  ['isspecialsourceid_21',['isSpecialSourceId',['../da/d03/classdxfcpp_1_1_order_source.html#a47e0a6e6956ca161fc413f3526a34ffd',1,'dxfcpp::OrderSource']]],
+  ['isspreadleg_22',['isspreadleg',['../de/d02/classdxfcpp_1_1_option_sale.html#ab66f7dc0cb9edcaba39223d37ef00e34',1,'dxfcpp::OptionSale::isSpreadLeg()'],['../d3/d00/classdxfcpp_1_1_time_and_sale.html#a7cf19805aab24f33fe16f31544def899',1,'dxfcpp::TimeAndSale::isSpreadLeg()']]],
+  ['isstringsymbol_23',['isStringSymbol',['../db/d03/structdxfcpp_1_1_symbol_wrapper.html#a0f66038aa88942094d6a34838e3bafa4',1,'dxfcpp::SymbolWrapper']]],
+  ['istimeseries_24',['isTimeSeries',['../d9/d00/classdxfcpp_1_1_event_type_enum.html#a3bfd1a0aef9d454e03632391bb4619ce',1,'dxfcpp::EventTypeEnum']]],
+  ['istimeseriessubscriptionsymbol_25',['isTimeSeriesSubscriptionSymbol',['../db/d03/structdxfcpp_1_1_symbol_wrapper.html#a8e6657db1f3a1d24ca921829b08561a6',1,'dxfcpp::SymbolWrapper']]],
+  ['istrading_26',['istrading',['../d5/d02/structdxfcpp_1_1_session_type.html#aba906f02e0e56f416d88bc31ca2621df',1,'dxfcpp::SessionType::isTrading()'],['../dc/d01/structdxfcpp_1_1_day.html#ab3d7616b4def4e511828a292024c2d7b',1,'dxfcpp::Day::isTrading()'],['../dd/d03/structdxfcpp_1_1_session.html#a0536eadc2c4eaeed2ea1430e383bb6e2',1,'dxfcpp::Session::isTrading()']]],
+  ['istradinghalted_27',['isTradingHalted',['../db/d00/classdxfcpp_1_1_profile.html#a46302b3f64b88162be137d5d8b2bbddb',1,'dxfcpp::Profile']]],
+  ['isvalidtick_28',['isvalidtick',['../de/d02/classdxfcpp_1_1_option_sale.html#a2dfc7d136f1e6c4d29d0ca77d9e2c8cb',1,'dxfcpp::OptionSale::isValidTick()'],['../d3/d00/classdxfcpp_1_1_time_and_sale.html#a378647b10d8a2a9ff2df256a6d8a26bf',1,'dxfcpp::TimeAndSale::isValidTick()']]],
+  ['iswildcardsymbol_29',['isWildcardSymbol',['../db/d03/structdxfcpp_1_1_symbol_wrapper.html#a8f39830e71468fb50a80b5a56750db42',1,'dxfcpp::SymbolWrapper']]]
 ];

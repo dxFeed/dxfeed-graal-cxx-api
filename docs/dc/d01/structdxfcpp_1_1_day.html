@@ -151,8 +151,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a12998de2d48f183e2cea7e6a617553e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0992b490b763d1ca63215aad987254b" id="r_ac0992b490b763d1ca63215aad987254b"><td class="memItemLeft" align="right" valign="top">std::int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d01/structdxfcpp_1_1_day.html#ac0992b490b763d1ca63215aad987254b">getResetTime</a> () const noexcept</td></tr>
 <tr class="separator:ac0992b490b763d1ca63215aad987254b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f33d3cdf1e7cabf3efb65f02075c3ac" id="r_a3f33d3cdf1e7cabf3efb65f02075c3ac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="../../dd/d03/structdxfcpp_1_1_session.html">Session</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d01/structdxfcpp_1_1_day.html#a3f33d3cdf1e7cabf3efb65f02075c3ac">getSessions</a> () const noexcept</td></tr>
-<tr class="separator:a3f33d3cdf1e7cabf3efb65f02075c3ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc17caa1b96904ac5226fc0df2ea89e5" id="r_acc17caa1b96904ac5226fc0df2ea89e5"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../dd/d03/structdxfcpp_1_1_session.html">Session</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d01/structdxfcpp_1_1_day.html#acc17caa1b96904ac5226fc0df2ea89e5">getSessionByTime</a> (std::int64_t time) const noexcept</td></tr>
 <tr class="memdesc:acc17caa1b96904ac5226fc0df2ea89e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns session belonging to this day that contains specified time.  <br /></td></tr>
 <tr class="separator:acc17caa1b96904ac5226fc0df2ea89e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -756,32 +754,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The session that contains specified time or <a class="el" href="../../dd/d03/structdxfcpp_1_1_session.html#a89b0a40b1acecac123bebfc91656721c" title="The alias to a type of shared pointer to the Session object.">Session::Ptr</a>{nullptr} (std::shared_ptr&lt;Session&gt;{nullptr}) if no such session was found within this day </dd></dl>
-
-</div>
-</div>
-<a id="a3f33d3cdf1e7cabf3efb65f02075c3ac" name="a3f33d3cdf1e7cabf3efb65f02075c3ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f33d3cdf1e7cabf3efb65f02075c3ac">&#9670;&#160;</a></span>getSessions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::shared_ptr&lt; <a class="el" href="../../dd/d03/structdxfcpp_1_1_session.html">Session</a> &gt; &gt; dxfcpp::Day::getSessions </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The list of sessions that constitute this day. The list is ordered according to natural order of sessions - how they occur one after another. </dd></dl>
 
 </div>
 </div>

@@ -51,7 +51,9 @@ var hierarchy =
           ] ],
           [ "dxfcpp::EventTypeWithSymbol< Symbol >", "d7/d02/structdxfcpp_1_1_event_type_with_symbol.html", null ]
         ] ],
-        [ "dxfcpp::InstrumentProfile", "d8/d01/classdxfcpp_1_1_instrument_profile.html", null ]
+        [ "dxfcpp::InstrumentProfile", "d8/d01/classdxfcpp_1_1_instrument_profile.html", null ],
+        [ "dxfcpp::InstrumentProfileCollector", "de/d03/classdxfcpp_1_1_instrument_profile_collector.html", null ],
+        [ "dxfcpp::InstrumentProfileConnection", "db/d00/classdxfcpp_1_1_instrument_profile_connection.html", null ]
       ] ]
     ] ],
     [ "dxfcpp::EventFlag", "de/d03/classdxfcpp_1_1_event_flag.html", null ],
@@ -75,11 +77,14 @@ var hierarchy =
         [ "dxfcpp::Underlying", "db/d02/classdxfcpp_1_1_underlying.html", null ]
       ] ]
     ] ],
-    [ "dxfcpp::IndexedEventSource", "d2/d01/classdxfcpp_1_1_indexed_event_source.html", null ],
+    [ "dxfcpp::IndexedEventSource", "d2/d01/classdxfcpp_1_1_indexed_event_source.html", [
+      [ "dxfcpp::OrderSource", "da/d03/classdxfcpp_1_1_order_source.html", null ]
+    ] ],
     [ "dxfcpp::IndexedEventSubscriptionSymbol", "df/d02/classdxfcpp_1_1_indexed_event_subscription_symbol.html", [
       [ "dxfcpp::TimeSeriesSubscriptionSymbol", "d6/d01/classdxfcpp_1_1_time_series_subscription_symbol.html", null ]
     ] ],
     [ "dxfcpp::InstrumentProfileType", "df/d01/structdxfcpp_1_1_instrument_profile_type.html", null ],
+    [ "dxfcpp::IterableInstrumentProfile", "de/d00/classdxfcpp_1_1_iterable_instrument_profile.html", null ],
     [ "dxfcpp::LastingEvent", "dd/d02/structdxfcpp_1_1_lasting_event.html", [
       [ "dxfcpp::Candle", "de/d03/classdxfcpp_1_1_candle.html", null ],
       [ "dxfcpp::Greeks", "d9/d01/classdxfcpp_1_1_greeks.html", null ],

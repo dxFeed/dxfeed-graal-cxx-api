@@ -116,236 +116,274 @@ $(document).ready(function(){initNavTree('dd/d01/_instrument_profile_connection_
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../../internal/JavaObjectHandle.hpp&quot;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../../entity/SharedEntity.hpp&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace</span> dxfcpp {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">class</span> <a class="code hl_define" href="../../df/d03/_conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> InstrumentProfileConnection <span class="keyword">final</span> : <span class="keyword">public</span> <a class="code hl_struct" href="../../db/d03/structdxfcpp_1_1_shared_entity.html">SharedEntity</a> {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="comment">/// The alias to a type of shared pointer to the InstrumentProfileConnection object</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">using</span> Ptr = std::shared_ptr&lt;InstrumentProfileConnection&gt;;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="comment">/// The alias to a type of unique pointer to the InstrumentProfileConnection object</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keyword">using</span> Unique = std::unique_ptr&lt;InstrumentProfileConnection&gt;;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   25</span><span class="comment">     * Instrument profile connection state.</span></div>
-<div class="line"><span class="lineno">   26</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keyword">enum</span> <span class="keyword">class</span> State : std::int32_t {</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   29</span><span class="comment">         * Instrument profile connection is not started yet.</span></div>
-<div class="line"><span class="lineno">   30</span><span class="comment">         * @ref InstrumentProfileConnection::start() &quot;start&quot; was not invoked yet.</span></div>
-<div class="line"><span class="lineno">   31</span><span class="comment">         */</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        NOT_CONNECTED,</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#</span><span class="preprocessor">include</span> <a class="code" href="../../d4/d02/_instrument_profile_collector_8hpp.html">&quot;InstrumentProfileCollector.hpp&quot;</a></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace</span> dxfcpp {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">/**</span></div>
+<div class="line"><span class="lineno">   18</span><span class="comment"> * Connects to an instrument profile URL and reads instrument profiles with support of</span></div>
+<div class="line"><span class="lineno">   19</span><span class="comment"> * streaming live updates.</span></div>
+<div class="line"><span class="lineno">   20</span><span class="comment"> * Please see &lt;b&gt;Instrument Profile Format&lt;/b&gt; documentation for complete description.</span></div>
+<div class="line"><span class="lineno">   21</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">class</span> <a class="code hl_define" href="../../df/d03/_conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> InstrumentProfileConnection <span class="keyword">final</span> : <span class="keyword">public</span> <a class="code hl_struct" href="../../db/d03/structdxfcpp_1_1_shared_entity.html">SharedEntity</a> {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="comment">/// The alias to a type of shared pointer to the InstrumentProfileConnection object</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keyword">using</span> Ptr = std::shared_ptr&lt;InstrumentProfileConnection&gt;;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="comment">/// The alias to a type of unique pointer to the InstrumentProfileConnection object</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keyword">using</span> Unique = std::unique_ptr&lt;InstrumentProfileConnection&gt;;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">   31</span><span class="comment">     * Instrument profile connection state.</span></div>
+<div class="line"><span class="lineno">   32</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">enum</span> <span class="keyword">class</span> <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a> : <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">std</a>::<a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">int32_t</a> {</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   35</span><span class="comment">         * Connection is being established.</span></div>
-<div class="line"><span class="lineno">   36</span><span class="comment">         */</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        CONNECTING,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   40</span><span class="comment">         * Connection was established.</span></div>
-<div class="line"><span class="lineno">   41</span><span class="comment">         */</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        CONNECTED,</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   45</span><span class="comment">         * Initial instrument profiles snapshot was fully read (this state is set only once).</span></div>
-<div class="line"><span class="lineno">   46</span><span class="comment">         */</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        COMPLETED,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   50</span><span class="comment">         * Instrument profile connection was @ref InstrumentProfileConnection::close() &quot;closed&quot;.</span></div>
-<div class="line"><span class="lineno">   51</span><span class="comment">         */</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        CLOSED</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    };</div>
+<div class="line"><span class="lineno">   35</span><span class="comment">         * Instrument profile connection is not started yet.</span></div>
+<div class="line"><span class="lineno">   36</span><span class="comment">         * @ref InstrumentProfileConnection::start() &quot;start&quot; was not invoked yet.</span></div>
+<div class="line"><span class="lineno">   37</span><span class="comment">         */</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8">NOT_CONNECTED</a>,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">   41</span><span class="comment">         * Connection is being established.</span></div>
+<div class="line"><span class="lineno">   42</span><span class="comment">         */</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d">CONNECTING</a>,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">   46</span><span class="comment">         * Connection was established.</span></div>
+<div class="line"><span class="lineno">   47</span><span class="comment">         */</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858">CONNECTED</a>,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">   51</span><span class="comment">         * Initial instrument profiles snapshot was fully read (this state is set only once).</span></div>
+<div class="line"><span class="lineno">   52</span><span class="comment">         */</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e">COMPLETED</a>,</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    Id&lt;InstrumentProfileConnection&gt; id_;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    JavaObjectHandle&lt;InstrumentProfileConnection&gt; handle_;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    JavaObjectHandle&lt;IpfPropertyChangeListener&gt; stateChangeListenerHandle_;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    SimpleHandler&lt;<span class="keywordtype">void</span>(State, State)&gt; onStateChange_{};</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">   56</span><span class="comment">         * Instrument profile connection was @ref InstrumentProfileConnection::close() &quot;closed&quot;.</span></div>
+<div class="line"><span class="lineno">   57</span><span class="comment">         */</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d">CLOSED</a></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    };</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    InstrumentProfileConnection() <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keyword">struct</span> Impl;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">static</span> std::string stateToString(State state) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordflow">switch</span> (state) {</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordflow">case</span> State::NOT_CONNECTED:</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;NOT_CONNECTED&quot;</span>;</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keywordflow">case</span> State::CONNECTING:</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;CONNECTING&quot;</span>;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keywordflow">case</span> State::CONNECTED:</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;CONNECTED&quot;</span>;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordflow">case</span> State::COMPLETED:</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;COMPLETED&quot;</span>;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keywordflow">case</span> State::CLOSED:</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;CLOSED&quot;</span>;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        }</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">   84</span><span class="comment">     * Creates instrument profile connection with a specified address and collector.</span></div>
-<div class="line"><span class="lineno">   85</span><span class="comment">     * Address may be just &quot;&lt;host&gt;:&lt;port&gt;&quot; of server, URL, or a file path.</span></div>
-<div class="line"><span class="lineno">   86</span><span class="comment">     * The &quot;[update=&lt;period&gt;]&quot; clause can be optionally added at the end of the address to</span></div>
-<div class="line"><span class="lineno">   87</span><span class="comment">     * specify an @ref InstrumentProfileConnection::getUpdatePeriod() &quot;update period&quot; via an address string.</span></div>
-<div class="line"><span class="lineno">   88</span><span class="comment">     * Default update period is 1 minute.</span></div>
-<div class="line"><span class="lineno">   89</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">   90</span><span class="comment">     * &lt;p&gt;Connection needs to be @ref InstrumentProfileConnection::start() &quot;started&quot; to begin an actual operation.</span></div>
-<div class="line"><span class="lineno">   91</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">   92</span><span class="comment">     * @param address The address.</span></div>
-<div class="line"><span class="lineno">   93</span><span class="comment">     * @param collector The instrument profile collector to push updates into.</span></div>
-<div class="line"><span class="lineno">   94</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">   95</span><span class="comment">     * @return new instrument profile connection.</span></div>
-<div class="line"><span class="lineno">   96</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keyword">static</span> Ptr createConnection(<span class="keyword">const</span> std::string &amp;address, InstrumentProfileCollector::Ptr collector) <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  100</span><span class="comment">     * Returns the address of this instrument profile connection.</span></div>
-<div class="line"><span class="lineno">  101</span><span class="comment">     * It does not include additional options specified as part of the address.</span></div>
-<div class="line"><span class="lineno">  102</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  103</span><span class="comment">     * @return The address of this instrument profile connection.</span></div>
-<div class="line"><span class="lineno">  104</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    std::string getAddress() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  108</span><span class="comment">     * Returns update period in milliseconds.</span></div>
-<div class="line"><span class="lineno">  109</span><span class="comment">     * It is period of an update check when the instrument profiles source does not support live updates</span></div>
-<div class="line"><span class="lineno">  110</span><span class="comment">     * and/or when connection is dropped.</span></div>
-<div class="line"><span class="lineno">  111</span><span class="comment">     * Default update period is 1 minute, unless overridden in an</span></div>
-<div class="line"><span class="lineno">  112</span><span class="comment">     * @ref InstrumentProfileConnection::createConnection() &quot;address string&quot;.</span></div>
-<div class="line"><span class="lineno">  113</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  114</span><span class="comment">     * @return The update period in milliseconds.</span></div>
-<div class="line"><span class="lineno">  115</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    std::int64_t getUpdatePeriod() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  119</span><span class="comment">     * Returns update period in milliseconds as chrono::duration</span></div>
-<div class="line"><span class="lineno">  120</span><span class="comment">     * It is period of an update check when the instrument profiles source does not support live updates</span></div>
-<div class="line"><span class="lineno">  121</span><span class="comment">     * and/or when connection is dropped.</span></div>
-<div class="line"><span class="lineno">  122</span><span class="comment">     * Default update period is 1 minute, unless overridden in an</span></div>
-<div class="line"><span class="lineno">  123</span><span class="comment">     * @ref InstrumentProfileConnection::createConnection() &quot;address string&quot;.</span></div>
-<div class="line"><span class="lineno">  124</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  125</span><span class="comment">     * @return The update period in milliseconds as chrono::duration.</span></div>
-<div class="line"><span class="lineno">  126</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    std::chrono::milliseconds getUpdatePeriodAsDuration() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        <span class="keywordflow">return</span> std::chrono::milliseconds(getUpdatePeriod());</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    }</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  132</span><span class="comment">     * Changes the update period in milliseconds.</span></div>
-<div class="line"><span class="lineno">  133</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  134</span><span class="comment">     * @param updatePeriod The update period in milliseconds.</span></div>
-<div class="line"><span class="lineno">  135</span><span class="comment">     * @see InstrumentProfileConnection::getUpdatePeriod()</span></div>
-<div class="line"><span class="lineno">  136</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <span class="keywordtype">void</span> setUpdatePeriod(std::int64_t updatePeriod) <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  140</span><span class="comment">     * Changes the update period in milliseconds as chrono::duration.</span></div>
-<div class="line"><span class="lineno">  141</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  142</span><span class="comment">     * @param updatePeriod The update period in milliseconds as chrono::duration.</span></div>
-<div class="line"><span class="lineno">  143</span><span class="comment">     * @see InstrumentProfileConnection::getUpdatePeriod()</span></div>
-<div class="line"><span class="lineno">  144</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    <span class="keywordtype">void</span> setUpdatePeriod(std::chrono::milliseconds updatePeriod) <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        setUpdatePeriod(updatePeriod.count());</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    }</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  150</span><span class="comment">     * Returns state of this instrument profile connections.</span></div>
-<div class="line"><span class="lineno">  151</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  152</span><span class="comment">     * @return The state of this instrument profile connections.</span></div>
-<div class="line"><span class="lineno">  153</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    State getState() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  157</span><span class="comment">     * Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.</span></div>
-<div class="line"><span class="lineno">  158</span><span class="comment">     * Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.</span></div>
-<div class="line"><span class="lineno">  159</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  160</span><span class="comment">     * @return The last modification time (in milliseconds) of instrument profiles or zero if it is unknown.</span></div>
-<div class="line"><span class="lineno">  161</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    std::int64_t getLastModified() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  165</span><span class="comment">     * Starts this instrument profile connection. This connection&#39;s state immediately changes to</span></div>
-<div class="line"><span class="lineno">  166</span><span class="comment">     * @ref InstrumentProfileConnection::State::CONNECTING &quot;CONNECTING&quot; and the actual connection establishment proceeds</span></div>
-<div class="line"><span class="lineno">  167</span><span class="comment">     * in the background.</span></div>
-<div class="line"><span class="lineno">  168</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    <span class="keywordtype">void</span> start() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  172</span><span class="comment">     * Closes this instrument profile connection. This connection&#39;s state immediately changes to</span></div>
-<div class="line"><span class="lineno">  173</span><span class="comment">     * @ref InstrumentProfileConnection::State::CLOSED &quot;CLOSED&quot; and the background update procedures are terminated.</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    Id&lt;InstrumentProfileConnection&gt; id_;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    JavaObjectHandle&lt;InstrumentProfileConnection&gt; handle_;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    JavaObjectHandle&lt;IpfPropertyChangeListener&gt; stateChangeListenerHandle_;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    SimpleHandler&lt;<span class="keywordtype">void</span>(<a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a>, <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a>)&gt; onStateChange_<a class="code hl_function" href="../../d5/d00/structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4.html#ad61817f97608b59ef4ed5330d90f8d07">{</a><a class="code hl_function" href="../../d5/d00/structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4.html#ad61817f97608b59ef4ed5330d90f8d07">}</a>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    InstrumentProfileConnection() <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keyword">struct</span> Impl;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keyword">static</span> std::string stateToString(<a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a> state) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keywordflow">switch</span> (state) {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordflow">case</span> <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8">::</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8">NOT_CONNECTED</a>:</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;NOT_CONNECTED&quot;</span>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keywordflow">case</span> <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d">::</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d">CONNECTING</a>:</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;CONNECTING&quot;</span>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <span class="keywordflow">case</span> <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858">::</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858">CONNECTED</a>:</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;CONNECTED&quot;</span>;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">case</span> <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e">::</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e">COMPLETED</a>:</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;COMPLETED&quot;</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordflow">case</span> <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d">::</a><a class="code hl_enumvalue" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d">CLOSED</a>:</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            <span class="keywordflow">return</span> <span class="stringliteral">&quot;CLOSED&quot;</span>;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        }</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    }</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">   90</span><span class="comment">     * Creates instrument profile connection with a specified address and collector.</span></div>
+<div class="line"><span class="lineno">   91</span><span class="comment">     * Address may be just &quot;&lt;host&gt;:&lt;port&gt;&quot; of server, URL, or a file path.</span></div>
+<div class="line"><span class="lineno">   92</span><span class="comment">     * The &quot;[update=&lt;period&gt;]&quot; clause can be optionally added at the end of the address to</span></div>
+<div class="line"><span class="lineno">   93</span><span class="comment">     * specify an @ref InstrumentProfileConnection::getUpdatePeriod() &quot;update period&quot; via an address string.</span></div>
+<div class="line"><span class="lineno">   94</span><span class="comment">     * Default update period is 1 minute.</span></div>
+<div class="line"><span class="lineno">   95</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">   96</span><span class="comment">     * &lt;p&gt;Connection needs to be @ref InstrumentProfileConnection::start() &quot;started&quot; to begin an actual operation.</span></div>
+<div class="line"><span class="lineno">   97</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">   98</span><span class="comment">     * @param address The address.</span></div>
+<div class="line"><span class="lineno">   99</span><span class="comment">     * @param collector The instrument profile collector to push updates into.</span></div>
+<div class="line"><span class="lineno">  100</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  101</span><span class="comment">     * @return new instrument profile connection.</span></div>
+<div class="line"><span class="lineno">  102</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keyword">static</span> Ptr <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a8c6d9346242856cb081e0b39c50490be">createConnection</a>(<span class="keyword">const</span> std::string &amp;address, InstrumentProfileCollector::Ptr collector) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  106</span><span class="comment">     * Returns the address of this instrument profile connection.</span></div>
+<div class="line"><span class="lineno">  107</span><span class="comment">     * It does not include additional options specified as part of the address.</span></div>
+<div class="line"><span class="lineno">  108</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  109</span><span class="comment">     * @return The address of this instrument profile connection.</span></div>
+<div class="line"><span class="lineno">  110</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    std::string <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#af72f021b002d581c18b5255bb927af90">getAddress</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  114</span><span class="comment">     * Returns update period in milliseconds.</span></div>
+<div class="line"><span class="lineno">  115</span><span class="comment">     * It is period of an update check when the instrument profiles source does not support live updates</span></div>
+<div class="line"><span class="lineno">  116</span><span class="comment">     * and/or when connection is dropped.</span></div>
+<div class="line"><span class="lineno">  117</span><span class="comment">     * Default update period is 1 minute, unless overridden in an</span></div>
+<div class="line"><span class="lineno">  118</span><span class="comment">     * @ref InstrumentProfileConnection::createConnection() &quot;address string&quot;.</span></div>
+<div class="line"><span class="lineno">  119</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  120</span><span class="comment">     * @return The update period in milliseconds.</span></div>
+<div class="line"><span class="lineno">  121</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    std::int64_t <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ace0bd32f519db9bf13ff62cedfd9835c">getUpdatePeriod</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  125</span><span class="comment">     * Returns update period in milliseconds as chrono::duration</span></div>
+<div class="line"><span class="lineno">  126</span><span class="comment">     * It is period of an update check when the instrument profiles source does not support live updates</span></div>
+<div class="line"><span class="lineno">  127</span><span class="comment">     * and/or when connection is dropped.</span></div>
+<div class="line"><span class="lineno">  128</span><span class="comment">     * Default update period is 1 minute, unless overridden in an</span></div>
+<div class="line"><span class="lineno">  129</span><span class="comment">     * @ref InstrumentProfileConnection::createConnection() &quot;address string&quot;.</span></div>
+<div class="line"><span class="lineno">  130</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  131</span><span class="comment">     * @return The update period in milliseconds as chrono::duration.</span></div>
+<div class="line"><span class="lineno">  132</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    std::chrono::milliseconds <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ab69cbd37ade86b5bdcb3618335b8800e">getUpdatePeriodAsDuration</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        <span class="keywordflow">return</span> std::chrono::milliseconds(<a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ace0bd32f519db9bf13ff62cedfd9835c">getUpdatePeriod</a><a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ace0bd32f519db9bf13ff62cedfd9835c">(</a><a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ace0bd32f519db9bf13ff62cedfd9835c">)</a>);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    }</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  138</span><span class="comment">     * Changes the update period in milliseconds.</span></div>
+<div class="line"><span class="lineno">  139</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  140</span><span class="comment">     * @param updatePeriod The update period in milliseconds.</span></div>
+<div class="line"><span class="lineno">  141</span><span class="comment">     * @see InstrumentProfileConnection::getUpdatePeriod()</span></div>
+<div class="line"><span class="lineno">  142</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a4d96bf46b2de162b34f98631f4e82e84">setUpdatePeriod</a>(std::int64_t updatePeriod) <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  146</span><span class="comment">     * Changes the update period in milliseconds as chrono::duration.</span></div>
+<div class="line"><span class="lineno">  147</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  148</span><span class="comment">     * @param updatePeriod The update period in milliseconds as chrono::duration.</span></div>
+<div class="line"><span class="lineno">  149</span><span class="comment">     * @see InstrumentProfileConnection::getUpdatePeriod()</span></div>
+<div class="line"><span class="lineno">  150</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a5e8366941b6070651b7966cb34b54d9e">setUpdatePeriod</a>(std::chrono::milliseconds updatePeriod) <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a4d96bf46b2de162b34f98631f4e82e84">setUpdatePeriod</a><a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a4d96bf46b2de162b34f98631f4e82e84">(</a>updatePeriod.count()<a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a4d96bf46b2de162b34f98631f4e82e84">)</a>;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    }</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  156</span><span class="comment">     * Returns state of this instrument profile connections.</span></div>
+<div class="line"><span class="lineno">  157</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  158</span><span class="comment">     * @return The state of this instrument profile connections.</span></div>
+<div class="line"><span class="lineno">  159</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    <a class="code hl_enumeration" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">State</a> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a14ea136c4da5de978b2ed946ad878c85">getState</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  163</span><span class="comment">     * Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.</span></div>
+<div class="line"><span class="lineno">  164</span><span class="comment">     * Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.</span></div>
+<div class="line"><span class="lineno">  165</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  166</span><span class="comment">     * @return The last modification time (in milliseconds) of instrument profiles or zero if it is unknown.</span></div>
+<div class="line"><span class="lineno">  167</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    std::int64_t <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ab0260dce2c5ce488be31cb572bf2a145">getLastModified</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  171</span><span class="comment">     * Starts this instrument profile connection. This connection&#39;s state immediately changes to</span></div>
+<div class="line"><span class="lineno">  172</span><span class="comment">     * @ref InstrumentProfileConnection::State::CONNECTING &quot;CONNECTING&quot; and the actual connection establishment proceeds</span></div>
+<div class="line"><span class="lineno">  173</span><span class="comment">     * in the background.</span></div>
 <div class="line"><span class="lineno">  174</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="keywordtype">void</span> close() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#addaee68079e29ca30122b0690f47a45a">start</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  178</span><span class="comment">     * Adds listener that is notified about changes in @ref InstrumentProfileConnection::getState() &quot;state&quot; property.</span></div>
-<div class="line"><span class="lineno">  179</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  180</span><span class="comment">     * &lt;p&gt;Installed listener can be removed by `id` with InstrumentProfileConnection::removeStateChangeListener method</span></div>
-<div class="line"><span class="lineno">  181</span><span class="comment">     * or by call `InstrumentProfileConnection::onStateChange() -= id`;</span></div>
-<div class="line"><span class="lineno">  182</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  183</span><span class="comment">     * @tparam StateChangeListener The listener type. It can be any callable with signature: `void(State, State)`</span></div>
-<div class="line"><span class="lineno">  184</span><span class="comment">     * @param listener The listener to add</span></div>
-<div class="line"><span class="lineno">  185</span><span class="comment">     * @return the listener id</span></div>
-<div class="line"><span class="lineno">  186</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> StateChangeListener&gt;</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    std::size_t addStateChangeListener(StateChangeListener &amp;&amp;listener) <span class="keyword">noexcept</span></div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="preprocessor">#</span><span class="preprocessor">if</span> <span class="preprocessor">__cpp_concepts</span></div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        requires requires {</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>            { listener(State{}, State{}) } -&gt; std::same_as&lt;<span class="keywordtype">void</span>&gt;;</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        }</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="preprocessor">#</span><span class="preprocessor">endif</span></div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    {</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        <span class="keywordflow">return</span> onStateChange_ += listener;</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    }</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  199</span><span class="comment">     * Removes listener that is notified about changes in @ref InstrumentProfileConnection::getState() &quot;state&quot; property.</span></div>
-<div class="line"><span class="lineno">  200</span><span class="comment">     * It removes the listener that was previously installed with InstrumentProfileConnection::addStateChangeListener</span></div>
-<div class="line"><span class="lineno">  201</span><span class="comment">     * method.</span></div>
-<div class="line"><span class="lineno">  202</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  203</span><span class="comment">     * @param listenerId The listener id to remove</span></div>
-<div class="line"><span class="lineno">  204</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="keywordtype">void</span> removeStateChangeListener(std::size_t listenerId) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        onStateChange_ -= listenerId;</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    }</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  210</span><span class="comment">     * Returns the onStateChange @ref SimpleHandler&lt;void(ArgTypes...)&gt; &quot;handler&quot; that can be used to add or remove</span></div>
-<div class="line"><span class="lineno">  211</span><span class="comment">     * listeners.</span></div>
-<div class="line"><span class="lineno">  212</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  213</span><span class="comment">     * @return onStateChange handler with `void(State, State)` signature</span></div>
-<div class="line"><span class="lineno">  214</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="keyword">auto</span> &amp;onStateChange() <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        <span class="keywordflow">return</span> onStateChange_;</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    }</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  220</span><span class="comment">     * Synchronously waits for full first snapshot read with the specified timeout.</span></div>
-<div class="line"><span class="lineno">  221</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  222</span><span class="comment">     * @param timeout The maximum time (in millis) to wait</span></div>
-<div class="line"><span class="lineno">  223</span><span class="comment">     * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED &quot;COMPLETED&quot; state was reached and `false`</span></div>
-<div class="line"><span class="lineno">  224</span><span class="comment">     *         if the waiting time elapsed before snapshot was fully read.</span></div>
-<div class="line"><span class="lineno">  225</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    <span class="keywordtype">bool</span> waitUntilCompleted(std::int64_t timeout) <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  229</span><span class="comment">     * Synchronously waits for full first snapshot read with the specified timeout.</span></div>
-<div class="line"><span class="lineno">  230</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  231</span><span class="comment">     * @param timeout The maximum time to wait</span></div>
-<div class="line"><span class="lineno">  232</span><span class="comment">     * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED &quot;COMPLETED&quot; state was reached and `false`</span></div>
-<div class="line"><span class="lineno">  233</span><span class="comment">     *         if the waiting time elapsed before snapshot was fully read.</span></div>
-<div class="line"><span class="lineno">  234</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <span class="keywordtype">bool</span> waitUntilCompleted(std::chrono::milliseconds timeout) <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        <span class="keywordflow">return</span> waitUntilCompleted(timeout.count());</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    }</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>};</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><span class="lineno">  178</span><span class="comment">     * Closes this instrument profile connection. This connection&#39;s state immediately changes to</span></div>
+<div class="line"><span class="lineno">  179</span><span class="comment">     * @ref InstrumentProfileConnection::State::CLOSED &quot;CLOSED&quot; and the background update procedures are terminated.</span></div>
+<div class="line"><span class="lineno">  180</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a34b2751fd3fb16cecc174773ffbad5bc">close</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  184</span><span class="comment">     * Adds listener that is notified about changes in @ref InstrumentProfileConnection::getState() &quot;state&quot; property.</span></div>
+<div class="line"><span class="lineno">  185</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  186</span><span class="comment">     * &lt;p&gt;Installed listener can be removed by `id` with InstrumentProfileConnection::removeStateChangeListener method</span></div>
+<div class="line"><span class="lineno">  187</span><span class="comment">     * or by call `InstrumentProfileConnection::onStateChange() -= id`;</span></div>
+<div class="line"><span class="lineno">  188</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  189</span><span class="comment">     * @tparam StateChangeListener The listener type. It can be any callable with signature: `void(State, State)`</span></div>
+<div class="line"><span class="lineno">  190</span><span class="comment">     * @param listener The listener to add</span></div>
+<div class="line"><span class="lineno">  191</span><span class="comment">     * @return the listener id</span></div>
+<div class="line"><span class="lineno">  192</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> StateChangeListener&gt;</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    std::size_t <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a9d3564db3cab9cd2e442e509c009ed86">addStateChangeListener</a>(StateChangeListener &amp;&amp;listener) <span class="keyword">noexcept</span></div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span><span class="preprocessor">#</span><span class="preprocessor">if</span> <span class="preprocessor">__cpp_concepts</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        requires requires {</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>            { listener(State{}, State{}) } -&gt; std::same_as&lt;<span class="keywordtype">void</span>&gt;;</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        }</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="preprocessor">#</span><span class="preprocessor">endif</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    {</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        <span class="keywordflow">return</span> onStateChange_ += listener;</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    }</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  205</span><span class="comment">     * Removes listener that is notified about changes in @ref InstrumentProfileConnection::getState() &quot;state&quot; property.</span></div>
+<div class="line"><span class="lineno">  206</span><span class="comment">     * It removes the listener that was previously installed with InstrumentProfileConnection::addStateChangeListener</span></div>
+<div class="line"><span class="lineno">  207</span><span class="comment">     * method.</span></div>
+<div class="line"><span class="lineno">  208</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  209</span><span class="comment">     * @param listenerId The listener id to remove</span></div>
+<div class="line"><span class="lineno">  210</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a13e5826c00974cf8693922845339b2c7">removeStateChangeListener</a>(std::size_t listenerId) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        onStateChange_ <a class="code hl_function" href="../../d5/d00/structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4.html#a9a3a6f6164c4584b4f109375085a5596">-=</a> listenerId;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    }</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  216</span><span class="comment">     * Returns the onStateChange @ref SimpleHandler&lt;void(ArgTypes...)&gt; &quot;handler&quot; that can be used to add or remove</span></div>
+<div class="line"><span class="lineno">  217</span><span class="comment">     * listeners.</span></div>
+<div class="line"><span class="lineno">  218</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  219</span><span class="comment">     * @return onStateChange handler with `void(State, State)` signature</span></div>
+<div class="line"><span class="lineno">  220</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="keyword">auto</span> &amp;<a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a607127b7f9a5c7259628774a856ffe29">onStateChange</a>() <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        <span class="keywordflow">return</span> onStateChange_;</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    }</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  226</span><span class="comment">     * Synchronously waits for full first snapshot read with the specified timeout.</span></div>
+<div class="line"><span class="lineno">  227</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  228</span><span class="comment">     * @param timeout The maximum time (in millis) to wait</span></div>
+<div class="line"><span class="lineno">  229</span><span class="comment">     * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED &quot;COMPLETED&quot; state was reached and `false`</span></div>
+<div class="line"><span class="lineno">  230</span><span class="comment">     *         if the waiting time elapsed before snapshot was fully read.</span></div>
+<div class="line"><span class="lineno">  231</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a8d2bb2ed147ed654455cffa6062f4b36">waitUntilCompleted</a>(std::int64_t timeout) <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  235</span><span class="comment">     * Synchronously waits for full first snapshot read with the specified timeout.</span></div>
+<div class="line"><span class="lineno">  236</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  237</span><span class="comment">     * @param timeout The maximum time to wait</span></div>
+<div class="line"><span class="lineno">  238</span><span class="comment">     * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED &quot;COMPLETED&quot; state was reached and `false`</span></div>
+<div class="line"><span class="lineno">  239</span><span class="comment">     *         if the waiting time elapsed before snapshot was fully read.</span></div>
+<div class="line"><span class="lineno">  240</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a980035e287fe65558b6f72d736000629">waitUntilCompleted</a>(std::chrono::milliseconds timeout) <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        <span class="keywordflow">return</span> <a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a8d2bb2ed147ed654455cffa6062f4b36">waitUntilCompleted</a><a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a8d2bb2ed147ed654455cffa6062f4b36">(</a>timeout.count()<a class="code hl_function" href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a8d2bb2ed147ed654455cffa6062f4b36">)</a>;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    }</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>};</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>} <span class="comment">// namespace dxfcpp</span></div>
 <div class="ttc" id="a_conf_8hpp_html_a2247137e794d0adca60e1208433f3ec9"><div class="ttname"><a href="../../df/d03/_conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a></div><div class="ttdeci">#define DXFCPP_EXPORT</div><div class="ttdef"><b>Definition</b> Conf.hpp:33</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_collector_html_a4333db3c6669dc452d1a036ec1350451"><div class="ttname"><a href="../../de/d03/classdxfcpp_1_1_instrument_profile_collector.html#a4333db3c6669dc452d1a036ec1350451">dxfcpp::InstrumentProfileCollector::updateInstrumentProfile</a></div><div class="ttdeci">void updateInstrumentProfile(const InstrumentProfile &amp;ip) const noexcept</div><div class="ttdoc">Convenience method to update one instrument profile in this collector.</div><div class="ttdef"><b>Definition</b> InstrumentProfileCollector.cpp:172</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_collector_html_a786c529e6055f8b71e3aeaef5c7bcbe3"><div class="ttname"><a href="../../de/d03/classdxfcpp_1_1_instrument_profile_collector.html#a786c529e6055f8b71e3aeaef5c7bcbe3">dxfcpp::InstrumentProfileCollector::getLastUpdateTime</a></div><div class="ttdeci">std::int64_t getLastUpdateTime() const noexcept</div><div class="ttdoc">Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.</div><div class="ttdef"><b>Definition</b> InstrumentProfileCollector.cpp:150</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_collector_html_a7c5fe2a804f91d1d198fa9ffdf711385"><div class="ttname"><a href="../../de/d03/classdxfcpp_1_1_instrument_profile_collector.html#a7c5fe2a804f91d1d198fa9ffdf711385">dxfcpp::InstrumentProfileCollector::updateInstrumentProfile</a></div><div class="ttdeci">void updateInstrumentProfile(std::shared_ptr&lt; InstrumentProfile &gt; ip) const noexcept</div><div class="ttdoc">Convenience method to update one instrument profile in this collector.</div><div class="ttdef"><b>Definition</b> InstrumentProfileCollector.cpp:158</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_collector_html_a95a585ada099ef46ca766598149c4f2b"><div class="ttname"><a href="../../de/d03/classdxfcpp_1_1_instrument_profile_collector.html#a95a585ada099ef46ca766598149c4f2b">dxfcpp::InstrumentProfileCollector::view</a></div><div class="ttdeci">std::shared_ptr&lt; IterableInstrumentProfile &gt; view() const noexcept</div><div class="ttdoc">Returns a concurrent view of the set of instrument profiles.</div><div class="ttdef"><b>Definition</b> InstrumentProfileCollector.cpp:186</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_collector_html_a9efaffdf89319cd9e2176f52f72bc381"><div class="ttname"><a href="../../de/d03/classdxfcpp_1_1_instrument_profile_collector.html#a9efaffdf89319cd9e2176f52f72bc381">dxfcpp::InstrumentProfileCollector::create</a></div><div class="ttdeci">static Ptr create() noexcept</div><div class="ttdoc">Creates the new InstrumentProfileCollector.</div><div class="ttdef"><b>Definition</b> InstrumentProfileCollector.cpp:135</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a13e5826c00974cf8693922845339b2c7"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a13e5826c00974cf8693922845339b2c7">dxfcpp::InstrumentProfileConnection::removeStateChangeListener</a></div><div class="ttdeci">void removeStateChangeListener(std::size_t listenerId) noexcept</div><div class="ttdoc">Removes listener that is notified about changes in state property.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.hpp:211</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a14ea136c4da5de978b2ed946ad878c85"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a14ea136c4da5de978b2ed946ad878c85">dxfcpp::InstrumentProfileConnection::getState</a></div><div class="ttdeci">State getState() const noexcept</div><div class="ttdoc">Returns state of this instrument profile connections.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:118</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a34b2751fd3fb16cecc174773ffbad5bc"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a34b2751fd3fb16cecc174773ffbad5bc">dxfcpp::InstrumentProfileConnection::close</a></div><div class="ttdeci">void close() const noexcept</div><div class="ttdoc">Closes this instrument profile connection.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:142</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a4d96bf46b2de162b34f98631f4e82e84"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a4d96bf46b2de162b34f98631f4e82e84">dxfcpp::InstrumentProfileConnection::setUpdatePeriod</a></div><div class="ttdeci">void setUpdatePeriod(std::int64_t updatePeriod) const noexcept</div><div class="ttdoc">Changes the update period in milliseconds.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:110</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a5e8366941b6070651b7966cb34b54d9e"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a5e8366941b6070651b7966cb34b54d9e">dxfcpp::InstrumentProfileConnection::setUpdatePeriod</a></div><div class="ttdeci">void setUpdatePeriod(std::chrono::milliseconds updatePeriod) const noexcept</div><div class="ttdoc">Changes the update period in milliseconds as chrono::duration.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.hpp:151</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a607127b7f9a5c7259628774a856ffe29"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a607127b7f9a5c7259628774a856ffe29">dxfcpp::InstrumentProfileConnection::onStateChange</a></div><div class="ttdeci">auto &amp; onStateChange() noexcept</div><div class="ttdoc">Returns the onStateChange handler that can be used to add or remove listeners.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.hpp:221</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a63d1cecff8d2edb80b8862725df0bd51"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51">dxfcpp::InstrumentProfileConnection::State</a></div><div class="ttdeci">State</div><div class="ttdoc">Instrument profile connection state.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.hpp:33</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d">dxfcpp::InstrumentProfileConnection::State::CLOSED</a></div><div class="ttdeci">@ CLOSED</div><div class="ttdoc">Instrument profile connection was closed.</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e">dxfcpp::InstrumentProfileConnection::State::COMPLETED</a></div><div class="ttdeci">@ COMPLETED</div><div class="ttdoc">Initial instrument profiles snapshot was fully read (this state is set only once).</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d">dxfcpp::InstrumentProfileConnection::State::CONNECTING</a></div><div class="ttdeci">@ CONNECTING</div><div class="ttdoc">Connection is being established.</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858">dxfcpp::InstrumentProfileConnection::State::CONNECTED</a></div><div class="ttdeci">@ CONNECTED</div><div class="ttdoc">Connection was established.</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8">dxfcpp::InstrumentProfileConnection::State::NOT_CONNECTED</a></div><div class="ttdeci">@ NOT_CONNECTED</div><div class="ttdoc">Instrument profile connection is not started yet.</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a8c6d9346242856cb081e0b39c50490be"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a8c6d9346242856cb081e0b39c50490be">dxfcpp::InstrumentProfileConnection::createConnection</a></div><div class="ttdeci">static Ptr createConnection(const std::string &amp;address, InstrumentProfileCollector::Ptr collector) noexcept</div><div class="ttdoc">Creates instrument profile connection with a specified address and collector.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:64</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a8d2bb2ed147ed654455cffa6062f4b36"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a8d2bb2ed147ed654455cffa6062f4b36">dxfcpp::InstrumentProfileConnection::waitUntilCompleted</a></div><div class="ttdeci">bool waitUntilCompleted(std::int64_t timeout) const noexcept</div><div class="ttdoc">Synchronously waits for full first snapshot read with the specified timeout.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:150</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a980035e287fe65558b6f72d736000629"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a980035e287fe65558b6f72d736000629">dxfcpp::InstrumentProfileConnection::waitUntilCompleted</a></div><div class="ttdeci">bool waitUntilCompleted(std::chrono::milliseconds timeout) const noexcept</div><div class="ttdoc">Synchronously waits for full first snapshot read with the specified timeout.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.hpp:241</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_a9d3564db3cab9cd2e442e509c009ed86"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#a9d3564db3cab9cd2e442e509c009ed86">dxfcpp::InstrumentProfileConnection::addStateChangeListener</a></div><div class="ttdeci">std::size_t addStateChangeListener(StateChangeListener &amp;&amp;listener) noexcept</div><div class="ttdoc">Adds listener that is notified about changes in state property.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.hpp:194</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_ab0260dce2c5ce488be31cb572bf2a145"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ab0260dce2c5ce488be31cb572bf2a145">dxfcpp::InstrumentProfileConnection::getLastModified</a></div><div class="ttdeci">std::int64_t getLastModified() const noexcept</div><div class="ttdoc">Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:126</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_ab69cbd37ade86b5bdcb3618335b8800e"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ab69cbd37ade86b5bdcb3618335b8800e">dxfcpp::InstrumentProfileConnection::getUpdatePeriodAsDuration</a></div><div class="ttdeci">std::chrono::milliseconds getUpdatePeriodAsDuration() const noexcept</div><div class="ttdoc">Returns update period in milliseconds as chrono::duration It is period of an update check when the in...</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.hpp:133</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_ace0bd32f519db9bf13ff62cedfd9835c"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#ace0bd32f519db9bf13ff62cedfd9835c">dxfcpp::InstrumentProfileConnection::getUpdatePeriod</a></div><div class="ttdeci">std::int64_t getUpdatePeriod() const noexcept</div><div class="ttdoc">Returns update period in milliseconds.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:102</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_addaee68079e29ca30122b0690f47a45a"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#addaee68079e29ca30122b0690f47a45a">dxfcpp::InstrumentProfileConnection::start</a></div><div class="ttdeci">void start() const noexcept</div><div class="ttdoc">Starts this instrument profile connection.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:134</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_connection_html_af72f021b002d581c18b5255bb927af90"><div class="ttname"><a href="../../db/d00/classdxfcpp_1_1_instrument_profile_connection.html#af72f021b002d581c18b5255bb927af90">dxfcpp::InstrumentProfileConnection::getAddress</a></div><div class="ttdeci">std::string getAddress() const noexcept</div><div class="ttdoc">Returns the address of this instrument profile connection.</div><div class="ttdef"><b>Definition</b> InstrumentProfileConnection.cpp:94</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_html_a6e65bd6bbe8aa78ac64a7fdcf747ffb9"><div class="ttname"><a href="../../d8/d01/classdxfcpp_1_1_instrument_profile.html#a6e65bd6bbe8aa78ac64a7fdcf747ffb9">dxfcpp::InstrumentProfile::freeGraal</a></div><div class="ttdeci">static void freeGraal(void *graalNative) noexcept</div><div class="ttdoc">Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).</div><div class="ttdef"><b>Definition</b> InstrumentProfile.cpp:260</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_instrument_profile_html_ae273701d033662cfb49349c6193e423e"><div class="ttname"><a href="../../d8/d01/classdxfcpp_1_1_instrument_profile.html#ae273701d033662cfb49349c6193e423e">dxfcpp::InstrumentProfile::toGraal</a></div><div class="ttdeci">void * toGraal() const noexcept</div><div class="ttdoc">Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).</div><div class="ttdef"><b>Definition</b> InstrumentProfile.cpp:246</div></div>
+<div class="ttc" id="astructdxfcpp_1_1_d_x_endpoint_html"><div class="ttname"><a href="../../d0/d03/structdxfcpp_1_1_d_x_endpoint.html">dxfcpp::DXEndpoint</a></div><div class="ttdoc">Manages network connections to feed or publisher.</div><div class="ttdef"><b>Definition</b> DXEndpoint.hpp:176</div></div>
+<div class="ttc" id="astructdxfcpp_1_1_d_x_endpoint_html_af82eb2c48281dedb4d2a1994f07a22c6"><div class="ttname"><a href="../../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#af82eb2c48281dedb4d2a1994f07a22c6">dxfcpp::DXEndpoint::State</a></div><div class="ttdeci">State</div><div class="ttdoc">Represents the current state of endpoint.</div><div class="ttdef"><b>Definition</b> DXEndpoint.hpp:456</div></div>
 <div class="ttc" id="astructdxfcpp_1_1_shared_entity_html"><div class="ttname"><a href="../../db/d03/structdxfcpp_1_1_shared_entity.html">dxfcpp::SharedEntity</a></div><div class="ttdoc">Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism.</div><div class="ttdef"><b>Definition</b> SharedEntity.hpp:15</div></div>
+<div class="ttc" id="astructdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_html_a9a3a6f6164c4584b4f109375085a5596"><div class="ttname"><a href="../../d5/d00/structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4.html#a9a3a6f6164c4584b4f109375085a5596">dxfcpp::SimpleHandler&lt; void(ArgTypes...)&gt;::operator-=</a></div><div class="ttdeci">void operator-=(std::size_t id)</div><div class="ttdoc">Removes a listener by the id.</div><div class="ttdef"><b>Definition</b> Handler.hpp:415</div></div>
+<div class="ttc" id="astructdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_html_ad61817f97608b59ef4ed5330d90f8d07"><div class="ttname"><a href="../../d5/d00/structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4.html#ad61817f97608b59ef4ed5330d90f8d07">dxfcpp::SimpleHandler&lt; void(ArgTypes...)&gt;::SimpleHandler</a></div><div class="ttdeci">SimpleHandler() noexcept=default</div><div class="ttdoc">Creates the new handler.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

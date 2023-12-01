@@ -5,6 +5,7 @@ var classdxfcpp_1_1_spread_order =
     [ "SpreadOrder", "da/d01/classdxfcpp_1_1_spread_order.html#a93f3355c0d77afe8618b01f2b6c4ad52", null ],
     [ "SpreadOrder", "da/d01/classdxfcpp_1_1_spread_order.html#a549497f9a1f4c5c93b916658eb47c888", null ],
     [ "getSpreadSymbol", "da/d01/classdxfcpp_1_1_spread_order.html#a519138942e57e77a82587b4a01244db0", null ],
+    [ "getSpreadSymbolOpt", "da/d01/classdxfcpp_1_1_spread_order.html#ab8fa4aa45751afa2fc7c216089425621", null ],
     [ "setSpreadSymbol", "da/d01/classdxfcpp_1_1_spread_order.html#a2f11551de61058f3599e47a4e3c83e16", null ],
     [ "toGraal", "da/d01/classdxfcpp_1_1_spread_order.html#a818689d7c6c5d2faf712afa8db809cd6", null ],
     [ "toString", "da/d01/classdxfcpp_1_1_spread_order.html#ae26d9d759dc9814a0fe8f340ce274a4a", null ],
