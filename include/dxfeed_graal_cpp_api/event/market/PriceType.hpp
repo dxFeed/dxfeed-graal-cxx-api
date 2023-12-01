@@ -5,41 +5,41 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <cstdint>
-#include <string>
-#include <type_traits>
-#include <unordered_map>
-
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
+
+#include <cstdint>
 
 namespace dxfcpp {
 
 /**
  * Type of the price value.
  */
-struct DXFCPP_EXPORT PriceType : Enum<PriceType, std::uint32_t> {
+struct PriceType : Enum<PriceType, std::uint32_t> {
     using Enum::Enum;
 
     /**
      * Regular price.
      */
-    static const PriceType REGULAR;
+    static const DXFCPP_EXPORT PriceType REGULAR;
 
     /**
      * Indicative price (derived via math formula).
      */
-    static const PriceType INDICATIVE;
+    static const DXFCPP_EXPORT PriceType INDICATIVE;
 
     /**
-     * Preliminary price (preliminary settlement price), usually posted prior to ::FINAL price.
+     * Preliminary price (preliminary settlement price), usually posted prior to PriceType::FINAL price.
      */
-    static const PriceType PRELIMINARY;
+    static const DXFCPP_EXPORT PriceType PRELIMINARY;
 
     /**
      * Final price (final settlement price).
      */
-    static const PriceType FINAL;
+    static const DXFCPP_EXPORT PriceType FINAL;
 };
+
+template <>
+const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const PriceType>> PriceType::ParentType::ALL;
 
 } // namespace dxfcpp

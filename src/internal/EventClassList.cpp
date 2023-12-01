@@ -13,12 +13,13 @@ struct EventClassList::Impl : public RawListWrapper<dxfg_event_clazz_list_t, [](
     *list.elements[index] = static_cast<dxfg_event_clazz_t>(id);
 }> {};
 
-EventClassList::EventClassList() noexcept : impl_(std::make_unique<EventClassList::Impl>()) {}
+EventClassList::EventClassList() noexcept : impl_(std::make_unique<EventClassList::Impl>()) {
+}
 
 std::unique_ptr<EventClassList> EventClassList::create(std::size_t size) noexcept {
     auto result = std::unique_ptr<EventClassList>(new (std::nothrow) EventClassList{});
 
-    //TODO: error handling
+    // TODO: error handling [EN-8232]
     if (result) {
         result->impl_->init(static_cast<std::uint32_t>(size));
     }
@@ -26,13 +27,21 @@ std::unique_ptr<EventClassList> EventClassList::create(std::size_t size) noexcep
     return result;
 }
 
-void EventClassList::set(std::size_t index, std::uint32_t id) noexcept { impl_->set(index, id); }
+void EventClassList::set(std::size_t index, std::uint32_t id) noexcept {
+    impl_->set(index, id);
+}
 
-bool EventClassList::isEmpty() const noexcept { return impl_->isEmpty(); }
+bool EventClassList::isEmpty() const noexcept {
+    return impl_->isEmpty();
+}
 
-std::size_t EventClassList::size() const noexcept { return impl_->size(); }
+std::size_t EventClassList::size() const noexcept {
+    return impl_->size();
+}
 
-void *EventClassList::getHandler() noexcept { return impl_->getHandler(); }
+void *EventClassList::getHandle() noexcept {
+    return impl_->getHandle();
+}
 
 EventClassList::~EventClassList() noexcept = default;
 

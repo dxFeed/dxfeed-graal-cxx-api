@@ -47,15 +47,9 @@ struct EventMapper;
  *
  * This event is implemented on top of QDS record `Underlying`.
  */
-class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent, public LastingEvent {
+class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEvent, public LastingEvent {
     friend struct EventMapper;
 
-    /**
-     * Maximum allowed sequence value.
-     *
-     * @see ::setSequence()
-     */
-    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
@@ -84,9 +78,43 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
 
     Data data_{};
 
-    static std::shared_ptr<Underlying> fromGraalNative(void *graalNative) noexcept;
+    void fillData(void *graalNative) noexcept override;
+    void fillGraalData(void *graalNative) const noexcept override;
 
   public:
+    static std::shared_ptr<Underlying> fromGraal(void *graalNative) noexcept;
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    void *toGraal() const noexcept override;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
+
+  public:
+    /**
+     * Maximum allowed sequence value.
+     *
+     * @see ::setSequence()
+     */
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+
+    /// The alias to a type of shared pointer to the Underlying object
+    using Ptr = std::shared_ptr<Underlying>;
+
+    /// The alias to a type of unique pointer to the Underlying object
+    using Unique = std::unique_ptr<Underlying>;
+
+    /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
     /// Creates new underlying event with default values.
@@ -97,16 +125,31 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Underlying(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {}
+    explicit Underlying(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    }
 
     ///
-    const IndexedEventSource &getSource() const & override { return IndexedEventSource::DEFAULT; }
+    const IndexedEventSource &getSource() const & noexcept override {
+        return IndexedEventSource::DEFAULT;
+    }
 
     ///
-    EventFlagsMask getEventFlags() const override { return EventFlagsMask(data_.eventFlags); }
+    std::int32_t getEventFlags() const noexcept override {
+        return data_.eventFlags;
+    }
 
     ///
-    void setEventFlags(const EventFlagsMask &eventFlags) override {
+    EventFlagsMask getEventFlagsMask() const noexcept override {
+        return EventFlagsMask(data_.eventFlags);
+    }
+
+    ///
+    void setEventFlags(std::int32_t eventFlags) noexcept override {
+        data_.eventFlags = eventFlags;
+    }
+
+    ///
+    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
         data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
     }
 
@@ -117,7 +160,9 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
      *
      * @return unique index of this event.
      */
-    std::int64_t getIndex() const override { return data_.index; }
+    std::int64_t getIndex() const noexcept override {
+        return data_.index;
+    }
 
     /**
      * Changes unique per-symbol index of this event.
@@ -129,14 +174,16 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
      * @param index the event index.
      * @see ::getIndex()
      */
-    void setIndex(std::int64_t index) override { data_.index = index; }
+    void setIndex(std::int64_t index) noexcept override {
+        data_.index = index;
+    }
 
     /**
      * Returns timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
-    std::int64_t getTime() const override {
+    std::int64_t getTime() const noexcept override {
         return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
     }
 
@@ -146,7 +193,7 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
      * @param time timestamp of the event in milliseconds.
      * @see ::getTime()
      */
-    void setTime(std::int64_t time) {
+    void setTime(std::int64_t time) noexcept {
         data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
                                 sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
                            getSequence());
@@ -159,15 +206,17 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const { return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE)); }
+    std::int32_t getSequence() const noexcept {
+        return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
+    }
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
      * @param sequence the sequence.
      * @see ::getSequence()
      */
-    void setSequence(int sequence) {
-        // TODO: Improve error handling
+    void setSequence(int sequence) noexcept {
+        // TODO: Improve error handling [EN-8232]
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
@@ -178,77 +227,97 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
      *
      * @return 30-day implied volatility for this underlying based on VIX methodology.
      */
-    double getVolatility() const { return data_.volatility; }
+    double getVolatility() const noexcept {
+        return data_.volatility;
+    }
 
     /**
      * Changes 30-day implied volatility for this underlying based on VIX methodology.
      *
      * @param volatility 30-day implied volatility for this underlying based on VIX methodology.
      */
-    void setVolatility(double volatility) { data_.volatility = volatility; }
+    void setVolatility(double volatility) noexcept {
+        data_.volatility = volatility;
+    }
 
     /**
      * Returns front month implied volatility for this underlying based on VIX methodology.
      *
      * @return front month implied volatility for this underlying based on VIX methodology.
      */
-    double getFrontVolatility() const { return data_.frontVolatility; }
+    double getFrontVolatility() const noexcept {
+        return data_.frontVolatility;
+    }
 
     /**
      * Changes front month implied volatility for this underlying based on VIX methodology.
      *
      * @param frontVolatility front month implied volatility for this underlying based on VIX methodology.
      */
-    void setFrontVolatility(double frontVolatility) { data_.frontVolatility = frontVolatility; }
+    void setFrontVolatility(double frontVolatility) noexcept {
+        data_.frontVolatility = frontVolatility;
+    }
 
     /**
      * Returns back month implied volatility for this underlying based on VIX methodology.
      *
      * @return back month implied volatility for this underlying based on VIX methodology.
      */
-    double getBackVolatility() const { return data_.backVolatility; }
+    double getBackVolatility() const noexcept {
+        return data_.backVolatility;
+    }
 
     /**
      * Changes back month implied volatility for this underlying based on VIX methodology.
      *
      * @param backVolatility back month implied volatility for this underlying based on VIX methodology.
      */
-    void setBackVolatility(double backVolatility) { data_.backVolatility = backVolatility; }
+    void setBackVolatility(double backVolatility) noexcept {
+        data_.backVolatility = backVolatility;
+    }
 
     /**
      * Returns call options traded volume for a day.
      *
      * @return call options traded volume for a day.
      */
-    double getCallVolume() const { return data_.callVolume; }
+    double getCallVolume() const noexcept {
+        return data_.callVolume;
+    }
 
     /**
      * Changes call options traded volume for a day.
      *
      * @param callVolume call options traded volume for a day.
      */
-    void setCallVolume(double callVolume) { data_.callVolume = callVolume; }
+    void setCallVolume(double callVolume) noexcept {
+        data_.callVolume = callVolume;
+    }
 
     /**
      * Returns put options traded volume for a day.
      *
      * @return put options traded volume for a day.
      */
-    double getPutVolume() const { return data_.putVolume; }
+    double getPutVolume() const noexcept {
+        return data_.putVolume;
+    }
 
     /**
      * Changes put options traded volume for a day.
      *
      * @param putVolume put options traded volume for a day.
      */
-    void setPutVolume(double putVolume) { data_.putVolume = putVolume; }
+    void setPutVolume(double putVolume) noexcept {
+        data_.putVolume = putVolume;
+    }
 
     /**
      * Returns options traded volume for a day.
      *
      * @return options traded volume for a day.
      */
-    double getOptionVolume() const {
+    double getOptionVolume() const noexcept {
         if (std::isnan(data_.putVolume)) {
             return data_.callVolume;
         }
@@ -265,14 +334,18 @@ class DXFCPP_EXPORT Underlying final: public MarketEvent, public TimeSeriesEvent
      *
      * @return ratio of put options traded volume to call options traded volume for a day.
      */
-    double getPutCallRatio() const { return data_.putCallRatio; }
+    double getPutCallRatio() const noexcept {
+        return data_.putCallRatio;
+    }
 
     /**
      * Changes ratio of put options traded volume to call options traded volume for a day.
      *
      * @param putCallRatio ratio of put options traded volume to call options traded volume for a day.
      */
-    void setPutCallRatio(double putCallRatio) { data_.putCallRatio = putCallRatio; }
+    void setPutCallRatio(double putCallRatio) noexcept {
+        data_.putCallRatio = putCallRatio;
+    }
 
     /**
      * Returns a string representation of the current object.

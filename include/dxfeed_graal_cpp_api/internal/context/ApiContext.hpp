@@ -8,18 +8,34 @@
 #include <memory>
 
 #include "../managers/DXEndpointManager.hpp"
+#include "../managers/DXFeedManager.hpp"
 #include "../managers/DXFeedSubscriptionManager.hpp"
+#include "../managers/DXPublisherManager.hpp"
+#include "../managers/InstrumentProfileCollectorManager.hpp"
+#include "../managers/InstrumentProfileConnectionManager.hpp"
+#include "../managers/InstrumentProfileReaderManager.hpp"
 
 namespace dxfcpp {
 
-class DXFCPP_EXPORT ApiContext {
-    mutable std::shared_ptr<DXEndpointManager> dxEndpointManager_;
-    mutable std::shared_ptr<DXFeedSubscriptionManager> dxFeedSubscriptionManager_;
-    std::atomic<bool> initialized{false};
+template <typename Manager> struct AddManagerMixin {
+    mutable std::shared_ptr<Manager> manager_;
 
-    ApiContext() noexcept
-        : dxEndpointManager_{std::make_shared<DXEndpointManager>()},
-          dxFeedSubscriptionManager_{std::make_shared<DXFeedSubscriptionManager>()} {}
+    AddManagerMixin() noexcept : manager_{std::make_shared<Manager>()} {
+    }
+
+    std::shared_ptr<Manager> getManager() const noexcept {
+        return manager_;
+    }
+};
+
+class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
+                                 AddManagerMixin<DXFeedSubscriptionManager>,
+                                 AddManagerMixin<DXFeedManager>,
+                                 AddManagerMixin<DXPublisherManager>,
+                                 AddManagerMixin<InstrumentProfileReaderManager>,
+                                 AddManagerMixin<InstrumentProfileCollectorManager>,
+                                 AddManagerMixin<InstrumentProfileConnectionManager> {
+    ApiContext() noexcept = default;
 
   public:
     static std::shared_ptr<ApiContext> getInstance() noexcept {
@@ -28,10 +44,8 @@ class DXFCPP_EXPORT ApiContext {
         return instance;
     }
 
-    std::shared_ptr<DXEndpointManager> getDxEndpointManager() const noexcept { return dxEndpointManager_; }
-
-    std::shared_ptr<DXFeedSubscriptionManager> getDxFeedSubscriptionManager() const noexcept {
-        return dxFeedSubscriptionManager_;
+    template <typename Manager> std::shared_ptr<Manager> getManager() const noexcept {
+        return AddManagerMixin<Manager>::getManager();
     }
 };
 

@@ -18,44 +18,91 @@
 
 namespace dxfcpp {
 
-void TimeAndSale::setExchangeCode(char exchangeCode) { data_.exchangeCode = utf8to16(exchangeCode); }
+void TimeAndSale::setExchangeCode(char exchangeCode) noexcept {
+    data_.exchangeCode = utf8to16(exchangeCode);
+}
 
 const EventTypeEnum &TimeAndSale::TYPE = EventTypeEnum::TIME_AND_SALE;
 
-std::shared_ptr<TimeAndSale> TimeAndSale::fromGraalNative(void *graalNative) noexcept {
+void TimeAndSale::fillData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillData(graalNative);
+
+    auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+
+    data_ = {
+        .eventFlags = graalTimeAndSale->event_flags,
+        .index = graalTimeAndSale->index,
+        .timeNanoPart = graalTimeAndSale->time_nano_part,
+        .exchangeCode = graalTimeAndSale->exchange_code,
+        .price = graalTimeAndSale->price,
+        .size = graalTimeAndSale->size,
+        .bidPrice = graalTimeAndSale->bid_price,
+        .askPrice = graalTimeAndSale->ask_price,
+        .exchangeSaleConditions = dxfcpp::toStringOpt(graalTimeAndSale->exchange_sale_conditions),
+        .flags = graalTimeAndSale->flags,
+        .buyer = dxfcpp::toStringOpt(graalTimeAndSale->buyer),
+        .seller = dxfcpp::toStringOpt(graalTimeAndSale->seller),
+    };
+}
+
+void TimeAndSale::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillGraalData(graalNative);
+
+    auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+
+    graalTimeAndSale->event_flags = data_.eventFlags;
+    graalTimeAndSale->index = data_.index;
+    graalTimeAndSale->time_nano_part = data_.timeNanoPart;
+    graalTimeAndSale->exchange_code = data_.exchangeCode;
+    graalTimeAndSale->price = data_.price;
+    graalTimeAndSale->size = data_.size;
+    graalTimeAndSale->bid_price = data_.bidPrice;
+    graalTimeAndSale->ask_price = data_.askPrice;
+    graalTimeAndSale->exchange_sale_conditions = createCString(data_.exchangeSaleConditions);
+    graalTimeAndSale->flags = data_.flags;
+    graalTimeAndSale->buyer = createCString(data_.buyer);
+    graalTimeAndSale->seller = createCString(data_.seller);
+}
+
+void TimeAndSale::freeGraalData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::freeGraalData(graalNative);
+
+    auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+
+    delete[] graalTimeAndSale->exchange_sale_conditions;
+    delete[] graalTimeAndSale->buyer;
+    delete[] graalTimeAndSale->seller;
+}
+
+std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_TIME_AND_SALE) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE) {
         return {};
     }
 
     try {
-        auto graalTimeAndSale = bit_cast<dxfg_time_and_sale_t *>(graalNative);
-        auto timeAndSale = std::make_shared<TimeAndSale>(dxfcpp::toString(graalTimeAndSale->market_event.event_symbol));
+        auto timeAndSale = std::make_shared<TimeAndSale>();
 
-        timeAndSale->setEventTime(graalTimeAndSale->market_event.event_time);
-        timeAndSale->data_ = {
-            graalTimeAndSale->event_flags,
-            graalTimeAndSale->index,
-            graalTimeAndSale->time_nano_part,
-            graalTimeAndSale->exchange_code,
-            graalTimeAndSale->price,
-            graalTimeAndSale->size,
-            graalTimeAndSale->bid_price,
-            graalTimeAndSale->ask_price,
-            dxfcpp::toString(graalTimeAndSale->exchange_sale_conditions),
-            graalTimeAndSale->flags,
-            dxfcpp::toString(graalTimeAndSale->buyer),
-            dxfcpp::toString(graalTimeAndSale->seller),
-        };
+        timeAndSale->fillData(graalNative);
 
         return timeAndSale;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -64,14 +111,49 @@ std::string TimeAndSale::toString() const noexcept {
     return fmt::format("TimeAndSale{{{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
                        "exchange={}, price={}, size={}, bid={}, "
                        "ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, validTick={}, type={}{}{}}}",
-                       MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-                       getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getTimeNanoPart(),
-                       getSequence(), encodeChar(getExchangeCode()), getPrice(), getSize(), getBidPrice(),
-                       getAskPrice(), getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()),
-                       getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(),
-                       getType().toString(),
+                       MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+                       getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
+                       getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
+                       dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
+                       getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()), getAggressorSide().toString(),
+                       isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
                        getBuyer().empty() ? std::string{} : fmt::format(", buyer='{}'", getBuyer()),
                        getSeller().empty() ? std::string{} : fmt::format(", seller='{}'", getSeller()));
+}
+
+void *TimeAndSale::toGraal() const noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalTimeAndSale = new (std::nothrow)
+        dxfg_time_and_sale_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE}}};
+
+    if (!graalTimeAndSale) {
+        // TODO: error handling [EN-8232]
+
+        return nullptr;
+    }
+
+    fillGraalData(static_cast<void *>(graalTimeAndSale));
+
+    return static_cast<void *>(graalTimeAndSale);
+}
+
+void TimeAndSale::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE) {
+        return;
+    }
+
+    auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+
+    freeGraalData(graalNative);
+
+    delete graalTimeAndSale;
 }
 
 } // namespace dxfcpp

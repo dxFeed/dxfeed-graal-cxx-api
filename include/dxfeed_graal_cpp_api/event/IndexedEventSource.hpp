@@ -16,7 +16,7 @@ namespace dxfcpp {
  * See IndexedEvent::getSource().
  */
 class DXFCPP_EXPORT IndexedEventSource {
-    std::uint32_t id_{};
+    std::int32_t id_{};
     std::string name_{};
 
   public:
@@ -25,34 +25,76 @@ class DXFCPP_EXPORT IndexedEventSource {
      */
     static const IndexedEventSource DEFAULT;
 
+    IndexedEventSource() noexcept = default;
+    virtual ~IndexedEventSource() noexcept = default;
+
     /**
      * Creates the new IndexedEvent's source by id and name.
      *
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(unsigned id, std::string name) noexcept : id_{id}, name_{std::move(name)} {}
+    IndexedEventSource(std::int32_t id, std::string name) noexcept : id_{id}, name_{std::move(name)} {
+    }
 
     /**
      * Returns the source identifier. Source identifier is non-negative.
      *
      * @return The source identifier.
      */
-    std::uint32_t id() const noexcept { return id_; }
+    std::int32_t id() const noexcept {
+        return id_;
+    }
 
     /**
      * Returns the string representation of the object.
      *
      * @return The string representation of the object.
      */
-    const std::string &name() const noexcept { return name_; }
+    const std::string &name() const noexcept {
+        return name_;
+    }
 
     /**
      * Returns the string representation of the object.
      *
      * @return The string representation of the object.
      */
-    std::string toString() const noexcept { return name_; }
+    std::string toString() const noexcept {
+        return name_;
+    }
+
+    bool operator==(const IndexedEventSource &indexedEventSource) const {
+        return id_ == indexedEventSource.id_;
+    }
+
+    auto operator<(const IndexedEventSource &indexedEventSource) const {
+        return id_ < indexedEventSource.id_;
+    }
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    virtual void *toGraal() const noexcept;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
+
+    static IndexedEventSource fromGraal(void *graalNative) noexcept;
 };
 
 } // namespace dxfcpp
+
+template <> struct std::hash<dxfcpp::IndexedEventSource> {
+    std::size_t operator()(const dxfcpp::IndexedEventSource &indexedEventSource) const noexcept {
+        return static_cast<std::size_t>(indexedEventSource.id());
+    }
+};

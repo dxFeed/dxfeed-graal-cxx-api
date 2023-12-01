@@ -20,11 +20,80 @@ namespace dxfcpp {
 
 const EventTypeEnum &Trade::TYPE = EventTypeEnum::TRADE;
 
-std::shared_ptr<Trade> Trade::fromGraalNative(void *graalNative) noexcept {
-    return TradeBase::fromGraalNative<Trade, dxfg_event_type_t, dxfg_trade_t, dxfg_event_clazz_t::DXFG_EVENT_TRADE>(
-        graalNative);
+void Trade::fillData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    TradeBase::fillData(graalNative);
 }
 
-std::string Trade::toString() const noexcept { return fmt::format("Trade{{{}}}", baseFieldsToString()); }
+void Trade::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    TradeBase::fillGraalData(graalNative);
+}
+
+std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return {};
+    }
+
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TRADE) {
+        return {};
+    }
+
+    try {
+        auto trade = std::make_shared<Trade>();
+
+        trade->fillData(graalNative);
+
+        return trade;
+    } catch (...) {
+        // TODO: error handling [EN-8232]
+        return {};
+    }
+}
+
+std::string Trade::toString() const noexcept {
+    return fmt::format("Trade{{{}}}", baseFieldsToString());
+}
+
+void *Trade::toGraal() const noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalTrade = new (std::nothrow)
+        dxfg_trade_t{.trade_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE}}}};
+
+    if (!graalTrade) {
+        // TODO: error handling [EN-8232]
+
+        return nullptr;
+    }
+
+    fillGraalData(static_cast<void *>(graalTrade));
+
+    return static_cast<void *>(graalTrade);
+}
+
+void Trade::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TRADE) {
+        return;
+    }
+
+    auto graalTrade = static_cast<dxfg_trade_t *>(graalNative);
+
+    MarketEvent::freeGraalData(graalNative);
+
+    delete graalTrade;
+}
 
 } // namespace dxfcpp

@@ -1,0 +1,121 @@
+// Copyright (c) 2023 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
+
+#pragma once
+
+#include "../internal/Conf.hpp"
+
+#include "../internal/Common.hpp"
+#include "../internal/Id.hpp"
+#include "../internal/JavaObjectHandle.hpp"
+
+#include "../entity/SharedEntity.hpp"
+
+#include "InstrumentProfile.hpp"
+
+#include <cstdint>
+#include <optional>
+#include <string>
+#include <type_traits>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
+namespace dxfcpp {
+
+/**
+ * Reads instrument profiles from the stream using Instrument Profile Format (IPF).
+ * Please see <b>Instrument Profile Format</b> documentation for complete description.
+ * This reader automatically uses data formats as specified in the stream.
+ *
+ * <p>This reader is intended for "one time only" usage: create new instances for new IPF reads.
+ * <p>Use {@link InstrumentProfileConnection} if support for streaming updates of instrument profiles is needed.
+ *
+ * <p>For backward compatibility reader can be configured with system property "-Dcom.dxfeed.ipf.complete" to control
+ * the strategy for missing "##COMPLETE" tag when reading IPF, possible values are:
+ * <ul>
+ *     <li>{@code warn} - show warning in the log (default)</li>
+ *     <li>{@code error} - throw exception (future default)</li>
+ *     <li>{@code ignore} - do nothing (for backward compatibility)</li>
+ * </ul>
+ */
+class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
+    Id<InstrumentProfileReader> id_;
+    JavaObjectHandle<InstrumentProfileReader> handle_;
+
+    InstrumentProfileReader() noexcept;
+
+  public:
+    /// The alias to a type of shared pointer to the InstrumentProfileReader object
+    using Ptr = std::shared_ptr<InstrumentProfileReader>;
+
+    /// The alias to a type of unique pointer to the InstrumentProfileReader object
+    using Unique = std::unique_ptr<InstrumentProfileReader>;
+
+    /**
+     * Creates the new InstrumentProfileReader
+     *
+     * @return The new InstrumentProfileReader
+     */
+    static Ptr create() noexcept;
+
+    /**
+     * Returns last modification time (in milliseconds) from last InstrumentProfileReader::readFromFile() operation
+     * or zero if it is unknown.
+     */
+    std::int64_t getLastModified() const noexcept;
+
+    /**
+     * Returns `true` if IPF was fully read on last InstrumentProfileReader::readFromFile() operation.
+     */
+    bool wasComplete() const noexcept;
+
+    /**
+     * Converts a specified string address specification into an URL that will be read by
+     * InstrumentProfileReader::readFromFile() method.
+     */
+    static std::string resolveSourceURL(const std::string &address) noexcept;
+
+    /**
+     * Reads and returns instrument profiles from specified file.
+     * This method recognizes data compression formats "zip" and "gzip" automatically.
+     * In case of <em>zip</em> the first file entry will be read and parsed as a plain data stream.
+     * In case of <em>gzip</em> compressed content will be read and processed.
+     * In other cases data considered uncompressed and will be parsed as is.
+     *
+     * <p>Authentication information can be supplied to this method as part of URL user info
+     * like {@code "http://user:password@host:port/path/file.ipf"}.
+     *
+     * <p>This is a shortcut for
+     * <code>{@link #readFromFile(String, String, String) readFromFile}(address, <b>null</b>, <b>null</b>)</code>.
+     *
+     * <p>This operation updates {@link #getLastModified() lastModified} and {@link #wasComplete() wasComplete}.
+     *
+     * @param address URL of file to read from
+     * @return list of instrument profiles
+     */
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address) const noexcept;
+
+    /**
+     * Reads and returns instrument profiles from specified address with a specified basic user and password
+     * credentials.
+     * This method recognizes data compression formats "zip" and "gzip" automatically.
+     * In case of <em>zip</em> the first file entry will be read and parsed as a plain data stream.
+     * In case of <em>gzip</em> compressed content will be read and processed.
+     * In other cases data considered uncompressed and will be parsed as is.
+     *
+     * <p>Specified user and password take precedence over authentication information that is supplied to this method
+     * as part of URL user info like {@code "http://user:password@host:port/path/file.ipf"}.
+     *
+     * <p>This operation updates {@link #getLastModified() lastModified} and {@link #wasComplete() wasComplete}.
+     *
+     * @param address URL of file to read from
+     * @param user the user name (may be null)
+     * @param password the password (may be null)
+     * @return list of instrument profiles
+     */
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address, const std::string &user,
+                                                                 const std::string &password) const noexcept;
+};
+
+} // namespace dxfcpp

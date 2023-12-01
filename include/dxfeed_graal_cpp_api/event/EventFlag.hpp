@@ -72,8 +72,8 @@ namespace dxfcpp {
  * snapshot.
  *
  * ```cpp
- * bool snapshotEnd = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_END) != 0;
- * bool snapshotSnip = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_SNIP) != 0;
+ * bool snapshotEnd = (event->getEventFlags() & IndexedEvent::SNAPSHOT_END) != 0;
+ * bool snapshotSnip = (event->getEventFlags() & IndexedEvent::SNAPSHOT_SNIP) != 0;
  * ```
  *
  * <p>The last event of a snapshot is marked with either `snapshotEnd` or `snapshotSnip`. At this time, all events
@@ -98,7 +98,8 @@ class DXFCPP_EXPORT EventFlag final {
     std::uint32_t flag_;
     std::string name_;
 
-    EventFlag(std::uint32_t flag, std::string name) : flag_{flag}, name_{std::move(name)} {}
+    EventFlag(std::uint32_t flag, std::string name) noexcept : flag_{flag}, name_{std::move(name)} {
+    }
 
   public:
     /**
@@ -176,12 +177,15 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Creates the invalid event flag
      */
-    explicit EventFlag() : flag_{unsigned(-1)}, name_{"INVALID"} {}
+    explicit EventFlag() noexcept : flag_{unsigned(-1)}, name_{"INVALID"} {
+    }
 
     /**
      * @return The event flag's value
      */
-    std::uint32_t getFlag() const { return flag_; }
+    std::uint32_t getFlag() const noexcept {
+        return flag_;
+    }
 
     /**
      * Determines if the given flag is in the mask.
@@ -190,7 +194,9 @@ class DXFCPP_EXPORT EventFlag final {
      *
      * @return `true` the given flag is in the mask.
      */
-    bool in(std::uint32_t eventFlagsMask) const { return (eventFlagsMask & flag_) != 0; }
+    bool in(std::uint32_t eventFlagsMask) const noexcept {
+        return (eventFlagsMask & flag_) != 0;
+    }
 
     /**
      * Determines if the given flag is in the mask.
@@ -201,7 +207,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return `true` the given flag is in the mask.
      */
     template <typename EventFlagsMask>
-    bool in(const EventFlagsMask &eventFlagsMask) const
+    bool in(const EventFlagsMask &eventFlagsMask) const noexcept
 #if __cpp_concepts
         requires requires {
             { eventFlagsMask.getMask() } -> std::same_as<std::uint32_t>;
@@ -212,22 +218,116 @@ class DXFCPP_EXPORT EventFlag final {
     }
 
     ///
-    [[nodiscard]] const std::string &getName() const { return name_; }
+    const std::string &getName() const & noexcept {
+        return name_;
+    }
 
     ///
-    std::string toString() const { return name_; }
+    const std::string &toString() const & noexcept {
+        return name_;
+    }
+
+    /**
+     * Performs a bit `or` operation with two event flags
+     *
+     * @param eventType1 The first event flag
+     * @param eventType2 The second event flag (std::int32_t)
+     * @return The result (std::int32_t)
+     */
+    friend std::int32_t operator|(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
+        return static_cast<std::int32_t>(dxfcpp::orOp(eventFlag1.getFlag(), eventFlag2));
+    }
+
+    /**
+     * Performs a bit `or` operation with two event flags
+     *
+     * @param eventType1 The first event flag (std::int32_t)
+     * @param eventType2 The second event flag
+     * @return The result (std::int32_t)
+     */
+    friend std::int32_t operator|(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
+        return dxfcpp::orOp(eventFlag1, eventFlag2.getFlag());
+    }
+
+    /**
+     * Performs a bit `and` operation with two event flags
+     *
+     * @param eventType1 The first event flag
+     * @param eventType2 The second event flag (std::int32_t)
+     * @return The result (std::int32_t)
+     */
+    friend std::int32_t operator&(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
+        return static_cast<std::int32_t>(dxfcpp::andOp(eventFlag1.getFlag(), eventFlag2));
+    }
+
+    /**
+     * Performs a bit `and` operation with two event flags
+     *
+     * @param eventType1 The first event flag (std::int32_t)
+     * @param eventType2 The second event flag
+     * @return The result (std::int32_t)
+     */
+    friend std::int32_t operator&(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
+        return dxfcpp::andOp(eventFlag1, eventFlag2.getFlag());
+    }
+
+    /**
+     * Performs a bit `or` operation with two event flags
+     *
+     * @param eventType1 The first event flag
+     * @param eventType2 The second event flag (std::uint32_t)
+     * @return The result (std::uint32_t)
+     */
+    friend std::uint32_t operator|(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
+        return eventFlag1.getFlag() | eventFlag2;
+    }
+
+    /**
+     * Performs a bit `or` operation with two event flags
+     *
+     * @param eventType1 The first event flag (std::uint32_t)
+     * @param eventType2 The second event flag
+     * @return The result (std::uint32_t)
+     */
+    friend std::uint32_t operator|(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
+        return dxfcpp::orOp(eventFlag1, eventFlag2.getFlag());
+    }
+
+    /**
+     * Performs a bit `and` operation with two event flags
+     *
+     * @param eventType1 The first event flag
+     * @param eventType2 The second event flag (std::uint32_t)
+     * @return The result (std::uint32_t)
+     */
+    friend std::uint32_t operator&(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
+        return static_cast<std::int32_t>(dxfcpp::andOp(eventFlag1.getFlag(), eventFlag2));
+    }
+
+    /**
+     * Performs a bit `and` operation with two event flags
+     *
+     * @param eventType1 The first event flag (std::uint32_t)
+     * @param eventType2 The second event flag
+     * @return The result (std::uint32_t)
+     */
+    friend std::uint32_t operator&(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
+        return dxfcpp::andOp(eventFlag1, eventFlag2.getFlag());
+    }
 };
 
 } // namespace dxfcpp
 
 ///
 template <> struct std::hash<dxfcpp::EventFlag> {
-    std::size_t operator()(const dxfcpp::EventFlag &eventFlag) const noexcept { return eventFlag.getFlag(); }
+    std::size_t operator()(const dxfcpp::EventFlag &eventFlag) const noexcept {
+        return eventFlag.getFlag();
+    }
 };
 
 namespace dxfcpp {
 
-///
+/// The event flags' mask (a set of bit flags)
 class EventFlagsMask final {
     std::uint32_t mask_;
 
@@ -235,7 +335,8 @@ class EventFlagsMask final {
     /**
      * Creates an empty event flags mask
      */
-    explicit EventFlagsMask() : mask_{0u} {}
+    explicit EventFlagsMask() noexcept : mask_{0u} {
+    }
 
     /**
      * Create event flags mask by integer value
@@ -243,7 +344,9 @@ class EventFlagsMask final {
      * @tparam MaskType The type of integer mask
      * @param mask The integer mask value
      */
-    template <Integral MaskType> explicit EventFlagsMask(MaskType mask) : mask_{static_cast<std::uint32_t>(mask)} {}
+    template <Integral MaskType>
+    explicit EventFlagsMask(MaskType mask) noexcept : mask_{static_cast<std::uint32_t>(mask)} {
+    }
 
     /**
      * Creates event flags mask by iterators of container with flags
@@ -252,9 +355,10 @@ class EventFlagsMask final {
      * @param begin The start position
      * @param end The end position
      */
-    template <typename EventFlagIt> EventFlagsMask(EventFlagIt begin, EventFlagIt end) {
-        mask_ =
-            std::accumulate(begin, end, 0u, [](unsigned mask, const EventFlag &flag) { return mask | flag.getFlag(); });
+    template <typename EventFlagIt> EventFlagsMask(EventFlagIt begin, EventFlagIt end) noexcept {
+        mask_ = std::accumulate(begin, end, 0u, [](unsigned mask, const EventFlag &flag) {
+            return mask | flag.getFlag();
+        });
     }
 
     /**
@@ -262,38 +366,54 @@ class EventFlagsMask final {
      *
      * @param eventTypes The list with flags
      */
-    EventFlagsMask(std::initializer_list<EventFlag> eventTypes)
-        : EventFlagsMask(eventTypes.begin(), eventTypes.end()) {}
+    EventFlagsMask(std::initializer_list<EventFlag> eventFlags) noexcept
+        : EventFlagsMask(eventFlags.begin(), eventFlags.end()) {
+    }
 
     /**
      * Returns an integer representation of event mask
      *
      * @return an integer representation
      */
-    constexpr std::uint32_t getMask() const { return mask_; }
-
-    /**
-     *
-     * @param eventTypesMask
-     * @param eventType
-     * @return
-     */
-    friend EventFlagsMask operator|(const EventFlagsMask &eventTypesMask, const EventFlag &eventType) {
-        return EventFlagsMask{eventTypesMask.mask_ | eventType.getFlag()};
+    constexpr std::uint32_t getMask() const noexcept {
+        return mask_;
     }
 
     /**
+     * Performs a bit `or` operation with an event flags' mask and an event flag
      *
-     * @param eventType1
-     * @param eventType2
-     * @return
+     * @param eventFlagsMask The event flags' mask
+     * @param eventFlag The event flag
+     * @return The result (event flags' mask)
      */
-    friend EventFlagsMask operator|(const EventFlag &eventType1, const EventFlag &eventType2) {
-        return EventFlagsMask{eventType1.getFlag() | eventType2.getFlag()};
+    friend EventFlagsMask operator|(const EventFlagsMask &eventFlagsMask, const EventFlag &eventFlag) noexcept {
+        return EventFlagsMask{eventFlagsMask.mask_ | eventFlag.getFlag()};
+    }
+
+    /**
+     * Performs a bit `and` operation with an event flags' mask and an event flag
+     *
+     * @param eventFlagsMask The event flags' mask
+     * @param eventFlag The event flag
+     * @return The result (event flags' mask)
+     */
+    friend EventFlagsMask operator&(const EventFlagsMask &eventFlagsMask, const EventFlag &eventFlag) noexcept {
+        return EventFlagsMask{eventFlagsMask.mask_ & eventFlag.getFlag()};
+    }
+
+    /**
+     * Performs a bit `or` operation with two event flags
+     *
+     * @param eventType1 The first event flag
+     * @param eventType2 The second event flag
+     * @return The result (event flags' mask )
+     */
+    friend EventFlagsMask operator|(const EventFlag &eventFlag1, const EventFlag &eventFlag2) noexcept {
+        return EventFlagsMask{eventFlag1.getFlag() | eventFlag2.getFlag()};
     }
 
     ///
-    std::string toString() const {
+    std::string toString() const noexcept {
         bool addOrSign = false;
         std::ostringstream result{};
 

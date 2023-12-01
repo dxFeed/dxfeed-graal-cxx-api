@@ -46,3 +46,8 @@ cmake-build-*/
 build-*/
 
 dist/
+dist-*/
+
+CMakeSettings.json
+*.patch
+.vs/**

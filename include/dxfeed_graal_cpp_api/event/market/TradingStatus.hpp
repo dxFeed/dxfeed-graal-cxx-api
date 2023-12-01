@@ -18,23 +18,27 @@ namespace dxfcpp {
 /**
  * Trading status of an instrument.
  */
-struct DXFCPP_EXPORT TradingStatus : Enum<TradingStatus, std::uint32_t> {
+struct TradingStatus : Enum<TradingStatus, std::uint32_t> {
     using Enum::Enum;
 
     /**
      * Trading status is undefined, unknown or inapplicable.
      */
-    static const TradingStatus UNDEFINED;
+    static const DXFCPP_EXPORT TradingStatus UNDEFINED;
 
     /**
      * Trading is halted.
      */
-    static const TradingStatus HALTED;
+    static const DXFCPP_EXPORT TradingStatus HALTED;
 
     /**
      * Trading is active.
      */
-    static const TradingStatus ACTIVE;
+    static const DXFCPP_EXPORT TradingStatus ACTIVE;
 };
+
+template <>
+const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>>
+    TradingStatus::ParentType::ALL;
 
 } // namespace dxfcpp

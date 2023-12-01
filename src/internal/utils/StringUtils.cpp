@@ -16,13 +16,29 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+#include <range/v3/all.hpp>
+
 namespace dxfcpp {
 
-std::string toString(bool b) { return b ? "true" : "false"; }
+std::string toString(bool b) noexcept {
+    return b ? "true" : "false";
+}
 
-std::string toString(const char *chars) {
+std::string toString(const char *chars) noexcept {
+    //TODO: cache [EN-8231]
+
     if (chars == nullptr) {
-        return "";
+        return dxfcpp::String::NUL;
+    }
+
+    return chars;
+}
+
+std::optional<std::string> toStringOpt(const char *chars) noexcept {
+    //TODO: cache [EN-8231]
+
+    if (chars == nullptr) {
+        return std::nullopt;
     }
 
     return chars;
@@ -44,6 +60,17 @@ std::string toString(void *ptr) {
     return result.str();
 }
 
+std::string toString(double d) {
+    if (std::isnan(d)) {
+        return "NaN";
+    }
+
+    auto x = fmt::format("{}", d);
+    auto y = fmt::format("{}", std::round(d));
+
+    return x.size() == y.size() ? x + ".0" : x;
+}
+
 std::string encodeChar(std::int16_t c) {
     if (c >= 32 && c <= 126) {
         return std::string{} + static_cast<char>(c);
@@ -56,7 +83,7 @@ std::string encodeChar(std::int16_t c) {
     return fmt::format("\\u{:04x}", c);
 }
 
-char utf16to8(std::int16_t in) {
+char utf16to8(std::int16_t in) noexcept {
     try {
         std::string out{};
         auto utf16in = {in};
@@ -65,12 +92,52 @@ char utf16to8(std::int16_t in) {
 
         return out.empty() ? char{} : out[0];
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return char{};
     }
 }
 
-std::int16_t utf8to16(char in) {
+std::string utf16toUtf8String(std::int16_t in) noexcept {
+    try {
+        std::string out{};
+        auto utf16in = {in};
+
+        utf8::utf16to8(std::begin(utf16in), std::end(utf16in), std::back_inserter(out));
+
+        return out;
+    } catch (...) {
+        // TODO: error handling [EN-8232]
+        return "";
+    }
+}
+
+std::string utf16toUtf8String(const std::u16string &in) noexcept {
+    try {
+        std::string out{};
+
+        utf8::utf16to8(std::begin(in), std::end(in), std::back_inserter(out));
+
+        return out;
+    } catch (...) {
+        // TODO: error handling [EN-8232]
+        return "";
+    }
+}
+
+std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept {
+    try {
+        std::string out{};
+
+        utf8::utf16to8(std::begin(in), std::end(in), std::back_inserter(out));
+
+        return out;
+    } catch (...) {
+        // TODO: error handling [EN-8232]
+        return "";
+    }
+}
+
+std::int16_t utf8to16(char in) noexcept {
     try {
         std::u16string out{};
         auto utf8in = {in};
@@ -79,22 +146,90 @@ std::int16_t utf8to16(char in) {
 
         return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return std::int16_t{};
     }
 }
 
 std::string formatTimeStamp(std::int64_t timestamp) {
+    return TimeFormat::DEFAULT.format(timestamp);
+//    if (timestamp == 0) {
+//        return "0";
+//    }
+//
+//    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+//
+//    return fmt::format("{:%Y%m%d-%H%M%S}", tm);
+}
+
+std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
+    if (timestamp == 0) {
+        return "0";
+    }
+
     auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
 
-    return fmt::format("{:%y%m%d-%H%M%S%z}", tm);
+    return fmt::format("{:%Y%m%d-%H%M%S%z}", tm);
 }
 
 std::string formatTimeStampWithMillis(std::int64_t timestamp) {
-    auto ms = timestamp % 1000;
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-
-    return fmt::format("{:%y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
+    return TimeFormat::DEFAULT_WITH_MILLIS.format(timestamp);
+//
+//    if (timestamp == 0) {
+//        return "0";
+//    }
+//
+//    auto ms = timestamp % 1000;
+//    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+//
+//    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}", tm, ms);
 }
 
+std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
+    return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(timestamp);
+
+//    if (timestamp == 0) {
+//        return "0";
+//    }
+//
+//    auto ms = timestamp % 1000;
+//    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+//
+//    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
 }
+
+char *createCString(const std::string &s) noexcept {
+    if (s == dxfcpp::String::NUL) {
+        return nullptr;
+    }
+
+    char *cString = new (std::nothrow) char[s.size() + 1];
+
+    if (!cString) {
+        return nullptr;
+    }
+
+    std::copy(s.begin(), s.end(), cString);
+    cString[s.size()] = '\0';
+
+    return cString;
+}
+
+DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) noexcept {
+    if (!s) {
+        return nullptr;
+    }
+
+    return createCString(s.value());
+}
+
+std::string trimStr(const std::string &s) noexcept {
+    auto trimPredicate = [](auto c) {
+        return c == ' ' || c == '\t' || c == '\v' || c == '\r' || c == '\n';
+    };
+
+    return s | ranges::views::drop_while(trimPredicate) | ranges::views::reverse |
+           ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
+};
+
+} // namespace dxfcpp

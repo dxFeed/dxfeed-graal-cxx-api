@@ -1,0 +1,125 @@
+# Copyright (c) 2023 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish The Release'
+        default: true
+        required: true
+        type: boolean
+      use_latest_tag:
+        description: 'Try To Use The Latest Git Tag'
+        default: false
+        required: true
+        type: boolean
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  get_version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+      tag_name: ${{ steps.set_version.outputs.tag_name }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: get_latest_tag
+        run: |
+          echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
+
+      - id: set_version
+        run: |
+          if [[ "${{ !inputs.use_latest_tag && startsWith(github.ref, 'refs/tags/') }}" == "true" ]]
+          then
+            echo "version=${{github.ref_name}}" >> $GITHUB_OUTPUT
+            echo "tag_name=${{github.ref}}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
+            echo "tag_name=${{ format('refs/tags/{0}', steps.get_latest_tag.outputs.tag) }}" >> $GITHUB_OUTPUT            
+          fi
+
+  build_package_and_upload:
+    name: Build, Package & Upload
+    needs: [ get_version ]
+    strategy:
+      matrix:
+        os: [ windows-latest, macos-13, ubuntu-22.04 ]
+        #buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
+        buildType: [ Release, Debug ]
+    runs-on: ${{ matrix.os }}
+    env:
+      XCODE_VERSION: '15.0'
+      GCC_VERSION: '12'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Select Xcode version
+        if: ${{ contains(matrix.os, 'macos') }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{env.XCODE_VERSION}}.app/Contents/Developer'
+
+      - name: Prepare build
+        run: |
+          ls
+          mkdir ${{github.workspace}}/build-${{matrix.buildType}}    
+
+      - name: Configure CMake (Win)
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
+
+      - name: Configure CMake (MacOS)
+        if: ${{ contains(matrix.os, 'macos') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+
+      - name: Configure CMake (Ubuntu)
+        env:
+          CC: gcc-${{env.GCC_VERSION}}
+          CXX: g++-${{env.GCC_VERSION}}
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}}
+
+      - name: Pack
+        working-directory: ${{github.workspace}}/build-${{matrix.buildType}}
+        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: build-${{matrix.buildType}}/*.zip
+
+  publish_release:
+    if: ${{ inputs.publish || contains(github.event_name, 'push')}}
+    runs-on: ubuntu-latest
+    name: Publish Release
+    needs: [ get_version, build_package_and_upload ]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+
+      - name: 'Echo download path'
+        run: echo ${{steps.download.outputs.download-path}}
+
+      - name: Display structure of downloaded files
+        run: ls -R
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/*.zip
+          prerelease: ${{ contains(needs.get_version.outputs.version, 'alpha') || contains(needs.get_version.outputs.version, 'beta') || contains(needs.get_version.outputs.version, 'pre') }}
+          tag_name: ${{ needs.get_version.outputs.tag_name }}
+          name: ${{ needs.get_version.outputs.version }}
+          draft: ${{ contains(needs.get_version.outputs.version, 'draft') }}
+          

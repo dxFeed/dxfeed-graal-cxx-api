@@ -12,31 +12,48 @@ namespace dxfcpp {
 
 template <typename T> struct Id {
     using ValueType = std::size_t;
+    const static Id UNKNOWN;
 
   private:
-    const ValueType value_{};
+    ValueType value_{};
 
-    explicit Id(ValueType value) : value_{value} {}
+    explicit Id(ValueType value) : value_{value} {
+    }
 
   public:
     static Id<T> getNext() {
-        static std::atomic<ValueType> value{};
+        static std::atomic<ValueType> value{1};
 
         return Id<T>{value++};
     }
 
-    [[nodiscard]] ValueType getValue() const { return value_; }
+    [[nodiscard]] ValueType getValue() const {
+        return value_;
+    }
 
-    explicit operator ValueType() const { return value_; }
+    explicit operator ValueType() const {
+        return value_;
+    }
 
-    static Id<T> from(ValueType value) { return Id<T>{value}; }
+    static Id<T> from(ValueType value) {
+        return Id<T>{value};
+    }
 
-    template <typename U> bool operator==(const Id<U> &id) const { return getValue() == id.getValue(); }
+    template <typename U> bool operator==(const Id<U> &id) const {
+        return getValue() == id.getValue();
+    }
 
-    template <typename U> auto operator<=>(const Id<U> &id) const { return getValue() <=> id.getValue(); }
+    template <typename U> auto operator<=>(const Id<U> &id) const {
+        return getValue() <=> id.getValue();
+    }
 };
+
+template<typename T> const Id<T> Id<T>::UNKNOWN{static_cast<Id<T>::ValueType>(-1)};
+
 } // namespace dxfcpp
 
 template <typename T> struct std::hash<dxfcpp::Id<T>> {
-    std::size_t operator()(const dxfcpp::Id<T> &id) const noexcept { return id.getValue(); }
+    std::size_t operator()(const dxfcpp::Id<T> &id) const noexcept {
+        return id.getValue();
+    }
 };

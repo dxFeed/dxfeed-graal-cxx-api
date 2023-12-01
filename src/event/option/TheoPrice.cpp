@@ -20,31 +20,63 @@ namespace dxfcpp {
 
 const EventTypeEnum &TheoPrice::TYPE = EventTypeEnum::THEO_PRICE;
 
-std::shared_ptr<TheoPrice> TheoPrice::fromGraalNative(void *graalNative) noexcept {
+void TheoPrice::fillData(void *graalNative) noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillData(graalNative);
+
+    auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);
+
+    data_ = {
+        .eventFlags = graalTheoPrice->event_flags,
+        .index = graalTheoPrice->index,
+        .price = graalTheoPrice->price,
+        .underlyingPrice = graalTheoPrice->underlying_price,
+        .delta = graalTheoPrice->delta,
+        .gamma = graalTheoPrice->gamma,
+        .dividend = graalTheoPrice->dividend,
+        .interest = graalTheoPrice->interest,
+    };
+}
+
+void TheoPrice::fillGraalData(void *graalNative) const noexcept {
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    MarketEvent::fillGraalData(graalNative);
+
+    auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);
+
+    graalTheoPrice->event_flags = data_.eventFlags;
+    graalTheoPrice->index = data_.index;
+    graalTheoPrice->price = data_.price;
+    graalTheoPrice->underlying_price = data_.underlyingPrice;
+    graalTheoPrice->delta = data_.delta;
+    graalTheoPrice->gamma = data_.gamma;
+    graalTheoPrice->dividend = data_.dividend;
+    graalTheoPrice->interest = data_.interest;
+}
+
+std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) noexcept {
     if (!graalNative) {
         return {};
     }
 
-    auto eventType = bit_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != DXFG_EVENT_THEO_PRICE) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE) {
         return {};
     }
 
     try {
-        auto graalTheoPrice = bit_cast<dxfg_theo_price_t *>(graalNative);
-        auto theoPrice = std::make_shared<TheoPrice>(dxfcpp::toString(graalTheoPrice->market_event.event_symbol));
+        auto theoPrice = std::make_shared<TheoPrice>();
 
-        theoPrice->setEventTime(graalTheoPrice->market_event.event_time);
-        theoPrice->data_ = {
-            graalTheoPrice->event_flags,      graalTheoPrice->index,    graalTheoPrice->price,
-            graalTheoPrice->underlying_price, graalTheoPrice->delta,    graalTheoPrice->gamma,
-            graalTheoPrice->dividend,         graalTheoPrice->interest,
-        };
+        theoPrice->fillData(graalNative);
 
         return theoPrice;
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
         return {};
     }
 }
@@ -53,9 +85,45 @@ std::string TheoPrice::toString() const noexcept {
     return fmt::format(
         "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
         "delta={}, gamma={}, dividend={}, interest={}}}",
-        MarketEvent::getEventSymbol(), formatTimeStampWithMillis(MarketEvent::getEventTime()),
-        getEventFlags().getMask(), formatTimeStampWithMillis(getTime()), getSequence(), getPrice(),
-        getUnderlyingPrice(), getDelta(), getGamma(), getDividend(), getInterest());
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
+        dxfcpp::toString(getPrice()), dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getDelta()),
+        dxfcpp::toString(getGamma()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
+}
+
+void *TheoPrice::toGraal() const noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
+    }
+
+    auto *graalTheoPrice = new (std::nothrow)
+        dxfg_theo_price_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE}}};
+
+    if (!graalTheoPrice) {
+        // TODO: error handling [EN-8232]
+
+        return nullptr;
+    }
+
+    fillGraalData(static_cast<void *>(graalTheoPrice));
+
+    return static_cast<void *>(graalTheoPrice);
+}
+
+void TheoPrice::freeGraal(void *graalNative) noexcept {
+    if (!graalNative) {
+        return;
+    }
+
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE) {
+        return;
+    }
+
+    auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);
+
+    MarketEvent::freeGraalData(graalNative);
+
+    delete graalTheoPrice;
 }
 
 } // namespace dxfcpp

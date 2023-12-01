@@ -7,9 +7,9 @@
 
 #include <compare>
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <unordered_map>
-#include <functional>
 
 #include "Common.hpp"
 
@@ -20,12 +20,94 @@
 namespace dxfcpp {
 
 /**
+ * Enum of the possible error codes returned by internal GraalVM functions
+ *
+ *  [Graal:CEntryPointErrors](https://github.com/oracle/graal/blob/96a1a66347bd4e5e00ae4e8e79812ebaf8cd5e33/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/c/function/CEntryPointErrors.java#L43)
+ */
+enum class CEntryPointErrorsEnum : uint32_t {
+    /// 0 - No error occurred.
+    NO_ERROR,
+
+    /// 1 - An unspecified error occurred.
+    UNSPECIFIED = 0,
+
+    /// 2 - An argument was NULL (nullptr).
+    NULL_ARGUMENT = 2,
+
+    /// 4 - The specified thread is not attached to the isolate.
+    UNATTACHED_THREAD = 4,
+
+    /// 5 - The specified isolate is unknown.
+    UNINITIALIZED_ISOLATE = 5,
+
+    /// 6 - Locating the image file failed.
+    LOCATE_IMAGE_FAILED = 6,
+
+    /// 7 - Opening the located image file failed.
+    OPEN_IMAGE_FAILED = 7,
+
+    /// 8 - Mapping the heap from the image file into memory failed.
+    MAP_HEAP_FAILED = 8,
+
+    /// 801 - Reserving address space for the new isolate failed.
+    RESERVE_ADDRESS_SPACE_FAILED = 801,
+
+    /// 802 - The image heap does not fit in the available address space.
+    INSUFFICIENT_ADDRESS_SPACE = 802,
+
+    /// 9 - Setting the protection of the heap memory failed.
+    PROTECT_HEAP_FAILED = 9,
+
+    /// 10 - The version of the specified isolate parameters is unsupported.
+    UNSUPPORTED_ISOLATE_PARAMETERS_VERSION = 10,
+
+    /// 11 - Initialization of threading in the isolate failed.
+    THREADING_INITIALIZATION_FAILED = 11,
+
+    /// 12 - Some exception is not caught.
+    UNCAUGHT_EXCEPTION = 12,
+
+    /// 13 - Initialization the isolate failed.
+    ISOLATE_INITIALIZATION_FAILED = 13,
+
+    /// 14 - Opening the located auxiliary image file failed.
+    OPEN_AUX_IMAGE_FAILED = 14,
+
+    /// 15 - Reading the opened auxiliary image file failed.
+    READ_AUX_IMAGE_META_FAILED = 15,
+
+    /// 16 - Mapping the auxiliary image file into memory failed.
+    MAP_AUX_IMAGE_FAILED = 16,
+
+    /// 17 - Insufficient memory for the auxiliary image.
+    INSUFFICIENT_AUX_IMAGE_MEMORY = 17,
+
+    /// 18 - Auxiliary images are not supported on this platform or edition.
+    AUX_IMAGE_UNSUPPORTED = 18,
+
+    /// 19 - Releasing the isolate's address space failed.
+    FREE_ADDRESS_SPACE_FAILED = 19,
+
+    /// 20 - Releasing the isolate's image heap memory failed.
+    FREE_IMAGE_HEAP_FAILED = 20,
+
+    /// 21 - The auxiliary image was built from a different primary image.
+    AUX_IMAGE_PRIMARY_IMAGE_MISMATCH = 21,
+
+    /// 22 - The isolate arguments could not be parsed.
+    ARGUMENT_PARSING_FAILED = 22,
+
+    /// 23 - Current target does not support the following CPU features that are required by the image.
+    CPU_FEATURE_CHECK_FAILED = 23,
+};
+
+/**
  * Possible error codes returned by internal GraalVM functions
  *
  *  [Graal:CEntryPointErrors](https://github.com/oracle/graal/blob/96a1a66347bd4e5e00ae4e8e79812ebaf8cd5e33/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/c/function/CEntryPointErrors.java#L43)
  */
 struct DXFCPP_EXPORT CEntryPointErrors {
-    using CodeType = std::uint32_t;
+    using CodeType = CEntryPointErrorsEnum;
 
   private:
     CodeType code_{};
@@ -33,7 +115,13 @@ struct DXFCPP_EXPORT CEntryPointErrors {
 
     template <Integral Code>
     CEntryPointErrors(Code code, std::string description) noexcept
-        : code_{static_cast<CodeType>(code)}, description_{std::move(description)} {}
+        : code_{static_cast<CodeType>(code)}, description_{std::move(description)} {
+    }
+
+    template <EnumConcept Code>
+    CEntryPointErrors(Code code, std::string description) noexcept
+        : code_{static_cast<CodeType>(code)}, description_{std::move(description)} {
+    }
 
   public:
     /// 0 - No error occurred.
@@ -121,12 +209,26 @@ struct DXFCPP_EXPORT CEntryPointErrors {
         return UNSPECIFIED;
     }
 
+    template <EnumConcept Code> static const CEntryPointErrors &valueOf(Code code) {
+        if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
+            return found->second;
+        }
+
+        return UNSPECIFIED;
+    }
+
     /// Returns the code
-    [[nodiscard]] CodeType getCode() const { return code_; }
+    [[nodiscard]] CodeType getCode() const {
+        return code_;
+    }
 
     /// Returns the description
-    [[nodiscard]] const std::string &getDescription() const & { return description_; }
+    [[nodiscard]] const std::string &getDescription() const & {
+        return description_;
+    }
 
-    bool operator==(const CEntryPointErrors &errors) const { return this->getCode() == errors.getCode(); }
+    bool operator==(const CEntryPointErrors &errors) const {
+        return this->getCode() == errors.getCode();
+    }
 };
 } // namespace dxfcpp

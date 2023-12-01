@@ -5,9 +5,9 @@
 
 #include "Conf.hpp"
 
+#include <cstdint>
 #include <memory>
 #include <utility>
-#include <cstdint>
 
 namespace dxfcpp {
 
@@ -41,7 +41,7 @@ struct DXFCPP_EXPORT EventClassList {
 
     [[nodiscard]] std::size_t size() const noexcept;
 
-    void *getHandler() noexcept;
+    void *getHandle() noexcept;
 
     ~EventClassList() noexcept;
 
@@ -55,4 +55,4 @@ struct DXFCPP_EXPORT EventClassList {
     std::unique_ptr<Impl> impl_;
 };
 
-}
+} // namespace dxfcpp

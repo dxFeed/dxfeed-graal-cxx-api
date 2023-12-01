@@ -8,6 +8,7 @@
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
+#include <climits>
 #include <cstring>
 
 #include <chrono>
@@ -25,9 +26,29 @@ namespace dxfcpp {
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 
+template <typename T>
+concept EnumConcept = std::is_enum_v<T>;
+
+template <class From, class To>
+concept ConvertibleTo = std::is_convertible_v<From, To> && requires { static_cast<To>(std::declval<From>()); };
+
+#include <type_traits>
+
+namespace detail {
+template <typename T>
+struct RemoveAllPointers
+    : std::conditional_t<std::is_pointer_v<T>, RemoveAllPointers<std::remove_pointer_t<T>>, std::type_identity<T>> {};
+} // namespace detail
+
+template <typename T> using RemoveAllPointers = typename detail::RemoveAllPointers<T>::type;
+
 struct DXFeedEventListener {};
 
 struct DXEndpointStateChangeListener {};
+
+struct IpfPropertyChangeListener {};
+
+struct InstrumentProfileUpdateListener {};
 
 #if defined(__clang__)
 constexpr bool isClangFlavouredCompiler = true;
@@ -35,7 +56,8 @@ constexpr bool isClangFlavouredCompiler = true;
 constexpr bool isClangFlavouredCompiler = false;
 #endif
 
-template <typename... T> constexpr void ignore_unused(const T &...) {}
+template <typename... T> constexpr void ignore_unused(const T &...) {
+}
 
 constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept -> bool {
 #ifdef __cpp_lib_is_constant_evaluated
@@ -63,33 +85,16 @@ constexpr To bit_cast(const From &from)
     return to;
 }
 
-// final_action allows you to ensure something gets run at the end of a scope
-template <class F> class final_action {
-  public:
-    explicit final_action(const F &ff) noexcept : f{ff} {}
-    explicit final_action(F &&ff) noexcept : f{std::move(ff)} {}
-
-    ~final_action() noexcept {
-        if (invoke)
-            f();
-    }
-
-    final_action(final_action &&other) noexcept : f(std::move(other.f)), invoke(std::exchange(other.invoke, false)) {}
-
-    final_action(const final_action &) = delete;
-    void operator=(const final_action &) = delete;
-    void operator=(final_action &&) = delete;
-
-  private:
-    F f;
-    bool invoke = true;
+/// Lightweight implementation of "nullable bool"
+enum class Tristate : std::uint8_t {
+    FALSE = 0,
+    TRUE = 1,
+    NONE = 2,
 };
 
-// finally() - convenience function to generate a final_action
-template <class F> [[nodiscard]] auto finally(F &&f) noexcept {
-    return final_action<std::decay_t<F>>{std::forward<F>(f)};
-}
-
+/**
+ * @return The number of milliseconds that have passed since the start of the Unix epoch (1970-01-01).
+ */
 inline auto now() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
         .count();
@@ -103,7 +108,7 @@ template <typename M, typename F, typename... Args> inline void callWithLock(M &
 
         return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
     } catch (...) {
-        // TODO: error handling
+        // TODO: error handling [EN-8232]
     }
 }
 
@@ -120,9 +125,6 @@ inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
     }
 }
 
-template <typename Collection, typename ElementType>
-concept ElementTypeIs = std::is_same_v<std::decay_t<decltype(*std::begin(Collection{}))>, ElementType>;
-
 namespace math {
 static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
     std::int64_t r = x / y;
@@ -135,9 +137,28 @@ static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
     return r;
 }
 
-static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) { return x - (floorDiv(x, y) * y); }
+static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
+    return x - (floorDiv(x, y) * y);
+}
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
+
+static inline bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
+    if (std::isnan(a) || std::isnan(b)) {
+        return false;
+    }
+
+    return std::abs(a - b) < eps;
+}
+
+template <typename T, typename U>
+static inline bool equals(T a, U b, double eps = std::numeric_limits<double>::epsilon()) {
+    if (std::isnan(static_cast<double>(a)) || std::isnan(static_cast<double>(b))) {
+        return false;
+    }
+
+    return std::abs(static_cast<double>(a) - static_cast<double>(b)) < eps;
+}
 
 } // namespace math
 
@@ -241,7 +262,9 @@ template <Integral T> constexpr static T div(T a, T b) {
     return ((a + 1) / b) + 1;
 }
 
-template <Integral T> constexpr static T abs(T a) { return a < 0 ? -a : a; }
+template <Integral T> constexpr static T abs(T a) {
+    return a < 0 ? -a : a;
+}
 
 } // namespace math_util
 
@@ -283,7 +306,7 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
 }
 
 constexpr static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
-    // TODO: error handling
+    // TODO: error handling [EN-8232]
     if (month < 1 || month > 12) {
         return -1;
     }
@@ -322,7 +345,8 @@ template <typename T, typename U, typename V, typename... Ws> struct MaxImpl<T, 
 template <typename... Ts> using Max = typename detail::MaxImpl<Ts...>::Type;
 
 /**
- * Performs a right arithmetic bit shift operation.
+ * Performs a right arithmetic bit shift operation (>> in Java, C, etc). The sign bit is extended to preserve the
+ * signedness of the number.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
@@ -335,10 +359,10 @@ template <typename... Ts> using Max = typename detail::MaxImpl<Ts...>::Type;
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V sar(V value, S shift);
+template <Integral V, Integral S> static constexpr V sar(V value, S shift) noexcept;
 
 /**
- * Performs a left arithmetic bit shift operation.
+ * Performs a left arithmetic bit shift operation (<< in Java, C, etc).
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sar() "right arithmetic shift" will be performed.
@@ -351,7 +375,7 @@ template <Integral V, Integral S> static constexpr V sar(V value, S shift);
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value, S shift) {
+template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value, S shift) noexcept {
     if constexpr (std::is_signed_v<S>) {
         if (shift < 0) {
             return sar(value, -shift);
@@ -370,7 +394,7 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
 }
 
 /**
- * Performs a left arithmetic bit shift operation.
+ * Performs a left arithmetic bit shift operation (<< in Java, C, etc).
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sar() "right arithmetic shift" will be performed.
@@ -383,10 +407,13 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V sal(V value, S shift) { return leftArithmeticShift(value, shift); }
+template <Integral V, Integral S> static constexpr V sal(V value, S shift) noexcept {
+    return leftArithmeticShift(value, shift);
+}
 
 /**
- * Performs a right arithmetic bit shift operation.
+ * Performs a right arithmetic bit shift operation (>> in Java, C, etc). The sign bit is extended to preserve the
+ * signedness of the number.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
@@ -399,7 +426,7 @@ template <Integral V, Integral S> static constexpr V sal(V value, S shift) { ret
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V rightArithmeticShift(V value, S shift) {
+template <Integral V, Integral S> static constexpr V rightArithmeticShift(V value, S shift) noexcept {
     if constexpr (std::is_signed_v<S>) {
         if (shift < 0) {
             return sal(value, -shift);
@@ -410,7 +437,7 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
         return value;
     }
 
-    if (shift >= sizeof(V) * 8) {
+    if (shift >= sizeof(V) * CHAR_BIT) {
         if (value < 0) {
             return -1;
         } else {
@@ -422,7 +449,8 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
 }
 
 /**
- * Performs a right arithmetic bit shift operation.
+ * Performs a right arithmetic bit shift operation (>> in Java, C, etc). The sign bit is extended to preserve the
+ * signedness of the number.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::sal() "left arithmetic shift" will be performed.
@@ -435,12 +463,12 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V sar(V value, S shift) {
+template <Integral V, Integral S> static constexpr V sar(V value, S shift) noexcept {
     return rightArithmeticShift(value, shift);
 }
 
 /**
- * Performs a right logical bit shift operation.
+ * Performs a right logical bit shift operation (>>> in Java). Fills the left bits by zero.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
@@ -453,7 +481,7 @@ template <Integral V, Integral S> static constexpr V sar(V value, S shift) {
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V shr(V value, S shift);
+template <Integral V, Integral S> static constexpr V shr(V value, S shift) noexcept;
 
 /**
  * Performs a left logical bit shift operation.
@@ -469,7 +497,7 @@ template <Integral V, Integral S> static constexpr V shr(V value, S shift);
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S shift) {
+template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S shift) noexcept {
     if constexpr (std::is_signed_v<S>) {
         if (shift < 0) {
             return shr(value, -shift);
@@ -480,7 +508,7 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * 8) {
+    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
@@ -501,10 +529,12 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V shl(V value, S shift) { return leftLogicalShift(value, shift); }
+template <Integral V, Integral S> static constexpr V shl(V value, S shift) noexcept {
+    return leftLogicalShift(value, shift);
+}
 
 /**
- * Performs a right logical bit shift operation.
+ * Performs a right logical bit shift operation (>>> in Java). Fills the left bits by zero.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
@@ -517,7 +547,7 @@ template <Integral V, Integral S> static constexpr V shl(V value, S shift) { ret
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, S shift) {
+template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, S shift) noexcept {
     if constexpr (std::is_signed_v<S>) {
         if (shift < 0) {
             return shl(value, -shift);
@@ -528,7 +558,7 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * 8) {
+    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
@@ -536,7 +566,7 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
 }
 
 /**
- * Performs a right logical bit shift operation.
+ * Performs a right logical bit shift operation (>>> in Java). Fills the left bits by zero.
  *
  * The result of the shift will be of the same type as the `value` being shifted.
  * If the shift is a negative number of bits, then a @ref ::shl() "left logical shift" will be performed.
@@ -549,31 +579,33 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
  * @param shift The shift in bits
  * @return The shifted `value`
  */
-template <Integral V, Integral S> static constexpr V shr(V value, S shift) { return rightLogicalShift(value, shift); }
+template <Integral V, Integral S> static constexpr V shr(V value, S shift) noexcept {
+    return rightLogicalShift(value, shift);
+}
 
-template <Integral A, Integral B> static constexpr A andOp(A a, B b) {
+template <Integral A, Integral B> static constexpr A andOp(A a, B b) noexcept {
     using Common = std::make_unsigned_t<Max<A, B>>;
 
     return static_cast<A>(static_cast<Common>(a) & static_cast<Common>(b));
 }
 
-template <Integral A, Integral B> static constexpr A orOp(A a, B b) {
+template <Integral A, Integral B> static constexpr A orOp(A a, B b) noexcept {
     using Common = std::make_unsigned_t<Max<A, B>>;
 
     return static_cast<A>(static_cast<Common>(a) | static_cast<Common>(b));
 }
 
-template <Integral A, Integral B> static constexpr A xorOp(A a, B b) {
+template <Integral A, Integral B> static constexpr A xorOp(A a, B b) noexcept {
     using Common = std::make_unsigned_t<Max<A, B>>;
 
     return static_cast<A>(static_cast<Common>(a) ^ static_cast<Common>(b));
 }
 
-template <Integral F, Integral M, Integral S> static constexpr F getBits(F flags, M mask, S shift) {
+template <Integral F, Integral M, Integral S> static constexpr F getBits(F flags, M mask, S shift) noexcept {
     return static_cast<F>(andOp(shr(flags, shift), mask));
 }
 
-template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bits) {
+template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bits) noexcept {
     if constexpr (std::is_signed_v<T>) {
         using U = std::make_unsigned_t<T>;
 
@@ -584,7 +616,8 @@ template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bit
     }
 }
 
-template <Integral F, Integral M, Integral S, Integral B> static constexpr F setBits(F flags, M mask, S shift, B bits) {
+template <Integral F, Integral M, Integral S, Integral B>
+static constexpr F setBits(F flags, M mask, S shift, B bits) noexcept {
     if constexpr (std::is_signed_v<F> || std::is_signed_v<M> || std::is_signed_v<S> || std::is_signed_v<B>) {
         using U = std::make_unsigned_t<Max<F, M, S, B>>;
 
@@ -593,6 +626,57 @@ template <Integral F, Integral M, Integral S, Integral B> static constexpr F set
     } else {
         return (flags & ~(mask << shift)) | ((bits & mask) << shift);
     }
+}
+
+template <std::size_t Bits> struct hashMixImpl;
+
+template <> struct hashMixImpl<64> {
+    constexpr static std::uint64_t fn(std::uint64_t x) noexcept {
+        std::uint64_t const m = (std::uint64_t(0xe9846af) << 32) + 0x9b1a615d;
+
+        x ^= x >> 32;
+        x *= m;
+        x ^= x >> 32;
+        x *= m;
+        x ^= x >> 28;
+
+        return x;
+    }
+};
+
+template <> struct hashMixImpl<32> {
+    constexpr static std::uint32_t fn(std::uint32_t x) noexcept {
+        std::uint32_t const m1 = 0x21f0aaad;
+        std::uint32_t const m2 = 0x735a2d97;
+
+        x ^= x >> 16;
+        x *= m1;
+        x ^= x >> 15;
+        x *= m2;
+        x ^= x >> 15;
+
+        return x;
+    }
+};
+
+constexpr static std::size_t hashMix(std::size_t v) noexcept {
+    return hashMixImpl<sizeof(std::size_t) * CHAR_BIT>::fn(v);
+}
+
+template <class T> constexpr void hashCombine(std::size_t &seed, const T &v) noexcept {
+    seed = hashMix(seed + 0x9e3779b9 + std::hash<T>()(v));
+}
+
+template <Integral T, Integral U> constexpr std::size_t pack(T t, U u) noexcept {
+    constexpr auto sizeOfSize = sizeof(std::size_t) * CHAR_BIT;
+
+    return orOp(shl(t, sizeOfSize / 2), u);
+}
+
+constexpr std::pair<std::size_t, std::size_t> unpack(std::size_t v) noexcept {
+    constexpr auto sizeOfSize = sizeof(std::size_t) * CHAR_BIT;
+
+    return {shr(v, sizeOfSize / 2), andOp(v, shr(~std::size_t{}, sizeOfSize / 2))};
 }
 
 } // namespace dxfcpp

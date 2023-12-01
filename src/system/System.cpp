@@ -16,16 +16,16 @@
 namespace dxfcpp {
 
 bool System::setProperty(const std::string &key, const std::string &value) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "')");
     }
 
     auto result = runIsolatedOrElse(
         [key = key, value = value](auto threadHandle) {
-            return CEntryPointErrors::valueOf(dxfg_system_set_property(
+            return static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(
                        dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
-                   CEntryPointErrors::NO_ERROR;
+                   CEntryPointErrorsEnum::NO_ERROR;
         },
         false);
 
@@ -37,7 +37,7 @@ bool System::setProperty(const std::string &key, const std::string &value) {
 }
 
 std::string System::getProperty(const std::string &key) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("System::getProperty(key = " + key + ")");
     }
@@ -67,7 +67,7 @@ std::string System::getProperty(const std::string &key) {
 } // namespace dxfcpp
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
-    // TODO: check invalid utf-8
+    // TODO: check invalid utf-8 [EN-8233]
 
     return dxfcpp::System::setProperty(key, value) ? DXFC_EC_SUCCESS : DXFC_EC_ERROR;
 }

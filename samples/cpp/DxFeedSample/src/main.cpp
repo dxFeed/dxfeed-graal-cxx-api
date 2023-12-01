@@ -34,11 +34,11 @@ void testQuoteAndTradeListener(const std::string &symbol) {
     // Listener must be attached before symbols are added.
     subscription->addEventListener([](const auto &events) {
         for (const auto &e : events) {
-            //An example of using is<T> and sharedAs<T> (may return empty shared_ptr)
-            if (const auto& q = e-> template sharedAs<Quote>(); q) {
-                std::cout << "Q: " + q->toString() + "\n";
-            } else if (e-> template is<Trade>()) {
-                std::cout << "T: " + e-> template sharedAs<Trade>()->toString() + "\n";
+            // An example of using is<T> and sharedAs<T> (may return empty shared_ptr)
+            if (const auto &q = e->template sharedAs<Quote>(); q) {
+                std::cout << q->toString() + "\n";
+            } else if (e->template is<Trade>()) {
+                std::cout << e->template sharedAs<Trade>()->toString() + "\n";
             }
         }
     });

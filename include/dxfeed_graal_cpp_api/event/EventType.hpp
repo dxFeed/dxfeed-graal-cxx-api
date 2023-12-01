@@ -9,7 +9,7 @@
 #include <memory>
 #include <string>
 
-#include "../entity/SharedEntity.hpp"
+#include "../entity/EntityModule.hpp"
 
 namespace dxfcpp {
 
@@ -27,7 +27,7 @@ namespace dxfcpp {
  * @see DXFeed
  */
 struct DXFCPP_EXPORT EventType : public SharedEntity {
-    /// The alias to a type of shared pointer to the EventType's child object.
+    /// The alias to a type of shared pointer to the EventType object.
     using Ptr = std::shared_ptr<EventType>;
 
     /**
@@ -45,7 +45,9 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      * @return The difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC or zero when time is not available.
      */
-    virtual std::int64_t getEventTime() const { return 0; }
+    virtual std::int64_t getEventTime() const noexcept {
+        return 0;
+    }
 
     /**
      * Changes event creation time.
@@ -55,14 +57,27 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
      */
-    virtual void setEventTime(std::int64_t /*eventTime*/){
+    virtual void setEventTime(std::int64_t /*eventTime*/) noexcept {
         // The default implementation is empty
     };
 
-    ///
-    std::string toString() const noexcept override { return "EventType{}"; }
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    virtual void *toGraal() const noexcept = 0;
 
-    friend std::ostream &operator<<(std::ostream &os, const EventType &e) { return os << e.toString(); }
+    ///
+    std::string toString() const noexcept override {
+        return "EventType{}";
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const EventType &e) {
+        return os << e.toString();
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const std::shared_ptr<EventType> &e) {
         return os << e->toString();
@@ -94,14 +109,21 @@ template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public Eve
      *
      * @return The event symbol.
      */
-    virtual const Symbol &getEventSymbol() const = 0;
+    virtual const Symbol &getEventSymbol() const& noexcept = 0;
+
+    /**
+     * Returns event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @return The event symbol or std::nullopt.
+     */
+    virtual const std::optional<Symbol> &getEventSymbolOpt() const& noexcept = 0;
 
     /**
      * Changes event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
      *
      * @param eventSymbol event symbol.
      */
-    virtual void setEventSymbol(const Symbol &eventSymbol) = 0;
+    virtual void setEventSymbol(const Symbol &eventSymbol) noexcept = 0;
 };
 
 } // namespace dxfcpp

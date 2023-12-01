@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <optional>
 
 #include "../EventType.hpp"
 
@@ -24,7 +25,7 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     using Ptr = std::shared_ptr<MarketEvent>;
 
   private:
-    std::string eventSymbol_{};
+    std::optional<std::string> eventSymbol_{};
     std::int64_t eventTime_{};
 
   protected:
@@ -35,31 +36,55 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit MarketEvent(std::string eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {}
+    explicit MarketEvent(std::string eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
+    }
+
+    virtual void fillData(void *graalNative) noexcept;
+    virtual void fillGraalData(void *graalNative) const noexcept;
+    static void freeGraalData(void *graalNative) noexcept;
 
   public:
     /**
      * Returns symbol of this event.
      *
-     * @return symbol of this event.
+     * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
-    const std::string &getEventSymbol() const override { return eventSymbol_; }
+    const std::string &getEventSymbol() const & noexcept override {
+        if (!eventSymbol_) {
+            return dxfcpp::String::NUL;
+        }
+
+        return eventSymbol_.value();
+    }
+
+    /**
+     * Returns symbol of this event.
+     *
+     * @return symbol of this event or `std::nullopt`.
+     */
+    const std::optional<std::string> &getEventSymbolOpt() const & noexcept override {
+        return eventSymbol_;
+    }
 
     /**
      * Changes symbol of this event.
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const std::string &eventSymbol) override {
-        //TODO: check invalid utf-8
+    void setEventSymbol(const std::string &eventSymbol) noexcept override {
+        // TODO: check invalid utf-8 [EN-8233]
         eventSymbol_ = eventSymbol;
     }
 
     ///
-    std::int64_t getEventTime() const override { return eventTime_; }
+    std::int64_t getEventTime() const noexcept override {
+        return eventTime_;
+    }
 
     ///
-    void setEventTime(std::int64_t eventTime) override { eventTime_ = eventTime; }
+    void setEventTime(std::int64_t eventTime) noexcept override {
+        eventTime_ = eventTime;
+    }
 };
 
 } // namespace dxfcpp

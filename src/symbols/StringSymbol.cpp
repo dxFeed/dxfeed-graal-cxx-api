@@ -10,50 +10,10 @@
 
 namespace dxfcpp {
 
-struct StringSymbol::Impl final {
-    dxfg_string_symbol_t graalSymbol;
-
-    Impl() noexcept : graalSymbol{{STRING}, nullptr} {}
-
-    Impl(const Impl &) noexcept {
-        graalSymbol.supper = {STRING};
-        graalSymbol.symbol = nullptr;
-    }
-
-    Impl(Impl &&) noexcept {
-        graalSymbol.supper = {STRING};
-        graalSymbol.symbol = nullptr;
-    }
-
-    Impl &operator=(const Impl &impl) noexcept {
-        if (this == &impl) {
-            return *this;
-        }
-
-        graalSymbol.supper = {STRING};
-        graalSymbol.symbol = nullptr;
-
-        return *this;
-    }
-
-    Impl &operator=(Impl &&impl) noexcept {
-        if (this == &impl) {
-            return *this;
-        }
-
-        graalSymbol.supper = {STRING};
-        graalSymbol.symbol = nullptr;
-
-        return *this;
-    }
-};
-
-StringSymbol::StringSymbol(const StringSymbol &stringSymbol) noexcept : impl_{std::make_unique<StringSymbol::Impl>()} {
-    data_ = stringSymbol.data_;
+StringSymbol::StringSymbol(const StringSymbol &stringSymbol) noexcept : data_{stringSymbol.data_} {
 }
 
-StringSymbol::StringSymbol(StringSymbol &&stringSymbol) noexcept : impl_{std::make_unique<StringSymbol::Impl>()} {
-    data_ = std::move(stringSymbol.data_);
+StringSymbol::StringSymbol(StringSymbol &&stringSymbol) noexcept : data_{std::move(stringSymbol.data_)} {
 }
 
 StringSymbol &StringSymbol::operator=(const StringSymbol &stringSymbol) noexcept {
@@ -61,7 +21,6 @@ StringSymbol &StringSymbol::operator=(const StringSymbol &stringSymbol) noexcept
         return *this;
     }
 
-    impl_ = std::make_unique<StringSymbol::Impl>();
     data_ = stringSymbol.data_;
 
     return *this;
@@ -72,32 +31,57 @@ StringSymbol &StringSymbol::operator=(StringSymbol &&stringSymbol) noexcept {
         return *this;
     }
 
-    impl_ = std::make_unique<StringSymbol::Impl>();
     data_ = std::move(stringSymbol.data_);
 
     return *this;
 }
 
-StringSymbol::StringSymbol() noexcept : impl_{std::make_unique<StringSymbol::Impl>()} {}
+StringSymbol::StringSymbol() noexcept {
+}
 
 StringSymbol::~StringSymbol() noexcept = default;
 
 void *StringSymbol::toGraal() const noexcept {
-    if (impl_->graalSymbol.symbol == nullptr) {
-        impl_->graalSymbol.symbol = data_.c_str();
-
-        // std::visit([this](auto symbol) { impl_->graalSymbol.symbol = symbol.data(); }, data_);
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("StringSymbol::toGraal()");
     }
 
-    return bit_cast<void *>(&impl_->graalSymbol);
+    auto *graalSymbol = new (std::nothrow) dxfg_string_symbol_t{{STRING}, createCString(data_)};
+
+    return static_cast<void *>(graalSymbol);
 }
 
-const std::string &StringSymbol::getData() const { return data_; }
+void StringSymbol::freeGraal(void *graalNative) noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("StringSymbol::freeGraal(graalNative = " + toStringAny(graalNative) + ")");
+    }
 
-std::string toString(const dxfg_symbol_t *graalSymbol);
+    if (graalNative == nullptr) {
+        return;
+    }
 
-std::string graalSymbolToString(void *graalSymbol) {
-    return !graalSymbol ? "null" : toString(bit_cast<const dxfg_symbol_t *>(graalSymbol));
+    auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
+
+    delete[] graalSymbol->symbol;
+    delete graalSymbol;
+}
+
+StringSymbol StringSymbol::fromGraal(void *graalNative) noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("StringSymbol::fromGraal(graalNative = " + toStringAny(graalNative) + ")");
+    }
+
+    if (graalNative == nullptr) {
+        return {};
+    }
+
+    auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
+
+    return {graalSymbol->symbol};
+}
+
+const std::string &StringSymbol::getData() const {
+    return data_;
 }
 
 } // namespace dxfcpp

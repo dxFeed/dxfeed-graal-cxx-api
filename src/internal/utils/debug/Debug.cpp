@@ -43,9 +43,9 @@ std::string Debugger::debugPrefixStr() {
     return fmt::format("D {} [{}]", nowStr(), toString(std::this_thread::get_id()));
 }
 
- void Debugger::debug(std::string str) {
-     vprint(std::cerr, "{} {}\n", debugPrefixStr(), std::move(str));
- }
+void Debugger::debug(std::string str) {
+    vprint(std::cerr, "{} {}\n", debugPrefixStr(), std::move(str));
+}
 
 #    if DXFCPP_TRACE == 1
 std::string Debugger::tracePrefixStr() {
@@ -56,7 +56,6 @@ void Debugger::trace(std::string str) {
     vprint(std::cerr, "{} ~~ {}\n", tracePrefixStr(), std::move(str));
 }
 #    else
-inline void Debugger::trace(...) {}
 #    endif
 
 #endif

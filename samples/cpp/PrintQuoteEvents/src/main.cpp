@@ -6,7 +6,7 @@
 #include <iostream>
 
 /*
- * A simple sample that shows how to subscribe to quotes for one instruments,
+ * A simple sample that shows how to subscribe to quotes for one instrument,
  * and print all received quotes to the console.
  * Use default DXFeed instance for that data feed address is defined by "dxfeed.properties" file.
  * The properties file is copied to the build output directory from the project directory.

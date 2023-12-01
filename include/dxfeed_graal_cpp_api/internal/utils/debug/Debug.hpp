@@ -6,8 +6,8 @@
 #include "../../Conf.hpp"
 
 #define DXFCPP_DEBUG 0
-//#define DXFCPP_TRACE_LISTS 1
-//#define DXFCPP_TRACE_ISOLATES 1
+// #define DXFCPP_TRACE_LISTS 1
+// #define DXFCPP_TRACE_ISOLATES 1
 
 #ifndef DXFCPP_DEBUG
 #    define DXFCPP_DEBUG 0
@@ -28,20 +28,24 @@ namespace dxfcpp {
 
 #if DXFCPP_DEBUG == 0
 
-static inline std::string getDebugName() { return {}; }
+static inline std::string getDebugName() {
+    return {};
+}
 
 struct DXFCPP_EXPORT Debugger {
     static constexpr bool isDebug = false;
     static constexpr bool traceIsolates = false;
     static constexpr bool traceLists = false;
 
-    static void debug(std::string) {}
-    static void trace(std::string) {}
+    static void debug(std::string) {
+    }
+    static void trace(std::string) {
+    }
 };
 
 #else
 
-struct Debugger {
+struct DXFCPP_EXPORT Debugger {
     static constexpr bool isDebug = true;
 #    if DXFCPP_TRACE_ISOLATES == 1
     static constexpr bool traceIsolates = true;
@@ -62,7 +66,8 @@ struct Debugger {
     static std::string tracePrefixStr();
     static void trace(std::string);
 #    else
-    static void trace(std::string);
+    static void trace(std::string) {
+    }
 #    endif
 };
 

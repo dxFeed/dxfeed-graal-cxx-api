@@ -10,29 +10,125 @@
 #include <optional>
 #include <utility>
 #include <variant>
+#include <concepts>
 
+#include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
+#include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
 #include "../api/osub/WildcardSymbol.hpp"
+#include "../event/candle/CandleSymbol.hpp"
+#include "../internal/Common.hpp"
 #include "StringSymbol.hpp"
 
 namespace dxfcpp {
+
+/**
+ * A concept describing a symbol that can be wrapped.
+ *
+ * @tparam T Probable symbol type
+ */
+template <typename T>
+concept ConvertibleToSymbolWrapper =
+    ConvertibleToStringSymbol<std::decay_t<T>> || std::is_same_v<std::decay_t<T>, WildcardSymbol> ||
+    std::is_same_v<std::decay_t<T>, IndexedEventSubscriptionSymbol> ||
+    std::is_same_v<std::decay_t<T>, TimeSeriesSubscriptionSymbol> || std::is_same_v<std::decay_t<T>, CandleSymbol>;
+
+/**
+ * A concept that defines a collection of wrapped or wrapping symbols.
+ *
+ * @tparam Collection The collection type
+ */
+template <typename Collection>
+concept ConvertibleToSymbolWrapperCollection =
+    requires(Collection c) {
+        std::begin(c);
+        std::end(c);
+    } &&
+    (
+        requires(Collection c) {
+            { *std::begin(c) } -> dxfcpp::ConvertibleTo<SymbolWrapper>;
+        } ||
+        requires(Collection c) {
+            { *std::begin(c) } -> ConvertibleToSymbolWrapper;
+        });
 
 /**
  * A helper wrapper class needed to pass heterogeneous symbols using a container and convert them to internal Graal
  * representation.
  */
 struct DXFCPP_EXPORT SymbolWrapper final {
-    using DataType = typename std::variant<WildcardSymbol, StringSymbol>;
+    using DataType = typename std::variant<WildcardSymbol, StringSymbol, IndexedEventSubscriptionSymbol,
+                                           TimeSeriesSubscriptionSymbol, CandleSymbol>;
+
+    class DXFCPP_EXPORT SymbolListUtils final {
+        static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
+        static void *newGraalList(std::ptrdiff_t size) noexcept;
+        static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
+        static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
+
+      public:
+        template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) noexcept {
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("SymbolWrapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
+            }
+
+            auto size = calculateGraalListSize(std::distance(begin, end));
+
+            // Zero size is needed, for example, to clear the list of symbols.
+            auto *list = newGraalList(size);
+
+            if (!list || size == 0) {
+                return list;
+            }
+
+            std::ptrdiff_t elementIdx = 0;
+            bool needToFree = false;
+
+            for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
+                if constexpr (requires { it->toGraal(); }) {
+                    needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
+                } else if constexpr (std::is_convertible_v<decltype(*it), SymbolWrapper> ||
+                                     dxfcpp::ConvertibleToSymbolWrapper<decltype(*it)>) {
+                    needToFree = setGraalListElement(list, elementIdx, SymbolWrapper(*it).toGraal()) == false;
+                }
+
+                if (needToFree) {
+                    break;
+                }
+            }
+
+            if (needToFree) {
+                freeGraalListElements(list, elementIdx);
+
+                return nullptr;
+            }
+
+            return list;
+        }
+
+        template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+        static void *toGraalList(const SymbolsCollection &collection) noexcept {
+            return SymbolListUtils::toGraalList(std::begin(collection), std::end(collection));
+        }
+
+        static void *toGraalList(std::initializer_list<SymbolWrapper> collection) noexcept {
+            return SymbolListUtils::toGraalList(collection.begin(), collection.end());
+        }
+
+        static void freeGraalList(void *graalList) noexcept;
+
+        static std::vector<SymbolWrapper> fromGraalList(void *graalList) noexcept;
+    };
 
   private:
     DataType data_;
 
   public:
     SymbolWrapper(const SymbolWrapper &) noexcept = default;
-    SymbolWrapper(SymbolWrapper &&) noexcept = delete;
+    SymbolWrapper(SymbolWrapper &&) noexcept = default;
     SymbolWrapper &operator=(const SymbolWrapper &) noexcept = default;
-    SymbolWrapper &operator=(SymbolWrapper &&) noexcept = delete;
+    SymbolWrapper &operator=(SymbolWrapper &&) noexcept = default;
     SymbolWrapper() noexcept = default;
-    ~SymbolWrapper() noexcept = default;
+    virtual ~SymbolWrapper() noexcept = default;
 
     /**
      * Constructor for any wrapped symbol.
@@ -66,7 +162,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     /**
      * Constructor for any wrapped wildcard (*) symbol.
      *
-     * @param wildcardSymbol The wrapped wildcard symbl
+     * @param wildcardSymbol The wrapped wildcard symbol
      */
     SymbolWrapper(const WildcardSymbol &wildcardSymbol) noexcept {
         if constexpr (Debugger::isDebug) {
@@ -76,8 +172,77 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         data_ = wildcardSymbol;
     }
 
+    /**
+     * Constructor for IndexedEventSubscriptionSymbol.
+     *
+     * @param indexedEventSubscriptionSymbol The IndexedEventSubscriptionSymbol
+     */
+    SymbolWrapper(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(
+                "SymbolWrapper(indexedEventSubscriptionSymbol = " + toStringAny(indexedEventSubscriptionSymbol) + ")");
+        }
+
+        data_ = indexedEventSubscriptionSymbol;
+    }
+
+    /**
+     * Constructor for TimeSeriesSubscriptionSymbol.
+     *
+     * @param timeSeriesSubscriptionSymbol The TimeSeriesSubscriptionSymbol
+     */
+    SymbolWrapper(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(
+                "SymbolWrapper(timeSeriesSubscriptionSymbol = " + toStringAny(timeSeriesSubscriptionSymbol) + ")");
+        }
+
+        data_ = timeSeriesSubscriptionSymbol;
+    }
+
+    /**
+     * Constructor for CandleSymbol.
+     *
+     * @param candleSymbol The CandleSymbol
+     */
+    SymbolWrapper(const CandleSymbol &candleSymbol) noexcept {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("SymbolWrapper(candleSymbol = " + toStringAny(candleSymbol) + ")");
+        }
+
+        data_ = candleSymbol;
+    }
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
+
+    static SymbolWrapper fromGraal(void *graalNative) noexcept;
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
     void *toGraal() const noexcept {
-        return std::visit([](const auto &symbol) { return symbol.toGraal(); }, data_);
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("SymbolWrapper::toGraal()");
+        }
+
+        return std::visit(
+            [](const auto &symbol) {
+                return symbol.toGraal();
+            },
+            data_);
+    }
+
+    std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const noexcept {
+        return {toGraal(), SymbolWrapper::freeGraal};
     }
 
     /**
@@ -86,25 +251,21 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      * @return a string representation
      */
     std::string toString() const noexcept {
-        return "SymbolWrapper{" + std::visit([](const auto &symbol) { return toStringAny(symbol); }, data_) + "}";
-    }
-
-    /**
-     * @return `true` if current SymbolWrapper holds a WildcardSymbol
-     */
-    bool isWildcardSymbol() const noexcept { return std::holds_alternative<WildcardSymbol>(data_); }
-
-    /**
-     * @return WildcardSymbol (optional) or nullopt if current SymbolWrapper doesn't hold WildcardSymbol
-     */
-    std::optional<WildcardSymbol> asWildcardSymbol() const noexcept {
-        return isWildcardSymbol() ? std::make_optional(WildcardSymbol::ALL) : std::nullopt;
+        return "SymbolWrapper{" +
+               std::visit(
+                   [](const auto &symbol) {
+                       return toStringAny(symbol);
+                   },
+                   data_) +
+               "}";
     }
 
     /**
      * @return `true` if current SymbolWrapper holds a StringSymbol
      */
-    bool isStringSymbol() const noexcept { return std::holds_alternative<StringSymbol>(data_); }
+    bool isStringSymbol() const noexcept {
+        return std::holds_alternative<StringSymbol>(data_);
+    }
 
     /**
      * @return String representation of StringSymbol or an empty string
@@ -113,40 +274,83 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
     }
 
-    const DataType &getData() const noexcept { return data_; }
+    /**
+     * @return `true` if current SymbolWrapper holds a WildcardSymbol
+     */
+    bool isWildcardSymbol() const noexcept {
+        return std::holds_alternative<WildcardSymbol>(data_);
+    }
 
-    bool operator==(const SymbolWrapper &symbolWrapper) const { return getData() == symbolWrapper.getData(); }
+    /**
+     * @return WildcardSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold WildcardSymbol
+     */
+    std::optional<WildcardSymbol> asWildcardSymbol() const noexcept {
+        return isWildcardSymbol() ? std::make_optional(WildcardSymbol::ALL) : std::nullopt;
+    }
 
-    auto operator<(const SymbolWrapper &symbolWrapper) const { return getData() < symbolWrapper.getData(); }
+    /**
+     * @return `true` if current SymbolWrapper holds a IndexedEventSubscriptionSymbol
+     */
+    bool isIndexedEventSubscriptionSymbol() const noexcept {
+        return std::holds_alternative<IndexedEventSubscriptionSymbol>(data_);
+    }
+
+    /**
+     * @return IndexedEventSubscriptionSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
+     * IndexedEventSubscriptionSymbol
+     */
+    std::optional<IndexedEventSubscriptionSymbol> asIndexedEventSubscriptionSymbol() const noexcept {
+        return isIndexedEventSubscriptionSymbol()
+                   ? std::make_optional<IndexedEventSubscriptionSymbol>(std::get<IndexedEventSubscriptionSymbol>(data_))
+                   : std::nullopt;
+    }
+
+    /**
+     * @return `true` if current SymbolWrapper holds a TimeSeriesSubscriptionSymbol
+     */
+    bool isTimeSeriesSubscriptionSymbol() const noexcept {
+        return std::holds_alternative<TimeSeriesSubscriptionSymbol>(data_);
+    }
+
+    /**
+     * @return TimeSeriesSubscriptionSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
+     * TimeSeriesSubscriptionSymbol
+     */
+    std::optional<TimeSeriesSubscriptionSymbol> asTimeSeriesSubscriptionSymbol() const noexcept {
+        return isTimeSeriesSubscriptionSymbol()
+                   ? std::make_optional<TimeSeriesSubscriptionSymbol>(std::get<TimeSeriesSubscriptionSymbol>(data_))
+                   : std::nullopt;
+    }
+
+    /**
+     * @return `true` if current SymbolWrapper holds a CandleSymbol
+     */
+    bool isCandleSymbol() const noexcept {
+        return std::holds_alternative<CandleSymbol>(data_);
+    }
+
+    /**
+     * @return CandleSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
+     * CandleSymbol
+     */
+    std::optional<CandleSymbol> asCandleSymbol() const noexcept {
+        return isCandleSymbol() ? std::make_optional<CandleSymbol>(std::get<CandleSymbol>(data_)) : std::nullopt;
+    }
+
+    const DataType &getData() const noexcept {
+        return data_;
+    }
+
+    bool operator==(const SymbolWrapper &symbolWrapper) const {
+        return getData() == symbolWrapper.getData();
+    }
+
+    auto operator<(const SymbolWrapper &symbolWrapper) const {
+        return getData() < symbolWrapper.getData();
+    }
+
+    using GraalPtr = std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)>;
 };
-
-/**
- * A concept describing a symbol that can be wrapped.
- *
- * @tparam T Probable symbol type
- */
-template <typename T>
-concept ConvertibleToSymbolWrapper =
-    ConvertibleToStringSymbol<std::decay_t<T>> || std::is_same_v<std::decay_t<T>, WildcardSymbol>;
-
-/**
- * A concept that defines a collection of wrapped or wrapping symbols.
- *
- * @tparam Collection The collection type
- */
-template <typename Collection>
-concept ConvertibleToSymbolWrapperCollection =
-    requires(Collection c) {
-        std::begin(c);
-        std::end(c);
-    } &&
-    (
-        requires(Collection c) {
-            { *std::begin(c) } -> std::convertible_to<SymbolWrapper>;
-        } ||
-        requires(Collection c) {
-            { *std::begin(c) } -> ConvertibleToSymbolWrapper;
-        });
 
 inline namespace literals {
 

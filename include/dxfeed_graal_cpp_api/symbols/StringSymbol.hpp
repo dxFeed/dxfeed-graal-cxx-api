@@ -13,7 +13,8 @@
 namespace dxfcpp {
 
 /**
- * A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal Graal representation.
+ * A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal
+ * Graal representation.
  *
  * The current implementation is suboptimal (by memory usage) and will be enhanced.
  */
@@ -21,16 +22,13 @@ struct DXFCPP_EXPORT StringSymbol final {
   private:
     std::string data_;
 
-    struct Impl;
-    std::unique_ptr<Impl> impl_;
-
   public:
     StringSymbol(const StringSymbol &stringSymbol) noexcept;
     StringSymbol(StringSymbol &&) noexcept;
     StringSymbol &operator=(const StringSymbol &stringSymbol) noexcept;
     StringSymbol &operator=(StringSymbol &&) noexcept;
     StringSymbol() noexcept;
-    ~StringSymbol() noexcept;
+    virtual ~StringSymbol() noexcept;
 
     /**
      * Constructs StringSymbol from a char array
@@ -66,20 +64,46 @@ struct DXFCPP_EXPORT StringSymbol final {
         data_ = std::move(string);
     }
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
     void *toGraal() const noexcept;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative) noexcept;
+
+    static StringSymbol fromGraal(void *graalNative) noexcept;
 
     /**
      * Returns a string representation of the current object.
      *
      * @return a string representation
      */
-    std::string toString() const noexcept { return "StringSymbol{" + data_ + "}"; }
+    std::string toString() const noexcept {
+        if constexpr (Debugger::isDebug) {
+            return "StringSymbol{" + data_ + "}";
+        } else {
+            return data_;
+        }
+    }
 
     const std::string &getData() const;
 
-    bool operator==(const StringSymbol &stringSymbol) const { return getData() == stringSymbol.getData(); }
+    bool operator==(const StringSymbol &stringSymbol) const {
+        return getData() == stringSymbol.getData();
+    }
 
-    bool operator<(const StringSymbol &stringSymbol) const { return getData() < stringSymbol.getData(); }
+    bool operator<(const StringSymbol &stringSymbol) const {
+        return getData() < stringSymbol.getData();
+    }
 };
 
 /**
@@ -105,8 +129,6 @@ inline StringSymbol operator""_s(const char *string, size_t length) noexcept {
 }
 
 } // namespace literals
-
-DXFCPP_EXPORT std::string graalSymbolToString(void *graalSymbol);
 
 } // namespace dxfcpp
 

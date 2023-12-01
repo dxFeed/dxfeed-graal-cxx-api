@@ -2,27 +2,27 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest.h>
 
 #include "dxfeed_graal_c_api/api.h"
 #include "dxfeed_graal_cpp_api/api.hpp"
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include <doctest.h>
 
 TEST_CASE("DXEndpoint::Builder") {
     auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
     auto endpoint = builder->build();
 
     endpoint->onStateChange() += [](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        std::cerr << "DXEndpoint::Builder Test: {}" + std::string("State changed: ") +
+        std::cerr << "DXEndpoint::Builder Test: " + std::string("State changed: ") +
                          dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
                          dxfcpp::DXEndpoint::stateToString(newState)
                   << "\n";
     };
 
     endpoint->addStateChangeListener([](dxfcpp::DXEndpoint::State oldState, dxfcpp::DXEndpoint::State newState) {
-        std::cerr << "DXEndpoint::Builder Test: {}" + std::string("State changed 2: ") +
+        std::cerr << "DXEndpoint::Builder Test: " + std::string("State changed 2: ") +
                          dxfcpp::DXEndpoint::stateToString(oldState) + " -> " +
                          dxfcpp::DXEndpoint::stateToString(newState)
                   << "\n";
@@ -106,6 +106,8 @@ TEST_CASE("dxfc_dxendpoint_builder_t bug") {
 //    }
 //
 //    dxfc_dxendpoint_close(endpoint);
+//
+//    std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
 TEST_CASE("DXFeedSubscription") {
@@ -115,7 +117,42 @@ TEST_CASE("DXFeedSubscription") {
 
     dxfcpp::DXFeed::getInstance()->attachSubscription(s2);
 
+    std::set types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
+
+    auto s3 = dxfcpp::DXFeed::getInstance()->createSubscription(types);
+
+    auto s4 = dxfcpp::DXFeed::getInstance()->createSubscription(types.begin(), types.end());
+
+    auto s5 = dxfcpp::DXFeed::getInstance()->createSubscription(std::move(types));
+
+    auto types2 = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
+
+    auto sub6 = dxfcpp::DXFeedSubscription::create(types2.begin(), types2.end());
+
     dxfcpp::DXFeed::getInstance();
 }
 
 TEST_CASE("dxfcpp::DXFeed::getInstance()") { dxfcpp::DXFeed::getInstance(); }
+
+TEST_CASE("dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList") {
+    using namespace std::literals;
+
+    auto* list = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList({"AAPL", "IBM"s, "TSLA"sv});
+    auto* list2 = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList(std::vector<std::string>{"XXX", "YYY", "ZZZ"});
+
+    auto set = std::set<dxfcpp::SymbolWrapper>{"111", "222"sv, "333"s};
+
+    auto* list3 = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList(set.begin(), set.end());
+
+    auto sl = dxfcpp::SymbolWrapper::SymbolListUtils::fromGraalList(list);
+
+
+    std::cout << "Symbols:\n";
+    for (const auto& s : sl) {
+        std::cout << s.toString() << "\n";
+    }
+
+    dxfcpp::SymbolWrapper::SymbolListUtils::freeGraalList(list);
+    dxfcpp::SymbolWrapper::SymbolListUtils::freeGraalList(list2);
+    dxfcpp::SymbolWrapper::SymbolListUtils::freeGraalList(list3);
+}

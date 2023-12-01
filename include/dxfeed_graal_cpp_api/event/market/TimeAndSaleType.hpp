@@ -18,23 +18,26 @@ namespace dxfcpp {
 /**
  * Type of a time and sale event.
  */
-struct DXFCPP_EXPORT TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
+struct TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
     using Enum::Enum;
 
     /**
      * Represents new time and sale event.
      */
-    static const TimeAndSaleType NEW;
+    static const DXFCPP_EXPORT TimeAndSaleType NEW;
 
     /**
      * Represents correction time and sale event.
      */
-    static const TimeAndSaleType CORRECTION;
+    static const DXFCPP_EXPORT TimeAndSaleType CORRECTION;
 
     /**
      * Represents cancel time and sale event.
      */
-    static const TimeAndSaleType CANCEL;
+    static const DXFCPP_EXPORT TimeAndSaleType CANCEL;
 };
 
-}
+template <>
+const std::unordered_map<TimeAndSaleType::CodeType, std::reference_wrapper<const TimeAndSaleType>>
+    TimeAndSaleType::ParentType::ALL;
+} // namespace dxfcpp

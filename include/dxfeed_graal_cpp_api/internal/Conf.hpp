@@ -3,6 +3,14 @@
 
 #pragma once
 
+#ifdef _WINNT_
+#    error Please, include windows.h or winnt.h after dxFeed Graal CXX API headers
+#endif
+
+#ifndef DXFCXX_VERSION
+#define DXFCXX_VERSION "0.0.0"
+#endif
+
 #ifdef DXFCPP_EXPORT
 #    error DXFCPP_EXPORT was previously defined
 #endif
@@ -25,4 +33,12 @@
 #    define DXFCPP_EXPORT
 #    define DXFCPP_EXPORT_TEMPLATE_DECLARE
 #    define DXFCPP_EXPORT_TEMPLATE_DEFINE
+#endif
+
+#ifndef DXFCPP_CXX20_CONSTEXPR_STRING
+#    if defined(__cpp_lib_constexpr_string)
+#        define DXFCPP_CXX20_CONSTEXPR_STRING constexpr
+#    else
+#        define DXFCPP_CXX20_CONSTEXPR_STRING
+#    endif
 #endif

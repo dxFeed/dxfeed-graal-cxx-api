@@ -18,23 +18,27 @@ namespace dxfcpp {
 /**
  * Short sale restriction on an instrument.
  */
-struct DXFCPP_EXPORT ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
+struct ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
     using Enum::Enum;
 
     /**
      * Short sale restriction is undefined, unknown or inapplicable.
      */
-    static const ShortSaleRestriction UNDEFINED;
+    static const DXFCPP_EXPORT ShortSaleRestriction UNDEFINED;
 
     /**
      * Short sale restriction is active.
      */
-    static const ShortSaleRestriction ACTIVE;
+    static const DXFCPP_EXPORT ShortSaleRestriction ACTIVE;
 
     /**
      * Short sale restriction is inactive.
      */
-    static const ShortSaleRestriction INACTIVE;
+    static const DXFCPP_EXPORT ShortSaleRestriction INACTIVE;
 };
+
+template <>
+const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<const ShortSaleRestriction>>
+    ShortSaleRestriction::ParentType::ALL;
 
 } // namespace dxfcpp
