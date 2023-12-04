@@ -16,8 +16,8 @@ const std::vector<std::string> ConnectTool::USAGE{
 const std::vector<std::string> ConnectTool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> ConnectTool::ARGS{
-    AddressArgRequired{}, TypesArgRequired{}, SymbolsArgRequired{}, FromTimeArg{}, SourceArg{},
-    PropertiesArg{},      TapeArg{},          QuiteArg{},           HelpArg{}};
+    AddressArgRequired{}, TypesArgRequired{}, SymbolsArgRequired{}, FromTimeArg{},    SourceArg{},
+    PropertiesArg{},      TapeArg{},          QuiteArg{},           ForceStreamArg{}, HelpArg{}};
 
 const std::string DumpTool::NAME{"Dump"};
 const std::string DumpTool::SHORT_DESCRIPTION{"Dumps all events received from address."};
@@ -372,7 +372,8 @@ const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::AL
 const std::vector<std::string> tools::HelpTool::ALL_TOOL_NAMES =
     tools::HelpTool::ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
 
-const std::set<std::string> HelpTool::ALL_NAMES = ranges::views::concat(ALL_ARTICLE_NAMES, ALL_TOOL_NAMES) | ranges::to<std::set>;
+const std::set<std::string> HelpTool::ALL_NAMES =
+    ranges::views::concat(ALL_ARTICLE_NAMES, ALL_TOOL_NAMES) | ranges::to<std::set>;
 
 const std::string Tools::NAME{"Tools"};
 const std::string Tools::SHORT_DESCRIPTION{"A collection of useful utilities that use the dxFeed API."};

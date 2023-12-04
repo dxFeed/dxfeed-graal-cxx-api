@@ -284,8 +284,10 @@ Quote{AAPL, eventTime=0, time=20221219-223312.000, timeNanoPart=0, sequence=0, b
 int main() {
     using namespace dxfcpp;
     
-    // The experimental property must be enabled.
-    System::setProperty("dxfeed.experimental.dxlink.enable", "true");
+    // Enable experimental feature.
+    System::SetProperty("dxfeed.experimental.dxlink.enable", "true");
+    // Set scheme for dxLink.
+    System::SetProperty("scheme", "ext:resource:dxlink.xml");
     
     // For token-based authorization, use the following address format:
     // "demo.dxfeed.com:7300[login=entitle:token]"
