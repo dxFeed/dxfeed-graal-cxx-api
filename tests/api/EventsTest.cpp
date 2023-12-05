@@ -23,7 +23,6 @@ struct OrderConstants {
 
 TEST_CASE("Order::setTime() should change TimeSequence") {
     auto o = Order("AAPL").withSequence(123);
-    auto oldTimeSequence = o.getTimeSequence();
     std::int64_t time = 1'701'703'226'500LL;
 
     o.setTime(time);
@@ -82,7 +81,6 @@ struct TimeAndSaleConstants {
 
 TEST_CASE("TimeAndSale::setTime() should change Index") {
     auto tns = TimeAndSale("AAPL");
-    auto oldIndex = tns.getIndex();
     std::int64_t time = 1'701'703'226'500LL;
 
     tns.setTime(time);
@@ -113,4 +111,45 @@ TEST_CASE("TimeAndSale::setSequence() should change Index") {
     auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~TimeAndSaleConstants::MAX_SEQUENCE), sequence);
 
     REQUIRE(tns.getIndex() == expectedIndex);
+}
+
+struct GreeksConstants {
+    static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
+    static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+};
+
+TEST_CASE("Greeks::setTime() should change Index") {
+    auto g = Greeks("AAPL");
+    std::int64_t time = 1'701'703'226'500LL;
+
+    g.setTime(time);
+
+    auto newIndex = g.getIndex();
+    auto expectedIndex =
+        dxfcpp::orOp(dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
+                                              GreeksConstants::SECONDS_SHIFT),
+                                  dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
+                                              GreeksConstants::MILLISECONDS_SHIFT)),
+                     g.getSequence());
+    auto expectedTime = dxfcpp::sar(expectedIndex, GreeksConstants::SECONDS_SHIFT) * 1000 +
+                        dxfcpp::andOp(dxfcpp::sar(expectedIndex, GreeksConstants::MILLISECONDS_SHIFT),
+                                      GreeksConstants::MILLISECONDS_MASK);
+
+    REQUIRE(time == g.getTime());
+    REQUIRE(time == expectedTime);
+    REQUIRE(newIndex == expectedIndex);
+}
+
+TEST_CASE("Greeks::setSequence() should change Index") {
+    auto g = Greeks("AAPL");
+    auto oldIndex = g.getIndex();
+    int sequence = 567;
+
+    g.setSequence(sequence);
+
+    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~GreeksConstants::MAX_SEQUENCE), sequence);
+
+    REQUIRE(g.getIndex() == expectedIndex);
 }
