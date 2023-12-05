@@ -15,6 +15,73 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
+struct OptionSaleConstants {
+    static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
+    static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
+};
+
+TEST_CASE("OptionSale::setTime() should change TimeSequence") {
+    auto os = OptionSale("AAPL");
+
+    os.setSequence(123);
+
+    std::int64_t time = 1'701'703'226'500LL;
+
+    os.setTime(time);
+
+    auto newTimeSequence = os.getTimeSequence();
+    auto expectedTimeSequence =
+        dxfcpp::orOp(dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
+                                              OptionSaleConstants::SECONDS_SHIFT),
+                                  dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
+                                              OptionSaleConstants::MILLISECONDS_SHIFT)),
+                     os.getSequence());
+    auto expectedTime = dxfcpp::sar(expectedTimeSequence, OptionSaleConstants::SECONDS_SHIFT) * 1000 +
+                        dxfcpp::andOp(dxfcpp::sar(expectedTimeSequence, OptionSaleConstants::MILLISECONDS_SHIFT),
+                                      OptionSaleConstants::MILLISECONDS_MASK);
+
+    REQUIRE(time == os.getTime());
+    REQUIRE(time == expectedTime);
+    REQUIRE(newTimeSequence == expectedTimeSequence);
+}
+
+TEST_CASE("OptionSale::setTime() shouldn't change Index") {
+    auto os = OptionSale("AAPL");
+
+    os.setSequence(123);
+
+    auto oldIndex = os.getIndex();
+    std::int64_t time = 1'701'703'226'500LL;
+
+    os.setTime(time);
+
+    REQUIRE(oldIndex == os.getIndex());
+}
+
+TEST_CASE("OptionSale::setTime() shouldn't change Sequence") {
+    auto os = OptionSale("AAPL");
+
+    os.setSequence(123);
+    auto oldSequence = os.getSequence();
+    std::int64_t time = 1'701'703'226'500LL;
+
+    os.setTime(time);
+
+    REQUIRE(oldSequence == os.getSequence());
+}
+
+TEST_CASE("OptionSale::setIndex() shouldn't change Sequence") {
+    auto os = OptionSale("AAPL");
+
+    os.setSequence(123);
+    auto oldSequence = os.getSequence();
+
+    os.setIndex(1'234'567'891'011LL);
+
+    REQUIRE(oldSequence == os.getSequence());
+}
+
 struct OrderConstants {
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
