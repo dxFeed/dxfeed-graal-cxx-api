@@ -8,8 +8,8 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
-#include <string>
 #include <optional>
+#include <string>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
@@ -224,8 +224,8 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @see ::getTime()
      */
     void setTime(std::int64_t time) noexcept {
-        data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
-                                sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
+        data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                                sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
                            getSequence());
     }
 

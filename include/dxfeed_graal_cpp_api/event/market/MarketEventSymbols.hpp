@@ -5,8 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <string>
 #include <optional>
+#include <string>
 
 namespace dxfcpp {
 
@@ -52,7 +52,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @return exchange code of the specified symbol or `'\0'` if none is defined.
      */
     static char getExchangeCode(const std::string &symbol) noexcept {
-        return hasExchangeCode(symbol) ? symbol[getLengthWithoutAttributesInternal(symbol) - 1] : 0;
+        return hasExchangeCode(symbol) ? symbol[getLengthWithoutAttributesInternal(symbol) - 1] : '\0';
     }
 
     /**
@@ -65,8 +65,8 @@ struct DXFCPP_EXPORT MarketEventSymbols {
     static DXFCPP_CXX20_CONSTEXPR_STRING std::string changeExchangeCode(const std::string &symbol,
                                                                         char exchangeCode) noexcept {
         auto i = getLengthWithoutAttributesInternal(symbol);
-        auto result = exchangeCode == 0 ? getBaseSymbolInternal(symbol, i)
-                                        : getBaseSymbolInternal(symbol, i) + EXCHANGE_SEPARATOR + exchangeCode;
+        auto result = exchangeCode == '\0' ? getBaseSymbolInternal(symbol, i)
+                                           : getBaseSymbolInternal(symbol, i) + EXCHANGE_SEPARATOR + exchangeCode;
         return i == symbol.length() ? result : result + symbol.substr(i);
     }
 
@@ -180,6 +180,8 @@ struct DXFCPP_EXPORT MarketEventSymbols {
 
             return std::nullopt;
         } catch (...) {
+            // TODO: error handling: [EN-8232]
+
             return std::nullopt;
         }
     }
@@ -212,6 +214,8 @@ struct DXFCPP_EXPORT MarketEventSymbols {
 
             return symbol.substr(0, i) + symbol.substr(j);
         } catch (...) {
+            // TODO: error handling: [EN-8232]
+
             return symbol;
         }
     }

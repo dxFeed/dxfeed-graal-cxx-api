@@ -198,8 +198,8 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      * @see ::getTime()
      */
     void setTime(std::int64_t time) noexcept {
-        data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
-                                sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
+        data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                                sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
                            getSequence());
     }
 

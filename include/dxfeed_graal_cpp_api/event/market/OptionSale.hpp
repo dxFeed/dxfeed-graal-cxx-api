@@ -8,8 +8,8 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
-#include <string>
 #include <optional>
+#include <string>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
@@ -219,9 +219,10 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @param time time of this event.
      */
     void setTime(std::int64_t time) noexcept {
-        data_.timeSequence = orOp(
-            sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-            orOp(sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_MASK), getSequence()));
+        data_.timeSequence =
+            orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                      sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+                 getSequence());
     }
 
     /**
@@ -271,7 +272,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @return The sequence number of this event
      */
     std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
+        return static_cast<std::int32_t>(andOp(data_.timeSequence, MAX_SEQUENCE));
     }
 
     /**
@@ -284,7 +285,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
         // TODO: Improve error handling [EN-8232]
         assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
 
-        data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
+        data_.timeSequence = orOp(andOp(data_.timeSequence, ~MAX_SEQUENCE), sequence);
     }
 
     /**
@@ -445,7 +446,8 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @param tradeThroughExempt TradeThroughExempt flag of this option sale event.
      */
     void setTradeThroughExempt(char tradeThroughExempt) noexcept {
-        // TODO: error handling [EN-8232] //util::checkChar(tradeThroughExempt, TimeAndSale::TTE_MASK, "tradeThroughExempt");
+        // TODO: error handling [EN-8232] //util::checkChar(tradeThroughExempt, TimeAndSale::TTE_MASK,
+        // "tradeThroughExempt");
 
         data_.flags = setBits(data_.flags, TimeAndSale::TTE_MASK, TimeAndSale::TTE_SHIFT, tradeThroughExempt);
     }
