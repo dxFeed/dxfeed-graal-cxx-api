@@ -7,13 +7,52 @@
 #include "dxfeed_graal_cpp_api/api.hpp"
 #include <doctest.h>
 #include <fmt/format.h>
-#include <thread>
-#include <unordered_map>
 #include <vector>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
+
+struct CandleConstants {
+    static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
+    static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+};
+
+TEST_CASE("Candle::setTime() should change Index") {
+    auto c = Candle("AAPL"_c);
+    std::int64_t time = 1'701'703'226'537LL;
+
+    c.setTime(time);
+
+    auto newIndex = c.getIndex();
+    auto expectedIndex =
+        dxfcpp::orOp(dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
+                                              CandleConstants::SECONDS_SHIFT),
+                                  dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
+                                              CandleConstants::MILLISECONDS_SHIFT)),
+                     c.getSequence());
+    auto expectedTime = dxfcpp::sar(expectedIndex, CandleConstants::SECONDS_SHIFT) * 1000 +
+                        dxfcpp::andOp(dxfcpp::sar(expectedIndex, CandleConstants::MILLISECONDS_SHIFT),
+                                      CandleConstants::MILLISECONDS_MASK);
+
+    REQUIRE(time == c.getTime());
+    REQUIRE(time == expectedTime);
+    REQUIRE(newIndex == expectedIndex);
+}
+
+TEST_CASE("Candle::setSequence() should change Index") {
+    auto c = Candle("AAPL"_c);
+    auto oldIndex = c.getIndex();
+    int sequence = 567;
+
+    c.setSequence(sequence);
+
+    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~CandleConstants::MAX_SEQUENCE), sequence);
+
+    REQUIRE(c.getIndex() == expectedIndex);
+}
 
 struct OptionSaleConstants {
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
@@ -26,7 +65,7 @@ TEST_CASE("OptionSale::setTime() should change TimeSequence") {
 
     os.setSequence(123);
 
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'541LL;
 
     os.setTime(time);
 
@@ -52,7 +91,7 @@ TEST_CASE("OptionSale::setTime() shouldn't change Index") {
     os.setSequence(123);
 
     auto oldIndex = os.getIndex();
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'578LL;
 
     os.setTime(time);
 
@@ -64,7 +103,7 @@ TEST_CASE("OptionSale::setTime() shouldn't change Sequence") {
 
     os.setSequence(123);
     auto oldSequence = os.getSequence();
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'589LL;
 
     os.setTime(time);
 
@@ -90,7 +129,7 @@ struct OrderConstants {
 
 TEST_CASE("Order::setTime() should change TimeSequence") {
     auto o = Order("AAPL").withSequence(123);
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'511LL;
 
     o.setTime(time);
 
@@ -113,7 +152,7 @@ TEST_CASE("Order::setTime() should change TimeSequence") {
 TEST_CASE("Order::setTime() shouldn't change Index") {
     auto o = Order("AAPL").withSequence(123);
     auto oldIndex = o.getIndex();
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'523LL;
 
     o.setTime(time);
 
@@ -148,7 +187,7 @@ struct TimeAndSaleConstants {
 
 TEST_CASE("TimeAndSale::setTime() should change Index") {
     auto tns = TimeAndSale("AAPL");
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'556LL;
 
     tns.setTime(time);
 
@@ -189,7 +228,7 @@ struct GreeksConstants {
 
 TEST_CASE("Greeks::setTime() should change Index") {
     auto g = Greeks("AAPL");
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'535LL;
 
     g.setTime(time);
 
@@ -231,7 +270,7 @@ struct SeriesConstants {
 
 TEST_CASE("Series::setTime() should change TimeSequence") {
     auto s = Series("AAPL").withSequence(123);
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'578LL;
 
     s.setTime(time);
 
@@ -254,7 +293,7 @@ TEST_CASE("Series::setTime() should change TimeSequence") {
 TEST_CASE("Series::setTime() shouldn't change Index") {
     auto s = Series("AAPL").withSequence(123);
     auto oldIndex = s.getIndex();
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'519LL;
 
     s.setTime(time);
 
@@ -264,7 +303,7 @@ TEST_CASE("Series::setTime() shouldn't change Index") {
 TEST_CASE("Series::setTime() shouldn't change Sequence") {
     auto s = Series("AAPL").withSequence(123);
     auto oldSequence = s.getSequence();
-    std::int64_t time = 1'701'703'226'500LL;
+    std::int64_t time = 1'701'703'226'528LL;
 
     s.setTime(time);
 
