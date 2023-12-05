@@ -23,6 +23,7 @@ set(DXFC_TEST_SOURCES
         api/CandleSymbolTest.cpp
         api/DXEndpointTest.cpp
         api/DXPublisherTest.cpp
+        api/EventsTest.cpp
         api/MarketEventSymbolsTest.cpp
         api/OrderSourceTest.cpp
         system/SystemTest.cpp)

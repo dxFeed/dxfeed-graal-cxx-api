@@ -280,8 +280,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @return time of this order.
      */
     std::int64_t getTime() const noexcept {
-        return sar(orderBaseData_.index, SECONDS_SHIFT) * 1000 +
-               andOp(sar(orderBaseData_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+        return sar(orderBaseData_.timeSequence, SECONDS_SHIFT) * 1000 +
+               andOp(sar(orderBaseData_.timeSequence, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
     }
 
     /**
@@ -291,9 +291,10 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @param time time of this order.
      */
     void setTime(std::int64_t time) noexcept {
-        orderBaseData_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),
-                                         sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),
-                                    getSequence());
+        orderBaseData_.timeSequence =
+            orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                      sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+                 getSequence());
     }
 
     /**
@@ -600,10 +601,11 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @return exchange code of this order as UTF8 string.
      */
     std::string getExchangeCodeString() const noexcept {
-        //TODO: cache [EN-8231]
+        // TODO: cache [EN-8231]
 
-        return std::string(1ULL, static_cast<char>(
-                          static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
+        return std::string(
+            1ULL, static_cast<char>( // NOLINT(*-return-braced-init-list)
+                      static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
     }
 
     /**

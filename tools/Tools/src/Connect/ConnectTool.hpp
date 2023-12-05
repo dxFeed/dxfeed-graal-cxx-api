@@ -55,6 +55,7 @@ struct ConnectTool {
         std::optional<std::string> properties;
         std::optional<std::string> tape;
         bool isQuite;
+        bool forceStream{};
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
             std::size_t index = 0;
@@ -96,6 +97,7 @@ struct ConnectTool {
             bool tapeIsParsed{};
             std::optional<std::string> tape{};
             bool isQuite{};
+            bool forceStream{};
 
             for (; index < args.size();) {
                 if (!fromTimeIsParsed && FromTimeArg::canParse(args, index)) {
@@ -128,12 +130,17 @@ struct ConnectTool {
                         continue;
                     }
 
+                    if (!forceStream && (forceStream = ForceStreamArg::parse(args, index).result)) {
+                        index++;
+                        continue;
+                    }
+
                     index++;
                 }
             }
 
             return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, fromTime,
-                                          source, properties, tape, isQuite});
+                                          source, properties, tape, isQuite, forceStream});
         }
     };
 
@@ -141,7 +148,7 @@ struct ConnectTool {
         using namespace std::literals;
 
         auto endpoint = DXEndpoint::newBuilder()
-                            ->withRole(DXEndpoint::Role::FEED)
+                            ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
                             ->withProperties(CmdArgsUtils::parseProperties(args.properties))
                             ->withName(NAME + "Tool")
                             ->build();
