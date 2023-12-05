@@ -22,59 +22,22 @@ struct OrderConstants {
 };
 
 TEST_CASE("Order::setTime() should change TimeSequence") {
-
     auto o = Order("AAPL").withSequence(123);
-
     auto oldTimeSequence = o.getTimeSequence();
-
-    std::cout << "OTS:" << oldTimeSequence << std::endl;
-
     std::int64_t time = 1'701'703'226'500LL;
-
-    std::cout << "T: " << time << std::endl;
-    fmt::println("{:0B}", time);
-    fmt::println("{:0B}", static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)));
-    fmt::println("{:0B}", dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
-                                      OrderConstants::SECONDS_SHIFT));
-    fmt::println("{:0B}", static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)));
-    fmt::println("{:0B}", dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
-                                      OrderConstants::MILLISECONDS_SHIFT));
-    fmt::println("{:0B}",
-                 dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
-                                          OrderConstants::SECONDS_SHIFT),
-                              dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
-                                          OrderConstants::MILLISECONDS_SHIFT)));
-    fmt::println(
-        "{:0B}",
-        dxfcpp::orOp(dxfcpp::orOp(sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
-                                      OrderConstants::SECONDS_SHIFT),
-                                  dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
-                                              OrderConstants::MILLISECONDS_SHIFT)),
-                     o.getSequence()));
-
-    std::cout << "S: " << static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)) << std::endl;
-    std::cout << "MS: " << static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)) << std::endl;
 
     o.setTime(time);
 
     auto newTimeSequence = o.getTimeSequence();
-
-    std::cout << "NTS: " << newTimeSequence << std::endl;
-
-    auto expectedTime = dxfcpp::sar(newTimeSequence, OrderConstants::SECONDS_SHIFT) * 1000 +
-                        dxfcpp::andOp(dxfcpp::sar(newTimeSequence, OrderConstants::MILLISECONDS_SHIFT),
-                                      OrderConstants::MILLISECONDS_MASK);
-
-    std::cout << "ET: " << expectedTime << std::endl;
-
     auto expectedTimeSequence =
         dxfcpp::orOp(dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
                                               OrderConstants::SECONDS_SHIFT),
                                   dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
                                               OrderConstants::MILLISECONDS_SHIFT)),
                      o.getSequence());
-
-    std::cout << "ETS: " << expectedTimeSequence << std::endl;
+    auto expectedTime = dxfcpp::sar(expectedTimeSequence, OrderConstants::SECONDS_SHIFT) * 1000 +
+                        dxfcpp::andOp(dxfcpp::sar(expectedTimeSequence, OrderConstants::MILLISECONDS_SHIFT),
+                                      OrderConstants::MILLISECONDS_MASK);
 
     REQUIRE(time == o.getTime());
     REQUIRE(time == expectedTime);
@@ -82,11 +45,8 @@ TEST_CASE("Order::setTime() should change TimeSequence") {
 }
 
 TEST_CASE("Order::setTime() shouldn't change Index") {
-
     auto o = Order("AAPL").withSequence(123);
-
     auto oldIndex = o.getIndex();
-
     std::int64_t time = 1'701'703'226'500LL;
 
     o.setTime(time);
@@ -95,11 +55,8 @@ TEST_CASE("Order::setTime() shouldn't change Index") {
 }
 
 TEST_CASE("Order::setTime() shouldn't change Sequence") {
-
     auto o = Order("AAPL").withSequence(123);
-
     auto oldSequence = o.getSequence();
-
     std::int64_t time = 1'701'703'226'500LL;
 
     o.setTime(time);
@@ -108,12 +65,52 @@ TEST_CASE("Order::setTime() shouldn't change Sequence") {
 }
 
 TEST_CASE("Order::setIndex() shouldn't change Sequence") {
-
     auto o = Order("AAPL").withSequence(123);
-
     auto oldSequence = o.getSequence();
 
     o.setIndex(1'234'567'891'011LL);
 
     REQUIRE(oldSequence == o.getSequence());
+}
+
+struct TimeAndSaleConstants {
+    static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
+    static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+};
+
+TEST_CASE("TimeAndSale::setTime() should change Index") {
+    auto tns = TimeAndSale("AAPL");
+    auto oldIndex = tns.getIndex();
+    std::int64_t time = 1'701'703'226'500LL;
+
+    tns.setTime(time);
+
+    auto newIndex = tns.getIndex();
+    auto expectedIndex =
+        dxfcpp::orOp(dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
+                                              TimeAndSaleConstants::SECONDS_SHIFT),
+                                  dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
+                                              TimeAndSaleConstants::MILLISECONDS_SHIFT)),
+                     tns.getSequence());
+    auto expectedTime = dxfcpp::sar(expectedIndex, TimeAndSaleConstants::SECONDS_SHIFT) * 1000 +
+                        dxfcpp::andOp(dxfcpp::sar(expectedIndex, TimeAndSaleConstants::MILLISECONDS_SHIFT),
+                                      TimeAndSaleConstants::MILLISECONDS_MASK);
+
+    REQUIRE(time == tns.getTime());
+    REQUIRE(time == expectedTime);
+    REQUIRE(newIndex == expectedIndex);
+}
+
+TEST_CASE("TimeAndSale::setSequence() should change Index") {
+    auto tns = TimeAndSale("AAPL");
+    auto oldIndex = tns.getIndex();
+    int sequence = 567;
+
+    tns.setSequence(sequence);
+
+    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~TimeAndSaleConstants::MAX_SEQUENCE), sequence);
+
+    REQUIRE(tns.getIndex() == expectedIndex);
 }

@@ -602,7 +602,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     std::string getExchangeCodeString() const noexcept {
         //TODO: cache [EN-8231]
 
-        return std::string(1ULL, static_cast<char>(
+        return std::string(1ULL, static_cast<char>( // NOLINT(*-return-braced-init-list)
                           static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
     }
 
