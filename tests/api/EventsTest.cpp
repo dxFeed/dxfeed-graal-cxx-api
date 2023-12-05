@@ -267,7 +267,6 @@ struct SeriesConstants {
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 };
 
-
 TEST_CASE("Series::setTime() should change TimeSequence") {
     auto s = Series("AAPL").withSequence(123);
     std::int64_t time = 1'701'703'226'578LL;
@@ -317,4 +316,49 @@ TEST_CASE("Series::setIndex() shouldn't change Sequence") {
     s.setIndex(1'234'567'891'011LL);
 
     REQUIRE(oldSequence == s.getSequence());
+}
+
+struct TradeConstants {
+    static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
+    static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+};
+
+TEST_CASE("Trade::setTime() should change TimeSequence") {
+    auto tr = Trade("AAPL");
+
+    tr.setSequence(123);
+
+    std::int64_t time = 1'701'703'226'577LL;
+
+    tr.setTime(time);
+
+    auto newTimeSequence = tr.getTimeSequence();
+    auto expectedTimeSequence =
+        dxfcpp::orOp(dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
+                                              TradeConstants::SECONDS_SHIFT),
+                                  dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
+                                              TradeConstants::MILLISECONDS_SHIFT)),
+                     tr.getSequence());
+    auto expectedTime = dxfcpp::sar(expectedTimeSequence, TradeConstants::SECONDS_SHIFT) * 1000 +
+                        dxfcpp::andOp(dxfcpp::sar(expectedTimeSequence, TradeConstants::MILLISECONDS_SHIFT),
+                                      TradeConstants::MILLISECONDS_MASK);
+
+    REQUIRE(newTimeSequence == expectedTimeSequence);
+    REQUIRE(time == expectedTime);
+    REQUIRE(time == tr.getTime());
+}
+
+TEST_CASE("Trade::setTime() shouldn't change Sequence") {
+    auto tr = Trade("AAPL");
+
+    tr.setSequence(123);
+
+    auto oldSequence = tr.getSequence();
+    std::int64_t time = 1'701'703'226'528LL;
+
+    tr.setTime(time);
+
+    REQUIRE(oldSequence == tr.getSequence());
 }
