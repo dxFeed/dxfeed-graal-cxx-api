@@ -342,8 +342,10 @@ How to connect to dxLink</h3>
 <div class="line"><span class="keywordtype">int</span> main() {</div>
 <div class="line">    <span class="keyword">using namespace </span>dxfcpp;</div>
 <div class="line">    </div>
-<div class="line">    <span class="comment">// The experimental property must be enabled.</span></div>
-<div class="line">    System::setProperty(<span class="stringliteral">&quot;dxfeed.experimental.dxlink.enable&quot;</span>, <span class="stringliteral">&quot;true&quot;</span>);</div>
+<div class="line">    <span class="comment">// Enable experimental feature.</span></div>
+<div class="line">    System::SetProperty(<span class="stringliteral">&quot;dxfeed.experimental.dxlink.enable&quot;</span>, <span class="stringliteral">&quot;true&quot;</span>);</div>
+<div class="line">    <span class="comment">// Set scheme for dxLink.</span></div>
+<div class="line">    System::SetProperty(<span class="stringliteral">&quot;scheme&quot;</span>, <span class="stringliteral">&quot;ext:resource:dxlink.xml&quot;</span>);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// For token-based authorization, use the following address format:</span></div>
 <div class="line">    <span class="comment">// &quot;demo.dxfeed.com:7300[login=entitle:token]&quot;</span></div>

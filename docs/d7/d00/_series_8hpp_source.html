@@ -239,340 +239,554 @@ $(document).ready(function(){initNavTree('d7/d00/_series_8hpp_source.html','../.
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aac06ab7c3783e1c2b70065c1ba7b555f">Series</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code hl_struct" href="../../de/d01/structdxfcpp_1_1_market_event.html">MarketEvent</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#afeb8874ca4d6b603d5b941f19e0735cf">(</a>std::move(eventSymbol)<a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#afeb8874ca4d6b603d5b941f19e0735cf">)</a> {</div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    }</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="comment">///</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <span class="keyword">const</span> <a class="code hl_class" href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html">IndexedEventSource</a> &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aaaa8e2016b3aff845df96c386f24f396">getSource</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        <span class="keywordflow">return</span> <a class="code hl_class" href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html">IndexedEventSource</a><a class="code hl_variable" href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html#ab7bc1a5037c8e18b2adeb45237cea5eb">::</a><a class="code hl_variable" href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html#ab7bc1a5037c8e18b2adeb45237cea5eb">DEFAULT</a>;</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    }</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="comment">///</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    std::int32_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aa9c1ea427a9724e12fbfbb39315fbec5">getEventFlags</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        <span class="keywordflow">return</span> data_.eventFlags;</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    }</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="comment">///</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    EventFlagsMask <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a39c3e3ae494dc444de30e3d903eebaac">getEventFlagsMask</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keywordflow">return</span> EventFlagsMask(data_.eventFlags);</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    }</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="comment">///</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">setEventFlags</a>(std::int32_t eventFlags) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        data_.eventFlags = eventFlags;</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    }</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="comment">///</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">setEventFlags</a>(<span class="keyword">const</span> EventFlagsMask &amp;eventFlags) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        data_.eventFlags = <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(eventFlags<a class="code hl_function" href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">.</a><a class="code hl_function" href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">getMask</a><a class="code hl_function" href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">(</a><a class="code hl_function" href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">)</a>);</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    }</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  162</span><span class="comment">     * Returns unique per-symbol index of this event.</span></div>
-<div class="line"><span class="lineno">  163</span><span class="comment">     * The index is composed of @ref ::getTime() &quot;time&quot; and @ref ::getSequence() &quot;sequence&quot;.</span></div>
-<div class="line"><span class="lineno">  164</span><span class="comment">     * Changing either time or sequence changes event index.</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  137</span><span class="comment">     * Changes event&#39;s symbol and returns the current series.</span></div>
+<div class="line"><span class="lineno">  138</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  139</span><span class="comment">     * @param eventSymbol The symbol of this event.</span></div>
+<div class="line"><span class="lineno">  140</span><span class="comment">     * @return The current series.</span></div>
+<div class="line"><span class="lineno">  141</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="keyword">virtual</span> Series &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ac9b1138ec64df65782f7e2d17d751665">withEventSymbol</a>(<span class="keyword">const</span> std::string &amp;eventSymbol) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        <a class="code hl_struct" href="../../de/d01/structdxfcpp_1_1_market_event.html">MarketEvent</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#a371a67895ed8276685d29e0657b53899">::</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#a371a67895ed8276685d29e0657b53899">setEventSymbol</a>(eventSymbol);</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    }</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  149</span><span class="comment">     * Changes event&#39;s symbol and returns a shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  150</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  151</span><span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Series&gt;(new</span></div>
+<div class="line"><span class="lineno">  152</span><span class="comment">     * Series(...))` or `std::make_shared&lt;Series&gt;(...)`</span></div>
+<div class="line"><span class="lineno">  153</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  154</span><span class="comment">     * @param eventSymbol The symbol of this event.</span></div>
+<div class="line"><span class="lineno">  155</span><span class="comment">     * @return A shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  156</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    Series::Ptr <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a0ccf33524a9a6c845cfce9e0fe809a96">withEventSymbolShared</a>(<span class="keyword">const</span> std::string &amp;eventSymbol) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        <a class="code hl_struct" href="../../de/d01/structdxfcpp_1_1_market_event.html">MarketEvent</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#a371a67895ed8276685d29e0657b53899">::</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#a371a67895ed8276685d29e0657b53899">setEventSymbol</a>(eventSymbol);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;Series&gt;();</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    }</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  164</span><span class="comment">     * Changes event&#39;s creation time and returns the current series.</span></div>
 <div class="line"><span class="lineno">  165</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  166</span><span class="comment">     * @return unique index of this event.</span></div>
-<div class="line"><span class="lineno">  167</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    std::int64_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ac6144eb907c3f037c8eda1d8b08de5d0">getIndex</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        <span class="keywordflow">return</span> data_.index;</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    }</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  173</span><span class="comment">     * Changes unique per-symbol index of this event.</span></div>
-<div class="line"><span class="lineno">  174</span><span class="comment">     * The index is composed of @ref ::getTime() &quot;time&quot; and @ref ::getSequence() &quot;sequence&quot; and</span></div>
-<div class="line"><span class="lineno">  175</span><span class="comment">     * invocation of this method changes time and sequence.</span></div>
-<div class="line"><span class="lineno">  176</span><span class="comment">     * &lt;b&gt;Do not use this method directly.&lt;/b&gt;</span></div>
-<div class="line"><span class="lineno">  177</span><span class="comment">     * Change @ref ::setTime() &quot;time&quot; and/or @ref ::setSequence() &quot;sequence&quot;.</span></div>
+<div class="line"><span class="lineno">  166</span><span class="comment">     * @param eventTime the difference, measured in milliseconds, between the event creation time and</span></div>
+<div class="line"><span class="lineno">  167</span><span class="comment">     * midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><span class="lineno">  168</span><span class="comment">     * @return The current series.</span></div>
+<div class="line"><span class="lineno">  169</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    Series &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a249fa99c8e69a6f02ae561692baa38c8">withEventTime</a>(std::int64_t eventTime) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        <a class="code hl_struct" href="../../de/d01/structdxfcpp_1_1_market_event.html">MarketEvent</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#a80b9add6fad6c1121ddd0497d423f7ce">::</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#a80b9add6fad6c1121ddd0497d423f7ce">setEventTime</a>(eventTime);</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    }</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  177</span><span class="comment">     * Changes event&#39;s creation time and returns a shared pointer to the current series.</span></div>
 <div class="line"><span class="lineno">  178</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  179</span><span class="comment">     * @param index the event index.</span></div>
-<div class="line"><span class="lineno">  180</span><span class="comment">     * @see ::getIndex()</span></div>
-<div class="line"><span class="lineno">  181</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">setIndex</a>(std::int64_t index) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        data_.index = index;</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    }</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  187</span><span class="comment">     * Returns time and sequence of this event packaged into single long value.</span></div>
-<div class="line"><span class="lineno">  188</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  189</span><span class="comment">     * @return time and sequence of this event.</span></div>
-<div class="line"><span class="lineno">  190</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    std::int64_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a75be339f644dedc21b176f173d7fc3e5">getTimeSequence</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        <span class="keywordflow">return</span> data_.timeSequence;</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    }</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  196</span><span class="comment">     * Changes time and sequence of this event.</span></div>
-<div class="line"><span class="lineno">  197</span><span class="comment">     * &lt;b&gt;Do not use this method directly.&lt;/b&gt;</span></div>
-<div class="line"><span class="lineno">  198</span><span class="comment">     * Change @ref ::setTime() &quot;time&quot; and/or @ref ::setSequence() &quot;sequence&quot;.</span></div>
-<div class="line"><span class="lineno">  199</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  200</span><span class="comment">     * @param timeSequence the time and sequence.</span></div>
-<div class="line"><span class="lineno">  201</span><span class="comment">     * @see ::getTimeSequence()</span></div>
-<div class="line"><span class="lineno">  202</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a4f865ebe992d1759467c93a55fce9b76">setTimeSequence</a>(std::int64_t timeSequence) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        data_.timeSequence = timeSequence;</div>
+<div class="line"><span class="lineno">  179</span><span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Series&gt;(new</span></div>
+<div class="line"><span class="lineno">  180</span><span class="comment">     * Series(...))` or `std::make_shared&lt;Series&gt;(...)`</span></div>
+<div class="line"><span class="lineno">  181</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  182</span><span class="comment">     * @param eventTime the difference, measured in milliseconds, between the event creation time and</span></div>
+<div class="line"><span class="lineno">  183</span><span class="comment">     * midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><span class="lineno">  184</span><span class="comment">     * @return A shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  185</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    Series::Ptr <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#afd57a78c0c0336f246b309346a72bf43">withEventTimeShared</a>(std::int64_t eventTime) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        <a class="code hl_struct" href="../../de/d01/structdxfcpp_1_1_market_event.html">MarketEvent</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#a80b9add6fad6c1121ddd0497d423f7ce">::</a><a class="code hl_function" href="../../de/d01/structdxfcpp_1_1_market_event.html#a80b9add6fad6c1121ddd0497d423f7ce">setEventTime</a>(eventTime);</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;Series&gt;();</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    }</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="comment">///</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keyword">const</span> <a class="code hl_class" href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html">IndexedEventSource</a> &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aaaa8e2016b3aff845df96c386f24f396">getSource</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <span class="keywordflow">return</span> <a class="code hl_class" href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html">IndexedEventSource</a><a class="code hl_variable" href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html#ab7bc1a5037c8e18b2adeb45237cea5eb">::</a><a class="code hl_variable" href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html#ab7bc1a5037c8e18b2adeb45237cea5eb">DEFAULT</a>;</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    }</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="comment">///</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    std::int32_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aa9c1ea427a9724e12fbfbb39315fbec5">getEventFlags</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        <span class="keywordflow">return</span> data_.eventFlags;</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    }</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <span class="comment">///</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    EventFlagsMask <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a39c3e3ae494dc444de30e3d903eebaac">getEventFlagsMask</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <span class="keywordflow">return</span> EventFlagsMask(data_.eventFlags);</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    }</div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  208</span><span class="comment">     * Returns time of this series event.</span></div>
-<div class="line"><span class="lineno">  209</span><span class="comment">     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
-<div class="line"><span class="lineno">  210</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  211</span><span class="comment">     * @return time of this series event.</span></div>
-<div class="line"><span class="lineno">  212</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    std::int64_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a0f60b30fd65bcc017e82a7e93ba87fcc">getTime</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        <span class="keywordflow">return</span> sar(data_.timeSequence, SECONDS_SHIFT) * 1000 +</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>               andOp(sar(data_.timeSequence, MILLISECONDS_SHIFT), MILLISECONDS_MASK);</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    }</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  219</span><span class="comment">     * Changes time of this series event.</span></div>
-<div class="line"><span class="lineno">  220</span><span class="comment">     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
-<div class="line"><span class="lineno">  221</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  222</span><span class="comment">     * @param time time of this series event.</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <span class="comment">///</span></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">setEventFlags</a>(std::int32_t eventFlags) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        data_.eventFlags = eventFlags;</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    }</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    <span class="comment">///</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">setEventFlags</a>(<span class="keyword">const</span> EventFlagsMask &amp;eventFlags) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        data_.eventFlags = <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(eventFlags<a class="code hl_function" href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">.</a><a class="code hl_function" href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">getMask</a><a class="code hl_function" href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">(</a><a class="code hl_function" href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">)</a>);</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    }</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span> </div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  218</span><span class="comment">     * Changes transactional event flags and returns the current series.</span></div>
+<div class="line"><span class="lineno">  219</span><span class="comment">     * See EventFlag &quot;Event Flags&quot; section.</span></div>
+<div class="line"><span class="lineno">  220</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  221</span><span class="comment">     * @param eventFlags transactional event flags.</span></div>
+<div class="line"><span class="lineno">  222</span><span class="comment">     * @return The current series.</span></div>
 <div class="line"><span class="lineno">  223</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">setTime</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        data_.timeSequence = orOp(</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            orOp(sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getMillisFromTime(time)), MILLISECONDS_MASK), <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">getSequence</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">(</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">)</a>));</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    Series &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a8f0ea89e67cbe14742be0efbc260bf0a">withEventFlags</a>(std::int32_t eventFlags) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">setEventFlags</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">(</a>eventFlags<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">)</a>;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    }</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  231</span><span class="comment">     * Returns sequence number of this series event to distinguish trades that have the same</span></div>
-<div class="line"><span class="lineno">  232</span><span class="comment">     * @ref ::getTime() &quot;time&quot;. This sequence number does not have to be unique and</span></div>
-<div class="line"><span class="lineno">  233</span><span class="comment">     * does not need to be sequential. Sequence can range from 0 to ::MAX_SEQUENCE.</span></div>
-<div class="line"><span class="lineno">  234</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  235</span><span class="comment">     * @return sequence of this series event.</span></div>
-<div class="line"><span class="lineno">  236</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    std::int32_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">getSequence</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        <span class="keywordflow">return</span> <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(andOp(data_.timeSequence, <a class="code hl_variable" href="../../d1/d02/classdxfcpp_1_1_series.html#a64b996ca5f00f510e0d96b75f59c7e58">MAX_SEQUENCE</a>));</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    }</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  242</span><span class="comment">     * Changes @ref ::getSequence() &quot;sequence number&quot; of this series event.</span></div>
-<div class="line"><span class="lineno">  243</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  244</span><span class="comment">     * @param sequence the sequence.</span></div>
-<div class="line"><span class="lineno">  245</span><span class="comment">     * @see ::getSequence()</span></div>
-<div class="line"><span class="lineno">  246</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">setSequence</a>(std::int32_t sequence) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        <span class="comment">// TODO: Improve error handling [EN-8232]</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        assert(sequence &gt;= 0 &amp;&amp; sequence &lt;= <a class="code hl_variable" href="../../d1/d02/classdxfcpp_1_1_series.html#a64b996ca5f00f510e0d96b75f59c7e58">MAX_SEQUENCE</a>);</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        data_.timeSequence = orOp(andOp(data_.timeSequence, ~<a class="code hl_variable" href="../../d1/d02/classdxfcpp_1_1_series.html#a64b996ca5f00f510e0d96b75f59c7e58">MAX_SEQUENCE</a>), sequence);</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    }</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  255</span><span class="comment">     * Returns day id of expiration.</span></div>
-<div class="line"><span class="lineno">  256</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  257</span><span class="comment">     * Example: @ref day_util::#getDayIdByYearMonthDay() &quot;dxfcpp::day_util::getDayIdByYearMonthDay&quot;(20090117).</span></div>
-<div class="line"><span class="lineno">  258</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  259</span><span class="comment">     * @return day id of expiration.</span></div>
-<div class="line"><span class="lineno">  260</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    std::int32_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a3bc261f83f17749d4ae046b24a6120fd">getExpiration</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>        <span class="keywordflow">return</span> data_.expiration;</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    }</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  266</span><span class="comment">     * Changes day id of expiration.</span></div>
-<div class="line"><span class="lineno">  267</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  268</span><span class="comment">     * @param expiration day id of expiration.</span></div>
-<div class="line"><span class="lineno">  269</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aa5dc46654a661bcbdc707234410a88c2">setExpiration</a>(std::int32_t expiration) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        data_.expiration = expiration;</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    }</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  275</span><span class="comment">     * Returns implied volatility index for this series based on VIX methodology.</span></div>
-<div class="line"><span class="lineno">  276</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  277</span><span class="comment">     * @return implied volatility index for this series based on VIX methodology.</span></div>
-<div class="line"><span class="lineno">  278</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ab26ee45ec0b39d911692edcd3d79d8ce">getVolatility</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        <span class="keywordflow">return</span> data_.volatility;</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    }</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span> </div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  284</span><span class="comment">     * Changes implied volatility index for this series based on VIX methodology.</span></div>
-<div class="line"><span class="lineno">  285</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  286</span><span class="comment">     * @param volatility implied volatility index for this series based on VIX methodology.</span></div>
-<div class="line"><span class="lineno">  287</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a03e81c865f159f206a6d363303a86424">setVolatility</a>(<span class="keywordtype">double</span> volatility) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        data_.volatility = volatility;</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    }</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  293</span><span class="comment">     * Returns call options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  294</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  295</span><span class="comment">     * @return call options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  296</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#accbd9d05dc739bd07ddceddc36dd6d75">getCallVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        <span class="keywordflow">return</span> data_.callVolume;</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    }</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  302</span><span class="comment">     * Changes call options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  303</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  304</span><span class="comment">     * @param callVolume call options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  305</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ab0c23da6fff1762a57566061f8f10c5f">setCallVolume</a>(<span class="keywordtype">double</span> callVolume) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>        data_.callVolume = callVolume;</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    }</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span> </div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  311</span><span class="comment">     * Returns put options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  312</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  313</span><span class="comment">     * @return put options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  314</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a4c27787992bbbc878cb906ab1b85c3c5">getPutVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>        <span class="keywordflow">return</span> data_.putVolume;</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    }</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  320</span><span class="comment">     * Changes put options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  321</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  322</span><span class="comment">     * @param putVolume put options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  323</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a92201c531d5d82ea95d9cc55eff2b05f">setPutVolume</a>(<span class="keywordtype">double</span> putVolume) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>        data_.putVolume = putVolume;</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    }</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span> </div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  329</span><span class="comment">     * Returns options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  330</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  331</span><span class="comment">     * @return options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  332</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07390cabc0b7ec0acb72e52d21f98eff">getOptionVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>        <span class="keywordflow">if</span> (std::isnan(data_.putVolume)) {</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>            <span class="keywordflow">return</span> data_.callVolume;</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>        }</div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span> </div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>        <span class="keywordflow">if</span> (std::isnan(data_.callVolume)) {</div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>            <span class="keywordflow">return</span> data_.putVolume;</div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>        }</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>        <span class="keywordflow">return</span> data_.putVolume + data_.callVolume;</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    }</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span> </div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  346</span><span class="comment">     * Returns ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  231</span><span class="comment">     * Changes transactional event flags and returns a shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  232</span><span class="comment">     * See EventFlag &quot;Event Flags&quot; section.</span></div>
+<div class="line"><span class="lineno">  233</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  234</span><span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Series&gt;(new</span></div>
+<div class="line"><span class="lineno">  235</span><span class="comment">     * Series(...))` or `std::make_shared&lt;Series&gt;(...)`</span></div>
+<div class="line"><span class="lineno">  236</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  237</span><span class="comment">     * @param eventFlags transactional event flags.</span></div>
+<div class="line"><span class="lineno">  238</span><span class="comment">     * @return A shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  239</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    Series::Ptr <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a0ba1451ce5d9af1ccf890ec24837d3fb">withEventFlagsShared</a>(std::int32_t eventFlags) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">setEventFlags</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">(</a>eventFlags<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">)</a>;</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;Series&gt;();</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    }</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  247</span><span class="comment">     * Changes transactional event flags and returns the current series.</span></div>
+<div class="line"><span class="lineno">  248</span><span class="comment">     * See EventFlag &quot;Event Flags&quot; section.</span></div>
+<div class="line"><span class="lineno">  249</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  250</span><span class="comment">     * @param eventFlags transactional event flags&#39; mask.</span></div>
+<div class="line"><span class="lineno">  251</span><span class="comment">     * @return The current series.</span></div>
+<div class="line"><span class="lineno">  252</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    Series &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acace749bef12c6d0e11f0b0de3421c89">withEventFlags</a>(<span class="keyword">const</span> EventFlagsMask &amp;eventFlags) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">setEventFlags</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">(</a>eventFlags<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">)</a>;</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span> </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    }</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  260</span><span class="comment">     * Changes transactional event flags and returns a shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  261</span><span class="comment">     * See EventFlag &quot;Event Flags&quot; section.</span></div>
+<div class="line"><span class="lineno">  262</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  263</span><span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Series&gt;(new</span></div>
+<div class="line"><span class="lineno">  264</span><span class="comment">     * Series(...))` or `std::make_shared&lt;Series&gt;(...)`</span></div>
+<div class="line"><span class="lineno">  265</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  266</span><span class="comment">     * @param eventFlags transactional event flags&#39; mask.</span></div>
+<div class="line"><span class="lineno">  267</span><span class="comment">     * @return A shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  268</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    Series::Ptr <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acd9367cfadfd24ab6360d6ff2152d780">withEventFlagsShared</a>(<span class="keyword">const</span> EventFlagsMask &amp;eventFlags) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">setEventFlags</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">(</a>eventFlags<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">)</a>;</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;Series&gt;();</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    }</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  276</span><span class="comment">     * Returns unique per-symbol index of this event.</span></div>
+<div class="line"><span class="lineno">  277</span><span class="comment">     * The index is composed of @ref ::getTime() &quot;time&quot; and @ref ::getSequence() &quot;sequence&quot;.</span></div>
+<div class="line"><span class="lineno">  278</span><span class="comment">     * Changing either time or sequence changes event index.</span></div>
+<div class="line"><span class="lineno">  279</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  280</span><span class="comment">     * @return unique index of this event.</span></div>
+<div class="line"><span class="lineno">  281</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    std::int64_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ac6144eb907c3f037c8eda1d8b08de5d0">getIndex</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>        <span class="keywordflow">return</span> data_.index;</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    }</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  287</span><span class="comment">     * Changes unique per-symbol index of this event.</span></div>
+<div class="line"><span class="lineno">  288</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  289</span><span class="comment">     * @param index the event index.</span></div>
+<div class="line"><span class="lineno">  290</span><span class="comment">     * @see Series::getIndex()</span></div>
+<div class="line"><span class="lineno">  291</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">setIndex</a>(std::int64_t index) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        data_.index = index;</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    }</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  297</span><span class="comment">     * Changes unique per-symbol index of this series and returns it.</span></div>
+<div class="line"><span class="lineno">  298</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  299</span><span class="comment">     * @param index unique per-symbol index of this series.</span></div>
+<div class="line"><span class="lineno">  300</span><span class="comment">     * @return The current series.</span></div>
+<div class="line"><span class="lineno">  301</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    Series &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#af3bc2c6a9687bc95788d8c7a5d3ef8b7">withIndex</a>(std::int64_t index) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">setIndex</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">(</a>index<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">)</a>;</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span> </div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    }</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span> </div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  309</span><span class="comment">     * Changes unique per-symbol index of this series and returns a shared pointer to it.</span></div>
+<div class="line"><span class="lineno">  310</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  311</span><span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Series&gt;(new</span></div>
+<div class="line"><span class="lineno">  312</span><span class="comment">     * Series(...))` or `std::make_shared&lt;Series&gt;(...)`</span></div>
+<div class="line"><span class="lineno">  313</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  314</span><span class="comment">     * @param index unique per-symbol index of this order.</span></div>
+<div class="line"><span class="lineno">  315</span><span class="comment">     * @return A shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  316</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    Series::Ptr <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#afdcad8f2db1fa12ebb6379f3f34da364">withIndexShared</a>(std::int64_t index) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">setIndex</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">(</a>index<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">)</a>;</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;Series&gt;();</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    }</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span> </div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  324</span><span class="comment">     * Returns time and sequence of this event packaged into single long value.</span></div>
+<div class="line"><span class="lineno">  325</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  326</span><span class="comment">     * @return time and sequence of this event.</span></div>
+<div class="line"><span class="lineno">  327</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    std::int64_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a75be339f644dedc21b176f173d7fc3e5">getTimeSequence</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>        <span class="keywordflow">return</span> data_.timeSequence;</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    }</div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span> </div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  333</span><span class="comment">     * Changes time and sequence of this event.</span></div>
+<div class="line"><span class="lineno">  334</span><span class="comment">     * &lt;b&gt;Do not use this method directly.&lt;/b&gt;</span></div>
+<div class="line"><span class="lineno">  335</span><span class="comment">     * Change @ref Series::setTime() &quot;time&quot; and/or @ref Series::setSequence() &quot;sequence&quot;.</span></div>
+<div class="line"><span class="lineno">  336</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  337</span><span class="comment">     * @param timeSequence the time and sequence.</span></div>
+<div class="line"><span class="lineno">  338</span><span class="comment">     * @see ::getTimeSequence()</span></div>
+<div class="line"><span class="lineno">  339</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a4f865ebe992d1759467c93a55fce9b76">setTimeSequence</a>(std::int64_t timeSequence) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>        data_.timeSequence = timeSequence;</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    }</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  345</span><span class="comment">     * Returns time of this series event.</span></div>
+<div class="line"><span class="lineno">  346</span><span class="comment">     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
 <div class="line"><span class="lineno">  347</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  348</span><span class="comment">     * @return ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  348</span><span class="comment">     * @return time of this series event.</span></div>
 <div class="line"><span class="lineno">  349</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf2420dba428269bd0863a081d33fc0">getPutCallRatio</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>        <span class="keywordflow">return</span> data_.putCallRatio;</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    }</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span> </div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  355</span><span class="comment">     * Changes ratio of put options traded volume to call options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  356</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  357</span><span class="comment">     * @param putCallRatio ratio of put options traded volume to call options traded volume for a day.</span></div>
-<div class="line"><span class="lineno">  358</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acdb92c62f7e31a89b5c06eeb2250ac30">setPutCallRatio</a>(<span class="keywordtype">double</span> putCallRatio) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>        data_.putCallRatio = putCallRatio;</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    }</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span> </div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  364</span><span class="comment">     * Returns implied forward price for this option series.</span></div>
-<div class="line"><span class="lineno">  365</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  366</span><span class="comment">     * @return implied forward price for this option series.</span></div>
-<div class="line"><span class="lineno">  367</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a3c63d3ffb26064d6597346d072570744">getForwardPrice</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        <span class="keywordflow">return</span> data_.forwardPrice;</div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>    }</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span> </div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  373</span><span class="comment">     * Changes implied forward price for this option series.</span></div>
-<div class="line"><span class="lineno">  374</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  375</span><span class="comment">     * @param forwardPrice implied forward price for this option series.</span></div>
-<div class="line"><span class="lineno">  376</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a0f53c43f923258b79453c6f8f56410b3">setForwardPrice</a>(<span class="keywordtype">double</span> forwardPrice) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>        data_.forwardPrice = forwardPrice;</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    std::int64_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a0f60b30fd65bcc017e82a7e93ba87fcc">getTime</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>        <span class="keywordflow">return</span> sar(data_.timeSequence, SECONDS_SHIFT) * 1000 +</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>               andOp(sar(data_.timeSequence, MILLISECONDS_SHIFT), MILLISECONDS_MASK);</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    }</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span> </div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  356</span><span class="comment">     * Changes time of this series event.</span></div>
+<div class="line"><span class="lineno">  357</span><span class="comment">     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><span class="lineno">  358</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  359</span><span class="comment">     * @param time time of this series event.</span></div>
+<div class="line"><span class="lineno">  360</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">setTime</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>        data_.timeSequence =</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>            orOp(orOp(sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>                      sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>                 <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">getSequence</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">(</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">)</a>);</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    }</div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  369</span><span class="comment">     * Changes time of this series and returns it.</span></div>
+<div class="line"><span class="lineno">  370</span><span class="comment">     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><span class="lineno">  371</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  372</span><span class="comment">     * @param time time of this series.</span></div>
+<div class="line"><span class="lineno">  373</span><span class="comment">     * @return The current series.</span></div>
+<div class="line"><span class="lineno">  374</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    Series &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1c268da1ff54eedaabc5ef37374f59e0">withTime</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">setTime</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">(</a>time<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">)</a>;</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span> </div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>    }</div>
 <div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span> </div>
 <div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  382</span><span class="comment">     * Returns implied simple dividend return of the corresponding option series.</span></div>
-<div class="line"><span class="lineno">  383</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  384</span><span class="comment">     * @return implied simple dividend return of the corresponding option series.</span></div>
-<div class="line"><span class="lineno">  385</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a183ae4f58f76e1a06cd7f38c336f0c37">getDividend</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>        <span class="keywordflow">return</span> data_.dividend;</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>    }</div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span> </div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  391</span><span class="comment">     * Changes implied simple dividend return of the corresponding option series.</span></div>
-<div class="line"><span class="lineno">  392</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  393</span><span class="comment">     * @param dividend implied simple dividend return of the corresponding option series.</span></div>
-<div class="line"><span class="lineno">  394</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aaa2f448d57e93c007171687d9e39c3f1">setDividend</a>(<span class="keywordtype">double</span> dividend) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>        data_.dividend = dividend;</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>    }</div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span> </div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  400</span><span class="comment">     * Returns implied simple interest return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  382</span><span class="comment">     * Changes time of this series and returns a shared pointer to it.</span></div>
+<div class="line"><span class="lineno">  383</span><span class="comment">     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><span class="lineno">  384</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  385</span><span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Series&gt;(new</span></div>
+<div class="line"><span class="lineno">  386</span><span class="comment">     * Series(...))` or `std::make_shared&lt;Series&gt;(...)`</span></div>
+<div class="line"><span class="lineno">  387</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  388</span><span class="comment">     * @param time time of this series.</span></div>
+<div class="line"><span class="lineno">  389</span><span class="comment">     * @return A shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  390</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>    Series::Ptr <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a785a0576560c73dd94f455108d3c47c5">withTimeShared</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">setTime</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">(</a>time<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">)</a>;</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span> </div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;Series&gt;();</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    }</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span> </div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  398</span><span class="comment">     * Returns sequence number of this series event to distinguish trades that have the same</span></div>
+<div class="line"><span class="lineno">  399</span><span class="comment">     * @ref ::getTime() &quot;time&quot;. This sequence number does not have to be unique and</span></div>
+<div class="line"><span class="lineno">  400</span><span class="comment">     * does not need to be sequential. Sequence can range from 0 to ::MAX_SEQUENCE.</span></div>
 <div class="line"><span class="lineno">  401</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  402</span><span class="comment">     * @return implied simple interest return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  402</span><span class="comment">     * @return sequence of this series event.</span></div>
 <div class="line"><span class="lineno">  403</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ae89100c3e45f0f122a06eb65d7d93de6">getInterest</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        <span class="keywordflow">return</span> data_.interest;</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    std::int32_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">getSequence</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        <span class="keywordflow">return</span> <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(andOp(data_.timeSequence, <a class="code hl_variable" href="../../d1/d02/classdxfcpp_1_1_series.html#a64b996ca5f00f510e0d96b75f59c7e58">MAX_SEQUENCE</a>));</div>
 <div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    }</div>
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span> </div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  409</span><span class="comment">     * Changes implied simple interest return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  409</span><span class="comment">     * Changes @ref Series::getSequence() &quot;sequence number&quot; of this series event.</span></div>
 <div class="line"><span class="lineno">  410</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  411</span><span class="comment">     * @param interest implied simple interest return of the corresponding option series.</span></div>
-<div class="line"><span class="lineno">  412</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a2bc17da785219a714ba37693153b96fd">setInterest</a>(<span class="keywordtype">double</span> interest) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>        data_.interest = interest;</div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>    }</div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span> </div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>    <span class="comment">/**</span></div>
-<div class="line"><span class="lineno">  418</span><span class="comment">     * Returns a string representation of the current object.</span></div>
-<div class="line"><span class="lineno">  419</span><span class="comment">     *</span></div>
-<div class="line"><span class="lineno">  420</span><span class="comment">     * @return a string representation</span></div>
-<div class="line"><span class="lineno">  421</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>    std::string <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a2b964d3b9d9275abbc2dc962d6e73578">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a2b964d3b9d9275abbc2dc962d6e73578">override</a>;</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>};</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span> </div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><span class="lineno">  411</span><span class="comment">     * @param sequence the sequence.</span></div>
+<div class="line"><span class="lineno">  412</span><span class="comment">     * @see Series::getSequence()</span></div>
+<div class="line"><span class="lineno">  413</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">setSequence</a>(std::int32_t sequence) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>        <span class="comment">// TODO: Improve error handling [EN-8232]</span></div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>        assert(sequence &gt;= 0 &amp;&amp; sequence &lt;= <a class="code hl_variable" href="../../d1/d02/classdxfcpp_1_1_series.html#a64b996ca5f00f510e0d96b75f59c7e58">MAX_SEQUENCE</a>);</div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span> </div>
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>        data_.timeSequence = orOp(andOp(data_.timeSequence, ~<a class="code hl_variable" href="../../d1/d02/classdxfcpp_1_1_series.html#a64b996ca5f00f510e0d96b75f59c7e58">MAX_SEQUENCE</a>), sequence);</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>    }</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span> </div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  422</span><span class="comment">     * Changes @ref Series::getSequence() &quot;sequence number&quot; of this series.</span></div>
+<div class="line"><span class="lineno">  423</span><span class="comment">     * Returns the current order.</span></div>
+<div class="line"><span class="lineno">  424</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  425</span><span class="comment">     * @param sequence the sequence.</span></div>
+<div class="line"><span class="lineno">  426</span><span class="comment">     * @return The current series.</span></div>
+<div class="line"><span class="lineno">  427</span><span class="comment">     * @see Series::getSequence()</span></div>
+<div class="line"><span class="lineno">  428</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>    Series &amp;<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a8736eaaf6963d186dfaf24852955dd8b">withSequence</a>(std::int32_t sequence) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">setSequence</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">(</a>sequence<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">)</a>;</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span> </div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>    }</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span> </div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  436</span><span class="comment">     * Changes @ref Series::getSequence() &quot;sequence number&quot; of this series.</span></div>
+<div class="line"><span class="lineno">  437</span><span class="comment">     * Returns a shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  438</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  439</span><span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Series&gt;(new</span></div>
+<div class="line"><span class="lineno">  440</span><span class="comment">     * Series(...))` or `std::make_shared&lt;Series&gt;(...)`</span></div>
+<div class="line"><span class="lineno">  441</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  442</span><span class="comment">     * @param sequence the sequence.</span></div>
+<div class="line"><span class="lineno">  443</span><span class="comment">     * @return A shared pointer to the current series.</span></div>
+<div class="line"><span class="lineno">  444</span><span class="comment">     * @see Series::getSequence()</span></div>
+<div class="line"><span class="lineno">  445</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>    Series::Ptr <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#af665d6ea0cabad8a2b70c6e61810de9c">withSequenceShared</a>(std::int32_t sequence) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>        Series<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">::</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">setSequence</a><a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">(</a>sequence<a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">)</a>;</div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span> </div>
+<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;Series&gt;();</div>
+<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>    }</div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span> </div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  453</span><span class="comment">     * Returns day id of expiration.</span></div>
+<div class="line"><span class="lineno">  454</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  455</span><span class="comment">     * Example: @ref day_util::#getDayIdByYearMonthDay() &quot;dxfcpp::day_util::getDayIdByYearMonthDay&quot;(20090117).</span></div>
+<div class="line"><span class="lineno">  456</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  457</span><span class="comment">     * @return day id of expiration.</span></div>
+<div class="line"><span class="lineno">  458</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>    std::int32_t <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a3bc261f83f17749d4ae046b24a6120fd">getExpiration</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>        <span class="keywordflow">return</span> data_.expiration;</div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>    }</div>
+<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span> </div>
+<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  464</span><span class="comment">     * Changes day id of expiration.</span></div>
+<div class="line"><span class="lineno">  465</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  466</span><span class="comment">     * @param expiration day id of expiration.</span></div>
+<div class="line"><span class="lineno">  467</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aa5dc46654a661bcbdc707234410a88c2">setExpiration</a>(std::int32_t expiration) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00469" name="l00469"></a><span class="lineno">  469</span>        data_.expiration = expiration;</div>
+<div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span>    }</div>
+<div class="line"><a id="l00471" name="l00471"></a><span class="lineno">  471</span> </div>
+<div class="line"><a id="l00472" name="l00472"></a><span class="lineno">  472</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  473</span><span class="comment">     * Returns implied volatility index for this series based on VIX methodology.</span></div>
+<div class="line"><span class="lineno">  474</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  475</span><span class="comment">     * @return implied volatility index for this series based on VIX methodology.</span></div>
+<div class="line"><span class="lineno">  476</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ab26ee45ec0b39d911692edcd3d79d8ce">getVolatility</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>        <span class="keywordflow">return</span> data_.volatility;</div>
+<div class="line"><a id="l00479" name="l00479"></a><span class="lineno">  479</span>    }</div>
+<div class="line"><a id="l00480" name="l00480"></a><span class="lineno">  480</span> </div>
+<div class="line"><a id="l00481" name="l00481"></a><span class="lineno">  481</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  482</span><span class="comment">     * Changes implied volatility index for this series based on VIX methodology.</span></div>
+<div class="line"><span class="lineno">  483</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  484</span><span class="comment">     * @param volatility implied volatility index for this series based on VIX methodology.</span></div>
+<div class="line"><span class="lineno">  485</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a03e81c865f159f206a6d363303a86424">setVolatility</a>(<span class="keywordtype">double</span> volatility) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span>        data_.volatility = volatility;</div>
+<div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span>    }</div>
+<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span> </div>
+<div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  491</span><span class="comment">     * Returns call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  492</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  493</span><span class="comment">     * @return call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  494</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#accbd9d05dc739bd07ddceddc36dd6d75">getCallVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>        <span class="keywordflow">return</span> data_.callVolume;</div>
+<div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span>    }</div>
+<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span> </div>
+<div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  500</span><span class="comment">     * Changes call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  501</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  502</span><span class="comment">     * @param callVolume call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  503</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00504" name="l00504"></a><span class="lineno">  504</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ab0c23da6fff1762a57566061f8f10c5f">setCallVolume</a>(<span class="keywordtype">double</span> callVolume) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00505" name="l00505"></a><span class="lineno">  505</span>        data_.callVolume = callVolume;</div>
+<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>    }</div>
+<div class="line"><a id="l00507" name="l00507"></a><span class="lineno">  507</span> </div>
+<div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  509</span><span class="comment">     * Returns put options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  510</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  511</span><span class="comment">     * @return put options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  512</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00513" name="l00513"></a><span class="lineno">  513</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a4c27787992bbbc878cb906ab1b85c3c5">getPutVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span>        <span class="keywordflow">return</span> data_.putVolume;</div>
+<div class="line"><a id="l00515" name="l00515"></a><span class="lineno">  515</span>    }</div>
+<div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span> </div>
+<div class="line"><a id="l00517" name="l00517"></a><span class="lineno">  517</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  518</span><span class="comment">     * Changes put options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  519</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  520</span><span class="comment">     * @param putVolume put options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  521</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a92201c531d5d82ea95d9cc55eff2b05f">setPutVolume</a>(<span class="keywordtype">double</span> putVolume) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00523" name="l00523"></a><span class="lineno">  523</span>        data_.putVolume = putVolume;</div>
+<div class="line"><a id="l00524" name="l00524"></a><span class="lineno">  524</span>    }</div>
+<div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span> </div>
+<div class="line"><a id="l00526" name="l00526"></a><span class="lineno">  526</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  527</span><span class="comment">     * Returns options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  528</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  529</span><span class="comment">     * @return options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  530</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a07390cabc0b7ec0acb72e52d21f98eff">getOptionVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00532" name="l00532"></a><span class="lineno">  532</span>        <span class="keywordflow">if</span> (std::isnan(data_.putVolume)) {</div>
+<div class="line"><a id="l00533" name="l00533"></a><span class="lineno">  533</span>            <span class="keywordflow">return</span> data_.callVolume;</div>
+<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>        }</div>
+<div class="line"><a id="l00535" name="l00535"></a><span class="lineno">  535</span> </div>
+<div class="line"><a id="l00536" name="l00536"></a><span class="lineno">  536</span>        <span class="keywordflow">if</span> (std::isnan(data_.callVolume)) {</div>
+<div class="line"><a id="l00537" name="l00537"></a><span class="lineno">  537</span>            <span class="keywordflow">return</span> data_.putVolume;</div>
+<div class="line"><a id="l00538" name="l00538"></a><span class="lineno">  538</span>        }</div>
+<div class="line"><a id="l00539" name="l00539"></a><span class="lineno">  539</span> </div>
+<div class="line"><a id="l00540" name="l00540"></a><span class="lineno">  540</span>        <span class="keywordflow">return</span> data_.putVolume + data_.callVolume;</div>
+<div class="line"><a id="l00541" name="l00541"></a><span class="lineno">  541</span>    }</div>
+<div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span> </div>
+<div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  544</span><span class="comment">     * Returns ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  545</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  546</span><span class="comment">     * @return ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  547</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00548" name="l00548"></a><span class="lineno">  548</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf2420dba428269bd0863a081d33fc0">getPutCallRatio</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00549" name="l00549"></a><span class="lineno">  549</span>        <span class="keywordflow">return</span> data_.putCallRatio;</div>
+<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span>    }</div>
+<div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span> </div>
+<div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  553</span><span class="comment">     * Changes ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  554</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  555</span><span class="comment">     * @param putCallRatio ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><span class="lineno">  556</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#acdb92c62f7e31a89b5c06eeb2250ac30">setPutCallRatio</a>(<span class="keywordtype">double</span> putCallRatio) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span>        data_.putCallRatio = putCallRatio;</div>
+<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>    }</div>
+<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span> </div>
+<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  562</span><span class="comment">     * Returns implied forward price for this option series.</span></div>
+<div class="line"><span class="lineno">  563</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  564</span><span class="comment">     * @return implied forward price for this option series.</span></div>
+<div class="line"><span class="lineno">  565</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a3c63d3ffb26064d6597346d072570744">getForwardPrice</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>        <span class="keywordflow">return</span> data_.forwardPrice;</div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>    }</div>
+<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span> </div>
+<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  571</span><span class="comment">     * Changes implied forward price for this option series.</span></div>
+<div class="line"><span class="lineno">  572</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  573</span><span class="comment">     * @param forwardPrice implied forward price for this option series.</span></div>
+<div class="line"><span class="lineno">  574</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a0f53c43f923258b79453c6f8f56410b3">setForwardPrice</a>(<span class="keywordtype">double</span> forwardPrice) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>        data_.forwardPrice = forwardPrice;</div>
+<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>    }</div>
+<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span> </div>
+<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  580</span><span class="comment">     * Returns implied simple dividend return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  581</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  582</span><span class="comment">     * @return implied simple dividend return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  583</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a183ae4f58f76e1a06cd7f38c336f0c37">getDividend</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>        <span class="keywordflow">return</span> data_.dividend;</div>
+<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span>    }</div>
+<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span> </div>
+<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  589</span><span class="comment">     * Changes implied simple dividend return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  590</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  591</span><span class="comment">     * @param dividend implied simple dividend return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  592</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#aaa2f448d57e93c007171687d9e39c3f1">setDividend</a>(<span class="keywordtype">double</span> dividend) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span>        data_.dividend = dividend;</div>
+<div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span>    }</div>
+<div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span> </div>
+<div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  598</span><span class="comment">     * Returns implied simple interest return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  599</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  600</span><span class="comment">     * @return implied simple interest return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  601</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#ae89100c3e45f0f122a06eb65d7d93de6">getInterest</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>        <span class="keywordflow">return</span> data_.interest;</div>
+<div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span>    }</div>
+<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span> </div>
+<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  607</span><span class="comment">     * Changes implied simple interest return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  608</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  609</span><span class="comment">     * @param interest implied simple interest return of the corresponding option series.</span></div>
+<div class="line"><span class="lineno">  610</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a2bc17da785219a714ba37693153b96fd">setInterest</a>(<span class="keywordtype">double</span> interest) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>        data_.interest = interest;</div>
+<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>    }</div>
+<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span> </div>
+<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>    <span class="comment">/**</span></div>
+<div class="line"><span class="lineno">  616</span><span class="comment">     * Returns a string representation of the current object.</span></div>
+<div class="line"><span class="lineno">  617</span><span class="comment">     *</span></div>
+<div class="line"><span class="lineno">  618</span><span class="comment">     * @return a string representation</span></div>
+<div class="line"><span class="lineno">  619</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span>    std::string <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a2b964d3b9d9275abbc2dc962d6e73578">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code hl_function" href="../../d1/d02/classdxfcpp_1_1_series.html#a2b964d3b9d9275abbc2dc962d6e73578">override</a>;</div>
+<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>};</div>
+<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span> </div>
+<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>} <span class="comment">// namespace dxfcpp</span></div>
 <div class="ttc" id="a_conf_8hpp_html_a2247137e794d0adca60e1208433f3ec9"><div class="ttname"><a href="../../df/d03/_conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a></div><div class="ttdeci">#define DXFCPP_EXPORT</div><div class="ttdef"><b>Definition</b> Conf.hpp:33</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_event_flags_mask_html_a1b25dedbfced78bf9e15ca5a2f65d977"><div class="ttname"><a href="../../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a1b25dedbfced78bf9e15ca5a2f65d977">dxfcpp::EventFlagsMask::getMask</a></div><div class="ttdeci">constexpr std::uint32_t getMask() const noexcept</div><div class="ttdoc">Returns an integer representation of event mask.</div><div class="ttdef"><b>Definition</b> EventFlag.hpp:378</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_event_type_enum_html"><div class="ttname"><a href="../../d9/d00/classdxfcpp_1_1_event_type_enum.html">dxfcpp::EventTypeEnum</a></div><div class="ttdoc">The enumeration type that provides additional information about the dxFeed Graal C++-API event type.</div><div class="ttdef"><b>Definition</b> EventTypeEnum.hpp:19</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_indexed_event_source_html"><div class="ttname"><a href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html">dxfcpp::IndexedEventSource</a></div><div class="ttdoc">Source identifier for IndexedEvent.</div><div class="ttdef"><b>Definition</b> IndexedEventSource.hpp:18</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_indexed_event_source_html_ab7bc1a5037c8e18b2adeb45237cea5eb"><div class="ttname"><a href="../../d2/d01/classdxfcpp_1_1_indexed_event_source.html#ab7bc1a5037c8e18b2adeb45237cea5eb">dxfcpp::IndexedEventSource::DEFAULT</a></div><div class="ttdeci">static const IndexedEventSource DEFAULT</div><div class="ttdoc">The default source with zero identifier for all events that do not support multiple sources.</div><div class="ttdef"><b>Definition</b> IndexedEventSource.hpp:26</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a03e81c865f159f206a6d363303a86424"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a03e81c865f159f206a6d363303a86424">dxfcpp::Series::setVolatility</a></div><div class="ttdeci">void setVolatility(double volatility) noexcept</div><div class="ttdoc">Changes implied volatility index for this series based on VIX methodology.</div><div class="ttdef"><b>Definition</b> Series.hpp:288</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a07390cabc0b7ec0acb72e52d21f98eff"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a07390cabc0b7ec0acb72e52d21f98eff">dxfcpp::Series::getOptionVolume</a></div><div class="ttdeci">double getOptionVolume() const noexcept</div><div class="ttdoc">Returns options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:333</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a07e8ce3e0bdeee09d313680aed8f5fe0"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">dxfcpp::Series::setEventFlags</a></div><div class="ttdeci">void setEventFlags(std::int32_t eventFlags) noexcept override</div><div class="ttdoc">Changes transactional event flags.</div><div class="ttdef"><b>Definition</b> Series.hpp:152</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a0f53c43f923258b79453c6f8f56410b3"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a0f53c43f923258b79453c6f8f56410b3">dxfcpp::Series::setForwardPrice</a></div><div class="ttdeci">void setForwardPrice(double forwardPrice) noexcept</div><div class="ttdoc">Changes implied forward price for this option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:377</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a0f60b30fd65bcc017e82a7e93ba87fcc"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a0f60b30fd65bcc017e82a7e93ba87fcc">dxfcpp::Series::getTime</a></div><div class="ttdeci">std::int64_t getTime() const noexcept</div><div class="ttdoc">Returns time of this series event.</div><div class="ttdef"><b>Definition</b> Series.hpp:213</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a12911fff7b683318e5f0b50a7fc6fd5b"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">dxfcpp::Series::setSequence</a></div><div class="ttdeci">void setSequence(std::int32_t sequence) noexcept</div><div class="ttdoc">Changes sequence number of this series event.</div><div class="ttdef"><b>Definition</b> Series.hpp:247</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a183ae4f58f76e1a06cd7f38c336f0c37"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a183ae4f58f76e1a06cd7f38c336f0c37">dxfcpp::Series::getDividend</a></div><div class="ttdeci">double getDividend() const noexcept</div><div class="ttdoc">Returns implied simple dividend return of the corresponding option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:386</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a1bf2420dba428269bd0863a081d33fc0"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf2420dba428269bd0863a081d33fc0">dxfcpp::Series::getPutCallRatio</a></div><div class="ttdeci">double getPutCallRatio() const noexcept</div><div class="ttdoc">Returns ratio of put options traded volume to call options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:350</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a1bf383441ffa87fb1d320e1caa53f3f8"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">dxfcpp::Series::setTime</a></div><div class="ttdeci">void setTime(std::int64_t time) noexcept</div><div class="ttdoc">Changes time of this series event.</div><div class="ttdef"><b>Definition</b> Series.hpp:224</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a03e81c865f159f206a6d363303a86424"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a03e81c865f159f206a6d363303a86424">dxfcpp::Series::setVolatility</a></div><div class="ttdeci">void setVolatility(double volatility) noexcept</div><div class="ttdoc">Changes implied volatility index for this series based on VIX methodology.</div><div class="ttdef"><b>Definition</b> Series.hpp:486</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a07390cabc0b7ec0acb72e52d21f98eff"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a07390cabc0b7ec0acb72e52d21f98eff">dxfcpp::Series::getOptionVolume</a></div><div class="ttdeci">double getOptionVolume() const noexcept</div><div class="ttdoc">Returns options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:531</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a07e8ce3e0bdeee09d313680aed8f5fe0"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a07e8ce3e0bdeee09d313680aed8f5fe0">dxfcpp::Series::setEventFlags</a></div><div class="ttdeci">void setEventFlags(std::int32_t eventFlags) noexcept override</div><div class="ttdoc">Changes transactional event flags.</div><div class="ttdef"><b>Definition</b> Series.hpp:208</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a0ba1451ce5d9af1ccf890ec24837d3fb"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a0ba1451ce5d9af1ccf890ec24837d3fb">dxfcpp::Series::withEventFlagsShared</a></div><div class="ttdeci">Series::Ptr withEventFlagsShared(std::int32_t eventFlags) noexcept</div><div class="ttdoc">Changes transactional event flags and returns a shared pointer to the current series.</div><div class="ttdef"><b>Definition</b> Series.hpp:240</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a0ccf33524a9a6c845cfce9e0fe809a96"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a0ccf33524a9a6c845cfce9e0fe809a96">dxfcpp::Series::withEventSymbolShared</a></div><div class="ttdeci">Series::Ptr withEventSymbolShared(const std::string &amp;eventSymbol) noexcept</div><div class="ttdoc">Changes event's symbol and returns a shared pointer to the current series.</div><div class="ttdef"><b>Definition</b> Series.hpp:157</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a0f53c43f923258b79453c6f8f56410b3"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a0f53c43f923258b79453c6f8f56410b3">dxfcpp::Series::setForwardPrice</a></div><div class="ttdeci">void setForwardPrice(double forwardPrice) noexcept</div><div class="ttdoc">Changes implied forward price for this option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:575</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a0f60b30fd65bcc017e82a7e93ba87fcc"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a0f60b30fd65bcc017e82a7e93ba87fcc">dxfcpp::Series::getTime</a></div><div class="ttdeci">std::int64_t getTime() const noexcept</div><div class="ttdoc">Returns time of this series event.</div><div class="ttdef"><b>Definition</b> Series.hpp:350</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a12911fff7b683318e5f0b50a7fc6fd5b"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a12911fff7b683318e5f0b50a7fc6fd5b">dxfcpp::Series::setSequence</a></div><div class="ttdeci">void setSequence(std::int32_t sequence) noexcept</div><div class="ttdoc">Changes sequence number of this series event.</div><div class="ttdef"><b>Definition</b> Series.hpp:414</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a183ae4f58f76e1a06cd7f38c336f0c37"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a183ae4f58f76e1a06cd7f38c336f0c37">dxfcpp::Series::getDividend</a></div><div class="ttdeci">double getDividend() const noexcept</div><div class="ttdoc">Returns implied simple dividend return of the corresponding option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:584</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a1bf2420dba428269bd0863a081d33fc0"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf2420dba428269bd0863a081d33fc0">dxfcpp::Series::getPutCallRatio</a></div><div class="ttdeci">double getPutCallRatio() const noexcept</div><div class="ttdoc">Returns ratio of put options traded volume to call options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:548</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a1bf383441ffa87fb1d320e1caa53f3f8"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a1bf383441ffa87fb1d320e1caa53f3f8">dxfcpp::Series::setTime</a></div><div class="ttdeci">void setTime(std::int64_t time) noexcept</div><div class="ttdoc">Changes time of this series event.</div><div class="ttdef"><b>Definition</b> Series.hpp:361</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a1c268da1ff54eedaabc5ef37374f59e0"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a1c268da1ff54eedaabc5ef37374f59e0">dxfcpp::Series::withTime</a></div><div class="ttdeci">Series &amp; withTime(std::int64_t time) noexcept</div><div class="ttdoc">Changes time of this series and returns it.</div><div class="ttdef"><b>Definition</b> Series.hpp:375</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a249fa99c8e69a6f02ae561692baa38c8"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a249fa99c8e69a6f02ae561692baa38c8">dxfcpp::Series::withEventTime</a></div><div class="ttdeci">Series &amp; withEventTime(std::int64_t eventTime) noexcept</div><div class="ttdoc">Changes event's creation time and returns the current series.</div><div class="ttdef"><b>Definition</b> Series.hpp:170</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_series_html_a27dbc1ca5b0aaf446714a7500df0073f"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a27dbc1ca5b0aaf446714a7500df0073f">dxfcpp::Series::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition</b> Series.hpp:123</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_series_html_a2b964d3b9d9275abbc2dc962d6e73578"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a2b964d3b9d9275abbc2dc962d6e73578">dxfcpp::Series::toString</a></div><div class="ttdeci">std::string toString() const noexcept override</div><div class="ttdoc">Returns a string representation of the current object.</div><div class="ttdef"><b>Definition</b> Series.cpp:90</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a2bc17da785219a714ba37693153b96fd"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a2bc17da785219a714ba37693153b96fd">dxfcpp::Series::setInterest</a></div><div class="ttdeci">void setInterest(double interest) noexcept</div><div class="ttdoc">Changes implied simple interest return of the corresponding option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:413</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a39c3e3ae494dc444de30e3d903eebaac"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a39c3e3ae494dc444de30e3d903eebaac">dxfcpp::Series::getEventFlagsMask</a></div><div class="ttdeci">EventFlagsMask getEventFlagsMask() const noexcept override</div><div class="ttdoc">Returns transactional event flags.</div><div class="ttdef"><b>Definition</b> Series.hpp:147</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a3bc261f83f17749d4ae046b24a6120fd"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a3bc261f83f17749d4ae046b24a6120fd">dxfcpp::Series::getExpiration</a></div><div class="ttdeci">std::int32_t getExpiration() const noexcept</div><div class="ttdoc">Returns day id of expiration.</div><div class="ttdef"><b>Definition</b> Series.hpp:261</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a3c63d3ffb26064d6597346d072570744"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a3c63d3ffb26064d6597346d072570744">dxfcpp::Series::getForwardPrice</a></div><div class="ttdeci">double getForwardPrice() const noexcept</div><div class="ttdoc">Returns implied forward price for this option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:368</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a4c27787992bbbc878cb906ab1b85c3c5"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a4c27787992bbbc878cb906ab1b85c3c5">dxfcpp::Series::getPutVolume</a></div><div class="ttdeci">double getPutVolume() const noexcept</div><div class="ttdoc">Returns put options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:315</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a4f865ebe992d1759467c93a55fce9b76"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a4f865ebe992d1759467c93a55fce9b76">dxfcpp::Series::setTimeSequence</a></div><div class="ttdeci">void setTimeSequence(std::int64_t timeSequence) noexcept</div><div class="ttdoc">Changes time and sequence of this event.</div><div class="ttdef"><b>Definition</b> Series.hpp:203</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a2bc17da785219a714ba37693153b96fd"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a2bc17da785219a714ba37693153b96fd">dxfcpp::Series::setInterest</a></div><div class="ttdeci">void setInterest(double interest) noexcept</div><div class="ttdoc">Changes implied simple interest return of the corresponding option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:611</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a39c3e3ae494dc444de30e3d903eebaac"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a39c3e3ae494dc444de30e3d903eebaac">dxfcpp::Series::getEventFlagsMask</a></div><div class="ttdeci">EventFlagsMask getEventFlagsMask() const noexcept override</div><div class="ttdoc">Returns transactional event flags.</div><div class="ttdef"><b>Definition</b> Series.hpp:203</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a3bc261f83f17749d4ae046b24a6120fd"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a3bc261f83f17749d4ae046b24a6120fd">dxfcpp::Series::getExpiration</a></div><div class="ttdeci">std::int32_t getExpiration() const noexcept</div><div class="ttdoc">Returns day id of expiration.</div><div class="ttdef"><b>Definition</b> Series.hpp:459</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a3c63d3ffb26064d6597346d072570744"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a3c63d3ffb26064d6597346d072570744">dxfcpp::Series::getForwardPrice</a></div><div class="ttdeci">double getForwardPrice() const noexcept</div><div class="ttdoc">Returns implied forward price for this option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:566</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a4c27787992bbbc878cb906ab1b85c3c5"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a4c27787992bbbc878cb906ab1b85c3c5">dxfcpp::Series::getPutVolume</a></div><div class="ttdeci">double getPutVolume() const noexcept</div><div class="ttdoc">Returns put options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:513</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a4f865ebe992d1759467c93a55fce9b76"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a4f865ebe992d1759467c93a55fce9b76">dxfcpp::Series::setTimeSequence</a></div><div class="ttdeci">void setTimeSequence(std::int64_t timeSequence) noexcept</div><div class="ttdoc">Changes time and sequence of this event.</div><div class="ttdef"><b>Definition</b> Series.hpp:340</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_series_html_a64b996ca5f00f510e0d96b75f59c7e58"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a64b996ca5f00f510e0d96b75f59c7e58">dxfcpp::Series::MAX_SEQUENCE</a></div><div class="ttdeci">static constexpr std::uint32_t MAX_SEQUENCE</div><div class="ttdoc">Maximum allowed sequence value.</div><div class="ttdef"><b>Definition</b> Series.hpp:114</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a75be339f644dedc21b176f173d7fc3e5"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a75be339f644dedc21b176f173d7fc3e5">dxfcpp::Series::getTimeSequence</a></div><div class="ttdeci">std::int64_t getTimeSequence() const noexcept</div><div class="ttdoc">Returns time and sequence of this event packaged into single long value.</div><div class="ttdef"><b>Definition</b> Series.hpp:191</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a75be339f644dedc21b176f173d7fc3e5"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a75be339f644dedc21b176f173d7fc3e5">dxfcpp::Series::getTimeSequence</a></div><div class="ttdeci">std::int64_t getTimeSequence() const noexcept</div><div class="ttdoc">Returns time and sequence of this event packaged into single long value.</div><div class="ttdef"><b>Definition</b> Series.hpp:328</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a785a0576560c73dd94f455108d3c47c5"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a785a0576560c73dd94f455108d3c47c5">dxfcpp::Series::withTimeShared</a></div><div class="ttdeci">Series::Ptr withTimeShared(std::int64_t time) noexcept</div><div class="ttdoc">Changes time of this series and returns a shared pointer to it.</div><div class="ttdef"><b>Definition</b> Series.hpp:391</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_series_html_a7c711320747079dbd506d63c1d4730d7"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a7c711320747079dbd506d63c1d4730d7">dxfcpp::Series::toGraal</a></div><div class="ttdeci">void * toGraal() const noexcept override</div><div class="ttdoc">Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).</div><div class="ttdef"><b>Definition</b> Series.cpp:101</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_series_html_a80f5ae4807e6db084a60c93d7b2f3319"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a80f5ae4807e6db084a60c93d7b2f3319">dxfcpp::Series::freeGraal</a></div><div class="ttdeci">static void freeGraal(void *graalNative) noexcept</div><div class="ttdoc">Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).</div><div class="ttdef"><b>Definition</b> Series.cpp:120</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a82c8ec1a60cc773c72ab7c06b958e202"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">dxfcpp::Series::setIndex</a></div><div class="ttdeci">void setIndex(std::int64_t index) noexcept override</div><div class="ttdoc">Changes unique per-symbol index of this event.</div><div class="ttdef"><b>Definition</b> Series.hpp:182</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a82c8ec1a60cc773c72ab7c06b958e202"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a82c8ec1a60cc773c72ab7c06b958e202">dxfcpp::Series::setIndex</a></div><div class="ttdeci">void setIndex(std::int64_t index) noexcept override</div><div class="ttdoc">Changes unique per-symbol index of this event.</div><div class="ttdef"><b>Definition</b> Series.hpp:292</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a8736eaaf6963d186dfaf24852955dd8b"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a8736eaaf6963d186dfaf24852955dd8b">dxfcpp::Series::withSequence</a></div><div class="ttdeci">Series &amp; withSequence(std::int32_t sequence) noexcept</div><div class="ttdoc">Changes sequence number of this series.</div><div class="ttdef"><b>Definition</b> Series.hpp:429</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_series_html_a8d353ffbfcfaf1f7e3cb2b1bb9add279"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a8d353ffbfcfaf1f7e3cb2b1bb9add279">dxfcpp::Series::Series</a></div><div class="ttdeci">Series() noexcept=default</div><div class="ttdoc">Creates new series event with default values.</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a92201c531d5d82ea95d9cc55eff2b05f"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a92201c531d5d82ea95d9cc55eff2b05f">dxfcpp::Series::setPutVolume</a></div><div class="ttdeci">void setPutVolume(double putVolume) noexcept</div><div class="ttdoc">Changes put options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:324</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_a985abe04d8e59abbf9bfc8ca153fb690"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">dxfcpp::Series::getSequence</a></div><div class="ttdeci">std::int32_t getSequence() const noexcept</div><div class="ttdoc">Returns sequence number of this series event to distinguish trades that have the same time.</div><div class="ttdef"><b>Definition</b> Series.hpp:237</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_aa5dc46654a661bcbdc707234410a88c2"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aa5dc46654a661bcbdc707234410a88c2">dxfcpp::Series::setExpiration</a></div><div class="ttdeci">void setExpiration(std::int32_t expiration) noexcept</div><div class="ttdoc">Changes day id of expiration.</div><div class="ttdef"><b>Definition</b> Series.hpp:270</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_aa9c1ea427a9724e12fbfbb39315fbec5"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aa9c1ea427a9724e12fbfbb39315fbec5">dxfcpp::Series::getEventFlags</a></div><div class="ttdeci">std::int32_t getEventFlags() const noexcept override</div><div class="ttdoc">Returns transactional event flags.</div><div class="ttdef"><b>Definition</b> Series.hpp:142</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_aaa2f448d57e93c007171687d9e39c3f1"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aaa2f448d57e93c007171687d9e39c3f1">dxfcpp::Series::setDividend</a></div><div class="ttdeci">void setDividend(double dividend) noexcept</div><div class="ttdoc">Changes implied simple dividend return of the corresponding option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:395</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_aaaa8e2016b3aff845df96c386f24f396"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aaaa8e2016b3aff845df96c386f24f396">dxfcpp::Series::getSource</a></div><div class="ttdeci">const IndexedEventSource &amp; getSource() const &amp;noexcept override</div><div class="ttdoc">Returns the source of this event.</div><div class="ttdef"><b>Definition</b> Series.hpp:137</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a8f0ea89e67cbe14742be0efbc260bf0a"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a8f0ea89e67cbe14742be0efbc260bf0a">dxfcpp::Series::withEventFlags</a></div><div class="ttdeci">Series &amp; withEventFlags(std::int32_t eventFlags) noexcept</div><div class="ttdoc">Changes transactional event flags and returns the current series.</div><div class="ttdef"><b>Definition</b> Series.hpp:224</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a92201c531d5d82ea95d9cc55eff2b05f"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a92201c531d5d82ea95d9cc55eff2b05f">dxfcpp::Series::setPutVolume</a></div><div class="ttdeci">void setPutVolume(double putVolume) noexcept</div><div class="ttdoc">Changes put options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:522</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_a985abe04d8e59abbf9bfc8ca153fb690"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#a985abe04d8e59abbf9bfc8ca153fb690">dxfcpp::Series::getSequence</a></div><div class="ttdeci">std::int32_t getSequence() const noexcept</div><div class="ttdoc">Returns sequence number of this series event to distinguish trades that have the same time.</div><div class="ttdef"><b>Definition</b> Series.hpp:404</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_aa5dc46654a661bcbdc707234410a88c2"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aa5dc46654a661bcbdc707234410a88c2">dxfcpp::Series::setExpiration</a></div><div class="ttdeci">void setExpiration(std::int32_t expiration) noexcept</div><div class="ttdoc">Changes day id of expiration.</div><div class="ttdef"><b>Definition</b> Series.hpp:468</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_aa9c1ea427a9724e12fbfbb39315fbec5"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aa9c1ea427a9724e12fbfbb39315fbec5">dxfcpp::Series::getEventFlags</a></div><div class="ttdeci">std::int32_t getEventFlags() const noexcept override</div><div class="ttdoc">Returns transactional event flags.</div><div class="ttdef"><b>Definition</b> Series.hpp:198</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_aaa2f448d57e93c007171687d9e39c3f1"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aaa2f448d57e93c007171687d9e39c3f1">dxfcpp::Series::setDividend</a></div><div class="ttdeci">void setDividend(double dividend) noexcept</div><div class="ttdoc">Changes implied simple dividend return of the corresponding option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:593</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_aaaa8e2016b3aff845df96c386f24f396"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aaaa8e2016b3aff845df96c386f24f396">dxfcpp::Series::getSource</a></div><div class="ttdeci">const IndexedEventSource &amp; getSource() const &amp;noexcept override</div><div class="ttdoc">Returns the source of this event.</div><div class="ttdef"><b>Definition</b> Series.hpp:193</div></div>
 <div class="ttc" id="aclassdxfcpp_1_1_series_html_aac06ab7c3783e1c2b70065c1ba7b555f"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#aac06ab7c3783e1c2b70065c1ba7b555f">dxfcpp::Series::Series</a></div><div class="ttdeci">Series(std::string eventSymbol) noexcept</div><div class="ttdoc">Creates new series event with the specified event symbol.</div><div class="ttdef"><b>Definition</b> Series.hpp:133</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_ab0c23da6fff1762a57566061f8f10c5f"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ab0c23da6fff1762a57566061f8f10c5f">dxfcpp::Series::setCallVolume</a></div><div class="ttdeci">void setCallVolume(double callVolume) noexcept</div><div class="ttdoc">Changes call options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:306</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_ab26ee45ec0b39d911692edcd3d79d8ce"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ab26ee45ec0b39d911692edcd3d79d8ce">dxfcpp::Series::getVolatility</a></div><div class="ttdeci">double getVolatility() const noexcept</div><div class="ttdoc">Returns implied volatility index for this series based on VIX methodology.</div><div class="ttdef"><b>Definition</b> Series.hpp:279</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_ac6144eb907c3f037c8eda1d8b08de5d0"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ac6144eb907c3f037c8eda1d8b08de5d0">dxfcpp::Series::getIndex</a></div><div class="ttdeci">std::int64_t getIndex() const noexcept override</div><div class="ttdoc">Returns unique per-symbol index of this event.</div><div class="ttdef"><b>Definition</b> Series.hpp:168</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_accbd9d05dc739bd07ddceddc36dd6d75"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#accbd9d05dc739bd07ddceddc36dd6d75">dxfcpp::Series::getCallVolume</a></div><div class="ttdeci">double getCallVolume() const noexcept</div><div class="ttdoc">Returns call options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:297</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_acdb92c62f7e31a89b5c06eeb2250ac30"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#acdb92c62f7e31a89b5c06eeb2250ac30">dxfcpp::Series::setPutCallRatio</a></div><div class="ttdeci">void setPutCallRatio(double putCallRatio) noexcept</div><div class="ttdoc">Changes ratio of put options traded volume to call options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:359</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_acf0ea0ffeabcebecedc1ac21e67d3a00"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">dxfcpp::Series::setEventFlags</a></div><div class="ttdeci">void setEventFlags(const EventFlagsMask &amp;eventFlags) noexcept override</div><div class="ttdoc">Changes transactional event flags.</div><div class="ttdef"><b>Definition</b> Series.hpp:157</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1_series_html_ae89100c3e45f0f122a06eb65d7d93de6"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ae89100c3e45f0f122a06eb65d7d93de6">dxfcpp::Series::getInterest</a></div><div class="ttdeci">double getInterest() const noexcept</div><div class="ttdoc">Returns implied simple interest return of the corresponding option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:404</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_ab0c23da6fff1762a57566061f8f10c5f"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ab0c23da6fff1762a57566061f8f10c5f">dxfcpp::Series::setCallVolume</a></div><div class="ttdeci">void setCallVolume(double callVolume) noexcept</div><div class="ttdoc">Changes call options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:504</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_ab26ee45ec0b39d911692edcd3d79d8ce"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ab26ee45ec0b39d911692edcd3d79d8ce">dxfcpp::Series::getVolatility</a></div><div class="ttdeci">double getVolatility() const noexcept</div><div class="ttdoc">Returns implied volatility index for this series based on VIX methodology.</div><div class="ttdef"><b>Definition</b> Series.hpp:477</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_ac6144eb907c3f037c8eda1d8b08de5d0"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ac6144eb907c3f037c8eda1d8b08de5d0">dxfcpp::Series::getIndex</a></div><div class="ttdeci">std::int64_t getIndex() const noexcept override</div><div class="ttdoc">Returns unique per-symbol index of this event.</div><div class="ttdef"><b>Definition</b> Series.hpp:282</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_ac9b1138ec64df65782f7e2d17d751665"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ac9b1138ec64df65782f7e2d17d751665">dxfcpp::Series::withEventSymbol</a></div><div class="ttdeci">virtual Series &amp; withEventSymbol(const std::string &amp;eventSymbol) noexcept</div><div class="ttdoc">Changes event's symbol and returns the current series.</div><div class="ttdef"><b>Definition</b> Series.hpp:142</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_acace749bef12c6d0e11f0b0de3421c89"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#acace749bef12c6d0e11f0b0de3421c89">dxfcpp::Series::withEventFlags</a></div><div class="ttdeci">Series &amp; withEventFlags(const EventFlagsMask &amp;eventFlags) noexcept</div><div class="ttdoc">Changes transactional event flags and returns the current series.</div><div class="ttdef"><b>Definition</b> Series.hpp:253</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_accbd9d05dc739bd07ddceddc36dd6d75"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#accbd9d05dc739bd07ddceddc36dd6d75">dxfcpp::Series::getCallVolume</a></div><div class="ttdeci">double getCallVolume() const noexcept</div><div class="ttdoc">Returns call options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:495</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_acd9367cfadfd24ab6360d6ff2152d780"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#acd9367cfadfd24ab6360d6ff2152d780">dxfcpp::Series::withEventFlagsShared</a></div><div class="ttdeci">Series::Ptr withEventFlagsShared(const EventFlagsMask &amp;eventFlags) noexcept</div><div class="ttdoc">Changes transactional event flags and returns a shared pointer to the current series.</div><div class="ttdef"><b>Definition</b> Series.hpp:269</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_acdb92c62f7e31a89b5c06eeb2250ac30"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#acdb92c62f7e31a89b5c06eeb2250ac30">dxfcpp::Series::setPutCallRatio</a></div><div class="ttdeci">void setPutCallRatio(double putCallRatio) noexcept</div><div class="ttdoc">Changes ratio of put options traded volume to call options traded volume for a day.</div><div class="ttdef"><b>Definition</b> Series.hpp:557</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_acf0ea0ffeabcebecedc1ac21e67d3a00"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#acf0ea0ffeabcebecedc1ac21e67d3a00">dxfcpp::Series::setEventFlags</a></div><div class="ttdeci">void setEventFlags(const EventFlagsMask &amp;eventFlags) noexcept override</div><div class="ttdoc">Changes transactional event flags.</div><div class="ttdef"><b>Definition</b> Series.hpp:213</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_ae89100c3e45f0f122a06eb65d7d93de6"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#ae89100c3e45f0f122a06eb65d7d93de6">dxfcpp::Series::getInterest</a></div><div class="ttdeci">double getInterest() const noexcept</div><div class="ttdoc">Returns implied simple interest return of the corresponding option series.</div><div class="ttdef"><b>Definition</b> Series.hpp:602</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_af3bc2c6a9687bc95788d8c7a5d3ef8b7"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#af3bc2c6a9687bc95788d8c7a5d3ef8b7">dxfcpp::Series::withIndex</a></div><div class="ttdeci">Series &amp; withIndex(std::int64_t index) noexcept</div><div class="ttdoc">Changes unique per-symbol index of this series and returns it.</div><div class="ttdef"><b>Definition</b> Series.hpp:302</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_af665d6ea0cabad8a2b70c6e61810de9c"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#af665d6ea0cabad8a2b70c6e61810de9c">dxfcpp::Series::withSequenceShared</a></div><div class="ttdeci">Series::Ptr withSequenceShared(std::int32_t sequence) noexcept</div><div class="ttdoc">Changes sequence number of this series.</div><div class="ttdef"><b>Definition</b> Series.hpp:446</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_afd57a78c0c0336f246b309346a72bf43"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#afd57a78c0c0336f246b309346a72bf43">dxfcpp::Series::withEventTimeShared</a></div><div class="ttdeci">Series::Ptr withEventTimeShared(std::int64_t eventTime) noexcept</div><div class="ttdoc">Changes event's creation time and returns a shared pointer to the current series.</div><div class="ttdef"><b>Definition</b> Series.hpp:186</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1_series_html_afdcad8f2db1fa12ebb6379f3f34da364"><div class="ttname"><a href="../../d1/d02/classdxfcpp_1_1_series.html#afdcad8f2db1fa12ebb6379f3f34da364">dxfcpp::Series::withIndexShared</a></div><div class="ttdeci">Series::Ptr withIndexShared(std::int64_t index) noexcept</div><div class="ttdoc">Changes unique per-symbol index of this series and returns a shared pointer to it.</div><div class="ttdef"><b>Definition</b> Series.hpp:317</div></div>
 <div class="ttc" id="astructdxfcpp_1_1_indexed_event_html"><div class="ttname"><a href="../../da/d01/structdxfcpp_1_1_indexed_event.html">dxfcpp::IndexedEvent</a></div><div class="ttdoc">Represents an indexed collection of up-to-date information about some condition or state of an extern...</div><div class="ttdef"><b>Definition</b> IndexedEvent.hpp:39</div></div>
 <div class="ttc" id="astructdxfcpp_1_1_market_event_html"><div class="ttname"><a href="../../de/d01/structdxfcpp_1_1_market_event.html">dxfcpp::MarketEvent</a></div><div class="ttdoc">Base class for all market events.</div><div class="ttdef"><b>Definition</b> MarketEvent.hpp:23</div></div>
+<div class="ttc" id="astructdxfcpp_1_1_market_event_html_a371a67895ed8276685d29e0657b53899"><div class="ttname"><a href="../../de/d01/structdxfcpp_1_1_market_event.html#a371a67895ed8276685d29e0657b53899">dxfcpp::MarketEvent::setEventSymbol</a></div><div class="ttdeci">void setEventSymbol(const std::string &amp;eventSymbol) noexcept override</div><div class="ttdoc">Changes symbol of this event.</div><div class="ttdef"><b>Definition</b> MarketEvent.hpp:74</div></div>
+<div class="ttc" id="astructdxfcpp_1_1_market_event_html_a80b9add6fad6c1121ddd0497d423f7ce"><div class="ttname"><a href="../../de/d01/structdxfcpp_1_1_market_event.html#a80b9add6fad6c1121ddd0497d423f7ce">dxfcpp::MarketEvent::setEventTime</a></div><div class="ttdeci">void setEventTime(std::int64_t eventTime) noexcept override</div><div class="ttdoc">Changes event creation time.</div><div class="ttdef"><b>Definition</b> MarketEvent.hpp:85</div></div>
 <div class="ttc" id="astructdxfcpp_1_1_market_event_html_afeb8874ca4d6b603d5b941f19e0735cf"><div class="ttname"><a href="../../de/d01/structdxfcpp_1_1_market_event.html#afeb8874ca4d6b603d5b941f19e0735cf">dxfcpp::MarketEvent::MarketEvent</a></div><div class="ttdeci">MarketEvent(std::string eventSymbol) noexcept</div><div class="ttdoc">Protected constructor for concrete implementation classes that initializes eventSymbol property.</div><div class="ttdef"><b>Definition</b> MarketEvent.hpp:39</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

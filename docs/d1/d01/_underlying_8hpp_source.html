@@ -300,8 +300,8 @@ $(document).ready(function(){initNavTree('d1/d01/_underlying_8hpp_source.html','
 <div class="line"><span class="lineno">  194</span><span class="comment">     * @see ::getTime()</span></div>
 <div class="line"><span class="lineno">  195</span><span class="comment">     */</span></div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../db/d02/classdxfcpp_1_1_underlying.html#a915f7c1f724706e576c469951738fc5a">setTime</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>                                sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        data_.index = orOp(orOp(sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>                                sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>                           <a class="code hl_function" href="../../db/d02/classdxfcpp_1_1_underlying.html#a72cfecf404fb92e2d0b575055f44240d">getSequence</a><a class="code hl_function" href="../../db/d02/classdxfcpp_1_1_underlying.html#a72cfecf404fb92e2d0b575055f44240d">(</a><a class="code hl_function" href="../../db/d02/classdxfcpp_1_1_underlying.html#a72cfecf404fb92e2d0b575055f44240d">)</a>);</div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    }</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
