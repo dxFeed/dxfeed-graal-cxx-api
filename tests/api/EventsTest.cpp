@@ -403,3 +403,44 @@ TEST_CASE("TheoPrice::setSequence() should change Index") {
 
     REQUIRE(tp.getIndex() == expectedIndex);
 }
+
+struct UnderlyingConstants {
+    static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
+    static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+};
+
+TEST_CASE("Underlying::setTime() should change Index") {
+    auto u = Underlying("AAPL");
+    std::int64_t time = 1'701'703'226'535LL;
+
+    u.setTime(time);
+
+    auto newIndex = u.getIndex();
+    auto expectedIndex =
+        dxfcpp::orOp(dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
+                                              UnderlyingConstants::SECONDS_SHIFT),
+                                  dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
+                                              UnderlyingConstants::MILLISECONDS_SHIFT)),
+                     u.getSequence());
+    auto expectedTime = dxfcpp::sar(expectedIndex, UnderlyingConstants::SECONDS_SHIFT) * 1000 +
+                        dxfcpp::andOp(dxfcpp::sar(expectedIndex, UnderlyingConstants::MILLISECONDS_SHIFT),
+                                      UnderlyingConstants::MILLISECONDS_MASK);
+
+    REQUIRE(time == u.getTime());
+    REQUIRE(time == expectedTime);
+    REQUIRE(newIndex == expectedIndex);
+}
+
+TEST_CASE("Underlying::setSequence() should change Index") {
+    auto u = Underlying("AAPL");
+    auto oldIndex = u.getIndex();
+    int sequence = 567;
+
+    u.setSequence(sequence);
+
+    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~UnderlyingConstants::MAX_SEQUENCE), sequence);
+
+    REQUIRE(u.getIndex() == expectedIndex);
+}
