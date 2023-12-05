@@ -153,3 +153,62 @@ TEST_CASE("Greeks::setSequence() should change Index") {
 
     REQUIRE(g.getIndex() == expectedIndex);
 }
+
+struct SeriesConstants {
+    static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
+    static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
+    static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+};
+
+
+TEST_CASE("Series::setTime() should change TimeSequence") {
+    auto s = Series("AAPL").withSequence(123);
+    std::int64_t time = 1'701'703'226'500LL;
+
+    s.setTime(time);
+
+    auto newTimeSequence = s.getTimeSequence();
+    auto expectedTimeSequence =
+        dxfcpp::orOp(dxfcpp::orOp(dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getSecondsFromTime(time)),
+                                              SeriesConstants::SECONDS_SHIFT),
+                                  dxfcpp::sal(static_cast<std::int64_t>(dxfcpp::time_util::getMillisFromTime(time)),
+                                              SeriesConstants::MILLISECONDS_SHIFT)),
+                     s.getSequence());
+    auto expectedTime = dxfcpp::sar(expectedTimeSequence, SeriesConstants::SECONDS_SHIFT) * 1000 +
+                        dxfcpp::andOp(dxfcpp::sar(expectedTimeSequence, SeriesConstants::MILLISECONDS_SHIFT),
+                                      SeriesConstants::MILLISECONDS_MASK);
+
+    REQUIRE(newTimeSequence == expectedTimeSequence);
+    REQUIRE(time == expectedTime);
+    REQUIRE(time == s.getTime());
+}
+
+TEST_CASE("Series::setTime() shouldn't change Index") {
+    auto s = Series("AAPL").withSequence(123);
+    auto oldIndex = s.getIndex();
+    std::int64_t time = 1'701'703'226'500LL;
+
+    s.setTime(time);
+
+    REQUIRE(oldIndex == s.getIndex());
+}
+
+TEST_CASE("Series::setTime() shouldn't change Sequence") {
+    auto s = Series("AAPL").withSequence(123);
+    auto oldSequence = s.getSequence();
+    std::int64_t time = 1'701'703'226'500LL;
+
+    s.setTime(time);
+
+    REQUIRE(oldSequence == s.getSequence());
+}
+
+TEST_CASE("Series::setIndex() shouldn't change Sequence") {
+    auto s = Series("AAPL").withSequence(123);
+    auto oldSequence = s.getSequence();
+
+    s.setIndex(1'234'567'891'011LL);
+
+    REQUIRE(oldSequence == s.getSequence());
+}
