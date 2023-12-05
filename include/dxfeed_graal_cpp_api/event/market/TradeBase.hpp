@@ -129,9 +129,10 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @param time time of the last trade.
      */
     void setTime(std::int64_t time) noexcept {
-        tradeBaseData_.timeSequence = orOp(
-            sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-            orOp(sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_MASK), getSequence()));
+        tradeBaseData_.timeSequence =
+            orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                      sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+                 getSequence());
     }
 
     /**
@@ -212,7 +213,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @return exchange code of last trade as UTF8 string.
      */
     std::string getExchangeCodeString() const noexcept {
-        //TODO: cache [EN-8231]
+        // TODO: cache [EN-8231]
 
         return dxfcpp::utf16toUtf8String(tradeBaseData_.exchangeCode);
     }
