@@ -138,7 +138,7 @@ struct DumpTool {
                 ->withRole(DXEndpoint::Role::STREAM_FEED)
                 ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default
                 ->withProperties(parsedProperties)
-                ->withName(NAME + "Tool::Feed")
+                ->withName(NAME + "Tool-Feed")
                 ->build();
 
         auto sub = inputEndpoint->getFeed()->createSubscription(
@@ -164,7 +164,7 @@ struct DumpTool {
                     ->withRole(DXEndpoint::Role::STREAM_PUBLISHER)
                     ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default
                     ->withProperties(parsedProperties)
-                    ->withName(NAME + "Tool::Publisher")
+                    ->withName(NAME + "Tool-Publisher")
                     ->build()
                     ->connect(tape.starts_with("tape:") ? tape : "tape:" + tape);
 

@@ -342,7 +342,7 @@ struct LatencyTest {
                             ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
                             ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
                             ->withProperties(parsedProperties)
-                            ->withName(NAME + "Tool::Feed")
+                            ->withName(NAME + "Tool-Feed")
                             ->build();
 
         auto sub = endpoint->getFeed()->createSubscription(
