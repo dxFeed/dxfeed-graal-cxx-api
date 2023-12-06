@@ -88,7 +88,10 @@ Connects to the demo-endpoint and subscribes to TimeAndSale event for AAPL symbo
   connect demo.dxfeed.com:7300 TimeAndSale AAPL --from-time 0
 
 Connects to the tape file and subscribes for all events and all symbols:
-  connect file:tape.csv all all -p dxfeed.wildcard.enable=true)"},
+  connect file:tape.csv all all -p dxfeed.wildcard.enable=true
+
+Connects to the demo-endpoint by dxLink and subscribes to Quote event for AAPL symbol:
+  connect "dxlink:wss://demo.dxfeed.com/dxlink-ws" Quote AAPL -p dxfeed.experimental.dxlink.enable=true)"},
     {"Dump",
      R"(This tool dumps all received data records and subscription items to a console. It can connect to any address including
 plain file.
