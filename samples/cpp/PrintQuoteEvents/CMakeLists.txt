@@ -34,23 +34,18 @@ elseif (UNIX)
 endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_include_directories(${PROJECT_NAME} PRIVATE ../../../include)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
-#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
-#target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
-
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
-        #        $<TARGET_FILE:dxfcxx>
         ${CMAKE_CURRENT_SOURCE_DIR}/dxfeed.properties
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
-    install(TARGETS ${PROJECT_NAME})
-    install(FILES "dxfeed.properties" DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
+    install(FILES "dxfeed.properties" DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
 
     if (WIN32)
-        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
+        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
     endif ()
 endif ()

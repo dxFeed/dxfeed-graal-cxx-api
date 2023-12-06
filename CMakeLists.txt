@@ -369,6 +369,7 @@ if (DXFCXX_INSTALL)
         install(TARGETS ${PROJECT_NAME})
         install(TARGETS ${PROJECT_NAME}_static)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
-        install(FILES "LICENSE" "README.md" DESTINATION ".")
     endif ()
+
+    install(FILES "LICENSE" "README.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
 endif ()
