@@ -69,20 +69,35 @@ jobs:
           ls
           mkdir ${{github.workspace}}/build-${{matrix.buildType}}    
 
-      - name: Configure CMake (Win)
-        if: ${{ contains(matrix.os, 'windows') }}
+      - name: Configure CMake (Win-Release)
+        if: ${{ contains(matrix.os, 'windows') && !contains(matrix.buildType, 'Deb') }}
         run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
 
-      - name: Configure CMake (MacOS)
-        if: ${{ contains(matrix.os, 'macos') }}
+      - name: Configure CMake (Win-Debug)
+        if: ${{ contains(matrix.os, 'windows') && contains(matrix.buildType, 'Deb') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}" -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF
+
+      - name: Configure CMake (MacOS-Release)
+        if: ${{ contains(matrix.os, 'macos') && !contains(matrix.buildType, 'Deb') }}
         run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
 
-      - name: Configure CMake (Ubuntu)
+      - name: Configure CMake (MacOS-Debug)
+        if: ${{ contains(matrix.os, 'macos') && contains(matrix.buildType, 'Deb') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}} -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF
+
+      - name: Configure CMake (Ubuntu-Release)
         env:
           CC: gcc-${{env.GCC_VERSION}}
           CXX: g++-${{env.GCC_VERSION}}
-        if: ${{ contains(matrix.os, 'ubuntu') }}
+        if: ${{ contains(matrix.os, 'ubuntu') && !contains(matrix.buildType, 'Deb') }}
         run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
+
+      - name: Configure CMake (Ubuntu-Debug)
+        env:
+          CC: gcc-${{env.GCC_VERSION}}
+          CXX: g++-${{env.GCC_VERSION}}
+        if: ${{ contains(matrix.os, 'ubuntu') && contains(matrix.buildType, 'Deb') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}} -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}}
