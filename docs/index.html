@@ -304,6 +304,9 @@ How to connect to QD endpoint</h3>
 <div class="line">            -&gt;withProperty(<span class="stringliteral">&quot;dxfeed.address&quot;</span>, <span class="stringliteral">&quot;demo.dxfeed.com:7300&quot;</span>)</div>
 <div class="line">            -&gt;build();</div>
 <div class="line">    </div>
+<div class="line">    <span class="comment">// Another way to connect the endpoint.</span></div>
+<div class="line">    <span class="comment">// auto endpoint = DXEndpoint::create()-&gt;connect(&quot;demo.dxfeed.com:7300&quot;);</span></div>
+<div class="line">    </div>
 <div class="line">    <span class="keyword">auto</span> subscription = endpoint-&gt;getFeed()-&gt;createSubscription(Quote::TYPE);</div>
 <div class="line">    </div>
 <div class="line">    subscription-&gt;addEventListener([](<span class="keyword">auto</span>&amp;&amp; events) {</div>
@@ -348,10 +351,13 @@ How to connect to dxLink</h3>
 <div class="line">    System::SetProperty(<span class="stringliteral">&quot;scheme&quot;</span>, <span class="stringliteral">&quot;ext:resource:dxlink.xml&quot;</span>);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// For token-based authorization, use the following address format:</span></div>
-<div class="line">    <span class="comment">// &quot;demo.dxfeed.com:7300[login=entitle:token]&quot;</span></div>
+<div class="line">    <span class="comment">// &quot;dxlink:wss://demo.dxfeed.com/dxlink-ws[login=dxlink:token]&quot;</span></div>
 <div class="line">    <span class="keyword">auto</span> endpoint = DXEndpoint::newBuilder()</div>
 <div class="line">            -&gt;withProperty(<span class="stringliteral">&quot;dxfeed.address&quot;</span>, <span class="stringliteral">&quot;dxlink:wss://demo.dxfeed.com/dxlink-ws&quot;</span>)</div>
 <div class="line">            -&gt;build();</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// Another way to connect the endpoint.</span></div>
+<div class="line">    <span class="comment">// auto endpoint = DXEndpoint::create()-&gt;connect(&quot;dxlink:wss://demo.dxfeed.com/dxlink-ws&quot;);</span></div>
 <div class="line">    </div>
 <div class="line">    <span class="keyword">auto</span> subscription = endpoint-&gt;getFeed()-&gt;createSubscription(Quote::TYPE);</div>
 <div class="line">    </div>

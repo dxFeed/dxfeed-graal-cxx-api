@@ -203,7 +203,7 @@ var searchData=
   ['getvwap_200',['getVWAP',['../de/d03/classdxfcpp_1_1_candle.html#a78495c18f52a6485d0818858d4bf9771',1,'dxfcpp::Candle']]],
   ['getyear_201',['getYear',['../dc/d01/structdxfcpp_1_1_day.html#a813a042676cb54a7aa8bac5182d23750',1,'dxfcpp::Day']]],
   ['getyearmonthday_202',['getYearMonthDay',['../dc/d01/structdxfcpp_1_1_day.html#a66c22ef75baab14cc4b806dee3deeb37',1,'dxfcpp::Day']]],
-  ['glbx_203',['glbx',['../da/d03/classdxfcpp_1_1_order_source.html#a670aa79c79b11eeea43b5ea9e3b10620',1,'dxfcpp::OrderSource::glbx'],['../da/d03/classdxfcpp_1_1_order_source.html#a6b93cf7c95d5326773de4635995e58a8',1,'dxfcpp::OrderSource::GLBX']]],
+  ['glbx_203',['glbx',['../da/d03/classdxfcpp_1_1_order_source.html#a6b93cf7c95d5326773de4635995e58a8',1,'dxfcpp::OrderSource::GLBX'],['../da/d03/classdxfcpp_1_1_order_source.html#a670aa79c79b11eeea43b5ea9e3b10620',1,'dxfcpp::OrderSource::glbx']]],
   ['gmt_204',['GMT',['../d9/d00/structdxfcpp_1_1_time_format.html#a617ef387577f889512499fc92967a386',1,'dxfcpp::TimeFormat']]],
   ['graal_20cxx_20api_205',['dxFeed Graal CXX API',['../index.html',1,'']]],
   ['greeks_206',['greeks',['../d9/d01/classdxfcpp_1_1_greeks.html',1,'dxfcpp::Greeks'],['../d9/d01/classdxfcpp_1_1_greeks.html#a9d81e079adbe74adfec721eb20fb183b',1,'dxfcpp::Greeks::Greeks() noexcept=default'],['../d9/d01/classdxfcpp_1_1_greeks.html#a18d66b2b9e0051907298ddc3ae1c4730',1,'dxfcpp::Greeks::Greeks(std::string eventSymbol) noexcept']]]

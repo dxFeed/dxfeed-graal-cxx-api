@@ -11,5 +11,5 @@ var searchData=
   ['buy_8',['BUY',['../d7/d03/structdxfcpp_1_1_side.html#ab0a0ec12ea96aabd9f14612dac189fa0',1,'dxfcpp::Side']]],
   ['bxtr_9',['BXTR',['../da/d03/classdxfcpp_1_1_order_source.html#a7a19f6df5e18a2498df8b82895420082',1,'dxfcpp::OrderSource']]],
   ['byx_10',['BYX',['../da/d03/classdxfcpp_1_1_order_source.html#a2ae9ba5cb4d02a9f53186431a605e3a5',1,'dxfcpp::OrderSource']]],
-  ['bzx_11',['bzx',['../da/d03/classdxfcpp_1_1_order_source.html#a0672976bfc68857590fae20ebda19831',1,'dxfcpp::OrderSource::BZX'],['../da/d03/classdxfcpp_1_1_order_source.html#ad5a306362d9c4c7a80d171e9f17e75b8',1,'dxfcpp::OrderSource::bzx']]]
+  ['bzx_11',['bzx',['../da/d03/classdxfcpp_1_1_order_source.html#ad5a306362d9c4c7a80d171e9f17e75b8',1,'dxfcpp::OrderSource::bzx'],['../da/d03/classdxfcpp_1_1_order_source.html#a0672976bfc68857590fae20ebda19831',1,'dxfcpp::OrderSource::BZX']]]
 ];
