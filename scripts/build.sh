@@ -17,14 +17,40 @@ do
     echo "--- $BUILD_TYPE ---" &&
     echo "--- Removing old bundles ---" && find "$DIST_DIR" -maxdepth 1 -name "$TAG*$BUILD_TYPE.zip" -print0 | xargs -0 rm -f &&
     mkdir "$BUILD_DIR" &&
-    if [ "$BUILD_TYPE" = "Debug" ] || [ "$BUILD_TYPE" = "RelWithDebInfo" ]; then
-      echo "--- Configuring CMake ---" && cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DDXFCXX_VERSION="$TAG" -DDXFCXX_PACKAGE_SUFFIX=-$BUILD_TYPE -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF
-    else
-      echo "--- Configuring CMake ---" && cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DDXFCXX_VERSION="$TAG" -DDXFCXX_PACKAGE_SUFFIX=-$BUILD_TYPE
-    fi &&
+    echo "--- Configuring CMake ---" && cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DDXFCXX_VERSION="$TAG" -DDXFCXX_PACKAGE_SUFFIX=-$BUILD_TYPE -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF &&
     echo "--- Building ---" && cmake --build "$BUILD_DIR" --config $BUILD_TYPE --parallel 8 &&
     cd "$BUILD_DIR" &&
     echo "--- Packing ---" && cpack -G ZIP -C $BUILD_TYPE --config ./dxFeedGraalCxxApiPackConfig.cmake &&
     echo "--- Coping bundles ---" && find . -maxdepth 1 -name "*$BUILD_TYPE.zip" -type f -print0 | xargs -0 -I {} cp {} "$DIST_DIR/" &&
     cd "$CUR_DIR" || exit
 done
+
+BUILD_TYPE="Release"
+COMPONENT="Samples"
+BUILD_DIR="$(pwd)/build-$COMPONENT"
+
+if [ -d "$BUILD_DIR" ]; then rm -Rf "$BUILD_DIR"; fi &&
+  echo "--- $COMPONENT ---" &&
+  echo "--- Removing old bundles ---" && find "$DIST_DIR" -maxdepth 1 -name "$TAG*$COMPONENT.zip" -print0 | xargs -0 rm -f &&
+  mkdir "$BUILD_DIR" &&
+  echo "--- Configuring CMake ---" && cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DDXFCXX_VERSION="$TAG" -DDXFCXX_PACKAGE_SUFFIX=-$COMPONENT -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_TOOLS=OFF &&
+  echo "--- Building ---" && cmake --build "$BUILD_DIR" --config $BUILD_TYPE --parallel 8 &&
+  cd "$BUILD_DIR" &&
+  echo "--- Packing ---" && cpack -G ZIP -C $BUILD_TYPE --config ./dxFeedGraalCxxApiPackConfig.cmake &&
+  echo "--- Coping bundles ---" && find . -maxdepth 1 -name "*$COMPONENT.zip" -type f -print0 | xargs -0 -I {} cp {} "$DIST_DIR/" &&
+  cd "$CUR_DIR" || exit
+
+COMPONENT="Tools"
+BUILD_DIR="$(pwd)/build-$COMPONENT"
+
+if [ -d "$BUILD_DIR" ]; then rm -Rf "$BUILD_DIR"; fi &&
+  echo "--- $COMPONENT ---" &&
+  echo "--- Removing old bundles ---" && find "$DIST_DIR" -maxdepth 1 -name "$TAG*$COMPONENT.zip" -print0 | xargs -0 rm -f &&
+  mkdir "$BUILD_DIR" &&
+  echo "--- Configuring CMake ---" && cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DDXFCXX_VERSION="$TAG" -DDXFCXX_PACKAGE_SUFFIX=-$COMPONENT -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_SAMPLES=OFF &&
+  echo "--- Building ---" && cmake --build "$BUILD_DIR" --config $BUILD_TYPE --parallel 8 &&
+  cd "$BUILD_DIR" &&
+  echo "--- Packing ---" && cpack -G ZIP -C $BUILD_TYPE --config ./dxFeedGraalCxxApiPackConfig.cmake &&
+  echo "--- Coping bundles ---" && find . -maxdepth 1 -name "*$COMPONENT.zip" -type f -print0 | xargs -0 -I {} cp {} "$DIST_DIR/" &&
+  cd "$CUR_DIR" || exit
+
