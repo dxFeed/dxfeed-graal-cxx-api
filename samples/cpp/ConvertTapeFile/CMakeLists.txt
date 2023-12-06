@@ -35,42 +35,48 @@ endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-if (DXFCXX_ENABLE_VS_ASAN)
-    target_compile_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")
-    target_link_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")
+#if (DXFCXX_ENABLE_VS_ASAN)
+#    target_compile_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")
+#    target_link_options(${PROJECT_NAME} PRIVATE "/fsanitize=address")
+#
+#    target_compile_definitions(${PROJECT_NAME}
+#            PUBLIC
+#            $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:
+#            _DISABLE_VECTOR_ANNOTATION
+#            _DISABLE_STRING_ANNOTATION
+#            >
+#    )
+#endif ()
 
-    target_compile_definitions(${PROJECT_NAME}
-            PUBLIC
-            $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:
-            _DISABLE_VECTOR_ANNOTATION
-            _DISABLE_STRING_ANNOTATION
-            >
-    )
-endif ()
+#if (DXFCXX_ENABLE_ASAN_UBSAN)
+#    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
+#    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#            $<TARGET_FILE:dxfcxx::graal>
+#            ${CMAKE_CURRENT_SOURCE_DIR}/ConvertTapeFile.in
+#            $<TARGET_FILE:dxfcxx>
+#            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+#    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
+#    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
+#else ()
+#    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#            $<TARGET_FILE:dxfcxx::graal>
+#            ${CMAKE_CURRENT_SOURCE_DIR}/ConvertTapeFile.in
+#            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+#endif ()
 
-if (DXFCXX_ENABLE_ASAN_UBSAN)
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx::graal>
-            ${CMAKE_CURRENT_SOURCE_DIR}/ConvertTapeFile.in
-            $<TARGET_FILE:dxfcxx>
-            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
-    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
-    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
-else ()
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx::graal>
-            ${CMAKE_CURRENT_SOURCE_DIR}/ConvertTapeFile.in
-            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
-endif ()
+target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:dxfcxx::graal>
+        ${CMAKE_CURRENT_SOURCE_DIR}/ConvertTapeFile.in
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
-    install(TARGETS ${PROJECT_NAME})
-    install(FILES "ConvertTapeFile.in" DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
+    install(FILES "ConvertTapeFile.in" DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
 
     if (WIN32)
-        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
+        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
     endif ()
 endif ()

@@ -129,14 +129,16 @@ struct DumpTool {
     static void run(const Args &args) noexcept {
         using namespace std::literals;
 
-        auto properties = CmdArgsUtils::parseProperties(args.properties);
+        auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
+
+        System::setProperties(parsedProperties);
 
         auto inputEndpoint =
             DXEndpoint::newBuilder()
                 ->withRole(DXEndpoint::Role::STREAM_FEED)
                 ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default
-                ->withProperties(properties)
-                ->withName(NAME + "Tool")
+                ->withProperties(parsedProperties)
+                ->withName(NAME + "Tool-Feed")
                 ->build();
 
         auto sub = inputEndpoint->getFeed()->createSubscription(
@@ -161,8 +163,8 @@ struct DumpTool {
                 DXEndpoint::newBuilder()
                     ->withRole(DXEndpoint::Role::STREAM_PUBLISHER)
                     ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default
-                    ->withProperties(properties)
-                    ->withName(NAME + "Tool")
+                    ->withProperties(parsedProperties)
+                    ->withName(NAME + "Tool-Publisher")
                     ->build()
                     ->connect(tape.starts_with("tape:") ? tape : "tape:" + tape);
 

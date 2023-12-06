@@ -241,6 +241,9 @@ int main() {
             ->withProperty("dxfeed.address", "demo.dxfeed.com:7300")
             ->build();
     
+    // Another way to connect the endpoint.
+    // auto endpoint = DXEndpoint::create()->connect("demo.dxfeed.com:7300");
+    
     auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
     
     subscription->addEventListener([](auto&& events) {
@@ -290,10 +293,13 @@ int main() {
     System::SetProperty("scheme", "ext:resource:dxlink.xml");
     
     // For token-based authorization, use the following address format:
-    // "demo.dxfeed.com:7300[login=entitle:token]"
+    // "dxlink:wss://demo.dxfeed.com/dxlink-ws[login=dxlink:token]"
     auto endpoint = DXEndpoint::newBuilder()
             ->withProperty("dxfeed.address", "dxlink:wss://demo.dxfeed.com/dxlink-ws")
             ->build();
+    
+    // Another way to connect the endpoint.
+    // auto endpoint = DXEndpoint::create()->connect("dxlink:wss://demo.dxfeed.com/dxlink-ws");
     
     auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
     

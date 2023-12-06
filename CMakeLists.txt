@@ -15,7 +15,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 project(dxFeedGraalCxxApi)
 
-set(DXFCXX_VERSION "v1.1.1-beta" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v1.2.0-beta" CACHE STRING "The dxFeed Graal CXX API package version")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -369,6 +369,7 @@ if (DXFCXX_INSTALL)
         install(TARGETS ${PROJECT_NAME})
         install(TARGETS ${PROJECT_NAME}_static)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
-        install(FILES "LICENSE" "README.md" DESTINATION ".")
     endif ()
+
+    install(FILES "LICENSE" "README.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
 endif ()
