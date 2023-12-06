@@ -171,6 +171,8 @@ jobs:
         with:
           files: |
             artifacts/*.zip
+            artifacts/build-Samples/*.zip
+            artifacts/build-Tools/*.zip
           prerelease: ${{ contains(needs.get_version.outputs.version, 'alpha') || contains(needs.get_version.outputs.version, 'beta') || contains(needs.get_version.outputs.version, 'pre') }}
           tag_name: ${{ needs.get_version.outputs.tag_name }}
           name: ${{ needs.get_version.outputs.version }}
