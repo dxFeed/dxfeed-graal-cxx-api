@@ -334,11 +334,15 @@ struct LatencyTest {
     static void run(const Args &args) noexcept {
         using namespace std::literals;
 
+        auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
+
+        System::setProperties(parsedProperties);
+
         auto endpoint = DXEndpoint::newBuilder()
                             ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
                             ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
-                            ->withProperties(CmdArgsUtils::parseProperties(args.properties))
-                            ->withName(NAME + "Tool")
+                            ->withProperties(parsedProperties)
+                            ->withName(NAME + "Tool::Feed")
                             ->build();
 
         auto sub = endpoint->getFeed()->createSubscription(

@@ -29,6 +29,18 @@ struct DXFCPP_EXPORT System {
     static bool setProperty(const std::string &key, const std::string &value);
 
     /**
+     * Sets the JVM system properties to the Properties argument.
+     * @tparam Properties The properties' type (std::map, std::unordered_map etc).
+     * @param properties The new system properties.
+     * @return
+     */
+    template <typename Properties> static void setProperties(Properties &&properties) {
+        for (auto &&[k, v] : properties) {
+            setProperty(k, v);
+        }
+    }
+
+    /**
      * Gets the system property indicated by the specified key.
      *
      * @param key The name of the system property (UTF-8 string).

@@ -90,8 +90,8 @@ struct PerfTestTool {
             fmt::print("  Rate of listener calls         : {} (calls/s)\n", formatDouble(listenerCallsPerSecond));
             fmt::print("  Number of events in call (avg) : {} (events)\n",
                        formatDouble(eventsPerSecond / listenerCallsPerSecond));
-            fmt::print("  Current memory usage           : {:.3f} (Mbyte)\n", currentMemoryUsage);
-            fmt::print("  Peak memory usage              : {:.3f} (Mbyte)\n", peakMemoryUsage_);
+            fmt::print("  Current memory usage           : {:.3f} (MByte)\n", currentMemoryUsage);
+            fmt::print("  Peak memory usage              : {:.3f} (MByte)\n", peakMemoryUsage_);
             fmt::print("  Current CPU usage              : {:.2f} %\n", currentCpuUsage * 100.0);
             fmt::print("  Peak CPU usage                 : {:.2f} %\n", peakCpuUsage_ * 100.0);
             fmt::print("  Running time                   : {:%H:%M:%S}\n", runningDiff_.elapsed());
@@ -236,11 +236,15 @@ struct PerfTestTool {
     static void run(const Args &args) noexcept {
         using namespace std::literals;
 
+        auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
+
+        System::setProperties(parsedProperties);
+
         auto endpoint = DXEndpoint::newBuilder()
                             ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
                             ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
-                            ->withProperties(CmdArgsUtils::parseProperties(args.properties))
-                            ->withName(NAME + "Tool")
+                            ->withProperties(parsedProperties)
+                            ->withName(NAME + "Tool::Feed")
                             ->build();
 
         auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types));
