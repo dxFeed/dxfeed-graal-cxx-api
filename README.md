@@ -11,7 +11,6 @@ and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) 
 
 :information_source: If you already use [dxFeed C API](https://github.com/dxFeed/dxfeed-c-api), please see
 the [Overview](#overview) section.<br>
-:warning: It’s a **beta** version and still under active development.
 
 [![Build](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml)
 ![Platform](https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20osx--x64%20%7C%20osx--aarch64-lightgrey)
