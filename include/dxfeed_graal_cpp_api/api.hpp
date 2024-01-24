@@ -45,3 +45,5 @@
 #include "system/System.hpp"
 
 #include "isolated/Isolated.hpp"
+
+#include "ondemand/OnDemandService.hpp"

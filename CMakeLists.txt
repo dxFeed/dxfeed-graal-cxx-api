@@ -137,6 +137,10 @@ set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/live/IterableInstrumentProfile.cpp
 )
 
+set(dxFeedGraalCxxApi_OnDemand_Sources
+        src/ondemand/OnDemandService.cpp
+)
+
 set(dxFeedGraalCxxApi_Symbols_Sources
         src/symbols/StringSymbol.cpp
         src/symbols/SymbolWrapper.cpp
