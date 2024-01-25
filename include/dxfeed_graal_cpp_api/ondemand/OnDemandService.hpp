@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Devexperts LLC.
+// Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -76,10 +76,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
 
   private:
     JavaObjectHandle<OnDemandService> handle_;
-
     std::shared_ptr<DXEndpoint> endpoint_{};
-
-    static std::shared_ptr<OnDemandService> create(void *feedHandle) noexcept;
 
   protected:
     OnDemandService() noexcept;
