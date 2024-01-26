@@ -374,6 +374,9 @@ versions):
 - [ ] DxFeedPublishProfiles is a simple demonstration of how to publish market events
 - [x] [ScheduleSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp)
   is a simple demonstration of how to get various scheduling information for instruments
+- [x] [OnDemandSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp)
+  a sample that demonstrates how to use the dxFeed on-demand history data replay service API
+
 
 ## Current State
 
