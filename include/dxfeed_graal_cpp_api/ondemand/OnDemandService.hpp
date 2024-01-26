@@ -35,7 +35,7 @@ struct DXEndpoint;
  * @ref DXFeed::getInstance() "DXFeed::getInstance()" method can be acquired with the following code:
  * <pre><tt>
  * @ref DXEndpoint "auto" endpoint = DXEndpoint::getInstance();
- * @ref OnDemandService "auto" onDemand = @ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance"(endpoint);
+ * @ref OnDemandService "auto" onDemand = OnDemandService::@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance"(endpoint);
  * </tt></pre>
  *
  * This instance can be used for on-demand historical tick data replay only when endpoint is connected to
