@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Devexperts LLC.
+// Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -25,6 +25,7 @@ namespace dxfcpp {
 
 struct DXPublisher;
 struct DXFeed;
+struct OnDemandService;
 
 /**
  * Manages network connections to @ref DXFeed "feed" or
@@ -179,6 +180,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
 
     /// The alias to a type of unique pointer to the DXEndpoint object
     using Unique = std::unique_ptr<DXEndpoint>;
+
+    friend struct OnDemandService;
 
     /**
      * `"name"`

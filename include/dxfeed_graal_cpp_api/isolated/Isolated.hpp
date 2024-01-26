@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Devexperts LLC.
+// Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -9,9 +9,9 @@
 
 #include "../ipf/live/InstrumentProfileConnection.hpp"
 
-#include <unordered_set>
-#include <string>
 #include <cstdint>
+#include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace dxfcpp::isolated {
@@ -123,6 +123,25 @@ struct InstrumentProfileUpdateListener {
 };
 
 } // namespace ipf
+
+namespace ondemand {
+
+struct OnDemandService {
+    static /* dxfg_on_demand_service_t* */ void *getInstance(/* dxfg_endpoint_t * */ void *endpoint) noexcept;
+    static bool isReplaySupported(/* dxfg_on_demand_service_t * */ void *service) noexcept;
+    static bool isReplay(/* dxfg_on_demand_service_t * */ void *service) noexcept;
+    static bool isClear(/* dxfg_on_demand_service_t * */ void *service) noexcept;
+    static std::int64_t getTime(/* dxfg_on_demand_service_t * */ void *service) noexcept;
+    static double getSpeed(/* dxfg_on_demand_service_t * */ void *service) noexcept;
+    static bool replay(/* dxfg_on_demand_service_t * */ void *service, std::int64_t time) noexcept;
+    static bool replay(/* dxfg_on_demand_service_t * */ void *service, std::int64_t time, double speed) noexcept;
+    static bool pause(/* dxfg_on_demand_service_t * */ void *service) noexcept;
+    static bool stopAndResume(/* dxfg_on_demand_service_t * */ void *service) noexcept;
+    static bool stopAndClear(/* dxfg_on_demand_service_t * */ void *service) noexcept;
+    static bool setSpeed(/* dxfg_on_demand_service_t * */ void *service, double speed) noexcept;
+};
+
+} // namespace ondemand
 
 namespace schedule {
 struct DayFilter {

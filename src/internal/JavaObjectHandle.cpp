@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Devexperts LLC.
+// Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxfg_api.h>
@@ -45,6 +45,8 @@ template struct JavaObjectHandle<InstrumentProfileConnection>;
 template struct JavaObjectHandle<IpfPropertyChangeListener>;
 template struct JavaObjectHandle<InstrumentProfileUpdateListener>;
 template struct JavaObjectHandle<IterableInstrumentProfile>;
+
+template struct JavaObjectHandle<OnDemandService>;
 
 template struct JavaObjectHandle<Schedule>;
 template struct JavaObjectHandle<Day>;
