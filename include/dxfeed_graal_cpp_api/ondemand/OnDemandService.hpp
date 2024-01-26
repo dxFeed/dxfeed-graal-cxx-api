@@ -21,47 +21,47 @@ struct DXEndpoint;
 
 /**
  * Provides on-demand historical tick data replay controls.
- * This class is used to seamlessly transition from ordinary real-time or delayed data feed to the
- * replay of the tick-by-tick history of market data behaviour without any changes to the code
- * that consumes and process these market events.
+ * This class is used to seamlessly transition from ordinary real-time or delayed data feed to the replay of the
+ * tick-by-tick history of market data behaviour without any changes to the code that consumes and process these market
+ * events.
  *
- * <p>As single {@code OnDemandService} instance
- * is conceptually associated with each {@link DXEndpoint} endpoint instance with the role
- * of {@link Role#FEED FEED} or {@link Role#ON_DEMAND_FEED ON_DEMAND_FEED}.
- * You can retrieve {@code OnDemandService} instance that is associated with a given
- * {@link DXEndpoint} using {@link #getInstance(DXEndpoint) getInstance(endpoint)} method.
+ * <p>As single OnDemandService instance is conceptually associated with each DXEndpoint endpoint instance with the role
+ * of @ref DXEndpoint::Role::FEED "FEED" or @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
+ * You can retrieve OnDemandService instance that is associated with a given
+ * DXEndpoint using @ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance(endpoint)" method.
  *
- * <p>For example, {@code OnDemandService} instance for a default {@link DXFeed} that is
- * featured in the documentation of {@link DXFeed} class and is retrieved via
- * {@link DXFeed#getInstance() DXFeed.getInstance()} method can be acquired with the following code:
+ * <p>For example, OnDemandService instance for a default DXFeed that is featured in the documentation of DXFeed class
+ * and is retrieved via
+ * @ref DXFeed::getInstance() "DXFeed::getInstance()" method can be acquired with the following code:
  * <pre><tt>
- * {@link DXEndpoint} endpoint = {@link DXEndpoint}.{@link DXEndpoint#getInstance() getInstance}();
- * OnDemandService onDemand = {@link #getInstance(DXEndpoint) getInstance}(endpoint);</tt></pre>
+ * @ref DXEndpoint "auto" endpoint = DXEndpoint::getInstance();
+ * @ref OnDemandService "auto" onDemand = @ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance"(endpoint);
+ * </tt></pre>
  *
  * This instance can be used for on-demand historical tick data replay only when endpoint is connected to
  * the on-demand data provider and the appropriate credentials are provided.
- * {@link #isReplaySupported() isReplaySupported} returns {@code true} when it is so.
+ * @ref OnDemandService::isReplaySupported() "isReplaySupported" returns `true` when it is so.
  *
- * <p>On-demand replay is started with {@link #replay(Date) replay} method that takes time as a parameters.
- * {@link DXFeed} is then disconnected from other data providers, pre-buffers historical tick data for replay,
+ * <p>On-demand replay is started with @ref OnDemandService::replay(std::int64_t) "replay" method that takes time as a parameter.
+ * DXFeed is then disconnected from other data providers, pre-buffers historical tick data for replay,
  * and starts replay of the data as if it was coming from the data feeds now. All the usual APIs that are
- * part of {@link DXFeed} like {@link DXFeedSubscription subscription} and various {@link com.dxfeed.model models}
+ * part of DXFeed like @ref DXFeedSubscription "subscription" and various dxFeed models
  * can be used normally as with the ordinary real-time or delayed data feed.
  *
- * <p>Replay speed can be changed on the fly with {@link #setSpeed(double) setSpeed} method or it can be set
- * initially when starting replay with a two-argument version of {@link #replay(Date, double) replay} method.
- * {@link #pause()} method is the same as {@link #setSpeed(double) setSpeed(0)}.
+ * <p>Replay speed can be changed on the fly with @ref OnDemandService::setSpeed(double) "setSpeed" method or it can be set
+ * initially when starting replay with a two-argument version of @ref OnDemandService::replay(std::int64_t, double) "replay" method.
+ * @ref OnDemandService::pause() "pause" method is the same as @ref OnDemandService::setSpeed(double) "setSpeed(0)".
  *
- * <p>{@link #stopAndResume() stopAndResume} method stops data replay and resumes ordinary real-time or delayed data feed
- * that was used before {@link #replay(Date) replay} method was invoked.
+ * <p>@ref OnDemandService::stopAndResume() "stopAndResume" method stops data replay and resumes ordinary real-time or delayed data feed
+ * that was used before @ref OnDemandService::replay(std::int64_t) "replay" method was invoked.
  * Endpoints with a role of
- * {@link Role#ON_DEMAND_FEED ON_DEMAND_FEED} do not have an ordinary feed (they are essentially on-demand only)
- * and thus {@link #stopAndResume() stopAndResume} method works like {@link #stopAndClear() stopAndClear} for them.
+ * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" do not have an ordinary feed (they are essentially on-demand only)
+ * and thus @ref OnDemandService::stopAndResume() "stopAndResume" method works like @ref OnDemandService::stopAndClear() "stopAndClear" for them.
  *
  * <h3>State and change notifications</h3>
  *
- * On-demand historical tick data replay state can be queried with {@link #isReplaySupported() isReplaySupported},
- * {@link #isReplay() isReplay}, {@link #getSpeed() getSpeed}, and {@link #getTime() getTime} methods.
+ * On-demand historical tick data replay state can be queried with @ref OnDemandService::isReplaySupported() "isReplaySupported",
+ * @ref OnDemandService::isReplay() "isReplay", @ref OnDemandService::getSpeed() "getSpeed", and @ref OnDemandService::getTime() "getTime" methods.
  *
  * <h3>Threads and locks</h3>
  *
@@ -85,55 +85,48 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     ~OnDemandService() noexcept override;
 
     /**
-     * Returns on-demand service for the default {@link DXEndpoint} instance with
-     * {@link Role#ON_DEMAND_FEED ON_DEMAND_FEED} role that is
+     * Returns on-demand service for the default DXEndpoint instance with
+     * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" role that is
      * not connected to any other real-time or delayed data feed.
      * This method is a shortcut for:
      * <pre><tt>
-     * OnDemandService.{@link #getInstance(DXEndpoint) getInstance}({@link DXEndpoint DXEndpoint}.{@link DXEndpoint#getInstance(DXEndpoint.Role) getInstance}({@link Role#ON_DEMAND_FEED ON_DEMAND_FEED}))</tt></pre>
+     * OnDemandService::@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance"(@ref DXEndpoint "DXEndpoint"::@ref DXEndpoint::getInstance(DXEndpoint::Role) "getInstance"(DXEndpoint::Role::ON_DEMAND_FEED))</tt></pre>
      *
-     * <p>If you need an instance of {@code OnDemandService} to seamlessly switch from other real-time or delayed
+     * <p>If you need an instance of OnDemandService to seamlessly switch from other real-time or delayed
      * data feed to on-demand historical tick data replay, then use
-     * {@link #getInstance(DXEndpoint) getInstance(endpoint)} method for a specific {@code endpoint} that
+     * {@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance(endpoint)" method for a specific `endpoint` that
      * you are using.
      *
-     * <p>This method works only when the optional "<b>dxfeed-ondemand.jar</b>" is in the class-path.
-     *
-     * @return on-demand endpoint for the default {@link DXEndpoint} instance.
-     * @throws UnsupportedOperationException if "<b>dxfeed-ondemand.jar</b>" is not in the class-path.
+     * @return on-demand endpoint for the default DXEndpoint instance.
      */
     static std::shared_ptr<OnDemandService> getInstance() noexcept;
 
     /**
-     * Returns on-demand service for the specified {@link DXEndpoint}.
-     * Each {@code DXEndpoint} is conceptually associated with a single instance of on-demand service to
+     * Returns on-demand service for the specified DXEndpoint.
+     * Each DXEndpoint is conceptually associated with a single instance of on-demand service to
      * control its historic data replay and this method returns this instance.
      * The endpoint must have a role of
-     * {@link Role#FEED FEED} or {@link Role#ON_DEMAND_FEED ON_DEMAND_FEED}.
-     *
-     * <p>This method works only when the optional "<b>dxfeed-ondemand.jar</b>" is in the class-path.
+     * @ref DXEndpoint::Role::FEED "FEED" or @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
      *
      * @param endpoint the endpoint.
      * @return the on-demand service.
-     * @throws UnsupportedOperationException if "<b>dxfeed-ondemand.jar</b>" is not in the class-path.
-     * @throws IllegalArgumentException if the specified endpoint has unsupported class or wrong role.
      */
     static std::shared_ptr<OnDemandService> getInstance(std::shared_ptr<DXEndpoint> endpoint) noexcept;
 
     /**
-     * Returns {@link DXEndpoint} that is associated with this on-demand service.
-     * @return {@link DXEndpoint} that is associated with this on-demand service.
+     * Returns DXEndpoint that is associated with this on-demand service.
+     * @return DXEndpoint that is associated with this on-demand service.
      */
     std::shared_ptr<DXEndpoint> getEndpoint() const noexcept;
 
     /**
-     * Returns {@code true} when on-demand historical data replay mode is supported.
-     * {@link DXEndpoint} should be {@link DXEndpoint#connect(String) connected}
-     * to an address with "(ondemand:&lt;address&gt;)" component that specifies an on-demand historical
+     * Returns `true` when on-demand historical data replay mode is supported.
+     * DXEndpoint should be @ref DXEndpoint::connect() "connected"
+     * to an address with "(ondemand:<address>)" component that specifies an on-demand historical
      * data provider address.
-     * When this method returns {@code false}, {@link #replay(Date, double) replay} method throws
-     * {@link IllegalStateException}.
-     * @return {@code true} when on-demand historical data replay mode is supported.
+     * When this method returns `false`, @ref OnDemandService::replay(std::int64_t, double) "replay" method does nothing.
+     *
+     * @return `true` when on-demand historical data replay mode is supported.
      */
     bool isReplaySupported() const noexcept;
 
