@@ -115,6 +115,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
 
     /**
      * Returns DXEndpoint that is associated with this on-demand service.
+     *
      * @return DXEndpoint that is associated with this on-demand service.
      */
     std::shared_ptr<DXEndpoint> getEndpoint() const noexcept;
@@ -131,36 +132,39 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     bool isReplaySupported() const noexcept;
 
     /**
-     * Returns true when this on-demand historical data replay service is in replay mode.
-     * Replay mode is in effect after invocation of {@link #replay(Date, double) replay} method and
-     * before invocation {@link #stopAndResume() stopAndResume} or {@link #stopAndClear() stopAndClear} methods.
-     * @return true when this on-demand historical data replay service is in replay mode.
+     * Returns `true` when this on-demand historical data replay service is in replay mode.
+     * Replay mode is in effect after invocation of @ref OnDemandService::replay(std::int64_t, double) "replay" method and
+     * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::stopAndClear() "stopAndClear" methods.
+     *
+     * @return `true` when this on-demand historical data replay service is in replay mode.
      */
     bool isReplay() const noexcept;
 
     /**
-     * Returns true when this on-demand historical data replay service is in clear mode.
-     * Clear mode is in effect after invocation of {@link #stopAndClear()}  method and
-     * before invocation {@link #stopAndResume() stopAndResume} or {@link #replay(Date, double) replay} methods.
-     * @return true when this on-demand historical data replay service is in clear mode.
+     * Returns `true` when this on-demand historical data replay service is in clear mode.
+     * Clear mode is in effect after invocation of @ref OnDemandService::stopAndClear() "stopAndClear"  method and
+     * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::replay(std::int64_t, double) "replay" methods.
+     *
+     * @return `true` when this on-demand historical data replay service is in clear mode.
      */
     bool isClear() const noexcept;
 
     /**
      * Returns current or last on-demand historical data replay time.
-     * In {@link #isReplay() replay mode} this is the time that is being currently replayed,
+     * In @ref OnDemandService::isReplay() "replay mode" this is the time that is being currently replayed,
      * otherwise this is the last time that was replayed.
-     * If replay was never started, then result is {@code new Date(0)}.
-     * @return current or last on-demand historical data replay time.
+     * If replay was never started, then result is 0.
+     *
+     * @return current or last on-demand historical data replay time in millis.
      */
     std::int64_t getTime() const noexcept;
 
     /**
      * Returns on-demand historical data replay speed.
      * Speed is measured with respect to the real-time playback speed.
-     * The result of this method is zero when this service is not in {@link #isReplay() replay mode}.
-     * The speed is set when starting replay by {@link #replay(Date, double) replay(time, speed)} method
-     * and with {@link #setSpeed(double) setSpeed(speed)} method during replay.
+     * The result of this method is zero when this service is not in @ref OnDemandService::isReplay() "replay mode".
+     * The speed is set when starting replay by @ref OnDemandService::replay(std::int64_t, double) "replay(time, speed)" method
+     * and with @ref OnDemandService::setSpeed(double) "setSpeed(speed)" method during replay.
      *
      * @return on-demand historical data replay speed.
      */
@@ -170,80 +174,71 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * Turns on-demand historical data replay mode from a specified time with real-time speed.
      * This is a shortcut for:
      * <pre><tt>
-     *     {@link #replay(Date, double) replay}(time, 1);</tt></pre>
-     * This method can be used only when {@link #isReplaySupported()} method returns {@code true},
-     * that is when {@link DXEndpoint} is {@link DXEndpoint#connect(String) connected}
-     * to an address with "(ondemand:&lt;address&gt;)" component that specifies an on-demand historical
+     *     @ref OnDemandService::replay(Date, double) "replay"(time, 1);</tt></pre>
+     * This method can be used only when OnDemandService::isReplaySupported() method returns `true`,
+     * that is when DXEndpoint is @ref DXEndpoint::connect() "connected"
+     * to an address with "(ondemand:<address>)" component that specifies an on-demand historical
      * data provider address.
      *
-     * @param time time to start replay from.
-     * @throws IllegalStateException when {@link #isReplaySupported()} is {@code false}.
-     * @throws NullPointerException if time is null.
-     * @see #replay(Date, double)
-     * @see #isReplaySupported()
+     * @param time time (timestamp in millis) to start replay from.
      */
     void replay(std::int64_t time) const noexcept;
 
     /**
      * Turns on-demand historical data replay mode from a specified time and with a specified speed.
-     * This method can be used only when {@link #isReplaySupported()} method returns {@code true},
-     * that is when {@link DXEndpoint} is {@link DXEndpoint#connect(String) connected}
-     * to an address with "(ondemand:&lt;address&gt;)" component that specifies an on-demand historical
+     * This method can be used only when OnDemandService::isReplaySupported() method returns `true`,
+     * that is when DXEndpoint is @ref DXEndpoint::connect() "connected"
+     * to an address with "(ondemand:<address>)" component that specifies an on-demand historical
      * data provider address.
      *
      * <p>After invocation of this method:
      * <ul>
-     *     <li>{@link #isReplay()} returns {@code true}.
-     *     <li>{@link #isClear()} returns {@code false}.
-     *     <li>{@link #getTime()} returns time that is currently being replayed.
-     *     <li>{@link #getSpeed()} returns {@code speed}.
+     *     <li>OnDemandService::isReplay() returns `true`.
+     *     <li>OnDemandService::isClear() returns `false`.
+     *     <li>OnDemandService::getTime() returns time that is currently being replayed.
+     *     <li>OnDemandService::getSpeed() returns `speed`.
      * </ul>
      *
-     * @param time time to start replay from.
-     * @param speed speed to start replay with. Use 1 for real-time speed, &gt;1 for faster than real-time speed,
-     *              &lt;1 for slower than real-time speed, and 0 for pause.
-     * @throws IllegalStateException when {@link #isReplaySupported()} is {@code false}.
-     * @throws IllegalArgumentException if {@code speed < 0}.
-     * @throws NullPointerException when if is null.
-     * @see #isReplaySupported()
+     * @param time time (timestamp in millis) to start replay from.
+     * @param speed speed to start replay with. Use 1 for real-time speed, >1 for faster than real-time speed,
+     *              <1 for slower than real-time speed, and 0 for pause.
      */
     void replay(std::int64_t time, double speed) const noexcept;
 
     /**
      * Pauses on-demand historical data replay and keeps data snapshot.
-     * This method can only be called in {@link #isReplay() replay mode}.
+     * This method can only be called in @ref OnDemandService::isReplay() "replay mode".
      * This is a shortcut for:
      * <pre><tt>
-     *     {@link #setSpeed(double) setSpeed}(0);</tt></pre>
+     *     @ref OnDemandService::setSpeed(double) "setSpeed"(0);</tt></pre>
      * This method atomically captures current replay time and pauses at it.
      * After invocation of this method:
      * <ul>
-     *     <li>{@link #isReplay()} returns {@code true}.
-     *     <li>{@link #isClear()} returns {@code false}.
-     *     <li>{@link #getTime()} returns time where replay was paused at.
-     *     <li>{@link #getSpeed()} returns {@code 0}.
+     *     <li>OnDemandService::isReplay() returns `true`.
+     *     <li>OnDemandService::isClear() returns `false`.
+     *     <li>OnDemandService::getTime() returns time where replay was paused at.
+     *     <li>OnDemandService::getSpeed() returns `0`.
      * </ul>
-     * @throws IllegalStateException if on-demand service was not in {@link #isReplay() replay mode}.
      */
     void pause() const noexcept;
 
     /**
      * Stops on-demand historical data replay and resumes ordinary data feed.
-     * This method has no effect when invoked not in {@link #isReplay() replay mode}.
+     * This method has no effect when invoked not in @ref OnDemandService::isReplay() "replay mode".
      * After invocation of this method:
      * <ul>
-     *     <li>{@link #isReplay()} returns {@code false}.
-     *     <li>{@link #isClear()} returns {@code false}.
-     *     <li>{@link #getTime()} returns last replayed time.
-     *     <li>{@link #getSpeed()} returns {@code 0}.
+     *     <li>OnDemandService::isReplay() returns `false`.
+     *     <li>OnDemandService::isClear() returns `false`.
+     *     <li>OnDemandService::getTime() returns last replayed time.
+     *     <li>OnDemandService::getSpeed() returns `0`.
      * </ul>
      *
      * <p>To stop on-demand historical data replay without resuming ordinary data feed use
-     * either {@link #pause()} to keep data snapshot or {@link #stopAndClear()} to clear data.
+     * either OnDemandService::pause() to keep data snapshot or OnDemandService::stopAndClear() to clear data.
      *
      * <p>Note, that endpoints with a role of
-     * {@link Role#ON_DEMAND_FEED ON_DEMAND_FEED} do not have an ordinary feed (they are essentially on-demand only)
-     * and thus {@code stopAndResume} method works like {@link #stopAndClear() stopAndClear} for them.
+     * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" do not have an ordinary feed (they are essentially on-demand only)
+     * and thus `stopAndResume` method works like @ref OnDemandService::stopAndClear() "stopAndClear" for them.
      */
     void stopAndResume() const noexcept;
 
@@ -253,24 +248,23 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * for ordinary data feed. All incoming data updates are suspended and current data is cleared.
      * After invocation of this method:
      * <ul>
-     *     <li>{@link #isReplay()} returns {@code false}.
-     *     <li>{@link #isClear()} returns {@code true}.
-     *     <li>{@link #getTime()} returns last replayed time.
-     *     <li>{@link #getSpeed()} returns {@code 0}.
+     *     <li>OnDemandService::isReplay() returns `false`.
+     *     <li>OnDemandService::isClear() returns `true`.
+     *     <li>OnDemandService::getTime() returns last replayed time.
+     *     <li>OnDemandService::getSpeed() returns `0`.
      * </ul>
      *
-     * <p>Ordinary data feed can be resumed with {@link #stopAndResume()} method and on-demand historical data
-     * replay can be continued with {@link #replay(Date, double) replay(...)} method.
+     * <p>Ordinary data feed can be resumed with OnDemandService::stopAndResume() method and on-demand historical data
+     * replay can be continued with @ref OnDemandService::replay(std::int64_t, double) "replay(...)" method.
      */
     void stopAndClear() const noexcept;
 
     /**
-     * Changes on-demand historical data replay speed while continuing replay at current {@link #getTime()} time}.
+     * Changes on-demand historical data replay speed while continuing replay at current @ref OnDemandService::getTime() "time".
      * Speed is measured with respect to the real-time playback speed.
-     * This method can only be called with non-zero speed in {@link #isReplay() replay mode}.
+     * This method can only be called with non-zero speed in @ref OnDemandService::isReplay() "replay mode".
+     *
      * @param speed on-demand historical data replay speed.
-     * @throws IllegalStateException if on-demand service was not in {@link #isReplay() replay mode} and {@code speed != 0}.
-     * @throws IllegalArgumentException if {@code speed < 0}.
      */
     void setSpeed(double speed) const noexcept;
 };
