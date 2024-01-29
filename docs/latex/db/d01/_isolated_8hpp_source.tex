@@ -2,212 +2,242 @@
 \hypertarget{_isolated_8hpp_source}{}\label{_isolated_8hpp_source}\index{Isolated.hpp@{Isolated.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ dxfcpp::isolated\ \{}
-\DoxyCodeLine{00009\ \textcolor{keyword}{struct}\ String\ \{}
-\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ release(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *string)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00011\ \};}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{keyword}{struct}\ StringList\ \{}
-\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ release(\textcolor{comment}{/*\ dxfg\_string\_list*\ */}\ \textcolor{keywordtype}{void}\ *stringList)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00015\ \};}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../api/DXEndpoint.hpp"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../ipf/live/InstrumentProfileConnection.hpp"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{keyword}{struct}\ TimeFormat\ \{}
-\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDefault()\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *getGmt()\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *withTimeZone(\textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *timeFormat)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *withMillis(\textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *timeFormat)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parse(\textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *timeFormat,\ \textcolor{keyword}{const}\ std::string\ \&value)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ format(\textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *timeFormat,\ std::int64\_t\ value)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ dxfcpp::isolated\ \{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{struct}\ String\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ release(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *string)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{struct}\ StringList\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ release(\textcolor{comment}{/*\ dxfg\_string\_list*\ */}\ \textcolor{keywordtype}{void}\ *stringList)\ \textcolor{keyword}{noexcept};}
 \DoxyCodeLine{00024\ \};}
 \DoxyCodeLine{00025\ }
-\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ Tools\ \{}
-\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::string>\ \textcolor{comment}{/*\ dxfg\_string\_list*\ */}\ parseSymbols(\textcolor{keyword}{const}\ std::string\ \&symbolList)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00028\ \};}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \textcolor{keyword}{namespace}\ api\ \{}
-\DoxyCodeLine{00031\ \textcolor{keyword}{struct}\ DXEndpoint\ \{}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ close(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{static}\ dxfcpp::DXEndpoint::State\ getState(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ user(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle,\ \textcolor{keyword}{const}\ std::string\ \&user)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ password(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle,\ \textcolor{keyword}{const}\ std::string\ \&password)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ connect(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle,\ \textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ TimeFormat\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDefault()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *getGmt()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *withTimeZone(\textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *timeFormat)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *withMillis(\textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *timeFormat)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parse(\textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *timeFormat,\ \textcolor{keyword}{const}\ std::string\ \&value)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ format(\textcolor{comment}{/*\ dxfg\_time\_format\_t*\ */}\ \textcolor{keywordtype}{void}\ *timeFormat,\ std::int64\_t\ value)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00033\ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{struct}\ Tools\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::string>\ \textcolor{comment}{/*\ dxfg\_string\_list*\ */}\ parseSymbols(\textcolor{keyword}{const}\ std::string\ \&symbolList)\ \textcolor{keyword}{noexcept};}
 \DoxyCodeLine{00037\ \};}
-\DoxyCodeLine{00038\ \}\ \textcolor{comment}{//\ namespace\ api}}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \textcolor{keyword}{namespace}\ ipf\ \{}
-\DoxyCodeLine{00041\ \textcolor{keyword}{struct}\ InstrumentProfileReader\ \{}
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t*\ */}\ \textcolor{keywordtype}{void}\ *create()\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00043\ }
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t}
-\DoxyCodeLine{00045\ \ \ \ \ getLastModified(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileReaderHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00046\ }
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ wasComplete(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileReaderHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{namespace}\ api\ \{}
+\DoxyCodeLine{00040\ \textcolor{keyword}{struct}\ DXEndpoint\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ close(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1994f07a22c6}{State}}\ getState(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ user(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle,\ \textcolor{keyword}{const}\ std::string\ \&user)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ password(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle,\ \textcolor{keyword}{const}\ std::string\ \&password)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ connect(\textcolor{comment}{/*\ dxfg\_endpoint\_t*\ */}\ \textcolor{keywordtype}{void}\ *graalDXEndpointHandle,\ \textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ \}\ \textcolor{comment}{//\ namespace\ api}}
 \DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_list*\ */}\ \textcolor{keywordtype}{void}\ *}
-\DoxyCodeLine{00050\ \ \ \ \ readFromFile(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileReaderHandle,}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00049\ \textcolor{keyword}{namespace}\ ipf\ \{}
+\DoxyCodeLine{00050\ \textcolor{keyword}{struct}\ InstrumentProfileReader\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t*\ */}\ \textcolor{keywordtype}{void}\ *create()\ \textcolor{keyword}{noexcept};}
 \DoxyCodeLine{00052\ }
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_list*\ */}\ \textcolor{keywordtype}{void}\ *}
-\DoxyCodeLine{00054\ \ \ \ \ readFromFile(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileReaderHandle,}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&address,\ \textcolor{keyword}{const}\ std::string\ \&user,\ \textcolor{keyword}{const}\ std::string\ \&password)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ resolveSourceURL(\textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00058\ \};}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \textcolor{keyword}{struct}\ InstrumentProfileCollector\ \{}
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *create()\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getLastUpdateTime(\textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ updateInstrumentProfile(}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle,}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *ip)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ addUpdateListener(\textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle,}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_update\_listener\_t*\ */}\ \textcolor{keywordtype}{void}\ *listener)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ removeUpdateListener(\textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle,}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_update\_listener\_t*\ */}\ \textcolor{keywordtype}{void}\ *listener)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00070\ \};}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \textcolor{keyword}{struct}\ InstrumentProfileConnection\ \{}
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_ipf\_connection\_t*\ */}\ \textcolor{keywordtype}{void}\ *}
-\DoxyCodeLine{00074\ \ \ \ \ createConnection(\textcolor{keyword}{const}\ std::string\ \&address,}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ getAddress(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getUpdatePeriod(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ setUpdatePeriod(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle,}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ updatePeriod)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{static}\ dxfcpp::InstrumentProfileConnection::State}
-\DoxyCodeLine{00081\ \ \ \ \ getState(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getLastModified(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ start(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ close(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ addStateChangeListener(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle,}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_connection\_state\_change\_listener\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *listener)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ waitUntilCompleted(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle,}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ timeoutInMs)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00089\ \};}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \textcolor{keyword}{struct}\ IpfPropertyChangeListener\ \{}
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_ipf\_connection\_state\_change\_listener\_t*\ */}\ \textcolor{keywordtype}{void}\ *}
-\DoxyCodeLine{00093\ \ \ \ \ create(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_state\_change\_listener\_func\ */}\ \textcolor{keywordtype}{void}\ *userFunc,\ \textcolor{keywordtype}{void}\ *userData)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00094\ \};}
-\DoxyCodeLine{00095\ }
-\DoxyCodeLine{00096\ \textcolor{keyword}{struct}\ InstrumentProfile\ \{}
-\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ release(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *ip)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00098\ \};}
-\DoxyCodeLine{00099\ }
-\DoxyCodeLine{00100\ \textcolor{keyword}{struct}\ InstrumentProfileList\ \{}
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ release(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_list\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileList)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00102\ \};}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \textcolor{keyword}{struct}\ InstrumentProfileIterator\ \{}
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ hasNext(\textcolor{comment}{/*\ dxfg\_iterable\_ip\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *iterable)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *next(\textcolor{comment}{/*\ dxfg\_iterable\_ip\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *iterable)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00107\ \};}
-\DoxyCodeLine{00108\ }
-\DoxyCodeLine{00109\ \textcolor{keyword}{struct}\ InstrumentProfileUpdateListener\ \{}
-\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_ipf\_update\_listener\_t*\ */}\ \textcolor{keywordtype}{void}\ *create(\textcolor{comment}{/*\ dxfg\_ipf\_update\_listener\_function\ */}\ \textcolor{keywordtype}{void}\ *userFunc,}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ *userData)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00112\ \};}
-\DoxyCodeLine{00113\ }
-\DoxyCodeLine{00114\ \}\ \textcolor{comment}{//\ namespace\ ipf}}
-\DoxyCodeLine{00115\ }
-\DoxyCodeLine{00116\ \textcolor{keyword}{namespace}\ schedule\ \{}
-\DoxyCodeLine{00117\ \textcolor{keyword}{struct}\ DayFilter\ \{}
-\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(std::uint32\_t\ code)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00119\ \};}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \textcolor{keyword}{struct}\ Day\ \{}
-\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *getSchedule(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getDayId(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getYearMonthDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getYear(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getMonthOfYear(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getDayOfMonth(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getDayOfWeek(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isHoliday(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isShortDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isTrading(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getStartTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getEndTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ containsTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getResetTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getSessionByTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getFirstSession(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getLastSession(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findFirstSession(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findLastSession(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getPrevDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getNextDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *findPrevDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *findNextDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keyword}{static}\ std::size\_t\ getHashCode(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ equals(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *otherDay)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ toString(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00156\ \};}
-\DoxyCodeLine{00157\ }
-\DoxyCodeLine{00158\ \textcolor{keyword}{struct}\ SessionFilter\ \{}
-\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(std::uint32\_t\ code)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00160\ \};}
-\DoxyCodeLine{00161\ }
-\DoxyCodeLine{00162\ \textcolor{keyword}{struct}\ Session\ \{}
-\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDay(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getType(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isTrading(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isEmpty(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getStartTime(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getEndTime(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ containsTime(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getPrevSession(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getNextSession(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findPrevSession(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findNextSession(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keyword}{static}\ std::size\_t\ getHashCode(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ equals(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *otherSession)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ toString(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00181\ \};}
-\DoxyCodeLine{00182\ }
-\DoxyCodeLine{00183\ \textcolor{keyword}{struct}\ Schedule\ \{}
-\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfile)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(\textcolor{keyword}{const}\ std::string\ \&scheduleDefinition)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfile,}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&venue)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keyword}{static}\ std::vector<std::string>\ getTradingVenues(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfile)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ downloadDefaults(\textcolor{keyword}{const}\ std::string\ \&downloadConfig)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ setDefaults(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{char}>\ \&data)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getSessionByTime(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDayByTime(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDayById(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,\ std::int32\_t\ dayId)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDayByYearMonthDay(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int32\_t\ yearMonthDay)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getNearestSessionByTime(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,\ std::int64\_t\ time,}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findNearestSessionByTime(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ time,}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ getName(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ getTimeZoneDisplayName(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ getTimeZoneId(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00205\ \};}
-\DoxyCodeLine{00206\ \}\ \textcolor{comment}{//\ namespace\ schedule}}
-\DoxyCodeLine{00207\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp::isolated}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t}
+\DoxyCodeLine{00054\ \ \ \ \ getLastModified(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileReaderHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ wasComplete(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileReaderHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_list*\ */}\ \textcolor{keywordtype}{void}\ *}
+\DoxyCodeLine{00059\ \ \ \ \ readFromFile(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileReaderHandle,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_list*\ */}\ \textcolor{keywordtype}{void}\ *}
+\DoxyCodeLine{00063\ \ \ \ \ readFromFile(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_reader\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileReaderHandle,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&address,\ \textcolor{keyword}{const}\ std::string\ \&user,\ \textcolor{keyword}{const}\ std::string\ \&password)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ resolveSourceURL(\textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00067\ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{struct}\ InstrumentProfileCollector\ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *create()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getLastUpdateTime(\textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ updateInstrumentProfile(}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *ip)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_iterable\_ip\_t*\ */}\ \textcolor{keywordtype}{void}\ *}
+\DoxyCodeLine{00076\ \ \ \ \ view(\textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ addUpdateListener(\textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_update\_listener\_t*\ */}\ \textcolor{keywordtype}{void}\ *listener)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ removeUpdateListener(\textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle,}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_update\_listener\_t*\ */}\ \textcolor{keywordtype}{void}\ *listener)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00081\ \};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{keyword}{struct}\ InstrumentProfileConnection\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_ipf\_connection\_t*\ */}\ \textcolor{keywordtype}{void}\ *}
+\DoxyCodeLine{00085\ \ \ \ \ createConnection(\textcolor{keyword}{const}\ std::string\ \&address,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_collector\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileCollectorHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ getAddress(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getUpdatePeriod(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ setUpdatePeriod(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ updatePeriod)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{static}\ dxfcpp::InstrumentProfileConnection::\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}}
+\DoxyCodeLine{00092\ \ \ \ \ getState(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getLastModified(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ start(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ close(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ addStateChangeListener(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle,}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_ipf\_connection\_state\_change\_listener\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *listener)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ waitUntilCompleted(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfileConnectionHandle,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ timeoutInMs)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00100\ \};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{keyword}{struct}\ IpfPropertyChangeListener\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_ipf\_connection\_state\_change\_listener\_t*\ */}\ \textcolor{keywordtype}{void}\ *}
+\DoxyCodeLine{00104\ \ \ \ \ create(\textcolor{comment}{/*\ dxfg\_ipf\_connection\_state\_change\_listener\_func\ */}\ \textcolor{keywordtype}{void}\ *userFunc,\ \textcolor{keywordtype}{void}\ *userData)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00105\ \};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{keyword}{struct}\ InstrumentProfile\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ release(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *ip)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00109\ \};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{keyword}{struct}\ InstrumentProfileList\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ release(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_list\ *\ */}\ \textcolor{keywordtype}{void}\ *graalInstrumentProfileList)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00113\ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{keyword}{struct}\ InstrumentProfileIterator\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ hasNext(\textcolor{comment}{/*\ dxfg\_iterable\_ip\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *iterable)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *next(\textcolor{comment}{/*\ dxfg\_iterable\_ip\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *iterable)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00118\ \};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{keyword}{struct}\ InstrumentProfileUpdateListener\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_ipf\_update\_listener\_t*\ */}\ \textcolor{keywordtype}{void}\ *create(\textcolor{comment}{/*\ dxfg\_ipf\_update\_listener\_function\ */}\ \textcolor{keywordtype}{void}\ *userFunc,}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ *userData)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00123\ \};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \}\ \textcolor{comment}{//\ namespace\ ipf}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \textcolor{keyword}{namespace}\ ondemand\ \{}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{keyword}{struct}\ OnDemandService\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(\textcolor{comment}{/*\ dxfg\_endpoint\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *endpoint)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isReplaySupported(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isReplay(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isClear(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getTime(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ getSpeed(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ replay(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ replay(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service,\ std::int64\_t\ time,\ \textcolor{keywordtype}{double}\ speed)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ pause(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ stopAndResume(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ stopAndClear(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ setSpeed(\textcolor{comment}{/*\ dxfg\_on\_demand\_service\_t\ *\ */}\ \textcolor{keywordtype}{void}\ *service,\ \textcolor{keywordtype}{double}\ speed)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00142\ \};}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \}\ \textcolor{comment}{//\ namespace\ ondemand}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{keyword}{namespace}\ schedule\ \{}
+\DoxyCodeLine{00147\ \textcolor{keyword}{struct}\ DayFilter\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(std::uint32\_t\ code)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00149\ \};}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \textcolor{keyword}{struct}\ Day\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *getSchedule(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getDayId(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getYearMonthDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getYear(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getMonthOfYear(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getDayOfMonth(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getDayOfWeek(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isHoliday(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isShortDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isTrading(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getStartTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getEndTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ containsTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getResetTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getSessionByTime(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getFirstSession(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getLastSession(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findFirstSession(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findLastSession(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getPrevDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getNextDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *findPrevDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *findNextDay(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_day\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keyword}{static}\ std::size\_t\ getHashCode(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ equals(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day,\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *otherDay)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ toString(\textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *day)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00186\ \};}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \textcolor{keyword}{struct}\ SessionFilter\ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(std::uint32\_t\ code)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00190\ \};}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \textcolor{keyword}{struct}\ Session\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDay(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keyword}{static}\ std::int32\_t\ getType(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isTrading(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isEmpty(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getStartTime(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ getEndTime(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ containsTime(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getPrevSession(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getNextSession(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findPrevSession(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findNextSession(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keyword}{static}\ std::size\_t\ getHashCode(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ equals(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session,\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *otherSession)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ toString(\textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *session)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00211\ \};}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \textcolor{keyword}{struct}\ Schedule\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfile)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(\textcolor{keyword}{const}\ std::string\ \&scheduleDefinition)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *getInstance(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfile,}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&venue)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keyword}{static}\ std::vector<std::string>\ getTradingVenues(\textcolor{comment}{/*\ dxfg\_instrument\_profile\_t*\ */}\ \textcolor{keywordtype}{void}\ *instrumentProfile)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ downloadDefaults(\textcolor{keyword}{const}\ std::string\ \&downloadConfig)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ setDefaults(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{char}>\ \&data)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getSessionByTime(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDayByTime(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,\ std::int64\_t\ time)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDayById(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,\ std::int32\_t\ dayId)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_day\_t*\ */}\ \textcolor{keywordtype}{void}\ *getDayByYearMonthDay(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int32\_t\ yearMonthDay)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *getNearestSessionByTime(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,\ std::int64\_t\ time,}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{comment}{/*\ dxfg\_session\_t*\ */}\ \textcolor{keywordtype}{void}\ *findNearestSessionByTime(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule,}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ time,}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ dxfg\_session\_filter\_t*\ */}\ \textcolor{keywordtype}{void}\ *filter)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ getName(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ getTimeZoneDisplayName(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ getTimeZoneId(\textcolor{comment}{/*\ dxfg\_schedule\_t*\ */}\ \textcolor{keywordtype}{void}\ *schedule)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00235\ \};}
+\DoxyCodeLine{00236\ \}\ \textcolor{comment}{//\ namespace\ schedule}}
+\DoxyCodeLine{00237\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp::isolated}}
 
 \end{DoxyCode}

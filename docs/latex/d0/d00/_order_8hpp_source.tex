@@ -2,7 +2,7 @@
 \hypertarget{_order_8hpp_source}{}\label{_order_8hpp_source}\index{Order.hpp@{Order.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -13,924 +13,940 @@
 \DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
-\DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_order_base_8hpp}{"{}OrderBase.hpp"{}}}}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Order\ event\ is\ a\ snapshot\ for\ a\ full\ available\ market\ depth\ for\ a\ symbol.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ The\ collection\ of\ order\ events\ of\ a\ symbol\ represents\ the\ most\ recent\ information}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ that\ is\ available\ about\ orders\ on\ the\ market\ at\ any\ given\ moment\ of\ time.}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ Order\ events\ give\ information\ on\ several\ levels\ of\ details,\ called\ scopes\ -\/\ see\ Scope.}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Scope\ of\ an\ order\ is\ available\ via\ @ref\ Order::getScope\ "{}scope"{}\ property.}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ <p>\ Order\ events\ arrive\ from}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ multiple\ sources\ for\ the\ same\ market\ symbol\ and\ are\ distinguished\ by\ their\ @ref\ Order::getIndex\ "{}index"{}.\ Index\ is\ a}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ unique\ per\ symbol\ identifier\ of\ the\ event.}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ It\ is\ unique\ across\ all\ the\ sources\ of\ depth\ information\ for\ the\ symbol.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ The\ event\ with\ @ref\ Order::getSize()\ "{}size"{}\ either\ \`{}0`\ or\ \`{}NaN`\ is\ a\ signal\ to\ remove\ previously\ received\ order\ for}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ the\ corresponding\ index.\ The\ method\ Order::hasSize()\ is\ a\ convenient\ method\ to\ test\ for\ size\ presence.}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ <p>\ Events\ from\ finer-\/grained\ Scope\ of\ detail\ give\ more\ information\ and\ include\ events}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ from\ coarse-\/grained\ Scope\ of\ detail.\ For\ a\ consistent\ representation\ of\ the\ market\ depth}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ to\ the\ end-\/user,\ order\ events\ must\ be\ filtered\ to\ remove\ coarse-\/grained\ events\ that}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ are\ superseded\ by\ the\ finer-\/grained\ events.}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ Some\ order\ event\ sources\ provide\ a\ consistent\ view\ of\ the\ price-\/level\ or\ detailed\ order\ book.\ Their\ updates}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ may\ incorporate\ multiple\ changes\ to\ price\ levels\ or\ to\ individual\ orders\ that\ have\ to\ be\ processed\ at\ the\ same\ time.}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ Order::getEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ <p>\ See\ \`{}Event\ Flags`\ section\ of\ OrderBase\ class\ documentation\ for\ details.}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ <p>\ The\ composite\ quotes\ with\ Scope::COMPOSITE\ and\ regional\ quotes\ with\ Scope::REGIONAL\ come}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ individually\ from\ different\ venues\ and\ are\ not\ related\ to\ each\ other\ in\ any\ transactional\ way.\ The\ result\ of}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ Order::getEventFlags\ method\ for\ them\ is\ always\ zero.}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ <h3>Publishing\ order\ books</h3>}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ When\ publishing\ an\ order\ event\ with\ DXPublisher::publishEvents()\ method,\ least\ significant\ 32\ bits\ of}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ order\ @ref\ Order::getIndex()\ "{}index"{}\ must\ be\ in\ a\ range\ of\ from\ 0\ to\ \`{}std::numeric\_limits<std::int32\_t>::max()`}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ inclusive.\ Use\ Order::setSource()\ method\ after\ Order::setIndex()\ to\ properly\ include\ source\ identifier\ into\ the}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ index.}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ A\ snapshot\ has\ to\ be\ published\ in\ the\ <em>descending</em>\ order\ of\ @ref\ Order::getIndex()\ "{}index"{},\ starting\ with}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ an\ event\ with\ the\ largest\ index\ and\ marking\ it\ with\ EventFlag::SNAPSHOT\_BEGIN\ bit\ in\ @ref\ Order::getEventFlags()}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ "{}eventFlags"{},\ and\ finishing\ the\ snapshot\ with\ an\ event\ that\ has\ zero\ 32\ least\ significant\ bits\ of\ index.}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ EventFlag::SNAPSHOT\_END\ bit\ in\ @ref\ Order::getEventFlags()\ "{}eventFlags"{}\ is\ optional\ during\ publishing.}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ It\ will\ be\ properly\ set\ on\ receiving\ end\ anyway.}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ <h3>Limitations</h3>}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ This\ event\ type\ cannot\ be\ used\ with\ DXFeed::getLastEvent()\ method.}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ <h3><a\ name="{}fobSection"{}>Full\ Order\ Book\ Support</a></h3>}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ *\ Some\ feeds\ provide\ support\ for\ "{}Full\ Order\ Book"{}\ (FOB)\ where\ additional\ fields\ will\ be\ available:}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ *\ <ul>}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ *\ <li>@ref\ Order::getAction()\ "{}action"{}\ -\/\ event\ business\ meaning\ (see\ OrderAction\ for\ more\ details)</li>}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ *\ <li>@ref\ Order::getActionTime()\ "{}actionTime"{}\ -\/\ time\ of\ the\ last\ action</li>}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ ID\ of\ this\ order</li>}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ additional\ ID\ for\ this\ order</li>}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ trade\ (order\ execution)\ ID</li>}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ <li>@ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/\ price\ of\ the\ trade</li>}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ -\/\ size\ of\ the\ trade</li>}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ </ul>}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ record\ \`{}Quote`\ for\ composite\ quotes\ with\ Scope::COMPOSITE,}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ record\ \`{}Quote\&X`\ for\ regional\ exchange\ best\ quotes\ with\ Scope::REGIONAL,}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ *\ record\ \`{}MarketMaker`\ for\ market-\/maker\ quotes\ and\ futures\ price\ level\ aggregates\ with\ Scope::AGGREGATE,}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ *\ record\ \`{}Order`\ for\ the\ most\ fine-\/grained\ Scope::ORDER\ with\ zero\ source\ id,}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ *\ and\ records\ \`{}Order\#<source-\/id>`\ for\ specific\ source\ ids,}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ *\ where\ \`{}<source-\/id>`\ is\ up\ to\ 4\ ASCII\ characters\ with\ a\ mnemonic\ for\ the\ source\ like\ "{}NTV"{}.}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00092\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\ \{}
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00094\ }
-\DoxyCodeLine{00095\ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{struct}\ OrderData\ \{}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ std::string\ marketMaker\{\};}
-\DoxyCodeLine{00098\ \ \ \ \ \};}
-\DoxyCodeLine{00099\ }
-\DoxyCodeLine{00100\ \ \ \ \ OrderData\ orderData\_\{\};}
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00105\ }
-\DoxyCodeLine{00106\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00108\ }
-\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_order_aff2c9d717969967a1ccf4fbb70813c4f}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_order_aff2c9d717969967a1ccf4fbb70813c4f}{override}};}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_order_a362238c83fc87eb026e13f6441d19a25}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00124\ }
-\DoxyCodeLine{00125\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Order\ object}}
-\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>;}
-\DoxyCodeLine{00128\ }
-\DoxyCodeLine{00129\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Order\ object}}
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classdxfcpp_1_1_order}{Unique}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_order}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_order}{unique\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>;}
-\DoxyCodeLine{00131\ }
-\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
-\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_adf74ebb2958a1382183eb0b43728a53a}{TYPE}};}
-\DoxyCodeLine{00134\ }
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ order\ event\ with\ default\ values.}}
-\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_a6588db9aab3b926b94cda473e3c196dc}{Order}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00137\ }
-\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ order\ event\ with\ the\ specified\ event\ symbol.}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{Order}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{OrderBase}}(\mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{move}}(\mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{eventSymbol}}))\ \{}
-\DoxyCodeLine{00144\ \ \ \ \ \}}
-\DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ order.}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a2887e4a834a70a6087b0f17bab8119d5}{withEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
-\DoxyCodeLine{00154\ }
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00156\ \ \ \ \ \}}
-\DoxyCodeLine{00157\ }
-\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a1849f2ca31e6349c4fbd98ddb4764f5f}{withEventSymbolShared}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
-\DoxyCodeLine{00169\ }
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00171\ \ \ \ \ \}}
-\DoxyCodeLine{00172\ }
-\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ order.}}
-\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
-\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00180\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a34fc1146dec2f86c512c8478972c4db7}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
-\DoxyCodeLine{00182\ }
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00184\ \ \ \ \ \}}
-\DoxyCodeLine{00185\ }
-\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00196\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a216107e58a65282aec886c8959e0b399}{withEventTimeShared}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
-\DoxyCodeLine{00198\ }
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00200\ \ \ \ \ \}}
-\DoxyCodeLine{00201\ }
-\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ the\ current\ order.}}
-\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
-\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ source\ of\ this\ event.}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00209\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a38f12f739fc7dd4226674f85b8aad603}{withSource}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{setSource}}(source);}
-\DoxyCodeLine{00211\ }
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00213\ \ \ \ \ \}}
-\DoxyCodeLine{00214\ }
-\DoxyCodeLine{00215\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
-\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ source\ of\ this\ event.}}
-\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00225\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_acc32eafdd0ec25913ce058181f87913f}{withSourceShared}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{setSource}}(source);}
-\DoxyCodeLine{00227\ }
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00229\ \ \ \ \ \}}
-\DoxyCodeLine{00230\ }
-\DoxyCodeLine{00231\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ order.}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
-\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00238\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_add681d381d436be2dedef9271da6a2c6}{withEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
-\DoxyCodeLine{00240\ }
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00242\ \ \ \ \ \}}
-\DoxyCodeLine{00243\ }
-\DoxyCodeLine{00244\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
-\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00254\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a8d32cc9f40d71b052a5ffdb9daeff771}{withEventFlagsShared}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
-\DoxyCodeLine{00256\ }
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00258\ \ \ \ \ \}}
-\DoxyCodeLine{00259\ }
-\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ order.}}
-\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
-\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00267\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a9d167b678843600e1eb0ecef1b4de8e4}{withEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
-\DoxyCodeLine{00269\ }
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00271\ \ \ \ \ \}}
-\DoxyCodeLine{00272\ }
-\DoxyCodeLine{00273\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
-\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00283\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a6886b9a3a1ff88386f2ab3e5ce024630}{withEventFlagsShared}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
-\DoxyCodeLine{00285\ }
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00287\ \ \ \ \ \}}
-\DoxyCodeLine{00288\ }
-\DoxyCodeLine{00289\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ order\ and\ returns\ it.\ Note,\ that\ this\ method\ also\ changes}}
-\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
-\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
-\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ order.}}
-\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00297\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a72cad9f98d5215097f4729c0708479ef}{withIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{setIndex}}(index);}
-\DoxyCodeLine{00299\ }
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00301\ \ \ \ \ \}}
-\DoxyCodeLine{00302\ }
-\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ order\ and\ returns\ a\ shared\ pointer\ to\ it.\ Note,\ that\ this\ method\ also}}
-\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ *\ changes}}
-\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
-\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
-\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ order.}}
-\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00315\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a16a898275f2c48f95a6a99e8c810a914}{withIndexShared}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{setIndex}}(index);}
-\DoxyCodeLine{00317\ }
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00319\ \ \ \ \ \}}
-\DoxyCodeLine{00320\ }
-\DoxyCodeLine{00321\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ order\ and\ returns\ it.}}
-\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ order.}}
-\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00328\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_acc55c04ca2740db2e6189b9f800eac60}{withTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{setTime}}(time);}
-\DoxyCodeLine{00330\ }
-\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00332\ \ \ \ \ \}}
-\DoxyCodeLine{00333\ }
-\DoxyCodeLine{00334\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ order\ and\ returns\ a\ shared\ pointer\ to\ it.}}
-\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ order.}}
-\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00344\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_acfc206d46e32006a1b498d9117d79636}{withTimeShared}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{setTime}}(time);}
-\DoxyCodeLine{00346\ }
-\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00348\ \ \ \ \ \}}
-\DoxyCodeLine{00349\ }
-\DoxyCodeLine{00350\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ order.}}
-\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ order.}}
-\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00357\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ad48e252735199b90ed2ebc5ecb49bda5}{withTimeNanoPart}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{setTimeNanoPart}}(timeNanoPart);}
-\DoxyCodeLine{00359\ }
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00361\ \ \ \ \ \}}
-\DoxyCodeLine{00362\ }
-\DoxyCodeLine{00363\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00364\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ order.}}
-\DoxyCodeLine{00365\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00366\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ order.}}
-\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00373\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a38b740402f6f09a34fefd583937683a2}{withTimeNanoPartShared}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{setTimeNanoPart}}(timeNanoPart);}
-\DoxyCodeLine{00375\ }
-\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00377\ \ \ \ \ \}}
-\DoxyCodeLine{00378\ }
-\DoxyCodeLine{00379\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00380\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ order.}}
-\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
-\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
-\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00387\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a46f5a0a2af26b254931517cc032c6a02}{withSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{setSequence}}(sequence);}
-\DoxyCodeLine{00389\ }
-\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00391\ \ \ \ \ \}}
-\DoxyCodeLine{00392\ }
-\DoxyCodeLine{00393\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ order.}}
-\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
-\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
-\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00404\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a20fb15b4f9c2feb224fc42ba9cfb53bb}{withSequenceShared}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{setSequence}}(sequence);}
-\DoxyCodeLine{00406\ }
-\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00408\ \ \ \ \ \}}
-\DoxyCodeLine{00409\ }
-\DoxyCodeLine{00410\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ order\ and\ returns\ it.}}
-\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ The\ time\ of\ this\ order\ in\ nanoseconds.}}
-\DoxyCodeLine{00415\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00417\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a55cd8ed27d1dbd62fbb3cd726d24b9ed}{withTimeNanos}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{setTimeNanos}}(timeNanos);}
-\DoxyCodeLine{00419\ }
-\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00421\ \ \ \ \ \}}
-\DoxyCodeLine{00422\ }
-\DoxyCodeLine{00423\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00424\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ order.}}
-\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00429\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00430\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00431\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ time\ of\ this\ order\ in\ nanoseconds.}}
-\DoxyCodeLine{00432\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00433\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00434\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_adf05fdb01af70d25bd68843c71831948}{withTimeNanosShared}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{setTimeNanos}}(timeNanos);}
-\DoxyCodeLine{00436\ }
-\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00438\ \ \ \ \ \}}
-\DoxyCodeLine{00439\ }
-\DoxyCodeLine{00440\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ order\ and\ returns\ it.}}
-\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ side\ of\ this\ order.}}
-\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00446\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a409bddd21123a2d22c14784686185bee}{withAction}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{setAction}}(action);}
-\DoxyCodeLine{00448\ }
-\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00450\ \ \ \ \ \}}
-\DoxyCodeLine{00451\ }
-\DoxyCodeLine{00452\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00453\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ order.}}
-\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00459\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ action\ of\ this\ order.}}
-\DoxyCodeLine{00460\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00461\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00462\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_af5a5ba6a1fdfc8c66a7a75767a31f2a2}{withActionShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{setAction}}(action);}
-\DoxyCodeLine{00464\ }
-\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00466\ \ \ \ \ \}}
-\DoxyCodeLine{00467\ }
-\DoxyCodeLine{00468\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00469\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ current\ order.}}
-\DoxyCodeLine{00470\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ order\ action\ time.}}
-\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00473\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00474\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a95f72e96e87a2ed0ea8381d84d427a33}{withActionTime}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{setActionTime}}(actionTime);}
-\DoxyCodeLine{00476\ }
-\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00478\ \ \ \ \ \}}
-\DoxyCodeLine{00479\ }
-\DoxyCodeLine{00480\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00481\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00482\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00483\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00484\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00485\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00486\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ order\ action\ time.}}
-\DoxyCodeLine{00487\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00488\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00489\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a215ae8b0ae3fa64ff0bfc35c1f36d78f}{withActionTimeShared}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{setActionTime}}(actionTime);}
-\DoxyCodeLine{00491\ }
-\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00493\ \ \ \ \ \}}
-\DoxyCodeLine{00494\ }
-\DoxyCodeLine{00495\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00496\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ order\ ID.}}
-\DoxyCodeLine{00497\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00498\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00499\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ The\ order\ ID.}}
-\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00501\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00502\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ad1d108ca37beceee348ca28610f32e30}{withOrderId}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{setOrderId}}(orderId);}
-\DoxyCodeLine{00504\ }
-\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00506\ \ \ \ \ \}}
-\DoxyCodeLine{00507\ }
-\DoxyCodeLine{00508\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00509\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ order\ ID.}}
-\DoxyCodeLine{00510\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00511\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00512\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00513\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00514\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00515\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ order\ ID.}}
-\DoxyCodeLine{00516\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00517\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00518\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a09f7642abc4270a6505e34820a582ad9}{withOrderIdShared}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{setOrderId}}(orderId);}
-\DoxyCodeLine{00520\ }
-\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00522\ \ \ \ \ \}}
-\DoxyCodeLine{00523\ }
-\DoxyCodeLine{00524\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00525\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ order\ ID.}}
-\DoxyCodeLine{00526\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00527\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ order\ ID.}}
-\DoxyCodeLine{00529\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00530\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00531\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_aafc941ad63d3ec802c20e44606beaf58}{withAuxOrderId}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{setAuxOrderId}}(auxOrderId);}
-\DoxyCodeLine{00533\ }
-\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00535\ \ \ \ \ \}}
-\DoxyCodeLine{00536\ }
-\DoxyCodeLine{00537\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00538\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ order\ ID.}}
-\DoxyCodeLine{00539\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00540\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00541\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00542\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00543\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00544\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ order\ ID.}}
-\DoxyCodeLine{00545\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00546\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00547\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_aba9d14eca5d78995436770004acb496d}{withAuxOrderIdShared}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{setAuxOrderId}}(auxOrderId);}
-\DoxyCodeLine{00549\ }
-\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00551\ \ \ \ \ \}}
-\DoxyCodeLine{00552\ }
-\DoxyCodeLine{00553\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00554\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ order.}}
-\DoxyCodeLine{00555\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00556\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00557\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ order.}}
-\DoxyCodeLine{00558\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00559\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00560\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_aba7c8a7d5069c625fdb6950be75d4c8d}{withPrice}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{setPrice}}(price);}
-\DoxyCodeLine{00562\ }
-\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00564\ \ \ \ \ \}}
-\DoxyCodeLine{00565\ }
-\DoxyCodeLine{00566\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00567\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ order.}}
-\DoxyCodeLine{00568\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00569\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00570\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00571\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00572\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00573\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ order.}}
-\DoxyCodeLine{00574\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00575\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00576\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a9557b326b71dbeb5818bb033958eecee}{withPriceShared}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{setPrice}}(price);}
-\DoxyCodeLine{00578\ }
-\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00580\ \ \ \ \ \}}
-\DoxyCodeLine{00581\ }
-\DoxyCodeLine{00582\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00583\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ order.}}
-\DoxyCodeLine{00584\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00585\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00586\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ order.}}
-\DoxyCodeLine{00587\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00588\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00589\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a7da1f50ca1405b6af9aa6a4912d17f82}{withSize}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{setSize}}(size);}
-\DoxyCodeLine{00591\ }
-\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00593\ \ \ \ \ \}}
-\DoxyCodeLine{00594\ }
-\DoxyCodeLine{00595\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00596\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ order.}}
-\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00599\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00600\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00601\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00602\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ order.}}
-\DoxyCodeLine{00603\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00604\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00605\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_aeed46d7128a3ac38268ef3db66ac8c1c}{withSizeShared}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{setSize}}(size);}
-\DoxyCodeLine{00607\ }
-\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00609\ \ \ \ \ \}}
-\DoxyCodeLine{00610\ }
-\DoxyCodeLine{00611\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00612\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ order.}}
-\DoxyCodeLine{00613\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00614\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00615\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ order.}}
-\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00617\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00618\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a7e7d8b3dc51c50b18c752d892dc097e5}{withExecutedSize}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{setExecutedSize}}(executedSize);}
-\DoxyCodeLine{00620\ }
-\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00622\ \ \ \ \ \}}
-\DoxyCodeLine{00623\ }
-\DoxyCodeLine{00624\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00625\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ order.}}
-\DoxyCodeLine{00626\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00627\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00628\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00629\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00630\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00631\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ order.}}
-\DoxyCodeLine{00632\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00633\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00634\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_af809f858dc6a58bd0573e94a9de2d7f6}{withExecutedSizeShared}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{setExecutedSize}}(executedSize);}
-\DoxyCodeLine{00636\ }
-\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00638\ \ \ \ \ \}}
-\DoxyCodeLine{00639\ }
-\DoxyCodeLine{00640\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00641\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
-\DoxyCodeLine{00642\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00643\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00644\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
-\DoxyCodeLine{00645\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00646\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00647\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ab19f0b05eebb35b51a12608a3af57223}{withCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{setCount}}(count);}
-\DoxyCodeLine{00649\ }
-\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00651\ \ \ \ \ \}}
-\DoxyCodeLine{00652\ }
-\DoxyCodeLine{00653\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00654\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
-\DoxyCodeLine{00655\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00656\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00657\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00658\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00659\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00660\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
-\DoxyCodeLine{00661\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00662\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00663\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a052d2ee15b771cd65d11371294c32c91}{withCountShared}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{setCount}}(count);}
-\DoxyCodeLine{00665\ }
-\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00667\ \ \ \ \ \}}
-\DoxyCodeLine{00668\ }
-\DoxyCodeLine{00669\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00670\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
-\DoxyCodeLine{00671\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00672\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00673\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
-\DoxyCodeLine{00674\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00675\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00676\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a375d8ae6ef9a3539fd5f4b884ce3b4c7}{withTradeId}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{setTradeId}}(tradeId);}
-\DoxyCodeLine{00678\ }
-\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00680\ \ \ \ \ \}}
-\DoxyCodeLine{00681\ }
-\DoxyCodeLine{00682\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00683\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
-\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00687\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00688\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00689\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
-\DoxyCodeLine{00690\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00691\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00692\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a1f85087d1e1dd214308b7f6ac31fc3c9}{withTradeShared}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00693\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{setTradeId}}(tradeId);}
-\DoxyCodeLine{00694\ }
-\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00696\ \ \ \ \ \}}
-\DoxyCodeLine{00697\ }
-\DoxyCodeLine{00698\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00699\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
-\DoxyCodeLine{00700\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00701\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00702\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
-\DoxyCodeLine{00703\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00704\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00705\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ac0f695d982844d74cffd316054fbef67}{withTradePrice}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{setTradePrice}}(tradePrice);}
-\DoxyCodeLine{00707\ }
-\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00709\ \ \ \ \ \}}
-\DoxyCodeLine{00710\ }
-\DoxyCodeLine{00711\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00712\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
-\DoxyCodeLine{00713\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00714\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00715\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00716\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00717\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00718\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
-\DoxyCodeLine{00719\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00720\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00721\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a64e841a57e96fbd9f646f57c9b37515d}{withTradePriceShared}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{setTradePrice}}(tradePrice);}
-\DoxyCodeLine{00723\ }
-\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00725\ \ \ \ \ \}}
-\DoxyCodeLine{00726\ }
-\DoxyCodeLine{00727\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00728\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
-\DoxyCodeLine{00729\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00730\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00731\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
-\DoxyCodeLine{00732\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00733\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00734\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a2cb83e90336799463ce70a73fc1a248e}{withTradeSize}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{setTradeSize}}(tradeSize);}
-\DoxyCodeLine{00736\ }
-\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00738\ \ \ \ \ \}}
-\DoxyCodeLine{00739\ }
-\DoxyCodeLine{00740\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00741\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
-\DoxyCodeLine{00742\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00743\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00744\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00745\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00746\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00747\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
-\DoxyCodeLine{00748\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00749\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00750\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_aa18bab121bafc2eb08bcb06c9ceb5e21}{withTradeSizeShared}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{setTradeSize}}(tradeSize);}
-\DoxyCodeLine{00752\ }
-\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00754\ \ \ \ \ \}}
-\DoxyCodeLine{00755\ }
-\DoxyCodeLine{00756\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00757\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ order.}}
-\DoxyCodeLine{00758\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00759\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00760\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ order.}}
-\DoxyCodeLine{00761\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00762\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00763\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a858b5f6d4f5e42f387cd246c59d80d46}{withExchangeCode}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
-\DoxyCodeLine{00765\ }
-\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00767\ \ \ \ \ \}}
-\DoxyCodeLine{00768\ }
-\DoxyCodeLine{00769\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00770\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ order.}}
-\DoxyCodeLine{00771\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00772\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00773\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00774\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00775\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00776\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ order.}}
-\DoxyCodeLine{00777\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00778\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00779\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_adca23105b8335e3e4c73d2785b859669}{withExchangeCodeShared}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
-\DoxyCodeLine{00781\ }
-\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00783\ \ \ \ \ \}}
-\DoxyCodeLine{00784\ }
-\DoxyCodeLine{00785\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00786\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ order.}}
-\DoxyCodeLine{00787\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00788\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00789\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ order.}}
-\DoxyCodeLine{00790\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00791\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00792\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a5bed301bfbf78e9ccfe13f4bda3dc8bb}{withExchangeCode}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
-\DoxyCodeLine{00794\ }
-\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00796\ \ \ \ \ \}}
-\DoxyCodeLine{00797\ }
-\DoxyCodeLine{00798\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00799\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ order.}}
-\DoxyCodeLine{00800\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00801\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00802\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00803\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00804\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00805\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ order.}}
-\DoxyCodeLine{00806\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00807\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00808\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a8e409725ff46574fff289f285ce12eaf}{withExchangeCodeShared}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
-\DoxyCodeLine{00810\ }
-\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00812\ \ \ \ \ \}}
-\DoxyCodeLine{00813\ }
-\DoxyCodeLine{00814\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00815\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ order.}}
-\DoxyCodeLine{00816\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00817\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00818\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ order.}}
-\DoxyCodeLine{00819\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00820\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00821\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a9ed3eeb1c3bc3bbfe4543eafe69e9f5c}{withOrderSide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00822\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{setOrderSide}}(side);}
-\DoxyCodeLine{00823\ }
-\DoxyCodeLine{00824\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00825\ \ \ \ \ \}}
-\DoxyCodeLine{00826\ }
-\DoxyCodeLine{00827\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00828\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ order.}}
-\DoxyCodeLine{00829\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00830\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00831\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00832\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00833\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00834\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ order.}}
-\DoxyCodeLine{00835\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00836\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00837\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a6d1df1d81c67be511b1590e2b3115edc}{withOrderSideShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{setOrderSide}}(side);}
-\DoxyCodeLine{00839\ }
-\DoxyCodeLine{00840\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00841\ \ \ \ \ \}}
-\DoxyCodeLine{00842\ }
-\DoxyCodeLine{00843\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00844\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ order.}}
-\DoxyCodeLine{00845\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00846\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00847\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ order.}}
-\DoxyCodeLine{00848\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00849\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00850\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a6f50244abd44b6021453e06af53b78b7}{withScope}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00851\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{setScope}}(scope);}
-\DoxyCodeLine{00852\ }
-\DoxyCodeLine{00853\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00854\ \ \ \ \ \}}
-\DoxyCodeLine{00855\ }
-\DoxyCodeLine{00856\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00857\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ order.}}
-\DoxyCodeLine{00858\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00859\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00860\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00861\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
-\DoxyCodeLine{00862\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00863\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ order.}}
-\DoxyCodeLine{00864\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00865\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00866\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_aafff82e635eaa743021773252d6b4c08}{withScopeShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{setScope}}(scope);}
-\DoxyCodeLine{00868\ }
-\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
-\DoxyCodeLine{00870\ \ \ \ \ \}}
-\DoxyCodeLine{00871\ }
-\DoxyCodeLine{00872\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{00873\ }
-\DoxyCodeLine{00874\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00875\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
-\DoxyCodeLine{00876\ \textcolor{comment}{\ \ \ \ \ *\ This\ value\ is\ defined\ for\ Scope::AGGREGATE\ and\ Scope::ORDER\ orders.}}
-\DoxyCodeLine{00877\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00878\ \textcolor{comment}{\ \ \ \ \ *\ @return\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
-\DoxyCodeLine{00879\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00880\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ad24c0f02010548131f8a3f99e12a3da5}{getMarketMaker}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00881\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ orderData\_.marketMaker;}
-\DoxyCodeLine{00882\ \ \ \ \ \}}
-\DoxyCodeLine{00883\ }
-\DoxyCodeLine{00884\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00885\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
-\DoxyCodeLine{00886\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00887\ \textcolor{comment}{\ \ \ \ \ *\ @param\ marketMaker\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
-\DoxyCodeLine{00888\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00889\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_order_aa90a84f25b8d4c065cc9b7d52e454d82}{setMarketMaker}}(std::string\ marketMaker)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00890\ \ \ \ \ \ \ \ \ orderData\_.marketMaker\ =\ std::move(marketMaker);}
-\DoxyCodeLine{00891\ \ \ \ \ \}}
-\DoxyCodeLine{00892\ }
-\DoxyCodeLine{00893\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00894\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
-\DoxyCodeLine{00895\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
-\DoxyCodeLine{00896\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00897\ \textcolor{comment}{\ \ \ \ \ *\ @param\ marketMaker\ The\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
-\DoxyCodeLine{00898\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
-\DoxyCodeLine{00899\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00900\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a6a3b826e1e95fe471976293dcfcd45de}{withMarketMaker}}(std::string\ marketMaker)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00901\ \ \ \ \ \ \ \ \ setMarketMaker(std::move(marketMaker));}
-\DoxyCodeLine{00902\ }
-\DoxyCodeLine{00903\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00904\ \ \ \ \ \}}
-\DoxyCodeLine{00905\ }
-\DoxyCodeLine{00906\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00907\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
-\DoxyCodeLine{00908\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
-\DoxyCodeLine{00909\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00910\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
-\DoxyCodeLine{00911\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_order_base_8hpp}{"{}OrderBase.hpp"{}}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Order\ event\ is\ a\ snapshot\ for\ a\ full\ available\ market\ depth\ for\ a\ symbol.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ The\ collection\ of\ order\ events\ of\ a\ symbol\ represents\ the\ most\ recent\ information}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ that\ is\ available\ about\ orders\ on\ the\ market\ at\ any\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Order\ events\ give\ information\ on\ several\ levels\ of\ details,\ called\ scopes\ -\/\ see\ Scope.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ Scope\ of\ an\ order\ is\ available\ via\ @ref\ Order::getScope\ "{}scope"{}\ property.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ <p>\ Order\ events\ arrive\ from}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ multiple\ sources\ for\ the\ same\ market\ symbol\ and\ are\ distinguished\ by\ their\ @ref\ Order::getIndex\ "{}index"{}.\ Index\ is\ a}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ unique\ per\ symbol\ identifier\ of\ the\ event.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ It\ is\ unique\ across\ all\ the\ sources\ of\ depth\ information\ for\ the\ symbol.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ The\ event\ with\ @ref\ Order::getSize()\ "{}size"{}\ either\ \`{}0`\ or\ \`{}NaN`\ is\ a\ signal\ to\ remove\ previously\ received\ order\ for}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ the\ corresponding\ index.\ The\ method\ Order::hasSize()\ is\ a\ convenient\ method\ to\ test\ for\ size\ presence.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ <p>\ Events\ from\ finer-\/grained\ Scope\ of\ detail\ give\ more\ information\ and\ include\ events}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ from\ coarse-\/grained\ Scope\ of\ detail.\ For\ a\ consistent\ representation\ of\ the\ market\ depth}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ to\ the\ end-\/user,\ order\ events\ must\ be\ filtered\ to\ remove\ coarse-\/grained\ events\ that}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ are\ superseded\ by\ the\ finer-\/grained\ events.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ Some\ order\ event\ sources\ provide\ a\ consistent\ view\ of\ the\ price-\/level\ or\ detailed\ order\ book.\ Their\ updates}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ may\ incorporate\ multiple\ changes\ to\ price\ levels\ or\ to\ individual\ orders\ that\ have\ to\ be\ processed\ at\ the\ same\ time.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ Order::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ <p>\ See\ \`{}Event\ Flags`\ section\ of\ OrderBase\ class\ documentation\ for\ details.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ <p>\ The\ composite\ quotes\ with\ Scope::COMPOSITE\ and\ regional\ quotes\ with\ Scope::REGIONAL\ come}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ individually\ from\ different\ venues\ and\ are\ not\ related\ to\ each\ other\ in\ any\ transactional\ way.\ The\ result\ of}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ Order::getEventFlags\ method\ for\ them\ is\ always\ zero.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ <h3>Publishing\ order\ books</h3>}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ When\ publishing\ an\ order\ event\ with\ DXPublisher::publishEvents()\ method,\ least\ significant\ 32\ bits\ of}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ order\ @ref\ Order::getIndex()\ "{}index"{}\ must\ be\ in\ a\ range\ of\ from\ 0\ to\ \`{}std::numeric\_limits<std::int32\_t>::max()`}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ inclusive.\ Use\ Order::setSource()\ method\ after\ Order::setIndex()\ to\ properly\ include\ source\ identifier\ into\ the}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ index.}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ A\ snapshot\ has\ to\ be\ published\ in\ the\ <em>descending</em>\ order\ of\ @ref\ Order::getIndex()\ "{}index"{},\ starting\ with}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ an\ event\ with\ the\ largest\ index\ and\ marking\ it\ with\ EventFlag::SNAPSHOT\_BEGIN\ bit\ in\ @ref\ Order::getEventFlags()}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ "{}eventFlags"{},\ and\ finishing\ the\ snapshot\ with\ an\ event\ that\ has\ zero\ 32\ least\ significant\ bits\ of\ index.}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ EventFlag::SNAPSHOT\_END\ bit\ in\ @ref\ Order::getEventFlags()\ "{}eventFlags"{}\ is\ optional\ during\ publishing.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ It\ will\ be\ properly\ set\ on\ receiving\ end\ anyway.}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ <h3>Limitations</h3>}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ This\ event\ type\ cannot\ be\ used\ with\ DXFeed::getLastEvent()\ method.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *\ <h3><a\ name="{}fobSection"{}>Full\ Order\ Book\ Support</a></h3>}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ *\ Some\ feeds\ provide\ support\ for\ "{}Full\ Order\ Book"{}\ (FOB)\ where\ additional\ fields\ will\ be\ available:}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ *\ <li>@ref\ Order::getAction()\ "{}action"{}\ -\/\ event\ business\ meaning\ (see\ OrderAction\ for\ more\ details)</li>}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ *\ <li>@ref\ Order::getActionTime()\ "{}actionTime"{}\ -\/\ time\ of\ the\ last\ action</li>}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ ID\ of\ this\ order</li>}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ additional\ ID\ for\ this\ order</li>}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ trade\ (order\ execution)\ ID</li>}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ <li>@ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/\ price\ of\ the\ trade</li>}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ -\/\ size\ of\ the\ trade</li>}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ record\ \`{}Quote`\ for\ composite\ quotes\ with\ Scope::COMPOSITE,}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ *\ record\ \`{}Quote\&X`\ for\ regional\ exchange\ best\ quotes\ with\ Scope::REGIONAL,}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ *\ record\ \`{}MarketMaker`\ for\ market-\/maker\ quotes\ and\ futures\ price\ level\ aggregates\ with\ Scope::AGGREGATE,}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ *\ record\ \`{}Order`\ for\ the\ most\ fine-\/grained\ Scope::ORDER\ with\ zero\ source\ id,}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ *\ and\ records\ \`{}Order\#<source-\/id>`\ for\ specific\ source\ ids,}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ *\ where\ \`{}<source-\/id>`\ is\ up\ to\ 4\ ASCII\ characters\ with\ a\ mnemonic\ for\ the\ source\ like\ "{}NTV"{}.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00093\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{struct}\ OrderData\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ std::optional<std::string>\ marketMaker\{\};}
+\DoxyCodeLine{00099\ \ \ \ \ \};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ OrderData\ orderData\_\{\};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_order_aff2c9d717969967a1ccf4fbb70813c4f}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_order_aff2c9d717969967a1ccf4fbb70813c4f}{override}};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_order_a362238c83fc87eb026e13f6441d19a25}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Order\ object}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>;}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Order\ object}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classdxfcpp_1_1_order}{Unique}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_order}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_order}{unique\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>;}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_adf74ebb2958a1382183eb0b43728a53a}{TYPE}};}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ order\ event\ with\ default\ values.}}
+\DoxyCodeLine{00137\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_a6588db9aab3b926b94cda473e3c196dc}{Order}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ order\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{Order}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{OrderBase}}(\mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{move}}(\mbox{\hyperlink{classdxfcpp_1_1_order_af335dfcaa5dfb37b36c3e5b26ec7fd39}{eventSymbol}}))\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ order.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a2887e4a834a70a6087b0f17bab8119d5}{withEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00157\ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00168\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a1849f2ca31e6349c4fbd98ddb4764f5f}{withEventSymbolShared}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00172\ \ \ \ \ \}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ order.}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00181\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a34fc1146dec2f86c512c8478972c4db7}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00185\ \ \ \ \ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00197\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a216107e58a65282aec886c8959e0b399}{withEventTimeShared}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00201\ \ \ \ \ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ the\ current\ order.}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ source\ of\ this\ event.}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00210\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a38f12f739fc7dd4226674f85b8aad603}{withSource}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{setSource}}(source);}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00214\ \ \ \ \ \}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ source\ of\ this\ event.}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00226\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_acc32eafdd0ec25913ce058181f87913f}{withSourceShared}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{setSource}}(source);}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00230\ \ \ \ \ \}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ order.}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00239\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_add681d381d436be2dedef9271da6a2c6}{withEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00243\ \ \ \ \ \}}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00255\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a8d32cc9f40d71b052a5ffdb9daeff771}{withEventFlagsShared}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00259\ \ \ \ \ \}}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ order.}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00268\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a9d167b678843600e1eb0ecef1b4de8e4}{withEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00272\ \ \ \ \ \}}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00284\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a6886b9a3a1ff88386f2ab3e5ce024630}{withEventFlagsShared}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00288\ \ \ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ order\ and\ returns\ it.\ Note,\ that\ this\ method\ also\ changes}}
+\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
+\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
+\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ order.}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00298\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a72cad9f98d5215097f4729c0708479ef}{withIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{setIndex}}(index);}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00302\ \ \ \ \ \}}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ order\ and\ returns\ a\ shared\ pointer\ to\ it.\ Note,\ that\ this\ method\ also}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ changes}}
+\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ order.}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00316\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a16a898275f2c48f95a6a99e8c810a914}{withIndexShared}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{setIndex}}(index);}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00320\ \ \ \ \ \}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ order.}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00328\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00329\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_acc55c04ca2740db2e6189b9f800eac60}{withTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{setTime}}(time);}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00333\ \ \ \ \ \}}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ order\ and\ returns\ a\ shared\ pointer\ to\ it.}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ order.}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00345\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_acfc206d46e32006a1b498d9117d79636}{withTimeShared}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{setTime}}(time);}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00349\ \ \ \ \ \}}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ order.}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ order.}}
+\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00357\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00358\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ad48e252735199b90ed2ebc5ecb49bda5}{withTimeNanoPart}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{setTimeNanoPart}}(timeNanoPart);}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00362\ \ \ \ \ \}}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00365\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ order.}}
+\DoxyCodeLine{00366\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ order.}}
+\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00374\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a38b740402f6f09a34fefd583937683a2}{withTimeNanoPartShared}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{setTimeNanoPart}}(timeNanoPart);}
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00378\ \ \ \ \ \}}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ order.}}
+\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00388\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a46f5a0a2af26b254931517cc032c6a02}{withSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{setSequence}}(sequence);}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00392\ \ \ \ \ \}}
+\DoxyCodeLine{00393\ }
+\DoxyCodeLine{00394\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ order.}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
+\DoxyCodeLine{00404\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00405\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a20fb15b4f9c2feb224fc42ba9cfb53bb}{withSequenceShared}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{setSequence}}(sequence);}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00409\ \ \ \ \ \}}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00415\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ The\ time\ of\ this\ order\ in\ nanoseconds.}}
+\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00417\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00418\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a55cd8ed27d1dbd62fbb3cd726d24b9ed}{withTimeNanos}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{setTimeNanos}}(timeNanos);}
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00422\ \ \ \ \ \}}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ order.}}
+\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00429\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00430\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00431\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00432\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ time\ of\ this\ order\ in\ nanoseconds.}}
+\DoxyCodeLine{00433\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00434\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00435\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_adf05fdb01af70d25bd68843c71831948}{withTimeNanosShared}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{setTimeNanos}}(timeNanos);}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00439\ \ \ \ \ \}}
+\DoxyCodeLine{00440\ }
+\DoxyCodeLine{00441\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ side\ of\ this\ order.}}
+\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00446\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00447\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a409bddd21123a2d22c14784686185bee}{withAction}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{setAction}}(action);}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00451\ \ \ \ \ \}}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00453\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ order.}}
+\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00459\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00460\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ action\ of\ this\ order.}}
+\DoxyCodeLine{00461\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00462\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00463\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_af5a5ba6a1fdfc8c66a7a75767a31f2a2}{withActionShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{setAction}}(action);}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00467\ \ \ \ \ \}}
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00470\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ current\ order.}}
+\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ order\ action\ time.}}
+\DoxyCodeLine{00473\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00474\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00475\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a95f72e96e87a2ed0ea8381d84d427a33}{withActionTime}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{setActionTime}}(actionTime);}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00479\ \ \ \ \ \}}
+\DoxyCodeLine{00480\ }
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00482\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00483\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00484\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00485\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00486\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00487\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ order\ action\ time.}}
+\DoxyCodeLine{00488\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00489\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00490\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a215ae8b0ae3fa64ff0bfc35c1f36d78f}{withActionTimeShared}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{setActionTime}}(actionTime);}
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00494\ \ \ \ \ \}}
+\DoxyCodeLine{00495\ }
+\DoxyCodeLine{00496\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00497\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ order\ ID.}}
+\DoxyCodeLine{00498\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00499\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ The\ order\ ID.}}
+\DoxyCodeLine{00501\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00502\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00503\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ad1d108ca37beceee348ca28610f32e30}{withOrderId}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{setOrderId}}(orderId);}
+\DoxyCodeLine{00505\ }
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00507\ \ \ \ \ \}}
+\DoxyCodeLine{00508\ }
+\DoxyCodeLine{00509\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00510\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ order\ ID.}}
+\DoxyCodeLine{00511\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00512\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00513\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00514\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00515\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00516\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ order\ ID.}}
+\DoxyCodeLine{00517\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00518\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00519\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a09f7642abc4270a6505e34820a582ad9}{withOrderIdShared}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{setOrderId}}(orderId);}
+\DoxyCodeLine{00521\ }
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00523\ \ \ \ \ \}}
+\DoxyCodeLine{00524\ }
+\DoxyCodeLine{00525\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00526\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ order\ ID.}}
+\DoxyCodeLine{00527\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00529\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ order\ ID.}}
+\DoxyCodeLine{00530\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00531\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00532\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_aafc941ad63d3ec802c20e44606beaf58}{withAuxOrderId}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{setAuxOrderId}}(auxOrderId);}
+\DoxyCodeLine{00534\ }
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00536\ \ \ \ \ \}}
+\DoxyCodeLine{00537\ }
+\DoxyCodeLine{00538\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00539\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ order\ ID.}}
+\DoxyCodeLine{00540\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00541\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00542\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00543\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00544\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00545\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ order\ ID.}}
+\DoxyCodeLine{00546\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00547\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00548\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_aba9d14eca5d78995436770004acb496d}{withAuxOrderIdShared}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{setAuxOrderId}}(auxOrderId);}
+\DoxyCodeLine{00550\ }
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00552\ \ \ \ \ \}}
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00555\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ order.}}
+\DoxyCodeLine{00556\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00557\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00558\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ order.}}
+\DoxyCodeLine{00559\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00560\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00561\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_aba7c8a7d5069c625fdb6950be75d4c8d}{withPrice}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{setPrice}}(price);}
+\DoxyCodeLine{00563\ }
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00565\ \ \ \ \ \}}
+\DoxyCodeLine{00566\ }
+\DoxyCodeLine{00567\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00568\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ order.}}
+\DoxyCodeLine{00569\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00570\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00571\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00572\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00573\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00574\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ order.}}
+\DoxyCodeLine{00575\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00576\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00577\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a9557b326b71dbeb5818bb033958eecee}{withPriceShared}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{setPrice}}(price);}
+\DoxyCodeLine{00579\ }
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00581\ \ \ \ \ \}}
+\DoxyCodeLine{00582\ }
+\DoxyCodeLine{00583\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00584\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ order.}}
+\DoxyCodeLine{00585\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00586\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00587\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ order.}}
+\DoxyCodeLine{00588\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00589\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00590\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a7da1f50ca1405b6af9aa6a4912d17f82}{withSize}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{setSize}}(size);}
+\DoxyCodeLine{00592\ }
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00594\ \ \ \ \ \}}
+\DoxyCodeLine{00595\ }
+\DoxyCodeLine{00596\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ order.}}
+\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00599\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00600\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00601\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00602\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00603\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ order.}}
+\DoxyCodeLine{00604\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00605\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00606\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_aeed46d7128a3ac38268ef3db66ac8c1c}{withSizeShared}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{setSize}}(size);}
+\DoxyCodeLine{00608\ }
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00610\ \ \ \ \ \}}
+\DoxyCodeLine{00611\ }
+\DoxyCodeLine{00612\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00613\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ order.}}
+\DoxyCodeLine{00614\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00615\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ order.}}
+\DoxyCodeLine{00617\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00618\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00619\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a7e7d8b3dc51c50b18c752d892dc097e5}{withExecutedSize}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{setExecutedSize}}(executedSize);}
+\DoxyCodeLine{00621\ }
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00623\ \ \ \ \ \}}
+\DoxyCodeLine{00624\ }
+\DoxyCodeLine{00625\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00626\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ order.}}
+\DoxyCodeLine{00627\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00628\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00629\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00630\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00631\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00632\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ order.}}
+\DoxyCodeLine{00633\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00634\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00635\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_af809f858dc6a58bd0573e94a9de2d7f6}{withExecutedSizeShared}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{setExecutedSize}}(executedSize);}
+\DoxyCodeLine{00637\ }
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00639\ \ \ \ \ \}}
+\DoxyCodeLine{00640\ }
+\DoxyCodeLine{00641\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00642\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
+\DoxyCodeLine{00643\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00644\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00645\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
+\DoxyCodeLine{00646\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00647\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00648\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ab19f0b05eebb35b51a12608a3af57223}{withCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{setCount}}(count);}
+\DoxyCodeLine{00650\ }
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00652\ \ \ \ \ \}}
+\DoxyCodeLine{00653\ }
+\DoxyCodeLine{00654\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00655\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
+\DoxyCodeLine{00656\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00657\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00658\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00659\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00660\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00661\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
+\DoxyCodeLine{00662\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00663\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00664\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a052d2ee15b771cd65d11371294c32c91}{withCountShared}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{setCount}}(count);}
+\DoxyCodeLine{00666\ }
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00668\ \ \ \ \ \}}
+\DoxyCodeLine{00669\ }
+\DoxyCodeLine{00670\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00671\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
+\DoxyCodeLine{00672\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00673\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00674\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
+\DoxyCodeLine{00675\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00676\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00677\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a375d8ae6ef9a3539fd5f4b884ce3b4c7}{withTradeId}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{setTradeId}}(tradeId);}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00680\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00681\ \ \ \ \ \}}
+\DoxyCodeLine{00682\ }
+\DoxyCodeLine{00683\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
+\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00687\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00688\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00689\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00690\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
+\DoxyCodeLine{00691\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00692\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00693\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a1f85087d1e1dd214308b7f6ac31fc3c9}{withTradeShared}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{setTradeId}}(tradeId);}
+\DoxyCodeLine{00695\ }
+\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00697\ \ \ \ \ \}}
+\DoxyCodeLine{00698\ }
+\DoxyCodeLine{00699\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00700\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
+\DoxyCodeLine{00701\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00702\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00703\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
+\DoxyCodeLine{00704\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00705\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00706\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ac0f695d982844d74cffd316054fbef67}{withTradePrice}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{setTradePrice}}(tradePrice);}
+\DoxyCodeLine{00708\ }
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00710\ \ \ \ \ \}}
+\DoxyCodeLine{00711\ }
+\DoxyCodeLine{00712\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00713\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
+\DoxyCodeLine{00714\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00715\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00716\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00717\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00718\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00719\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
+\DoxyCodeLine{00720\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00721\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00722\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a64e841a57e96fbd9f646f57c9b37515d}{withTradePriceShared}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{setTradePrice}}(tradePrice);}
+\DoxyCodeLine{00724\ }
+\DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00726\ \ \ \ \ \}}
+\DoxyCodeLine{00727\ }
+\DoxyCodeLine{00728\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00729\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
+\DoxyCodeLine{00730\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00731\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00732\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
+\DoxyCodeLine{00733\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00734\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00735\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a2cb83e90336799463ce70a73fc1a248e}{withTradeSize}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{setTradeSize}}(tradeSize);}
+\DoxyCodeLine{00737\ }
+\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00739\ \ \ \ \ \}}
+\DoxyCodeLine{00740\ }
+\DoxyCodeLine{00741\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00742\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
+\DoxyCodeLine{00743\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00744\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00745\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00746\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00747\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00748\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
+\DoxyCodeLine{00749\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00750\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00751\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_aa18bab121bafc2eb08bcb06c9ceb5e21}{withTradeSizeShared}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{setTradeSize}}(tradeSize);}
+\DoxyCodeLine{00753\ }
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00755\ \ \ \ \ \}}
+\DoxyCodeLine{00756\ }
+\DoxyCodeLine{00757\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00758\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ order.}}
+\DoxyCodeLine{00759\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00760\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00761\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ order.}}
+\DoxyCodeLine{00762\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00763\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00764\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a858b5f6d4f5e42f387cd246c59d80d46}{withExchangeCode}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
+\DoxyCodeLine{00766\ }
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00768\ \ \ \ \ \}}
+\DoxyCodeLine{00769\ }
+\DoxyCodeLine{00770\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00771\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ order.}}
+\DoxyCodeLine{00772\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00773\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00774\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00775\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00776\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00777\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ order.}}
+\DoxyCodeLine{00778\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00779\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00780\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_adca23105b8335e3e4c73d2785b859669}{withExchangeCodeShared}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
+\DoxyCodeLine{00782\ }
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00784\ \ \ \ \ \}}
+\DoxyCodeLine{00785\ }
+\DoxyCodeLine{00786\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00787\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ order.}}
+\DoxyCodeLine{00788\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00789\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00790\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ order.}}
+\DoxyCodeLine{00791\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00792\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00793\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a5bed301bfbf78e9ccfe13f4bda3dc8bb}{withExchangeCode}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
+\DoxyCodeLine{00795\ }
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00797\ \ \ \ \ \}}
+\DoxyCodeLine{00798\ }
+\DoxyCodeLine{00799\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00800\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ order.}}
+\DoxyCodeLine{00801\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00802\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00803\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00804\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00805\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00806\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ order.}}
+\DoxyCodeLine{00807\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00808\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00809\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a8e409725ff46574fff289f285ce12eaf}{withExchangeCodeShared}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
+\DoxyCodeLine{00811\ }
+\DoxyCodeLine{00812\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00813\ \ \ \ \ \}}
+\DoxyCodeLine{00814\ }
+\DoxyCodeLine{00815\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00816\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ order.}}
+\DoxyCodeLine{00817\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00818\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00819\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ order.}}
+\DoxyCodeLine{00820\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00821\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00822\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a9ed3eeb1c3bc3bbfe4543eafe69e9f5c}{withOrderSide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00823\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{setOrderSide}}(side);}
+\DoxyCodeLine{00824\ }
+\DoxyCodeLine{00825\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00826\ \ \ \ \ \}}
+\DoxyCodeLine{00827\ }
+\DoxyCodeLine{00828\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00829\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ order.}}
+\DoxyCodeLine{00830\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00831\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00832\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00833\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00834\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00835\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ order.}}
+\DoxyCodeLine{00836\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00837\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00838\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_a6d1df1d81c67be511b1590e2b3115edc}{withOrderSideShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{setOrderSide}}(side);}
+\DoxyCodeLine{00840\ }
+\DoxyCodeLine{00841\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00842\ \ \ \ \ \}}
+\DoxyCodeLine{00843\ }
+\DoxyCodeLine{00844\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00845\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ order.}}
+\DoxyCodeLine{00846\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00847\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00848\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ order.}}
+\DoxyCodeLine{00849\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
+\DoxyCodeLine{00850\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00851\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a6f50244abd44b6021453e06af53b78b7}{withScope}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00852\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{setScope}}(scope);}
+\DoxyCodeLine{00853\ }
+\DoxyCodeLine{00854\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00855\ \ \ \ \ \}}
+\DoxyCodeLine{00856\ }
+\DoxyCodeLine{00857\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00858\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ order.}}
+\DoxyCodeLine{00859\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00860\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00861\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00862\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00863\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00864\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ order.}}
+\DoxyCodeLine{00865\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00866\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00867\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_aafff82e635eaa743021773252d6b4c08}{withScopeShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{setScope}}(scope);}
+\DoxyCodeLine{00869\ }
+\DoxyCodeLine{00870\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00871\ \ \ \ \ \}}
+\DoxyCodeLine{00872\ }
+\DoxyCodeLine{00873\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00874\ }
+\DoxyCodeLine{00875\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00876\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
+\DoxyCodeLine{00877\ \textcolor{comment}{\ \ \ \ \ *\ This\ value\ is\ defined\ for\ Scope::AGGREGATE\ and\ Scope::ORDER\ orders.}}
+\DoxyCodeLine{00878\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00879\ \textcolor{comment}{\ \ \ \ \ *\ @return\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order\ or\ dxfcpp::String::NUL}}
+\DoxyCodeLine{00880\ \textcolor{comment}{\ \ \ \ \ *\ (`std::string\{"{}<null>"{}\}`).}}
+\DoxyCodeLine{00881\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00882\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_ad24c0f02010548131f8a3f99e12a3da5}{getMarketMaker}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00883\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!orderData\_.marketMaker)\ \{}
+\DoxyCodeLine{00884\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::String::NUL;}
+\DoxyCodeLine{00885\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00886\ }
+\DoxyCodeLine{00887\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ orderData\_.marketMaker.value();}
+\DoxyCodeLine{00888\ \ \ \ \ \}}
+\DoxyCodeLine{00889\ }
+\DoxyCodeLine{00890\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00891\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
+\DoxyCodeLine{00892\ \textcolor{comment}{\ \ \ \ \ *\ This\ value\ is\ defined\ for\ Scope::AGGREGATE\ and\ Scope::ORDER\ orders.}}
+\DoxyCodeLine{00893\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00894\ \textcolor{comment}{\ \ \ \ \ *\ @return\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order\ or\ \`{}std::nullopt`.}}
+\DoxyCodeLine{00895\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00896\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_order_a9f01f0cf722dc28c449c3458aea516e9}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_order_a9f01f0cf722dc28c449c3458aea516e9}{optional}}<\mbox{\hyperlink{classdxfcpp_1_1_order_a9f01f0cf722dc28c449c3458aea516e9}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_order_a9f01f0cf722dc28c449c3458aea516e9}{string}}>\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a9f01f0cf722dc28c449c3458aea516e9}{getMarketMakerOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00897\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ orderData\_.marketMaker;}
+\DoxyCodeLine{00898\ \ \ \ \ \}}
+\DoxyCodeLine{00899\ }
+\DoxyCodeLine{00900\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00901\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
+\DoxyCodeLine{00902\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00903\ \textcolor{comment}{\ \ \ \ \ *\ @param\ marketMaker\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
+\DoxyCodeLine{00904\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00905\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_order_aa90a84f25b8d4c065cc9b7d52e454d82}{setMarketMaker}}(std::string\ marketMaker)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00906\ \ \ \ \ \ \ \ \ orderData\_.marketMaker\ =\ std::move(marketMaker);}
+\DoxyCodeLine{00907\ \ \ \ \ \}}
+\DoxyCodeLine{00908\ }
+\DoxyCodeLine{00909\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00910\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
+\DoxyCodeLine{00911\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
 \DoxyCodeLine{00912\ \textcolor{comment}{\ \ \ \ \ *}}
 \DoxyCodeLine{00913\ \textcolor{comment}{\ \ \ \ \ *\ @param\ marketMaker\ The\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
-\DoxyCodeLine{00914\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00914\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ order.}}
 \DoxyCodeLine{00915\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00916\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_ad1fb5a8134f1c6f938406bde28121206}{withMarketMakerShared}}(std::string\ marketMaker)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00916\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_order_a6a3b826e1e95fe471976293dcfcd45de}{withMarketMaker}}(std::string\ marketMaker)\ \textcolor{keyword}{noexcept}\ \{}
 \DoxyCodeLine{00917\ \ \ \ \ \ \ \ \ setMarketMaker(std::move(marketMaker));}
 \DoxyCodeLine{00918\ }
-\DoxyCodeLine{00919\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00919\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
 \DoxyCodeLine{00920\ \ \ \ \ \}}
 \DoxyCodeLine{00921\ }
 \DoxyCodeLine{00922\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00923\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
-\DoxyCodeLine{00924\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00925\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
-\DoxyCodeLine{00926\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00927\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_order_a62de3f2d3e1f66409a2ab57e4303f806}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_order_a62de3f2d3e1f66409a2ab57e4303f806}{override}};}
-\DoxyCodeLine{00928\ \};}
-\DoxyCodeLine{00929\ }
-\DoxyCodeLine{00930\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00923\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
+\DoxyCodeLine{00924\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00925\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00926\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Order>(new}}
+\DoxyCodeLine{00927\ \textcolor{comment}{\ \ \ \ \ *\ Order(...))`\ or\ \`{}std::make\_shared<Order>(...)`}}
+\DoxyCodeLine{00928\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00929\ \textcolor{comment}{\ \ \ \ \ *\ @param\ marketMaker\ The\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ order.}}
+\DoxyCodeLine{00930\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ order.}}
+\DoxyCodeLine{00931\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00932\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_order_ad1fb5a8134f1c6f938406bde28121206}{withMarketMakerShared}}(std::string\ marketMaker)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00933\ \ \ \ \ \ \ \ \ setMarketMaker(std::move(marketMaker));}
+\DoxyCodeLine{00934\ }
+\DoxyCodeLine{00935\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_order}{Order}}>();}
+\DoxyCodeLine{00936\ \ \ \ \ \}}
+\DoxyCodeLine{00937\ }
+\DoxyCodeLine{00938\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00939\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00940\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00941\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00942\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00943\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_order_a62de3f2d3e1f66409a2ab57e4303f806}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_order_a62de3f2d3e1f66409a2ab57e4303f806}{override}};}
+\DoxyCodeLine{00944\ \};}
+\DoxyCodeLine{00945\ }
+\DoxyCodeLine{00946\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
 
 \end{DoxyCode}

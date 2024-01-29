@@ -2,7 +2,7 @@
 \hypertarget{_theo_price_8hpp_source}{}\label{_theo_price_8hpp_source}\index{TheoPrice.hpp@{TheoPrice.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -99,7 +99,7 @@
 \DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *}}
 \DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
 \DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_theo_price_a9ddbb1509ec844cfb06b65f3eceabc3f}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_theo_price_a9ddbb1509ec844cfb06b65f3eceabc3f}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a9ddbb1509ec844cfb06b65f3eceabc3f}{override}};}
 \DoxyCodeLine{00099\ }
 \DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{/**}}
 \DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
@@ -202,8 +202,8 @@
 \DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getTime()}}
 \DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ */}}
 \DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a21cfe78423cfa168cbcc20c1c07c6cea}{setTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(orOp(sal(time\_util::getSecondsFromTime(time),\ SECONDS\_SHIFT),}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sal(time\_util::getMillisFromTime(time),\ MILLISECONDS\_SHIFT)),}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(orOp(sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getSecondsFromTime(time)),\ SECONDS\_SHIFT),}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getMillisFromTime(time)),\ MILLISECONDS\_SHIFT)),}
 \DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_afa8cd07f9f851bf591a6e5091226549e}{getSequence}}\mbox{\hyperlink{classdxfcpp_1_1_theo_price_afa8cd07f9f851bf591a6e5091226549e}{(}}\mbox{\hyperlink{classdxfcpp_1_1_theo_price_afa8cd07f9f851bf591a6e5091226549e}{)}});}
 \DoxyCodeLine{00204\ \ \ \ \ \}}
 \DoxyCodeLine{00205\ }
@@ -224,7 +224,7 @@
 \DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getSequence()}}
 \DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ */}}
 \DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_ac7e007a068b748bd019d2d258f8a0b24}{setSequence}}(\textcolor{keywordtype}{int}\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling\ [EN-\/8232]}}
 \DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ sequence\ <=\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a6a8127a23c449b33c7a0d2099bbc5e68}{MAX\_SEQUENCE}});}
 \DoxyCodeLine{00225\ }
 \DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(andOp(data\_.index,\ \string~\mbox{\hyperlink{classdxfcpp_1_1_theo_price_a6a8127a23c449b33c7a0d2099bbc5e68}{MAX\_SEQUENCE}}),\ sequence);}
@@ -345,7 +345,7 @@
 \DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *}}
 \DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
 \DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00344\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a511b9dd099e453f7129dbe9ecb562c5b}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00344\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a511b9dd099e453f7129dbe9ecb562c5b}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a511b9dd099e453f7129dbe9ecb562c5b}{override}};}
 \DoxyCodeLine{00345\ \};}
 \DoxyCodeLine{00346\ }
 \DoxyCodeLine{00347\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}

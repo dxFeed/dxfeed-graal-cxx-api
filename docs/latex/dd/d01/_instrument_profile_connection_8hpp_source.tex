@@ -2,7 +2,7 @@
 \hypertarget{_instrument_profile_connection_8hpp_source}{}\label{_instrument_profile_connection_8hpp_source}\index{InstrumentProfileConnection.hpp@{InstrumentProfileConnection.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -14,233 +14,239 @@
 \DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/JavaObjectHandle.hpp"{}}}
 \DoxyCodeLine{00011\ }
 \DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../entity/SharedEntity.hpp"{}}}
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
-\DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ InstrumentProfileConnection\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
-\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ InstrumentProfileConnection\ object}}
-\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<InstrumentProfileConnection>;}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ InstrumentProfileConnection\ object}}
-\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<InstrumentProfileConnection>;}
-\DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ Instrument\ profile\ connection\ state.}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ State\ :\ std::int32\_t\ \{}
-\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Instrument\ profile\ connection\ is\ not\ started\ yet.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @ref\ InstrumentProfileConnection::start()\ "{}start"{}\ was\ not\ invoked\ yet.}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ NOT\_CONNECTED,}
-\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_instrument_profile_collector_8hpp}{"{}InstrumentProfileCollector.hpp"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ Connects\ to\ an\ instrument\ profile\ URL\ and\ reads\ instrument\ profiles\ with\ support\ of}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ streaming\ live\ updates.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Please\ see\ <b>Instrument\ Profile\ Format</b>\ documentation\ for\ complete\ description.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00022\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ InstrumentProfileConnection\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ InstrumentProfileConnection\ object}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<InstrumentProfileConnection>;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ InstrumentProfileConnection\ object}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<InstrumentProfileConnection>;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ *\ Instrument\ profile\ connection\ state.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{int32\_t}}\ \{}
 \DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Connection\ is\ being\ established.}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ CONNECTING,}
-\DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Connection\ was\ established.}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ CONNECTED,}
-\DoxyCodeLine{00043\ }
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Initial\ instrument\ profiles\ snapshot\ was\ fully\ read\ (this\ state\ is\ set\ only\ once).}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ COMPLETED,}
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Instrument\ profile\ connection\ was\ @ref\ InstrumentProfileConnection::close()\ "{}closed"{}.}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ CLOSED}
-\DoxyCodeLine{00053\ \ \ \ \ \};}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Instrument\ profile\ connection\ is\ not\ started\ yet.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @ref\ InstrumentProfileConnection::start()\ "{}start"{}\ was\ not\ invoked\ yet.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\_CONNECTED}},}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Connection\ is\ being\ established.}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d}{CONNECTING}},}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Connection\ was\ established.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858}{CONNECTED}},}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Initial\ instrument\ profiles\ snapshot\ was\ fully\ read\ (this\ state\ is\ set\ only\ once).}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e}{COMPLETED}},}
 \DoxyCodeLine{00054\ }
-\DoxyCodeLine{00055\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00056\ \ \ \ \ Id<InstrumentProfileConnection>\ id\_;}
-\DoxyCodeLine{00057\ \ \ \ \ JavaObjectHandle<InstrumentProfileConnection>\ handle\_;}
-\DoxyCodeLine{00058\ \ \ \ \ JavaObjectHandle<IpfPropertyChangeListener>\ stateChangeListenerHandle\_;}
-\DoxyCodeLine{00059\ \ \ \ \ SimpleHandler<\textcolor{keywordtype}{void}(State,\ State)>\ onStateChange\_\{\};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Instrument\ profile\ connection\ was\ @ref\ InstrumentProfileConnection::close()\ "{}closed"{}.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}}}
+\DoxyCodeLine{00059\ \ \ \ \ \};}
 \DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ InstrumentProfileConnection()\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{struct}\ Impl;}
-\DoxyCodeLine{00064\ }
-\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ stateToString(State\ state)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (state)\ \{}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ State::NOT\_CONNECTED:}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}NOT\_CONNECTED"{}};}
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ State::CONNECTING:}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CONNECTING"{}};}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ State::CONNECTED:}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CONNECTED"{}};}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ State::COMPLETED:}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}COMPLETED"{}};}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ State::CLOSED:}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CLOSED"{}};}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00079\ }
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
-\DoxyCodeLine{00081\ \ \ \ \ \}}
-\DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ instrument\ profile\ connection\ with\ a\ specified\ address\ and\ collector.}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ Address\ may\ be\ just\ "{}<host>:<port>"{}\ of\ server,\ URL,\ or\ a\ file\ path.}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ The\ "{}[update=<period>]"{}\ clause\ can\ be\ optionally\ added\ at\ the\ end\ of\ the\ address\ to}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ specify\ an\ @ref\ InstrumentProfileConnection::getUpdatePeriod()\ "{}update\ period"{}\ via\ an\ address\ string.}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ Default\ update\ period\ is\ 1\ minute.}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ <p>Connection\ needs\ to\ be\ @ref\ InstrumentProfileConnection::start()\ "{}started"{}\ to\ begin\ an\ actual\ operation.}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ @param\ address\ The\ address.}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collector\ The\ instrument\ profile\ collector\ to\ push\ updates\ into.}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ @return\ new\ instrument\ profile\ connection.}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ createConnection(\textcolor{keyword}{const}\ std::string\ \&address,\ InstrumentProfileCollector::Ptr\ collector)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00098\ }
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ address\ of\ this\ instrument\ profile\ connection.}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ It\ does\ not\ include\ additional\ options\ specified\ as\ part\ of\ the\ address.}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ address\ of\ this\ instrument\ profile\ connection.}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00105\ \ \ \ \ std::string\ getAddress()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ update\ period\ in\ milliseconds.}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ period\ of\ an\ update\ check\ when\ the\ instrument\ profiles\ source\ does\ not\ support\ live\ updates}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ and/or\ when\ connection\ is\ dropped.}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Default\ update\ period\ is\ 1\ minute,\ unless\ overridden\ in\ an}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfileConnection::createConnection()\ "{}address\ string"{}.}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ update\ period\ in\ milliseconds.}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00116\ \ \ \ \ std::int64\_t\ getUpdatePeriod()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ update\ period\ in\ milliseconds\ as\ chrono::duration}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ period\ of\ an\ update\ check\ when\ the\ instrument\ profiles\ source\ does\ not\ support\ live\ updates}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ and/or\ when\ connection\ is\ dropped.}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ Default\ update\ period\ is\ 1\ minute,\ unless\ overridden\ in\ an}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfileConnection::createConnection()\ "{}address\ string"{}.}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ update\ period\ in\ milliseconds\ as\ chrono::duration.}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00127\ \ \ \ \ std::chrono::milliseconds\ getUpdatePeriodAsDuration()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::chrono::milliseconds(getUpdatePeriod());}
-\DoxyCodeLine{00129\ \ \ \ \ \}}
-\DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ update\ period\ in\ milliseconds.}}
-\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ @param\ updatePeriod\ The\ update\ period\ in\ milliseconds.}}
-\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ @see\ InstrumentProfileConnection::getUpdatePeriod()}}
-\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{void}\ setUpdatePeriod(std::int64\_t\ updatePeriod)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ update\ period\ in\ milliseconds\ as\ chrono::duration.}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ @param\ updatePeriod\ The\ update\ period\ in\ milliseconds\ as\ chrono::duration.}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ @see\ InstrumentProfileConnection::getUpdatePeriod()}}
-\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keywordtype}{void}\ setUpdatePeriod(std::chrono::milliseconds\ updatePeriod)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ setUpdatePeriod(updatePeriod.count());}
-\DoxyCodeLine{00147\ \ \ \ \ \}}
-\DoxyCodeLine{00148\ }
-\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ state\ of\ this\ instrument\ profile\ connections.}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ state\ of\ this\ instrument\ profile\ connections.}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00154\ \ \ \ \ State\ getState()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00155\ }
-\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ last\ modification\ time\ (in\ milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
-\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ while\ the\ time\ is\ represented\ in\ milliseconds,\ the\ actual\ granularity\ of\ time\ here\ is\ a\ second.}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ last\ modification\ time\ (in\ milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00162\ \ \ \ \ std::int64\_t\ getLastModified()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00163\ }
-\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ Starts\ this\ instrument\ profile\ connection.\ This\ connection's\ state\ immediately\ changes\ to}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfileConnection::State::CONNECTING\ "{}CONNECTING"{}\ and\ the\ actual\ connection\ establishment\ proceeds}}
-\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ in\ the\ background.}}
-\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{void}\ start()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00170\ }
-\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ Closes\ this\ instrument\ profile\ connection.\ This\ connection's\ state\ immediately\ changes\ to}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfileConnection::State::CLOSED\ "{}CLOSED"{}\ and\ the\ background\ update\ procedures\ are\ terminated.}}
+\DoxyCodeLine{00061\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00062\ \ \ \ \ Id<InstrumentProfileConnection>\ id\_;}
+\DoxyCodeLine{00063\ \ \ \ \ JavaObjectHandle<InstrumentProfileConnection>\ handle\_;}
+\DoxyCodeLine{00064\ \ \ \ \ JavaObjectHandle<IpfPropertyChangeListener>\ stateChangeListenerHandle\_;}
+\DoxyCodeLine{00065\ \ \ \ \ SimpleHandler<\textcolor{keywordtype}{void}(\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}},\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}})>\ onStateChange\_\mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_ad61817f97608b59ef4ed5330d90f8d07}{\{}}\mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_ad61817f97608b59ef4ed5330d90f8d07}{\}}};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ InstrumentProfileConnection()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{struct}\ Impl;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ stateToString(\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}\ state)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (state)\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8}{::}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\_CONNECTED}}:}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}NOT\_CONNECTED"{}};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d}{CONNECTING}}:}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CONNECTING"{}};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858}{::}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858}{CONNECTED}}:}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CONNECTED"{}};}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e}{::}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e}{COMPLETED}}:}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}COMPLETED"{}};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}}:}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CLOSED"{}};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00087\ \ \ \ \ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ instrument\ profile\ connection\ with\ a\ specified\ address\ and\ collector.}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ Address\ may\ be\ just\ "{}<host>:<port>"{}\ of\ server,\ URL,\ or\ a\ file\ path.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ The\ "{}[update=<period>]"{}\ clause\ can\ be\ optionally\ added\ at\ the\ end\ of\ the\ address\ to}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ specify\ an\ @ref\ InstrumentProfileConnection::getUpdatePeriod()\ "{}update\ period"{}\ via\ an\ address\ string.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ Default\ update\ period\ is\ 1\ minute.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ <p>Connection\ needs\ to\ be\ @ref\ InstrumentProfileConnection::start()\ "{}started"{}\ to\ begin\ an\ actual\ operation.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ @param\ address\ The\ address.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collector\ The\ instrument\ profile\ collector\ to\ push\ updates\ into.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ @return\ new\ instrument\ profile\ connection.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a8c6d9346242856cb081e0b39c50490be}{createConnection}}(\textcolor{keyword}{const}\ std::string\ \&address,\ InstrumentProfileCollector::Ptr\ collector)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ address\ of\ this\ instrument\ profile\ connection.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ It\ does\ not\ include\ additional\ options\ specified\ as\ part\ of\ the\ address.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ address\ of\ this\ instrument\ profile\ connection.}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00111\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_af72f021b002d581c18b5255bb927af90}{getAddress}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ update\ period\ in\ milliseconds.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ period\ of\ an\ update\ check\ when\ the\ instrument\ profiles\ source\ does\ not\ support\ live\ updates}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ and/or\ when\ connection\ is\ dropped.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ Default\ update\ period\ is\ 1\ minute,\ unless\ overridden\ in\ an}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfileConnection::createConnection()\ "{}address\ string"{}.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ update\ period\ in\ milliseconds.}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00122\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}{getUpdatePeriod}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ update\ period\ in\ milliseconds\ as\ chrono::duration}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ period\ of\ an\ update\ check\ when\ the\ instrument\ profiles\ source\ does\ not\ support\ live\ updates}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ and/or\ when\ connection\ is\ dropped.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ Default\ update\ period\ is\ 1\ minute,\ unless\ overridden\ in\ an}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfileConnection::createConnection()\ "{}address\ string"{}.}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ update\ period\ in\ milliseconds\ as\ chrono::duration.}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00133\ \ \ \ \ std::chrono::milliseconds\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ab69cbd37ade86b5bdcb3618335b8800e}{getUpdatePeriodAsDuration}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::chrono::milliseconds(\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}{getUpdatePeriod}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}{(}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}{)}});}
+\DoxyCodeLine{00135\ \ \ \ \ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ update\ period\ in\ milliseconds.}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ @param\ updatePeriod\ The\ update\ period\ in\ milliseconds.}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ @see\ InstrumentProfileConnection::getUpdatePeriod()}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a4d96bf46b2de162b34f98631f4e82e84}{setUpdatePeriod}}(std::int64\_t\ updatePeriod)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ update\ period\ in\ milliseconds\ as\ chrono::duration.}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ @param\ updatePeriod\ The\ update\ period\ in\ milliseconds\ as\ chrono::duration.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ @see\ InstrumentProfileConnection::getUpdatePeriod()}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a5e8366941b6070651b7966cb34b54d9e}{setUpdatePeriod}}(std::chrono::milliseconds\ updatePeriod)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a4d96bf46b2de162b34f98631f4e82e84}{setUpdatePeriod}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a4d96bf46b2de162b34f98631f4e82e84}{(}}updatePeriod.count()\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a4d96bf46b2de162b34f98631f4e82e84}{)}};}
+\DoxyCodeLine{00153\ \ \ \ \ \}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ state\ of\ this\ instrument\ profile\ connections.}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ state\ of\ this\ instrument\ profile\ connections.}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00160\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a14ea136c4da5de978b2ed946ad878c85}{getState}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ last\ modification\ time\ (in\ milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ while\ the\ time\ is\ represented\ in\ milliseconds,\ the\ actual\ granularity\ of\ time\ here\ is\ a\ second.}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ last\ modification\ time\ (in\ milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00168\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ab0260dce2c5ce488be31cb572bf2a145}{getLastModified}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *\ Starts\ this\ instrument\ profile\ connection.\ This\ connection's\ state\ immediately\ changes\ to}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfileConnection::State::CONNECTING\ "{}CONNECTING"{}\ and\ the\ actual\ connection\ establishment\ proceeds}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ in\ the\ background.}}
 \DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordtype}{void}\ close()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_addaee68079e29ca30122b0690f47a45a}{start}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
 \DoxyCodeLine{00176\ }
 \DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ listener\ that\ is\ notified\ about\ changes\ in\ @ref\ InstrumentProfileConnection::getState()\ "{}state"{}\ property.}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ <p>Installed\ listener\ can\ be\ removed\ by\ \`{}id`\ with\ InstrumentProfileConnection::removeStateChangeListener\ method}}
-\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ or\ by\ call\ \`{}InstrumentProfileConnection::onStateChange()\ -\/=\ id`;}}
-\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ StateChangeListener\ The\ listener\ type.\ It\ can\ be\ any\ callable\ with\ signature:\ \`{}void(State,\ State)`}}
-\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener\ to\ add}}
-\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ listener\ id}}
-\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ StateChangeListener>}
-\DoxyCodeLine{00188\ \ \ \ \ std::size\_t\ addStateChangeListener(StateChangeListener\ \&\&listener)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00189\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ requires\ requires\ \{}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ listener(State\{\},\ State\{\})\ \}\ -\/>\ std::same\_as<\textcolor{keywordtype}{void}>;}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00193\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
-\DoxyCodeLine{00194\ \ \ \ \ \{}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ onStateChange\_\ +=\ listener;}
-\DoxyCodeLine{00196\ \ \ \ \ \}}
-\DoxyCodeLine{00197\ }
-\DoxyCodeLine{00198\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ listener\ that\ is\ notified\ about\ changes\ in\ @ref\ InstrumentProfileConnection::getState()\ "{}state"{}\ property.}}
-\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ It\ removes\ the\ listener\ that\ was\ previously\ installed\ with\ InstrumentProfileConnection::addStateChangeListener}}
-\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ method.}}
-\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listenerId\ The\ listener\ id\ to\ remove}}
-\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{void}\ removeStateChangeListener(std::size\_t\ listenerId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ onStateChange\_\ -\/=\ listenerId;}
-\DoxyCodeLine{00207\ \ \ \ \ \}}
-\DoxyCodeLine{00208\ }
-\DoxyCodeLine{00209\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ onStateChange\ @ref\ SimpleHandler<void(ArgTypes...)>\ "{}handler"{}\ that\ can\ be\ used\ to\ add\ or\ remove}}
-\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ *\ listeners.}}
-\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *\ @return\ onStateChange\ handler\ with\ \`{}void(State,\ State)`\ signature}}
-\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keyword}{auto}\ \&onStateChange()\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ onStateChange\_;}
-\DoxyCodeLine{00217\ \ \ \ \ \}}
-\DoxyCodeLine{00218\ }
-\DoxyCodeLine{00219\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ Synchronously\ waits\ for\ full\ first\ snapshot\ read\ with\ the\ specified\ timeout.}}
-\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeout\ The\ maximum\ time\ (in\ millis)\ to\ wait}}
-\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ @ref\ InstrumentProfileConnection::State::COMPLETED\ "{}COMPLETED"{}\ state\ was\ reached\ and\ \`{}false`}}
-\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ the\ waiting\ time\ elapsed\ before\ snapshot\ was\ fully\ read.}}
-\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keywordtype}{bool}\ waitUntilCompleted(std::int64\_t\ timeout)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00227\ }
-\DoxyCodeLine{00228\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *\ Synchronously\ waits\ for\ full\ first\ snapshot\ read\ with\ the\ specified\ timeout.}}
-\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeout\ The\ maximum\ time\ to\ wait}}
-\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ @ref\ InstrumentProfileConnection::State::COMPLETED\ "{}COMPLETED"{}\ state\ was\ reached\ and\ \`{}false`}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ the\ waiting\ time\ elapsed\ before\ snapshot\ was\ fully\ read.}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordtype}{bool}\ waitUntilCompleted(std::chrono::milliseconds\ timeout)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ waitUntilCompleted(timeout.count());}
-\DoxyCodeLine{00237\ \ \ \ \ \}}
-\DoxyCodeLine{00238\ \};}
-\DoxyCodeLine{00239\ }
-\DoxyCodeLine{00240\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ Closes\ this\ instrument\ profile\ connection.\ This\ connection's\ state\ immediately\ changes\ to}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfileConnection::State::CLOSED\ "{}CLOSED"{}\ and\ the\ background\ update\ procedures\ are\ terminated.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a34b2751fd3fb16cecc174773ffbad5bc}{close}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ listener\ that\ is\ notified\ about\ changes\ in\ @ref\ InstrumentProfileConnection::getState()\ "{}state"{}\ property.}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ <p>Installed\ listener\ can\ be\ removed\ by\ \`{}id`\ with\ InstrumentProfileConnection::removeStateChangeListener\ method}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ or\ by\ call\ \`{}InstrumentProfileConnection::onStateChange()\ -\/=\ id`;}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ StateChangeListener\ The\ listener\ type.\ It\ can\ be\ any\ callable\ with\ signature:\ \`{}void(State,\ State)`}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener\ to\ add}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ listener\ id}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ StateChangeListener>}
+\DoxyCodeLine{00194\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a9d3564db3cab9cd2e442e509c009ed86}{addStateChangeListener}}(StateChangeListener\ \&\&listener)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ requires\ requires\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ listener(State\{\},\ State\{\})\ \}\ -\/>\ std::same\_as<\textcolor{keywordtype}{void}>;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00199\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00200\ \ \ \ \ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ onStateChange\_\ +=\ listener;}
+\DoxyCodeLine{00202\ \ \ \ \ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ listener\ that\ is\ notified\ about\ changes\ in\ @ref\ InstrumentProfileConnection::getState()\ "{}state"{}\ property.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ It\ removes\ the\ listener\ that\ was\ previously\ installed\ with\ InstrumentProfileConnection::addStateChangeListener}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ method.}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listenerId\ The\ listener\ id\ to\ remove}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a13e5826c00974cf8693922845339b2c7}{removeStateChangeListener}}(std::size\_t\ listenerId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ onStateChange\_\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a9a3a6f6164c4584b4f109375085a5596}{-\/=}}\ listenerId;}
+\DoxyCodeLine{00213\ \ \ \ \ \}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ onStateChange\ @ref\ SimpleHandler<void(ArgTypes...)>\ "{}handler"{}\ that\ can\ be\ used\ to\ add\ or\ remove}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ listeners.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ @return\ onStateChange\ handler\ with\ \`{}void(State,\ State)`\ signature}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{auto}\ \&\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a607127b7f9a5c7259628774a856ffe29}{onStateChange}}()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ onStateChange\_;}
+\DoxyCodeLine{00223\ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ Synchronously\ waits\ for\ full\ first\ snapshot\ read\ with\ the\ specified\ timeout.}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeout\ The\ maximum\ time\ (in\ millis)\ to\ wait}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ @ref\ InstrumentProfileConnection::State::COMPLETED\ "{}COMPLETED"{}\ state\ was\ reached\ and\ \`{}false`}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ the\ waiting\ time\ elapsed\ before\ snapshot\ was\ fully\ read.}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a8d2bb2ed147ed654455cffa6062f4b36}{waitUntilCompleted}}(std::int64\_t\ timeout)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ Synchronously\ waits\ for\ full\ first\ snapshot\ read\ with\ the\ specified\ timeout.}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeout\ The\ maximum\ time\ to\ wait}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ @ref\ InstrumentProfileConnection::State::COMPLETED\ "{}COMPLETED"{}\ state\ was\ reached\ and\ \`{}false`}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ the\ waiting\ time\ elapsed\ before\ snapshot\ was\ fully\ read.}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a980035e287fe65558b6f72d736000629}{waitUntilCompleted}}(std::chrono::milliseconds\ timeout)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a8d2bb2ed147ed654455cffa6062f4b36}{waitUntilCompleted}}\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a8d2bb2ed147ed654455cffa6062f4b36}{(}}timeout.count()\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a8d2bb2ed147ed654455cffa6062f4b36}{)}};}
+\DoxyCodeLine{00243\ \ \ \ \ \}}
+\DoxyCodeLine{00244\ \};}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
 
 \end{DoxyCode}

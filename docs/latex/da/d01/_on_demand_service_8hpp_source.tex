@@ -1,0 +1,278 @@
+\doxysubsection{On\+Demand\+Service.\+hpp}
+\hypertarget{_on_demand_service_8hpp_source}{}\label{_on_demand_service_8hpp_source}\index{OnDemandService.hpp@{OnDemandService.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/CEntryPointErrors.hpp"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Handler.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Isolate.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/JavaObjectHandle.hpp"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Provides\ on-\/demand\ historical\ tick\ data\ replay\ controls.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ This\ class\ is\ used\ to\ seamlessly\ transition\ from\ ordinary\ real-\/time\ or\ delayed\ data\ feed\ to\ the\ replay\ of\ the}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ tick-\/by-\/tick\ history\ of\ market\ data\ behaviour\ without\ any\ changes\ to\ the\ code\ that\ consumes\ and\ process\ these\ market}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ events.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ <p>As\ single\ OnDemandService\ instance\ is\ conceptually\ associated\ with\ each\ DXEndpoint\ endpoint\ instance\ with\ the\ role}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ of\ @ref\ DXEndpoint::Role::FEED\ "{}FEED"{}\ or\ @ref\ DXEndpoint::Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ You\ can\ retrieve\ OnDemandService\ instance\ that\ is\ associated\ with\ a\ given}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ DXEndpoint\ using\ @ref\ OnDemandService::getInstance(std::shared\_ptr<DXEndpoint>)\ "{}getInstance(endpoint)"{}\ method.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ <p>For\ example,\ OnDemandService\ instance\ for\ a\ default\ DXFeed\ that\ is\ featured\ in\ the\ documentation\ of\ DXFeed\ class}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ and\ is\ retrieved\ via}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ @ref\ DXFeed::getInstance()\ "{}DXFeed::getInstance()"{}\ method\ can\ be\ acquired\ with\ the\ following\ code:}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ <pre><tt>}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ @ref\ DXEndpoint\ "{}auto"{}\ endpoint\ =\ DXEndpoint::getInstance();}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ @ref\ OnDemandService\ "{}auto"{}\ onDemand\ =\ OnDemandService::@ref\ OnDemandService::getInstance(std::shared\_ptr<DXEndpoint>)\ "{}getInstance"{}(endpoint);}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ </tt></pre>}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ This\ instance\ can\ be\ used\ for\ on-\/demand\ historical\ tick\ data\ replay\ only\ when\ endpoint\ is\ connected\ to}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ the\ on-\/demand\ data\ provider\ and\ the\ appropriate\ credentials\ are\ provided.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ @ref\ OnDemandService::isReplaySupported()\ "{}isReplaySupported"{}\ returns\ \`{}true`\ when\ it\ is\ so.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ <p>On-\/demand\ replay\ is\ started\ with\ @ref\ OnDemandService::replay(std::int64\_t)\ "{}replay"{}\ method\ that\ takes\ time\ as\ a\ parameter.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ DXFeed\ is\ then\ disconnected\ from\ other\ data\ providers,\ pre-\/buffers\ historical\ tick\ data\ for\ replay,}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ and\ starts\ replay\ of\ the\ data\ as\ if\ it\ was\ coming\ from\ the\ data\ feeds\ now.\ All\ the\ usual\ APIs\ that\ are}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ part\ of\ DXFeed\ like\ @ref\ DXFeedSubscription\ "{}subscription"{}\ and\ various\ dxFeed\ models}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ can\ be\ used\ normally\ as\ with\ the\ ordinary\ real-\/time\ or\ delayed\ data\ feed.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ <p>Replay\ speed\ can\ be\ changed\ on\ the\ fly\ with\ @ref\ OnDemandService::setSpeed(double)\ "{}setSpeed"{}\ method\ or\ it\ can\ be\ set}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ initially\ when\ starting\ replay\ with\ a\ two-\/argument\ version\ of\ @ref\ OnDemandService::replay(std::int64\_t,\ double)\ "{}replay"{}\ method.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ @ref\ OnDemandService::pause()\ "{}pause"{}\ method\ is\ the\ same\ as\ @ref\ OnDemandService::setSpeed(double)\ "{}setSpeed(0)"{}.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ <p>@ref\ OnDemandService::stopAndResume()\ "{}stopAndResume"{}\ method\ stops\ data\ replay\ and\ resumes\ ordinary\ real-\/time\ or\ delayed\ data\ feed}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ that\ was\ used\ before\ @ref\ OnDemandService::replay(std::int64\_t)\ "{}replay"{}\ method\ was\ invoked.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ Endpoints\ with\ a\ role\ of}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ @ref\ DXEndpoint::Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}\ do\ not\ have\ an\ ordinary\ feed\ (they\ are\ essentially\ on-\/demand\ only)}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ and\ thus\ @ref\ OnDemandService::stopAndResume()\ "{}stopAndResume"{}\ method\ works\ like\ @ref\ OnDemandService::stopAndClear()\ "{}stopAndClear"{}\ for\ them.}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ <h3>State\ and\ change\ notifications</h3>}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ On-\/demand\ historical\ tick\ data\ replay\ state\ can\ be\ queried\ with\ @ref\ OnDemandService::isReplaySupported()\ "{}isReplaySupported"{},}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ @ref\ OnDemandService::isReplay()\ "{}isReplay"{},\ @ref\ OnDemandService::getSpeed()\ "{}getSpeed"{},\ and\ @ref\ OnDemandService::getTime()\ "{}getTime"{}\ methods.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ <h3>Threads\ and\ locks</h3>}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ This\ class\ is\ thread-\/safe\ and\ can\ be\ used\ concurrently\ from\ multiple\ threads\ without\ external\ synchronization.}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00070\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{OnDemandService}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{SharedEntity}}\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ OnDemandService\ object}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{OnDemandService}}>;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ OnDemandService\ object}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{OnDemandService}}>;}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00078\ \ \ \ \ JavaObjectHandle<\mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{OnDemandService}}>\ handle\_;}
+\DoxyCodeLine{00079\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ endpoint\_\{\};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00082\ \ \ \ \ OnDemandService()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00085\ \ \ \ \ \string~OnDemandService()\ \textcolor{keyword}{noexcept}\ override;}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ on-\/demand\ service\ for\ the\ default\ DXEndpoint\ instance\ with}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ DXEndpoint::Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}\ role\ that\ is}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ not\ connected\ to\ any\ other\ real-\/time\ or\ delayed\ data\ feed.}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ is\ a\ shortcut\ for:}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ OnDemandService::@ref\ OnDemandService::getInstance(std::shared\_ptr<DXEndpoint>)\ "{}getInstance"{}(@ref\ DXEndpoint\ "{}DXEndpoint"{}::@ref\ DXEndpoint::getInstance(DXEndpoint::Role)\ "{}getInstance"{}(DXEndpoint::Role::ON\_DEMAND\_FEED))</tt></pre>}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ <p>If\ you\ need\ an\ instance\ of\ OnDemandService\ to\ seamlessly\ switch\ from\ other\ real-\/time\ or\ delayed}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ data\ feed\ to\ on-\/demand\ historical\ tick\ data\ replay,\ then\ use}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ \{@ref\ OnDemandService::getInstance(std::shared\_ptr<DXEndpoint>)\ "{}getInstance(endpoint)"{}\ method\ for\ a\ specific\ \`{}endpoint`\ that}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ you\ are\ using.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ @return\ on-\/demand\ endpoint\ for\ the\ default\ DXEndpoint\ instance.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{OnDemandService}}>\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ae1a196a44a7cadc3947bfa3b51feb76d}{getInstance}}()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ on-\/demand\ service\ for\ the\ specified\ DXEndpoint.}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ Each\ DXEndpoint\ is\ conceptually\ associated\ with\ a\ single\ instance\ of\ on-\/demand\ service\ to}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ control\ its\ historic\ data\ replay\ and\ this\ method\ returns\ this\ instance.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ The\ endpoint\ must\ have\ a\ role\ of}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ DXEndpoint::Role::FEED\ "{}FEED"{}\ or\ @ref\ DXEndpoint::Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}.}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ @param\ endpoint\ the\ endpoint.}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ on-\/demand\ service.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{OnDemandService}}>\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ae15499a709aa000ba8debd302eafa4ab}{getInstance}}(std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ endpoint)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ DXEndpoint\ that\ is\ associated\ with\ this\ on-\/demand\ service.}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ @return\ DXEndpoint\ that\ is\ associated\ with\ this\ on-\/demand\ service.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00121\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}>\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a22340e6506b97860fb975809ea499492}{getEndpoint}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ when\ on-\/demand\ historical\ data\ replay\ mode\ is\ supported.}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ DXEndpoint\ should\ be\ @ref\ DXEndpoint::connect()\ "{}connected"{}}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ to\ an\ address\ with\ "{}(ondemand:<address>)"{}\ component\ that\ specifies\ an\ on-\/demand\ historical}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ data\ provider\ address.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ When\ this\ method\ returns\ \`{}false`,\ @ref\ OnDemandService::replay(std::int64\_t,\ double)\ "{}replay"{}\ method\ does\ nothing.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ when\ on-\/demand\ historical\ data\ replay\ mode\ is\ supported.}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a90d8fbd5848ea7ddf107649e39e634dd}{isReplaySupported}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ when\ this\ on-\/demand\ historical\ data\ replay\ service\ is\ in\ replay\ mode.}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ Replay\ mode\ is\ in\ effect\ after\ invocation\ of\ @ref\ OnDemandService::replay(std::int64\_t,\ double)\ "{}replay"{}\ method\ and}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ before\ invocation\ @ref\ OnDemandService::stopAndResume()\ "{}stopAndResume"{}\ or\ @ref\ OnDemandService::stopAndClear()\ "{}stopAndClear"{}\ methods.}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ when\ this\ on-\/demand\ historical\ data\ replay\ service\ is\ in\ replay\ mode.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{isReplay}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ when\ this\ on-\/demand\ historical\ data\ replay\ service\ is\ in\ clear\ mode.}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ Clear\ mode\ is\ in\ effect\ after\ invocation\ of\ @ref\ OnDemandService::stopAndClear()\ "{}stopAndClear"{}\ \ method\ and}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ before\ invocation\ @ref\ OnDemandService::stopAndResume()\ "{}stopAndResume"{}\ or\ @ref\ OnDemandService::replay(std::int64\_t,\ double)\ "{}replay"{}\ methods.}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ when\ this\ on-\/demand\ historical\ data\ replay\ service\ is\ in\ clear\ mode.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_abf5352aa973901424828fed25da7f388}{isClear}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ current\ or\ last\ on-\/demand\ historical\ data\ replay\ time.}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ In\ @ref\ OnDemandService::isReplay()\ "{}replay\ mode"{}\ this\ is\ the\ time\ that\ is\ being\ currently\ replayed,}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ otherwise\ this\ is\ the\ last\ time\ that\ was\ replayed.}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ If\ replay\ was\ never\ started,\ then\ result\ is\ 0.}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ @return\ current\ or\ last\ on-\/demand\ historical\ data\ replay\ time\ in\ millis.}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00160\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{getTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ on-\/demand\ historical\ data\ replay\ speed.}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ Speed\ is\ measured\ with\ respect\ to\ the\ real-\/time\ playback\ speed.}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ of\ this\ method\ is\ zero\ when\ this\ service\ is\ not\ in\ @ref\ OnDemandService::isReplay()\ "{}replay\ mode"{}.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ The\ speed\ is\ set\ when\ starting\ replay\ by\ @ref\ OnDemandService::replay(std::int64\_t,\ double)\ "{}replay(time,\ speed)"{}\ method}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ and\ with\ @ref\ OnDemandService::setSpeed(double)\ "{}setSpeed(speed)"{}\ method\ during\ replay.}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ @return\ on-\/demand\ historical\ data\ replay\ speed.}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d}{getSpeed}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ Turns\ on-\/demand\ historical\ data\ replay\ mode\ from\ a\ specified\ time\ with\ real-\/time\ speed.}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ This\ is\ a\ shortcut\ for:}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @ref\ OnDemandService::replay(Date,\ double)\ "{}replay"{}(time,\ 1);</tt></pre>}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ can\ be\ used\ only\ when\ OnDemandService::isReplaySupported()\ method\ returns\ \`{}true`,}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ that\ is\ when\ DXEndpoint\ is\ @ref\ DXEndpoint::connect()\ "{}connected"{}}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ to\ an\ address\ with\ "{}(ondemand:<address>)"{}\ component\ that\ specifies\ an\ on-\/demand\ historical}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ data\ provider\ address.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ (timestamp\ in\ millis)\ to\ start\ replay\ from.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a858773b5a797289cc95de7d38249305b}{replay}}(std::int64\_t\ time)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *\ Turns\ on-\/demand\ historical\ data\ replay\ mode\ from\ a\ specified\ time\ and\ with\ a\ specified\ speed.}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ can\ be\ used\ only\ when\ OnDemandService::isReplaySupported()\ method\ returns\ \`{}true`,}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ that\ is\ when\ DXEndpoint\ is\ @ref\ DXEndpoint::connect()\ "{}connected"{}}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ to\ an\ address\ with\ "{}(ondemand:<address>)"{}\ component\ that\ specifies\ an\ on-\/demand\ historical}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ data\ provider\ address.}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ <p>After\ invocation\ of\ this\ method:}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::isReplay()\ returns\ \`{}true`.}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::isClear()\ returns\ \`{}false`.}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::getTime()\ returns\ time\ that\ is\ currently\ being\ replayed.}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::getSpeed()\ returns\ \`{}speed`.}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ (timestamp\ in\ millis)\ to\ start\ replay\ from.}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ @param\ speed\ speed\ to\ start\ replay\ with.\ Use\ 1\ for\ real-\/time\ speed,\ >1\ for\ faster\ than\ real-\/time\ speed,}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ \ <1\ for\ slower\ than\ real-\/time\ speed,\ and\ 0\ for\ pause.}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a436a7ef54c286aa191af0c90b77ec5be}{replay}}(std::int64\_t\ time,\ \textcolor{keywordtype}{double}\ speed)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ Pauses\ on-\/demand\ historical\ data\ replay\ and\ keeps\ data\ snapshot.}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ can\ only\ be\ called\ in\ @ref\ OnDemandService::isReplay()\ "{}replay\ mode"{}.}}
+\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ *\ This\ is\ a\ shortcut\ for:}}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @ref\ OnDemandService::setSpeed(double)\ "{}setSpeed"{}(0);</tt></pre>}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ atomically\ captures\ current\ replay\ time\ and\ pauses\ at\ it.}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *\ After\ invocation\ of\ this\ method:}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::isReplay()\ returns\ \`{}true`.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::isClear()\ returns\ \`{}false`.}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::getTime()\ returns\ time\ where\ replay\ was\ paused\ at.}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::getSpeed()\ returns\ \`{}0`.}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ad6320537ee56243d6706aa65860a232d}{pause}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ Stops\ on-\/demand\ historical\ data\ replay\ and\ resumes\ ordinary\ data\ feed.}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ has\ no\ effect\ when\ invoked\ not\ in\ @ref\ OnDemandService::isReplay()\ "{}replay\ mode"{}.}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *\ After\ invocation\ of\ this\ method:}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::isReplay()\ returns\ \`{}false`.}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::isClear()\ returns\ \`{}false`.}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::getTime()\ returns\ last\ replayed\ time.}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::getSpeed()\ returns\ \`{}0`.}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ <p>To\ stop\ on-\/demand\ historical\ data\ replay\ without\ resuming\ ordinary\ data\ feed\ use}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ either\ OnDemandService::pause()\ to\ keep\ data\ snapshot\ or\ OnDemandService::stopAndClear()\ to\ clear\ data.}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *\ <p>Note,\ that\ endpoints\ with\ a\ role\ of}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ DXEndpoint::Role::ON\_DEMAND\_FEED\ "{}ON\_DEMAND\_FEED"{}\ do\ not\ have\ an\ ordinary\ feed\ (they\ are\ essentially\ on-\/demand\ only)}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ and\ thus\ \`{}stopAndResume`\ method\ works\ like\ @ref\ OnDemandService::stopAndClear()\ "{}stopAndClear"{}\ for\ them.}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}{stopAndResume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ Stops\ incoming\ data\ and\ clears\ it\ without\ resuming\ data\ updates.}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ works\ both\ in\ on-\/demand\ historical\ data\ replay\ mode\ and}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ for\ ordinary\ data\ feed.\ All\ incoming\ data\ updates\ are\ suspended\ and\ current\ data\ is\ cleared.}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *\ After\ invocation\ of\ this\ method:}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::isReplay()\ returns\ \`{}false`.}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::isClear()\ returns\ \`{}true`.}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::getTime()\ returns\ last\ replayed\ time.}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>OnDemandService::getSpeed()\ returns\ \`{}0`.}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ <p>Ordinary\ data\ feed\ can\ be\ resumed\ with\ OnDemandService::stopAndResume()\ method\ and\ on-\/demand\ historical\ data}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *\ replay\ can\ be\ continued\ with\ @ref\ OnDemandService::replay(std::int64\_t,\ double)\ "{}replay(...)"{}\ method.}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}{stopAndClear}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ on-\/demand\ historical\ data\ replay\ speed\ while\ continuing\ replay\ at\ current\ @ref\ OnDemandService::getTime()\ "{}time"{}.}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ Speed\ is\ measured\ with\ respect\ to\ the\ real-\/time\ playback\ speed.}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ can\ only\ be\ called\ with\ non-\/zero\ speed\ in\ @ref\ OnDemandService::isReplay()\ "{}replay\ mode"{}.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *\ @param\ speed\ on-\/demand\ historical\ data\ replay\ speed.}}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ae2bd0b06348f9d71822c3dbbad19aa9f}{setSpeed}}(\textcolor{keywordtype}{double}\ speed)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00270\ \};}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \}}
+
+\end{DoxyCode}

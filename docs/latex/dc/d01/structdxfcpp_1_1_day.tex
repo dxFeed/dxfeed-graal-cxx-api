@@ -13,10 +13,10 @@
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c}\label{structdxfcpp_1_1_day_a37ba1fb3d418bc61108026bb86fdf64c} 
-using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_day}{Day}} $>$
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_day}{Day}}$>$
 \begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_day}{Day} object. \end{DoxyCompactList}\item 
 \Hypertarget{structdxfcpp_1_1_day_ac75b9da9d9dcd6642f828440947b53e6}\label{structdxfcpp_1_1_day_ac75b9da9d9dcd6642f828440947b53e6} 
-using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_day}{Day}} $>$
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_day}{Day}}$>$
 \begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{structdxfcpp_1_1_day}{Day} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -48,8 +48,6 @@ std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_af4e8fd01377aa9e00f6ac
 bool \mbox{\hyperlink{structdxfcpp_1_1_day_a12998de2d48f183e2cea7e6a617553e6}{contains\+Time}} (std\+::int64\+\_\+t time) const noexcept
 \item 
 std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_day_ac0992b490b763d1ca63215aad987254b}{get\+Reset\+Time}} () const noexcept
-\item 
-std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_a3f33d3cdf1e7cabf3efb65f02075c3ac}{get\+Sessions}} () const noexcept
 \item 
 std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_day_acc17caa1b96904ac5226fc0df2ea89e5}{get\+Session\+By\+Time}} (std\+::int64\+\_\+t time) const noexcept
 \begin{DoxyCompactList}\small\item\em Returns session belonging to this day that contains specified time. \end{DoxyCompactList}\item 
@@ -377,15 +375,6 @@ If no such session was found within this day this method will return \doxylink{s
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 The session that contains specified time or \doxylink{structdxfcpp_1_1_session_a89b0a40b1acecac123bebfc91656721c}{Session\+::\+Ptr}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within this day 
-\end{DoxyReturn}
-\Hypertarget{structdxfcpp_1_1_day_a3f33d3cdf1e7cabf3efb65f02075c3ac}\label{structdxfcpp_1_1_day_a3f33d3cdf1e7cabf3efb65f02075c3ac} 
-\index{dxfcpp::Day@{dxfcpp::Day}!getSessions@{getSessions}}
-\index{getSessions@{getSessions}!dxfcpp::Day@{dxfcpp::Day}}
-\doxyparagraph{\texorpdfstring{getSessions()}{getSessions()}}
-{\footnotesize\ttfamily std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_session}{Session}} $>$ $>$ dxfcpp\+::\+Day\+::get\+Sessions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
-
-\begin{DoxyReturn}{Returns}
-The list of sessions that constitute this day. The list is ordered according to natural order of sessions -\/ how they occur one after another. 
 \end{DoxyReturn}
 \Hypertarget{structdxfcpp_1_1_day_ae3c4cf3680a5aab9e01efbdec0fbb5a3}\label{structdxfcpp_1_1_day_ae3c4cf3680a5aab9e01efbdec0fbb5a3} 
 \index{dxfcpp::Day@{dxfcpp::Day}!getStartTime@{getStartTime}}

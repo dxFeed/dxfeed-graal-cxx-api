@@ -2,7 +2,7 @@
 \hypertarget{_cmd_args_utils_8hpp_source}{}\label{_cmd_args_utils_8hpp_source}\index{CmdArgsUtils.hpp@{CmdArgsUtils.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -18,201 +18,201 @@
 \DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../symbols/SymbolWrapper.hpp"{}}}
 \DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ CmdArgsUtils\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ symbols.}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ *\ The\ symbol\ "{}all"{}\ or\ "{}*"{}\ can\ be\ passed.\ This\ will\ add\ WildcardSymbol\ (all\ symbols).}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ CmdArgsUtils\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ symbols.}}
 \DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ symbols}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<SymbolWrapper>\ parseSymbols(\textcolor{keyword}{const}\ std::string\ \&symbols)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ symbols.}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ The\ symbol\ "{}all"{}\ or\ "{}*"{}\ can\ be\ passed.\ This\ will\ add\ WildcardSymbol\ (all\ symbols)..}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ The\ symbol\ "{}all"{}\ or\ "{}*"{}\ can\ be\ passed.\ This\ will\ add\ WildcardSymbol\ (all\ symbols).}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ symbols}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<SymbolWrapper>\ parseSymbols(\textcolor{keyword}{const}\ std::string\ \&symbols)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ symbols.}}
 \DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ symbols}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<SymbolWrapper>\ parseSymbols(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *symbols)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseSymbols(std::string(symbols));}
-\DoxyCodeLine{00040\ \ \ \ \ \}}
-\DoxyCodeLine{00041\ }
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ symbols.}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ The\ symbol\ "{}all"{}\ or\ "{}*"{}\ can\ be\ passed.\ This\ will\ add\ WildcardSymbol\ (all\ symbols).}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ The\ symbol\ "{}all"{}\ or\ "{}*"{}\ can\ be\ passed.\ This\ will\ add\ WildcardSymbol\ (all\ symbols)..}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ symbols}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<SymbolWrapper>\ parseSymbols(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *symbols)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseSymbols(std::string(symbols));}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ symbols.}}
 \DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ symbols}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<SymbolWrapper>\ parseSymbols(std::string\_view\ symbols)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseSymbols(symbols.data());}
-\DoxyCodeLine{00052\ \ \ \ \ \}}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ symbols.}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ The\ symbol\ "{}all"{}\ or\ "{}*"{}\ can\ be\ passed.\ This\ will\ add\ WildcardSymbol\ (all\ symbols).}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ The\ symbol\ "{}all"{}\ or\ "{}*"{}\ can\ be\ passed.\ This\ will\ add\ WildcardSymbol\ (all\ symbols).}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ symbols}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<SymbolWrapper>\ parseSymbols(std::string\_view\ symbols)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseSymbols(symbols.data());}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ symbols.}}
 \DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ symbols}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<SymbolWrapper>\ parseSymbols(std::optional<std::string>\ symbols)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (symbols.has\_value())\ \{}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseSymbols(symbols.value());}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
-\DoxyCodeLine{00068\ \ \ \ \ \}}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ candle\ symbols.}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ candle\ symbols}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<CandleSymbol>\ parseCandleSymbols(\textcolor{keyword}{const}\ std::string\ \&symbols)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ candle\ symbols.}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ candle\ symbols}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<CandleSymbol>\ parseCandleSymbols(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *symbols)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseCandleSymbols(std::string(symbols));}
-\DoxyCodeLine{00086\ \ \ \ \ \}}
-\DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ candle\ symbols.}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ candle\ symbols}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<CandleSymbol>\ parseCandleSymbols(std::string\_view\ symbols)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseCandleSymbols(symbols.data());}
-\DoxyCodeLine{00096\ \ \ \ \ \}}
-\DoxyCodeLine{00097\ }
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ candle\ symbols.}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ candle\ symbols}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<CandleSymbol>\ parseCandleSymbols(std::optional<std::string>\ symbols)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (symbols.has\_value())\ \{}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseCandleSymbols(symbols.value());}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00108\ }
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
-\DoxyCodeLine{00110\ \ \ \ \ \}}
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ event\ types.}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ "{}all"{}\ or\ "{}*"{}\ will\ be\ converted\ to\ all\ types.}}
-\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ @param\ types\ The\ comma-\/separated\ list\ of\ event\ types.}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ types.}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>}
-\DoxyCodeLine{00121\ \ \ \ \ parseTypes(\textcolor{keyword}{const}\ std::string\ \&types)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00122\ }
-\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ event\ types.}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ "{}all"{}\ or\ "{}*"{}\ will\ be\ converted\ to\ all\ types.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ The\ symbol\ "{}all"{}\ or\ "{}*"{}\ can\ be\ passed.\ This\ will\ add\ WildcardSymbol\ (all\ symbols).}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ symbols}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<SymbolWrapper>\ parseSymbols(std::optional<std::string>\ symbols)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ candle\ symbols.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ candle\ symbols}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<CandleSymbol>\ parseCandleSymbols(\textcolor{keyword}{const}\ std::string\ \&symbols)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ candle\ symbols.}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ candle\ symbols}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<CandleSymbol>\ parseCandleSymbols(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *symbols)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseCandleSymbols(std::string(symbols));}
+\DoxyCodeLine{00082\ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ candle\ symbols.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ candle\ symbols}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<CandleSymbol>\ parseCandleSymbols(std::string\_view\ symbols)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseCandleSymbols(symbols.data());}
+\DoxyCodeLine{00092\ \ \ \ \ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ candle\ symbols.}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbols\ The\ coma-\/separated\ list\ of\ symbols.}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ candle\ symbols}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<CandleSymbol>\ parseCandleSymbols(std::optional<std::string>\ symbols)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ event\ types.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ "{}all"{}\ or\ "{}*"{}\ will\ be\ converted\ to\ all\ types.}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ @param\ types\ The\ comma-\/separated\ list\ of\ event\ types.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ types.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>}
+\DoxyCodeLine{00111\ \ \ \ \ parseTypes(\textcolor{keyword}{const}\ std::string\ \&types)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ event\ types.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ "{}all"{}\ or\ "{}*"{}\ will\ be\ converted\ to\ all\ types.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ @param\ types\ The\ comma-\/separated\ list\ of\ event\ types.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ types.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ parseTypes(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *types)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseTypes(std::string(types));}
+\DoxyCodeLine{00123\ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ event\ types.}}
 \DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ @param\ types\ The\ comma-\/separated\ list\ of\ event\ types.}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ types.}}
-\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ parseTypes(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *types)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseTypes(std::string(types));}
-\DoxyCodeLine{00133\ \ \ \ \ \}}
-\DoxyCodeLine{00134\ }
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ event\ types.}}
-\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ "{}all"{}\ or\ "{}*"{}\ will\ be\ converted\ to\ all\ types.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ "{}all"{}\ or\ "{}*"{}\ will\ be\ converted\ to\ all\ types.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ @param\ types\ The\ comma-\/separated\ list\ of\ event\ types.}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ types.}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ parseTypes(std::string\_view\ types)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseTypes(types.data());}
+\DoxyCodeLine{00135\ \ \ \ \ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ event\ types.}}
 \DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ @param\ types\ The\ comma-\/separated\ list\ of\ event\ types.}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ types.}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ parseTypes(std::string\_view\ types)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseTypes(types.data());}
-\DoxyCodeLine{00145\ \ \ \ \ \}}
-\DoxyCodeLine{00146\ }
-\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ an\ input\ string\ and\ returns\ a\ set\ of\ event\ types.}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ "{}all"{}\ or\ "{}*"{}\ will\ be\ converted\ to\ all\ types.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ "{}all"{}\ or\ "{}*"{}\ will\ be\ converted\ to\ all\ types.}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ @param\ types\ The\ comma-\/separated\ list\ of\ event\ types.}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ types.}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>}
+\DoxyCodeLine{00146\ \ \ \ \ parseTypes(std::optional<std::string>\ types)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ the\ input\ collection\ of\ strings\ and\ returns\ a\ collection\ of\ key-\/value\ properties.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ The\ input\ strings\ should\ look\ like\ comma-\/separated:\ "{}key=value"{}.}}
 \DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ @param\ types\ The\ comma-\/separated\ list\ of\ event\ types.}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ created\ set\ of\ parsed\ types.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ input\ comma-\/separated\ key-\/value\ pairs.}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ collection\ of\ key-\/value\ properties.}}
 \DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_set<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>}
-\DoxyCodeLine{00156\ \ \ \ \ parseTypes(std::optional<std::string>\ types)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00157\ }
-\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ the\ input\ collection\ of\ strings\ and\ returns\ a\ collection\ of\ key-\/value\ properties.}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ The\ input\ strings\ should\ look\ like\ comma-\/separated:\ "{}key=value"{}.}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ input\ comma-\/separated\ key-\/value\ pairs.}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ collection\ of\ key-\/value\ properties.}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>\ parseProperties(\textcolor{keyword}{const}\ std::string\ \&properties)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00166\ }
-\DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ the\ input\ collection\ of\ strings\ and\ returns\ a\ collection\ of\ key-\/value\ properties.}}
-\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ The\ input\ strings\ should\ look\ like\ comma-\/separated:\ "{}key=value"{}.}}
-\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ input\ comma-\/separated\ key-\/value\ pairs.}}
-\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ collection\ of\ key-\/value\ properties.}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>\ parseProperties(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *properties)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseProperties(std::string(properties));}
-\DoxyCodeLine{00176\ \ \ \ \ \}}
-\DoxyCodeLine{00177\ }
-\DoxyCodeLine{00178\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ the\ input\ collection\ of\ strings\ and\ returns\ a\ collection\ of\ key-\/value\ properties.}}
-\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ The\ input\ strings\ should\ look\ like\ comma-\/separated:\ "{}key=value"{}.}}
-\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ input\ comma-\/separated\ key-\/value\ pairs.}}
-\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ collection\ of\ key-\/value\ properties.}}
-\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>\ parseProperties(std::string\_view\ properties)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseProperties(properties.data());}
-\DoxyCodeLine{00187\ \ \ \ \ \}}
-\DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ the\ input\ collection\ of\ strings\ and\ returns\ a\ collection\ of\ key-\/value\ properties.}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ The\ input\ strings\ should\ look\ like\ comma-\/separated:\ "{}key=value"{}.}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ input\ comma-\/separated\ key-\/value\ pairs.}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ collection\ of\ key-\/value\ properties.}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>}
-\DoxyCodeLine{00197\ \ \ \ \ parseProperties(std::optional<std::string>\ properties)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (properties.has\_value())\ \{}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseProperties(properties.value());}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00201\ }
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
-\DoxyCodeLine{00203\ \ \ \ \ \}}
-\DoxyCodeLine{00204\ }
-\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ Date+Time\ string\ and\ converts\ to\ timestamp}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ @param\ string\ Date+Time\ string}}
-\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ @return\ UTC\ timestamp}}
-\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parseDateTime(\textcolor{keyword}{const}\ std::string\ \&string)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>\ parseProperties(\textcolor{keyword}{const}\ std::string\ \&properties)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ the\ input\ collection\ of\ strings\ and\ returns\ a\ collection\ of\ key-\/value\ properties.}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ The\ input\ strings\ should\ look\ like\ comma-\/separated:\ "{}key=value"{}.}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ input\ comma-\/separated\ key-\/value\ pairs.}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ collection\ of\ key-\/value\ properties.}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>\ parseProperties(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *properties)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseProperties(std::string(properties));}
+\DoxyCodeLine{00166\ \ \ \ \ \}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ the\ input\ collection\ of\ strings\ and\ returns\ a\ collection\ of\ key-\/value\ properties.}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ The\ input\ strings\ should\ look\ like\ comma-\/separated:\ "{}key=value"{}.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ input\ comma-\/separated\ key-\/value\ pairs.}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ collection\ of\ key-\/value\ properties.}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>\ parseProperties(std::string\_view\ properties)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseProperties(properties.data());}
+\DoxyCodeLine{00177\ \ \ \ \ \}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ the\ input\ collection\ of\ strings\ and\ returns\ a\ collection\ of\ key-\/value\ properties.}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ The\ input\ strings\ should\ look\ like\ comma-\/separated:\ "{}key=value"{}.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ input\ comma-\/separated\ key-\/value\ pairs.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ collection\ of\ key-\/value\ properties.}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::string>}
+\DoxyCodeLine{00187\ \ \ \ \ parseProperties(std::optional<std::string>\ properties)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (properties.has\_value())\ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseProperties(properties.value());}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
+\DoxyCodeLine{00193\ \ \ \ \ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ Date+Time\ string\ and\ converts\ to\ timestamp}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ @param\ string\ Date+Time\ string}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *\ @return\ UTC\ timestamp}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parseDateTime(\textcolor{keyword}{const}\ std::string\ \&string)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ Date+Time\ string\ and\ converts\ to\ timestamp}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @param\ string\ Date+Time\ string}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @return\ UTC\ timestamp}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parseDateTime(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *string)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseDateTime(std::string(string));}
+\DoxyCodeLine{00211\ \ \ \ \ \}}
 \DoxyCodeLine{00212\ }
 \DoxyCodeLine{00213\ \ \ \ \ \textcolor{comment}{/**}}
 \DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ Date+Time\ string\ and\ converts\ to\ timestamp}}
@@ -220,8 +220,8 @@
 \DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ @param\ string\ Date+Time\ string}}
 \DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ @return\ UTC\ timestamp}}
 \DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parseDateTime(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *string)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseDateTime(std::string(string));}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parseDateTime(std::string\_view\ string)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseDateTime(string.data());}
 \DoxyCodeLine{00221\ \ \ \ \ \}}
 \DoxyCodeLine{00222\ }
 \DoxyCodeLine{00223\ \ \ \ \ \textcolor{comment}{/**}}
@@ -230,25 +230,15 @@
 \DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ @param\ string\ Date+Time\ string}}
 \DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ @return\ UTC\ timestamp}}
 \DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parseDateTime(std::string\_view\ string)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseDateTime(string.data());}
-\DoxyCodeLine{00231\ \ \ \ \ \}}
-\DoxyCodeLine{00232\ }
-\DoxyCodeLine{00233\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ Date+Time\ string\ and\ converts\ to\ timestamp}}
-\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @param\ string\ Date+Time\ string}}
-\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ @return\ UTC\ timestamp}}
-\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parseDateTime(std::optional<std::string>\ string)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (string.has\_value())\ \{}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseDateTime(string.value());}
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00243\ }
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
-\DoxyCodeLine{00245\ \ \ \ \ \}}
-\DoxyCodeLine{00246\ \};}
-\DoxyCodeLine{00247\ }
-\DoxyCodeLine{00248\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keyword}{static}\ std::int64\_t\ parseDateTime(std::optional<std::string>\ string)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (string.has\_value())\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parseDateTime(string.value());}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00235\ \ \ \ \ \}}
+\DoxyCodeLine{00236\ \};}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
 
 \end{DoxyCode}

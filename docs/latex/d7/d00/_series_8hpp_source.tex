@@ -2,7 +2,7 @@
 \hypertarget{_series_8hpp_source}{}\label{_series_8hpp_source}\index{Series.hpp@{Series.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -100,7 +100,7 @@
 \DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *}}
 \DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
 \DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_series_a7c711320747079dbd506d63c1d4730d7}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_series_a7c711320747079dbd506d63c1d4730d7}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a7c711320747079dbd506d63c1d4730d7}{override}};}
 \DoxyCodeLine{00100\ }
 \DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{/**}}
 \DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
@@ -137,295 +137,493 @@
 \DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_series_aac06ab7c3783e1c2b70065c1ba7b555f}{Series}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{(}}std::move(eventSymbol)\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{)}}\ \{}
 \DoxyCodeLine{00134\ \ \ \ \ \}}
 \DoxyCodeLine{00135\ }
-\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_aaaa8e2016b3aff845df96c386f24f396}{getSource}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{::}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT}};}
-\DoxyCodeLine{00139\ \ \ \ \ \}}
-\DoxyCodeLine{00140\ }
-\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00142\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_aa9c1ea427a9724e12fbfbb39315fbec5}{getEventFlags}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.eventFlags;}
-\DoxyCodeLine{00144\ \ \ \ \ \}}
-\DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00147\ \ \ \ \ EventFlagsMask\ \mbox{\hyperlink{classdxfcpp_1_1_series_a39c3e3ae494dc444de30e3d903eebaac}{getEventFlagsMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask(data\_.eventFlags);}
-\DoxyCodeLine{00149\ \ \ \ \ \}}
-\DoxyCodeLine{00150\ }
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{setEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ eventFlags;}
-\DoxyCodeLine{00154\ \ \ \ \ \}}
-\DoxyCodeLine{00155\ }
-\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{setEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ \textcolor{keyword}{static\_cast}<std::int32\_t>(eventFlags\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{getMask}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{)}});}
-\DoxyCodeLine{00159\ \ \ \ \ \}}
-\DoxyCodeLine{00160\ }
-\DoxyCodeLine{00161\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ unique\ per-\/symbol\ index\ of\ this\ event.}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ The\ index\ is\ composed\ of\ @ref\ ::getTime()\ "{}time"{}\ and\ @ref\ ::getSequence()\ "{}sequence"{}.}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ Changing\ either\ time\ or\ sequence\ changes\ event\ index.}}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ series.}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ series.}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{virtual}\ Series\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_ac9b1138ec64df65782f7e2d17d751665}{withEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00146\ \ \ \ \ \}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Series>(new}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ Series(...))`\ or\ \`{}std::make\_shared<Series>(...)`}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00157\ \ \ \ \ Series::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_series_a0ccf33524a9a6c845cfce9e0fe809a96}{withEventSymbolShared}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Series>();}
+\DoxyCodeLine{00161\ \ \ \ \ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ series.}}
 \DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ @return\ unique\ index\ of\ this\ event.}}
-\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00168\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_ac6144eb907c3f037c8eda1d8b08de5d0}{getIndex}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.index;}
-\DoxyCodeLine{00170\ \ \ \ \ \}}
-\DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ event.}}
-\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ The\ index\ is\ composed\ of\ @ref\ ::getTime()\ "{}time"{}\ and\ @ref\ ::getSequence()\ "{}sequence"{}\ and}}
-\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ invocation\ of\ this\ method\ changes\ time\ and\ sequence.}}
-\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ <b>Do\ not\ use\ this\ method\ directly.</b>}}
-\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ Change\ @ref\ ::setTime()\ "{}time"{}\ and/or\ @ref\ ::setSequence()\ "{}sequence"{}.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ series.}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00170\ \ \ \ \ Series\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_a249fa99c8e69a6f02ae561692baa38c8}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00174\ \ \ \ \ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ series.}}
 \DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ the\ event\ index.}}
-\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getIndex()}}
-\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{setIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ data\_.index\ =\ index;}
-\DoxyCodeLine{00184\ \ \ \ \ \}}
-\DoxyCodeLine{00185\ }
-\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ and\ sequence\ of\ this\ event\ packaged\ into\ single\ long\ value.}}
-\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ and\ sequence\ of\ this\ event.}}
-\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00191\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_a75be339f644dedc21b176f173d7fc3e5}{getTimeSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.timeSequence;}
-\DoxyCodeLine{00193\ \ \ \ \ \}}
-\DoxyCodeLine{00194\ }
-\DoxyCodeLine{00195\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ and\ sequence\ of\ this\ event.}}
-\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *\ <b>Do\ not\ use\ this\ method\ directly.</b>}}
-\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ Change\ @ref\ ::setTime()\ "{}time"{}\ and/or\ @ref\ ::setSequence()\ "{}sequence"{}.}}
-\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeSequence\ the\ time\ and\ sequence.}}
-\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getTimeSequence()}}
-\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a4f865ebe992d1759467c93a55fce9b76}{setTimeSequence}}(std::int64\_t\ timeSequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ data\_.timeSequence\ =\ timeSequence;}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Series>(new}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ Series(...))`\ or\ \`{}std::make\_shared<Series>(...)`}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00186\ \ \ \ \ Series::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_series_afd57a78c0c0336f246b309346a72bf43}{withEventTimeShared}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Series>();}
+\DoxyCodeLine{00190\ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_aaaa8e2016b3aff845df96c386f24f396}{getSource}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{::}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT}};}
+\DoxyCodeLine{00195\ \ \ \ \ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00198\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_aa9c1ea427a9724e12fbfbb39315fbec5}{getEventFlags}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.eventFlags;}
+\DoxyCodeLine{00200\ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00203\ \ \ \ \ EventFlagsMask\ \mbox{\hyperlink{classdxfcpp_1_1_series_a39c3e3ae494dc444de30e3d903eebaac}{getEventFlagsMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask(data\_.eventFlags);}
 \DoxyCodeLine{00205\ \ \ \ \ \}}
 \DoxyCodeLine{00206\ }
-\DoxyCodeLine{00207\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ of\ this\ series\ event.}}
-\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ of\ this\ series\ event.}}
-\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00213\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc}{getTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sar(data\_.timeSequence,\ SECONDS\_SHIFT)\ *\ 1000\ +}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ andOp(sar(data\_.timeSequence,\ MILLISECONDS\_SHIFT),\ MILLISECONDS\_MASK);}
-\DoxyCodeLine{00216\ \ \ \ \ \}}
-\DoxyCodeLine{00217\ }
-\DoxyCodeLine{00218\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ series\ event.}}
-\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ series\ event.}}
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{setEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ eventFlags;}
+\DoxyCodeLine{00210\ \ \ \ \ \}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{setEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ \textcolor{keyword}{static\_cast}<std::int32\_t>(eventFlags\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{getMask}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{)}});}
+\DoxyCodeLine{00215\ \ \ \ \ \}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ series.}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ series.}}
 \DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{setTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ data\_.timeSequence\ =\ orOp(}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getSecondsFromTime(time)),\ SECONDS\_SHIFT),}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ orOp(sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getMillisFromTime(time)),\ MILLISECONDS\_MASK),\ \mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{getSequence}}\mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{(}}\mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{)}}));}
+\DoxyCodeLine{00224\ \ \ \ \ Series\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_a8f0ea89e67cbe14742be0efbc260bf0a}{withEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{setEventFlags}}\mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{(}}eventFlags\mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{)}};}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
 \DoxyCodeLine{00228\ \ \ \ \ \}}
 \DoxyCodeLine{00229\ }
 \DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ sequence\ number\ of\ this\ series\ event\ to\ distinguish\ trades\ that\ have\ the\ same}}
-\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ ::getTime()\ "{}time"{}.\ This\ sequence\ number\ does\ not\ have\ to\ be\ unique\ and}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ does\ not\ need\ to\ be\ sequential.\ Sequence\ can\ range\ from\ 0\ to\ ::MAX\_SEQUENCE.}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ @return\ sequence\ of\ this\ series\ event.}}
-\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00237\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{getSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(andOp(data\_.timeSequence,\ \mbox{\hyperlink{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}{MAX\_SEQUENCE}}));}
-\DoxyCodeLine{00239\ \ \ \ \ \}}
-\DoxyCodeLine{00240\ }
-\DoxyCodeLine{00241\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ ::getSequence()\ "{}sequence\ number"{}\ of\ this\ series\ event.}}
-\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
-\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getSequence()}}
-\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{setSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling}}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ sequence\ <=\ \mbox{\hyperlink{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}{MAX\_SEQUENCE}});}
-\DoxyCodeLine{00250\ }
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ data\_.timeSequence\ =\ orOp(andOp(data\_.timeSequence,\ \string~\mbox{\hyperlink{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}{MAX\_SEQUENCE}}),\ sequence);}
-\DoxyCodeLine{00252\ \ \ \ \ \}}
-\DoxyCodeLine{00253\ }
-\DoxyCodeLine{00254\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ day\ id\ of\ expiration.}}
-\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ Example:\ @ref\ day\_util::\#getDayIdByYearMonthDay()\ "{}dxfcpp::day\_util::getDayIdByYearMonthDay"{}(20090117).}}
-\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ *\ @return\ day\ id\ of\ expiration.}}
-\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00261\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_a3bc261f83f17749d4ae046b24a6120fd}{getExpiration}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.expiration;}
-\DoxyCodeLine{00263\ \ \ \ \ \}}
-\DoxyCodeLine{00264\ }
-\DoxyCodeLine{00265\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ day\ id\ of\ expiration.}}
-\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ *\ @param\ expiration\ day\ id\ of\ expiration.}}
-\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_aa5dc46654a661bcbdc707234410a88c2}{setExpiration}}(std::int32\_t\ expiration)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ data\_.expiration\ =\ expiration;}
-\DoxyCodeLine{00272\ \ \ \ \ \}}
-\DoxyCodeLine{00273\ }
-\DoxyCodeLine{00274\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ volatility\ index\ for\ this\ series\ based\ on\ VIX\ methodology.}}
-\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ volatility\ index\ for\ this\ series\ based\ on\ VIX\ methodology.}}
-\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_ab26ee45ec0b39d911692edcd3d79d8ce}{getVolatility}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.volatility;}
-\DoxyCodeLine{00281\ \ \ \ \ \}}
-\DoxyCodeLine{00282\ }
-\DoxyCodeLine{00283\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ volatility\ index\ for\ this\ series\ based\ on\ VIX\ methodology.}}
-\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *\ @param\ volatility\ implied\ volatility\ index\ for\ this\ series\ based\ on\ VIX\ methodology.}}
-\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a03e81c865f159f206a6d363303a86424}{setVolatility}}(\textcolor{keywordtype}{double}\ volatility)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ data\_.volatility\ =\ volatility;}
-\DoxyCodeLine{00290\ \ \ \ \ \}}
-\DoxyCodeLine{00291\ }
-\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ call\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ @return\ call\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_accbd9d05dc739bd07ddceddc36dd6d75}{getCallVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.callVolume;}
-\DoxyCodeLine{00299\ \ \ \ \ \}}
-\DoxyCodeLine{00300\ }
-\DoxyCodeLine{00301\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00302\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ call\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00303\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ *\ @param\ callVolume\ call\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00306\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_ab0c23da6fff1762a57566061f8f10c5f}{setCallVolume}}(\textcolor{keywordtype}{double}\ callVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ data\_.callVolume\ =\ callVolume;}
-\DoxyCodeLine{00308\ \ \ \ \ \}}
-\DoxyCodeLine{00309\ }
-\DoxyCodeLine{00310\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ put\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ @return\ put\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a4c27787992bbbc878cb906ab1b85c3c5}{getPutVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.putVolume;}
-\DoxyCodeLine{00317\ \ \ \ \ \}}
-\DoxyCodeLine{00318\ }
-\DoxyCodeLine{00319\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00320\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ put\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00321\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ @param\ putVolume\ put\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a92201c531d5d82ea95d9cc55eff2b05f}{setPutVolume}}(\textcolor{keywordtype}{double}\ putVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ data\_.putVolume\ =\ putVolume;}
-\DoxyCodeLine{00326\ \ \ \ \ \}}
-\DoxyCodeLine{00327\ }
-\DoxyCodeLine{00328\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00329\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00330\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00331\ \textcolor{comment}{\ \ \ \ \ *\ @return\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00333\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a07390cabc0b7ec0acb72e52d21f98eff}{getOptionVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isnan(data\_.putVolume))\ \{}
-\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.callVolume;}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00337\ }
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isnan(data\_.callVolume))\ \{}
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.putVolume;}
-\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00341\ }
-\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.putVolume\ +\ data\_.callVolume;}
-\DoxyCodeLine{00343\ \ \ \ \ \}}
-\DoxyCodeLine{00344\ }
-\DoxyCodeLine{00345\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ratio\ of\ put\ options\ traded\ volume\ to\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Series>(new}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ Series(...))`\ or\ \`{}std::make\_shared<Series>(...)`}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00240\ \ \ \ \ Series::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_series_a0ba1451ce5d9af1ccf890ec24837d3fb}{withEventFlagsShared}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{setEventFlags}}\mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{(}}eventFlags\mbox{\hyperlink{classdxfcpp_1_1_series_a07e8ce3e0bdeee09d313680aed8f5fe0}{)}};}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Series>();}
+\DoxyCodeLine{00244\ \ \ \ \ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ series.}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ series.}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00253\ \ \ \ \ Series\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_acace749bef12c6d0e11f0b0de3421c89}{withEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{setEventFlags}}\mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{(}}eventFlags\mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{)}};}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00257\ \ \ \ \ \}}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Series>(new}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ Series(...))`\ or\ \`{}std::make\_shared<Series>(...)`}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00269\ \ \ \ \ Series::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_series_acd9367cfadfd24ab6360d6ff2152d780}{withEventFlagsShared}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{setEventFlags}}\mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{(}}eventFlags\mbox{\hyperlink{classdxfcpp_1_1_series_acf0ea0ffeabcebecedc1ac21e67d3a00}{)}};}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Series>();}
+\DoxyCodeLine{00273\ \ \ \ \ \}}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ The\ index\ is\ composed\ of\ @ref\ ::getTime()\ "{}time"{}\ and\ @ref\ ::getSequence()\ "{}sequence"{}.}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ Changing\ either\ time\ or\ sequence\ changes\ event\ index.}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ @return\ unique\ index\ of\ this\ event.}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00282\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_ac6144eb907c3f037c8eda1d8b08de5d0}{getIndex}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.index;}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ the\ event\ index.}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Series::getIndex()}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{setIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ data\_.index\ =\ index;}
+\DoxyCodeLine{00294\ \ \ \ \ \}}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ series\ and\ returns\ it.}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ series.}}
+\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ series.}}
+\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00302\ \ \ \ \ Series\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_af3bc2c6a9687bc95788d8c7a5d3ef8b7}{withIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{setIndex}}\mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{(}}index\mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{)}};}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00306\ \ \ \ \ \}}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ series\ and\ returns\ a\ shared\ pointer\ to\ it.}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Series>(new}}
+\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ Series(...))`\ or\ \`{}std::make\_shared<Series>(...)`}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ order.}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00317\ \ \ \ \ Series::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_series_afdcad8f2db1fa12ebb6379f3f34da364}{withIndexShared}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{setIndex}}\mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{(}}index\mbox{\hyperlink{classdxfcpp_1_1_series_a82c8ec1a60cc773c72ab7c06b958e202}{)}};}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Series>();}
+\DoxyCodeLine{00321\ \ \ \ \ \}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ and\ sequence\ of\ this\ event\ packaged\ into\ single\ long\ value.}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ and\ sequence\ of\ this\ event.}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00328\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_a75be339f644dedc21b176f173d7fc3e5}{getTimeSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.timeSequence;}
+\DoxyCodeLine{00330\ \ \ \ \ \}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ and\ sequence\ of\ this\ event.}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *\ <b>Do\ not\ use\ this\ method\ directly.</b>}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ Change\ @ref\ Series::setTime()\ "{}time"{}\ and/or\ @ref\ Series::setSequence()\ "{}sequence"{}.}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeSequence\ the\ time\ and\ sequence.}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getTimeSequence()}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00340\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a4f865ebe992d1759467c93a55fce9b76}{setTimeSequence}}(std::int64\_t\ timeSequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ data\_.timeSequence\ =\ timeSequence;}
+\DoxyCodeLine{00342\ \ \ \ \ \}}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ of\ this\ series\ event.}}
+\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
 \DoxyCodeLine{00347\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00348\ \textcolor{comment}{\ \ \ \ \ *\ @return\ ratio\ of\ put\ options\ traded\ volume\ to\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00348\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ of\ this\ series\ event.}}
 \DoxyCodeLine{00349\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00350\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a1bf2420dba428269bd0863a081d33fc0}{getPutCallRatio}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.putCallRatio;}
-\DoxyCodeLine{00352\ \ \ \ \ \}}
-\DoxyCodeLine{00353\ }
-\DoxyCodeLine{00354\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ratio\ of\ put\ options\ traded\ volume\ to\ call\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00357\ \textcolor{comment}{\ \ \ \ \ *\ @param\ putCallRatio\ ratio\ of\ put\ options\ traded\ volume\ to\ call\ options\ traded\ volume\ for\ a\ day.}}
-\DoxyCodeLine{00358\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00359\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_acdb92c62f7e31a89b5c06eeb2250ac30}{setPutCallRatio}}(\textcolor{keywordtype}{double}\ putCallRatio)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ data\_.putCallRatio\ =\ putCallRatio;}
-\DoxyCodeLine{00361\ \ \ \ \ \}}
-\DoxyCodeLine{00362\ }
-\DoxyCodeLine{00363\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00364\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ forward\ price\ for\ this\ option\ series.}}
-\DoxyCodeLine{00365\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00366\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ forward\ price\ for\ this\ option\ series.}}
-\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00368\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a3c63d3ffb26064d6597346d072570744}{getForwardPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.forwardPrice;}
-\DoxyCodeLine{00370\ \ \ \ \ \}}
-\DoxyCodeLine{00371\ }
-\DoxyCodeLine{00372\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ forward\ price\ for\ this\ option\ series.}}
-\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ *\ @param\ forwardPrice\ implied\ forward\ price\ for\ this\ option\ series.}}
-\DoxyCodeLine{00376\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00377\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a0f53c43f923258b79453c6f8f56410b3}{setForwardPrice}}(\textcolor{keywordtype}{double}\ forwardPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ data\_.forwardPrice\ =\ forwardPrice;}
+\DoxyCodeLine{00350\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_a0f60b30fd65bcc017e82a7e93ba87fcc}{getTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sar(data\_.timeSequence,\ SECONDS\_SHIFT)\ *\ 1000\ +}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ andOp(sar(data\_.timeSequence,\ MILLISECONDS\_SHIFT),\ MILLISECONDS\_MASK);}
+\DoxyCodeLine{00353\ \ \ \ \ \}}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ series\ event.}}
+\DoxyCodeLine{00357\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00358\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00359\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ series\ event.}}
+\DoxyCodeLine{00360\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{setTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ data\_.timeSequence\ =}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ orOp(orOp(sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getSecondsFromTime(time)),\ SECONDS\_SHIFT),}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getMillisFromTime(time)),\ MILLISECONDS\_SHIFT)),}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{getSequence}}\mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{(}}\mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{)}});}
+\DoxyCodeLine{00366\ \ \ \ \ \}}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ series\ and\ returns\ it.}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ series.}}
+\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ series.}}
+\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00375\ \ \ \ \ Series\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_a1c268da1ff54eedaabc5ef37374f59e0}{withTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{setTime}}\mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{(}}time\mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{)}};}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
 \DoxyCodeLine{00379\ \ \ \ \ \}}
 \DoxyCodeLine{00380\ }
 \DoxyCodeLine{00381\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00386\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a183ae4f58f76e1a06cd7f38c336f0c37}{getDividend}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dividend;}
-\DoxyCodeLine{00388\ \ \ \ \ \}}
-\DoxyCodeLine{00389\ }
-\DoxyCodeLine{00390\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00391\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00392\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00393\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dividend\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00395\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_aaa2f448d57e93c007171687d9e39c3f1}{setDividend}}(\textcolor{keywordtype}{double}\ dividend)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ data\_.dividend\ =\ dividend;}
-\DoxyCodeLine{00397\ \ \ \ \ \}}
-\DoxyCodeLine{00398\ }
-\DoxyCodeLine{00399\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ series\ and\ returns\ a\ shared\ pointer\ to\ it.}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Series>(new}}
+\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ *\ Series(...))`\ or\ \`{}std::make\_shared<Series>(...)`}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ series.}}
+\DoxyCodeLine{00389\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00390\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00391\ \ \ \ \ Series::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_series_a785a0576560c73dd94f455108d3c47c5}{withTimeShared}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{setTime}}\mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{(}}time\mbox{\hyperlink{classdxfcpp_1_1_series_a1bf383441ffa87fb1d320e1caa53f3f8}{)}};}
+\DoxyCodeLine{00393\ }
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Series>();}
+\DoxyCodeLine{00395\ \ \ \ \ \}}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ sequence\ number\ of\ this\ series\ event\ to\ distinguish\ trades\ that\ have\ the\ same}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ ::getTime()\ "{}time"{}.\ This\ sequence\ number\ does\ not\ have\ to\ be\ unique\ and}}
+\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ does\ not\ need\ to\ be\ sequential.\ Sequence\ can\ range\ from\ 0\ to\ ::MAX\_SEQUENCE.}}
 \DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *\ @return\ sequence\ of\ this\ series\ event.}}
 \DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00404\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_ae89100c3e45f0f122a06eb65d7d93de6}{getInterest}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.interest;}
+\DoxyCodeLine{00404\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_a985abe04d8e59abbf9bfc8ca153fb690}{getSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(andOp(data\_.timeSequence,\ \mbox{\hyperlink{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}{MAX\_SEQUENCE}}));}
 \DoxyCodeLine{00406\ \ \ \ \ \}}
 \DoxyCodeLine{00407\ }
 \DoxyCodeLine{00408\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00409\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00409\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ Series::getSequence()\ "{}sequence\ number"{}\ of\ this\ series\ event.}}
 \DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ @param\ interest\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00413\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a2bc17da785219a714ba37693153b96fd}{setInterest}}(\textcolor{keywordtype}{double}\ interest)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ data\_.interest\ =\ interest;}
-\DoxyCodeLine{00415\ \ \ \ \ \}}
-\DoxyCodeLine{00416\ }
-\DoxyCodeLine{00417\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00418\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
-\DoxyCodeLine{00419\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00420\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
-\DoxyCodeLine{00421\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00422\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_series_a2b964d3b9d9275abbc2dc962d6e73578}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00423\ \};}
-\DoxyCodeLine{00424\ }
-\DoxyCodeLine{00425\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Series::getSequence()}}
+\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00414\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{setSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling\ [EN-\/8232]}}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ sequence\ <=\ \mbox{\hyperlink{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}{MAX\_SEQUENCE}});}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ data\_.timeSequence\ =\ orOp(andOp(data\_.timeSequence,\ \string~\mbox{\hyperlink{classdxfcpp_1_1_series_a64b996ca5f00f510e0d96b75f59c7e58}{MAX\_SEQUENCE}}),\ sequence);}
+\DoxyCodeLine{00419\ \ \ \ \ \}}
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00422\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ Series::getSequence()\ "{}sequence\ number"{}\ of\ this\ series.}}
+\DoxyCodeLine{00423\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ order.}}
+\DoxyCodeLine{00424\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ series.}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Series::getSequence()}}
+\DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00429\ \ \ \ \ Series\ \&\mbox{\hyperlink{classdxfcpp_1_1_series_a8736eaaf6963d186dfaf24852955dd8b}{withSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{setSequence}}\mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{(}}sequence\mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{)}};}
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00433\ \ \ \ \ \}}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00435\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00436\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ Series::getSequence()\ "{}sequence\ number"{}\ of\ this\ series.}}
+\DoxyCodeLine{00437\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00438\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00439\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Series>(new}}
+\DoxyCodeLine{00440\ \textcolor{comment}{\ \ \ \ \ *\ Series(...))`\ or\ \`{}std::make\_shared<Series>(...)`}}
+\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ series.}}
+\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Series::getSequence()}}
+\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00446\ \ \ \ \ Series::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_series_af665d6ea0cabad8a2b70c6e61810de9c}{withSequenceShared}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ Series\mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{setSequence}}\mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{(}}sequence\mbox{\hyperlink{classdxfcpp_1_1_series_a12911fff7b683318e5f0b50a7fc6fd5b}{)}};}
+\DoxyCodeLine{00448\ }
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Series>();}
+\DoxyCodeLine{00450\ \ \ \ \ \}}
+\DoxyCodeLine{00451\ }
+\DoxyCodeLine{00452\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00453\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ day\ id\ of\ expiration.}}
+\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ *\ Example:\ @ref\ day\_util::\#getDayIdByYearMonthDay()\ "{}dxfcpp::day\_util::getDayIdByYearMonthDay"{}(20090117).}}
+\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \ \ \ *\ @return\ day\ id\ of\ expiration.}}
+\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00459\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_series_a3bc261f83f17749d4ae046b24a6120fd}{getExpiration}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.expiration;}
+\DoxyCodeLine{00461\ \ \ \ \ \}}
+\DoxyCodeLine{00462\ }
+\DoxyCodeLine{00463\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00464\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ day\ id\ of\ expiration.}}
+\DoxyCodeLine{00465\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00466\ \textcolor{comment}{\ \ \ \ \ *\ @param\ expiration\ day\ id\ of\ expiration.}}
+\DoxyCodeLine{00467\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00468\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_aa5dc46654a661bcbdc707234410a88c2}{setExpiration}}(std::int32\_t\ expiration)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ data\_.expiration\ =\ expiration;}
+\DoxyCodeLine{00470\ \ \ \ \ \}}
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00472\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00473\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ volatility\ index\ for\ this\ series\ based\ on\ VIX\ methodology.}}
+\DoxyCodeLine{00474\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00475\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ volatility\ index\ for\ this\ series\ based\ on\ VIX\ methodology.}}
+\DoxyCodeLine{00476\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00477\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_ab26ee45ec0b39d911692edcd3d79d8ce}{getVolatility}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.volatility;}
+\DoxyCodeLine{00479\ \ \ \ \ \}}
+\DoxyCodeLine{00480\ }
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00482\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ volatility\ index\ for\ this\ series\ based\ on\ VIX\ methodology.}}
+\DoxyCodeLine{00483\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00484\ \textcolor{comment}{\ \ \ \ \ *\ @param\ volatility\ implied\ volatility\ index\ for\ this\ series\ based\ on\ VIX\ methodology.}}
+\DoxyCodeLine{00485\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00486\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a03e81c865f159f206a6d363303a86424}{setVolatility}}(\textcolor{keywordtype}{double}\ volatility)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ data\_.volatility\ =\ volatility;}
+\DoxyCodeLine{00488\ \ \ \ \ \}}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00491\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00492\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00493\ \textcolor{comment}{\ \ \ \ \ *\ @return\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00494\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00495\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_accbd9d05dc739bd07ddceddc36dd6d75}{getCallVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.callVolume;}
+\DoxyCodeLine{00497\ \ \ \ \ \}}
+\DoxyCodeLine{00498\ }
+\DoxyCodeLine{00499\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00501\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00502\ \textcolor{comment}{\ \ \ \ \ *\ @param\ callVolume\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00503\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00504\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_ab0c23da6fff1762a57566061f8f10c5f}{setCallVolume}}(\textcolor{keywordtype}{double}\ callVolume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ data\_.callVolume\ =\ callVolume;}
+\DoxyCodeLine{00506\ \ \ \ \ \}}
+\DoxyCodeLine{00507\ }
+\DoxyCodeLine{00508\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00509\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ put\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00510\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00511\ \textcolor{comment}{\ \ \ \ \ *\ @return\ put\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00512\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00513\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a4c27787992bbbc878cb906ab1b85c3c5}{getPutVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.putVolume;}
+\DoxyCodeLine{00515\ \ \ \ \ \}}
+\DoxyCodeLine{00516\ }
+\DoxyCodeLine{00517\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00518\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ put\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00519\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00520\ \textcolor{comment}{\ \ \ \ \ *\ @param\ putVolume\ put\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00521\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00522\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a92201c531d5d82ea95d9cc55eff2b05f}{setPutVolume}}(\textcolor{keywordtype}{double}\ putVolume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ data\_.putVolume\ =\ putVolume;}
+\DoxyCodeLine{00524\ \ \ \ \ \}}
+\DoxyCodeLine{00525\ }
+\DoxyCodeLine{00526\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00527\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00529\ \textcolor{comment}{\ \ \ \ \ *\ @return\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00530\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00531\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a07390cabc0b7ec0acb72e52d21f98eff}{getOptionVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isnan(data\_.putVolume))\ \{}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.callVolume;}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00535\ }
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isnan(data\_.callVolume))\ \{}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.putVolume;}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00539\ }
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.putVolume\ +\ data\_.callVolume;}
+\DoxyCodeLine{00541\ \ \ \ \ \}}
+\DoxyCodeLine{00542\ }
+\DoxyCodeLine{00543\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00544\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ratio\ of\ put\ options\ traded\ volume\ to\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00545\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00546\ \textcolor{comment}{\ \ \ \ \ *\ @return\ ratio\ of\ put\ options\ traded\ volume\ to\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00547\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00548\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a1bf2420dba428269bd0863a081d33fc0}{getPutCallRatio}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.putCallRatio;}
+\DoxyCodeLine{00550\ \ \ \ \ \}}
+\DoxyCodeLine{00551\ }
+\DoxyCodeLine{00552\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00553\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ratio\ of\ put\ options\ traded\ volume\ to\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00554\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00555\ \textcolor{comment}{\ \ \ \ \ *\ @param\ putCallRatio\ ratio\ of\ put\ options\ traded\ volume\ to\ call\ options\ traded\ volume\ for\ a\ day.}}
+\DoxyCodeLine{00556\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00557\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_acdb92c62f7e31a89b5c06eeb2250ac30}{setPutCallRatio}}(\textcolor{keywordtype}{double}\ putCallRatio)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ data\_.putCallRatio\ =\ putCallRatio;}
+\DoxyCodeLine{00559\ \ \ \ \ \}}
+\DoxyCodeLine{00560\ }
+\DoxyCodeLine{00561\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00562\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ forward\ price\ for\ this\ option\ series.}}
+\DoxyCodeLine{00563\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00564\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ forward\ price\ for\ this\ option\ series.}}
+\DoxyCodeLine{00565\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00566\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a3c63d3ffb26064d6597346d072570744}{getForwardPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.forwardPrice;}
+\DoxyCodeLine{00568\ \ \ \ \ \}}
+\DoxyCodeLine{00569\ }
+\DoxyCodeLine{00570\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00571\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ forward\ price\ for\ this\ option\ series.}}
+\DoxyCodeLine{00572\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00573\ \textcolor{comment}{\ \ \ \ \ *\ @param\ forwardPrice\ implied\ forward\ price\ for\ this\ option\ series.}}
+\DoxyCodeLine{00574\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00575\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a0f53c43f923258b79453c6f8f56410b3}{setForwardPrice}}(\textcolor{keywordtype}{double}\ forwardPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ data\_.forwardPrice\ =\ forwardPrice;}
+\DoxyCodeLine{00577\ \ \ \ \ \}}
+\DoxyCodeLine{00578\ }
+\DoxyCodeLine{00579\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00580\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00581\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00582\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00583\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00584\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a183ae4f58f76e1a06cd7f38c336f0c37}{getDividend}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dividend;}
+\DoxyCodeLine{00586\ \ \ \ \ \}}
+\DoxyCodeLine{00587\ }
+\DoxyCodeLine{00588\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00589\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00590\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00591\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dividend\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00592\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00593\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_aaa2f448d57e93c007171687d9e39c3f1}{setDividend}}(\textcolor{keywordtype}{double}\ dividend)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ data\_.dividend\ =\ dividend;}
+\DoxyCodeLine{00595\ \ \ \ \ \}}
+\DoxyCodeLine{00596\ }
+\DoxyCodeLine{00597\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00599\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00600\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00601\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00602\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_series_ae89100c3e45f0f122a06eb65d7d93de6}{getInterest}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.interest;}
+\DoxyCodeLine{00604\ \ \ \ \ \}}
+\DoxyCodeLine{00605\ }
+\DoxyCodeLine{00606\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00607\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00608\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00609\ \textcolor{comment}{\ \ \ \ \ *\ @param\ interest\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00610\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00611\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a2bc17da785219a714ba37693153b96fd}{setInterest}}(\textcolor{keywordtype}{double}\ interest)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ data\_.interest\ =\ interest;}
+\DoxyCodeLine{00613\ \ \ \ \ \}}
+\DoxyCodeLine{00614\ }
+\DoxyCodeLine{00615\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00617\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00618\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00619\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00620\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_series_a2b964d3b9d9275abbc2dc962d6e73578}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_series_a2b964d3b9d9275abbc2dc962d6e73578}{override}};}
+\DoxyCodeLine{00621\ \};}
+\DoxyCodeLine{00622\ }
+\DoxyCodeLine{00623\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
 
 \end{DoxyCode}

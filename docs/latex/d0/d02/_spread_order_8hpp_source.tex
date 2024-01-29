@@ -2,7 +2,7 @@
 \hypertarget{_spread_order_8hpp_source}{}\label{_spread_order_8hpp_source}\index{SpreadOrder.hpp@{SpreadOrder.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -13,922 +13,934 @@
 \DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
-\DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_order_base_8hpp}{"{}OrderBase.hpp"{}}}}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Spread\ order\ event\ is\ a\ snapshot\ for\ a\ full\ available\ market\ depth\ for\ all\ spreads}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ on\ a\ given\ underlying\ symbol.\ The\ collection\ of\ spread\ order\ events\ of\ a\ symbol}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ spread\ orders\ on}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ the\ market\ at\ any\ given\ moment\ of\ time.}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ <p>\ Spread\ order\ is\ similar\ to\ a\ regular\ Order,\ but\ it\ has\ a}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @ref\ SpreadOrder::getSpreadSymbol()\ "{}spreadSymbol"{}\ property\ that\ contains\ the\ symbol}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ of\ the\ actual\ spread\ that\ is\ being\ represented\ by\ spread\ order\ object.}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ @ref\ SpreadOrder::getEventSymbol()\ "{}eventSymbol"{}\ property\ contains\ the\ underlying\ symbol}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ that\ was\ used\ in\ subscription.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <p>\ Like\ regular\ orders,\ spread\ order\ events\ arrive\ from}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ multiple\ sources\ for\ the\ same\ market\ symbol\ and\ are\ distinguished\ by\ their}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ @ref\ SpreadOrder::getIndex\ "{}index"{}.}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ It\ is\ unique\ across\ all\ the\ sources\ of\ depth\ information\ for\ the\ symbol.}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ The\ event\ with\ @ref\ SpreadOrder::getSize()\ "{}size"{}\ either\ \`{}0`\ or\ \`{}NaN`}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ is\ a\ signal\ to\ remove\ previously\ received\ order\ for\ the\ corresponding\ index.}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ The\ method\ @ref\ SpreadOrder::hasSize()\ "{}hasSize"{}\ is\ a\ convenient\ method\ to\ test\ for\ size\ presence.}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ Some\ spread\ order\ event\ sources\ provide\ a\ consistent\ view\ of\ the\ price-\/level\ or\ detailed\ order\ book.\ Their\ updates}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ may\ incorporate\ multiple\ changes\ to\ price\ levels\ or\ to\ individual\ orders\ that\ have\ to\ be\ processed\ at\ the\ same\ time.}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ SpreadOrder::getEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ <p>\ See\ \`{}Event\ Flags`\ section\ of\ OrderBase\ class\ documentation\ for\ details.}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ <p>IndexedEventModel\ class\ handles\ all\ the\ snapshot\ and\ transaction\ logic\ and\ conveniently\ represents}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ a\ list\ current\ of\ events.}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ It\ relies\ on\ the\ code\ of\ AbstractIndexedEventModel\ to\ handle\ this\ logic.}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ Use\ the\ source\ code\ of\ AbstractIndexedEventModel\ for\ clarification\ on\ transactions\ and\ snapshot\ logic.}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ <h3>Publishing\ order\ books</h3>}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ When\ publishing\ an\ order\ event\ with\ DXPublisher::publishEvents()\ method,\ least\ significant\ 32\ bits\ of}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ order\ @ref\ SpreadOrder::getIndex()\ "{}index"{}\ must\ be\ in\ a\ range\ of\ from\ 0\ to\ \`{}std::numeric\_limits<std::int32\_t>::max()`}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ inclusive.\ Use\ @ref\ SpreadOrder::setSource()\ "{}setSource"{}\ method\ after\ @ref\ SpreadOrder::setIndex()\ "{}setIndex"{}\ to}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ properly\ include\ source\ identifier\ into\ the\ index.}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ A\ snapshot\ has\ to\ be\ published\ in\ the\ <em>descending</em>\ order\ of\ @ref\ SpreadOrder::getIndex()\ "{}index"{},\ starting}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ with\ an\ event\ with\ the\ largest\ index\ and\ marking\ it\ with\ SpreadOrder::SNAPSHOT\_BEGIN\ bit\ in\ @ref}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ SpreadOrder::getEventFlags()\ "{}eventFlags"{},\ and\ finishing\ the\ snapshot\ with\ an\ event\ that\ has\ zero\ 32\ least}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ significant\ bits\ of\ index.}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ @ref\ SpreadOrder::SNAPSHOT\_END\ bit\ in\ @ref\ SpreadOrder::getEventFlags()\ "{}eventFlags"{}\ is\ optional\ during\ publishing.}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ It\ will\ be\ properly\ set\ on\ receiving\ end\ anyway.}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ <h3>Limitations</h3>}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ *\ This\ event\ type\ cannot\ be\ used\ with\ @ref\ DXFeed::getLastEvent()\ method.}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ *\ <h3><a\ name="{}fobSection"{}>Full\ Order\ Book\ Support</a></h3>}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ *\ Some\ feeds\ provide\ support\ for\ "{}Full\ Order\ Book"{}\ (FOB)\ where\ additional\ fields\ will\ be\ available:}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ *\ <ul>}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getAction()\ "{}action"{}\ -\/\ event\ business\ meaning\ (see\ OrderAction\ for\ more\ details)</li>}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getActionTime()\ "{}actionTime"{}\ -\/\ time\ of\ the\ last\ action</li>}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getOrderId()\ "{}orderId"{}\ -\/\ ID\ of\ this\ order</li>}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ additional\ ID\ for\ this\ order</li>}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getTradeId()\ "{}tradeId"{}\ -\/\ trade\ (order\ execution)\ ID</li>}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getTradePrice()\ "{}tradePrice"{}\ -\/\ price\ of\ the\ trade</li>}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getTradeSize()\ "{}tradeSize"{}\ -\/\ size\ of\ the\ trade</li>}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ *\ </ul>}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ records\ \`{}SpreadOrder\#<source-\/id>`,}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ *\ where\ \`{}<source-\/id>`\ is\ up\ to\ 4\ ASCII\ characters\ with\ a\ mnemonic\ for\ the\ source\ like\ "{}ISE"{}.}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00091\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\ \{}
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{struct}\ SpreadOrderData\ \{}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ std::string\ spreadSymbol\{\};}
-\DoxyCodeLine{00097\ \ \ \ \ \};}
-\DoxyCodeLine{00098\ }
-\DoxyCodeLine{00099\ \ \ \ \ SpreadOrderData\ spreadOrderData\_\{\};}
-\DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a818689d7c6c5d2faf712afa8db809cd6}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a818689d7c6c5d2faf712afa8db809cd6}{override}};}
-\DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_afa3a9e325845eec2238966edfec9dd8f}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ SpreadOrder\ object}}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>;}
-\DoxyCodeLine{00127\ }
-\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ SpreadOrder\ object}}
-\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{Unique}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{unique\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>;}
-\DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
-\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ad317db74748f88e5ef32b76fb0326dcc}{TYPE}};}
-\DoxyCodeLine{00133\ }
-\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ spread\ order\ event\ with\ default\ values.}}
-\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a93f3355c0d77afe8618b01f2b6c4ad52}{SpreadOrder}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00136\ }
-\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ spread\ order\ event\ with\ the\ specified\ event\ symbol.}}
-\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{SpreadOrder}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{OrderBase}}(\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{move}}(\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{eventSymbol}}))\ \{}
-\DoxyCodeLine{00143\ \ \ \ \ \}}
-\DoxyCodeLine{00144\ }
-\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00151\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a28240de8636d040dccd074de2aec1353}{withEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
-\DoxyCodeLine{00153\ }
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00155\ \ \ \ \ \}}
-\DoxyCodeLine{00156\ }
-\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00166\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ad8453cb043bb8dea6a4cce1c33341391}{withEventSymbolShared}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
-\DoxyCodeLine{00168\ }
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00170\ \ \ \ \ \}}
-\DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
-\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00179\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_aa7b3531298186d794a5a658051f8c9f4}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
-\DoxyCodeLine{00181\ }
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00183\ \ \ \ \ \}}
-\DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ The\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00195\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_aed0a6336e2c68452074e0bee0e096868}{withEventTimeShared}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
-\DoxyCodeLine{00197\ }
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00199\ \ \ \ \ \}}
-\DoxyCodeLine{00200\ }
-\DoxyCodeLine{00201\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
-\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ The\ source\ of\ this\ event.}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00208\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a9399edfaef5f47e4bfefbf2b74458883}{withSource}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{setSource}}(source);}
-\DoxyCodeLine{00210\ }
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00212\ \ \ \ \ \}}
-\DoxyCodeLine{00213\ }
-\DoxyCodeLine{00214\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
-\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ The\ source\ of\ this\ event.}}
-\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00224\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a3b95b0c31d71c9fdba4c73beaa93fb96}{withSourceShared}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{setSource}}(source);}
-\DoxyCodeLine{00226\ }
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00228\ \ \ \ \ \}}
-\DoxyCodeLine{00229\ }
-\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ The\ transactional\ event\ flags.}}
-\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00237\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a08e2eafa0221750286725b14e195812a}{withEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
-\DoxyCodeLine{00239\ }
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00241\ \ \ \ \ \}}
-\DoxyCodeLine{00242\ }
-\DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ The\ transactional\ event\ flags.}}
-\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00253\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a8b851fad3e6a8c4045266efa2d704af1}{withEventFlagsShared}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
-\DoxyCodeLine{00255\ }
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00257\ \ \ \ \ \}}
-\DoxyCodeLine{00258\ }
-\DoxyCodeLine{00259\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ The\ transactional\ event\ flags'\ mask.}}
-\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00266\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae5360012df083b356378db4f58375d72}{withEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
-\DoxyCodeLine{00268\ }
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00270\ \ \ \ \ \}}
-\DoxyCodeLine{00271\ }
-\DoxyCodeLine{00272\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ The\ transactional\ event\ flags'\ mask.}}
-\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00282\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_aff27642887f849ee625535e410992759}{withEventFlagsShared}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
-\DoxyCodeLine{00284\ }
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00286\ \ \ \ \ \}}
-\DoxyCodeLine{00287\ }
-\DoxyCodeLine{00288\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ spread\ order\ and\ returns\ it.\ Note,\ that\ this\ method\ also\ changes}}
-\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
-\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
-\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ The\ unique\ per-\/symbol\ index\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00296\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a9dcc5b6cc11e83e8f90dd95410b346d6}{withIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{setIndex}}(index);}
-\DoxyCodeLine{00298\ }
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00300\ \ \ \ \ \}}
-\DoxyCodeLine{00301\ }
-\DoxyCodeLine{00302\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00303\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ spread\ order\ and\ returns\ a\ shared\ pointer\ to\ it.\ Note,\ that\ this\ method}}
-\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ *\ also\ changes}}
-\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
-\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
-\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ The\ unique\ per-\/symbol\ index\ of\ this\ order.}}
-\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00314\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a46051af17b608427cc4507ffb7244db4}{withIndexShared}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{setIndex}}(index);}
-\DoxyCodeLine{00316\ }
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00318\ \ \ \ \ \}}
-\DoxyCodeLine{00319\ }
-\DoxyCodeLine{00320\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00321\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ spread\ order\ and\ returns\ it.}}
-\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00327\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a3a14fed44c565050860dda5e389b1a5f}{withTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{setTime}}(time);}
-\DoxyCodeLine{00329\ }
-\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00331\ \ \ \ \ \}}
-\DoxyCodeLine{00332\ }
-\DoxyCodeLine{00333\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ spread\ order\ and\ returns\ a\ shared\ pointer\ to\ it.}}
-\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00343\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_aa1a1634a6825ed1b27a58d975cd9cb41}{withTimeShared}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{setTime}}(time);}
-\DoxyCodeLine{00345\ }
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00347\ \ \ \ \ \}}
-\DoxyCodeLine{00348\ }
-\DoxyCodeLine{00349\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00350\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ The\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00356\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a2ba94e1ad2a8b5f5622612a1054a926d}{withTimeNanoPart}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{setTimeNanoPart}}(timeNanoPart);}
-\DoxyCodeLine{00358\ }
-\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00360\ \ \ \ \ \}}
-\DoxyCodeLine{00361\ }
-\DoxyCodeLine{00362\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00363\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00364\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00365\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00366\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ The\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00372\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_af215a794afc16fd12331e09d1c4ef3b8}{withTimeNanoPartShared}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{setTimeNanoPart}}(timeNanoPart);}
-\DoxyCodeLine{00374\ }
-\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00376\ \ \ \ \ \}}
-\DoxyCodeLine{00377\ }
-\DoxyCodeLine{00378\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00379\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00380\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ The\ sequence.}}
-\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
-\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00386\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a5754198bbab7ce2852b2c2c090139c2e}{withSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{setSequence}}(sequence);}
-\DoxyCodeLine{00388\ }
-\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00390\ \ \ \ \ \}}
-\DoxyCodeLine{00391\ }
-\DoxyCodeLine{00392\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00393\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ The\ sequence.}}
-\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
-\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00403\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_af3c3690e78e72c7b38127c2af2bc6b51}{withSequenceShared}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{setSequence}}(sequence);}
-\DoxyCodeLine{00405\ }
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00407\ \ \ \ \ \}}
-\DoxyCodeLine{00408\ }
-\DoxyCodeLine{00409\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ spread\ order\ and\ returns\ it.}}
-\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ The\ time\ of\ this\ order\ in\ nanoseconds.}}
-\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00415\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00416\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ad871496e9bb57b174d7fe7ad541968bd}{withTimeNanos}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{setTimeNanos}}(timeNanos);}
-\DoxyCodeLine{00418\ }
-\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00420\ \ \ \ \ \}}
-\DoxyCodeLine{00421\ }
-\DoxyCodeLine{00422\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00423\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00424\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00429\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00430\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ The\ time\ of\ this\ spread\ order\ in\ nanoseconds.}}
-\DoxyCodeLine{00431\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00432\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00433\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a5a311d2b1afac9e2d1bd48b93eac5b75}{withTimeNanosShared}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{setTimeNanos}}(timeNanos);}
-\DoxyCodeLine{00435\ }
-\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00437\ \ \ \ \ \}}
-\DoxyCodeLine{00438\ }
-\DoxyCodeLine{00439\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00440\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ spread\ order\ and\ returns\ it.}}
-\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ side\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00445\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae5cbc094e47b4d25d22b88e43cfb76b1}{withAction}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{setAction}}(action);}
-\DoxyCodeLine{00447\ }
-\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00449\ \ \ \ \ \}}
-\DoxyCodeLine{00450\ }
-\DoxyCodeLine{00451\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00452\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00453\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ action\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00459\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00460\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00461\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a603455bc7541a1bf0f4982a2fab58756}{withActionShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{setAction}}(action);}
-\DoxyCodeLine{00463\ }
-\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00465\ \ \ \ \ \}}
-\DoxyCodeLine{00466\ }
-\DoxyCodeLine{00467\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00468\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ current\ spread\ order.}}
-\DoxyCodeLine{00469\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00470\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ spread\ order\ action\ time.}}
-\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00473\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ac9e92e3421266df940402d6113727db4}{withActionTime}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{setActionTime}}(actionTime);}
-\DoxyCodeLine{00475\ }
-\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00477\ \ \ \ \ \}}
-\DoxyCodeLine{00478\ }
-\DoxyCodeLine{00479\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00480\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00481\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00482\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00483\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00484\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00485\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ spread\ order\ action\ time.}}
-\DoxyCodeLine{00486\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00487\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00488\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a64e9ecf295fe0b16c1d74d053b19e863}{withActionTimeShared}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{setActionTime}}(actionTime);}
-\DoxyCodeLine{00490\ }
-\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00492\ \ \ \ \ \}}
-\DoxyCodeLine{00493\ }
-\DoxyCodeLine{00494\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00495\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ order\ ID.}}
-\DoxyCodeLine{00496\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00497\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00498\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ The\ spread\ order\ ID.}}
-\DoxyCodeLine{00499\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00501\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae1eab850e44d9cdbbd655150b53a84db}{withOrderId}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{setOrderId}}(orderId);}
-\DoxyCodeLine{00503\ }
-\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00505\ \ \ \ \ \}}
-\DoxyCodeLine{00506\ }
-\DoxyCodeLine{00507\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00508\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ spread\ order\ ID.}}
-\DoxyCodeLine{00509\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00510\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00511\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00512\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00513\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00514\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ The\ spread\ order\ ID.}}
-\DoxyCodeLine{00515\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00516\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00517\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a73688cfd1691a964eae46c8c18ef6cb6}{withOrderIdShared}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{setOrderId}}(orderId);}
-\DoxyCodeLine{00519\ }
-\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00521\ \ \ \ \ \}}
-\DoxyCodeLine{00522\ }
-\DoxyCodeLine{00523\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00524\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ spread\ order\ ID.}}
-\DoxyCodeLine{00525\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00526\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00527\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ spread\ order\ ID.}}
-\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00529\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00530\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a985a29ae6b6a914156367819e65efcaf}{withAuxOrderId}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{setAuxOrderId}}(auxOrderId);}
-\DoxyCodeLine{00532\ }
-\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00534\ \ \ \ \ \}}
-\DoxyCodeLine{00535\ }
-\DoxyCodeLine{00536\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00537\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ spread\ order\ ID.}}
-\DoxyCodeLine{00538\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00539\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00540\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00541\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00542\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00543\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ spread\ order\ ID.}}
-\DoxyCodeLine{00544\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00545\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00546\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a5e4743cc23b7fc6dfeb88fca4533f04a}{withAuxOrderIdShared}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{setAuxOrderId}}(auxOrderId);}
-\DoxyCodeLine{00548\ }
-\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00550\ \ \ \ \ \}}
-\DoxyCodeLine{00551\ }
-\DoxyCodeLine{00552\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00553\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00554\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00555\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00556\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00557\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00558\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00559\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae767eb688d49d9a98162bef580cc9a88}{withPrice}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{setPrice}}(price);}
-\DoxyCodeLine{00561\ }
-\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00563\ \ \ \ \ \}}
-\DoxyCodeLine{00564\ }
-\DoxyCodeLine{00565\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00566\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00567\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00568\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00569\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00570\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00571\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00572\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00573\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00574\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00575\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_aea244fbad923d0b06d90ea968bb03282}{withPriceShared}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{setPrice}}(price);}
-\DoxyCodeLine{00577\ }
-\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00579\ \ \ \ \ \}}
-\DoxyCodeLine{00580\ }
-\DoxyCodeLine{00581\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00582\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00583\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00584\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00585\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00586\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00587\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00588\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a644dfee68de9ef4a682ccde4460c5fa6}{withSize}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{setSize}}(size);}
-\DoxyCodeLine{00590\ }
-\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00592\ \ \ \ \ \}}
-\DoxyCodeLine{00593\ }
-\DoxyCodeLine{00594\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00595\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00596\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00599\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00600\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00601\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00602\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00603\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00604\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a297fe225b11f18fee22c88ae19a91255}{withSizeShared}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{setSize}}(size);}
-\DoxyCodeLine{00606\ }
-\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00608\ \ \ \ \ \}}
-\DoxyCodeLine{00609\ }
-\DoxyCodeLine{00610\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00611\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00612\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00613\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00614\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00615\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00617\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_af415e2ec144946c4957f776933ace096}{withExecutedSize}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{setExecutedSize}}(executedSize);}
-\DoxyCodeLine{00619\ }
-\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00621\ \ \ \ \ \}}
-\DoxyCodeLine{00622\ }
-\DoxyCodeLine{00623\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00624\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00625\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00626\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00627\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00628\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00629\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00630\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00631\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00632\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00633\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a88422c71acc975f525fb27b6968df984}{withExecutedSizeShared}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{setExecutedSize}}(executedSize);}
-\DoxyCodeLine{00635\ }
-\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00637\ \ \ \ \ \}}
-\DoxyCodeLine{00638\ }
-\DoxyCodeLine{00639\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00640\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ spread\ orders\ in\ this\ aggregate\ spread\ order.}}
-\DoxyCodeLine{00641\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00642\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00643\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ orders\ in\ this\ aggregate\ spread\ order.}}
-\DoxyCodeLine{00644\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00645\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00646\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ac776c796ebff2055e5911da2984485c1}{withCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{setCount}}(count);}
-\DoxyCodeLine{00648\ }
-\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00650\ \ \ \ \ \}}
-\DoxyCodeLine{00651\ }
-\DoxyCodeLine{00652\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00653\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ spread\ orders\ in\ this\ aggregate\ spread\ order.}}
-\DoxyCodeLine{00654\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00655\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00656\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00657\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00658\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00659\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ spread\ orders\ in\ this\ aggregate\ spread\ spread\ order.}}
-\DoxyCodeLine{00660\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00661\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00662\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_af0c0f02b7bcfde5fa192192b6782462f}{withCountShared}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{setCount}}(count);}
-\DoxyCodeLine{00664\ }
-\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00666\ \ \ \ \ \}}
-\DoxyCodeLine{00667\ }
-\DoxyCodeLine{00668\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00669\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
-\DoxyCodeLine{00670\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00671\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00672\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
-\DoxyCodeLine{00673\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00674\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00675\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a7796e3d0f0f520d3d56f0a95c5992b0c}{withTradeId}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{setTradeId}}(tradeId);}
-\DoxyCodeLine{00677\ }
-\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00679\ \ \ \ \ \}}
-\DoxyCodeLine{00680\ }
-\DoxyCodeLine{00681\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00682\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
-\DoxyCodeLine{00683\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00687\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00688\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
-\DoxyCodeLine{00689\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00690\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00691\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae1e6f27eed8290855fa9831f04b863f7}{withTradeShared}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{setTradeId}}(tradeId);}
-\DoxyCodeLine{00693\ }
-\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00695\ \ \ \ \ \}}
-\DoxyCodeLine{00696\ }
-\DoxyCodeLine{00697\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00698\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
-\DoxyCodeLine{00699\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00700\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00701\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
-\DoxyCodeLine{00702\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00703\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00704\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a753503806133d92fb2b4353665326450}{withTradePrice}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{setTradePrice}}(tradePrice);}
-\DoxyCodeLine{00706\ }
-\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00708\ \ \ \ \ \}}
-\DoxyCodeLine{00709\ }
-\DoxyCodeLine{00710\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00711\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
-\DoxyCodeLine{00712\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00713\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00714\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00715\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00716\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00717\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
-\DoxyCodeLine{00718\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00719\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00720\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a585d9244a757a9cb64da7cc18a6796a5}{withTradePriceShared}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{setTradePrice}}(tradePrice);}
-\DoxyCodeLine{00722\ }
-\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00724\ \ \ \ \ \}}
-\DoxyCodeLine{00725\ }
-\DoxyCodeLine{00726\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00727\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
-\DoxyCodeLine{00728\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00729\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00730\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
-\DoxyCodeLine{00731\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00732\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00733\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a2a1618974f408efa888531ee248cb7fc}{withTradeSize}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{setTradeSize}}(tradeSize);}
-\DoxyCodeLine{00735\ }
-\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00737\ \ \ \ \ \}}
-\DoxyCodeLine{00738\ }
-\DoxyCodeLine{00739\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00740\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
-\DoxyCodeLine{00741\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00742\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00743\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00744\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00745\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00746\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
-\DoxyCodeLine{00747\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00748\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00749\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a7cfe1fd67451db26bed9cdc29d70d877}{withTradeSizeShared}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{setTradeSize}}(tradeSize);}
-\DoxyCodeLine{00751\ }
-\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00753\ \ \ \ \ \}}
-\DoxyCodeLine{00754\ }
-\DoxyCodeLine{00755\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00756\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00757\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00758\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00759\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00760\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00761\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00762\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ab374a682333a2bd75e3c7f77d0307a7e}{withExchangeCode}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00763\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
-\DoxyCodeLine{00764\ }
-\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00766\ \ \ \ \ \}}
-\DoxyCodeLine{00767\ }
-\DoxyCodeLine{00768\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00769\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00770\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00771\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00772\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00773\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00774\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00775\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00776\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00777\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00778\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_abb2f7b8f24ad53ed1bac0fef7359afe6}{withExchangeCodeShared}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
-\DoxyCodeLine{00780\ }
-\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00782\ \ \ \ \ \}}
-\DoxyCodeLine{00783\ }
-\DoxyCodeLine{00784\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00785\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00786\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00787\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00788\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00789\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00790\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00791\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_aea1b9e98e893c2898860ef4b01c74c31}{withExchangeCode}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
-\DoxyCodeLine{00793\ }
-\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00795\ \ \ \ \ \}}
-\DoxyCodeLine{00796\ }
-\DoxyCodeLine{00797\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00798\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00799\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00800\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00801\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00802\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00803\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00804\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00805\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00806\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00807\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a08dae8718c3c43310b36f0e036e04c95}{withExchangeCodeShared}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00808\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
-\DoxyCodeLine{00809\ }
-\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00811\ \ \ \ \ \}}
-\DoxyCodeLine{00812\ }
-\DoxyCodeLine{00813\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00814\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00815\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00816\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00817\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00818\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00819\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00820\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a4c5bd807ce493db5f38d091cf811d55d}{withOrderSide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00821\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{setOrderSide}}(side);}
-\DoxyCodeLine{00822\ }
-\DoxyCodeLine{00823\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00824\ \ \ \ \ \}}
-\DoxyCodeLine{00825\ }
-\DoxyCodeLine{00826\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00827\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00828\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00829\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00830\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00831\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00832\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00833\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00834\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00835\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00836\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ad8ba6d0e534539839aef027773a455f9}{withOrderSideShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00837\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{setOrderSide}}(side);}
-\DoxyCodeLine{00838\ }
-\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00840\ \ \ \ \ \}}
-\DoxyCodeLine{00841\ }
-\DoxyCodeLine{00842\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00843\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00844\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00845\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00846\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00847\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00848\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00849\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a4a6ef25bcd600acba59712fdbf45617f}{withScope}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00850\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{setScope}}(scope);}
-\DoxyCodeLine{00851\ }
-\DoxyCodeLine{00852\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00853\ \ \ \ \ \}}
-\DoxyCodeLine{00854\ }
-\DoxyCodeLine{00855\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00856\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00857\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00858\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00859\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00860\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00861\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00862\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ spread\ order.}}
-\DoxyCodeLine{00863\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00864\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00865\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a4ff600e850a2bfb9d2e4e2965ba747dc}{withScopeShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00866\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{setScope}}(scope);}
-\DoxyCodeLine{00867\ }
-\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00869\ \ \ \ \ \}}
-\DoxyCodeLine{00870\ }
-\DoxyCodeLine{00871\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{00872\ }
-\DoxyCodeLine{00873\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00874\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ spread\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00875\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00876\ \textcolor{comment}{\ \ \ \ \ *\ @return\ spread\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00877\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00878\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a519138942e57e77a82587b4a01244db0}{getSpreadSymbol}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00879\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ spreadOrderData\_.spreadSymbol;}
-\DoxyCodeLine{00880\ \ \ \ \ \}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_order_base_8hpp}{"{}OrderBase.hpp"{}}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Spread\ order\ event\ is\ a\ snapshot\ for\ a\ full\ available\ market\ depth\ for\ all\ spreads}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ on\ a\ given\ underlying\ symbol.\ The\ collection\ of\ spread\ order\ events\ of\ a\ symbol}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ spread\ orders\ on}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ the\ market\ at\ any\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ <p>\ Spread\ order\ is\ similar\ to\ a\ regular\ Order,\ but\ it\ has\ a}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ @ref\ SpreadOrder::getSpreadSymbol()\ "{}spreadSymbol"{}\ property\ that\ contains\ the\ symbol}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ of\ the\ actual\ spread\ that\ is\ being\ represented\ by\ spread\ order\ object.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ @ref\ SpreadOrder::getEventSymbol()\ "{}eventSymbol"{}\ property\ contains\ the\ underlying\ symbol}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ that\ was\ used\ in\ subscription.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ <p>\ Like\ regular\ orders,\ spread\ order\ events\ arrive\ from}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ multiple\ sources\ for\ the\ same\ market\ symbol\ and\ are\ distinguished\ by\ their}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ @ref\ SpreadOrder::getIndex\ "{}index"{}.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ It\ is\ unique\ across\ all\ the\ sources\ of\ depth\ information\ for\ the\ symbol.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ The\ event\ with\ @ref\ SpreadOrder::getSize()\ "{}size"{}\ either\ \`{}0`\ or\ \`{}NaN`}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ is\ a\ signal\ to\ remove\ previously\ received\ order\ for\ the\ corresponding\ index.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ The\ method\ @ref\ SpreadOrder::hasSize()\ "{}hasSize"{}\ is\ a\ convenient\ method\ to\ test\ for\ size\ presence.}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ Some\ spread\ order\ event\ sources\ provide\ a\ consistent\ view\ of\ the\ price-\/level\ or\ detailed\ order\ book.\ Their\ updates}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ may\ incorporate\ multiple\ changes\ to\ price\ levels\ or\ to\ individual\ orders\ that\ have\ to\ be\ processed\ at\ the\ same\ time.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ SpreadOrder::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ <p>\ See\ \`{}Event\ Flags`\ section\ of\ OrderBase\ class\ documentation\ for\ details.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ <p>IndexedEventModel\ class\ handles\ all\ the\ snapshot\ and\ transaction\ logic\ and\ conveniently\ represents}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ a\ list\ current\ of\ events.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ It\ relies\ on\ the\ code\ of\ AbstractIndexedEventModel\ to\ handle\ this\ logic.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ Use\ the\ source\ code\ of\ AbstractIndexedEventModel\ for\ clarification\ on\ transactions\ and\ snapshot\ logic.}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ <h3>Publishing\ order\ books</h3>}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ When\ publishing\ an\ order\ event\ with\ DXPublisher::publishEvents()\ method,\ least\ significant\ 32\ bits\ of}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ order\ @ref\ SpreadOrder::getIndex()\ "{}index"{}\ must\ be\ in\ a\ range\ of\ from\ 0\ to\ \`{}std::numeric\_limits<std::int32\_t>::max()`}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ inclusive.\ Use\ @ref\ SpreadOrder::setSource()\ "{}setSource"{}\ method\ after\ @ref\ SpreadOrder::setIndex()\ "{}setIndex"{}\ to}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ properly\ include\ source\ identifier\ into\ the\ index.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ A\ snapshot\ has\ to\ be\ published\ in\ the\ <em>descending</em>\ order\ of\ @ref\ SpreadOrder::getIndex()\ "{}index"{},\ starting}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ with\ an\ event\ with\ the\ largest\ index\ and\ marking\ it\ with\ SpreadOrder::SNAPSHOT\_BEGIN\ bit\ in\ @ref}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ SpreadOrder::getEventFlags()\ "{}eventFlags"{},\ and\ finishing\ the\ snapshot\ with\ an\ event\ that\ has\ zero\ 32\ least}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ significant\ bits\ of\ index.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ @ref\ SpreadOrder::SNAPSHOT\_END\ bit\ in\ @ref\ SpreadOrder::getEventFlags()\ "{}eventFlags"{}\ is\ optional\ during\ publishing.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ It\ will\ be\ properly\ set\ on\ receiving\ end\ anyway.}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ <h3>Limitations</h3>}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ *\ This\ event\ type\ cannot\ be\ used\ with\ @ref\ DXFeed::getLastEvent()\ method.}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ *\ <h3><a\ name="{}fobSection"{}>Full\ Order\ Book\ Support</a></h3>}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ *\ Some\ feeds\ provide\ support\ for\ "{}Full\ Order\ Book"{}\ (FOB)\ where\ additional\ fields\ will\ be\ available:}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getAction()\ "{}action"{}\ -\/\ event\ business\ meaning\ (see\ OrderAction\ for\ more\ details)</li>}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getActionTime()\ "{}actionTime"{}\ -\/\ time\ of\ the\ last\ action</li>}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getOrderId()\ "{}orderId"{}\ -\/\ ID\ of\ this\ order</li>}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ additional\ ID\ for\ this\ order</li>}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getTradeId()\ "{}tradeId"{}\ -\/\ trade\ (order\ execution)\ ID</li>}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getTradePrice()\ "{}tradePrice"{}\ -\/\ price\ of\ the\ trade</li>}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ *\ <li>@ref\ SpreadOrder::getTradeSize()\ "{}tradeSize"{}\ -\/\ size\ of\ the\ trade</li>}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ records\ \`{}SpreadOrder\#<source-\/id>`,}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ *\ where\ \`{}<source-\/id>`\ is\ up\ to\ 4\ ASCII\ characters\ with\ a\ mnemonic\ for\ the\ source\ like\ "{}ISE"{}.}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00092\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{struct}\ SpreadOrderData\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ std::optional<std::string>\ spreadSymbol\{\};}
+\DoxyCodeLine{00098\ \ \ \ \ \};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ SpreadOrderData\ spreadOrderData\_\{\};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a818689d7c6c5d2faf712afa8db809cd6}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a818689d7c6c5d2faf712afa8db809cd6}{override}};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_afa3a9e325845eec2238966edfec9dd8f}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ SpreadOrder\ object}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>;}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ SpreadOrder\ object}}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{Unique}}\ =\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{unique\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>;}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ad317db74748f88e5ef32b76fb0326dcc}{TYPE}};}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ spread\ order\ event\ with\ default\ values.}}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a93f3355c0d77afe8618b01f2b6c4ad52}{SpreadOrder}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ spread\ order\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{SpreadOrder}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{OrderBase}}(\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{move}}(\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a549497f9a1f4c5c93b916658eb47c888}{eventSymbol}}))\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a28240de8636d040dccd074de2aec1353}{withEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00156\ \ \ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ad8453cb043bb8dea6a4cce1c33341391}{withEventSymbolShared}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(eventSymbol);}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00171\ \ \ \ \ \}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00180\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_aa7b3531298186d794a5a658051f8c9f4}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00184\ \ \ \ \ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ The\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00196\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_aed0a6336e2c68452074e0bee0e096868}{withEventTimeShared}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(eventTime);}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00200\ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ The\ source\ of\ this\ event.}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00209\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a9399edfaef5f47e4bfefbf2b74458883}{withSource}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{setSource}}(source);}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00213\ \ \ \ \ \}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ The\ source\ of\ this\ event.}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00225\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a3b95b0c31d71c9fdba4c73beaa93fb96}{withSourceShared}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1813c11582e335c3654c028ad80b7a0d}{setSource}}(source);}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00229\ \ \ \ \ \}}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ The\ transactional\ event\ flags.}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00238\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a08e2eafa0221750286725b14e195812a}{withEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00242\ \ \ \ \ \}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ The\ transactional\ event\ flags.}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00254\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a8b851fad3e6a8c4045266efa2d704af1}{withEventFlagsShared}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00258\ \ \ \ \ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ The\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00267\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae5360012df083b356378db4f58375d72}{withEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00271\ \ \ \ \ \}}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ The\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00283\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_aff27642887f849ee625535e410992759}{withEventFlagsShared}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setEventFlags(eventFlags);}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00287\ \ \ \ \ \}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ spread\ order\ and\ returns\ it.\ Note,\ that\ this\ method\ also\ changes}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
+\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
+\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ The\ unique\ per-\/symbol\ index\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00297\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a9dcc5b6cc11e83e8f90dd95410b346d6}{withIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{setIndex}}(index);}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00301\ \ \ \ \ \}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ spread\ order\ and\ returns\ a\ shared\ pointer\ to\ it.\ Note,\ that\ this\ method}}
+\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ *\ also\ changes}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
+\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ The\ unique\ per-\/symbol\ index\ of\ this\ order.}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00315\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a46051af17b608427cc4507ffb7244db4}{withIndexShared}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3cb36dcbcc027ad5e93bf56faffff748}{setIndex}}(index);}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00319\ \ \ \ \ \}}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ spread\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00328\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a3a14fed44c565050860dda5e389b1a5f}{withTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{setTime}}(time);}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00332\ \ \ \ \ \}}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ spread\ order\ and\ returns\ a\ shared\ pointer\ to\ it.}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00344\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_aa1a1634a6825ed1b27a58d975cd9cb41}{withTimeShared}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a57ed23b4847fac141d11bbd42be48f89}{setTime}}(time);}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00348\ \ \ \ \ \}}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ The\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00357\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a2ba94e1ad2a8b5f5622612a1054a926d}{withTimeNanoPart}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{setTimeNanoPart}}(timeNanoPart);}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00361\ \ \ \ \ \}}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00364\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00365\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00366\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ The\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00373\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_af215a794afc16fd12331e09d1c4ef3b8}{withTimeNanoPartShared}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a0afca98632cdac7d5a9fa9dae830a7b9}{setTimeNanoPart}}(timeNanoPart);}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00377\ \ \ \ \ \}}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00380\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ The\ sequence.}}
+\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
+\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00387\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a5754198bbab7ce2852b2c2c090139c2e}{withSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{setSequence}}(sequence);}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00391\ \ \ \ \ \}}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ The\ sequence.}}
+\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
+\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00404\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_af3c3690e78e72c7b38127c2af2bc6b51}{withSequenceShared}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9b1e2b7d06c6c05e55b310eb6b6ac9f9}{setSequence}}(sequence);}
+\DoxyCodeLine{00406\ }
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00408\ \ \ \ \ \}}
+\DoxyCodeLine{00409\ }
+\DoxyCodeLine{00410\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ spread\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ The\ time\ of\ this\ order\ in\ nanoseconds.}}
+\DoxyCodeLine{00415\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00417\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ad871496e9bb57b174d7fe7ad541968bd}{withTimeNanos}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{setTimeNanos}}(timeNanos);}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00421\ \ \ \ \ \}}
+\DoxyCodeLine{00422\ }
+\DoxyCodeLine{00423\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00424\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00429\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00430\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00431\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ The\ time\ of\ this\ spread\ order\ in\ nanoseconds.}}
+\DoxyCodeLine{00432\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00433\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00434\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a5a311d2b1afac9e2d1bd48b93eac5b75}{withTimeNanosShared}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4ca0b3a1ee27f2f007a4bc761f25a91f}{setTimeNanos}}(timeNanos);}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00438\ \ \ \ \ \}}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00440\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ spread\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ side\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00446\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae5cbc094e47b4d25d22b88e43cfb76b1}{withAction}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{setAction}}(action);}
+\DoxyCodeLine{00448\ }
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00450\ \ \ \ \ \}}
+\DoxyCodeLine{00451\ }
+\DoxyCodeLine{00452\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00453\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00459\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ action\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00460\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00461\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00462\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a603455bc7541a1bf0f4982a2fab58756}{withActionShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ab0ff7764c21f30f92442ea92fc3c3d14}{setAction}}(action);}
+\DoxyCodeLine{00464\ }
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00466\ \ \ \ \ \}}
+\DoxyCodeLine{00467\ }
+\DoxyCodeLine{00468\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00469\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ current\ spread\ order.}}
+\DoxyCodeLine{00470\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ spread\ order\ action\ time.}}
+\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00473\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00474\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ac9e92e3421266df940402d6113727db4}{withActionTime}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{setActionTime}}(actionTime);}
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00478\ \ \ \ \ \}}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00481\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00482\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00483\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00484\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00485\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00486\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ spread\ order\ action\ time.}}
+\DoxyCodeLine{00487\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00488\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00489\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a64e9ecf295fe0b16c1d74d053b19e863}{withActionTimeShared}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ac8ddc02ab5f428d4340b9b9ec2a2d6aa}{setActionTime}}(actionTime);}
+\DoxyCodeLine{00491\ }
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00493\ \ \ \ \ \}}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00496\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ order\ ID.}}
+\DoxyCodeLine{00497\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00498\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00499\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ The\ spread\ order\ ID.}}
+\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00501\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00502\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae1eab850e44d9cdbbd655150b53a84db}{withOrderId}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{setOrderId}}(orderId);}
+\DoxyCodeLine{00504\ }
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00506\ \ \ \ \ \}}
+\DoxyCodeLine{00507\ }
+\DoxyCodeLine{00508\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00509\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ spread\ order\ ID.}}
+\DoxyCodeLine{00510\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00511\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00512\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00513\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00514\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00515\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ The\ spread\ order\ ID.}}
+\DoxyCodeLine{00516\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00517\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00518\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a73688cfd1691a964eae46c8c18ef6cb6}{withOrderIdShared}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a519b8485d8e6ce119b63923f833ce59a}{setOrderId}}(orderId);}
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00522\ \ \ \ \ \}}
+\DoxyCodeLine{00523\ }
+\DoxyCodeLine{00524\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00525\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ spread\ order\ ID.}}
+\DoxyCodeLine{00526\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00527\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ spread\ order\ ID.}}
+\DoxyCodeLine{00529\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00530\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00531\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a985a29ae6b6a914156367819e65efcaf}{withAuxOrderId}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{setAuxOrderId}}(auxOrderId);}
+\DoxyCodeLine{00533\ }
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00535\ \ \ \ \ \}}
+\DoxyCodeLine{00536\ }
+\DoxyCodeLine{00537\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00538\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ spread\ order\ ID.}}
+\DoxyCodeLine{00539\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00540\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00541\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00542\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00543\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00544\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ spread\ order\ ID.}}
+\DoxyCodeLine{00545\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00546\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00547\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a5e4743cc23b7fc6dfeb88fca4533f04a}{withAuxOrderIdShared}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a9f52291d9b6712a4611673c078c8247b}{setAuxOrderId}}(auxOrderId);}
+\DoxyCodeLine{00549\ }
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00551\ \ \ \ \ \}}
+\DoxyCodeLine{00552\ }
+\DoxyCodeLine{00553\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00554\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00555\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00556\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00557\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00558\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00559\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00560\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae767eb688d49d9a98162bef580cc9a88}{withPrice}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{setPrice}}(price);}
+\DoxyCodeLine{00562\ }
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00564\ \ \ \ \ \}}
+\DoxyCodeLine{00565\ }
+\DoxyCodeLine{00566\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00567\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00568\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00569\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00570\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00571\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00572\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00573\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00574\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00575\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00576\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_aea244fbad923d0b06d90ea968bb03282}{withPriceShared}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_ad8672701e0cec3aa6c0211e17fae4f49}{setPrice}}(price);}
+\DoxyCodeLine{00578\ }
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00580\ \ \ \ \ \}}
+\DoxyCodeLine{00581\ }
+\DoxyCodeLine{00582\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00583\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00584\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00585\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00586\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00587\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00588\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00589\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a644dfee68de9ef4a682ccde4460c5fa6}{withSize}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{setSize}}(size);}
+\DoxyCodeLine{00591\ }
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00593\ \ \ \ \ \}}
+\DoxyCodeLine{00594\ }
+\DoxyCodeLine{00595\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00596\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00599\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00600\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00601\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00602\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00603\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00604\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00605\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a297fe225b11f18fee22c88ae19a91255}{withSizeShared}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a34d1ee3266ecd0502c76bc278a977b28}{setSize}}(size);}
+\DoxyCodeLine{00607\ }
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00609\ \ \ \ \ \}}
+\DoxyCodeLine{00610\ }
+\DoxyCodeLine{00611\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00612\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00613\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00614\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00615\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00617\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00618\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_af415e2ec144946c4957f776933ace096}{withExecutedSize}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{setExecutedSize}}(executedSize);}
+\DoxyCodeLine{00620\ }
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00622\ \ \ \ \ \}}
+\DoxyCodeLine{00623\ }
+\DoxyCodeLine{00624\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00625\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00626\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00627\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00628\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00629\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00630\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00631\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00632\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00633\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00634\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a88422c71acc975f525fb27b6968df984}{withExecutedSizeShared}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a059f1f8107f9556a7bcc9cc5c59f1305}{setExecutedSize}}(executedSize);}
+\DoxyCodeLine{00636\ }
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00638\ \ \ \ \ \}}
+\DoxyCodeLine{00639\ }
+\DoxyCodeLine{00640\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00641\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ spread\ orders\ in\ this\ aggregate\ spread\ order.}}
+\DoxyCodeLine{00642\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00643\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00644\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ orders\ in\ this\ aggregate\ spread\ order.}}
+\DoxyCodeLine{00645\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00646\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00647\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ac776c796ebff2055e5911da2984485c1}{withCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{setCount}}(count);}
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00651\ \ \ \ \ \}}
+\DoxyCodeLine{00652\ }
+\DoxyCodeLine{00653\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00654\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ spread\ orders\ in\ this\ aggregate\ spread\ order.}}
+\DoxyCodeLine{00655\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00656\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00657\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00658\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00659\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00660\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ spread\ orders\ in\ this\ aggregate\ spread\ spread\ order.}}
+\DoxyCodeLine{00661\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00662\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00663\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_af0c0f02b7bcfde5fa192192b6782462f}{withCountShared}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a07aba66be613beacd5e80bdd86464272}{setCount}}(count);}
+\DoxyCodeLine{00665\ }
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00667\ \ \ \ \ \}}
+\DoxyCodeLine{00668\ }
+\DoxyCodeLine{00669\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00670\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
+\DoxyCodeLine{00671\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00672\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00673\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
+\DoxyCodeLine{00674\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00675\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00676\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a7796e3d0f0f520d3d56f0a95c5992b0c}{withTradeId}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{setTradeId}}(tradeId);}
+\DoxyCodeLine{00678\ }
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00680\ \ \ \ \ \}}
+\DoxyCodeLine{00681\ }
+\DoxyCodeLine{00682\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00683\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
+\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00687\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00688\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00689\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
+\DoxyCodeLine{00690\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00691\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00692\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae1e6f27eed8290855fa9831f04b863f7}{withTradeShared}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00693\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a4441865a957926aa7b8d20445dff9063}{setTradeId}}(tradeId);}
+\DoxyCodeLine{00694\ }
+\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00696\ \ \ \ \ \}}
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00699\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
+\DoxyCodeLine{00700\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00701\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00702\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
+\DoxyCodeLine{00703\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00704\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00705\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a753503806133d92fb2b4353665326450}{withTradePrice}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{setTradePrice}}(tradePrice);}
+\DoxyCodeLine{00707\ }
+\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00709\ \ \ \ \ \}}
+\DoxyCodeLine{00710\ }
+\DoxyCodeLine{00711\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00712\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
+\DoxyCodeLine{00713\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00714\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00715\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00716\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00717\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00718\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
+\DoxyCodeLine{00719\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00720\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00721\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a585d9244a757a9cb64da7cc18a6796a5}{withTradePriceShared}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abce2b1d941922c8ac30efec21773e572}{setTradePrice}}(tradePrice);}
+\DoxyCodeLine{00723\ }
+\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00725\ \ \ \ \ \}}
+\DoxyCodeLine{00726\ }
+\DoxyCodeLine{00727\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00728\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
+\DoxyCodeLine{00729\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00730\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00731\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
+\DoxyCodeLine{00732\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00733\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00734\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a2a1618974f408efa888531ee248cb7fc}{withTradeSize}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{setTradeSize}}(tradeSize);}
+\DoxyCodeLine{00736\ }
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00738\ \ \ \ \ \}}
+\DoxyCodeLine{00739\ }
+\DoxyCodeLine{00740\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00741\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
+\DoxyCodeLine{00742\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00743\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00744\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00745\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00746\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00747\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
+\DoxyCodeLine{00748\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00749\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00750\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a7cfe1fd67451db26bed9cdc29d70d877}{withTradeSizeShared}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_abd6f26430a933b22f59b546b545f38be}{setTradeSize}}(tradeSize);}
+\DoxyCodeLine{00752\ }
+\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00754\ \ \ \ \ \}}
+\DoxyCodeLine{00755\ }
+\DoxyCodeLine{00756\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00757\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00758\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00759\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00760\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00761\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00762\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00763\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ab374a682333a2bd75e3c7f77d0307a7e}{withExchangeCode}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
+\DoxyCodeLine{00765\ }
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00767\ \ \ \ \ \}}
+\DoxyCodeLine{00768\ }
+\DoxyCodeLine{00769\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00770\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00771\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00772\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00773\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00774\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00775\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00776\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00777\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00778\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00779\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_abb2f7b8f24ad53ed1bac0fef7359afe6}{withExchangeCodeShared}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
+\DoxyCodeLine{00781\ }
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00783\ \ \ \ \ \}}
+\DoxyCodeLine{00784\ }
+\DoxyCodeLine{00785\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00786\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00787\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00788\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00789\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00790\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00791\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00792\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_aea1b9e98e893c2898860ef4b01c74c31}{withExchangeCode}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
+\DoxyCodeLine{00794\ }
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00796\ \ \ \ \ \}}
+\DoxyCodeLine{00797\ }
+\DoxyCodeLine{00798\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00799\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00800\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00801\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00802\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00803\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00804\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00805\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00806\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00807\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00808\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a08dae8718c3c43310b36f0e036e04c95}{withExchangeCodeShared}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}::setExchangeCode(exchangeCode);}
+\DoxyCodeLine{00810\ }
+\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00812\ \ \ \ \ \}}
+\DoxyCodeLine{00813\ }
+\DoxyCodeLine{00814\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00815\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00816\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00817\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00818\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00819\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00820\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00821\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a4c5bd807ce493db5f38d091cf811d55d}{withOrderSide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00822\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{setOrderSide}}(side);}
+\DoxyCodeLine{00823\ }
+\DoxyCodeLine{00824\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00825\ \ \ \ \ \}}
+\DoxyCodeLine{00826\ }
+\DoxyCodeLine{00827\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00828\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00829\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00830\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00831\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00832\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00833\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00834\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00835\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00836\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00837\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ad8ba6d0e534539839aef027773a455f9}{withOrderSideShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a3b81e276c468529920df6d49db9247b4}{setOrderSide}}(side);}
+\DoxyCodeLine{00839\ }
+\DoxyCodeLine{00840\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00841\ \ \ \ \ \}}
+\DoxyCodeLine{00842\ }
+\DoxyCodeLine{00843\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00844\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00845\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00846\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00847\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00848\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00849\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00850\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a4a6ef25bcd600acba59712fdbf45617f}{withScope}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00851\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{setScope}}(scope);}
+\DoxyCodeLine{00852\ }
+\DoxyCodeLine{00853\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00854\ \ \ \ \ \}}
+\DoxyCodeLine{00855\ }
+\DoxyCodeLine{00856\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00857\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00858\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00859\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00860\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00861\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
+\DoxyCodeLine{00862\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00863\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ spread\ order.}}
+\DoxyCodeLine{00864\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00865\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00866\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a4ff600e850a2bfb9d2e4e2965ba747dc}{withScopeShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_order_base}{OrderBase}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_order_base_a1a80699b40d296360bc250d196e18c0d}{setScope}}(scope);}
+\DoxyCodeLine{00868\ }
+\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00870\ \ \ \ \ \}}
+\DoxyCodeLine{00871\ }
+\DoxyCodeLine{00872\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00873\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ spread\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00874\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00875\ \textcolor{comment}{\ \ \ \ \ *\ @return\ spread\ symbol\ of\ this\ event\ or\ dxfcpp::String::NUL\ (`std::string\{"{}<null>"{}\}`).}}
+\DoxyCodeLine{00876\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00877\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_a519138942e57e77a82587b4a01244db0}{getSpreadSymbol}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00878\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!spreadOrderData\_.spreadSymbol)\ \{}
+\DoxyCodeLine{00879\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::String::NUL;}
+\DoxyCodeLine{00880\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00881\ }
-\DoxyCodeLine{00882\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00883\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ spread\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00884\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00885\ \textcolor{comment}{\ \ \ \ \ *\ @param\ spreadSymbol\ spread\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00886\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00887\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a2f11551de61058f3599e47a4e3c83e16}{setSpreadSymbol}}(std::string\ spreadSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00888\ \ \ \ \ \ \ \ \ spreadOrderData\_.spreadSymbol\ =\ std::move(spreadSymbol);}
-\DoxyCodeLine{00889\ \ \ \ \ \}}
-\DoxyCodeLine{00890\ }
-\DoxyCodeLine{00891\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00892\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ spread\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00893\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00894\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00895\ \textcolor{comment}{\ \ \ \ \ *\ @param\ spreadSymbol\ spread\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00896\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
-\DoxyCodeLine{00897\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00898\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae2f2ecc8731029b6639d729674838bf8}{withSpreadSymbol}}(std::string\ spreadSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00899\ \ \ \ \ \ \ \ \ setSpreadSymbol(std::move(spreadSymbol));}
-\DoxyCodeLine{00900\ }
-\DoxyCodeLine{00901\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00902\ \ \ \ \ \}}
-\DoxyCodeLine{00903\ }
-\DoxyCodeLine{00904\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00905\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ spread\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00906\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00907\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00908\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
-\DoxyCodeLine{00909\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
-\DoxyCodeLine{00910\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00911\ \textcolor{comment}{\ \ \ \ \ *\ @param\ spreadSymbol\ spread\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00912\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
-\DoxyCodeLine{00913\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00914\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_adee84f9294d9f933a0fae980f40bd1f1}{withSpreadSymbolShared}}(std::string\ spreadSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00915\ \ \ \ \ \ \ \ \ setSpreadSymbol(std::move(spreadSymbol));}
-\DoxyCodeLine{00916\ }
-\DoxyCodeLine{00917\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
-\DoxyCodeLine{00918\ \ \ \ \ \}}
-\DoxyCodeLine{00919\ }
-\DoxyCodeLine{00920\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00921\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00882\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ spreadOrderData\_.spreadSymbol.value();}
+\DoxyCodeLine{00883\ \ \ \ \ \}}
+\DoxyCodeLine{00884\ }
+\DoxyCodeLine{00885\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00886\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ spread\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00887\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00888\ \textcolor{comment}{\ \ \ \ \ *\ @return\ spread\ symbol\ of\ this\ event\ or\ std::nullopt}}
+\DoxyCodeLine{00889\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00890\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ab8fa4aa45751afa2fc7c216089425621}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ab8fa4aa45751afa2fc7c216089425621}{optional}}<\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ab8fa4aa45751afa2fc7c216089425621}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ab8fa4aa45751afa2fc7c216089425621}{string}}>\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ab8fa4aa45751afa2fc7c216089425621}{getSpreadSymbolOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00891\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ spreadOrderData\_.spreadSymbol;}
+\DoxyCodeLine{00892\ \ \ \ \ \}}
+\DoxyCodeLine{00893\ }
+\DoxyCodeLine{00894\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00895\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ spread\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00896\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00897\ \textcolor{comment}{\ \ \ \ \ *\ @param\ spreadSymbol\ spread\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00898\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00899\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_a2f11551de61058f3599e47a4e3c83e16}{setSpreadSymbol}}(std::string\ spreadSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00900\ \ \ \ \ \ \ \ \ spreadOrderData\_.spreadSymbol\ =\ std::move(spreadSymbol);}
+\DoxyCodeLine{00901\ \ \ \ \ \}}
+\DoxyCodeLine{00902\ }
+\DoxyCodeLine{00903\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00904\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ spread\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00905\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00906\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00907\ \textcolor{comment}{\ \ \ \ \ *\ @param\ spreadSymbol\ spread\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00908\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ spread\ order.}}
+\DoxyCodeLine{00909\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00910\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae2f2ecc8731029b6639d729674838bf8}{withSpreadSymbol}}(std::string\ spreadSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00911\ \ \ \ \ \ \ \ \ setSpreadSymbol(std::move(spreadSymbol));}
+\DoxyCodeLine{00912\ }
+\DoxyCodeLine{00913\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00914\ \ \ \ \ \}}
+\DoxyCodeLine{00915\ }
+\DoxyCodeLine{00916\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00917\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ spread\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00918\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00919\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00920\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<SpreadOrder>(new}}
+\DoxyCodeLine{00921\ \textcolor{comment}{\ \ \ \ \ *\ SpreadOrder(...))`\ or\ \`{}std::make\_shared<SpreadOrder>(...)`}}
 \DoxyCodeLine{00922\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00923\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
-\DoxyCodeLine{00924\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00925\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae26d9d759dc9814a0fe8f340ce274a4a}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae26d9d759dc9814a0fe8f340ce274a4a}{override}};}
-\DoxyCodeLine{00926\ \};}
-\DoxyCodeLine{00927\ }
-\DoxyCodeLine{00928\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00923\ \textcolor{comment}{\ \ \ \ \ *\ @param\ spreadSymbol\ spread\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00924\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ spread\ order.}}
+\DoxyCodeLine{00925\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00926\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_adee84f9294d9f933a0fae980f40bd1f1}{withSpreadSymbolShared}}(std::string\ spreadSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00927\ \ \ \ \ \ \ \ \ setSpreadSymbol(std::move(spreadSymbol));}
+\DoxyCodeLine{00928\ }
+\DoxyCodeLine{00929\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<\mbox{\hyperlink{classdxfcpp_1_1_spread_order}{SpreadOrder}}>();}
+\DoxyCodeLine{00930\ \ \ \ \ \}}
+\DoxyCodeLine{00931\ }
+\DoxyCodeLine{00932\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00933\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00934\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00935\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00936\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00937\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae26d9d759dc9814a0fe8f340ce274a4a}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_spread_order_ae26d9d759dc9814a0fe8f340ce274a4a}{override}};}
+\DoxyCodeLine{00938\ \};}
+\DoxyCodeLine{00939\ }
+\DoxyCodeLine{00940\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
 
 \end{DoxyCode}

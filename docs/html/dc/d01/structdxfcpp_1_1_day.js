@@ -20,7 +20,6 @@ var structdxfcpp_1_1_day =
     [ "getResetTime", "dc/d01/structdxfcpp_1_1_day.html#ac0992b490b763d1ca63215aad987254b", null ],
     [ "getSchedule", "dc/d01/structdxfcpp_1_1_day.html#a38c1d9f7a3d2df0d9ccbd4b0b45f7653", null ],
     [ "getSessionByTime", "dc/d01/structdxfcpp_1_1_day.html#acc17caa1b96904ac5226fc0df2ea89e5", null ],
-    [ "getSessions", "dc/d01/structdxfcpp_1_1_day.html#a3f33d3cdf1e7cabf3efb65f02075c3ac", null ],
     [ "getStartTime", "dc/d01/structdxfcpp_1_1_day.html#ae3c4cf3680a5aab9e01efbdec0fbb5a3", null ],
     [ "getYear", "dc/d01/structdxfcpp_1_1_day.html#a813a042676cb54a7aa8bac5182d23750", null ],
     [ "getYearMonthDay", "dc/d01/structdxfcpp_1_1_day.html#a66c22ef75baab14cc4b806dee3deeb37", null ],

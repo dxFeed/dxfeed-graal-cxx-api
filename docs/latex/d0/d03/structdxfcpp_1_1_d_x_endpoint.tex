@@ -40,15 +40,15 @@ enum class \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_af82eb2c48281dedb4d2a1
  \}
 \begin{DoxyCompactList}\small\item\em Represents the current state of endpoint. \end{DoxyCompactList}\item 
 \Hypertarget{structdxfcpp_1_1_d_x_endpoint_a7897fa31937841df6be58d85d5fbfd03}\label{structdxfcpp_1_1_d_x_endpoint_a7897fa31937841df6be58d85d5fbfd03} 
-using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}} $>$
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}$>$
 \begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} object. \end{DoxyCompactList}\item 
 \Hypertarget{structdxfcpp_1_1_d_x_endpoint_aa2b591ba29f5fe76b580852a1c4d1df6}\label{structdxfcpp_1_1_d_x_endpoint_aa2b591ba29f5fe76b580852a1c4d1df6} 
-using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}} $>$
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}}$>$
 \begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
 \begin{DoxyCompactItemize}
 \item 
-using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}}$>$
 \begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -178,7 +178,7 @@ Endpoint role defines the behavior of its \doxylink{structdxfcpp_1_1_d_x_endpoin
 \end{DoxyItemize}
 
 This endpoint is automatically connected to the configured data feed as explained in default properties section.
-\item \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED} is similar to \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED}, but it is designed to be used with On\+Demand\+Service for historical data replay only. It is configured with default properties, but is not connected automatically to the data provider until On\+Demand\+Service-\/\texorpdfstring{$>$}{>}replay method is invoked.
+\item \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED} is similar to \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED}, but it is designed to be used with \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} for historical data replay only. It is configured with default properties, but is not connected automatically to the data provider until On\+Demand\+Service-\/\texorpdfstring{$>$}{>}replay method is invoked.
 \item \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da08e8da2638e7a4a4dfb3d29ab5afb751}{STREAM\+\_\+\+FEED} is similar to \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED} and also connects to the remote data feed provider, but is designed for bulk parsing of data from files. \doxylink{structdxfcpp_1_1_d_x_endpoint_aadf6d4f1eeb73b91c4f7f1deca4bb61f}{DXEndpoint\+::get\+Feed()} method returns feed object that subscribes to the data from the opened files and receives events from them. Events from the files are not conflated and are processed as fast as possible. Note, that in this role, DXFeed\+::get\+Last\+Event() method does not work and time-\/series subscription is not supported. For example\+: 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\textcolor{keyword}{auto}\ endpoint\ =\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_a4933409731472ca5aa39d0c83d542428}{DXEndpoint::create}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da08e8da2638e7a4a4dfb3d29ab5afb751}{DXEndpoint::Role::STREAM\_FEED}});}
@@ -211,7 +211,7 @@ Endpoint can be closed with \doxylink{structdxfcpp_1_1_d_x_endpoint_a06b70688f7a
 
 \doxyparagraph*{Event times}
 
-The \doxylink{structdxfcpp_1_1_event_type_a7490dfa82916838dfdbea88c65157d3d}{Event\+Type\+::get\+Event\+Time()} on received events is available only when the endpoint is created with \doxylink{structdxfcpp_1_1_d_x_endpoint_ade95bc0b10e58f612fd4355aa915ade9}{DXEndpoint\+::\+DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY} property and the data source has embedded event times. This is typically true only for data events that are read from historical tape files (see above) and from On\+Demand\+Service. Events that are coming from a network connections do not have an embedded event time information and event time is not available for them anyway.
+The \doxylink{structdxfcpp_1_1_event_type_a7490dfa82916838dfdbea88c65157d3d}{Event\+Type\+::get\+Event\+Time()} on received events is available only when the endpoint is created with \doxylink{structdxfcpp_1_1_d_x_endpoint_ade95bc0b10e58f612fd4355aa915ade9}{DXEndpoint\+::\+DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY} property and the data source has embedded event times. This is typically true only for data events that are read from historical tape files (see above) and from \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}. Events that are coming from a network connections do not have an embedded event time information and event time is not available for them anyway.
 
 \doxyparagraph*{\label{structdxfcpp_1_1_d_x_endpoint_defaultPropertiesSection}%
 \Hypertarget{structdxfcpp_1_1_d_x_endpoint_defaultPropertiesSection}%
@@ -263,12 +263,12 @@ This endpoint is automatically connected to the configured data feed as explaine
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{ON\_DEMAND\_FEED@{ON\_DEMAND\_FEED}!dxfcpp::DXEndpoint@{dxfcpp::DXEndpoint}}\index{dxfcpp::DXEndpoint@{dxfcpp::DXEndpoint}!ON\_DEMAND\_FEED@{ON\_DEMAND\_FEED}}}\Hypertarget{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}\label{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22} 
-ON\+\_\+\+DEMAND\+\_\+\+FEED&{\ttfamily ON\+\_\+\+DEMAND\+\_\+\+FEED} endpoint is similar to \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{DXEndpoint\+::\+FEED}, but it is designed to be used with On\+Demand\+Service for historical data replay only. It is configured with \href{\#defaultPropertiesSection}{\texttt{ default properties}}, but is not connected automatically to the data provider until On\+Demand\+Service.replay method is invoked.
+ON\+\_\+\+DEMAND\+\_\+\+FEED&{\ttfamily ON\+\_\+\+DEMAND\+\_\+\+FEED} endpoint is similar to \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{DXEndpoint\+::\+FEED}, but it is designed to be used with \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} for historical data replay only. It is configured with \href{\#defaultPropertiesSection}{\texttt{ default properties}}, but is not connected automatically to the data provider until On\+Demand\+Service.replay method is invoked.
 
-{\ttfamily ON\+\_\+\+DEMAND\+\_\+\+FEED} endpoint cannot be connected to an ordinary data feed at all. On\+Demand\+Service\+::stop\+And\+Resume() will have a similar effect to On\+Demand\+Service\+::stop\+And\+Clear().
+{\ttfamily ON\+\_\+\+DEMAND\+\_\+\+FEED} endpoint cannot be connected to an ordinary data feed at all. \doxylink{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}{On\+Demand\+Service\+::stop\+And\+Resume()} will have a similar effect to \doxylink{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}{On\+Demand\+Service\+::stop\+And\+Clear()}.
 
 \begin{DoxySeeAlso}{See also}
-On\+Demand\+Service 
+\doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} 
 \end{DoxySeeAlso}
 \\
 \hline
@@ -743,9 +743,9 @@ this \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}.
 
 Set this property to {\ttfamily true} to enable \doxylink{structdxfcpp_1_1_event_type_a7490dfa82916838dfdbea88c65157d3d}{event time} support. By default, the endpoint does not support event time.
 
-The event time is available only when the corresponding \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} is created with this property and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from On\+Demand\+Service. Events that are coming from a network connections do not have an embedded event time information and event time is not available for them anyway.
+The event time is available only when the corresponding \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} is created with this property and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}. Events that are coming from a network connections do not have an embedded event time information and event time is not available for them anyway.
 
-Use this property if you need to work with historical data coming from files or from On\+Demand\+Service or writing data with times to file via \doxylink{structdxfcpp_1_1_d_x_publisher}{DXPublisher} using "{}tape\+:..."{} address. \Hypertarget{structdxfcpp_1_1_d_x_endpoint_a728c91286a3036e3242eaef51d4a27fc}\label{structdxfcpp_1_1_d_x_endpoint_a728c91286a3036e3242eaef51d4a27fc} 
+Use this property if you need to work with historical data coming from files or from \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} or writing data with times to file via \doxylink{structdxfcpp_1_1_d_x_publisher}{DXPublisher} using "{}tape\+:..."{} address. \Hypertarget{structdxfcpp_1_1_d_x_endpoint_a728c91286a3036e3242eaef51d4a27fc}\label{structdxfcpp_1_1_d_x_endpoint_a728c91286a3036e3242eaef51d4a27fc} 
 \index{dxfcpp::DXEndpoint@{dxfcpp::DXEndpoint}!DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY@{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}}
 \index{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY@{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}!dxfcpp::DXEndpoint@{dxfcpp::DXEndpoint}}
 \doxyparagraph{\texorpdfstring{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}}

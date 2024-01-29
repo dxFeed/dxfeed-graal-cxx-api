@@ -1,0 +1,380 @@
+\doxysubsection{dxfcpp\+::Instrument\+Profile\+Connection Class Reference}
+\hypertarget{classdxfcpp_1_1_instrument_profile_connection}{}\label{classdxfcpp_1_1_instrument_profile_connection}\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+
+
+Connects to an instrument profile URL and reads instrument profiles with support of streaming live updates.  
+
+
+
+
+{\ttfamily \#include $<$Instrument\+Profile\+Connection.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Instrument\+Profile\+Connection\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{db/d00/classdxfcpp_1_1_instrument_profile_connection}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}} \+: std\+::int32\+\_\+t \{ \newline
+\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED}}
+, \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d}{CONNECTING}}
+, \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858}{CONNECTED}}
+, \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e}{COMPLETED}}
+, \newline
+\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}}
+ \}
+\begin{DoxyCompactList}\small\item\em Instrument profile connection state. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a825136f4dbb70e1835eaa3373e314e44}\label{classdxfcpp_1_1_instrument_profile_connection_a825136f4dbb70e1835eaa3373e314e44} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection}{Instrument\+Profile\+Connection}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{classdxfcpp_1_1_instrument_profile_connection}{Instrument\+Profile\+Connection} object. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a4b4b1fbc985eb4c8d7aa7bf565185cfe}\label{classdxfcpp_1_1_instrument_profile_connection_a4b4b1fbc985eb4c8d7aa7bf565185cfe} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection}{Instrument\+Profile\+Connection}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{classdxfcpp_1_1_instrument_profile_connection}{Instrument\+Profile\+Connection} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_af72f021b002d581c18b5255bb927af90}{get\+Address}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns the address of this instrument profile connection. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}{get\+Update\+Period}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns update period in milliseconds. \end{DoxyCompactList}\item 
+std\+::chrono\+::milliseconds \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ab69cbd37ade86b5bdcb3618335b8800e}{get\+Update\+Period\+As\+Duration}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns update period in milliseconds as chrono\+::duration It is period of an update check when the instrument profiles source does not support live updates and/or when connection is dropped. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a4d96bf46b2de162b34f98631f4e82e84}{set\+Update\+Period}} (std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{update\+Period}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes the update period in milliseconds. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a5e8366941b6070651b7966cb34b54d9e}{set\+Update\+Period}} (std\+::chrono\+::milliseconds \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{update\+Period}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes the update period in milliseconds as chrono\+::duration. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{State}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a14ea136c4da5de978b2ed946ad878c85}{get\+State}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns state of this instrument profile connections. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_ab0260dce2c5ce488be31cb572bf2a145}{get\+Last\+Modified}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_addaee68079e29ca30122b0690f47a45a}{start}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Starts this instrument profile connection. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a34b2751fd3fb16cecc174773ffbad5bc}{close}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Closes this instrument profile connection. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{State\+Change\+Listener}} $>$ }\\std\+::size\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a9d3564db3cab9cd2e442e509c009ed86}{add\+State\+Change\+Listener}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{State\+Change\+Listener}} \&\&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{listener}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Adds listener that is notified about changes in \doxylink{classdxfcpp_1_1_instrument_profile_connection_a14ea136c4da5de978b2ed946ad878c85}{state} property. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a13e5826c00974cf8693922845339b2c7}{remove\+State\+Change\+Listener}} (std\+::size\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{listener\+Id}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Removes listener that is notified about changes in \doxylink{classdxfcpp_1_1_instrument_profile_connection_a14ea136c4da5de978b2ed946ad878c85}{state} property. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{auto}} \& \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a607127b7f9a5c7259628774a856ffe29}{on\+State\+Change}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns the on\+State\+Change \doxylink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4}{handler} that can be used to add or remove listeners. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a8d2bb2ed147ed654455cffa6062f4b36}{wait\+Until\+Completed}} (std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{timeout}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Synchronously waits for full first snapshot read with the specified timeout. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a980035e287fe65558b6f72d736000629}{wait\+Until\+Completed}} (std\+::chrono\+::milliseconds \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{timeout}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Synchronously waits for full first snapshot read with the specified timeout. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} T $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{virtual}} std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{to\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a825136f4dbb70e1835eaa3373e314e44}{Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a8c6d9346242856cb081e0b39c50490be}{create\+Connection}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{address}}, \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a49492c3e1d3d282dcd0dd3a9e1a08639}{Instrument\+Profile\+Collector\+::\+Ptr}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{collector}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Creates instrument profile connection with a specified address and collector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Connects to an instrument profile URL and reads instrument profiles with support of streaming live updates. 
+
+Please see {\bfseries{Instrument \doxylink{classdxfcpp_1_1_profile}{Profile} Format}} documentation for complete description. 
+
+\doxysubsubsection{Member Enumeration Documentation}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}\label{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!State@{State}}
+\index{State@{State}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{State}{State}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{enum}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{class}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{dxfcpp\+::\+Instrument\+Profile\+Connection\+::\+State}} \+: std\+::int32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Instrument profile connection state. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NOT\_CONNECTED@{NOT\_CONNECTED}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!NOT\_CONNECTED@{NOT\_CONNECTED}}}\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8}\label{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51ad91be9b5ceb9fe0af02b9b02413eccf8} 
+NOT\+\_\+\+CONNECTED&Instrument profile connection is not started yet. \doxylink{classdxfcpp_1_1_instrument_profile_connection_addaee68079e29ca30122b0690f47a45a}{start} was not invoked yet. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CONNECTING@{CONNECTING}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!CONNECTING@{CONNECTING}}}\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d}\label{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d} 
+CONNECTING&Connection is being established. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CONNECTED@{CONNECTED}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!CONNECTED@{CONNECTED}}}\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858}\label{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51aa5afd6edd5336d91316964e493936858} 
+CONNECTED&Connection was established. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{COMPLETED@{COMPLETED}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!COMPLETED@{COMPLETED}}}\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e}\label{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e} 
+COMPLETED&Initial instrument profiles snapshot was fully read (this state is set only once). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CLOSED@{CLOSED}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!CLOSED@{CLOSED}}}\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d}\label{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d} 
+CLOSED&Instrument profile connection was \doxylink{classdxfcpp_1_1_instrument_profile_connection_a34b2751fd3fb16cecc174773ffbad5bc}{closed}. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a9d3564db3cab9cd2e442e509c009ed86}\label{classdxfcpp_1_1_instrument_profile_connection_a9d3564db3cab9cd2e442e509c009ed86} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!addStateChangeListener@{addStateChangeListener}}
+\index{addStateChangeListener@{addStateChangeListener}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{addStateChangeListener()}{addStateChangeListener()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{State\+Change\+Listener}} $>$ \\
+std\+::size\+\_\+t dxfcpp\+::\+Instrument\+Profile\+Connection\+::add\+State\+Change\+Listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{State\+Change\+Listener}} \&\&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds listener that is notified about changes in \doxylink{classdxfcpp_1_1_instrument_profile_connection_a14ea136c4da5de978b2ed946ad878c85}{state} property. 
+
+Installed listener can be removed by {\ttfamily id} with \doxylink{classdxfcpp_1_1_instrument_profile_connection_a13e5826c00974cf8693922845339b2c7}{Instrument\+Profile\+Connection\+::remove\+State\+Change\+Listener} method or by call {\ttfamily \doxylink{classdxfcpp_1_1_instrument_profile_connection_a607127b7f9a5c7259628774a856ffe29}{Instrument\+Profile\+Connection\+::on\+State\+Change()} -\/= id};
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em State\+Change\+Listener} & The listener type. It can be any callable with signature\+: {\ttfamily void(\+State, State)} \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the listener id 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a34b2751fd3fb16cecc174773ffbad5bc}\label{classdxfcpp_1_1_instrument_profile_connection_a34b2751fd3fb16cecc174773ffbad5bc} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!close@{close}}
+\index{close@{close}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Closes this instrument profile connection. 
+
+This connection\textquotesingle{}s state immediately changes to \doxylink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED} and the background update procedures are terminated. \Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a8c6d9346242856cb081e0b39c50490be}\label{classdxfcpp_1_1_instrument_profile_connection_a8c6d9346242856cb081e0b39c50490be} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!createConnection@{createConnection}}
+\index{createConnection@{createConnection}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{createConnection()}{createConnection()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a825136f4dbb70e1835eaa3373e314e44}{Instrument\+Profile\+Connection\+::\+Ptr}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::create\+Connection (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} std\+::string \&}]{address,  }\item[{\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a49492c3e1d3d282dcd0dd3a9e1a08639}{Instrument\+Profile\+Collector\+::\+Ptr}}}]{collector }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Creates instrument profile connection with a specified address and collector. 
+
+Address may be just "{}$<$host$>$\+:$<$port$>$"{} of server, URL, or a file path. The "{}\mbox{[}update=$<$period$>$\mbox{]}"{} clause can be optionally added at the end of the address to specify an \doxylink{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}{update period} via an address string. Default update period is 1 minute.
+
+Connection needs to be \doxylink{classdxfcpp_1_1_instrument_profile_connection_addaee68079e29ca30122b0690f47a45a}{started} to begin an actual operation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The address. \\
+\hline
+{\em collector} & The instrument profile collector to push updates into.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new instrument profile connection. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_af72f021b002d581c18b5255bb927af90}\label{classdxfcpp_1_1_instrument_profile_connection_af72f021b002d581c18b5255bb927af90} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!getAddress@{getAddress}}
+\index{getAddress@{getAddress}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getAddress()}{getAddress()}}
+{\footnotesize\ttfamily std\+::string dxfcpp\+::\+Instrument\+Profile\+Connection\+::get\+Address (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns the address of this instrument profile connection. 
+
+It does not include additional options specified as part of the address.
+
+\begin{DoxyReturn}{Returns}
+The address of this instrument profile connection. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_ab0260dce2c5ce488be31cb572bf2a145}\label{classdxfcpp_1_1_instrument_profile_connection_ab0260dce2c5ce488be31cb572bf2a145} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!getLastModified@{getLastModified}}
+\index{getLastModified@{getLastModified}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getLastModified()}{getLastModified()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Instrument\+Profile\+Connection\+::get\+Last\+Modified (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown. 
+
+Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+
+\begin{DoxyReturn}{Returns}
+The last modification time (in milliseconds) of instrument profiles or zero if it is unknown. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a14ea136c4da5de978b2ed946ad878c85}\label{classdxfcpp_1_1_instrument_profile_connection_a14ea136c4da5de978b2ed946ad878c85} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!getState@{getState}}
+\index{getState@{getState}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getState()}{getState()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51}{Instrument\+Profile\+Connection\+::\+State}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::get\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns state of this instrument profile connections. 
+
+\begin{DoxyReturn}{Returns}
+The state of this instrument profile connections. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}\label{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!getUpdatePeriod@{getUpdatePeriod}}
+\index{getUpdatePeriod@{getUpdatePeriod}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getUpdatePeriod()}{getUpdatePeriod()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Instrument\+Profile\+Connection\+::get\+Update\+Period (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns update period in milliseconds. 
+
+It is period of an update check when the instrument profiles source does not support live updates and/or when connection is dropped. Default update period is 1 minute, unless overridden in an \doxylink{classdxfcpp_1_1_instrument_profile_connection_a8c6d9346242856cb081e0b39c50490be}{address string}.
+
+\begin{DoxyReturn}{Returns}
+The update period in milliseconds. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_ab69cbd37ade86b5bdcb3618335b8800e}\label{classdxfcpp_1_1_instrument_profile_connection_ab69cbd37ade86b5bdcb3618335b8800e} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!getUpdatePeriodAsDuration@{getUpdatePeriodAsDuration}}
+\index{getUpdatePeriodAsDuration@{getUpdatePeriodAsDuration}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getUpdatePeriodAsDuration()}{getUpdatePeriodAsDuration()}}
+{\footnotesize\ttfamily std\+::chrono\+::milliseconds dxfcpp\+::\+Instrument\+Profile\+Connection\+::get\+Update\+Period\+As\+Duration (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns update period in milliseconds as chrono\+::duration It is period of an update check when the instrument profiles source does not support live updates and/or when connection is dropped. 
+
+Default update period is 1 minute, unless overridden in an \doxylink{classdxfcpp_1_1_instrument_profile_connection_a8c6d9346242856cb081e0b39c50490be}{address string}.
+
+\begin{DoxyReturn}{Returns}
+The update period in milliseconds as chrono\+::duration. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a607127b7f9a5c7259628774a856ffe29}\label{classdxfcpp_1_1_instrument_profile_connection_a607127b7f9a5c7259628774a856ffe29} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!onStateChange@{onStateChange}}
+\index{onStateChange@{onStateChange}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{onStateChange()}{onStateChange()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{auto}} \& dxfcpp\+::\+Instrument\+Profile\+Connection\+::on\+State\+Change (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the on\+State\+Change \doxylink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4}{handler} that can be used to add or remove listeners. 
+
+\begin{DoxyReturn}{Returns}
+on\+State\+Change handler with {\ttfamily void(\+State, State)} signature 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a13e5826c00974cf8693922845339b2c7}\label{classdxfcpp_1_1_instrument_profile_connection_a13e5826c00974cf8693922845339b2c7} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!removeStateChangeListener@{removeStateChangeListener}}
+\index{removeStateChangeListener@{removeStateChangeListener}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{removeStateChangeListener()}{removeStateChangeListener()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::remove\+State\+Change\+Listener (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{listener\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes listener that is notified about changes in \doxylink{classdxfcpp_1_1_instrument_profile_connection_a14ea136c4da5de978b2ed946ad878c85}{state} property. 
+
+It removes the listener that was previously installed with \doxylink{classdxfcpp_1_1_instrument_profile_connection_a9d3564db3cab9cd2e442e509c009ed86}{Instrument\+Profile\+Connection\+::add\+State\+Change\+Listener} method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener\+Id} & The listener id to remove \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a5e8366941b6070651b7966cb34b54d9e}\label{classdxfcpp_1_1_instrument_profile_connection_a5e8366941b6070651b7966cb34b54d9e} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!setUpdatePeriod@{setUpdatePeriod}}
+\index{setUpdatePeriod@{setUpdatePeriod}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{setUpdatePeriod()}{setUpdatePeriod()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::set\+Update\+Period (\begin{DoxyParamCaption}\item[{std\+::chrono\+::milliseconds}]{update\+Period }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the update period in milliseconds as chrono\+::duration. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em update\+Period} & The update period in milliseconds as chrono\+::duration. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}{Instrument\+Profile\+Connection\+::get\+Update\+Period()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a4d96bf46b2de162b34f98631f4e82e84}\label{classdxfcpp_1_1_instrument_profile_connection_a4d96bf46b2de162b34f98631f4e82e84} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!setUpdatePeriod@{setUpdatePeriod}}
+\index{setUpdatePeriod@{setUpdatePeriod}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{setUpdatePeriod()}{setUpdatePeriod()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::set\+Update\+Period (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{update\+Period }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes the update period in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em update\+Period} & The update period in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classdxfcpp_1_1_instrument_profile_connection_ace0bd32f519db9bf13ff62cedfd9835c}{Instrument\+Profile\+Connection\+::get\+Update\+Period()} 
+\end{DoxySeeAlso}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_addaee68079e29ca30122b0690f47a45a}\label{classdxfcpp_1_1_instrument_profile_connection_addaee68079e29ca30122b0690f47a45a} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!start@{start}}
+\index{start@{start}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Starts this instrument profile connection. 
+
+This connection\textquotesingle{}s state immediately changes to \doxylink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a9a14f95e151eec641316e7c784ce832d}{CONNECTING} and the actual connection establishment proceeds in the background. \Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a980035e287fe65558b6f72d736000629}\label{classdxfcpp_1_1_instrument_profile_connection_a980035e287fe65558b6f72d736000629} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!waitUntilCompleted@{waitUntilCompleted}}
+\index{waitUntilCompleted@{waitUntilCompleted}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{waitUntilCompleted()}{waitUntilCompleted()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::wait\+Until\+Completed (\begin{DoxyParamCaption}\item[{std\+::chrono\+::milliseconds}]{timeout }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Synchronously waits for full first snapshot read with the specified timeout. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timeout} & The maximum time to wait \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if \doxylink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e}{COMPLETED} state was reached and {\ttfamily false} if the waiting time elapsed before snapshot was fully read. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_connection_a8d2bb2ed147ed654455cffa6062f4b36}\label{classdxfcpp_1_1_instrument_profile_connection_a8d2bb2ed147ed654455cffa6062f4b36} 
+\index{dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}!waitUntilCompleted@{waitUntilCompleted}}
+\index{waitUntilCompleted@{waitUntilCompleted}!dxfcpp::InstrumentProfileConnection@{dxfcpp::InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{waitUntilCompleted()}{waitUntilCompleted()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} dxfcpp\+::\+Instrument\+Profile\+Connection\+::wait\+Until\+Completed (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{timeout }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Synchronously waits for full first snapshot read with the specified timeout. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timeout} & The maximum time (in millis) to wait \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if \doxylink{classdxfcpp_1_1_instrument_profile_connection_a63d1cecff8d2edb80b8862725df0bd51a8f7afecbc8fbc4cd0f50a57d1172482e}{COMPLETED} state was reached and {\ttfamily false} if the waiting time elapsed before snapshot was fully read. 
+\end{DoxyReturn}

@@ -2,7 +2,7 @@
 \hypertarget{_candle_price_level_8hpp_source}{}\label{_candle_price_level_8hpp_source}\index{CandlePriceLevel.hpp@{CandlePriceLevel.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -126,7 +126,7 @@
 \DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ */}}
 \DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_price_level_a1d89d4dcbb0155f6f3cdeb426ae63e71}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_price_level_a1d89d4dcbb0155f6f3cdeb426ae63e71}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_candle_price_level_a1d89d4dcbb0155f6f3cdeb426ae63e71}{CandlePriceLevel}}>\ \mbox{\hyperlink{structdxfcpp_1_1_candle_price_level_a1d89d4dcbb0155f6f3cdeb426ae63e71}{valueOf}}(\textcolor{keywordtype}{double}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_price_level_a1d89d4dcbb0155f6f3cdeb426ae63e71}{value}})\ \textcolor{keyword}{noexcept}\ \{}
 \DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isinf(value)\ ||\ (value\ ==\ 0.0\ \&\&\ std::signbit(value)))\ \{}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ throw\ IllegalArgumentException("{}Incorrect\ candle\ price\ level:\ "{}\ +\ value);}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ [EN-\/8232]\ throw\ IllegalArgumentException("{}Incorrect\ candle\ price\ level:\ "{}\ +\ value);}}
 \DoxyCodeLine{00126\ }
 \DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
 \DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}}

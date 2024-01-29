@@ -2,7 +2,7 @@
 \hypertarget{_system_8hpp_source}{}\label{_system_8hpp_source}\index{System.hpp@{System.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -33,14 +33,26 @@
 \DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_system_aac369091e4fd1d35efcfc018db452905}{setProperty}}(\textcolor{keyword}{const}\ std::string\ \&key,\ \textcolor{keyword}{const}\ std::string\ \&value);}
 \DoxyCodeLine{00030\ }
 \DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Gets\ the\ system\ property\ indicated\ by\ the\ specified\ key.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ The\ name\ of\ the\ system\ property\ (UTF-\/8\ string).}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ value\ of\ a\ JVM\ system\ property\ (UTF-\/8\ string),\ or\ an\ empty\ string.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Sets\ the\ JVM\ system\ properties\ to\ the\ Properties\ argument.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ Properties\ The\ properties'\ type\ (std::map,\ std::unordered\_map\ etc).}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ new\ system\ properties.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ @return}}
 \DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_system_af2918454df4b12fa0d26476ac800d208}{getProperty}}(\textcolor{keyword}{const}\ std::string\ \&key);}
-\DoxyCodeLine{00038\ \};}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Properties>\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_system_a4d6dec1437d62a3d41c1a413f68517bf}{setProperties}}(Properties\ \&\&properties)\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&\&[\mbox{\hyperlink{structdxfcpp_1_1_system}{k}},\ \mbox{\hyperlink{structdxfcpp_1_1_system}{v}}]\ :\ \mbox{\hyperlink{structdxfcpp_1_1_system}{properties}})\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_system}{setProperty}}(\mbox{\hyperlink{structdxfcpp_1_1_system}{k}},\ \mbox{\hyperlink{structdxfcpp_1_1_system}{v}});}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00041\ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *\ Gets\ the\ system\ property\ indicated\ by\ the\ specified\ key.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ The\ name\ of\ the\ system\ property\ (UTF-\/8\ string).}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ value\ of\ a\ JVM\ system\ property\ (UTF-\/8\ string),\ or\ an\ empty\ string.}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_system_af2918454df4b12fa0d26476ac800d208}{getProperty}}(\textcolor{keyword}{const}\ std::string\ \&key);}
+\DoxyCodeLine{00050\ \};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
 
 \end{DoxyCode}

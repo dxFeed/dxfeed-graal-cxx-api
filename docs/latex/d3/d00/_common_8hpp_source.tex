@@ -2,7 +2,7 @@
 \hypertarget{_common_8hpp_source}{}\label{_common_8hpp_source}\index{Common.hpp@{Common.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -112,7 +112,7 @@
 \DoxyCodeLine{00108\ }
 \DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::call\_once(once,\ std::forward<F>(f),\ std::forward<Args>(args)...);}
 \DoxyCodeLine{00110\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ [EN-\/8232]}}
 \DoxyCodeLine{00112\ \ \ \ \ \}}
 \DoxyCodeLine{00113\ \}}
 \DoxyCodeLine{00114\ }
@@ -310,7 +310,7 @@
 \DoxyCodeLine{00306\ \}}
 \DoxyCodeLine{00307\ }
 \DoxyCodeLine{00308\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ std::int32\_t\ getDayIdByYearMonthDay(std::int32\_t\ year,\ std::int32\_t\ month,\ std::int32\_t\ day)\ \{}
-\DoxyCodeLine{00309\ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling}}
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ [EN-\/8232]}}
 \DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordflow}{if}\ (month\ <\ 1\ ||\ month\ >\ 12)\ \{}
 \DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{00312\ \ \ \ \ \}}

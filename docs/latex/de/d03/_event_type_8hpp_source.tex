@@ -2,7 +2,7 @@
 \hypertarget{_event_type_8hpp_source}{}\label{_event_type_8hpp_source}\index{EventType.hpp@{EventType.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -113,16 +113,23 @@
 \DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
 \DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ event\ symbol.}}
 \DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ Symbol\ \&\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a8f016c83c211cdd2cf50e61307f3ac4c}{getEventSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ Symbol\ \&\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_ac538c22b9db24c92494e600a97ea4f16}{getEventSymbol}}()\ \textcolor{keyword}{const}\&\ \textcolor{keyword}{noexcept}\ =\ 0;}
 \DoxyCodeLine{00113\ }
 \DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
 \DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ event\ symbol.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ event\ symbol\ or\ std::nullopt.}}
 \DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_af4577800cd16018b9f85b36911fc79d9}{setEventSymbol}}(\textcolor{keyword}{const}\ Symbol\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ =\ 0;}
-\DoxyCodeLine{00120\ \};}
-\DoxyCodeLine{00121\ }
-\DoxyCodeLine{00122\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a5ac37797f3b17ec18876ccc381638044}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a5ac37797f3b17ec18876ccc381638044}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a5ac37797f3b17ec18876ccc381638044}{Symbol}}>\ \&\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a5ac37797f3b17ec18876ccc381638044}{getEventSymbolOpt}}()\ \textcolor{keyword}{const}\&\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ event\ symbol.}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_af4577800cd16018b9f85b36911fc79d9}{setEventSymbol}}(\textcolor{keyword}{const}\ Symbol\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00127\ \};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
 
 \end{DoxyCode}

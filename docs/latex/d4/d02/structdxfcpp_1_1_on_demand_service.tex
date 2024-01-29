@@ -1,0 +1,364 @@
+\doxysubsection{dxfcpp\+::On\+Demand\+Service Struct Reference}
+\hypertarget{structdxfcpp_1_1_on_demand_service}{}\label{structdxfcpp_1_1_on_demand_service}\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+
+
+Provides on-\/demand historical tick data replay controls.  
+
+
+
+
+{\ttfamily \#include $<$On\+Demand\+Service.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::On\+Demand\+Service\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d4/d02/structdxfcpp_1_1_on_demand_service}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structdxfcpp_1_1_on_demand_service_a34f0b57289c177d3506d2a31d31b4904}\label{structdxfcpp_1_1_on_demand_service_a34f0b57289c177d3506d2a31d31b4904} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} object. \end{DoxyCompactList}\item 
+\Hypertarget{structdxfcpp_1_1_on_demand_service_a92a1eee217699df39c428e755ccac990}\label{structdxfcpp_1_1_on_demand_service_a92a1eee217699df39c428e755ccac990} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a22340e6506b97860fb975809ea499492}{get\+Endpoint}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} that is associated with this on-\/demand service. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a90d8fbd5848ea7ddf107649e39e634dd}{is\+Replay\+Supported}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} when on-\/demand historical data replay mode is supported. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{is\+Replay}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} when this on-\/demand historical data replay service is in replay mode. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_abf5352aa973901424828fed25da7f388}{is\+Clear}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} when this on-\/demand historical data replay service is in clear mode. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{get\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns current or last on-\/demand historical data replay time. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d}{get\+Speed}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns on-\/demand historical data replay speed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a858773b5a797289cc95de7d38249305b}{replay}} (std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{time}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Turns on-\/demand historical data replay mode from a specified time with real-\/time speed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a436a7ef54c286aa191af0c90b77ec5be}{replay}} (std\+::int64\+\_\+t \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{time}}, \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{speed}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Turns on-\/demand historical data replay mode from a specified time and with a specified speed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ad6320537ee56243d6706aa65860a232d}{pause}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Pauses on-\/demand historical data replay and keeps data snapshot. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}{stop\+And\+Resume}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Stops on-\/demand historical data replay and resumes ordinary data feed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}{stop\+And\+Clear}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Stops incoming data and clears it without resuming data updates. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ae2bd0b06348f9d71822c3dbbad19aa9f}{set\+Speed}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{speed}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Changes on-\/demand historical data replay speed while continuing replay at current \doxylink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{time}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} T $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{virtual}} std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{to\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ae1a196a44a7cadc3947bfa3b51feb76d}{get\+Instance}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns on-\/demand service for the default \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} instance with \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED} role that is not connected to any other real-\/time or delayed data feed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service_ae15499a709aa000ba8debd302eafa4ab}{get\+Instance}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}} $>$ endpoint) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns on-\/demand service for the specified \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Provides on-\/demand historical tick data replay controls. 
+
+This class is used to seamlessly transition from ordinary real-\/time or delayed data feed to the replay of the tick-\/by-\/tick history of market data behaviour without any changes to the code that consumes and process these market events.
+
+As single \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} instance is conceptually associated with each \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} endpoint instance with the role of \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED} or \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED}. You can retrieve \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} instance that is associated with a given \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} using \doxylink{structdxfcpp_1_1_on_demand_service_ae15499a709aa000ba8debd302eafa4ab}{get\+Instance(endpoint)} method.
+
+For example, \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} instance for a default \doxylink{structdxfcpp_1_1_d_x_feed}{DXFeed} that is featured in the documentation of \doxylink{structdxfcpp_1_1_d_x_feed}{DXFeed} class and is retrieved via \doxylink{structdxfcpp_1_1_d_x_feed_ace4eaf9e79186f44e989d97622e0dcf0}{DXFeed\+::get\+Instance()} method can be acquired with the following code\+: 
+\begin{DoxyPre}{\ttfamily 
+\doxylink{structdxfcpp_1_1_d_x_endpoint}{auto} endpoint = \doxylink{structdxfcpp_1_1_d_x_endpoint_a6b190bf5c614f618a80ae359c6334cb6}{DXEndpoint::getInstance()};
+\doxylink{structdxfcpp_1_1_on_demand_service}{auto} onDemand = \doxylink{structdxfcpp_1_1_on_demand_service}{OnDemandService}::\doxylink{structdxfcpp_1_1_on_demand_service_ae15499a709aa000ba8debd302eafa4ab}{getInstance}(endpoint);
+}\end{DoxyPre}
+
+
+This instance can be used for on-\/demand historical tick data replay only when endpoint is connected to the on-\/demand data provider and the appropriate credentials are provided. \doxylink{structdxfcpp_1_1_on_demand_service_a90d8fbd5848ea7ddf107649e39e634dd}{is\+Replay\+Supported} returns {\ttfamily true} when it is so.
+
+On-\/demand replay is started with replay method that takes time as a parameter. \doxylink{structdxfcpp_1_1_d_x_feed}{DXFeed} is then disconnected from other data providers, pre-\/buffers historical tick data for replay, and starts replay of the data as if it was coming from the data feeds now. All the usual APIs that are part of \doxylink{structdxfcpp_1_1_d_x_feed}{DXFeed} like \doxylink{classdxfcpp_1_1_d_x_feed_subscription}{subscription} and various dx\+Feed models can be used normally as with the ordinary real-\/time or delayed data feed.
+
+Replay speed can be changed on the fly with set\+Speed method or it can be set initially when starting replay with a two-\/argument version of replay method. \doxylink{structdxfcpp_1_1_on_demand_service_ad6320537ee56243d6706aa65860a232d}{pause} method is the same as set\+Speed(0).
+
+\doxylink{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}{stop\+And\+Resume} method stops data replay and resumes ordinary real-\/time or delayed data feed that was used before replay method was invoked. Endpoints with a role of \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED} do not have an ordinary feed (they are essentially on-\/demand only) and thus \doxylink{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}{stop\+And\+Resume} method works like \doxylink{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}{stop\+And\+Clear} for them.
+
+\doxyparagraph*{State and change notifications}
+
+On-\/demand historical tick data replay state can be queried with \doxylink{structdxfcpp_1_1_on_demand_service_a90d8fbd5848ea7ddf107649e39e634dd}{is\+Replay\+Supported}, \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{is\+Replay}, \doxylink{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d}{get\+Speed}, and \doxylink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{get\+Time} methods.
+
+\doxyparagraph*{Threads and locks}
+
+This class is thread-\/safe and can be used concurrently from multiple threads without external synchronization. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_a22340e6506b97860fb975809ea499492}\label{structdxfcpp_1_1_on_demand_service_a22340e6506b97860fb975809ea499492} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!getEndpoint@{getEndpoint}}
+\index{getEndpoint@{getEndpoint}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{getEndpoint()}{getEndpoint()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}} $>$ dxfcpp\+::\+On\+Demand\+Service\+::get\+Endpoint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} that is associated with this on-\/demand service. 
+
+\begin{DoxyReturn}{Returns}
+\doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} that is associated with this on-\/demand service. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_ae1a196a44a7cadc3947bfa3b51feb76d}\label{structdxfcpp_1_1_on_demand_service_ae1a196a44a7cadc3947bfa3b51feb76d} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}} $>$ dxfcpp\+::\+On\+Demand\+Service\+::get\+Instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns on-\/demand service for the default \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} instance with \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED} role that is not connected to any other real-\/time or delayed data feed. 
+
+This method is a shortcut for\+: 
+\begin{DoxyPre}{\ttfamily 
+\doxylink{structdxfcpp_1_1_on_demand_service}{OnDemandService}::\doxylink{structdxfcpp_1_1_on_demand_service_ae15499a709aa000ba8debd302eafa4ab}{getInstance}(\doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}::\doxylink{structdxfcpp_1_1_d_x_endpoint_ac78d872789ab90a1d47865810d942a36}{getInstance}(\doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{DXEndpoint::Role::ON\_DEMAND\_FEED}))}\end{DoxyPre}
+
+
+If you need an instance of \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service} to seamlessly switch from other real-\/time or delayed data feed to on-\/demand historical tick data replay, then use \{\doxylink{structdxfcpp_1_1_on_demand_service_ae15499a709aa000ba8debd302eafa4ab}{get\+Instance(endpoint)} method for a specific {\ttfamily endpoint} that you are using.
+
+\begin{DoxyReturn}{Returns}
+on-\/demand endpoint for the default \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} instance. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_ae15499a709aa000ba8debd302eafa4ab}\label{structdxfcpp_1_1_on_demand_service_ae15499a709aa000ba8debd302eafa4ab} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}} $>$ dxfcpp\+::\+On\+Demand\+Service\+::get\+Instance (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}} $>$}]{endpoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns on-\/demand service for the specified \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}. 
+
+Each \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} is conceptually associated with a single instance of on-\/demand service to control its historic data replay and this method returns this instance. The endpoint must have a role of \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{FEED} or \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & the endpoint. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the on-\/demand service. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d}\label{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!getSpeed@{getSpeed}}
+\index{getSpeed@{getSpeed}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{getSpeed()}{getSpeed()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}} dxfcpp\+::\+On\+Demand\+Service\+::get\+Speed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns on-\/demand historical data replay speed. 
+
+Speed is measured with respect to the real-\/time playback speed. The result of this method is zero when this service is not in \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{replay mode}. The speed is set when starting replay by replay(time, speed) method and with set\+Speed(speed) method during replay.
+
+\begin{DoxyReturn}{Returns}
+on-\/demand historical data replay speed. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}\label{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!getTime@{getTime}}
+\index{getTime@{getTime}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+On\+Demand\+Service\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns current or last on-\/demand historical data replay time. 
+
+In \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{replay mode} this is the time that is being currently replayed, otherwise this is the last time that was replayed. If replay was never started, then result is 0.
+
+\begin{DoxyReturn}{Returns}
+current or last on-\/demand historical data replay time in millis. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_abf5352aa973901424828fed25da7f388}\label{structdxfcpp_1_1_on_demand_service_abf5352aa973901424828fed25da7f388} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!isClear@{isClear}}
+\index{isClear@{isClear}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{isClear()}{isClear()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} dxfcpp\+::\+On\+Demand\+Service\+::is\+Clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} when this on-\/demand historical data replay service is in clear mode. 
+
+Clear mode is in effect after invocation of \doxylink{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}{stop\+And\+Clear} method and before invocation \doxylink{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}{stop\+And\+Resume} or replay methods.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} when this on-\/demand historical data replay service is in clear mode. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}\label{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!isReplay@{isReplay}}
+\index{isReplay@{isReplay}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{isReplay()}{isReplay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} dxfcpp\+::\+On\+Demand\+Service\+::is\+Replay (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} when this on-\/demand historical data replay service is in replay mode. 
+
+Replay mode is in effect after invocation of replay method and before invocation \doxylink{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}{stop\+And\+Resume} or \doxylink{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}{stop\+And\+Clear} methods.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} when this on-\/demand historical data replay service is in replay mode. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_a90d8fbd5848ea7ddf107649e39e634dd}\label{structdxfcpp_1_1_on_demand_service_a90d8fbd5848ea7ddf107649e39e634dd} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!isReplaySupported@{isReplaySupported}}
+\index{isReplaySupported@{isReplaySupported}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{isReplaySupported()}{isReplaySupported()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} dxfcpp\+::\+On\+Demand\+Service\+::is\+Replay\+Supported (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} when on-\/demand historical data replay mode is supported. 
+
+\doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} should be \doxylink{structdxfcpp_1_1_d_x_endpoint_a26dc7548a792c0e3eb0b47a90ff7771c}{connected} to an address with "{}(ondemand\+:$<$address$>$)"{} component that specifies an on-\/demand historical data provider address. When this method returns {\ttfamily false}, replay method does nothing.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} when on-\/demand historical data replay mode is supported. 
+\end{DoxyReturn}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_ad6320537ee56243d6706aa65860a232d}\label{structdxfcpp_1_1_on_demand_service_ad6320537ee56243d6706aa65860a232d} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!pause@{pause}}
+\index{pause@{pause}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{pause()}{pause()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+On\+Demand\+Service\+::pause (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Pauses on-\/demand historical data replay and keeps data snapshot. 
+
+This method can only be called in \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{replay mode}. This is a shortcut for\+: 
+\begin{DoxyPre}{\ttfamily 
+    setSpeed(0);}\end{DoxyPre}
+ This method atomically captures current replay time and pauses at it. After invocation of this method\+: 
+\begin{DoxyItemize}
+\item \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{On\+Demand\+Service\+::is\+Replay()} returns {\ttfamily true}. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_abf5352aa973901424828fed25da7f388}{On\+Demand\+Service\+::is\+Clear()} returns {\ttfamily false}. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{On\+Demand\+Service\+::get\+Time()} returns time where replay was paused at. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d}{On\+Demand\+Service\+::get\+Speed()} returns {\ttfamily 0}. 
+\end{DoxyItemize}\Hypertarget{structdxfcpp_1_1_on_demand_service_a858773b5a797289cc95de7d38249305b}\label{structdxfcpp_1_1_on_demand_service_a858773b5a797289cc95de7d38249305b} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!replay@{replay}}
+\index{replay@{replay}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{replay()}{replay()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+On\+Demand\+Service\+::replay (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Turns on-\/demand historical data replay mode from a specified time with real-\/time speed. 
+
+This is a shortcut for\+: 
+\begin{DoxyPre}{\ttfamily 
+    replay(time, 1);}\end{DoxyPre}
+ This method can be used only when \doxylink{structdxfcpp_1_1_on_demand_service_a90d8fbd5848ea7ddf107649e39e634dd}{On\+Demand\+Service\+::is\+Replay\+Supported()} method returns {\ttfamily true}, that is when \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} is \doxylink{structdxfcpp_1_1_d_x_endpoint_a26dc7548a792c0e3eb0b47a90ff7771c}{connected} to an address with "{}(ondemand\+:$<$address$>$)"{} component that specifies an on-\/demand historical data provider address.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time (timestamp in millis) to start replay from. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_a436a7ef54c286aa191af0c90b77ec5be}\label{structdxfcpp_1_1_on_demand_service_a436a7ef54c286aa191af0c90b77ec5be} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!replay@{replay}}
+\index{replay@{replay}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{replay()}{replay()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+On\+Demand\+Service\+::replay (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time,  }\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{speed }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Turns on-\/demand historical data replay mode from a specified time and with a specified speed. 
+
+This method can be used only when \doxylink{structdxfcpp_1_1_on_demand_service_a90d8fbd5848ea7ddf107649e39e634dd}{On\+Demand\+Service\+::is\+Replay\+Supported()} method returns {\ttfamily true}, that is when \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} is \doxylink{structdxfcpp_1_1_d_x_endpoint_a26dc7548a792c0e3eb0b47a90ff7771c}{connected} to an address with "{}(ondemand\+:$<$address$>$)"{} component that specifies an on-\/demand historical data provider address.
+
+After invocation of this method\+: 
+\begin{DoxyItemize}
+\item \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{On\+Demand\+Service\+::is\+Replay()} returns {\ttfamily true}. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_abf5352aa973901424828fed25da7f388}{On\+Demand\+Service\+::is\+Clear()} returns {\ttfamily false}. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{On\+Demand\+Service\+::get\+Time()} returns time that is currently being replayed. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d}{On\+Demand\+Service\+::get\+Speed()} returns {\ttfamily speed}. 
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time (timestamp in millis) to start replay from. \\
+\hline
+{\em speed} & speed to start replay with. Use 1 for real-\/time speed, \texorpdfstring{$>$}{>}1 for faster than real-\/time speed, \texorpdfstring{$<$}{<}1 for slower than real-\/time speed, and 0 for pause. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_ae2bd0b06348f9d71822c3dbbad19aa9f}\label{structdxfcpp_1_1_on_demand_service_ae2bd0b06348f9d71822c3dbbad19aa9f} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!setSpeed@{setSpeed}}
+\index{setSpeed@{setSpeed}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{setSpeed()}{setSpeed()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+On\+Demand\+Service\+::set\+Speed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{double}}}]{speed }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes on-\/demand historical data replay speed while continuing replay at current \doxylink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{time}. 
+
+Speed is measured with respect to the real-\/time playback speed. This method can only be called with non-\/zero speed in \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{replay mode}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em speed} & on-\/demand historical data replay speed. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}\label{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!stopAndClear@{stopAndClear}}
+\index{stopAndClear@{stopAndClear}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{stopAndClear()}{stopAndClear()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+On\+Demand\+Service\+::stop\+And\+Clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Stops incoming data and clears it without resuming data updates. 
+
+This method works both in on-\/demand historical data replay mode and for ordinary data feed. All incoming data updates are suspended and current data is cleared. After invocation of this method\+: 
+\begin{DoxyItemize}
+\item \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{On\+Demand\+Service\+::is\+Replay()} returns {\ttfamily false}. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_abf5352aa973901424828fed25da7f388}{On\+Demand\+Service\+::is\+Clear()} returns {\ttfamily true}. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{On\+Demand\+Service\+::get\+Time()} returns last replayed time. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d}{On\+Demand\+Service\+::get\+Speed()} returns {\ttfamily 0}. 
+\end{DoxyItemize}
+
+Ordinary data feed can be resumed with \doxylink{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}{On\+Demand\+Service\+::stop\+And\+Resume()} method and on-\/demand historical data replay can be continued with replay(...) method. \Hypertarget{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e}\label{structdxfcpp_1_1_on_demand_service_a0ab8f606931c2a69624b4edeaa15a11e} 
+\index{dxfcpp::OnDemandService@{dxfcpp::OnDemandService}!stopAndResume@{stopAndResume}}
+\index{stopAndResume@{stopAndResume}!dxfcpp::OnDemandService@{dxfcpp::OnDemandService}}
+\doxyparagraph{\texorpdfstring{stopAndResume()}{stopAndResume()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+On\+Demand\+Service\+::stop\+And\+Resume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Stops on-\/demand historical data replay and resumes ordinary data feed. 
+
+This method has no effect when invoked not in \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{replay mode}. After invocation of this method\+: 
+\begin{DoxyItemize}
+\item \doxylink{structdxfcpp_1_1_on_demand_service_a60d12010746e25e6d5a49dac7269ec84}{On\+Demand\+Service\+::is\+Replay()} returns {\ttfamily false}. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_abf5352aa973901424828fed25da7f388}{On\+Demand\+Service\+::is\+Clear()} returns {\ttfamily false}. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_a2d5e98f573a8fc2d7d5c5bce1714e82b}{On\+Demand\+Service\+::get\+Time()} returns last replayed time. 
+\item \doxylink{structdxfcpp_1_1_on_demand_service_aea890fdc0f949d1beadc77eeaf9a720d}{On\+Demand\+Service\+::get\+Speed()} returns {\ttfamily 0}. 
+\end{DoxyItemize}
+
+To stop on-\/demand historical data replay without resuming ordinary data feed use either \doxylink{structdxfcpp_1_1_on_demand_service_ad6320537ee56243d6706aa65860a232d}{On\+Demand\+Service\+::pause()} to keep data snapshot or \doxylink{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}{On\+Demand\+Service\+::stop\+And\+Clear()} to clear data.
+
+Note, that endpoints with a role of \doxylink{structdxfcpp_1_1_d_x_endpoint_ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED} do not have an ordinary feed (they are essentially on-\/demand only) and thus {\ttfamily stop\+And\+Resume} method works like \doxylink{structdxfcpp_1_1_on_demand_service_ac86fee581ed9953977a3bd7ea1dca402}{stop\+And\+Clear} for them. 

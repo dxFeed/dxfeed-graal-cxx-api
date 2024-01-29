@@ -42,6 +42,7 @@ var annotated_dup =
       [ "LastingEvent", "dd/d02/structdxfcpp_1_1_lasting_event.html", "dd/d02/structdxfcpp_1_1_lasting_event" ],
       [ "MarketEvent", "de/d01/structdxfcpp_1_1_market_event.html", "de/d01/structdxfcpp_1_1_market_event" ],
       [ "MarketEventSymbols", "d5/d01/structdxfcpp_1_1_market_event_symbols.html", null ],
+      [ "OnDemandService", "d4/d02/structdxfcpp_1_1_on_demand_service.html", "d4/d02/structdxfcpp_1_1_on_demand_service" ],
       [ "OptionSale", "de/d02/classdxfcpp_1_1_option_sale.html", "de/d02/classdxfcpp_1_1_option_sale" ],
       [ "Order", "d0/d00/classdxfcpp_1_1_order.html", "d0/d00/classdxfcpp_1_1_order" ],
       [ "OrderAction", "df/d01/structdxfcpp_1_1_order_action.html", null ],

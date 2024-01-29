@@ -53,7 +53,8 @@ var hierarchy =
         ] ],
         [ "dxfcpp::InstrumentProfile", "d8/d01/classdxfcpp_1_1_instrument_profile.html", null ],
         [ "dxfcpp::InstrumentProfileCollector", "de/d03/classdxfcpp_1_1_instrument_profile_collector.html", null ],
-        [ "dxfcpp::InstrumentProfileConnection", "db/d00/classdxfcpp_1_1_instrument_profile_connection.html", null ]
+        [ "dxfcpp::InstrumentProfileConnection", "db/d00/classdxfcpp_1_1_instrument_profile_connection.html", null ],
+        [ "dxfcpp::OnDemandService", "d4/d02/structdxfcpp_1_1_on_demand_service.html", null ]
       ] ]
     ] ],
     [ "dxfcpp::EventFlag", "de/d03/classdxfcpp_1_1_event_flag.html", null ],
@@ -107,8 +108,6 @@ var hierarchy =
     [ "dxfcpp::Side", "d7/d03/structdxfcpp_1_1_side.html", null ],
     [ "dxfcpp::SimpleHandler< Signature >", "d8/d00/structdxfcpp_1_1_simple_handler.html", null ],
     [ "dxfcpp::SimpleHandler< void(ArgTypes...)>", "d5/d00/structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4.html", null ],
-    [ "dxfcpp::SimpleHandler< void(const std::vector< std::shared_ptr< dxfcpp::EventType > > &)>", "d8/d00/structdxfcpp_1_1_simple_handler.html", null ],
-    [ "dxfcpp::SimpleHandler< void(const std::vector< std::shared_ptr< dxfcpp::InstrumentProfile > > &)>", "d8/d00/structdxfcpp_1_1_simple_handler.html", null ],
     [ "dxfcpp::SimpleHandler< void(State, State)>", "d8/d00/structdxfcpp_1_1_simple_handler.html", null ],
     [ "dxfcpp::StringSymbol", "d7/d00/structdxfcpp_1_1_string_symbol.html", null ],
     [ "dxfcpp::SymbolWrapper", "db/d03/structdxfcpp_1_1_symbol_wrapper.html", null ],

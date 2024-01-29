@@ -2,7 +2,7 @@
 \hypertarget{_quote_8hpp_source}{}\label{_quote_8hpp_source}\index{Quote.hpp@{Quote.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -182,7 +182,7 @@
 \DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Quote::getSequence()}}
 \DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ */}}
 \DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_quote_ac95ca334088170a0f20119bb00eb5b62}{setSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling\ [EN-\/8232]}}
 \DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ sequence\ <=\ \mbox{\hyperlink{classdxfcpp_1_1_quote_a7559909df497fc5e47c13f90a10ff964}{MAX\_SEQUENCE}});}
 \DoxyCodeLine{00183\ }
 \DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ data\_.timeMillisSequence\ =\ orOp(andOp(data\_.timeMillisSequence,\ \string~\mbox{\hyperlink{classdxfcpp_1_1_quote_a7559909df497fc5e47c13f90a10ff964}{MAX\_SEQUENCE}}),\ sequence);}

@@ -5,6 +5,7 @@ var classdxfcpp_1_1_order =
     [ "Order", "d0/d00/classdxfcpp_1_1_order.html#a6588db9aab3b926b94cda473e3c196dc", null ],
     [ "Order", "d0/d00/classdxfcpp_1_1_order.html#af335dfcaa5dfb37b36c3e5b26ec7fd39", null ],
     [ "getMarketMaker", "d0/d00/classdxfcpp_1_1_order.html#ad24c0f02010548131f8a3f99e12a3da5", null ],
+    [ "getMarketMakerOpt", "d0/d00/classdxfcpp_1_1_order.html#a9f01f0cf722dc28c449c3458aea516e9", null ],
     [ "setMarketMaker", "d0/d00/classdxfcpp_1_1_order.html#aa90a84f25b8d4c065cc9b7d52e454d82", null ],
     [ "toGraal", "d0/d00/classdxfcpp_1_1_order.html#aff2c9d717969967a1ccf4fbb70813c4f", null ],
     [ "toString", "d0/d00/classdxfcpp_1_1_order.html#a62de3f2d3e1f66409a2ab57e4303f806", null ],

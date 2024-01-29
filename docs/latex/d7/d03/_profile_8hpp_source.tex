@@ -2,7 +2,7 @@
 \hypertarget{_profile_8hpp_source}{}\label{_profile_8hpp_source}\index{Profile.hpp@{Profile.hpp}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2023\ Devexperts\ LLC.}}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
 \DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
 \DoxyCodeLine{00003\ }
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
@@ -12,444 +12,471 @@
 \DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_short_sale_restriction_8hpp}{"{}ShortSaleRestriction.hpp"{}}}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_trading_status_8hpp}{"{}TradingStatus.hpp"{}}}}
-\DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Profile\ information\ snapshot\ that\ contains\ security\ instrument\ description.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ traded\ security}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ on\ the\ market\ at\ any\ given\ moment\ of\ time.}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00028\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Profile\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}\ \{}
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/*}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Flags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ \ \ 31..4\ \ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ |\ \ \ SSR\ \ \ |\ \ Status\ |}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ SSR\ values\ are\ taken\ from\ ShortSaleRestriction\ enum.}}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ SSR\_MASK\ =\ 3;}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ SSR\_SHIFT\ =\ 2;}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ STATUS\ values\ are\ taken\ from\ TradingStatus\ enum.}}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ STATUS\_MASK\ =\ 3;}
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ STATUS\_SHIFT\ =\ 0;}
-\DoxyCodeLine{00046\ }
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ std::string\ description\{\};}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::string\ statusReason\{\};}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ std::int64\_t\ haltStartTime\{\};}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ std::int64\_t\ haltEndTime\{\};}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ highLimitPrice\ =\ math::NaN;}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ lowLimitPrice\ =\ math::NaN;}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ high52WeekPrice\ =\ math::NaN;}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ low52WeekPrice\ =\ math::NaN;}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ beta\ =\ math::NaN;}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ earningsPerShare\ =\ math::NaN;}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dividendFrequency\ =\ math::NaN;}
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ exDividendAmount\ =\ math::NaN;}
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ std::int32\_t\ exDividendDayId\{\};}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ shares\ =\ math::NaN;}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ freeFloat\ =\ math::NaN;}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ std::int32\_t\ flags\{\};}
-\DoxyCodeLine{00064\ \ \ \ \ \};}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ Data\ data\_\{\};}
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Profile>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00074\ }
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_profile_a0a777ea66d070c6c65b08d60de2a6e22}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00083\ }
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a0735528be0680ed32fc00ad57565bebe}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Profile\ object}}
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<Profile>;}
-\DoxyCodeLine{00094\ }
-\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Profile\ object}}
-\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<Profile>;}
-\DoxyCodeLine{00097\ }
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_af5a14a3a12ea99fcff0f220c3fef91c4}{TYPE}};}
-\DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ profile\ event\ with\ default\ values.}}
-\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_profile_a871eadbd163126f0fce23384cf1524da}{Profile}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ profile\ event\ with\ the\ specified\ event\ symbol.}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7b9a19b3905978f52fc30350a930cc60}{Profile}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{(}}std::move(eventSymbol)\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{)}}\ \{}
-\DoxyCodeLine{00110\ \ \ \ \ \}}
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ description\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ @return\ description\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_a3fe820b09930f14ab9e899419ee2fbc0}{getDescription}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.description;}
-\DoxyCodeLine{00119\ \ \ \ \ \}}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ description\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ @param\ description\ description\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a6fdb588e27587a1ef2dbacd3d0e8f567}{setDescription}}(std::string\ description)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ data\_.description\ =\ std::move(description);}
-\DoxyCodeLine{00128\ \ \ \ \ \}}
-\DoxyCodeLine{00129\ }
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ short\ sale\ restriction\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ @return\ short\ sale\ restriction\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_a7fa0f59a872c70a5e13b0b0446d89bd9}{getShortSaleRestriction}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ShortSaleRestriction::valueOf(getBits(data\_.flags,\ SSR\_MASK,\ SSR\_SHIFT));}
-\DoxyCodeLine{00137\ \ \ \ \ \}}
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ short\ sale\ restriction\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ @param\ restriction\ short\ sale\ restriction\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a3bcc0ffe64e5ec5cf52852722e072c9d}{setShortSaleRestriction}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\ \&restriction)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ data\_.flags\ =\ setBits(data\_.flags,\ SSR\_MASK,\ SSR\_SHIFT,\ restriction.getCode());}
-\DoxyCodeLine{00146\ \ \ \ \ \}}
-\DoxyCodeLine{00147\ }
-\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ short\ sale\ restriction\ status\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ short\ sale\ of\ the\ security\ instrument\ is\ restricted.}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_afdb8200924e421b8d221290baf3de447}{isShortSaleRestricted}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7fa0f59a872c70a5e13b0b0446d89bd9}{getShortSaleRestriction}}\mbox{\hyperlink{classdxfcpp_1_1_profile_a7fa0f59a872c70a5e13b0b0446d89bd9}{(}}\mbox{\hyperlink{classdxfcpp_1_1_profile_a7fa0f59a872c70a5e13b0b0446d89bd9}{)}}\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction_a9aaad37646ab7ea16488735538d1a927}{::}}\mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction_a9aaad37646ab7ea16488735538d1a927}{ACTIVE}};}
-\DoxyCodeLine{00155\ \ \ \ \ \}}
-\DoxyCodeLine{00156\ }
-\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ trading\ status\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ @return\ trading\ status\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_trading_status}{TradingStatus}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_a6ad48e30c50a7ca3a3213ab312fb714a}{getTradingStatus}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TradingStatus::valueOf(getBits(data\_.flags,\ STATUS\_MASK,\ STATUS\_SHIFT));}
-\DoxyCodeLine{00164\ \ \ \ \ \}}
-\DoxyCodeLine{00165\ }
-\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trading\ status\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ @param\ status\ trading\ status\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a9b16a585205f2ef73d1aa4e3583f7f03}{setTradingStatus}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_trading_status}{TradingStatus}}\ \&status)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ data\_.flags\ =\ setBits(data\_.flags,\ STATUS\_MASK,\ STATUS\_SHIFT,\ status.getCode());}
-\DoxyCodeLine{00173\ \ \ \ \ \}}
-\DoxyCodeLine{00174\ }
-\DoxyCodeLine{00175\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ trading\ halt\ status\ of\ the\ security\ instrument.}}
-\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ trading\ of\ the\ security\ instrument\ is\ halted.}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a46302b3f64b88162be137d5d8b2bbddb}{isTradingHalted}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a6ad48e30c50a7ca3a3213ab312fb714a}{getTradingStatus}}\mbox{\hyperlink{classdxfcpp_1_1_profile_a6ad48e30c50a7ca3a3213ab312fb714a}{(}}\mbox{\hyperlink{classdxfcpp_1_1_profile_a6ad48e30c50a7ca3a3213ab312fb714a}{)}}\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_trading_status}{TradingStatus}}\mbox{\hyperlink{structdxfcpp_1_1_trading_status_adcba73e3144f9bb59c340b5068c7d68a}{::}}\mbox{\hyperlink{structdxfcpp_1_1_trading_status_adcba73e3144f9bb59c340b5068c7d68a}{HALTED}};}
-\DoxyCodeLine{00182\ \ \ \ \ \}}
-\DoxyCodeLine{00183\ }
-\DoxyCodeLine{00184\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ description\ of\ the\ reason\ that\ trading\ was\ halted.}}
-\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ @return\ description\ of\ the\ reason\ that\ trading\ was\ halted.}}
-\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_af0d7558c9bf608e0fcf73c1daf64c745}{getStatusReason}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.statusReason;}
-\DoxyCodeLine{00191\ \ \ \ \ \}}
-\DoxyCodeLine{00192\ }
-\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ description\ of\ the\ reason\ that\ trading\ was\ halted.}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ @param\ statusReason\ description\ of\ the\ reason\ that\ trading\ was\ halted.}}
-\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a51c77ef74f7fcc3eacf19089686e4bea}{setStatusReason}}(std::string\ statusReason)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ data\_.statusReason\ =\ std::move(statusReason);}
-\DoxyCodeLine{00200\ \ \ \ \ \}}
-\DoxyCodeLine{00201\ }
-\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ starting\ time\ of\ the\ trading\ halt\ interval.}}
-\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @return\ starting\ time\ of\ the\ trading\ halt\ interval.}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00208\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7e5796c0567fcb0df2e6f822f81d10dc}{getHaltStartTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.haltStartTime;}
-\DoxyCodeLine{00210\ \ \ \ \ \}}
-\DoxyCodeLine{00211\ }
-\DoxyCodeLine{00212\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ starting\ time\ of\ the\ trading\ halt\ interval.}}
-\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ @param\ haltStartTime\ starting\ time\ of\ the\ trading\ halt\ interval.}}
-\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_af6b1474b8e1565a3e9b8def8d0ab679b}{setHaltStartTime}}(std::int64\_t\ haltStartTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ data\_.haltStartTime\ =\ haltStartTime;}
-\DoxyCodeLine{00220\ \ \ \ \ \}}
-\DoxyCodeLine{00221\ }
-\DoxyCodeLine{00222\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ending\ time\ of\ the\ trading\ halt\ interval.}}
-\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ @return\ ending\ time\ of\ the\ trading\ halt\ interval.}}
-\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00228\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ad2c03b7eb5dcc03a31a18a178b35ce18}{getHaltEndTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.haltEndTime;}
-\DoxyCodeLine{00230\ \ \ \ \ \}}
-\DoxyCodeLine{00231\ }
-\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ending\ time\ of\ the\ trading\ halt\ interval.}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @param\ haltEndTime\ ending\ time\ of\ the\ trading\ halt\ interval.}}
-\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a0fb3841d8b55659990621694511eb36c}{setHaltEndTime}}(std::int64\_t\ haltEndTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ data\_.haltEndTime\ =\ haltEndTime;}
-\DoxyCodeLine{00240\ \ \ \ \ \}}
-\DoxyCodeLine{00241\ }
-\DoxyCodeLine{00242\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ maximal\ (high)\ allowed\ price.}}
-\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ maximal\ (high)\ allowed\ price.}}
-\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_af63e126195c7c316c527670a82d1b709}{getHighLimitPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.highLimitPrice;}
-\DoxyCodeLine{00249\ \ \ \ \ \}}
-\DoxyCodeLine{00250\ }
-\DoxyCodeLine{00251\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ allowed\ price.}}
-\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *\ @param\ highLimitPrice\ the\ maximal\ (high)\ allowed\ price.}}
-\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_abccb5e233dfb4289da9079c182bf3ddf}{setHighLimitPrice}}(\textcolor{keywordtype}{double}\ highLimitPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ data\_.highLimitPrice\ =\ highLimitPrice;}
-\DoxyCodeLine{00258\ \ \ \ \ \}}
-\DoxyCodeLine{00259\ }
-\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ minimal\ (low)\ allowed\ price.}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_short_sale_restriction_8hpp}{"{}ShortSaleRestriction.hpp"{}}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_trading_status_8hpp}{"{}TradingStatus.hpp"{}}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ Profile\ information\ snapshot\ that\ contains\ security\ instrument\ description.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ traded\ security}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ on\ the\ market\ at\ any\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00029\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Profile\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ Flags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ \ \ 31..4\ \ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ |\ \ \ SSR\ \ \ |\ \ Status\ |}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ SSR\ values\ are\ taken\ from\ ShortSaleRestriction\ enum.}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ SSR\_MASK\ =\ 3;}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ SSR\_SHIFT\ =\ 2;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ STATUS\ values\ are\ taken\ from\ TradingStatus\ enum.}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ STATUS\_MASK\ =\ 3;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ STATUS\_SHIFT\ =\ 0;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::optional<std::string>\ description\{\};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ std::optional<std::string>\ statusReason\{\};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ std::int64\_t\ haltStartTime\{\};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ std::int64\_t\ haltEndTime\{\};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ highLimitPrice\ =\ math::NaN;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ lowLimitPrice\ =\ math::NaN;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ high52WeekPrice\ =\ math::NaN;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ low52WeekPrice\ =\ math::NaN;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ beta\ =\ math::NaN;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ earningsPerShare\ =\ math::NaN;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dividendFrequency\ =\ math::NaN;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ exDividendAmount\ =\ math::NaN;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ std::int32\_t\ exDividendDayId\{\};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ shares\ =\ math::NaN;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ freeFloat\ =\ math::NaN;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ std::int32\_t\ flags\{\};}
+\DoxyCodeLine{00065\ \ \ \ \ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ Data\ data\_\{\};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Profile>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_profile_a0a777ea66d070c6c65b08d60de2a6e22}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a0a777ea66d070c6c65b08d60de2a6e22}{override}};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a0735528be0680ed32fc00ad57565bebe}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Profile\ object}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<Profile>;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Profile\ object}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<Profile>;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_af5a14a3a12ea99fcff0f220c3fef91c4}{TYPE}};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ profile\ event\ with\ default\ values.}}
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_profile_a871eadbd163126f0fce23384cf1524da}{Profile}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ profile\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7b9a19b3905978f52fc30350a930cc60}{Profile}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{(}}std::move(eventSymbol)\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{)}}\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ description\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ @return\ description\ of\ the\ security\ instrument\ or\ dxfcpp::String::NUL\ (`std::string\{"{}<null>"{}\}`).}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_a3fe820b09930f14ab9e899419ee2fbc0}{getDescription}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!data\_.description)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::String::NUL;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.description.value();}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ description\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ @return\ description\ of\ the\ security\ instrument\ or\ std::nullopt}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a1d8d32fdbe9efbc5f5272b619bfe7cb9}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_profile_a1d8d32fdbe9efbc5f5272b619bfe7cb9}{optional}}<\mbox{\hyperlink{classdxfcpp_1_1_profile_a1d8d32fdbe9efbc5f5272b619bfe7cb9}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_profile_a1d8d32fdbe9efbc5f5272b619bfe7cb9}{string}}>\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_a1d8d32fdbe9efbc5f5272b619bfe7cb9}{getDescriptionOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.description;}
+\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ description\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ @param\ description\ description\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a6fdb588e27587a1ef2dbacd3d0e8f567}{setDescription}}(std::string\ description)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ data\_.description\ =\ std::move(description);}
+\DoxyCodeLine{00142\ \ \ \ \ \}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ short\ sale\ restriction\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ @return\ short\ sale\ restriction\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_a7fa0f59a872c70a5e13b0b0446d89bd9}{getShortSaleRestriction}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ShortSaleRestriction::valueOf(getBits(data\_.flags,\ SSR\_MASK,\ SSR\_SHIFT));}
+\DoxyCodeLine{00151\ \ \ \ \ \}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ short\ sale\ restriction\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ @param\ restriction\ short\ sale\ restriction\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a3bcc0ffe64e5ec5cf52852722e072c9d}{setShortSaleRestriction}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\ \&restriction)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ data\_.flags\ =\ setBits(data\_.flags,\ SSR\_MASK,\ SSR\_SHIFT,\ restriction.getCode());}
+\DoxyCodeLine{00160\ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ short\ sale\ restriction\ status\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ short\ sale\ of\ the\ security\ instrument\ is\ restricted.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_afdb8200924e421b8d221290baf3de447}{isShortSaleRestricted}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7fa0f59a872c70a5e13b0b0446d89bd9}{getShortSaleRestriction}}\mbox{\hyperlink{classdxfcpp_1_1_profile_a7fa0f59a872c70a5e13b0b0446d89bd9}{(}}\mbox{\hyperlink{classdxfcpp_1_1_profile_a7fa0f59a872c70a5e13b0b0446d89bd9}{)}}\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction}{ShortSaleRestriction}}\mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction_a9aaad37646ab7ea16488735538d1a927}{::}}\mbox{\hyperlink{structdxfcpp_1_1_short_sale_restriction_a9aaad37646ab7ea16488735538d1a927}{ACTIVE}};}
+\DoxyCodeLine{00169\ \ \ \ \ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ trading\ status\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ @return\ trading\ status\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_trading_status}{TradingStatus}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_a6ad48e30c50a7ca3a3213ab312fb714a}{getTradingStatus}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TradingStatus::valueOf(getBits(data\_.flags,\ STATUS\_MASK,\ STATUS\_SHIFT));}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trading\ status\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ @param\ status\ trading\ status\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a9b16a585205f2ef73d1aa4e3583f7f03}{setTradingStatus}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_trading_status}{TradingStatus}}\ \&status)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ data\_.flags\ =\ setBits(data\_.flags,\ STATUS\_MASK,\ STATUS\_SHIFT,\ status.getCode());}
+\DoxyCodeLine{00187\ \ \ \ \ \}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ trading\ halt\ status\ of\ the\ security\ instrument.}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ trading\ of\ the\ security\ instrument\ is\ halted.}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a46302b3f64b88162be137d5d8b2bbddb}{isTradingHalted}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a6ad48e30c50a7ca3a3213ab312fb714a}{getTradingStatus}}\mbox{\hyperlink{classdxfcpp_1_1_profile_a6ad48e30c50a7ca3a3213ab312fb714a}{(}}\mbox{\hyperlink{classdxfcpp_1_1_profile_a6ad48e30c50a7ca3a3213ab312fb714a}{)}}\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_trading_status}{TradingStatus}}\mbox{\hyperlink{structdxfcpp_1_1_trading_status_adcba73e3144f9bb59c340b5068c7d68a}{::}}\mbox{\hyperlink{structdxfcpp_1_1_trading_status_adcba73e3144f9bb59c340b5068c7d68a}{HALTED}};}
+\DoxyCodeLine{00196\ \ \ \ \ \}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ description\ of\ the\ reason\ that\ trading\ was\ halted.}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ @return\ description\ of\ the\ reason\ that\ trading\ was\ halted\ or\ dxfcpp::String::NUL\ (`std::string\{"{}<null>"{}\}`).}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_af0d7558c9bf608e0fcf73c1daf64c745}{getStatusReason}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!data\_.statusReason)\ \{}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::String::NUL;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.statusReason.value();}
+\DoxyCodeLine{00209\ \ \ \ \ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ description\ of\ the\ reason\ that\ trading\ was\ halted.}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ @return\ description\ of\ the\ reason\ that\ trading\ was\ halted\ or\ std::nullopt.}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ac182862c5de80c82ede7246a3c9ebf3e}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_profile_ac182862c5de80c82ede7246a3c9ebf3e}{optional}}<\mbox{\hyperlink{classdxfcpp_1_1_profile_ac182862c5de80c82ede7246a3c9ebf3e}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_profile_ac182862c5de80c82ede7246a3c9ebf3e}{string}}>\ \&\mbox{\hyperlink{classdxfcpp_1_1_profile_ac182862c5de80c82ede7246a3c9ebf3e}{getStatusReasonOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.statusReason;}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ description\ of\ the\ reason\ that\ trading\ was\ halted.}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ @param\ statusReason\ description\ of\ the\ reason\ that\ trading\ was\ halted.}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a51c77ef74f7fcc3eacf19089686e4bea}{setStatusReason}}(std::string\ statusReason)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ data\_.statusReason\ =\ std::move(statusReason);}
+\DoxyCodeLine{00227\ \ \ \ \ \}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ starting\ time\ of\ the\ trading\ halt\ interval.}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ @return\ starting\ time\ of\ the\ trading\ halt\ interval.}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00235\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7e5796c0567fcb0df2e6f822f81d10dc}{getHaltStartTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.haltStartTime;}
+\DoxyCodeLine{00237\ \ \ \ \ \}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ starting\ time\ of\ the\ trading\ halt\ interval.}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *\ @param\ haltStartTime\ starting\ time\ of\ the\ trading\ halt\ interval.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_af6b1474b8e1565a3e9b8def8d0ab679b}{setHaltStartTime}}(std::int64\_t\ haltStartTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ data\_.haltStartTime\ =\ haltStartTime;}
+\DoxyCodeLine{00247\ \ \ \ \ \}}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ending\ time\ of\ the\ trading\ halt\ interval.}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *\ @return\ ending\ time\ of\ the\ trading\ halt\ interval.}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00255\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ad2c03b7eb5dcc03a31a18a178b35ce18}{getHaltEndTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.haltEndTime;}
+\DoxyCodeLine{00257\ \ \ \ \ \}}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ending\ time\ of\ the\ trading\ halt\ interval.}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
 \DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ minimal\ (low)\ allowed\ price.}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ @param\ haltEndTime\ ending\ time\ of\ the\ trading\ halt\ interval.}}
 \DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a41f2d068a32976138a19568d09f70ef1}{getLowLimitPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.lowLimitPrice;}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a0fb3841d8b55659990621694511eb36c}{setHaltEndTime}}(std::int64\_t\ haltEndTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ data\_.haltEndTime\ =\ haltEndTime;}
 \DoxyCodeLine{00267\ \ \ \ \ \}}
 \DoxyCodeLine{00268\ }
 \DoxyCodeLine{00269\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00270\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ allowed\ price.}}
+\DoxyCodeLine{00270\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ maximal\ (high)\ allowed\ price.}}
 \DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ *\ @param\ lowLimitPrice\ the\ minimal\ (low)\ allowed\ price.}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ maximal\ (high)\ allowed\ price.}}
 \DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a35f4add752de1c88b83b8087d3da174a}{setLowLimitPrice}}(\textcolor{keywordtype}{double}\ lowLimitPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ data\_.lowLimitPrice\ =\ lowLimitPrice;}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_af63e126195c7c316c527670a82d1b709}{getHighLimitPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.highLimitPrice;}
 \DoxyCodeLine{00276\ \ \ \ \ \}}
 \DoxyCodeLine{00277\ }
 \DoxyCodeLine{00278\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ maximal\ (high)\ price\ in\ last\ 52\ weeks.}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ allowed\ price.}}
 \DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ maximal\ (high)\ price\ in\ last\ 52\ weeks.}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ @param\ highLimitPrice\ the\ maximal\ (high)\ allowed\ price.}}
 \DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_afb1be92f322b3ed75e6f0c2c36f8e575}{getHigh52WeekPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.high52WeekPrice;}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_abccb5e233dfb4289da9079c182bf3ddf}{setHighLimitPrice}}(\textcolor{keywordtype}{double}\ highLimitPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ data\_.highLimitPrice\ =\ highLimitPrice;}
 \DoxyCodeLine{00285\ \ \ \ \ \}}
 \DoxyCodeLine{00286\ }
 \DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ in\ last\ 52\ weeks.}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ minimal\ (low)\ allowed\ price.}}
 \DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ @param\ high52WeekPrice\ the\ maximal\ (high)\ price\ in\ last\ 52\ weeks.}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ minimal\ (low)\ allowed\ price.}}
 \DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_afaa8befa24ed89c9d1496a3159439f93}{setHigh52WeekPrice}}(\textcolor{keywordtype}{double}\ high52WeekPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ data\_.high52WeekPrice\ =\ high52WeekPrice;}
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a41f2d068a32976138a19568d09f70ef1}{getLowLimitPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.lowLimitPrice;}
 \DoxyCodeLine{00294\ \ \ \ \ \}}
 \DoxyCodeLine{00295\ }
 \DoxyCodeLine{00296\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ minimal\ (low)\ price\ in\ last\ 52\ weeks.}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ allowed\ price.}}
 \DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ minimal\ (low)\ price\ in\ last\ 52\ weeks.}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ @param\ lowLimitPrice\ the\ minimal\ (low)\ allowed\ price.}}
 \DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7e1c6c88d7a68b72b361c6ecb6c91b85}{getLow52WeekPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.low52WeekPrice;}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a35f4add752de1c88b83b8087d3da174a}{setLowLimitPrice}}(\textcolor{keywordtype}{double}\ lowLimitPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ data\_.lowLimitPrice\ =\ lowLimitPrice;}
 \DoxyCodeLine{00303\ \ \ \ \ \}}
 \DoxyCodeLine{00304\ }
 \DoxyCodeLine{00305\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ in\ last\ 52\ weeks.}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ maximal\ (high)\ price\ in\ last\ 52\ weeks.}}
 \DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ @param\ low52WeekPrice\ the\ minimal\ (low)\ price\ in\ last\ 52\ weeks.}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ maximal\ (high)\ price\ in\ last\ 52\ weeks.}}
 \DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_aae8e5dac60991610f810d529d192c771}{setLow52WeekPrice}}(\textcolor{keywordtype}{double}\ low52WeekPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ data\_.low52WeekPrice\ =\ low52WeekPrice;}
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_afb1be92f322b3ed75e6f0c2c36f8e575}{getHigh52WeekPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.high52WeekPrice;}
 \DoxyCodeLine{00312\ \ \ \ \ \}}
 \DoxyCodeLine{00313\ }
 \DoxyCodeLine{00314\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ correlation\ coefficient\ of\ the\ instrument\ to\ the\ S\&P500\ index.}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ in\ last\ 52\ weeks.}}
 \DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ correlation\ coefficient\ of\ the\ instrument\ to\ the\ S\&P500\ index.}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *\ @param\ high52WeekPrice\ the\ maximal\ (high)\ price\ in\ last\ 52\ weeks.}}
 \DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a609627da094f594fa5577800a5357e74}{getBeta}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.beta;}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_afaa8befa24ed89c9d1496a3159439f93}{setHigh52WeekPrice}}(\textcolor{keywordtype}{double}\ high52WeekPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ data\_.high52WeekPrice\ =\ high52WeekPrice;}
 \DoxyCodeLine{00321\ \ \ \ \ \}}
 \DoxyCodeLine{00322\ }
 \DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ correlation\ coefficient\ of\ the\ instrument\ to\ the\ S\&P500\ index.}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ minimal\ (low)\ price\ in\ last\ 52\ weeks.}}
 \DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ @param\ beta\ the\ correlation\ coefficient\ of\ the\ instrument\ to\ the\ S\&P500\ index}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ minimal\ (low)\ price\ in\ last\ 52\ weeks.}}
 \DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_af6489ba4d1fe25e17b7122aee3680e01}{setBeta}}(\textcolor{keywordtype}{double}\ beta)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ data\_.beta\ =\ beta;}
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7e1c6c88d7a68b72b361c6ecb6c91b85}{getLow52WeekPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.low52WeekPrice;}
 \DoxyCodeLine{00330\ \ \ \ \ \}}
 \DoxyCodeLine{00331\ }
 \DoxyCodeLine{00332\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ earnings\ per\ share\ (the\ company’s\ profits\ divided\ by\ the\ number\ of\ shares).}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ in\ last\ 52\ weeks.}}
 \DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ @return\ earnings\ per\ share}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ @param\ low52WeekPrice\ the\ minimal\ (low)\ price\ in\ last\ 52\ weeks.}}
 \DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a1fd5f4ebc372331aef3d91e6ab9f4e86}{getEarningsPerShare}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.earningsPerShare;}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_aae8e5dac60991610f810d529d192c771}{setLow52WeekPrice}}(\textcolor{keywordtype}{double}\ low52WeekPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ data\_.low52WeekPrice\ =\ low52WeekPrice;}
 \DoxyCodeLine{00339\ \ \ \ \ \}}
 \DoxyCodeLine{00340\ }
 \DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ Earnings\ per\ share\ (the\ company’s\ profits\ divided\ by\ the\ number\ of\ shares).}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ correlation\ coefficient\ of\ the\ instrument\ to\ the\ S\&P500\ index.}}
 \DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ *\ @param\ earningsPerShare\ earnings\ per\ share}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ correlation\ coefficient\ of\ the\ instrument\ to\ the\ S\&P500\ index.}}
 \DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00346\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_aaaea1a9403b813ba8772d174870ed734}{setEarningsPerShare}}(\textcolor{keywordtype}{double}\ earningsPerShare)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ data\_.earningsPerShare\ =\ earningsPerShare;}
+\DoxyCodeLine{00346\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a609627da094f594fa5577800a5357e74}{getBeta}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.beta;}
 \DoxyCodeLine{00348\ \ \ \ \ \}}
 \DoxyCodeLine{00349\ }
 \DoxyCodeLine{00350\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ frequency\ of\ cash\ dividends\ payments\ per\ year\ (calculated).}}
+\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ correlation\ coefficient\ of\ the\ instrument\ to\ the\ S\&P500\ index.}}
 \DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Frequency\ of\ cash\ dividends\ payments\ per\ year}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *\ @param\ beta\ the\ correlation\ coefficient\ of\ the\ instrument\ to\ the\ S\&P500\ index}}
 \DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00355\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a2a0b8eb4839ebe5139ee99fe7a9a3145}{getDividendFrequency}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dividendFrequency;}
+\DoxyCodeLine{00355\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_af6489ba4d1fe25e17b7122aee3680e01}{setBeta}}(\textcolor{keywordtype}{double}\ beta)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ data\_.beta\ =\ beta;}
 \DoxyCodeLine{00357\ \ \ \ \ \}}
 \DoxyCodeLine{00358\ }
 \DoxyCodeLine{00359\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00360\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ frequency\ of\ cash\ dividends\ payments\ per\ year.}}
+\DoxyCodeLine{00360\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ earnings\ per\ share\ (the\ company’s\ profits\ divided\ by\ the\ number\ of\ shares).}}
 \DoxyCodeLine{00361\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00362\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dividendFrequency\ frequency\ of\ cash\ dividends\ payments\ per\ year}}
+\DoxyCodeLine{00362\ \textcolor{comment}{\ \ \ \ \ *\ @return\ earnings\ per\ share}}
 \DoxyCodeLine{00363\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00364\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a6868b3c7eb163a8223393254e8fda95f}{setDividendFrequency}}(\textcolor{keywordtype}{double}\ dividendFrequency)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ data\_.dividendFrequency\ =\ dividendFrequency;}
+\DoxyCodeLine{00364\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a1fd5f4ebc372331aef3d91e6ab9f4e86}{getEarningsPerShare}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.earningsPerShare;}
 \DoxyCodeLine{00366\ \ \ \ \ \}}
 \DoxyCodeLine{00367\ }
 \DoxyCodeLine{00368\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ amount\ of\ the\ last\ paid\ dividend.}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ Earnings\ per\ share\ (the\ company’s\ profits\ divided\ by\ the\ number\ of\ shares).}}
 \DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ amount\ of\ the\ last\ paid\ dividend}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *\ @param\ earningsPerShare\ earnings\ per\ share}}
 \DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00373\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ac6b8e08327bff30865cbf1a5beaaa177}{getExDividendAmount}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.exDividendAmount;}
+\DoxyCodeLine{00373\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_aaaea1a9403b813ba8772d174870ed734}{setEarningsPerShare}}(\textcolor{keywordtype}{double}\ earningsPerShare)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ data\_.earningsPerShare\ =\ earningsPerShare;}
 \DoxyCodeLine{00375\ \ \ \ \ \}}
 \DoxyCodeLine{00376\ }
 \DoxyCodeLine{00377\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00378\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ amount\ of\ the\ last\ paid\ dividend.}}
+\DoxyCodeLine{00378\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ frequency\ of\ cash\ dividends\ payments\ per\ year\ (calculated).}}
 \DoxyCodeLine{00379\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00380\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exDividendAmount\ the\ amount\ of\ the\ last\ paid\ dividend}}
+\DoxyCodeLine{00380\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Frequency\ of\ cash\ dividends\ payments\ per\ year}}
 \DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00382\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_af781120bb4eb723e019a74debe545a15}{setExDividendAmount}}(\textcolor{keywordtype}{double}\ exDividendAmount)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ data\_.exDividendAmount\ =\ exDividendAmount;}
+\DoxyCodeLine{00382\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a2a0b8eb4839ebe5139ee99fe7a9a3145}{getDividendFrequency}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dividendFrequency;}
 \DoxyCodeLine{00384\ \ \ \ \ \}}
 \DoxyCodeLine{00385\ }
 \DoxyCodeLine{00386\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ identifier\ of\ the\ day\ of\ the\ last\ dividend\ payment\ (ex-\/dividend\ date).}}
-\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
-\DoxyCodeLine{00389\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00390\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ identifier\ of\ the\ day\ of\ the\ last\ dividend\ payment}}
-\DoxyCodeLine{00391\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00392\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ab17cd75536d39127baec7fd13243c478}{getExDividendDayId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.exDividendDayId;}
-\DoxyCodeLine{00394\ \ \ \ \ \}}
-\DoxyCodeLine{00395\ }
-\DoxyCodeLine{00396\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ identifier\ of\ the\ day\ of\ the\ last\ dividend\ payment\ (ex-\/dividend\ date).}}
-\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
-\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exDividendDayId\ identifier\ of\ the\ day\ of\ the\ last\ dividend\ payment}}
-\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00402\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_acbc839f0f4ce749102c1ff2da49b2936}{setExDividendDayId}}(std::int32\_t\ exDividendDayId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ data\_.exDividendDayId\ =\ exDividendDayId;}
-\DoxyCodeLine{00404\ \ \ \ \ \}}
-\DoxyCodeLine{00405\ }
-\DoxyCodeLine{00406\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00407\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ number\ of\ shares\ outstanding.}}
-\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00409\ \textcolor{comment}{\ \ \ \ \ *\ @return\ shares\ outstanding}}
-\DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00411\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a251c309dc1f2e6e36a708a5c088eea78}{getShares}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.shares;}
-\DoxyCodeLine{00413\ \ \ \ \ \}}
-\DoxyCodeLine{00414\ }
-\DoxyCodeLine{00415\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ number\ of\ shares\ outstanding.}}
-\DoxyCodeLine{00417\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00418\ \textcolor{comment}{\ \ \ \ \ *\ @param\ shares\ shares\ outstanding.}}
-\DoxyCodeLine{00419\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00420\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ada94bee31e238d81d17f1c44ce996695}{setShares}}(\textcolor{keywordtype}{double}\ shares)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ data\_.shares\ =\ shares;}
-\DoxyCodeLine{00422\ \ \ \ \ \}}
-\DoxyCodeLine{00423\ }
-\DoxyCodeLine{00424\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ free-\/float\ -\/\ the\ number\ of\ shares\ outstanding\ that\ are\ available\ to\ the\ public\ for\ trade.}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ frequency\ of\ cash\ dividends\ payments\ per\ year.}}
+\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00389\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dividendFrequency\ frequency\ of\ cash\ dividends\ payments\ per\ year}}
+\DoxyCodeLine{00390\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00391\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a6868b3c7eb163a8223393254e8fda95f}{setDividendFrequency}}(\textcolor{keywordtype}{double}\ dividendFrequency)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ data\_.dividendFrequency\ =\ dividendFrequency;}
+\DoxyCodeLine{00393\ \ \ \ \ \}}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ amount\ of\ the\ last\ paid\ dividend.}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ amount\ of\ the\ last\ paid\ dividend}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00400\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ac6b8e08327bff30865cbf1a5beaaa177}{getExDividendAmount}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.exDividendAmount;}
+\DoxyCodeLine{00402\ \ \ \ \ \}}
+\DoxyCodeLine{00403\ }
+\DoxyCodeLine{00404\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00405\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ amount\ of\ the\ last\ paid\ dividend.}}
+\DoxyCodeLine{00406\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00407\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exDividendAmount\ the\ amount\ of\ the\ last\ paid\ dividend}}
+\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00409\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_af781120bb4eb723e019a74debe545a15}{setExDividendAmount}}(\textcolor{keywordtype}{double}\ exDividendAmount)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ data\_.exDividendAmount\ =\ exDividendAmount;}
+\DoxyCodeLine{00411\ \ \ \ \ \}}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00413\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ identifier\ of\ the\ day\ of\ the\ last\ dividend\ payment\ (ex-\/dividend\ date).}}
+\DoxyCodeLine{00415\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
+\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00417\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ identifier\ of\ the\ day\ of\ the\ last\ dividend\ payment}}
+\DoxyCodeLine{00418\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00419\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ab17cd75536d39127baec7fd13243c478}{getExDividendDayId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.exDividendDayId;}
+\DoxyCodeLine{00421\ \ \ \ \ \}}
+\DoxyCodeLine{00422\ }
+\DoxyCodeLine{00423\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00424\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ identifier\ of\ the\ day\ of\ the\ last\ dividend\ payment\ (ex-\/dividend\ date).}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
 \DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *\ @return\ free-\/float}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exDividendDayId\ identifier\ of\ the\ day\ of\ the\ last\ dividend\ payment}}
 \DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00429\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_afd857a46f7c3fbb4ad6aee4b073080b1}{getFreeFloat}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.freeFloat;}
+\DoxyCodeLine{00429\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_acbc839f0f4ce749102c1ff2da49b2936}{setExDividendDayId}}(std::int32\_t\ exDividendDayId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ data\_.exDividendDayId\ =\ exDividendDayId;}
 \DoxyCodeLine{00431\ \ \ \ \ \}}
 \DoxyCodeLine{00432\ }
 \DoxyCodeLine{00433\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00434\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ free-\/float\ -\/\ the\ number\ of\ shares\ outstanding\ that\ are\ available\ to\ the\ public\ for\ trade}}
-\DoxyCodeLine{00435\ \textcolor{comment}{\ \ \ \ \ *\ @param\ freeFloat\ the\ number\ of\ shares\ outstanding\ that\ are\ available\ to\ the\ public\ for\ trade}}
-\DoxyCodeLine{00436\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00437\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7d376edcc989cb3c6ee0b91f93b943ac}{setFreeFloat}}(\textcolor{keywordtype}{double}\ freeFloat)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ data\_.freeFloat\ =\ freeFloat;}
-\DoxyCodeLine{00439\ \ \ \ \ \}}
-\DoxyCodeLine{00440\ }
-\DoxyCodeLine{00441\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
-\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
-\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00446\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a43aab03f0166925f3f1d71f388c0e896}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00447\ \};}
-\DoxyCodeLine{00448\ }
-\DoxyCodeLine{00449\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00434\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ number\ of\ shares\ outstanding.}}
+\DoxyCodeLine{00435\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00436\ \textcolor{comment}{\ \ \ \ \ *\ @return\ shares\ outstanding}}
+\DoxyCodeLine{00437\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00438\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a251c309dc1f2e6e36a708a5c088eea78}{getShares}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.shares;}
+\DoxyCodeLine{00440\ \ \ \ \ \}}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ number\ of\ shares\ outstanding.}}
+\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ *\ @param\ shares\ shares\ outstanding.}}
+\DoxyCodeLine{00446\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00447\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_ada94bee31e238d81d17f1c44ce996695}{setShares}}(\textcolor{keywordtype}{double}\ shares)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ data\_.shares\ =\ shares;}
+\DoxyCodeLine{00449\ \ \ \ \ \}}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00451\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00452\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ free-\/float\ -\/\ the\ number\ of\ shares\ outstanding\ that\ are\ available\ to\ the\ public\ for\ trade.}}
+\DoxyCodeLine{00453\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ *\ @return\ free-\/float}}
+\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00456\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_afd857a46f7c3fbb4ad6aee4b073080b1}{getFreeFloat}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.freeFloat;}
+\DoxyCodeLine{00458\ \ \ \ \ \}}
+\DoxyCodeLine{00459\ }
+\DoxyCodeLine{00460\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00461\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ free-\/float\ -\/\ the\ number\ of\ shares\ outstanding\ that\ are\ available\ to\ the\ public\ for\ trade}}
+\DoxyCodeLine{00462\ \textcolor{comment}{\ \ \ \ \ *\ @param\ freeFloat\ the\ number\ of\ shares\ outstanding\ that\ are\ available\ to\ the\ public\ for\ trade}}
+\DoxyCodeLine{00463\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00464\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a7d376edcc989cb3c6ee0b91f93b943ac}{setFreeFloat}}(\textcolor{keywordtype}{double}\ freeFloat)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ data\_.freeFloat\ =\ freeFloat;}
+\DoxyCodeLine{00466\ \ \ \ \ \}}
+\DoxyCodeLine{00467\ }
+\DoxyCodeLine{00468\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00469\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00470\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00473\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a43aab03f0166925f3f1d71f388c0e896}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_profile_a43aab03f0166925f3f1d71f388c0e896}{override}};}
+\DoxyCodeLine{00474\ \};}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
 
 \end{DoxyCode}

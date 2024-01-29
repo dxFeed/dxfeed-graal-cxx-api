@@ -19,12 +19,12 @@ Inheritance diagram for dxfcpp\+::Event\+Type\+:\begin{figure}[H]
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{structdxfcpp_1_1_event_type_a79078a83cb055e5250b65c06e8ea9fbe}\label{structdxfcpp_1_1_event_type_a79078a83cb055e5250b65c06e8ea9fbe} 
-\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}} $>$
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_event_type}{Event\+Type}}$>$
 \begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}} $>$
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}}$>$
 \begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -76,7 +76,7 @@ Event types are POCO (plain old cpp objects, not POD) that follow bean naming co
 
 Returns time when event was created or zero when time is not available. 
 
-This event time is available only when the corresponding \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} is created with \doxylink{structdxfcpp_1_1_d_x_endpoint_ade95bc0b10e58f612fd4355aa915ade9}{DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY} and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from On\+Demand\+Service. Events that are coming from a network connections do not have an embedded event time information and this method will return zero for them, meaning that event was received just now.
+This event time is available only when the corresponding \doxylink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint} is created with \doxylink{structdxfcpp_1_1_d_x_endpoint_ade95bc0b10e58f612fd4355aa915ade9}{DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY} and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from \doxylink{structdxfcpp_1_1_on_demand_service}{On\+Demand\+Service}. Events that are coming from a network connections do not have an embedded event time information and this method will return zero for them, meaning that event was received just now.
 
 Default implementation returns 0.
 

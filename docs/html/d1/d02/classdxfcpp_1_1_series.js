@@ -35,5 +35,19 @@ var classdxfcpp_1_1_series =
     [ "setTimeSequence", "d1/d02/classdxfcpp_1_1_series.html#a4f865ebe992d1759467c93a55fce9b76", null ],
     [ "setVolatility", "d1/d02/classdxfcpp_1_1_series.html#a03e81c865f159f206a6d363303a86424", null ],
     [ "toGraal", "d1/d02/classdxfcpp_1_1_series.html#a7c711320747079dbd506d63c1d4730d7", null ],
-    [ "toString", "d1/d02/classdxfcpp_1_1_series.html#a2b964d3b9d9275abbc2dc962d6e73578", null ]
+    [ "toString", "d1/d02/classdxfcpp_1_1_series.html#a2b964d3b9d9275abbc2dc962d6e73578", null ],
+    [ "withEventFlags", "d1/d02/classdxfcpp_1_1_series.html#acace749bef12c6d0e11f0b0de3421c89", null ],
+    [ "withEventFlags", "d1/d02/classdxfcpp_1_1_series.html#a8f0ea89e67cbe14742be0efbc260bf0a", null ],
+    [ "withEventFlagsShared", "d1/d02/classdxfcpp_1_1_series.html#acd9367cfadfd24ab6360d6ff2152d780", null ],
+    [ "withEventFlagsShared", "d1/d02/classdxfcpp_1_1_series.html#a0ba1451ce5d9af1ccf890ec24837d3fb", null ],
+    [ "withEventSymbol", "d1/d02/classdxfcpp_1_1_series.html#ac9b1138ec64df65782f7e2d17d751665", null ],
+    [ "withEventSymbolShared", "d1/d02/classdxfcpp_1_1_series.html#a0ccf33524a9a6c845cfce9e0fe809a96", null ],
+    [ "withEventTime", "d1/d02/classdxfcpp_1_1_series.html#a249fa99c8e69a6f02ae561692baa38c8", null ],
+    [ "withEventTimeShared", "d1/d02/classdxfcpp_1_1_series.html#afd57a78c0c0336f246b309346a72bf43", null ],
+    [ "withIndex", "d1/d02/classdxfcpp_1_1_series.html#af3bc2c6a9687bc95788d8c7a5d3ef8b7", null ],
+    [ "withIndexShared", "d1/d02/classdxfcpp_1_1_series.html#afdcad8f2db1fa12ebb6379f3f34da364", null ],
+    [ "withSequence", "d1/d02/classdxfcpp_1_1_series.html#a8736eaaf6963d186dfaf24852955dd8b", null ],
+    [ "withSequenceShared", "d1/d02/classdxfcpp_1_1_series.html#af665d6ea0cabad8a2b70c6e61810de9c", null ],
+    [ "withTime", "d1/d02/classdxfcpp_1_1_series.html#a1c268da1ff54eedaabc5ef37374f59e0", null ],
+    [ "withTimeShared", "d1/d02/classdxfcpp_1_1_series.html#a785a0576560c73dd94f455108d3c47c5", null ]
 ];

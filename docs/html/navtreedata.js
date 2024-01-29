@@ -34,7 +34,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ],
         [ "Enumerations", "functions_enum.html", null ],
         [ "Related Symbols", "functions_rela.html", null ]
@@ -56,11 +56,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d3/d00/classdxfcpp_1_1_time_and_sale.html#a4209fa9b85b1eb6dc67b05da8e5eb593",
-"d8/d01/classdxfcpp_1_1_instrument_profile.html#a24b5dad0ac170756abf51e30f3e5be33",
-"da/d01/classdxfcpp_1_1_spread_order.html#ac9e92e3421266df940402d6113727db4",
-"dc/d01/structdxfcpp_1_1_day.html#a5a2709328521a36824c7aac735e14782",
-"de/d03/classdxfcpp_1_1_candle.html#a9b1f4b4f14fe38b0d464ac957fe194c1"
+"d3/d00/_option_sale_8hpp_source.html",
+"d7/d02/structdxfcpp_1_1_event_type_with_symbol.html#a5ac37797f3b17ec18876ccc381638044",
+"da/d01/classdxfcpp_1_1_spread_order.html#a2ba94e1ad2a8b5f5622612a1054a926d",
+"dc/d01/api_8h.html#a3a7f931ee286a227711ec5dd530323c1a3b1cde06ba459c4718cb9ec8b72531fb",
+"de/d02/classdxfcpp_1_1_option_sale.html#ac1a206cebf9bb752f7e4c46cda96fcfc",
+"functions_func_~.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,0 +1,179 @@
+\doxysubsection{dxfcpp\+::Instrument\+Profile\+Collector Class Reference}
+\hypertarget{classdxfcpp_1_1_instrument_profile_collector}{}\label{classdxfcpp_1_1_instrument_profile_collector}\index{dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}}
+
+
+Collects instrument profile updates and provides the live list of instrument profiles.  
+
+
+
+
+{\ttfamily \#include $<$Instrument\+Profile\+Collector.\+hpp$>$}
+
+Inheritance diagram for dxfcpp\+::Instrument\+Profile\+Collector\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{de/d03/classdxfcpp_1_1_instrument_profile_collector}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classdxfcpp_1_1_instrument_profile_collector_a49492c3e1d3d282dcd0dd3a9e1a08639}\label{classdxfcpp_1_1_instrument_profile_collector_a49492c3e1d3d282dcd0dd3a9e1a08639} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector}{Instrument\+Profile\+Collector}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{classdxfcpp_1_1_instrument_profile_collector}{Instrument\+Profile\+Collector} object. \end{DoxyCompactList}\item 
+\Hypertarget{classdxfcpp_1_1_instrument_profile_collector_a7586b105ab99d4294a89fa590f101644}\label{classdxfcpp_1_1_instrument_profile_collector_a7586b105ab99d4294a89fa590f101644} 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector}{Instrument\+Profile\+Collector}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{classdxfcpp_1_1_instrument_profile_collector}{Instrument\+Profile\+Collector} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{using}} {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{structdxfcpp_1_1_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a786c529e6055f8b71e3aeaef5c7bcbe3}{get\+Last\+Update\+Time}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown. \end{DoxyCompactList}\item 
+std\+::chrono\+::milliseconds \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a0b8f73ab5e92c9875b8dad1250762aa2}{get\+Last\+Update\+Time\+As\+Duration}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns last modification time (as std\+::chrono\+::milliseconds) of instrument profiles or zero if it is unknown. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a7c5fe2a804f91d1d198fa9ffdf711385}{update\+Instrument\+Profile}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile}{Instrument\+Profile}} $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{ip}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Convenience method to update one instrument profile in this collector. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a4333db3c6669dc452d1a036ec1350451}{update\+Instrument\+Profile}} (\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile}{Instrument\+Profile}} \&\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{ip}}) \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Convenience method to update one instrument profile in this collector. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_iterable_instrument_profile}{Iterable\+Instrument\+Profile}} $>$ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a95a585ada099ef46ca766598149c4f2b}{view}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns a concurrent view of the set of instrument profiles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{dxfcpp\+::\+Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{typename}} T $>$ }\\\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{bool}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac83e17b089df3399f9a2216000ee859e}{is}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_a2d9f44fbc4687b8537f987fcfb577b38}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{virtual}} std\+::string \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_ac5e5e03dd0deb47e0f9b13ee9df9d672}{to\+String}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{structdxfcpp_1_1_entity}{dxfcpp\+::\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{static}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a49492c3e1d3d282dcd0dd3a9e1a08639}{Ptr}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a9efaffdf89319cd9e2176f52f72bc381}{create}} () \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{noexcept}}
+\begin{DoxyCompactList}\small\item\em Creates the new \doxylink{classdxfcpp_1_1_instrument_profile_collector}{Instrument\+Profile\+Collector}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Collects instrument profile updates and provides the live list of instrument profiles. 
+
+This class contains a map that keeps a unique instrument profile per symbol. This class is intended to be used with \doxylink{classdxfcpp_1_1_instrument_profile_connection}{Instrument\+Profile\+Connection} as a repository that keeps profiles of all known instruments. See \doxylink{classdxfcpp_1_1_instrument_profile_connection}{Instrument\+Profile\+Connection} for a usage example.
+
+As set of instrument profiles stored in this collector can be accessed with \doxylink{classdxfcpp_1_1_instrument_profile_collector_a95a585ada099ef46ca766598149c4f2b}{view} method. A snapshot plus a live stream of updates can be accessed with add\+Update\+Listener method.
+
+Removal of instrument profile is represented by an \doxylink{classdxfcpp_1_1_instrument_profile}{Instrument\+Profile} instance with a \doxylink{classdxfcpp_1_1_instrument_profile_ab3c714343464641a7653e96557f5f160}{type} equal to {\ttfamily \doxylink{structdxfcpp_1_1_instrument_profile_type}{Instrument\+Profile\+Type}\+::REMOVED.get\+Name()}.
+
+{\bfseries{This class is thread-\/safe.}} 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_collector_a9efaffdf89319cd9e2176f52f72bc381}\label{classdxfcpp_1_1_instrument_profile_collector_a9efaffdf89319cd9e2176f52f72bc381} 
+\index{dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}!create@{create}}
+\index{create@{create}!dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a49492c3e1d3d282dcd0dd3a9e1a08639}{Instrument\+Profile\+Collector\+::\+Ptr}} dxfcpp\+::\+Instrument\+Profile\+Collector\+::create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Creates the new \doxylink{classdxfcpp_1_1_instrument_profile_collector}{Instrument\+Profile\+Collector}. 
+
+\begin{DoxyReturn}{Returns}
+The new \doxylink{classdxfcpp_1_1_instrument_profile_collector}{Instrument\+Profile\+Collector} 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_collector_a786c529e6055f8b71e3aeaef5c7bcbe3}\label{classdxfcpp_1_1_instrument_profile_collector_a786c529e6055f8b71e3aeaef5c7bcbe3} 
+\index{dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}!getLastUpdateTime@{getLastUpdateTime}}
+\index{getLastUpdateTime@{getLastUpdateTime}!dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{getLastUpdateTime()}{getLastUpdateTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t dxfcpp\+::\+Instrument\+Profile\+Collector\+::get\+Last\+Update\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown. 
+
+Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+
+\begin{DoxyReturn}{Returns}
+The last modification time (in milliseconds) of instrument profiles or zero if it is unknown. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_collector_a0b8f73ab5e92c9875b8dad1250762aa2}\label{classdxfcpp_1_1_instrument_profile_collector_a0b8f73ab5e92c9875b8dad1250762aa2} 
+\index{dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}!getLastUpdateTimeAsDuration@{getLastUpdateTimeAsDuration}}
+\index{getLastUpdateTimeAsDuration@{getLastUpdateTimeAsDuration}!dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{getLastUpdateTimeAsDuration()}{getLastUpdateTimeAsDuration()}}
+{\footnotesize\ttfamily std\+::chrono\+::milliseconds dxfcpp\+::\+Instrument\+Profile\+Collector\+::get\+Last\+Update\+Time\+As\+Duration (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns last modification time (as std\+::chrono\+::milliseconds) of instrument profiles or zero if it is unknown. 
+
+Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+
+\begin{DoxyReturn}{Returns}
+The last modification time (as std\+::chrono\+::milliseconds) of instrument profiles or zero if it is unknown. 
+\end{DoxyReturn}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_collector_a4333db3c6669dc452d1a036ec1350451}\label{classdxfcpp_1_1_instrument_profile_collector_a4333db3c6669dc452d1a036ec1350451} 
+\index{dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}!updateInstrumentProfile@{updateInstrumentProfile}}
+\index{updateInstrumentProfile@{updateInstrumentProfile}!dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{updateInstrumentProfile()}{updateInstrumentProfile()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Instrument\+Profile\+Collector\+::update\+Instrument\+Profile (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{const}} \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile}{Instrument\+Profile}} \&}]{ip }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Convenience method to update one instrument profile in this collector. 
+
+This is a shortcut for\+: 
+\begin{DoxyPre}{\ttfamily 
+   \doxylink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{updateInstrumentProfiles}(\{ip\}, nullptr);
+}\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em ip} & The instrument profile. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_collector_a7c5fe2a804f91d1d198fa9ffdf711385}\label{classdxfcpp_1_1_instrument_profile_collector_a7c5fe2a804f91d1d198fa9ffdf711385} 
+\index{dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}!updateInstrumentProfile@{updateInstrumentProfile}}
+\index{updateInstrumentProfile@{updateInstrumentProfile}!dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{updateInstrumentProfile()}{updateInstrumentProfile()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{void}} dxfcpp\+::\+Instrument\+Profile\+Collector\+::update\+Instrument\+Profile (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile}{Instrument\+Profile}} $>$}]{ip }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Convenience method to update one instrument profile in this collector. 
+
+This is a shortcut for\+: 
+\begin{DoxyPre}{\ttfamily 
+   \doxylink{structdxfcpp_1_1_shared_entity_aa117214d0b4e4fc6979400eff315a8d3}{updateInstrumentProfiles}(\{ip\}, nullptr);
+}\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em ip} & The instrument profile. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classdxfcpp_1_1_instrument_profile_collector_a95a585ada099ef46ca766598149c4f2b}\label{classdxfcpp_1_1_instrument_profile_collector_a95a585ada099ef46ca766598149c4f2b} 
+\index{dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}!view@{view}}
+\index{view@{view}!dxfcpp::InstrumentProfileCollector@{dxfcpp::InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{view()}{view()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classdxfcpp_1_1_iterable_instrument_profile}{Iterable\+Instrument\+Profile}} $>$ dxfcpp\+::\+Instrument\+Profile\+Collector\+::view (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns a concurrent view of the set of instrument profiles. 
+
+Note, that removal of instrument profile is represented by an \doxylink{classdxfcpp_1_1_instrument_profile}{Instrument\+Profile} instance with a \doxylink{classdxfcpp_1_1_instrument_profile_ab3c714343464641a7653e96557f5f160}{type} equal to {\ttfamily \doxylink{structdxfcpp_1_1_instrument_profile_type}{Instrument\+Profile\+Type}\+::REMOVED.get\+Name()}. Normally, this view exposes only non-\/removed profiles. However, if iteration is concurrent with removal, then a removed instrument profile (with a removed type) can be exposed by this view.
+
+\begin{DoxyReturn}{Returns}
+A concurrent view of the set of instrument profiles. 
+\end{DoxyReturn}
