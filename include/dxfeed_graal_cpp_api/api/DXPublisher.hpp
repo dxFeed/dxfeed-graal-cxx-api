@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Devexperts LLC.
+// Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -69,7 +69,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
   private:
     JavaObjectHandle<DXPublisher> handle_;
 
-    static std::shared_ptr<DXPublisher> create(void *feedHandle) noexcept;
+    static std::shared_ptr<DXPublisher> create(void *handle) noexcept;
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:

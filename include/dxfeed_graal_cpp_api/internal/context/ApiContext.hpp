@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Devexperts LLC.
+// Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -14,6 +14,7 @@
 #include "../managers/InstrumentProfileCollectorManager.hpp"
 #include "../managers/InstrumentProfileConnectionManager.hpp"
 #include "../managers/InstrumentProfileReaderManager.hpp"
+#include "../managers/OnDemandServiceManager.hpp"
 
 namespace dxfcpp {
 
@@ -34,7 +35,8 @@ class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
                                  AddManagerMixin<DXPublisherManager>,
                                  AddManagerMixin<InstrumentProfileReaderManager>,
                                  AddManagerMixin<InstrumentProfileCollectorManager>,
-                                 AddManagerMixin<InstrumentProfileConnectionManager> {
+                                 AddManagerMixin<InstrumentProfileConnectionManager>,
+                                 AddManagerMixin<OnDemandServiceManager> {
     ApiContext() noexcept = default;
 
   public:

@@ -11,7 +11,6 @@ and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) 
 
 :information_source: If you already use [dxFeed C API](https://github.com/dxFeed/dxfeed-c-api), please see
 the [Overview](#overview) section.<br>
-:warning: It’s a **beta** version and still under active development.
 
 [![Build](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml)
 ![Platform](https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20osx--x64%20%7C%20osx--aarch64-lightgrey)
@@ -290,7 +289,7 @@ int main() {
     // Enable experimental feature.
     System::SetProperty("dxfeed.experimental.dxlink.enable", "true");
     // Set scheme for dxLink.
-    System::SetProperty("scheme", "ext:resource:dxlink.xml");
+    System::SetProperty("scheme", "ext:opt:sysprops,resource:dxlink.xml");
     
     // For token-based authorization, use the following address format:
     // "dxlink:wss://demo.dxfeed.com/dxlink-ws[login=dxlink:token]"
@@ -375,6 +374,9 @@ versions):
 - [ ] DxFeedPublishProfiles is a simple demonstration of how to publish market events
 - [x] [ScheduleSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp)
   is a simple demonstration of how to get various scheduling information for instruments
+- [x] [OnDemandSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp)
+  a sample that demonstrates how to use the dxFeed on-demand history data replay service API
+
 
 ## Current State
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Devexperts LLC.
+// Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxfg_api.h>
@@ -24,9 +24,9 @@ std::shared_ptr<DXPublisher> DXPublisher::getInstance() noexcept {
     return DXEndpoint::getInstance()->getPublisher();
 }
 
-std::shared_ptr<DXPublisher> DXPublisher::create(void *feedHandle) noexcept {
+std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) noexcept {
     if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXPublisher::create(" + dxfcpp::toString(feedHandle) + ")");
+        Debugger::debug("DXPublisher::create(" + dxfcpp::toString(handle) + ")");
     }
 
     std::shared_ptr<DXPublisher> publisher{new (std::nothrow) DXPublisher{}};
@@ -37,7 +37,7 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *feedHandle) noexcept {
     // TODO: error handling [EN-8232]
 
     if (publisher) {
-        publisher->handle_ = JavaObjectHandle<DXPublisher>(feedHandle);
+        publisher->handle_ = JavaObjectHandle<DXPublisher>(handle);
     }
 
     return publisher;

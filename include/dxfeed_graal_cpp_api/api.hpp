@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Devexperts LLC.
+// Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -45,3 +45,5 @@
 #include "system/System.hpp"
 
 #include "isolated/Isolated.hpp"
+
+#include "ondemand/OnDemandService.hpp"

@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Devexperts LLC.
+# Copyright (c) 2024 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
 cmake_minimum_required(VERSION 3.21)
@@ -15,7 +15,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 project(dxFeedGraalCxxApi)
 
-set(DXFCXX_VERSION "v1.2.0-beta" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v1.3.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -41,7 +41,7 @@ option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.4" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.6" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
@@ -137,6 +137,10 @@ set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/live/IterableInstrumentProfile.cpp
 )
 
+set(dxFeedGraalCxxApi_OnDemand_Sources
+        src/ondemand/OnDemandService.cpp
+)
+
 set(dxFeedGraalCxxApi_Symbols_Sources
         src/symbols/StringSymbol.cpp
         src/symbols/SymbolWrapper.cpp
@@ -215,6 +219,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
+        ${dxFeedGraalCxxApi_OnDemand_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}
         ${dxFeedGraalCxxApi_System_Sources}
         ${dxFeedGraalCxxApi_Event_Sources}
@@ -348,6 +353,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/DxFeedIpfConnect)
     add_subdirectory(samples/cpp/DxFeedLiveIpfSample)
     add_subdirectory(samples/cpp/ScheduleSample)
+    add_subdirectory(samples/cpp/OnDemandSample)
 endif ()
 
 if (DXFCXX_BUILD_TOOLS)
