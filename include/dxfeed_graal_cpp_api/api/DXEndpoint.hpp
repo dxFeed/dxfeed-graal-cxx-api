@@ -62,7 +62,7 @@ struct OnDemandService;
  *   This endpoint is automatically connected to the configured data feed as explained in default properties section.
  * - @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" is similar to @ref Role::FEED "FEED", but it is designed to be used with
  *   OnDemandService for historical data replay only. It is configured with default properties, but is not connected
- *   automatically to the data provider until @ref OnDemandService::replay(Date, double) "OnDemandService->replay"
+ *   automatically to the data provider until @ref OnDemandService::replay(std::int64_t,double) "OnDemandService::replay"
  * method is invoked.
  * - @ref Role::STREAM_FEED "STREAM_FEED" is similar to @ref Role::FEED "FEED" and also connects to the remote data
  *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
@@ -210,7 +210,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * Defines default connection address for an endpoint with role @ref Role::FEED "FEED"
      * or @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
      * Connection is established to this address by role @ref Role::FEED "FEED" as soon as endpoint is created, while
-     * role @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" waits until OnDemandService::replay(Date, double) is invoked
+     * role @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" waits until OnDemandService::(std::int64_t,double) is invoked
      * before connecting.
      *
      * By default, without this property, connection is not established until @ref DXEndpoint::connect(const
@@ -385,7 +385,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          * `ON_DEMAND_FEED` endpoint is similar to DXEndpoint::FEED, but it is designed to be used with OnDemandService
          * for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default
          * properties</a>, but is not connected automatically to the data provider until @ref
-         * OnDemandService::replay(Date, double) "OnDemandService.replay" method is invoked.
+         * OnDemandService::(std::int64_t,double) "OnDemandService.replay" method is invoked.
          *
          * `ON_DEMAND_FEED` endpoint cannot be connected to an ordinary data feed at all.
          * OnDemandService::stopAndResume() will have a similar effect to OnDemandService::stopAndClear().

@@ -356,6 +356,8 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/OnDemandSample)
 endif ()
 
+add_subdirectory(docs)
+
 if (DXFCXX_BUILD_TOOLS)
     add_subdirectory(tools/Tools)
 endif ()

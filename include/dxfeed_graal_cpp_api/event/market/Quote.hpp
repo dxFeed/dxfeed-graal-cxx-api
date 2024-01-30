@@ -495,7 +495,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * Changes bid size and returns the current quote.
      *
      * @param bidSize The bid size.
-     * @retrun The current quote.
+     * @return The current quote.
      */
     Quote &withBidSize(double bidSize) noexcept {
         setBidSize(bidSize);
@@ -510,7 +510,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * Quote(...))` or `std::make_shared<Quote>(...)`
      *
      * @param bidSize The bid size.
-     * @retrun A shared pointer to the current quote.
+     * @return A shared pointer to the current quote.
      */
     Quote::Ptr withBidSizeShared(double bidSize) noexcept {
         setBidSize(bidSize);
@@ -730,7 +730,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * Changes ask size and returns the current quote.
      *
      * @param askSize The ask size.
-     * @retrun The current quote.
+     * @return The current quote.
      */
     Quote &withAskSize(double askSize) noexcept {
         setAskSize(askSize);
@@ -745,7 +745,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * Quote(...))` or `std::make_shared<Quote>(...)`
      *
      * @param askSize The ask size.
-     * @retrun A shared pointer to the current quote.
+     * @return A shared pointer to the current quote.
      */
     Quote::Ptr withAskSizeShared(double askSize) noexcept {
         setAskSize(askSize);

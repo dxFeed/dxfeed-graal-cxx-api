@@ -42,18 +42,18 @@ struct DXEndpoint;
  * the on-demand data provider and the appropriate credentials are provided.
  * @ref OnDemandService::isReplaySupported() "isReplaySupported" returns `true` when it is so.
  *
- * <p>On-demand replay is started with @ref OnDemandService::replay(std::int64_t) "replay" method that takes time as a parameter.
+ * <p>On-demand replay is started with @ref OnDemandService::replay() "replay" method that takes time as a parameter.
  * DXFeed is then disconnected from other data providers, pre-buffers historical tick data for replay,
  * and starts replay of the data as if it was coming from the data feeds now. All the usual APIs that are
  * part of DXFeed like @ref DXFeedSubscription "subscription" and various dxFeed models
  * can be used normally as with the ordinary real-time or delayed data feed.
  *
- * <p>Replay speed can be changed on the fly with @ref OnDemandService::setSpeed(double) "setSpeed" method or it can be set
- * initially when starting replay with a two-argument version of @ref OnDemandService::replay(std::int64_t, double) "replay" method.
- * @ref OnDemandService::pause() "pause" method is the same as @ref OnDemandService::setSpeed(double) "setSpeed(0)".
+ * <p>Replay speed can be changed on the fly with @ref OnDemandService::setSpeed() "setSpeed" method or it can be set
+ * initially when starting replay with a two-argument version of @ref OnDemandService::replay() "replay" method.
+ * @ref OnDemandService::pause() "pause" method is the same as @ref OnDemandService::setSpeed() "setSpeed(0)".
  *
  * <p>@ref OnDemandService::stopAndResume() "stopAndResume" method stops data replay and resumes ordinary real-time or delayed data feed
- * that was used before @ref OnDemandService::replay(std::int64_t) "replay" method was invoked.
+ * that was used before @ref OnDemandService::replay() "replay" method was invoked.
  * Endpoints with a role of
  * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" do not have an ordinary feed (they are essentially on-demand only)
  * and thus @ref OnDemandService::stopAndResume() "stopAndResume" method works like @ref OnDemandService::stopAndClear() "stopAndClear" for them.
@@ -125,7 +125,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * DXEndpoint should be @ref DXEndpoint::connect() "connected"
      * to an address with "(ondemand:<address>)" component that specifies an on-demand historical
      * data provider address.
-     * When this method returns `false`, @ref OnDemandService::replay(std::int64_t, double) "replay" method does nothing.
+     * When this method returns `false`, @ref OnDemandService::replay() "replay" method does nothing.
      *
      * @return `true` when on-demand historical data replay mode is supported.
      */
@@ -133,7 +133,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
 
     /**
      * Returns `true` when this on-demand historical data replay service is in replay mode.
-     * Replay mode is in effect after invocation of @ref OnDemandService::replay(std::int64_t, double) "replay" method and
+     * Replay mode is in effect after invocation of @ref OnDemandService::replay() "replay" method and
      * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::stopAndClear() "stopAndClear" methods.
      *
      * @return `true` when this on-demand historical data replay service is in replay mode.
@@ -143,7 +143,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     /**
      * Returns `true` when this on-demand historical data replay service is in clear mode.
      * Clear mode is in effect after invocation of @ref OnDemandService::stopAndClear() "stopAndClear"  method and
-     * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::replay(std::int64_t, double) "replay" methods.
+     * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::replay() "replay" methods.
      *
      * @return `true` when this on-demand historical data replay service is in clear mode.
      */
@@ -163,8 +163,8 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * Returns on-demand historical data replay speed.
      * Speed is measured with respect to the real-time playback speed.
      * The result of this method is zero when this service is not in @ref OnDemandService::isReplay() "replay mode".
-     * The speed is set when starting replay by @ref OnDemandService::replay(std::int64_t, double) "replay(time, speed)" method
-     * and with @ref OnDemandService::setSpeed(double) "setSpeed(speed)" method during replay.
+     * The speed is set when starting replay by @ref OnDemandService::replay() "replay(time, speed)" method
+     * and with @ref OnDemandService::setSpeed() "setSpeed(speed)" method during replay.
      *
      * @return on-demand historical data replay speed.
      */
@@ -174,7 +174,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * Turns on-demand historical data replay mode from a specified time with real-time speed.
      * This is a shortcut for:
      * <pre><tt>
-     *     @ref OnDemandService::replay(Date, double) "replay"(time, 1);</tt></pre>
+     *     @ref OnDemandService::replay(std::int64_t,double) "replay"(time, 1);</tt></pre>
      * This method can be used only when OnDemandService::isReplaySupported() method returns `true`,
      * that is when DXEndpoint is @ref DXEndpoint::connect() "connected"
      * to an address with "(ondemand:<address>)" component that specifies an on-demand historical
@@ -210,7 +210,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * This method can only be called in @ref OnDemandService::isReplay() "replay mode".
      * This is a shortcut for:
      * <pre><tt>
-     *     @ref OnDemandService::setSpeed(double) "setSpeed"(0);</tt></pre>
+     *     @ref OnDemandService::setSpeed() "setSpeed"(0);</tt></pre>
      * This method atomically captures current replay time and pauses at it.
      * After invocation of this method:
      * <ul>
@@ -255,7 +255,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * </ul>
      *
      * <p>Ordinary data feed can be resumed with OnDemandService::stopAndResume() method and on-demand historical data
-     * replay can be continued with @ref OnDemandService::replay(std::int64_t, double) "replay(...)" method.
+     * replay can be continued with @ref OnDemandService::replay() "replay(...)" method.
      */
     void stopAndClear() const noexcept;
 
