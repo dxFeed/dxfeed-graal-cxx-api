@@ -15,18 +15,25 @@ jobs:
           - image: windows-latest
             os: windows
             cores: 4
+            cc: 'cl'
+            cxx: 'cl'
           - image: macos-13
             os: macos
             cores: 4
             xcode: '15.0'
+            cc: 'clang'
+            cxx: 'clang++'
           - image: ubuntu-22.04
             os: linux
             cores: 4
-            gcc: '13'
+            cc: 'gcc-13'
+            cxx: 'g++-13'
           - image: macos-14
             os: macos
             cores: 3
             xcode: '15.0'
+            cc: 'clang'
+            cxx: 'clang++'
         buildType: [ Release ]
 
     runs-on: ${{ matrix.config.image }}
@@ -50,19 +57,15 @@ jobs:
       - name: Configure CMake (Mac)
         if: ${{ contains(matrix.config.os, 'mac') }}
         run: |
-          cmake -G "Ninja" -B ${{github.workspace}}/build \
-            -DCMAKE_BUILD_TYPE=${{matrix.buildType}} \
-            -DCMAKE_C_COMPILER=clang \          
-            -DCMAKE_CXX_COMPILER=clang++ \
-            -DDXFCXX_BUILD_DOC=OFF
+          cmake -G Ninja -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DDXFCXX_BUILD_DOC=OFF
 
       - name: Configure CMake (Linux)
         if: ${{ contains(matrix.config.os, 'linux') }}
         run: |
-          cmake -G "Ninja" -B ${{github.workspace}}/build \
+          cmake -G Ninja -B ${{github.workspace}}/build \
             -DCMAKE_BUILD_TYPE=${{matrix.buildType}} \
-            -DCMAKE_C_COMPILER=gcc-${{matrix.config.gcc}} \          
-            -DCMAKE_CXX_COMPILER=g++-${{matrix.config.gcc}} \
+            -DCMAKE_C_COMPILER=${{matrix.config.cc}} \
+            -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} \
             -DDXFCXX_BUILD_DOC=OFF
 
       - name: Configure CMake (Win)
@@ -70,8 +73,8 @@ jobs:
         run: |
           cmake -G "Ninja" -B ${{github.workspace}}/build ^
             -DCMAKE_BUILD_TYPE=${{matrix.buildType}} ^
-            -DCMAKE_C_COMPILER=cl ^
-            -DCMAKE_CXX_COMPILER=cl ^
+            -DCMAKE_C_COMPILER=${{matrix.config.cc}} ^
+            -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} ^
             -DDXFCXX_BUILD_DOC=OFF
 
       - name: Build
