@@ -47,16 +47,32 @@ jobs:
           ls
           mkdir ${{github.workspace}}/build    
 
-      - name: Configure CMake (!Linux)
-        if: ${{ !contains(matrix.config.os, 'linux') }}
-        run: cmake -B ${{github.workspace}}/build -G "Ninja" -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_BUILD_DOC=OFF
+      - name: Configure CMake (Mac)
+        if: ${{ contains(matrix.config.os, 'mac') }}
+        run: |
+          cmake -B ${{github.workspace}}/build -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=${{matrix.buildType}} \
+            -DCMAKE_C_COMPILER=clang \          
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DDXFCXX_BUILD_DOC=OFF
 
       - name: Configure CMake (Linux)
-        env:
-          CC: gcc-${{matrix.config.gcc}}
-          CXX: g++-${{matrix.config.gcc}}
         if: ${{ contains(matrix.config.os, 'linux') }}
-        run: cmake -B ${{github.workspace}}/build -G "Ninja" -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_BUILD_DOC=OFF
+        run: |
+          cmake -B ${{github.workspace}}/build -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=${{matrix.buildType}} \
+            -DCMAKE_C_COMPILER=gcc-${{matrix.config.gcc}} \          
+            -DCMAKE_CXX_COMPILER=g++-${{matrix.config.gcc}} \
+            -DDXFCXX_BUILD_DOC=OFF
+
+      - name: Configure CMake (Win)
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: |
+          cmake -B ${{github.workspace}}/build -G "Ninja" ^
+            -DCMAKE_BUILD_TYPE=${{matrix.buildType}} ^
+            -DCMAKE_C_COMPILER=cl ^
+            -DCMAKE_CXX_COMPILER=cl ^
+            -DDXFCXX_BUILD_DOC=OFF
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
