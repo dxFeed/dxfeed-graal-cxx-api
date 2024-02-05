@@ -53,14 +53,14 @@ jobs:
           - name: win-vs2022
             image: windows-latest
             os: windows
-            OS: Windows
+            osCamelCase: Windows
             cores: 4
             cc: 'cl'
             cxx: 'cl'
           - name: macos-13-xcode-15
             image: macos-13
             os: macos
-            OS: MacOS
+            osCamelCase: MacOS
             cores: 4
             xcode: '15.0'
             cc: 'clang'
@@ -68,14 +68,14 @@ jobs:
           - name: ubuntu-22.04-gcc-13
             image: ubuntu-22.04
             os: linux
-            OS: Linux
+            osCamelCase: Linux
             cores: 4
             cc: 'gcc-13'
             cxx: 'g++-13'
           - name: macos-14-xcode-15
             image: macos-14
             os: macos
-            OS: MacOS
+            osCamelCase: MacOS
             cores: 3
             xcode: '15.0'
             cc: 'clang'
