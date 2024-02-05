@@ -38,6 +38,10 @@ jobs:
         if: ${{ contains(matrix.config.os, 'macos') }}
         run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        if: ${{ contains(matrix.config.os, 'win') }}
+
       - name: Prepare build
         run: |
           ls
@@ -45,14 +49,14 @@ jobs:
 
       - name: Configure CMake (!Linux)
         if: ${{ !contains(matrix.config.os, 'linux') }}
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_BUILD_DOC=OFF
+        run: cmake -B ${{github.workspace}}/build -G "Ninja" -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_BUILD_DOC=OFF
 
       - name: Configure CMake (Linux)
         env:
           CC: gcc-${{matrix.config.gcc}}
           CXX: g++-${{matrix.config.gcc}}
         if: ${{ contains(matrix.config.os, 'linux') }}
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_BUILD_DOC=OFF
+        run: cmake -B ${{github.workspace}}/build -G "Ninja" -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_BUILD_DOC=OFF
 
       - name: Build (!Win)
         if: ${{ !contains(matrix.config.os, 'win') }}
