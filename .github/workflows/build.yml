@@ -18,7 +18,15 @@ jobs:
     strategy:
       matrix:
         #        os: [windows-latest, macos-latest, ubuntu-latest]
-        os: [ windows-latest, macos-13, ubuntu-22.04 ]
+        os: [ windows-latest, macos-13, ubuntu-22.04, macos-14 ]
+        cores: [ 4 ]
+        exclude:
+          - os: macos-14
+            cores: 4
+        include:
+          - os: macos-14
+            cores: 3
+
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -46,7 +54,7 @@ jobs:
 
 
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j ${{matrix.cores}}
 
       - name: Test
         working-directory: ${{github.workspace}}/build

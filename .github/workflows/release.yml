@@ -49,9 +49,16 @@ jobs:
     needs: [ get_version ]
     strategy:
       matrix:
-        os: [ windows-latest, macos-13, ubuntu-22.04 ]
-        #buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
+        os: [ windows-latest, macos-13, ubuntu-22.04, macos-14 ]
         buildType: [ Release, Debug ]
+        cores: [ 4 ]
+        exclude:
+          - os: macos-14
+            cores: 4
+        include:
+          - os: macos-14
+            cores: 3
+        #buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
     runs-on: ${{ matrix.os }}
     env:
       XCODE_VERSION: '15.0'
@@ -113,13 +120,13 @@ jobs:
           cmake -B ${{github.workspace}}/build-Tools -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Tools -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_BUILD_DOC=OFF
 
       - name: Build (Lib)
-        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}}
+        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}} -j ${{matrix.cores}}
 
       - name: Build (Samples & Tools)
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         run: |
-          cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}}
-          cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}}
+          cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}} -j ${{matrix.cores}}
+          cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}} -j ${{matrix.cores}}
 
       - name: Pack (Lib)
         working-directory: ${{github.workspace}}/build-${{matrix.buildType}}
