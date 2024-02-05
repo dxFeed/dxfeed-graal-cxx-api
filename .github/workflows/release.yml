@@ -119,14 +119,25 @@ jobs:
           cmake -B ${{github.workspace}}/build-Samples -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Samples -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
           cmake -B ${{github.workspace}}/build-Tools -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Tools -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Build (Lib)
+      - name: Build (Lib & !Win)
+        if: ${{ !contains(matrix.os, 'win') }}
         run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}} -j ${{matrix.cores}}
 
-      - name: Build (Samples & Tools)
-        if: ${{ !contains(matrix.buildType, 'Deb') }}
+      - name: Build (Lib & Win)
+        if: ${{ contains(matrix.os, 'win') }}
+        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}} -j ${{matrix.cores}} -- /p:CL_MPCount=${{matrix.cores}}
+
+      - name: Build (Samples & Tools & Release & !Win)
+        if: ${{ !contains(matrix.buildType, 'Deb') && !contains(matrix.os, 'win') }}
         run: |
           cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}} -j ${{matrix.cores}}
           cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}} -j ${{matrix.cores}}
+
+      - name: Build (Samples & Tools & Release & Win)
+        if: ${{ !contains(matrix.buildType, 'Deb') && contains(matrix.os, 'win') }}
+        run: |
+          cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}} -j ${{matrix.cores}} -- /p:CL_MPCount=${{matrix.cores}}
+          cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}} -j ${{matrix.cores}} -- /p:CL_MPCount=${{matrix.cores}}
 
       - name: Pack (Lib)
         working-directory: ${{github.workspace}}/build-${{matrix.buildType}}
