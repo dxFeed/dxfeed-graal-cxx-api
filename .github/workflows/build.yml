@@ -57,12 +57,16 @@ jobs:
       - name: Configure CMake (Mac)
         if: ${{ contains(matrix.config.os, 'mac') }}
         run: |
-          cmake -G Ninja -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DDXFCXX_BUILD_DOC=OFF
+          cmake -B ${{github.workspace}}/build \
+            -DCMAKE_BUILD_TYPE=${{matrix.buildType}} \
+            -DCMAKE_C_COMPILER=${{matrix.config.cc}} \
+            -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} \
+            -DDXFCXX_BUILD_DOC=OFF
 
       - name: Configure CMake (Linux)
         if: ${{ contains(matrix.config.os, 'linux') }}
         run: |
-          cmake -G Ninja -B ${{github.workspace}}/build \
+          cmake -B ${{github.workspace}}/build \
             -DCMAKE_BUILD_TYPE=${{matrix.buildType}} \
             -DCMAKE_C_COMPILER=${{matrix.config.cc}} \
             -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} \
