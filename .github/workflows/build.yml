@@ -7,57 +7,60 @@ on:
   pull_request:
   workflow_dispatch:
 
-env:
-  XCODE_VERSION: '15.0'
-  GCC_VERSION: '12'
-
 jobs:
   build:
     strategy:
       matrix:
-        #        os: [windows-latest, macos-latest, ubuntu-latest]
-        os: [ windows-latest, macos-13, ubuntu-22.04, macos-14 ]
-        buildType: [ Release ]
-        cores: [ 4 ]
-        exclude:
-          - os: macos-14
+        config:
+          - image: windows-latest
+            os: windows
             cores: 4
-        include:
-          - os: macos-14
+          - image: macos-13
+            os: macos
+            cores: 4
+            xcode: '15.0'
+          - image: ubuntu-22.04
+            os: linux
+            cores: 4
+            gcc: '13'
+          - image: macos-14
+            os: macos
             cores: 3
+            xcode: '15.0'
+        buildType: [ Release ]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.config.image }}
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Select Xcode version
-        if: ${{ contains(matrix.os, 'macos') }}
-        run: sudo xcode-select -s '/Applications/Xcode_${{env.XCODE_VERSION}}.app/Contents/Developer'
+        if: ${{ contains(matrix.config.os, 'macos') }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
 
       - name: Prepare build
         run: |
           ls
           mkdir ${{github.workspace}}/build    
 
-      - name: Configure CMake (!Ubuntu)
-        if: ${{ !contains(matrix.os, 'ubuntu') }}
+      - name: Configure CMake (!Linux)
+        if: ${{ !contains(matrix.config.os, 'linux') }}
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Configure CMake (Ubuntu)
+      - name: Configure CMake (Linux)
         env:
-          CC: gcc-${{env.GCC_VERSION}}
-          CXX: g++-${{env.GCC_VERSION}}
-        if: ${{ contains(matrix.os, 'ubuntu') }}
+          CC: gcc-${{matrix.config.gcc}}
+          CXX: g++-${{matrix.config.gcc}}
+        if: ${{ contains(matrix.config.os, 'linux') }}
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_BUILD_DOC=OFF
 
       - name: Build (!Win)
-        if: ${{ !contains(matrix.os, 'win') }}
-        run: cmake --build ${{github.workspace}}/build --config ${{matrix.buildType}} -j ${{matrix.cores}}
+        if: ${{ !contains(matrix.config.os, 'win') }}
+        run: cmake --build ${{github.workspace}}/build --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
 
       - name: Build (Win)
-        if: ${{ contains(matrix.os, 'win') }}
-        run: cmake --build ${{github.workspace}}/build --config ${{matrix.buildType}} -j ${{matrix.cores}} -- /p:CL_MPCount=${{matrix.cores}}
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: cmake --build ${{github.workspace}}/build --config ${{matrix.buildType}} -j ${{matrix.config.cores}} -- /p:CL_MPCount=${{matrix.config.cores}}
 
       - name: Test
         working-directory: ${{github.workspace}}/build
