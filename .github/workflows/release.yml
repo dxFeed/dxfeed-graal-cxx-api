@@ -28,7 +28,7 @@ jobs:
       version: ${{ steps.set_version.outputs.version }}
       tag_name: ${{ steps.set_version.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: get_latest_tag
         run: |
           echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
@@ -45,123 +45,136 @@ jobs:
           fi
 
   build_package_and_upload:
-    name: Build, Package & Upload
+    name: "${{ matrix.config.name }}-${{matrix.buildType}}: Build, Package & Upload"
     needs: [ get_version ]
     strategy:
       matrix:
-        os: [ windows-latest, macos-13, ubuntu-22.04, macos-14 ]
-        buildType: [ Release, Debug ]
-        cores: [ 4 ]
-        exclude:
-          - os: macos-14
+        config:
+          - name: win-vs2022
+            image: windows-latest
+            os: windows
+            OS: Windows
             cores: 4
-        include:
-          - os: macos-14
+            cc: 'cl'
+            cxx: 'cl'
+          - name: macos-13-xcode-15
+            image: macos-13
+            os: macos
+            OS: MacOS
+            cores: 4
+            xcode: '15.0'
+            cc: 'clang'
+            cxx: 'clang++'
+          - name: ubuntu-22.04-gcc-13
+            image: ubuntu-22.04
+            os: linux
+            OS: Linux
+            cores: 4
+            cc: 'gcc-13'
+            cxx: 'g++-13'
+          - name: macos-14-xcode-15
+            image: macos-14
+            os: macos
+            OS: MacOS
             cores: 3
-        #buildType: [ Release, Debug, RelWithDebInfo, MinSizeRel ]
+            xcode: '15.0'
+            cc: 'clang'
+            cxx: 'clang++'
+        buildType: [ Release, Debug ]
     runs-on: ${{ matrix.os }}
-    env:
-      XCODE_VERSION: '15.0'
-      GCC_VERSION: '12'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Select Xcode version
-        if: ${{ contains(matrix.os, 'macos') }}
+      - name: Select Xcode version [${{ matrix.config.OS }}]
+        if: ${{ contains(matrix.config.os, 'macos') }}
         run: sudo xcode-select -s '/Applications/Xcode_${{env.XCODE_VERSION}}.app/Contents/Developer'
 
-      - name: Prepare build
+      - name: Prepare build [All]
         run: |
           ls
           mkdir ${{github.workspace}}/build-${{matrix.buildType}}
 
-      - name: Prepare build (Samples & Tools)
+      - name: Prepare build [Samples][Tools][${{matrix.buildType}}]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         run: |
           ls
           mkdir ${{github.workspace}}/build-Samples          
           mkdir ${{github.workspace}}/build-Tools          
 
-      - name: Configure CMake (Win::Lib)
-        if: ${{ contains(matrix.os, 'windows') }}
+      - name: Configure CMake [Lib][${{ matrix.config.OS }}]
+        if: ${{ contains(matrix.config.os, 'win') }}
         run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}" -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF  -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Configure CMake (Win::Samples & Tools)
-        if: ${{ contains(matrix.os, 'windows') && !contains(matrix.buildType, 'Deb') }}
+      - name: Configure CMake [Samples][Tools][${{ matrix.config.OS }}][${{matrix.buildType}}]
+        if: ${{ contains(matrix.config.os, 'windows') && !contains(matrix.buildType, 'Deb') }}
         run: |
           cmake -B ${{github.workspace}}/build-Samples -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-Samples" -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
           cmake -B ${{github.workspace}}/build-Tools -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}" -DDXFCXX_PACKAGE_SUFFIX="-Tools" -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Configure CMake (MacOS::Lib)
-        if: ${{ contains(matrix.os, 'macos') }}
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}} -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
+      - name: Configure CMake [Lib][${{ matrix.config.OS }}]
+        if: ${{ contains(matrix.config.os, 'macos') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}} -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Configure CMake (MacOS::Samples & Tools)
-        if: ${{ contains(matrix.os, 'macos') && !contains(matrix.buildType, 'Deb') }}
+      - name: Configure CMake [Samples][Tools][${{ matrix.config.OS }}][${{matrix.buildType}}]
+        if: ${{ contains(matrix.config.os, 'macos') && !contains(matrix.buildType, 'Deb') }}
         run: |
-          cmake -B ${{github.workspace}}/build-Samples -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Samples -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
-          cmake -B ${{github.workspace}}/build-Tools -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Tools -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_BUILD_DOC=OFF
+          cmake -B ${{github.workspace}}/build-Samples -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Samples -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
+          cmake -B ${{github.workspace}}/build-Tools -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Tools -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Configure CMake (Ubuntu::Lib)
-        env:
-          CC: gcc-${{env.GCC_VERSION}}
-          CXX: g++-${{env.GCC_VERSION}}
-        if: ${{ contains(matrix.os, 'ubuntu') }}
-        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}} -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
+      - name: Configure CMake [Lib][${{ matrix.config.OS }}]
+        if: ${{ contains(matrix.config.os, 'linux') }}
+        run: cmake -B ${{github.workspace}}/build-${{matrix.buildType}} -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}} -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Configure CMake (Ubuntu::Samples & Tools)
-        env:
-          CC: gcc-${{env.GCC_VERSION}}
-          CXX: g++-${{env.GCC_VERSION}}
-        if: ${{ contains(matrix.os, 'ubuntu') && !contains(matrix.buildType, 'Deb') }}
+      - name: Configure CMake [Samples][Tools][${{ matrix.config.OS }}][${{matrix.buildType}}]
+        if: ${{ contains(matrix.config.os, 'linux') && !contains(matrix.buildType, 'Deb') }}
         run: |
-          cmake -B ${{github.workspace}}/build-Samples -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Samples -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
-          cmake -B ${{github.workspace}}/build-Tools -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Tools -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_BUILD_DOC=OFF
+          cmake -B ${{github.workspace}}/build-Samples -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Samples -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_TOOLS=OFF -DDXFCXX_BUILD_DOC=OFF
+          cmake -B ${{github.workspace}}/build-Tools -DCMAKE_BUILD_TYPE=${{matrix.buildType}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DDXFCXX_VERSION=${{needs.get_version.outputs.version}} -DDXFCXX_PACKAGE_SUFFIX=-Tools -DDXFCXX_BUILD_UNIT_TESTS=OFF -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_INSTALL_LIB=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Build (Lib & !Win)
-        if: ${{ !contains(matrix.os, 'win') }}
-        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}} -j ${{matrix.cores}}
+      - name: Build [Lib][${{ matrix.config.OS }}]
+        if: ${{ !contains(matrix.config.os, 'win') }}
+        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
 
-      - name: Build (Lib & Win)
-        if: ${{ contains(matrix.os, 'win') }}
-        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}} -j ${{matrix.cores}} -- /p:CL_MPCount=${{matrix.cores}}
+      - name: Build [Lib][${{ matrix.config.OS }}]
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: cmake --build ${{github.workspace}}/build-${{matrix.buildType}} --config ${{matrix.buildType}} -j ${{matrix.config.cores}} -- /p:CL_MPCount=${{matrix.config.cores}}
 
-      - name: Build (Samples & Tools & Release & !Win)
-        if: ${{ !contains(matrix.buildType, 'Deb') && !contains(matrix.os, 'win') }}
+      - name: Build [Samples][Tools]
+        if: ${{ !contains(matrix.buildType, 'Deb') && !contains(matrix.config.os, 'win') }}
         run: |
-          cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}} -j ${{matrix.cores}}
-          cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}} -j ${{matrix.cores}}
+          cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
+          cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
 
-      - name: Build (Samples & Tools & Release & Win)
-        if: ${{ !contains(matrix.buildType, 'Deb') && contains(matrix.os, 'win') }}
+      - name: Build [Samples][Tools]
+        if: ${{ !contains(matrix.buildType, 'Deb') && contains(matrix.config.os, 'win') }}
         run: |
-          cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}} -j ${{matrix.cores}} -- /p:CL_MPCount=${{matrix.cores}}
-          cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}} -j ${{matrix.cores}} -- /p:CL_MPCount=${{matrix.cores}}
+          cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}} -j ${{matrix.config.cores}} -- /p:CL_MPCount=${{matrix.config.cores}}
+          cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}} -j ${{matrix.config.cores}} -- /p:CL_MPCount=${{matrix.config.cores}}
 
-      - name: Pack (Lib)
+      - name: Pack [Lib][All]
         working-directory: ${{github.workspace}}/build-${{matrix.buildType}}
         run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
-      - name: Pack (Samples)
+      - name: Pack [Samples][All][${{matrix.buildType}}]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         working-directory: ${{github.workspace}}/build-Samples
         run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
-      - name: Pack (Tools)
+      - name: Pack [Tools][All][${{matrix.buildType}}]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         working-directory: ${{github.workspace}}/build-Tools
         run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Upload (Lib)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: artifacts
           path: build-${{matrix.buildType}}/*.zip
 
       - name: Upload (Samples & Tools)
         if: ${{ !contains(matrix.buildType, 'Deb') }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: artifacts
           path: |
@@ -176,9 +189,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
 
       - name: 'Echo download path'
         run: echo ${{steps.download.outputs.download-path}}
