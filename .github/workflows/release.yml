@@ -29,6 +29,11 @@ jobs:
       tag_name: ${{ steps.set_version.outputs.tag_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          fetch-tags: 'true'
+          fetch-depth: '0'
+          show-progress: 'true'
       - id: get_latest_tag
         run: |
           echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
