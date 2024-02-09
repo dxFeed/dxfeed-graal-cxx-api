@@ -107,6 +107,4 @@ thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
 
 const auto I = Isolate::getInstance();
 
-std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::INSTANCES{};
-
 } // namespace dxfcpp

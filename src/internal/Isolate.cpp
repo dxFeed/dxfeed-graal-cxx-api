@@ -362,6 +362,20 @@ dxfcpp::DXEndpoint::State DXEndpoint::getState(/* dxfg_endpoint_t* */ void *graa
         dxfcpp::DXEndpoint::State::CLOSED, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle));
 }
 
+void *DXEndpointStateChangeListener::create(void *userFunc, void *userData) noexcept {
+    if (!userFunc) {
+        // TODO: Improve error handling [EN-8232]
+        return nullptr;
+    }
+
+    return dxfcpp::bit_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&userFunc, auto &&userData) {
+            return dxfg_PropertyChangeListener_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), userFunc,
+                                                   userData);
+        },
+        nullptr, dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc), userData));
+}
+
 } // namespace api
 
 namespace ipf {

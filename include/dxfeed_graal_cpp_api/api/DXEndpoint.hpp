@@ -62,8 +62,8 @@ struct OnDemandService;
  *   This endpoint is automatically connected to the configured data feed as explained in default properties section.
  * - @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" is similar to @ref Role::FEED "FEED", but it is designed to be used with
  *   OnDemandService for historical data replay only. It is configured with default properties, but is not connected
- *   automatically to the data provider until @ref OnDemandService::replay(std::int64_t,double) "OnDemandService::replay"
- * method is invoked.
+ *   automatically to the data provider until @ref OnDemandService::replay(std::int64_t,double)
+ * "OnDemandService::replay" method is invoked.
  * - @ref Role::STREAM_FEED "STREAM_FEED" is similar to @ref Role::FEED "FEED" and also connects to the remote data
  *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
  *   object that subscribes to the data from the opened files and receives events from them. Events from the files are
@@ -432,24 +432,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
         LOCAL_HUB
     };
 
-    static std::string roleToString(Role role) {
-        switch (role) {
-        case Role::FEED:
-            return "FEED";
-        case Role::ON_DEMAND_FEED:
-            return "ON_DEMAND_FEED";
-        case Role::STREAM_FEED:
-            return "STREAM_FEED";
-        case Role::PUBLISHER:
-            return "PUBLISHER";
-        case Role::STREAM_PUBLISHER:
-            return "STREAM_PUBLISHER";
-        case Role::LOCAL_HUB:
-            return "LOCAL_HUB";
-        }
-
-        return "";
-    }
+    static std::string roleToString(Role role);
 
     /**
      * Represents the current state of endpoint.
@@ -479,25 +462,9 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
         CLOSED
     };
 
-    static auto stateToString(State state) {
-        switch (state) {
-        case State::NOT_CONNECTED:
-            return "NOT_CONNECTED";
-        case State::CONNECTING:
-            return "CONNECTING";
-        case State::CONNECTED:
-            return "CONNECTED";
-        case State::CLOSED:
-            return "CLOSED";
-        }
-
-        return "";
-    }
+    static std::string stateToString(State state);
 
   private:
-    static inline std::mutex MTX{};
-    static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
-
     JavaObjectHandle<DXEndpoint> handle_;
     Role role_ = Role::FEED;
     std::string name_{};
@@ -513,19 +480,15 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
 
     void closeImpl();
 
+    struct Impl;
+
+    std::unique_ptr<Impl> impl_;
+
   protected:
-    DXEndpoint() : handle_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandle_{}, onStateChange_{} {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint()");
-        }
-    }
+    DXEndpoint() noexcept;
 
   public:
-    ~DXEndpoint() noexcept override {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint{" + handle_.toString() + "}::~DXEndpoint()");
-        }
-    }
+    ~DXEndpoint() noexcept override;
 
     /**
      * Returns a default application-wide singleton instance of DXEndpoint with a @ref Role::FEED "FEED" role.
@@ -540,13 +503,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * DXEndpoint.Role::FEED "FEED").
      * @see DXEndpoint::getInstance(Role)
      */
-    static std::shared_ptr<DXEndpoint> getInstance() {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint::getInstance()");
-        }
-
-        return getInstance(Role::FEED);
-    }
+    static std::shared_ptr<DXEndpoint> getInstance() noexcept;
 
     /**
      * Returns a default application-wide singleton instance of DXEndpoint for a specific role.
@@ -567,19 +524,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * @param role The role of DXEndpoint instance
      * @return The DXEndpoint instance
      */
-    static std::shared_ptr<DXEndpoint> getInstance(Role role) {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint::getInstance(role = " + roleToString(role) + ")");
-        }
-
-        std::lock_guard lock(MTX);
-
-        if (INSTANCES.contains(role)) {
-            return INSTANCES[role];
-        }
-
-        return INSTANCES[role] = newBuilder()->withRole(role)->build();
-    }
+    static std::shared_ptr<DXEndpoint> getInstance(Role role) noexcept;
 
     /**
      * Creates an endpoint with @ref Role::FEED "FEED" role.
@@ -589,13 +534,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @return the created endpoint.
      */
-    static std::shared_ptr<DXEndpoint> create() {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint::create()");
-        }
-
-        return newBuilder()->build();
-    }
+    static std::shared_ptr<DXEndpoint> create() noexcept;
 
     /**
      * Creates an endpoint with a specified role.
@@ -606,13 +545,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * @param role the role.
      * @return the created endpoint.
      */
-    static std::shared_ptr<DXEndpoint> create(Role role) {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint::create(role = " + roleToString(role) + ")");
-        }
-
-        return newBuilder()->withRole(role)->build();
-    }
+    static std::shared_ptr<DXEndpoint> create(Role role) noexcept;
 
     /**
      * Returns the role of this endpoint.
@@ -621,9 +554,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @see DXEndpoint
      */
-    Role getRole() const {
-        return role_;
-    }
+    Role getRole() const noexcept;
 
     /**
      * Returns the state of this endpoint.
@@ -632,19 +563,15 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @see DXEndpoint
      */
-    State getState() const;
+    State getState() const noexcept;
 
     /// @return `true` if the endpoint is closed
-    bool isClosed() const {
-        return getState() == State::CLOSED;
-    }
+    bool isClosed() const noexcept;
 
     /**
      * @return The user defined endpoint's name
      */
-    const std::string &getName() const & {
-        return name_;
-    }
+    const std::string &getName() const & noexcept;
 
     /**
      * Adds listener that is notified about changes in @ref DXEndpoint::getState() "state" property.
@@ -673,9 +600,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @param listenerId The listener id to remove
      */
-    void removeStateChangeListener(std::size_t listenerId) noexcept {
-        onStateChange_ -= listenerId;
-    }
+    void removeStateChangeListener(std::size_t listenerId) noexcept;
 
     /**
      * Returns the onStateChange @ref SimpleHandler<void(ArgTypes...)> "handler" that can be used to add or remove
@@ -683,9 +608,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @return onStateChange handler with `void(State, State)` signature
      */
-    auto &onStateChange() noexcept {
-        return onStateChange_;
-    }
+    SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &onStateChange() noexcept;
 
     /**
      * Changes user name for this endpoint.
@@ -696,7 +619,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @return this DXEndpoint.
      */
-    std::shared_ptr<DXEndpoint> user(const std::string &user);
+    std::shared_ptr<DXEndpoint> user(const std::string &user) noexcept;
 
     /**
      * Changes password for this endpoint.
@@ -707,7 +630,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @return this DXEndpoint.
      */
-    std::shared_ptr<DXEndpoint> password(const std::string &password);
+    std::shared_ptr<DXEndpoint> password(const std::string &password) noexcept;
 
     /**
      * Connects to the specified remote address. Previously established connections are closed if
@@ -737,7 +660,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * @param address The data source address.
      * @return this DXEndpoint.
      */
-    std::shared_ptr<DXEndpoint> connect(const std::string &address);
+    std::shared_ptr<DXEndpoint> connect(const std::string &address) noexcept;
 
     /**
      * Terminates all established network connections and initiates connecting again with the same address.
@@ -755,7 +678,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#reconnect--)
      */
-    void reconnect();
+    void reconnect() noexcept;
 
     /**
      * Terminates all remote network connections.
@@ -767,7 +690,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnect--)
      */
-    void disconnect();
+    void disconnect() noexcept;
 
     /**
      * Terminates all remote network connections and clears stored data.
@@ -779,7 +702,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnectAndClear--)
      */
-    void disconnectAndClear();
+    void disconnectAndClear() noexcept;
 
     /**
      * Closes this endpoint. All network connection are terminated as with ::disconnect() method and no further
@@ -790,13 +713,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#close--)
      */
-    void close() {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint{" + handle_.toString() + "}::close()");
-        }
-
-        closeImpl();
-    }
+    void close() noexcept;
 
     /**
      * Waits while this endpoint @ref ::getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
@@ -809,7 +726,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitNotConnected--)
      */
-    void awaitNotConnected();
+    void awaitNotConnected() noexcept;
 
     /**
      * Waits until this endpoint stops processing data (becomes quiescent).
@@ -818,7 +735,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitProcessed--)
      */
-    void awaitProcessed();
+    void awaitProcessed() noexcept;
 
     /**
      * Closes this endpoint and wait until all pending data processing tasks are completed.
@@ -831,22 +748,20 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#closeAndAwaitTermination--)
      */
-    void closeAndAwaitTermination();
+    void closeAndAwaitTermination() noexcept;
 
     // TODO: implement [EN-8234]
-    std::unordered_set<EventTypeEnum> getEventTypes() {
-        return {};
-    }
+    std::unordered_set<EventTypeEnum> getEventTypes() noexcept;
 
     /**
      * @return The feed that is associated with this endpoint.
      */
-    std::shared_ptr<DXFeed> getFeed();
+    std::shared_ptr<DXFeed> getFeed() noexcept;
 
     /**
      * @return The publisher that is associated with this endpoint.
      */
-    std::shared_ptr<DXPublisher> getPublisher();
+    std::shared_ptr<DXPublisher> getPublisher() noexcept;
 
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.
@@ -858,11 +773,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() : handle_{}, properties_{} {
-            if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder::Builder()");
-            }
-        }
+        Builder() noexcept;
 
         static std::shared_ptr<Builder> create() noexcept;
 
@@ -878,15 +789,11 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          *
          * Non thread-safe.
          */
-        void loadDefaultPropertiesImpl();
+        void loadDefaultPropertiesImpl() noexcept;
 
       public:
         /// Releases the GraalVM handle
-        virtual ~Builder() {
-            if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::~Builder()");
-            }
-        }
+        virtual ~Builder() noexcept;
 
         /**
          * Changes name that is used to distinguish multiple endpoints
@@ -897,14 +804,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          *
          * @return `this` endpoint builder.
          */
-        std::shared_ptr<Builder> withName(const std::string &name) {
-            // TODO: check invalid utf-8 [EN-8233]
-            if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");
-            }
-
-            return withProperty(NAME_PROPERTY, name);
-        }
+        std::shared_ptr<Builder> withName(const std::string &name) noexcept;
 
         /**
          * Sets role for the created DXEndpoint.
@@ -914,7 +814,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          *
          * @return `this` endpoint builder.
          */
-        std::shared_ptr<Builder> withRole(Role role);
+        std::shared_ptr<Builder> withRole(Role role) noexcept;
 
         /**
          * Sets the specified property. Unsupported properties are ignored.
@@ -925,7 +825,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          *
          * @see ::supportsProperty(const std::string&)
          */
-        std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value);
+        std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value) noexcept;
 
         /**
          * Sets all supported properties from the provided properties object.
@@ -936,7 +836,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          *
          * @see ::withProperty(const std::string&, const std::string&)
          */
-        template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
+        template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) noexcept {
             if constexpr (Debugger::isDebug) {
                 Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperties(properties[" +
                                 std::to_string(properties.size()) + "])");
@@ -957,14 +857,14 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
          *
          * @see ::withProperty(const std::string&, const std::string&)
          */
-        bool supportsProperty(const std::string &key);
+        bool supportsProperty(const std::string &key) noexcept;
 
         /**
          * Builds DXEndpoint instance.
          *
          * @return the created endpoint.
          */
-        std::shared_ptr<DXEndpoint> build();
+        std::shared_ptr<DXEndpoint> build() noexcept;
     };
 
     /**
@@ -973,13 +873,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @return the created endpoint builder.
      */
-    static std::shared_ptr<Builder> newBuilder() noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXEndpoint::newBuilder()");
-        }
-
-        return Builder::create();
-    }
+    static std::shared_ptr<Builder> newBuilder() noexcept;
 
     std::string toString() const noexcept override;
 };
