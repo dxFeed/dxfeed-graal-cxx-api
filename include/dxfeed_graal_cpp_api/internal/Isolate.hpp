@@ -76,6 +76,8 @@ class Isolate final {
     IsolateThread mainIsolateThread_;
     static thread_local IsolateThread currentIsolateThread_;
 
+    Isolate() noexcept;
+
     Isolate(GraalIsolateHandle handle, GraalIsolateThreadHandle mainIsolateThreadHandle) noexcept
         : mtx_{}, handle_{handle}, mainIsolateThread_{mainIsolateThreadHandle, true} {
 
@@ -88,26 +90,23 @@ class Isolate final {
         }
     }
 
-    static std::shared_ptr<Isolate> create() noexcept;
-
     CEntryPointErrorsEnum attach() noexcept;
 
     GraalIsolateThreadHandle get() noexcept;
 
   public:
-    Isolate() = delete;
     Isolate(const Isolate &) = delete;
     Isolate &operator=(const Isolate &) = delete;
 
-    static std::shared_ptr<Isolate> getInstance() noexcept {
+    static Isolate& getInstance() noexcept {
         if constexpr (Debugger::traceIsolates) {
             Debugger::trace("Isolate::getInstance()");
         }
 
-        static std::shared_ptr<Isolate> instance = create();
+        static Isolate instance{};
 
         if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("Isolate::getInstance() -> *" + instance->toString());
+            Debugger::trace("Isolate::getInstance() -> " + instance.toString());
         }
 
         return instance;
@@ -180,7 +179,7 @@ class Isolate final {
                     return arg;
                 }
             },
-            Isolate::getInstance()->runIsolated(std::forward<F>(f)));
+            Isolate::getInstance().runIsolated(std::forward<F>(f)));
     }
 
     template <typename F, typename R, typename Arg, typename... Args>
@@ -197,7 +196,7 @@ class Isolate final {
                     return arg;
                 }
             },
-            Isolate::getInstance()->runIsolated(std::forward<F>(f), std::forward<Arg>(arg),
+            Isolate::getInstance().runIsolated(std::forward<F>(f), std::forward<Arg>(arg),
                                                 std::forward<Args>(args)...));
     }
 
@@ -214,7 +213,7 @@ class Isolate final {
 };
 
 template <typename F> auto runIsolated(F &&f) {
-    return Isolate::getInstance()->runIsolated(std::forward<F>(f));
+    return Isolate::getInstance().runIsolated(std::forward<F>(f));
 }
 
 template <typename F, typename R>
@@ -222,7 +221,7 @@ template <typename F, typename R>
     requires dxfcpp::ConvertibleTo<R, std::invoke_result_t<F &&, GraalIsolateThreadHandle>>
 #endif
 auto runIsolatedOrElse(F &&f, R defaultValue) {
-    return Isolate::getInstance()->runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue));
+    return Isolate::getInstance().runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue));
 }
 
 template <typename F, typename R, typename Arg, typename... Args>
@@ -230,7 +229,7 @@ template <typename F, typename R, typename Arg, typename... Args>
     requires dxfcpp::ConvertibleTo<R, std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...>>
 #endif
 auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
-    return Isolate::getInstance()->runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue),
+    return Isolate::getInstance().runIsolatedOrElse(std::forward<F>(f), std::move(defaultValue),
                                                      std::forward<Arg>(arg), std::forward<Args>(args)...);
 }
 

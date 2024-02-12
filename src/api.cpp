@@ -105,6 +105,6 @@ const std::unordered_map<CEntryPointErrors::CodeType, std::reference_wrapper<con
 
 thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
 
-const auto I = Isolate::getInstance();
+auto IS = Isolate::getInstance().toString();
 
 } // namespace dxfcpp

@@ -64,9 +64,9 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate
     return result;
 }
 
-std::shared_ptr<Isolate> Isolate::create() noexcept {
+Isolate::Isolate() noexcept : mtx_{} {
     if constexpr (Debugger::traceIsolates) {
-        Debugger::trace("Isolate::create()");
+        Debugger::trace("Isolate::Isolate()");
     }
 
     graal_isolate_t *graalIsolateHandle{};
@@ -75,21 +75,17 @@ std::shared_ptr<Isolate> Isolate::create() noexcept {
     if (static_cast<CEntryPointErrorsEnum>(graal_create_isolate(
             nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) == CEntryPointErrorsEnum::NO_ERROR) {
 
-        auto result =
-            std::shared_ptr<Isolate>{new (std::nothrow) Isolate{graalIsolateHandle, graalIsolateThreadHandle}};
+        handle_ = graalIsolateHandle;
+        mainIsolateThread_ = std::move(IsolateThread{graalIsolateThreadHandle, true});
 
-        if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("Isolate::create() -> *" + result->toString());
-        }
-
-        return result;
+        currentIsolateThread_.handle = graalIsolateThreadHandle;
+        currentIsolateThread_.isMain = true;
     }
 
     if constexpr (Debugger::traceIsolates) {
-        Debugger::trace("Isolate::create() -> nullptr");
+        Debugger::trace("Isolate::Isolate() -> " + std::string("Isolate{") + dxfcpp::toString(dxfcpp::bit_cast<void *>(handle_)) +
+                        ", main = " + mainIsolateThread_.toString() + ", current = " + currentIsolateThread_.toString() + "}");
     }
-
-    return nullptr;
 }
 
 CEntryPointErrorsEnum Isolate::attach() noexcept {
