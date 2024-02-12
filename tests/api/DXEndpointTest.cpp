@@ -52,62 +52,62 @@ auto cApiStateToString(dxfc_dxendpoint_state_t state) {
     return "";
 }
 
-TEST_CASE("dxfc_dxendpoint_builder_t bug") {
-//    dxfc_dxendpoint_builder_t builder{};
-//
-//    auto result = dxfc_dxendpoint_new_builder(&builder);
-//
-//    if (result != DXFC_EC_SUCCESS) {
-//        return;
-//    }
-//
-//    result = dxfc_dxendpoint_builder_with_role(builder, DXFC_DXENDPOINT_ROLE_FEED);
-//
-//    if (result != DXFC_EC_SUCCESS) {
-//        return;
-//    }
-//
-//    dxfc_dxendpoint_t endpoint{};
-//
-//    result = dxfc_dxendpoint_builder_build(builder, nullptr, &endpoint);
-//
-//    if (result != DXFC_EC_SUCCESS) {
-//        return;
-//    }
-//
-//    result = dxfc_dxendpoint_add_state_change_listener(
-//        endpoint, [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *) {
-//            std::cerr << "dxfc_dxendpoint_builder_t Test: {}" + std::string("State changed: ") +
-//                             cApiStateToString(oldState) + " -> " + cApiStateToString(newState) + "\n";
-//        });
-//
-//    if (result != DXFC_EC_SUCCESS) {
-//        return;
-//    }
-//
-//    result = dxfc_dxendpoint_connect(endpoint, "demo.dxfeed.com:7300");
-//
-//    if (result != DXFC_EC_SUCCESS) {
-//        return;
-//    }
-//
-//    std::this_thread::sleep_for(std::chrono::seconds(5));
-//
-//    result = dxfc_dxendpoint_disconnect(endpoint);
-//
-//    if (result != DXFC_EC_SUCCESS) {
-//        return;
-//    }
-//
-//    result = dxfc_dxendpoint_connect(endpoint, "demo.dxfeed.com:7300");
-//
-//    if (result != DXFC_EC_SUCCESS) {
-//        return;
-//    }
-//
-//    dxfc_dxendpoint_close(endpoint);
-//
-//    std::this_thread::sleep_for(std::chrono::seconds(10));
+TEST_CASE("dxfc_dxendpoint_builder_t") {
+    dxfc_dxendpoint_builder_t builder{};
+
+    auto result = dxfc_dxendpoint_new_builder(&builder);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_dxendpoint_builder_with_role(builder, DXFC_DXENDPOINT_ROLE_FEED);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    dxfc_dxendpoint_t endpoint{};
+
+    result = dxfc_dxendpoint_builder_build(builder, nullptr, &endpoint);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_dxendpoint_add_state_change_listener(
+        endpoint, [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *) {
+            std::cerr << "dxfc_dxendpoint_builder_t Test: " + std::string("State changed: ") +
+                             cApiStateToString(oldState) + " -> " + cApiStateToString(newState) + "\n";
+        });
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_dxendpoint_connect(endpoint, "demo.dxfeed.com:7300");
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    result = dxfc_dxendpoint_disconnect(endpoint);
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    result = dxfc_dxendpoint_connect(endpoint, "demo.dxfeed.com:7300");
+
+    if (result != DXFC_EC_SUCCESS) {
+        return;
+    }
+
+    dxfc_dxendpoint_close(endpoint);
+
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
 TEST_CASE("DXFeedSubscription") {
