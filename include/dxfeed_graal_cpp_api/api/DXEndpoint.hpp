@@ -474,9 +474,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     SimpleHandler<void(State, State)> onStateChange_{};
 
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
-                                              const std::unordered_map<std::string, std::string> &properties);
-
-    void setStateChangeListenerImpl();
+                                              const std::unordered_map<std::string, std::string> &properties) noexcept;
 
     void closeImpl();
 

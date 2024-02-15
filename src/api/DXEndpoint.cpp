@@ -108,8 +108,9 @@ struct DXEndpoint::Impl {
 
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::Impl::INSTANCES{};
 
-std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
-                                               const std::unordered_map<std::string, std::string> &properties) {
+std::shared_ptr<DXEndpoint>
+DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
+                   const std::unordered_map<std::string, std::string> &properties) noexcept {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::create(handle = " + dxfcpp::toString(endpointHandle) +
                         ", role = " + roleToString(role) + ", properties[" + std::to_string(properties.size()) + "])");
@@ -129,27 +130,12 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 
     auto id = ApiContext::getInstance()->getManager<DXEndpointManager>()->registerEntity(endpoint);
 
-    endpoint->stateChangeListenerHandle_ =
-        JavaObjectHandle<DXEndpointStateChangeListener>(isolated::api::DXEndpointStateChangeListener::create(
-            dxfcpp::bit_cast<void *>(&DXEndpoint::Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue())));
-    endpoint->setStateChangeListenerImpl();
+    endpoint->stateChangeListenerHandle_ = isolated::api::DXEndpointStateChangeListener::create(
+        dxfcpp::bit_cast<void *>(&DXEndpoint::Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
+
+    isolated::api::DXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
 
     return endpoint;
-}
-
-void DXEndpoint::setStateChangeListenerImpl() {
-    if (!handle_ || !stateChangeListenerHandle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get()),
-         stateChangeListenerHandle = dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_t *>(
-             stateChangeListenerHandle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_addStateChangeListener(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                          handle, stateChangeListenerHandle) == 0;
-        },
-        false);
 }
 
 DXEndpoint::State DXEndpoint::getState() const noexcept {

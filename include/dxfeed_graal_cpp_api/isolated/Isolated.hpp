@@ -43,10 +43,15 @@ struct DXEndpoint {
     static bool user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &user) noexcept;
     static bool password(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &password) noexcept;
     static bool connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &address) noexcept;
+    static bool /* int32_t */
+    addStateChangeListener(
+        /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+        /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
+            &listener) noexcept;
 };
 
 struct DXEndpointStateChangeListener {
-    static /* dxfg_endpoint_state_change_listener_t* */ void *
+    static /* dxfg_endpoint_state_change_listener_t* */ JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
     create(/* dxfg_endpoint_state_change_listener_func */ void *userFunc, void *userData) noexcept;
 };
 
