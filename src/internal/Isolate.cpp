@@ -289,8 +289,8 @@ static dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) 
     return dxfcpp::DXEndpoint::State::NOT_CONNECTED;
 }
 
-bool DXEndpoint::close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept {
-    if (!graalDXEndpointHandle) {
+bool DXEndpoint::close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
+    if (!endpoint) {
         // TODO: Improve error handling [EN-8232]
         return false;
     }
@@ -300,11 +300,12 @@ bool DXEndpoint::close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexc
             return dxfg_DXEndpoint_close(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
                                          graalDXEndpointHandle) == 0;
         },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle));
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-dxfcpp::DXEndpoint::State DXEndpoint::getState(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept {
-    if (!graalDXEndpointHandle) {
+dxfcpp::DXEndpoint::State
+DXEndpoint::getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
+    if (!endpoint) {
         // TODO: Improve error handling [EN-8232]
         return dxfcpp::DXEndpoint::State::CLOSED;
     }
@@ -314,11 +315,12 @@ dxfcpp::DXEndpoint::State DXEndpoint::getState(/* dxfg_endpoint_t* */ void *graa
             return graalStateToState(dxfg_DXEndpoint_getState(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
                                                               graalDXEndpointHandle));
         },
-        dxfcpp::DXEndpoint::State::CLOSED, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle));
+        dxfcpp::DXEndpoint::State::CLOSED, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-bool DXEndpoint::user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &user) noexcept {
-    if (!graalDXEndpointHandle) {
+bool DXEndpoint::user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                      const std::string &user) noexcept {
+    if (!endpoint) {
         // TODO: Improve error handling [EN-8232]
         return false;
     }
@@ -328,11 +330,12 @@ bool DXEndpoint::user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const 
             return dxfg_DXEndpoint_user(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), graalDXEndpointHandle,
                                         user.c_str()) == 0;
         },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle), user);
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), user);
 }
 
-bool DXEndpoint::password(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &password) noexcept {
-    if (!graalDXEndpointHandle) {
+bool DXEndpoint::password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                          const std::string &password) noexcept {
+    if (!endpoint) {
         // TODO: Improve error handling [EN-8232]
         return false;
     }
@@ -342,11 +345,12 @@ bool DXEndpoint::password(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, co
             return dxfg_DXEndpoint_password(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
                                             graalDXEndpointHandle, password.c_str()) == 0;
         },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle), password);
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), password);
 }
 
-bool DXEndpoint::connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &address) noexcept {
-    if (!graalDXEndpointHandle) {
+bool DXEndpoint::connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                         const std::string &address) noexcept {
+    if (!endpoint) {
         // TODO: Improve error handling [EN-8232]
         return false;
     }
@@ -356,7 +360,21 @@ bool DXEndpoint::connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, con
             return dxfg_DXEndpoint_connect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
                                            graalDXEndpointHandle, address.c_str()) == 0;
         },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(graalDXEndpointHandle), address);
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), address);
+}
+
+bool DXEndpoint::reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
+    if (!endpoint) {
+        // TODO: Improve error handling [EN-8232]
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [](auto threadHandle, auto &&graalDXEndpointHandle) {
+            return dxfg_DXEndpoint_reconnect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                                             graalDXEndpointHandle) == 0;
+        },
+        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
 bool /* int32_t */

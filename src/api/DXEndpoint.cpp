@@ -139,19 +139,11 @@ DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
 }
 
 DXEndpoint::State DXEndpoint::getState() const noexcept {
-    if (!handle_) {
-        return State::CLOSED;
-    }
-
-    return isolated::api::DXEndpoint::getState(handle_.get());
+    return isolated::api::DXEndpoint::getState(handle_);
 }
 
 void DXEndpoint::closeImpl() {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::api::DXEndpoint::close(handle_.get());
+    isolated::api::DXEndpoint::close(handle_);
     // TODO: close the Feed and Publisher
 }
 
@@ -161,11 +153,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) noexcept {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::user(user = " + user + ")");
     }
 
-    if (!handle_) {
-        return sharedAs<DXEndpoint>();
+    if (handle_) {
+        isolated::api::DXEndpoint::user(handle_, user);
     }
-
-    isolated::api::DXEndpoint::user(handle_.get(), user);
 
     return sharedAs<DXEndpoint>();
 }
@@ -176,11 +166,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) no
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::password(password = " + password + ")");
     }
 
-    if (!handle_) {
-        return sharedAs<DXEndpoint>();
+    if (handle_) {
+        isolated::api::DXEndpoint::password(handle_, password);
     }
-
-    isolated::api::DXEndpoint::password(handle_.get(), password);
 
     return sharedAs<DXEndpoint>();
 }
@@ -191,11 +179,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) noex
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + address + ")");
     }
 
-    if (!handle_) {
-        return sharedAs<DXEndpoint>();
+    if (handle_) {
+        isolated::api::DXEndpoint::connect(handle_, address);
     }
-
-    isolated::api::DXEndpoint::connect(handle_.get(), address);
 
     return sharedAs<DXEndpoint>();
 }
@@ -209,11 +195,7 @@ void DXEndpoint::reconnect() noexcept {
         return;
     }
 
-    runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_reconnect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
-        },
-        false);
+    isolated::api::DXEndpoint::reconnect(handle_);
 }
 
 void DXEndpoint::disconnect() noexcept {
