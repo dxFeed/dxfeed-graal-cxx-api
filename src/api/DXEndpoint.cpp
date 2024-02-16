@@ -350,7 +350,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
 void DXEndpoint::Builder::loadDefaultPropertiesImpl() noexcept {
     // The default properties file is only valid for the
     // Feed, OnDemandFeed and Publisher roles.
-    const auto &propertiesFileKey = [](auto role) -> const std::string & {
+    const auto &propertiesFileKey = [](auto role) constexpr -> const auto & {
         switch (role) {
         case Role::FEED:
         case Role::ON_DEMAND_FEED:
