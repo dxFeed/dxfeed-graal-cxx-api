@@ -142,11 +142,6 @@ DXEndpoint::State DXEndpoint::getState() const noexcept {
     return isolated::api::DXEndpoint::getState(handle_);
 }
 
-void DXEndpoint::closeImpl() {
-    isolated::api::DXEndpoint::close(handle_);
-    // TODO: close the Feed and Publisher
-}
-
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) noexcept {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
@@ -607,7 +602,7 @@ void DXEndpoint::close() noexcept {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::close()");
     }
 
-    closeImpl();
+    isolated::api::DXEndpoint::close(handle_);
 }
 
 std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() noexcept {

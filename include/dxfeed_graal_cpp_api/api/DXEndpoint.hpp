@@ -476,8 +476,6 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties) noexcept;
 
-    void closeImpl();
-
     struct Impl;
 
     std::unique_ptr<Impl> impl_;
