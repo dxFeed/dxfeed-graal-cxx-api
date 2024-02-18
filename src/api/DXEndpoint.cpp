@@ -148,9 +148,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) noexcept {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::user(user = " + user + ")");
     }
 
-    if (handle_) {
-        isolated::api::DXEndpoint::user(handle_, user);
-    }
+    isolated::api::DXEndpoint::user(handle_, user);
 
     return sharedAs<DXEndpoint>();
 }
@@ -161,9 +159,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) no
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::password(password = " + password + ")");
     }
 
-    if (handle_) {
-        isolated::api::DXEndpoint::password(handle_, password);
-    }
+    isolated::api::DXEndpoint::password(handle_, password);
 
     return sharedAs<DXEndpoint>();
 }
@@ -174,9 +170,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) noex
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + address + ")");
     }
 
-    if (handle_) {
-        isolated::api::DXEndpoint::connect(handle_, address);
-    }
+    isolated::api::DXEndpoint::connect(handle_, address);
 
     return sharedAs<DXEndpoint>();
 }
@@ -184,10 +178,6 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) noex
 void DXEndpoint::reconnect() noexcept {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::reconnect()");
-    }
-
-    if (!handle_) {
-        return;
     }
 
     isolated::api::DXEndpoint::reconnect(handle_);
@@ -198,15 +188,7 @@ void DXEndpoint::disconnect() noexcept {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::disconnect()");
     }
 
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_disconnect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
-        },
-        false);
+    isolated::api::DXEndpoint::disconnect(handle_);
 }
 
 void DXEndpoint::disconnectAndClear() noexcept {
@@ -214,16 +196,7 @@ void DXEndpoint::disconnectAndClear() noexcept {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::disconnectAndClear()");
     }
 
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_disconnectAndClear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                      handle) == 0;
-        },
-        false);
+    isolated::api::DXEndpoint::disconnectAndClear(handle_);
 }
 
 void DXEndpoint::awaitNotConnected() noexcept {
