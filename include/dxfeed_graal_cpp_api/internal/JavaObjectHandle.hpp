@@ -20,6 +20,7 @@ template <typename T> struct JavaObjectHandle {
 #endif
 
     using Type = T;
+
     static DXFCPP_EXPORT void deleter(void *handle) noexcept;
     explicit JavaObjectHandle(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
         if constexpr (Debugger::isDebug) {

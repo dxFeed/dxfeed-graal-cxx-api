@@ -186,52 +186,60 @@ bool StringList::release(/* dxfg_string_list* */ void *stringList) noexcept {
                             dxfcpp::bit_cast<dxfg_string_list *>(stringList));
 }
 
-/* dxfg_time_format_t* */ void *TimeFormat::getDefault() noexcept {
-    return runGraalFunction(toVoidPtr, dxfg_TimeFormat_DEFAULT, nullptr);
-}
-
-/* dxfg_time_format_t* */ void *TimeFormat::getGmt() noexcept {
-    return runGraalFunction(toVoidPtr, dxfg_TimeFormat_GMT, nullptr);
-}
-
-/* dxfg_time_format_t* */ void *TimeFormat::withTimeZone(/* dxfg_time_format_t* */ void *timeFormat) noexcept {
-    if (!timeFormat) {
-        // TODO: Improve error handling [EN-8232]
-        return nullptr;
+/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> TimeFormat::getDefault() noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("TimeFormat::getDefault()");
     }
 
-    return runGraalFunction(toVoidPtr, dxfg_TimeFormat_withTimeZone, nullptr,
-                            dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat));
+    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(toVoidPtr, dxfg_TimeFormat_DEFAULT, nullptr));
 }
 
-/* dxfg_time_format_t* */ void *TimeFormat::withMillis(/* dxfg_time_format_t* */ void *timeFormat) noexcept {
+/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> TimeFormat::getGmt() noexcept {
+    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(toVoidPtr, dxfg_TimeFormat_GMT, nullptr));
+}
+
+/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
+TimeFormat::withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat) noexcept {
     if (!timeFormat) {
         // TODO: Improve error handling [EN-8232]
-        return nullptr;
+        return JavaObjectHandle<dxfcpp::TimeFormat>{nullptr};
     }
 
-    return runGraalFunction(toVoidPtr, dxfg_TimeFormat_withMillis, nullptr,
-                            dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat));
+    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(
+        toVoidPtr, dxfg_TimeFormat_withTimeZone, nullptr, dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat.get())));
 }
 
-std::int64_t TimeFormat::parse(/* dxfg_time_format_t* */ void *timeFormat, const std::string &value) noexcept {
+/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
+TimeFormat::withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat) noexcept {
+    if (!timeFormat) {
+        // TODO: Improve error handling [EN-8232]
+        return JavaObjectHandle<dxfcpp::TimeFormat>{nullptr};
+    }
+
+    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(
+        toVoidPtr, dxfg_TimeFormat_withMillis, nullptr, dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat.get())));
+}
+
+std::int64_t TimeFormat::parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
+                               const std::string &value) noexcept {
     if (!timeFormat) {
         // TODO: Improve error handling [EN-8232]
         return 0;
     }
 
-    return runGraalFunction(doNothing, dxfg_TimeFormat_parse, 0, dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat),
-                            value.c_str());
+    return runGraalFunction(doNothing, dxfg_TimeFormat_parse, 0,
+                            dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat.get()), value.c_str());
 }
 
-std::string TimeFormat::format(/* dxfg_time_format_t* */ void *timeFormat, std::int64_t value) noexcept {
+std::string TimeFormat::format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
+                               std::int64_t value) noexcept {
     if (!timeFormat) {
         // TODO: Improve error handling [EN-8232]
         return dxfcpp::String::EMPTY;
     }
 
     auto resolvedURL = runGraalFunction(doNothing, dxfg_TimeFormat_format, nullptr,
-                                        dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat), value);
+                                        dxfcpp::bit_cast<dxfg_time_format_t *>(timeFormat.get()), value);
     auto result = dxfcpp::toString(resolvedURL);
 
     String::release(resolvedURL);
@@ -304,11 +312,8 @@ bool DXEndpoint::user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEn
         return false;
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_DXEndpoint_user(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
-        },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), user.c_str());
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_user, false,
+                            dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), user.c_str());
 }
 
 bool DXEndpoint::password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
@@ -318,11 +323,8 @@ bool DXEndpoint::password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::
         return false;
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_DXEndpoint_password(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
-        },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), password.c_str());
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_password, false,
+                            dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), password.c_str());
 }
 
 bool DXEndpoint::connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
@@ -332,11 +334,8 @@ bool DXEndpoint::connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
         return false;
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_DXEndpoint_connect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
-        },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), address.c_str());
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_connect, false,
+                            dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()), address.c_str());
 }
 
 bool DXEndpoint::reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
@@ -345,11 +344,8 @@ bool DXEndpoint::reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp:
         return false;
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_DXEndpoint_reconnect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
-        },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_reconnect, false,
+                            dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
 bool DXEndpoint::disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
@@ -358,11 +354,8 @@ bool DXEndpoint::disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
         return false;
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_DXEndpoint_disconnect(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
-        },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_disconnect, false,
+                            dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
 bool DXEndpoint::disconnectAndClear(
@@ -372,12 +365,8 @@ bool DXEndpoint::disconnectAndClear(
         return false;
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_DXEndpoint_disconnectAndClear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                      params...) == 0;
-        },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_disconnectAndClear, false,
+                            dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
 bool /* int32_t */
@@ -390,27 +379,21 @@ DXEndpoint::addStateChangeListener(
         return false;
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_DXEndpoint_addStateChangeListener(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                          params...) == 0;
-        },
-        false, dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()),
-        dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_t *>(listener.get()));
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_addStateChangeListener, false,
+                            dxfcpp::bit_cast<dxfg_endpoint_t *>(endpoint.get()),
+                            dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_t *>(listener.get()));
 }
 
 JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
                                                                                               void *userData) noexcept {
     if (!userFunc) {
         // TODO: Improve error handling [EN-8232]
-        return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>(nullptr);
+        return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>{nullptr};
     }
 
-    return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>(dxfcpp::bit_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_PropertyChangeListener_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), params...);
-        },
-        nullptr, dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc), userData)));
+    return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>(
+        runGraalFunction(toVoidPtr, dxfg_PropertyChangeListener_new, nullptr,
+                         dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc), userData));
 }
 
 } // namespace api

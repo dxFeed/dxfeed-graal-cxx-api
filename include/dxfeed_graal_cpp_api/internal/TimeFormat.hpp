@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+#include "JavaObjectHandle.hpp"
+
 #include <cstddef>
 #include <cstdint>
 #include <locale>
@@ -42,6 +44,7 @@ struct DXFCPP_EXPORT TimeFormat {
 
   public:
     explicit TimeFormat(void* handle = nullptr) noexcept;
+    explicit TimeFormat(JavaObjectHandle<TimeFormat>&& handle) noexcept;
     virtual ~TimeFormat() noexcept = default;
 
     TimeFormat(const TimeFormat &) = delete;
