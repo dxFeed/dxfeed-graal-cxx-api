@@ -34,12 +34,12 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 
     if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_attachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      subHandle) == 0;
+            [](auto threadHandle, auto &&...params) {
+                return dxfg_DXFeed_attachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), params...) ==
+                       0;
             },
-            false)) {
+            false, static_cast<dxfg_feed_t *>(handle_.get()),
+            static_cast<dxfg_subscription_t *>(subscription->handle_.get()))) {
 
         subscriptions_.emplace(subscription);
     }
@@ -55,12 +55,12 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 
     if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      subHandle) == 0;
+            [](auto threadHandle, auto &&...params) {
+                return dxfg_DXFeed_detachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), params...) ==
+                       0;
             },
-            false)) {
+            false, static_cast<dxfg_feed_t *>(handle_.get()),
+            static_cast<dxfg_subscription_t *>(subscription->handle_.get()))) {
 
         subscriptions_.erase(subscription);
     }
@@ -76,12 +76,12 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     }
 
     if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+            [](auto threadHandle, auto &&...params) {
                 return dxfg_DXFeed_detachSubscriptionAndClear(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                              handle, subHandle) == 0;
+                                                              params...) == 0;
             },
-            false)) {
+            false, static_cast<dxfg_feed_t *>(handle_.get()),
+            static_cast<dxfg_subscription_t *>(subscription->handle_.get()))) {
 
         subscriptions_.erase(subscription);
     }

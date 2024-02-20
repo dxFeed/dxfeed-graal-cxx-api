@@ -209,11 +209,11 @@ void DXEndpoint::awaitNotConnected() noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_awaitNotConnected(static_cast<graal_isolatethread_t *>(threadHandle), handle) ==
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXEndpoint_awaitNotConnected(static_cast<graal_isolatethread_t *>(threadHandle), params...) ==
                    0;
         },
-        false);
+        false, static_cast<dxfg_endpoint_t *>(handle_.get()));
 }
 
 void DXEndpoint::awaitProcessed() noexcept {
@@ -226,10 +226,10 @@ void DXEndpoint::awaitProcessed() noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_awaitProcessed(static_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXEndpoint_awaitProcessed(static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_endpoint_t *>(handle_.get()));
 }
 
 void DXEndpoint::closeAndAwaitTermination() noexcept {
@@ -242,11 +242,11 @@ void DXEndpoint::closeAndAwaitTermination() noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
+        [](auto threadHandle, auto &&...params) {
             return dxfg_DXEndpoint_closeAndAwaitTermination(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                            handle) == 0;
+                                                            params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_endpoint_t *>(handle_.get()));
 
     // TODO: close the Feed and Publisher
 }
@@ -264,10 +264,10 @@ std::shared_ptr<DXFeed> DXEndpoint::getFeed() noexcept {
         !handle_
             ? nullptr
             : runIsolatedOrElse(
-                  [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-                      return dxfg_DXEndpoint_getFeed(static_cast<graal_isolatethread_t *>(threadHandle), handle);
+                  [](auto threadHandle, auto &&...params) {
+                      return dxfg_DXEndpoint_getFeed(static_cast<graal_isolatethread_t *>(threadHandle), params...);
                   },
-                  nullptr);
+                  nullptr, static_cast<dxfg_endpoint_t *>(handle_.get()));
 
     feed_ = DXFeed::create(feedHandle);
 
@@ -283,14 +283,13 @@ std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() noexcept {
         return publisher_;
     }
 
-    auto publisherHandle =
-        !handle_ ? nullptr
-                 : runIsolatedOrElse(
-                       [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-                           return dxfg_DXEndpoint_getPublisher(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                               handle);
-                       },
-                       nullptr);
+    auto publisherHandle = !handle_ ? nullptr
+                                    : runIsolatedOrElse(
+                                          [](auto threadHandle, auto &&...params) {
+                                              return dxfg_DXEndpoint_getPublisher(
+                                                  static_cast<graal_isolatethread_t *>(threadHandle), params...);
+                                          },
+                                          nullptr, static_cast<dxfg_endpoint_t *>(handle_.get()));
 
     publisher_ = DXPublisher::create(publisherHandle);
 
@@ -306,10 +305,10 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
 
     if (builder) {
         builder->handle_ = JavaObjectHandle<DXEndpoint::Builder>(runIsolatedOrElse(
-            [](auto threadHandle) {
+            [](auto threadHandle, auto &&...) {
                 return dxfg_DXEndpoint_newBuilder(static_cast<graal_isolatethread_t *>(threadHandle));
             },
-            nullptr));
+            nullptr, nullptr));
     }
 
     return builder;
@@ -353,12 +352,12 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() noexcept {
 
         // The default property file has the same value as the key.
         runIsolatedOrElse(
-            [key = propertiesFileKey, value = propertiesFileKey,
-             handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
+            [](auto threadHandle, auto &&...params) {
                 return dxfg_DXEndpoint_Builder_withProperty(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                            handle, key.c_str(), value.c_str()) == 0;
+                                                            params...) == 0;
             },
-            false);
+            false, static_cast<dxfg_endpoint_builder_t *>(handle_.get()), propertiesFileKey.c_str(),
+            propertiesFileKey.c_str());
     }
 }
 
@@ -374,11 +373,10 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
     }
 
     runIsolatedOrElse(
-        [role = role, handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_Builder_withRole(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                    roleToGraalRole(role)) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXEndpoint_Builder_withRole(static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_endpoint_builder_t *>(handle_.get()), roleToGraalRole(role));
 
     return shared_from_this();
 }
@@ -398,12 +396,11 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
     }
 
     runIsolatedOrElse(
-        [key = key, value = value,
-         handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_Builder_withProperty(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                        key.c_str(), value.c_str()) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXEndpoint_Builder_withProperty(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                        params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_endpoint_builder_t *>(handle_.get()), key.c_str(), value.c_str());
 
     return shared_from_this();
 }
@@ -419,11 +416,11 @@ bool DXEndpoint::Builder::supportsProperty(const std::string &key) noexcept {
     }
 
     return runIsolatedOrElse(
-        [key = key, handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
+        [](auto threadHandle, auto &&...params) {
             return dxfg_DXEndpoint_Builder_supportsProperty(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                            handle, key.c_str()) != 0;
+                                                            params...) != 0;
         },
-        false);
+        false, static_cast<dxfg_endpoint_builder_t *>(handle_.get()), key.c_str());
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() noexcept {
@@ -433,14 +430,13 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() noexcept {
 
     loadDefaultPropertiesImpl();
 
-    auto endpointHandle =
-        !handle_ ? nullptr
-                 : runIsolatedOrElse(
-                       [handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-                           return dxfg_DXEndpoint_Builder_build(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                                handle);
-                       },
-                       nullptr);
+    auto endpointHandle = !handle_ ? nullptr
+                                   : runIsolatedOrElse(
+                                         [](auto threadHandle, auto &&...params) {
+                                             return dxfg_DXEndpoint_Builder_build(
+                                                 static_cast<graal_isolatethread_t *>(threadHandle), params...);
+                                         },
+                                         nullptr, static_cast<dxfg_endpoint_builder_t *>(handle_.get()));
 
     return DXEndpoint::create(endpointHandle, role_, properties_);
 }

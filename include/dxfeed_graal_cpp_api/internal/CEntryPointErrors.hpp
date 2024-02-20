@@ -29,7 +29,7 @@ enum class CEntryPointErrorsEnum : uint32_t {
     NO_ERROR,
 
     /// 1 - An unspecified error occurred.
-    UNSPECIFIED = 0,
+    UNSPECIFIED = 1,
 
     /// 2 - An argument was NULL (nullptr).
     NULL_ARGUMENT = 2,
@@ -99,136 +99,109 @@ enum class CEntryPointErrorsEnum : uint32_t {
 
     /// 23 - Current target does not support the following CPU features that are required by the image.
     CPU_FEATURE_CHECK_FAILED = 23,
+
+    /// 24 - Image page size is incompatible with run-time page size. Rebuild image with -H:PageSize=[pagesize] to set
+    /// appropriately.
+    PAGE_SIZE_CHECK_FAILED = 24,
+
+    /// 25 - Creating an in-memory file for the GOT failed.
+    DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_CREATE_FAILED = 25,
+
+    /// 26 - Resizing the in-memory file for the GOT failed.
+    DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_RESIZE_FAILED = 26,
+
+    /// 27 - Mapping and populating the in-memory file for the GOT failed.
+    DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_MAP_FAILED = 27,
+
+    /// 28 - Mapping the GOT before an isolate's heap failed (no mapping).
+    DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_MMAP_FAILED = 28,
+
+    /// 29 - Mapping the GOT before an isolate's heap failed (wrong mapping).
+    DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_WRONG_MMAP = 29,
+
+    /// 30 - Mapping the GOT before an isolate's heap failed (invalid file).
+    DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_INVALID = 30,
+
+    /// 31 - Could not create unique GOT file even after retrying.
+    DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_UNIQUE_FILE_CREATE_FAILED = 31,
+
+    /// 32 - Could not determine the stack boundaries.
+    UNKNOWN_STACK_BOUNDARIES = 32,
 };
 
-/**
- * Possible error codes returned by internal GraalVM functions
- *
- *  [Graal:CEntryPointErrors](https://github.com/oracle/graal/blob/96a1a66347bd4e5e00ae4e8e79812ebaf8cd5e33/substratevm/src/com.oracle.svm.core/src/com/oracle/svm/core/c/function/CEntryPointErrors.java#L43)
- */
-struct DXFCPP_EXPORT CEntryPointErrors {
-    using CodeType = CEntryPointErrorsEnum;
-
-  private:
-    CodeType code_{};
-    std::string description_{};
-
-    template <Integral Code>
-    CEntryPointErrors(Code code, std::string description) noexcept
-        : code_{static_cast<CodeType>(code)}, description_{std::move(description)} {
+inline constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum enumValue) {
+    switch (enumValue) {
+    case CEntryPointErrorsEnum::NO_ERROR:
+        return "No error occurred.";
+    case CEntryPointErrorsEnum::UNSPECIFIED:
+        return " An unspecified error occurred.";
+    case CEntryPointErrorsEnum::NULL_ARGUMENT:
+        return "An argument was NULL (nullptr).";
+    case CEntryPointErrorsEnum::UNATTACHED_THREAD:
+        return "The specified thread is not attached to the isolate.";
+    case CEntryPointErrorsEnum::UNINITIALIZED_ISOLATE:
+        return "The specified isolate is unknown.";
+    case CEntryPointErrorsEnum::LOCATE_IMAGE_FAILED:
+        return "Locating the image file failed.";
+    case CEntryPointErrorsEnum::OPEN_IMAGE_FAILED:
+        return "Opening the located image file failed.";
+    case CEntryPointErrorsEnum::MAP_HEAP_FAILED:
+        return "Mapping the heap from the image file into memory failed.";
+    case CEntryPointErrorsEnum::RESERVE_ADDRESS_SPACE_FAILED:
+        return "Reserving address space for the new isolate failed.";
+    case CEntryPointErrorsEnum::INSUFFICIENT_ADDRESS_SPACE:
+        return "The image heap does not fit in the available address space.";
+    case CEntryPointErrorsEnum::PROTECT_HEAP_FAILED:
+        return "The version of the specified isolate parameters is unsupported.";
+    case CEntryPointErrorsEnum::UNSUPPORTED_ISOLATE_PARAMETERS_VERSION:
+        return "The version of the specified isolate parameters is unsupported.";
+    case CEntryPointErrorsEnum::THREADING_INITIALIZATION_FAILED:
+        return "Initialization of threading in the isolate failed.";
+    case CEntryPointErrorsEnum::UNCAUGHT_EXCEPTION:
+        return "Some exception is not caught.";
+    case CEntryPointErrorsEnum::ISOLATE_INITIALIZATION_FAILED:
+        return "Initialization the isolate failed.";
+    case CEntryPointErrorsEnum::OPEN_AUX_IMAGE_FAILED:
+        return "Opening the located auxiliary image file failed.";
+    case CEntryPointErrorsEnum::READ_AUX_IMAGE_META_FAILED:
+        return "Reading the opened auxiliary image file failed.";
+    case CEntryPointErrorsEnum::MAP_AUX_IMAGE_FAILED:
+        return "Mapping the auxiliary image file into memory failed.";
+    case CEntryPointErrorsEnum::INSUFFICIENT_AUX_IMAGE_MEMORY:
+        return "Insufficient memory for the auxiliary image.";
+    case CEntryPointErrorsEnum::AUX_IMAGE_UNSUPPORTED:
+        return "Auxiliary images are not supported on this platform or edition.";
+    case CEntryPointErrorsEnum::FREE_ADDRESS_SPACE_FAILED:
+        return "Releasing the isolate's address space failed.";
+    case CEntryPointErrorsEnum::FREE_IMAGE_HEAP_FAILED:
+        return "Releasing the isolate's image heap memory failed.";
+    case CEntryPointErrorsEnum::AUX_IMAGE_PRIMARY_IMAGE_MISMATCH:
+        return "The auxiliary image was built from a different primary image.";
+    case CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED:
+        return "The isolate arguments could not be parsed.";
+    case CEntryPointErrorsEnum::CPU_FEATURE_CHECK_FAILED:
+        return "Current target does not support the following CPU features that are required by the image.";
+    case CEntryPointErrorsEnum::PAGE_SIZE_CHECK_FAILED:
+        return "Image page size is incompatible with run-time page size. Rebuild image with -H:PageSize=[pagesize] to set appropriately.";
+    case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_CREATE_FAILED:
+        return "Creating an in-memory file for the GOT failed.";
+    case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_RESIZE_FAILED:
+        return "Resizing the in-memory file for the GOT failed.";
+    case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_MAP_FAILED:
+        return "Mapping and populating the in-memory file for the GOT failed.";
+    case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_MMAP_FAILED:
+        return "Mapping the GOT before an isolate's heap failed (no mapping).";
+    case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_WRONG_MMAP:
+        return "Mapping the GOT before an isolate's heap failed (wrong mapping).";
+    case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_INVALID:
+        return "Mapping the GOT before an isolate's heap failed (invalid file).";
+    case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_UNIQUE_FILE_CREATE_FAILED:
+        return "Could not create unique GOT file even after retrying.";
+    case CEntryPointErrorsEnum::UNKNOWN_STACK_BOUNDARIES:
+        return "Could not determine the stack boundaries.";
     }
 
-    template <EnumConcept Code>
-    CEntryPointErrors(Code code, std::string description) noexcept
-        : code_{static_cast<CodeType>(code)}, description_{std::move(description)} {
-    }
+    return nullptr;
+}
 
-  public:
-    /// 0 - No error occurred.
-    static const CEntryPointErrors NO_ERROR;
-
-    /// 1 - An unspecified error occurred.
-    static const CEntryPointErrors UNSPECIFIED;
-
-    /// 2 - An argument was NULL (nullptr).
-    static const CEntryPointErrors NULL_ARGUMENT;
-
-    /// 4 - The specified thread is not attached to the isolate.
-    static const CEntryPointErrors UNATTACHED_THREAD;
-
-    /// 5 - The specified isolate is unknown.
-    static const CEntryPointErrors UNINITIALIZED_ISOLATE;
-
-    /// 6 - Locating the image file failed.
-    static const CEntryPointErrors LOCATE_IMAGE_FAILED;
-
-    /// 7 - Opening the located image file failed.
-    static const CEntryPointErrors OPEN_IMAGE_FAILED;
-
-    /// 8 - Mapping the heap from the image file into memory failed.
-    static const CEntryPointErrors MAP_HEAP_FAILED;
-
-    /// 801 - Reserving address space for the new isolate failed.
-    static const CEntryPointErrors RESERVE_ADDRESS_SPACE_FAILED;
-
-    /// 802 - The image heap does not fit in the available address space.
-    static const CEntryPointErrors INSUFFICIENT_ADDRESS_SPACE;
-
-    /// 9 - Setting the protection of the heap memory failed.
-    static const CEntryPointErrors PROTECT_HEAP_FAILED;
-
-    /// 10 - The version of the specified isolate parameters is unsupported.
-    static const CEntryPointErrors UNSUPPORTED_ISOLATE_PARAMETERS_VERSION;
-
-    /// 11 - Initialization of threading in the isolate failed.
-    static const CEntryPointErrors THREADING_INITIALIZATION_FAILED;
-
-    /// 12 - Some exception is not caught.
-    static const CEntryPointErrors UNCAUGHT_EXCEPTION;
-
-    /// 13 - Initialization the isolate failed.
-    static const CEntryPointErrors ISOLATE_INITIALIZATION_FAILED;
-
-    /// 14 - Opening the located auxiliary image file failed.
-    static const CEntryPointErrors OPEN_AUX_IMAGE_FAILED;
-
-    /// 15 - Reading the opened auxiliary image file failed.
-    static const CEntryPointErrors READ_AUX_IMAGE_META_FAILED;
-
-    /// 16 - Mapping the auxiliary image file into memory failed.
-    static const CEntryPointErrors MAP_AUX_IMAGE_FAILED;
-
-    /// 17 - Insufficient memory for the auxiliary image.
-    static const CEntryPointErrors INSUFFICIENT_AUX_IMAGE_MEMORY;
-
-    /// 18 - Auxiliary images are not supported on this platform or edition.
-    static const CEntryPointErrors AUX_IMAGE_UNSUPPORTED;
-
-    /// 19 - Releasing the isolate's address space failed.
-    static const CEntryPointErrors FREE_ADDRESS_SPACE_FAILED;
-
-    /// 20 - Releasing the isolate's image heap memory failed.
-    static const CEntryPointErrors FREE_IMAGE_HEAP_FAILED;
-
-    /// 21 - The auxiliary image was built from a different primary image.
-    static const CEntryPointErrors AUX_IMAGE_PRIMARY_IMAGE_MISMATCH;
-
-    /// 22 - The isolate arguments could not be parsed.
-    static const CEntryPointErrors ARGUMENT_PARSING_FAILED;
-
-    /// 23 - Current target does not support the following CPU features that are required by the image.
-    static const CEntryPointErrors CPU_FEATURE_CHECK_FAILED;
-
-    static const std::unordered_map<CodeType, std::reference_wrapper<const CEntryPointErrors>> ALL;
-
-    template <Integral Code> static const CEntryPointErrors &valueOf(Code code) {
-        if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
-            return found->second;
-        }
-
-        return UNSPECIFIED;
-    }
-
-    template <EnumConcept Code> static const CEntryPointErrors &valueOf(Code code) {
-        if (auto found = ALL.find(static_cast<CodeType>(code)); found != ALL.end()) {
-            return found->second;
-        }
-
-        return UNSPECIFIED;
-    }
-
-    /// Returns the code
-    [[nodiscard]] CodeType getCode() const {
-        return code_;
-    }
-
-    /// Returns the description
-    [[nodiscard]] const std::string &getDescription() const & {
-        return description_;
-    }
-
-    bool operator==(const CEntryPointErrors &errors) const {
-        return this->getCode() == errors.getCode();
-    }
-};
 } // namespace dxfcpp

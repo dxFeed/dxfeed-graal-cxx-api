@@ -9,24 +9,24 @@
 namespace dxfcpp {
 
 template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
+    }
+
+    if (!handle) {
+        return;
+    }
+
     auto result = runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            if constexpr (Debugger::isDebug) {
-                Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
-            }
-
-            if (handle) {
-                return dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                      static_cast<dxfg_java_object_handler *>(handle)) == 0;
-            }
-
-            return true;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_java_object_handler *>(handle));
     dxfcpp::ignore_unused(result);
 
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " + dxfcpp::toString(result));
+        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                        dxfcpp::toString(result));
     }
 }
 

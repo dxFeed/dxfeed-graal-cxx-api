@@ -22,12 +22,13 @@ bool System::setProperty(const std::string &key, const std::string &value) {
     }
 
     auto result = runIsolatedOrElse(
-        [key = key, value = value](auto threadHandle) {
-            return static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(
-                       static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
+        [](auto threadHandle, auto &&...params) {
+            // TODO: Improve error handling [EN-8232]
+            return static_cast<CEntryPointErrorsEnum>(
+                       dxfg_system_set_property(static_cast<graal_isolatethread_t *>(threadHandle), params...)) ==
                    CEntryPointErrorsEnum::NO_ERROR;
         },
-        false);
+        false, key.c_str(), value.c_str());
 
     if constexpr (Debugger::isDebug) {
         Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "') -> " + toString(result));
@@ -43,11 +44,10 @@ std::string System::getProperty(const std::string &key) {
     }
 
     auto result = runIsolatedOrElse(
-        [key = key](auto threadHandle) {
+        [](auto threadHandle, auto &&...params) {
             std::string resultString{};
 
-            if (auto result =
-                    dxfg_system_get_property(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str());
+            if (auto result = dxfg_system_get_property(static_cast<graal_isolatethread_t *>(threadHandle), params...);
                 result != nullptr) {
                 resultString = result;
                 dxfg_system_release_property(static_cast<graal_isolatethread_t *>(threadHandle), result);
@@ -55,7 +55,7 @@ std::string System::getProperty(const std::string &key) {
 
             return resultString;
         },
-        std::string{});
+        std::string{}, key.c_str());
 
     if constexpr (Debugger::isDebug) {
         Debugger::debug("System::getProperty(key = '" + key + "') -> '" + result + "'");

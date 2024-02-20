@@ -37,11 +37,11 @@ void DXFeedSubscription::addSymbolImpl(void *graalSymbol) const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
-            return dxfg_DXFeedSubscription_addSymbol(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                     static_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_addSymbol(static_cast<graal_isolatethread_t *>(threadHandle), params...) ==
+                   0;
         },
-        false);
+        false, static_cast<dxfg_subscription_t *>(handle_.get()), static_cast<dxfg_symbol_t *>(graalSymbol));
 }
 
 void DXFeedSubscription::addSymbolsImpl(void *graalSymbolList) const noexcept {
@@ -50,11 +50,11 @@ void DXFeedSubscription::addSymbolsImpl(void *graalSymbolList) const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
-            return dxfg_DXFeedSubscription_addSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      static_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_addSymbols(static_cast<graal_isolatethread_t *>(threadHandle), params...) ==
+                   0;
         },
-        false);
+        false, static_cast<dxfg_subscription_t *>(handle_.get()), static_cast<dxfg_symbol_list *>(graalSymbolList));
 }
 
 void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) const noexcept {
@@ -63,11 +63,11 @@ void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
+        [](auto threadHandle, auto &&...params) {
             return dxfg_DXFeedSubscription_removeSymbol(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                        handle, static_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
+                                                        params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_subscription_t *>(handle_.get()), static_cast<dxfg_symbol_t *>(graalSymbol));
 }
 
 void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const noexcept {
@@ -76,11 +76,11 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const noexcept
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
+        [](auto threadHandle, auto &&...params) {
             return dxfg_DXFeedSubscription_removeSymbols(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                         handle, static_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
+                                                         params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_subscription_t *>(handle_.get()), static_cast<dxfg_symbol_list *>(graalSymbolList));
 }
 
 void DXFeedSubscription::setSymbolsImpl(void *graalSymbolList) const noexcept {
@@ -89,11 +89,11 @@ void DXFeedSubscription::setSymbolsImpl(void *graalSymbolList) const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
-            return dxfg_DXFeedSubscription_setSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      static_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_setSymbols(static_cast<graal_isolatethread_t *>(threadHandle), params...) ==
+                   0;
         },
-        false);
+        false, static_cast<dxfg_subscription_t *>(handle_.get()), static_cast<dxfg_symbol_list *>(graalSymbolList));
 }
 
 std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const noexcept {
@@ -102,18 +102,18 @@ std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const noexcept {
     }
 
     dxfg_symbol_list *list = runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_getSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle);
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_getSymbols(static_cast<graal_isolatethread_t *>(threadHandle), params...);
         },
-        nullptr);
+        nullptr, static_cast<dxfg_subscription_t *>(handle_.get()));
 
     auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
 
     runIsolatedOrElse(
-        [list](auto threadHandle) {
-            return dxfg_CList_symbol_release(static_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_CList_symbol_release(static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
         },
-        false);
+        false, list);
 
     return result;
 }
@@ -124,19 +124,19 @@ std::vector<SymbolWrapper> DXFeedSubscription::getDecoratedSymbolsImpl() const n
     }
 
     dxfg_symbol_list *list = runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
+        [](auto threadHandle, auto &&...params) {
             return dxfg_DXFeedSubscription_getDecoratedSymbols(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                               handle);
+                                                               params...);
         },
-        nullptr);
+        nullptr, static_cast<dxfg_subscription_t *>(handle_.get()));
 
     auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
 
     runIsolatedOrElse(
-        [list](auto threadHandle) {
-            return dxfg_CList_symbol_release(static_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_CList_symbol_release(static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
         },
-        false);
+        false, list);
 
     return result;
 }
@@ -147,10 +147,10 @@ void DXFeedSubscription::closeImpl() const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_close(static_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_close(static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_subscription_t *>(handle_.get()));
 }
 
 void DXFeedSubscription::clearImpl() const noexcept {
@@ -159,10 +159,10 @@ void DXFeedSubscription::clearImpl() const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_clear(static_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_clear(static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
         },
-        false);
+        false, static_cast<dxfg_subscription_t *>(handle_.get()));
 }
 
 bool DXFeedSubscription::isClosedImpl() const noexcept {
@@ -171,11 +171,10 @@ bool DXFeedSubscription::isClosedImpl() const noexcept {
     }
 
     return runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_isClosed(static_cast<graal_isolatethread_t *>(threadHandle), handle) !=
-                   0;
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_isClosed(static_cast<graal_isolatethread_t *>(threadHandle), params...) != 0;
         },
-        false);
+        false, static_cast<dxfg_subscription_t *>(handle_.get()));
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
@@ -185,23 +184,23 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
     }
 
     handle_ = JavaObjectHandle<DXFeedSubscription>(runIsolatedOrElse(
-        [eventType](auto threadHandle) {
-            return dxfg_DXFeedSubscription_new(static_cast<graal_isolatethread_t *>(threadHandle),
-                                               static_cast<dxfg_event_clazz_t>(eventType.getId()));
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_new(static_cast<graal_isolatethread_t *>(threadHandle), params...);
         },
-        nullptr));
+        nullptr, static_cast<dxfg_event_clazz_t>(eventType.getId())));
 }
 
 JavaObjectHandle<DXFeedSubscription>
 DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept {
     return JavaObjectHandle<DXFeedSubscription>(runIsolatedOrElse(
-        [listHandle = static_cast<dxfg_event_clazz_list_t *>(list->getHandle())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_new2(static_cast<graal_isolatethread_t *>(threadHandle), listHandle);
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedSubscription_new2(static_cast<graal_isolatethread_t *>(threadHandle), params...);
         },
-        nullptr));
+        nullptr, static_cast<dxfg_event_clazz_list_t *>(list->getHandle())));
 }
 
 void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexcept {
+    // TODO: move to Impl!
     auto onEvents = [](graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
         auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
         auto sub = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getEntity(id);
@@ -214,21 +213,19 @@ void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexc
     };
 
     eventListenerHandle_ = JavaObjectHandle<DXFeedEventListener>(runIsolatedOrElse(
-        [idValue = id.getValue(), onEvents](auto threadHandle) {
-            return dxfg_DXFeedEventListener_new(static_cast<graal_isolatethread_t *>(threadHandle), onEvents,
-                                                dxfcpp::bit_cast<void *>(idValue));
+        [](auto threadHandle, auto &&...params) {
+            return dxfg_DXFeedEventListener_new(static_cast<graal_isolatethread_t *>(threadHandle), params...);
         },
-        nullptr));
+        nullptr, onEvents, dxfcpp::bit_cast<void *>(id.getValue())));
 
     if (handle_ && eventListenerHandle_) {
         runIsolatedOrElse(
-            [handle = static_cast<dxfg_subscription_t *>(handle_.get()),
-             eventListenerHandle =
-                 static_cast<dxfg_feed_event_listener_t *>(eventListenerHandle_.get())](auto threadHandle) {
+            [](auto threadHandle, auto &&...params) {
                 return dxfg_DXFeedSubscription_addEventListener(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                                handle, eventListenerHandle) == 0;
+                                                                params...) == 0;
             },
-            false);
+            false, static_cast<dxfg_subscription_t *>(handle_.get()),
+            static_cast<dxfg_feed_event_listener_t *>(eventListenerHandle_.get()));
     }
 }
 
@@ -236,7 +233,8 @@ bool DXFeedSubscription::tryToSetEventListenerHandle() noexcept {
     std::lock_guard lock{listenerMutex_};
 
     if (!eventListenerHandle_) {
-        auto idOpt = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getId(sharedAs<DXFeedSubscription>());
+        auto idOpt =
+            ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getId(sharedAs<DXFeedSubscription>());
 
         if (!idOpt) {
             return false;
