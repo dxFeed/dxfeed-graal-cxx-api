@@ -34,9 +34,9 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 
     if (runIsolatedOrElse(
-            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_attachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+                return dxfg_DXFeed_attachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
                                                       subHandle) == 0;
             },
             false)) {
@@ -55,9 +55,9 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 
     if (runIsolatedOrElse(
-            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
                                                       subHandle) == 0;
             },
             false)) {
@@ -76,9 +76,9 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     }
 
     if (runIsolatedOrElse(
-            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscriptionAndClear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscriptionAndClear(static_cast<graal_isolatethread_t *>(threadHandle),
                                                               handle, subHandle) == 0;
             },
             false)) {

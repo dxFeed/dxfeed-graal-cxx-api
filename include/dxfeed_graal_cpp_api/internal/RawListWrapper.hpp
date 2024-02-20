@@ -84,10 +84,10 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     void *getHandle() noexcept {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace(getDebugName() + "::getHandle() -> " + dxfcpp::toString(dxfcpp::bit_cast<void *>(&list_)));
+            Debugger::trace(getDebugName() + "::getHandle() -> " + dxfcpp::toString(static_cast<void *>(&list_)));
         }
 
-        return dxfcpp::bit_cast<void *>(&list_);
+        return static_cast<void *>(&list_);
     }
 
     void init(std::size_t size) noexcept {

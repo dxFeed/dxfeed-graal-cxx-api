@@ -34,7 +34,7 @@ void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) noexcept
     }
 
     if (size == 0) {
-        return dxfcpp::bit_cast<void *>(list);
+        return static_cast<void *>(list);
     }
 
     list->elements = new (std::nothrow) ElementType *[size] {
@@ -62,7 +62,7 @@ bool SymbolWrapper::SymbolListUtils::setGraalListElement(void *graalList, std::p
         return false;
     }
 
-    dxfcpp::bit_cast<ListType *>(graalList)->elements[elementIdx] = dxfcpp::bit_cast<ElementType *>(element);
+    static_cast<ListType *>(graalList)->elements[elementIdx] = static_cast<ElementType *>(element);
 
     return true;
 }
@@ -76,11 +76,11 @@ bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std:
         return false;
     }
 
-    auto *list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto *list = static_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
         // TODO: error handling [EN-8232]
-        SymbolWrapper::freeGraal(dxfcpp::bit_cast<void *>(list->elements[i]));
+        SymbolWrapper::freeGraal(static_cast<void *>(list->elements[i]));
     }
 
     delete[] list->elements;
@@ -101,12 +101,12 @@ void SymbolWrapper::SymbolListUtils::freeGraalList(void *graalList) noexcept {
         return;
     }
 
-    auto list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto list = static_cast<ListType *>(graalList);
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
             if (list->elements[elementIndex]) {
-                SymbolWrapper::freeGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex]));
+                SymbolWrapper::freeGraal(static_cast<void *>(list->elements[elementIndex]));
             }
         }
 
@@ -130,12 +130,12 @@ std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *g
 
     std::vector<SymbolWrapper> result{};
 
-    auto list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto list = static_cast<ListType *>(graalList);
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
             if (list->elements[elementIndex]) {
-                result.emplace_back(SymbolWrapper::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
+                result.emplace_back(SymbolWrapper::fromGraal(static_cast<void *>(list->elements[elementIndex])));
             }
         }
     }

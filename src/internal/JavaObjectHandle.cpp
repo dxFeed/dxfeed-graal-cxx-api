@@ -16,8 +16,8 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
             }
 
             if (handle) {
-                return dxfg_JavaObjectHandler_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                      dxfcpp::bit_cast<dxfg_java_object_handler *>(handle)) == 0;
+                return dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                      static_cast<dxfg_java_object_handler *>(handle)) == 0;
             }
 
             return true;

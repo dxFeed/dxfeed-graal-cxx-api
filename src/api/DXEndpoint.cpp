@@ -209,8 +209,8 @@ void DXEndpoint::awaitNotConnected() noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_awaitNotConnected(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle) ==
+        [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXEndpoint_awaitNotConnected(static_cast<graal_isolatethread_t *>(threadHandle), handle) ==
                    0;
         },
         false);
@@ -226,8 +226,8 @@ void DXEndpoint::awaitProcessed() noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_awaitProcessed(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
+        [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXEndpoint_awaitProcessed(static_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
         },
         false);
 }
@@ -242,8 +242,8 @@ void DXEndpoint::closeAndAwaitTermination() noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_closeAndAwaitTermination(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+        [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXEndpoint_closeAndAwaitTermination(static_cast<graal_isolatethread_t *>(threadHandle),
                                                             handle) == 0;
         },
         false);
@@ -264,8 +264,8 @@ std::shared_ptr<DXFeed> DXEndpoint::getFeed() noexcept {
         !handle_
             ? nullptr
             : runIsolatedOrElse(
-                  [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-                      return dxfg_DXEndpoint_getFeed(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle);
+                  [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
+                      return dxfg_DXEndpoint_getFeed(static_cast<graal_isolatethread_t *>(threadHandle), handle);
                   },
                   nullptr);
 
@@ -286,8 +286,8 @@ std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() noexcept {
     auto publisherHandle =
         !handle_ ? nullptr
                  : runIsolatedOrElse(
-                       [handle = dxfcpp::bit_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-                           return dxfg_DXEndpoint_getPublisher(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                       [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
+                           return dxfg_DXEndpoint_getPublisher(static_cast<graal_isolatethread_t *>(threadHandle),
                                                                handle);
                        },
                        nullptr);
@@ -307,7 +307,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
     if (builder) {
         builder->handle_ = JavaObjectHandle<DXEndpoint::Builder>(runIsolatedOrElse(
             [](auto threadHandle) {
-                return dxfg_DXEndpoint_newBuilder(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle));
+                return dxfg_DXEndpoint_newBuilder(static_cast<graal_isolatethread_t *>(threadHandle));
             },
             nullptr));
     }
@@ -354,8 +354,8 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() noexcept {
         // The default property file has the same value as the key.
         runIsolatedOrElse(
             [key = propertiesFileKey, value = propertiesFileKey,
-             handle = dxfcpp::bit_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-                return dxfg_DXEndpoint_Builder_withProperty(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+             handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
+                return dxfg_DXEndpoint_Builder_withProperty(static_cast<graal_isolatethread_t *>(threadHandle),
                                                             handle, key.c_str(), value.c_str()) == 0;
             },
             false);
@@ -374,8 +374,8 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
     }
 
     runIsolatedOrElse(
-        [role = role, handle = dxfcpp::bit_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_Builder_withRole(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+        [role = role, handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXEndpoint_Builder_withRole(static_cast<graal_isolatethread_t *>(threadHandle), handle,
                                                     roleToGraalRole(role)) == 0;
         },
         false);
@@ -399,8 +399,8 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 
     runIsolatedOrElse(
         [key = key, value = value,
-         handle = dxfcpp::bit_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_Builder_withProperty(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+         handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXEndpoint_Builder_withProperty(static_cast<graal_isolatethread_t *>(threadHandle), handle,
                                                         key.c_str(), value.c_str()) == 0;
         },
         false);
@@ -419,8 +419,8 @@ bool DXEndpoint::Builder::supportsProperty(const std::string &key) noexcept {
     }
 
     return runIsolatedOrElse(
-        [key = key, handle = dxfcpp::bit_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_Builder_supportsProperty(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+        [key = key, handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXEndpoint_Builder_supportsProperty(static_cast<graal_isolatethread_t *>(threadHandle),
                                                             handle, key.c_str()) != 0;
         },
         false);
@@ -436,8 +436,8 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() noexcept {
     auto endpointHandle =
         !handle_ ? nullptr
                  : runIsolatedOrElse(
-                       [handle = dxfcpp::bit_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-                           return dxfg_DXEndpoint_Builder_build(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                       [handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
+                           return dxfg_DXEndpoint_Builder_build(static_cast<graal_isolatethread_t *>(threadHandle),
                                                                 handle);
                        },
                        nullptr);
@@ -743,7 +743,7 @@ dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t
         return DXFC_EC_ERROR;
     }
 
-    *builderHandle = dxfcpp::bit_cast<dxfc_dxendpoint_builder_t>(result);
+    *builderHandle = static_cast<dxfc_dxendpoint_builder_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -754,7 +754,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t bu
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -770,7 +770,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t bu
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -787,7 +787,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -804,7 +804,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builde
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -831,7 +831,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_buil
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -848,7 +848,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builde
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -866,7 +866,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builde
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -876,7 +876,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_free(dxfc_dxendpoint_builder_t builder
         return DXFC_EC_ERROR;
     }
 
-    if (!dxfcpp::BuilderRegistry::remove(dxfcpp::bit_cast<dxfcpp::BuilderHandle *>(builderHandle))) {
+    if (!dxfcpp::BuilderRegistry::remove(static_cast<dxfcpp::BuilderHandle *>(builderHandle))) {
         return DXFC_EC_ERROR;
     }
 
@@ -900,7 +900,7 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance(void *userData, DXFC_OUT dxfc_dxe
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -923,7 +923,7 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, voi
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -945,7 +945,7 @@ dxfc_error_code_t dxfc_dxendpoint_create(void *userData, DXFC_OUT dxfc_dxendpoin
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -968,7 +968,7 @@ dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *use
         return DXFC_EC_ERROR;
     }
 
-    *endpointHandle = dxfcpp::bit_cast<dxfc_dxendpoint_t>(result);
+    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
 
     return DXFC_EC_SUCCESS;
 }
@@ -979,7 +979,7 @@ dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpointHandle) {
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -996,7 +996,7 @@ dxfc_error_code_t dxfc_dxendpoint_close_and_await_termination(dxfc_dxendpoint_t 
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1013,7 +1013,7 @@ dxfc_error_code_t dxfc_dxendpoint_get_role(dxfc_dxendpoint_t endpointHandle, DXF
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1030,7 +1030,7 @@ dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpointHandle, const c
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1047,7 +1047,7 @@ dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpointHandle, con
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1064,7 +1064,7 @@ dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpointHandle, cons
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1081,7 +1081,7 @@ dxfc_error_code_t dxfc_dxendpoint_reconnect(dxfc_dxendpoint_t endpointHandle) {
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1098,7 +1098,7 @@ dxfc_error_code_t dxfc_dxendpoint_disconnect(dxfc_dxendpoint_t endpointHandle) {
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1115,7 +1115,7 @@ dxfc_error_code_t dxfc_dxendpoint_disconnect_and_clear(dxfc_dxendpoint_t endpoin
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1132,7 +1132,7 @@ dxfc_error_code_t dxfc_dxendpoint_await_processed(dxfc_dxendpoint_t endpointHand
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1149,7 +1149,7 @@ dxfc_error_code_t dxfc_dxendpoint_await_not_connected(dxfc_dxendpoint_t endpoint
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1166,7 +1166,7 @@ dxfc_error_code_t dxfc_dxendpoint_get_state(dxfc_dxendpoint_t endpointHandle, DX
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1184,7 +1184,7 @@ dxfc_error_code_t dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t en
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1210,7 +1210,7 @@ dxfc_error_code_t dxfc_dxendpoint_remove_state_change_listener(dxfc_dxendpoint_t
     }
 
     auto endpointWrapper =
-        dxfcpp::EndpointWrapperRegistry::get(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
+        dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
         return DXFC_EC_ERROR;
@@ -1241,7 +1241,7 @@ dxfc_error_code_t dxfc_dxendpoint_free(dxfc_dxendpoint_t endpointHandle) {
         return DXFC_EC_ERROR;
     }
 
-    if (!dxfcpp::EndpointWrapperRegistry::remove(dxfcpp::bit_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle))) {
+    if (!dxfcpp::EndpointWrapperRegistry::remove(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle))) {
         return DXFC_EC_ERROR;
     }
 

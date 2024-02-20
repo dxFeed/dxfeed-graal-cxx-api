@@ -228,7 +228,7 @@ std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList
 
     std::vector<std::shared_ptr<InstrumentProfile>> result{};
 
-    auto list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto list = static_cast<ListType *>(graalList);
 
     if (list->size <= 0 || list->elements == nullptr) {
         return result;
@@ -236,7 +236,7 @@ std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList
 
     for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
         if (list->elements[elementIndex]) {
-            result.emplace_back(InstrumentProfile::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
+            result.emplace_back(InstrumentProfile::fromGraal(static_cast<void *>(list->elements[elementIndex])));
         }
     }
 
