@@ -8,10 +8,11 @@
 #include "../internal/CEntryPointErrors.hpp"
 
 #include <string>
+#include <stdexcept>
 
 namespace dxfcpp {
 
-struct GraalException : public std::runtime_error {
+struct DXFCPP_EXPORT GraalException : public std::runtime_error {
     explicit GraalException(CEntryPointErrorsEnum entryPointErrorsEnum)
         : std::runtime_error(createMessage(entryPointErrorsEnum)) {
     }

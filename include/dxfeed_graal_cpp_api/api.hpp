@@ -47,5 +47,6 @@
 #include "isolated/Isolated.hpp"
 
 #include "native/GraalException.hpp"
+#include "native/JavaException.hpp"
 
 #include "ondemand/OnDemandService.hpp"

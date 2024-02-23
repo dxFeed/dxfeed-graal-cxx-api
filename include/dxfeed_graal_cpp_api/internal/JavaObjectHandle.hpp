@@ -12,7 +12,11 @@
 
 namespace dxfcpp {
 
-template <typename T> struct JavaObjectHandle {
+struct DXFCPP_EXPORT DefaultDeleter {
+    static void deleter(void *handle) noexcept;
+};
+
+template <typename T, typename Deleter = DefaultDeleter> struct JavaObjectHandle {
 #if DXFCPP_DEBUG == 1
     static auto getDebugName() {
         return std::string("JavaObjectHandle<") + typeid(T).name() + ">";
@@ -20,37 +24,63 @@ template <typename T> struct JavaObjectHandle {
 #endif
 
     using Type = T;
+    using DeleterType = Deleter;
 
-    static DXFCPP_EXPORT void deleter(void *handle) noexcept;
-    explicit JavaObjectHandle(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
+    explicit JavaObjectHandle(void *handle = nullptr) noexcept : mutex_(), handle_{handle} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
         }
     }
 
     JavaObjectHandle(const JavaObjectHandle &) = delete;
-    JavaObjectHandle(JavaObjectHandle &&) noexcept = default;
+
+    JavaObjectHandle(JavaObjectHandle && otherJavaObjectHandle) noexcept {
+        std::lock_guard lock(otherJavaObjectHandle.mutex_);
+
+        handle_ = otherJavaObjectHandle.handle_;
+    }
+
     JavaObjectHandle &operator=(const JavaObjectHandle &) = delete;
-    JavaObjectHandle &operator=(JavaObjectHandle &&) noexcept = default;
-    virtual ~JavaObjectHandle() noexcept = default;
+
+    JavaObjectHandle &operator=(JavaObjectHandle && otherJavaObjectHandle) noexcept {
+        std::scoped_lock lock(mutex_, otherJavaObjectHandle.mutex_);
+
+        DeleterType::deleter(handle_);
+
+        handle_ = otherJavaObjectHandle.handle_;
+        otherJavaObjectHandle.handle_ = nullptr;
+
+        return *this;
+    }
+
+    virtual ~JavaObjectHandle() noexcept {
+        DeleterType::deleter(handle_);
+    }
 
     [[nodiscard]] std::string toString() const noexcept {
-        if (impl_)
-            return dxfcpp::toString(impl_.get());
+        std::lock_guard lock(mutex_);
+
+        if (handle_)
+            return dxfcpp::toString(handle_);
         else
             return "nullptr";
     }
 
     [[nodiscard]] void *get() const noexcept {
-        return impl_.get();
+        std::lock_guard lock(mutex_);
+
+        return handle_;
     }
 
     explicit operator bool() const noexcept {
-        return static_cast<bool>(impl_);
+        std::lock_guard lock(mutex_);
+
+        return handle_ != nullptr;
     }
 
   private:
-    std::unique_ptr<void, decltype(&deleter)> impl_;
+    mutable std::mutex mutex_{};
+    void *handle_{nullptr};
 };
 
 } // namespace dxfcpp
