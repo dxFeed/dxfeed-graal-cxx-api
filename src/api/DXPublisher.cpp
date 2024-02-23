@@ -49,10 +49,11 @@ std::string DXPublisher::toString() const noexcept {
 
 void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
     runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_DXPublisher_publishEvents(static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
+        [handle = static_cast<dxfg_publisher_t *>(handle_.get()), graalEventsList](auto threadHandle) {
+            return dxfg_DXPublisher_publishEvents(static_cast<graal_isolatethread_t *>(threadHandle), handle,
+                                                  static_cast<dxfg_event_type_list *>(graalEventsList)) == 0;
         },
-        false, static_cast<dxfg_publisher_t *>(handle_.get()), static_cast<dxfg_event_type_list *>(graalEventsList));
+        false);
 }
 
 } // namespace dxfcpp

@@ -6,5 +6,3 @@
 #include "../internal/Conf.hpp"
 
 namespace dxfcpp {
-
-}
