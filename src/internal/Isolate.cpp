@@ -109,7 +109,7 @@ CEntryPointErrorsEnum Isolate::attach() noexcept {
             if constexpr (Debugger::traceIsolates) {
                 Debugger::trace(toString() + "::attach(): result != CEntryPointErrorsEnum::NO_ERROR [" +
                                 std::to_string(static_cast<std::underlying_type_t<CEntryPointErrorsEnum>>(result)) +
-                                "] " + CEntryPointErrors::valueOf(result).getDescription());
+                                "] " + CEntryPointErrorsEnumToStr(result));
             }
 
             return result;

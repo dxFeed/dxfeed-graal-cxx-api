@@ -38,7 +38,7 @@ jobs:
             xcode: '15.0'
             cc: 'clang'
             cxx: 'clang++'
-        buildType: [ Release ]
+        buildType: [ Release, Debug ]
 
     name: ${{ matrix.config.name }}-${{matrix.buildType}}
     runs-on: ${{ matrix.config.image }}

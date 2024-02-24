@@ -126,7 +126,7 @@ class Isolate final {
             if constexpr (Debugger::traceIsolates) {
                 Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
                                 "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
-                                CEntryPointErrors::valueOf(result).getDescription());
+                                CEntryPointErrorsEnumToStr(result));
             }
 
             return result;
@@ -153,7 +153,7 @@ class Isolate final {
             if constexpr (Debugger::traceIsolates) {
                 Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
                                 "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
-                                CEntryPointErrors::valueOf(result).getDescription());
+                                CEntryPointErrorsEnumToStr(result));
             }
 
             return result;
