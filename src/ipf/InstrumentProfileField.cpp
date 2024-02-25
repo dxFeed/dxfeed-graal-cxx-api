@@ -103,4 +103,16 @@ const std::unordered_map<std::string, std::reference_wrapper<const InstrumentPro
     {InstrumentProfileField::TRADING_HOURS.getName(), std::cref(InstrumentProfileField::TRADING_HOURS)},
 };
 
+InstrumentProfileFieldEnum InstrumentProfileField::getFieldEnum() const {
+    return fieldEnum_;
+}
+
+InstrumentProfileFieldTypeEnum InstrumentProfileField::getTypeEnum() const {
+    return typeEnum_;
+}
+
+bool InstrumentProfileField::isNumericField() const {
+    return numericField_;
+}
+
 } // namespace dxfcpp

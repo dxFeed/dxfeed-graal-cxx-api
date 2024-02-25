@@ -120,6 +120,12 @@ class DXFCPP_EXPORT InstrumentProfileField {
 
         return std::nullopt;
     }
+
+    InstrumentProfileFieldEnum getFieldEnum() const;
+
+    InstrumentProfileFieldTypeEnum getTypeEnum() const;
+
+    bool isNumericField() const;
 };
 
 } // namespace dxfcpp

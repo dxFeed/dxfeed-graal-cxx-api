@@ -53,7 +53,6 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    std::atomic<std::size_t> eventCounter{};
     std::mutex ioMtx{};
 
     // Parse args.
