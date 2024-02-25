@@ -50,6 +50,8 @@ option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
 include(FetchContent)
 
+set(FETCHCONTENT_QUIET FALSE)
+
 set(DXFCXX_GRAAL_TARGET_PLATFORM "unknown-unknown" CACHE STRING "")
 set(DXFCXX_TARGET_PLATFORM "unknown-unknown" CACHE STRING "")
 set(DXFCXX_TARGET_OS "unknown" CACHE STRING "")
@@ -60,7 +62,13 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 include(ParseAndDetectPlatforms.cmake)
 
 if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
-    FetchContent_Declare(DxFeedGraalNativeSdk URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+    FetchContent_Declare(
+            DxFeedGraalNativeSdk
+            URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            DOWNLOAD_NO_EXTRACT FALSE
+    )
 else ()
     if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
         set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
@@ -72,21 +80,52 @@ else ()
         set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
     endif ()
 
-    FetchContent_Declare(DxFeedGraalNativeSdk URL ${DXFEED_GRAAL_NATIVE_SDK_URL})
+    FetchContent_Declare(
+            DxFeedGraalNativeSdk
+            URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            DOWNLOAD_NO_EXTRACT FALSE
+    )
 endif ()
 
 FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 # DxFeedGraalNativeSdk_SOURCE_DIR
 
-FetchContent_Declare(Process GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default)
+FetchContent_Declare(
+        Process
+        GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default
+        USES_TERMINAL_DOWNLOAD TRUE
+        GIT_PROGRESS TRUE
+        DOWNLOAD_NO_EXTRACT FALSE
+)
+
 FetchContent_MakeAvailable(Process)
 
-FetchContent_Declare(Console GIT_REPOSITORY "https://github.com/ttldtor/Console.git" GIT_TAG default)
+FetchContent_Declare(
+        Console
+        GIT_REPOSITORY "https://github.com/ttldtor/Console.git" GIT_TAG default
+        USES_TERMINAL_DOWNLOAD TRUE
+        GIT_PROGRESS TRUE
+        DOWNLOAD_NO_EXTRACT FALSE
+)
+
 FetchContent_MakeAvailable(Console)
 
 add_subdirectory(third_party/utfcpp-3.2.3)
+
+set(FMTLIB_VERSION "10.2.1")
 set(FMT_INSTALL OFF)
-add_subdirectory(third_party/fmt-10.0.0)
+
+FetchContent_Declare(
+        fmt
+        URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
+        USES_TERMINAL_DOWNLOAD TRUE
+        GIT_PROGRESS TRUE
+        DOWNLOAD_NO_EXTRACT FALSE
+)
+FetchContent_MakeAvailable(fmt)
+
 #set(BUILD_TZ_LIB ON)
 #set(USE_SYSTEM_TZ_DB ON)
 add_subdirectory(third_party/date-3.0.1)

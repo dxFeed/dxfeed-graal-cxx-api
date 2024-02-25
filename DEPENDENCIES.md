@@ -4,7 +4,7 @@
 
 - [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v1.1.4
 - [utfcpp](https://github.com/nemtrif/utfcpp) v3.2.3
-- [fmt](https://github.com/fmtlib/fmt) v10.0.0
+- [fmt](https://github.com/fmtlib/fmt) v10.2.1
 - [doctest](https://github.com/doctest/doctest) v2.4.11 (Tests)
 - [range-v3](https://github.com/ericniebler/range-v3) v0.12
 - [date](https://github.com/HowardHinnant/date) v3.0.1
