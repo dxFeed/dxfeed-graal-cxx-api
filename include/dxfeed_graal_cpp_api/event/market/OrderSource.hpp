@@ -87,7 +87,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     }
 
     static bool checkChar(char c) noexcept {
-        if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9') {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
             return true;
         }
 
@@ -96,7 +96,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         return false;
     }
 
-    static std::string decodeName(int id) noexcept {
+    static std::string decodeName(std::int32_t id) noexcept {
         if (id == 0) {
             // TODO: error handling: [EN-8232] throw IllegalArgumentException("Source name must contain from 1 to 4 characters");
 

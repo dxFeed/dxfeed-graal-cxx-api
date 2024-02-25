@@ -384,11 +384,13 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
         return value;
     }
 
-    if (shift >= sizeof(V) * 8) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return value << static_cast<std::make_unsigned_t<S>>(shift);
+    return value << unsignedShift;
 }
 
 /**
@@ -435,15 +437,13 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
         return value;
     }
 
-    if (shift >= sizeof(V) * CHAR_BIT) {
-        if (value < 0) {
-            return -1;
-        } else {
-            return 0;
-        }
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
+        return value < 0 ? -1 : 0;
     }
 
-    return value >> static_cast<std::make_unsigned_t<S>>(shift);
+    return value >> unsignedShift;
 }
 
 /**
@@ -506,11 +506,13 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return value << static_cast<std::make_unsigned_t<S>>(shift);
+    return value << unsignedShift;
 }
 
 /**
@@ -556,11 +558,13 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return static_cast<V>(static_cast<std::make_unsigned_t<V>>(value) >> static_cast<std::make_unsigned_t<S>>(shift));
+    return static_cast<V>(static_cast<std::make_unsigned_t<V>>(value) >> unsignedShift);
 }
 
 /**

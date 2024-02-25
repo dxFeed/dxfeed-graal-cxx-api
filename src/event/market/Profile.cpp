@@ -58,6 +58,7 @@ void Profile::fillGraalData(void *graalNative) const noexcept {
 
     auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
 
+    graalProfile->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_PROFILE;
     graalProfile->description = createCString(data_.description);
     graalProfile->status_reason = createCString(data_.statusReason);
     graalProfile->halt_start_time = data_.haltStartTime;
@@ -111,19 +112,19 @@ std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) noexcept {
 }
 
 std::string Profile::toString() const noexcept {
-    return fmt::format("Profile{{{}, eventTime={}, description='{}', SSR={}, status={}, statusReason='{}', "
-                       "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
-                       "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
-                       "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
-                       MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-                       getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(),
-                       getStatusReason(), TimeFormat::DEFAULT.format(getHaltStartTime()),
-                       TimeFormat::DEFAULT.format(getHaltEndTime()), dxfcpp::toString(getHighLimitPrice()),
-                       dxfcpp::toString(getLowLimitPrice()), dxfcpp::toString(getHigh52WeekPrice()),
-                       dxfcpp::toString(getLow52WeekPrice()), dxfcpp::toString(getBeta()),
-                       dxfcpp::toString(getEarningsPerShare()), dxfcpp::toString(getDividendFrequency()),
-                       dxfcpp::toString(getExDividendAmount()), day_util::getYearMonthDayByDayId(getExDividendDayId()),
-                       dxfcpp::toString(getShares()), dxfcpp::toString(getFreeFloat()));
+    return fmt::format(
+        "Profile{{{}, eventTime={}, description='{}', SSR={}, status={}, statusReason='{}', "
+        "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
+        "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
+        "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(), getStatusReason(),
+        TimeFormat::DEFAULT.format(getHaltStartTime()), TimeFormat::DEFAULT.format(getHaltEndTime()),
+        dxfcpp::toString(getHighLimitPrice()), dxfcpp::toString(getLowLimitPrice()),
+        dxfcpp::toString(getHigh52WeekPrice()), dxfcpp::toString(getLow52WeekPrice()), dxfcpp::toString(getBeta()),
+        dxfcpp::toString(getEarningsPerShare()), dxfcpp::toString(getDividendFrequency()),
+        dxfcpp::toString(getExDividendAmount()), day_util::getYearMonthDayByDayId(getExDividendDayId()),
+        dxfcpp::toString(getShares()), dxfcpp::toString(getFreeFloat()));
 }
 
 void *Profile::toGraal() const noexcept {
@@ -131,8 +132,7 @@ void *Profile::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalProfile = new (std::nothrow)
-        dxfg_profile_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_PROFILE}}};
+    auto *graalProfile = new (std::nothrow) dxfg_profile_t{};
 
     if (!graalProfile) {
         // TODO: error handling [EN-8232]

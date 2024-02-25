@@ -3,6 +3,12 @@
 
 #pragma once
 
+#ifdef _MSC_VER
+#    pragma warning(push)
+#    pragma warning(disable : 4251)
+#    pragma warning(disable : 4996)
+#endif
+
 #include <dxfg_api.h>
 
 #ifdef __cpp_lib_bit_cast
@@ -44,3 +50,7 @@
 #include "Common.hpp"
 #include "Handler.hpp"
 #include "Id.hpp"
+
+#ifdef _MSC_VER
+#    pragma warning(pop)
+#endif

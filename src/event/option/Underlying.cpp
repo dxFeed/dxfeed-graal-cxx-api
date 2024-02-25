@@ -50,6 +50,7 @@ void Underlying::fillGraalData(void *graalNative) const noexcept {
 
     auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
 
+    graalUnderlying->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_UNDERLYING;
     graalUnderlying->event_flags = data_.eventFlags;
     graalUnderlying->index = data_.index;
     graalUnderlying->volatility = data_.volatility;
@@ -97,8 +98,7 @@ void *Underlying::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalUnderlying = new (std::nothrow)
-        dxfg_underlying_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_UNDERLYING}}};
+    auto *graalUnderlying = new (std::nothrow) dxfg_underlying_t{};
 
     if (!graalUnderlying) {
         // TODO: error handling [EN-8232]

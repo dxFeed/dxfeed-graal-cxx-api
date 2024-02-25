@@ -70,7 +70,6 @@ bool SymbolWrapper::SymbolListUtils::setGraalListElement(void *graalList, std::p
 bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept {
     using ListType = dxfg_symbol_list;
     using SizeType = decltype(ListType::size);
-    using ElementType = dxfg_symbol_t;
 
     if (graalList == nullptr || count < 0 || count >= std::numeric_limits<SizeType>::max()) {
         return false;

@@ -58,7 +58,7 @@ struct NonOwningInstrumentProfileIterator {
 };
 
 struct InstrumentProfileCollector::Impl {
-    static void onInstrumentProfilesUpdate(graal_isolatethread_t *thread, dxfg_iterable_ip_t *profiles,
+    static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
                                            void *userData) noexcept {
         auto [collectorId, listenerId] = dxfcpp::unpack(dxfcpp::bit_cast<std::size_t>(userData));
 

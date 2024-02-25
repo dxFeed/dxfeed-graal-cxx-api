@@ -334,7 +334,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @see OrderBase::getSequence()
      */
     void setSequence(std::int32_t sequence) noexcept {
-        if (sequence < 0 || sequence > MAX_SEQUENCE) {
+        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
             // TODO: error handling: [EN-8232] throw IllegalArgumentException();
 
             return;

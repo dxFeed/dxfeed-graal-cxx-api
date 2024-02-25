@@ -3,9 +3,7 @@
 
 #include <dxfg_api.h>
 
-#include "dxfeed_graal_c_api/api.h"
-#include "dxfeed_graal_cpp_api/api.hpp"
-#include "dxfeed_graal_cpp_api/api/osub/IndexedEventSubscriptionSymbol.hpp"
+#include <dxfeed_graal_cpp_api/api.hpp>
 
 namespace dxfcpp {
 

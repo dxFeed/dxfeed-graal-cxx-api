@@ -57,6 +57,7 @@ void OptionSale::fillGraalData(void *graalNative) const noexcept {
 
     auto graalOptionSale = static_cast<dxfg_option_sale_t *>(graalNative);
 
+    graalOptionSale->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE;
     graalOptionSale->event_flags = data_.eventFlags;
     graalOptionSale->index = data_.index;
     graalOptionSale->time_sequence = data_.timeSequence;
@@ -131,8 +132,7 @@ void *OptionSale::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOptionSale = new (std::nothrow)
-        dxfg_option_sale_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE}}};
+    auto *graalOptionSale = new (std::nothrow) dxfg_option_sale_t{};
 
     if (!graalOptionSale) {
         // TODO: error handling [EN-8232]

@@ -53,6 +53,7 @@ void Series::fillGraalData(void *graalNative) const noexcept {
 
     auto graalSeries = static_cast<dxfg_series_t *>(graalNative);
 
+    graalSeries->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_SERIES;
     graalSeries->event_flags = data_.eventFlags;
     graalSeries->index = data_.index;
     graalSeries->time_sequence = data_.timeSequence;
@@ -103,8 +104,7 @@ void *Series::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSeries = new (std::nothrow)
-        dxfg_series_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SERIES}}};
+    auto *graalSeries = new (std::nothrow) dxfg_series_t{};
 
     if (!graalSeries) {
         // TODO: error handling [EN-8232]

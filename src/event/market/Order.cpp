@@ -37,6 +37,7 @@ void Order::fillGraalData(void *graalNative) const noexcept {
 
     auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
 
+    graalOrder->order_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_ORDER;
     graalOrder->market_maker = createCString(orderData_.marketMaker);
 }
 
@@ -82,8 +83,7 @@ void *Order::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOrder = new (std::nothrow)
-        dxfg_order_t{.order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_ORDER}}}};
+    auto *graalOrder = new (std::nothrow) dxfg_order_t{};
 
     if (!graalOrder) {
         // TODO: error handling [EN-8232]

@@ -34,6 +34,10 @@ void Trade::fillGraalData(void *graalNative) const noexcept {
     }
 
     TradeBase::fillGraalData(graalNative);
+
+    auto graalTrade = static_cast<dxfg_trade_t *>(graalNative);
+
+    graalTrade->trade_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE;
 }
 
 std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) noexcept {
@@ -66,8 +70,7 @@ void *Trade::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTrade = new (std::nothrow)
-        dxfg_trade_t{.trade_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE}}}};
+    auto *graalTrade = new (std::nothrow) dxfg_trade_t{};
 
     if (!graalTrade) {
         // TODO: error handling [EN-8232]

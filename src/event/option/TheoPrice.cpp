@@ -50,6 +50,7 @@ void TheoPrice::fillGraalData(void *graalNative) const noexcept {
 
     auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);
 
+    graalTheoPrice->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE;
     graalTheoPrice->event_flags = data_.eventFlags;
     graalTheoPrice->index = data_.index;
     graalTheoPrice->price = data_.price;
@@ -96,8 +97,7 @@ void *TheoPrice::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTheoPrice = new (std::nothrow)
-        dxfg_theo_price_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE}}};
+    auto *graalTheoPrice = new (std::nothrow) dxfg_theo_price_t{};
 
     if (!graalTheoPrice) {
         // TODO: error handling [EN-8232]

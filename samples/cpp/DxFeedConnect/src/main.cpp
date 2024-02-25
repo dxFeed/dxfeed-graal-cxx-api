@@ -60,10 +60,10 @@ int main(int argc, char *argv[]) {
     std::string address = argv[1];
     auto types = CmdArgsUtils::parseTypes(argv[2]);
     auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
-    auto time = -1ULL;
+    auto time = -1LL;
 
     if (argc >= 5) {
-        time = CmdArgsUtils::parseDateTime(argv[4]);
+        time = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[4]);
     }
 
     // Create an endpoint and connect to specified address.

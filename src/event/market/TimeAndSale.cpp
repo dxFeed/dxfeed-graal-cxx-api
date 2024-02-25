@@ -58,6 +58,7 @@ void TimeAndSale::fillGraalData(void *graalNative) const noexcept {
 
     auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
 
+    graalTimeAndSale->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE;
     graalTimeAndSale->event_flags = data_.eventFlags;
     graalTimeAndSale->index = data_.index;
     graalTimeAndSale->time_nano_part = data_.timeNanoPart;
@@ -111,9 +112,10 @@ std::string TimeAndSale::toString() const noexcept {
     return fmt::format("TimeAndSale{{{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
                        "exchange={}, price={}, size={}, bid={}, "
                        "ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, validTick={}, type={}{}{}}}",
-                       MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-                       getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
-                       getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
+                       MarketEvent::getEventSymbol(),
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+                       getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()),
+                       getTimeNanoPart(), getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
                        dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
                        getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()), getAggressorSide().toString(),
                        isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
@@ -126,8 +128,7 @@ void *TimeAndSale::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTimeAndSale = new (std::nothrow)
-        dxfg_time_and_sale_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE}}};
+    auto *graalTimeAndSale = new (std::nothrow) dxfg_time_and_sale_t{};
 
     if (!graalTimeAndSale) {
         // TODO: error handling [EN-8232]

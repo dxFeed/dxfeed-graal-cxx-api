@@ -45,7 +45,7 @@ TEST_CASE("Candle::setTime() should change Index") {
 TEST_CASE("Candle::setSequence() should change Index") {
     auto c = Candle("AAPL"_c);
     auto oldIndex = c.getIndex();
-    int sequence = 567;
+    std::int32_t sequence = 567;
 
     c.setSequence(sequence);
 
@@ -210,7 +210,7 @@ TEST_CASE("TimeAndSale::setTime() should change Index") {
 TEST_CASE("TimeAndSale::setSequence() should change Index") {
     auto tns = TimeAndSale("AAPL");
     auto oldIndex = tns.getIndex();
-    int sequence = 567;
+    std::int32_t sequence = 567;
 
     tns.setSequence(sequence);
 
@@ -296,7 +296,7 @@ TEST_CASE("Greeks::setTime() should change Index") {
 TEST_CASE("Greeks::setSequence() should change Index") {
     auto g = Greeks("AAPL");
     auto oldIndex = g.getIndex();
-    int sequence = 567;
+    std::int32_t sequence = 567;
 
     g.setSequence(sequence);
 
@@ -395,7 +395,7 @@ TEST_CASE("TheoPrice::setTime() should change Index") {
 TEST_CASE("TheoPrice::setSequence() should change Index") {
     auto tp = TheoPrice("AAPL");
     auto oldIndex = tp.getIndex();
-    int sequence = 567;
+    std::int32_t sequence = 567;
 
     tp.setSequence(sequence);
 
@@ -436,7 +436,7 @@ TEST_CASE("Underlying::setTime() should change Index") {
 TEST_CASE("Underlying::setSequence() should change Index") {
     auto u = Underlying("AAPL");
     auto oldIndex = u.getIndex();
-    int sequence = 567;
+    std::int32_t sequence = 567;
 
     u.setSequence(sequence);
 

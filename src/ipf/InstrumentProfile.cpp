@@ -67,7 +67,7 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
 
                 result.resize(strings->size);
 
-                for (int i = 0; i < strings->size; i++) {
+                for (std::int32_t i = 0; i < strings->size; i++) {
                     result[i] = dxfcpp::toString(strings->elements[i]);
                 }
 
@@ -81,7 +81,7 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
                     return result;
                 }
 
-                for (int i = 0; i < strings->size - 1; i += 2) {
+                for (std::int32_t i = 0; i < strings->size - 1; i += 2) {
                     auto key = dxfcpp::toString(strings->elements[i]);
 
                     if (key.empty()) {
@@ -145,7 +145,7 @@ void InstrumentProfile::fillGraalData(void *graalNative) const noexcept {
                 nullptr
             };
 
-        for (int i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
+        for (std::int32_t i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
             // TODO: process null-strings. <null>?
             if (!data_.rawCustomFields[i].empty()) {
                 graalInstrumentProfile->custom_fields->elements[i] = createCString(data_.rawCustomFields[i]);
@@ -188,7 +188,7 @@ void InstrumentProfile::freeGraalData(void *graalNative) noexcept {
 
     if (graalInstrumentProfile->custom_fields) {
         if (graalInstrumentProfile->custom_fields->elements && graalInstrumentProfile->custom_fields->size > 0) {
-            for (int i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
+            for (std::int32_t i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
                 delete[] graalInstrumentProfile->custom_fields->elements[i];
             }
 

@@ -37,6 +37,7 @@ void SpreadOrder::fillGraalData(void *graalNative) const noexcept {
 
     auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
 
+    graalSpreadOrder->order_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER;
     graalSpreadOrder->spread_symbol = createCString(spreadOrderData_.spreadSymbol);
 }
 
@@ -82,8 +83,7 @@ void *SpreadOrder::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSpreadOrder = new (std::nothrow) dxfg_spread_order_t{
-        .order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER}}}};
+    auto *graalSpreadOrder = new (std::nothrow) dxfg_spread_order_t{};
 
     if (!graalSpreadOrder) {
         // TODO: error handling [EN-8232]

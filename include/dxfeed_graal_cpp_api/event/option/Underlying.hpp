@@ -215,9 +215,9 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      * @param sequence the sequence.
      * @see ::getSequence()
      */
-    void setSequence(int sequence) noexcept {
+    void setSequence(std::int32_t sequence) noexcept {
         // TODO: Improve error handling [EN-8232]
-        assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
+        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }

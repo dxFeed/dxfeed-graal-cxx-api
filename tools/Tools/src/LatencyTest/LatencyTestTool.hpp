@@ -141,6 +141,8 @@ struct LatencyTest {
             auto eventsPerSecond = getEventsPerSecond();
             auto listenerCallsPerSecond = getListenerCallsPerSecond();
 
+            dxfcpp::ignore_unused(listenerCallsPerSecond);
+
             std::lock_guard lock{mtx_};
 
             if (!deltaTimes_.empty()) {

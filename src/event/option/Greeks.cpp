@@ -51,6 +51,7 @@ void Greeks::fillGraalData(void *graalNative) const noexcept {
 
     auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
 
+    graalGreeks->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_GREEKS;
     graalGreeks->event_flags = data_.eventFlags;
     graalGreeks->index = data_.index;
     graalGreeks->price = data_.price;
@@ -99,8 +100,7 @@ void *Greeks::toGraal() const noexcept {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalGreeks = new (std::nothrow)
-        dxfg_greeks_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_GREEKS}}};
+    auto *graalGreeks = new (std::nothrow) dxfg_greeks_t{};
 
     if (!graalGreeks) {
         // TODO: error handling [EN-8232]

@@ -413,7 +413,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      */
     void setSequence(std::int32_t sequence) noexcept {
         // TODO: Improve error handling [EN-8232]
-        assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
+        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
         data_.timeSequence = orOp(andOp(data_.timeSequence, ~MAX_SEQUENCE), sequence);
     }

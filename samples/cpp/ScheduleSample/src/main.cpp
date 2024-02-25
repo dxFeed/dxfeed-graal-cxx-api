@@ -216,7 +216,7 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Found profile for " + symbol + ": " + profile->getDescription() << std::endl;
 
-    auto time = argc < 5 ? dxfcpp::now() : TimeFormat::DEFAULT.parse(argv[4]);
+    auto time = argc < 5 ? dxfcpp::now() : TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[4]);
 
     std::cout << "Using timestamp " + TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(time) << std::endl;
 

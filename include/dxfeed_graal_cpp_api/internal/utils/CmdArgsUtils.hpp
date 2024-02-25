@@ -191,48 +191,6 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
 
         return {};
     }
-
-    /**
-     * Parses Date+Time string and converts to timestamp
-     *
-     * @param string Date+Time string
-     * @return UTC timestamp
-     */
-    static std::int64_t parseDateTime(const std::string &string) noexcept;
-
-    /**
-     * Parses Date+Time string and converts to timestamp
-     *
-     * @param string Date+Time string
-     * @return UTC timestamp
-     */
-    static std::int64_t parseDateTime(const char *string) noexcept {
-        return parseDateTime(std::string(string));
-    }
-
-    /**
-     * Parses Date+Time string and converts to timestamp
-     *
-     * @param string Date+Time string
-     * @return UTC timestamp
-     */
-    static std::int64_t parseDateTime(std::string_view string) noexcept {
-        return parseDateTime(string.data());
-    }
-
-    /**
-     * Parses Date+Time string and converts to timestamp
-     *
-     * @param string Date+Time string
-     * @return UTC timestamp
-     */
-    static std::int64_t parseDateTime(std::optional<std::string> string) noexcept {
-        if (string.has_value()) {
-            return parseDateTime(string.value());
-        }
-
-        return -1;
-    }
 };
 
 } // namespace dxfcpp

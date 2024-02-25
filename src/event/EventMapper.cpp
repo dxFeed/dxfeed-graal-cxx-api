@@ -266,7 +266,6 @@ bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx
 bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept {
     using ListType = dxfg_event_type_list;
     using SizeType = decltype(ListType::size);
-    using ElementType = dxfg_event_type_t;
 
     if (graalList == nullptr || count < 0 || count >= std::numeric_limits<SizeType>::max()) {
         return false;
