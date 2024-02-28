@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -19,3 +21,5 @@ class DXFeedSubscription;
 using DXFeedSubscriptionManager = EntityManager<DXFeedSubscription>;
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

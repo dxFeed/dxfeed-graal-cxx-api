@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -88,3 +90,5 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

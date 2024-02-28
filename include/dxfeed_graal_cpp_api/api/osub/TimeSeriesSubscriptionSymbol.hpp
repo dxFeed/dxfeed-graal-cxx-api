@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../symbols/SymbolWrapper.hpp"
 #include "../FilteredSubscriptionSymbol.hpp"
 
@@ -101,3 +103,5 @@ template <> struct DXFCPP_EXPORT std::hash<dxfcpp::TimeSeriesSubscriptionSymbol>
         return std::hash<std::unique_ptr<dxfcpp::SymbolWrapper>>{}(timeSeriesSubscriptionSymbol.getEventSymbol());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../internal/utils/StringUtils.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
@@ -108,3 +110,5 @@ template <> struct std::hash<dxfcpp::CandleExchange> {
         return static_cast<std::size_t>(candleExchange.getExchangeCode());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

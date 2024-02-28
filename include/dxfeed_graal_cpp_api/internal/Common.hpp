@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
@@ -682,3 +684,5 @@ constexpr std::pair<std::size_t, std::size_t> unpack(std::size_t v) noexcept {
 }
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

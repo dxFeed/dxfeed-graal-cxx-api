@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/Common.hpp"
 
 #include <cstdint>
@@ -129,3 +131,5 @@ class DXFCPP_EXPORT InstrumentProfileField {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

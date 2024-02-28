@@ -3,11 +3,9 @@
 
 #pragma once
 
-#ifdef _MSC_VER
-#    pragma warning(push)
-#    pragma warning(disable : 4251)
-#    pragma warning(disable : 4996)
-#endif
+#include "Conf.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
 #include <dxfg_api.h>
 
@@ -51,6 +49,4 @@
 #include "Handler.hpp"
 #include "Id.hpp"
 
-#ifdef _MSC_VER
-#    pragma warning(pop)
-#endif
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

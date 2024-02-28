@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/Common.hpp"
 #include "../internal/Id.hpp"
 #include "../internal/JavaObjectHandle.hpp"
@@ -119,3 +121,5 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

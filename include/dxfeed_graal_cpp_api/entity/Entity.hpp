@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 namespace dxfcpp {
 
 /// Base abstract class for all dxFeed C++ API entities
@@ -14,3 +16,5 @@ struct DXFCPP_EXPORT Entity {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

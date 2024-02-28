@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <atomic>
 #include <cstdint>
 
@@ -57,3 +59,5 @@ template <typename T> struct std::hash<dxfcpp::Id<T>> {
         return id.getValue();
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

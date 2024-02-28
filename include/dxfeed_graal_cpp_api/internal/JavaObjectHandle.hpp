@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "utils/StringUtils.hpp"
 
 #include <memory>
@@ -54,3 +56,5 @@ template <typename T> struct JavaObjectHandle {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/EventClassList.hpp"
 #include "../internal/context/ApiContext.hpp"
 
@@ -753,3 +755,5 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "AnalyticOrder.hpp"
 #include "Direction.hpp"
 #include "IcebergType.hpp"
@@ -29,3 +31,5 @@
 #include "TradeBase.hpp"
 #include "TradeETH.hpp"
 #include "TradingStatus.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

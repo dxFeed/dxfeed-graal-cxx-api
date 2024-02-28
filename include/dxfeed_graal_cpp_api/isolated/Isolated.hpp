@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/TimeFormat.hpp"
 
 #include "../api/DXEndpoint.hpp"
@@ -251,3 +253,5 @@ struct Schedule {
 };
 } // namespace schedule
 } // namespace dxfcpp::isolated
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

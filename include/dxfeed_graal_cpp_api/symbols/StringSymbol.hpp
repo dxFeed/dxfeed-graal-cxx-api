@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <utility>
@@ -137,3 +139,5 @@ template <> struct DXFCPP_EXPORT std::hash<dxfcpp::StringSymbol> {
         return std::hash<std::string>{}(stringSymbol.getData());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -374,3 +376,5 @@ template <> struct std::hash<dxfcpp::SymbolWrapper> {
         return std::hash<dxfcpp::SymbolWrapper::DataType>{}(symbolWrapper.getData());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

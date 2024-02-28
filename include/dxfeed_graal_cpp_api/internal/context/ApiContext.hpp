@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 
 #include "../managers/DXEndpointManager.hpp"
@@ -52,3 +54,5 @@ class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -42,3 +44,5 @@ const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const T
     TradingStatus::ParentType::ALL;
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

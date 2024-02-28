@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <string>
 
 namespace dxfcpp::enum_utils {
@@ -42,4 +44,6 @@ DXFCPP_EXPORT std::string getEventTypeEnumClassNamesList(std::string separator =
 DXFCPP_EXPORT std::string getMarketEventTypeEnumClassNamesList(std::string separator = std::string(",")) noexcept;
 
 }
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 

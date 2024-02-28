@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 namespace dxfcpp {
 
 enum class SessionTypeEnum : std::uint32_t {
@@ -85,3 +87,5 @@ template <> struct std::hash<dxfcpp::SessionType> {
         return std::hash<std::string>{}(sessionType.getName());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

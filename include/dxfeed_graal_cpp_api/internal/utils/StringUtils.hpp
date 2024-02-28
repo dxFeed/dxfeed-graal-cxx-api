@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
@@ -196,3 +198,5 @@ DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
 DXFCPP_EXPORT std::string trimStr(const std::string &s) noexcept;
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

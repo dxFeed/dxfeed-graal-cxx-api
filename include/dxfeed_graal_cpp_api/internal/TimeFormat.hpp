@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "JavaObjectHandle.hpp"
 
 #include <cstddef>
@@ -125,3 +127,5 @@ struct DXFCPP_EXPORT TimeFormat {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

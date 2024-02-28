@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -194,3 +196,5 @@ template <> struct DXFCPP_EXPORT std::hash<std::reference_wrapper<const dxfcpp::
         return static_cast<std::size_t>(eventType.get().getId());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

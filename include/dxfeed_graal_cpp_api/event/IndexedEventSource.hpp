@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <string>
 
@@ -98,3 +100,5 @@ template <> struct std::hash<dxfcpp::IndexedEventSource> {
         return static_cast<std::size_t>(indexedEventSource.id());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

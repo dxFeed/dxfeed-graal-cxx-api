@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 #include <optional>
 #include <unordered_map>
@@ -119,3 +121,5 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

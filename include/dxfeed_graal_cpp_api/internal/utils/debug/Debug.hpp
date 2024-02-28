@@ -5,6 +5,8 @@
 
 #include "../../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 // #define DXFCPP_DEBUG 1
 // #define DXFCPP_TRACE_LISTS 1
 // #define DXFCPP_TRACE_ISOLATES 1
@@ -74,3 +76,5 @@ struct DXFCPP_EXPORT Debugger {
 #endif
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

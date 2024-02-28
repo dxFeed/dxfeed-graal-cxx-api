@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 namespace dxfcpp {
 
 template <class T> class NonCopyable {
@@ -18,3 +20,5 @@ template <class T> class NonCopyable {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

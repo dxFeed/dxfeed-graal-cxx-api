@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 namespace dxfcpp {
 
 struct Schedule;
@@ -288,3 +290,5 @@ template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Day> {
         return day.getHashCode();
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

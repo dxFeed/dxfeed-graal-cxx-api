@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/Common.hpp"
 
 #include <cstdint>
@@ -42,3 +44,5 @@ const std::unordered_map<InstrumentProfileType::CodeType, std::reference_wrapper
     InstrumentProfileType::ParentType::ALL;
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

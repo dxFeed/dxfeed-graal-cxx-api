@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 
 #include "Entity.hpp"
@@ -70,3 +72,5 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../symbols/SymbolWrapper.hpp"
 
 #include "CandleAlignment.hpp"
@@ -332,3 +334,5 @@ template <> struct std::hash<dxfcpp::CandleSymbol> {
         return std::hash<std::string>{}(candleSymbol.toString());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

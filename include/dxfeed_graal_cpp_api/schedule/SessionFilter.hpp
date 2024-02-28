@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "SessionType.hpp"
 
 namespace dxfcpp {
@@ -136,3 +138,5 @@ template <> struct std::hash<dxfcpp::SessionFilter> {
         return hash;
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

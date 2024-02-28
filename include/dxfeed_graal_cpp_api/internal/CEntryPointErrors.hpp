@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <compare>
 #include <cstdint>
 #include <functional>
@@ -210,3 +212,5 @@ inline constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum en
 }
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

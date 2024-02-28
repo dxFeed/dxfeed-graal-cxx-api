@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 namespace dxfcpp {
 
 /**
@@ -194,3 +196,5 @@ template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Session> {
         return session.getHashCode();
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

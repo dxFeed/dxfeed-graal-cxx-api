@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -40,3 +42,5 @@ struct Side : Enum<Side, std::uint32_t> {
 template <> const std::unordered_map<Side::CodeType, std::reference_wrapper<const Side>> Side::ParentType::ALL;
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include "Common.hpp"
 #include "Conf.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <string>
 #include <thread>
@@ -18,3 +19,5 @@ struct DXFCPP_EXPORT Platform final {
     static std::string getPlatformInfo() noexcept;
 };
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

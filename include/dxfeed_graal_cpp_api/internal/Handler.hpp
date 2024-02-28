@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <deque>
 #include <functional>
 #include <future>
@@ -418,3 +420,5 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
 };
 
 } // namespace dxfcpp
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
