@@ -105,7 +105,7 @@ struct LatencyTest {
         }
 
         static double calcMin(auto &&values) noexcept {
-            return *std::min_element(std::begin(values), std::end(values));
+            return static_cast<double>(*std::min_element(std::begin(values), std::end(values)));
         }
 
         static double calcMean(auto &&values) noexcept {
@@ -113,7 +113,7 @@ struct LatencyTest {
         }
 
         static double calcMax(auto &&values) noexcept {
-            return *std::max_element(std::begin(values), std::end(values));
+            return static_cast<double>(*std::max_element(std::begin(values), std::end(values)));
         }
 
         static double calcStdDev(auto &&values) noexcept {
