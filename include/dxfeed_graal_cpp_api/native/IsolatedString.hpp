@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 namespace IsolatedString {
 
@@ -15,6 +15,6 @@ DXFCPP_EXPORT bool release(const char *string) noexcept;
 
 }
 
-}
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

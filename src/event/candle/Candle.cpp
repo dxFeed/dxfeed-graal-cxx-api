@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Candle::TYPE = EventTypeEnum::CANDLE;
 
@@ -150,4 +150,4 @@ void Candle::freeGraal(void *graalNative) noexcept {
     delete graalCandle;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -23,7 +23,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Reads instrument profiles from the stream using Instrument Profile Format (IPF).
@@ -120,6 +120,6 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
                                                                  const std::string &password) const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

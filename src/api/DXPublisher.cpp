@@ -14,7 +14,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::shared_ptr<DXPublisher> DXPublisher::getInstance() noexcept {
     if constexpr (Debugger::isDebug) {
@@ -56,4 +56,4 @@ void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
         false);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

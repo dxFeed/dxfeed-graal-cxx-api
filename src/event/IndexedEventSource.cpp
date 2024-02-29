@@ -8,7 +8,7 @@
 
 #include <memory>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
 
@@ -39,4 +39,4 @@ IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) noexcept {
     return {graalSource->id, graalSource->name};
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

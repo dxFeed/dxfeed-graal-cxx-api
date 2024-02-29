@@ -15,7 +15,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Quote::TYPE = EventTypeEnum::QUOTE;
 
@@ -168,4 +168,4 @@ void Quote::freeGraal(void *graalNative) noexcept {
     delete graalQuote;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

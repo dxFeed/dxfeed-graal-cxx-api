@@ -14,10 +14,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 class ObservableSubscription {};
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

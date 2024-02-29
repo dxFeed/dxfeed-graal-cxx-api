@@ -5,7 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum EventTypeEnum::QUOTE{DXFG_EVENT_QUOTE, "QUOTE", "Quote", true};
 const EventTypeEnum EventTypeEnum::PROFILE{DXFG_EVENT_PROFILE, "PROFILE", "Profile", true};
@@ -95,4 +95,4 @@ const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum
     {OPTION_SALE.getClassName(), std::cref(OPTION_SALE)},
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

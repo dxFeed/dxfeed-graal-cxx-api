@@ -21,7 +21,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <mutex>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
 class EventTypeEnum;
@@ -222,6 +222,6 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

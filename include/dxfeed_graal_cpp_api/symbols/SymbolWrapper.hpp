@@ -21,7 +21,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "StringSymbol.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * A concept describing a symbol that can be wrapped.
@@ -369,7 +369,7 @@ inline SymbolWrapper operator""_sw(const char *string, size_t length) noexcept {
 
 } // namespace literals
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::SymbolWrapper> {
     std::size_t operator()(const dxfcpp::SymbolWrapper &symbolWrapper) const noexcept {

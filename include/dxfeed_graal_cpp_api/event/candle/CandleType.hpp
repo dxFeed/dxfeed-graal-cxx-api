@@ -17,7 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Type of the candle aggregation period constitutes CandlePeriod type together its actual
@@ -207,7 +207,7 @@ struct DXFCPP_EXPORT CandleType {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandleType> {
     std::size_t operator()(const dxfcpp::CandleType &candleType) const noexcept {

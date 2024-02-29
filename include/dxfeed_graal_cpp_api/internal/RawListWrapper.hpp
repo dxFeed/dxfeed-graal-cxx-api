@@ -14,7 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "utils/StringUtils.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct Debugger;
 
@@ -168,6 +168,6 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

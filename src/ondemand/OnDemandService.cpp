@@ -14,7 +14,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 OnDemandService::OnDemandService() noexcept : handle_{} {
     if constexpr (Debugger::isDebug) {
@@ -147,4 +147,4 @@ void OnDemandService::setSpeed(double speed) const noexcept {
     isolated::ondemand::OnDemandService::setSpeed(handle_.get(), speed);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

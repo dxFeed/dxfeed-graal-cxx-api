@@ -7,7 +7,7 @@
 
 #include <fmt/format.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void JavaException::throwIfJavaThreadExceptionExists() {
     dxfg_exception_t *exception = runIsolatedThrow([](auto threadHandle) {
@@ -36,4 +36,4 @@ JavaException::JavaException(const std::string &message, const std::string &clas
       stackTrace(std::move(stackTrace)) {
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

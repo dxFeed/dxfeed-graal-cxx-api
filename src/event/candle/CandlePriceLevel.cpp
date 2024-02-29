@@ -6,10 +6,10 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const CandlePriceLevel CandlePriceLevel::DEFAULT{math::NaN};
 
 const std::string CandlePriceLevel::ATTRIBUTE_KEY{"pl"};
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

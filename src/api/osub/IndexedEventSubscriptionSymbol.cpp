@@ -5,7 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol,
                                                                const IndexedEventSource &source) noexcept
@@ -120,4 +120,4 @@ IndexedEventSubscriptionSymbol::operator=(IndexedEventSubscriptionSymbol &&index
     return *this;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

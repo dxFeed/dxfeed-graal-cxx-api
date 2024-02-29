@@ -6,7 +6,7 @@
 #include "dxfeed_graal_c_api/api.h"
 #include "dxfeed_graal_cpp_api/api.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const std::string WildcardSymbol::RESERVED_PREFIX = "*";
 
@@ -36,4 +36,4 @@ const WildcardSymbol &WildcardSymbol::fromGraal(void *) noexcept {
     return WildcardSymbol::ALL;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

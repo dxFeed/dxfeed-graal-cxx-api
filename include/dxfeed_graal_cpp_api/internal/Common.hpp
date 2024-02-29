@@ -23,7 +23,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "utils/debug/Debug.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 template <typename T>
 concept Integral = std::is_integral_v<T>;
@@ -683,6 +683,6 @@ constexpr std::pair<std::size_t, std::size_t> unpack(std::size_t v) noexcept {
     return {shr(v, sizeOfSize / 2), andOp(v, shr(~std::size_t{}, sizeOfSize / 2))};
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

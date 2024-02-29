@@ -11,7 +11,7 @@
 #include <utf8.h>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const TradingStatus TradingStatus::UNDEFINED{0, "UNDEFINED"};
 const TradingStatus TradingStatus::HALTED{1, "HALTED"};
@@ -25,4 +25,4 @@ const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const T
         {TradingStatus::ACTIVE.getCode(), std::cref(TradingStatus::ACTIVE)},
     };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

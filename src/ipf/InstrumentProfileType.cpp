@@ -11,7 +11,7 @@
 #include <utf8.h>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const InstrumentProfileType InstrumentProfileType::CURRENCY{0, "CURRENCY"};
 const InstrumentProfileType InstrumentProfileType::FOREX{1, "FOREX"};
@@ -49,4 +49,4 @@ const std::unordered_map<InstrumentProfileType::CodeType, std::reference_wrapper
            InstrumentProfileType::CFD, InstrumentProfileType::SPREAD, InstrumentProfileType::OTHER,
            InstrumentProfileType::REMOVED});
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

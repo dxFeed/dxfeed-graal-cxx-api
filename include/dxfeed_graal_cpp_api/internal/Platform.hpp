@@ -10,7 +10,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <thread>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
+
 struct DXFCPP_EXPORT Platform final {
     static std::size_t getLogicalCoresCount() noexcept {
         return std::thread::hardware_concurrency();
@@ -18,6 +19,7 @@ struct DXFCPP_EXPORT Platform final {
 
     static std::string getPlatformInfo() noexcept;
 };
-} // namespace dxfcpp
+
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

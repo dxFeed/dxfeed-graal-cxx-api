@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const OrderSource OrderSource::COMPOSITE_BID(1, "COMPOSITE_BID", 0);
 const OrderSource OrderSource::COMPOSITE_ASK(2, "COMPOSITE_ASK", 0);
@@ -77,4 +77,4 @@ void *OrderSource::toGraal() const noexcept {
     return static_cast<void *>(graalSource);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
@@ -204,6 +204,6 @@ struct DXFCPP_EXPORT Schedule {
     std::string getTimeZoneId() const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

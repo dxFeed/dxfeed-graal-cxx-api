@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
     auto result = runIsolatedOrElse(
@@ -56,4 +56,4 @@ template struct JavaObjectHandle<DayFilter>;
 
 template struct JavaObjectHandle<TimeFormat>;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -15,7 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Type of a time and sale event.
@@ -42,6 +42,7 @@ struct TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
 template <>
 const std::unordered_map<TimeAndSaleType::CodeType, std::reference_wrapper<const TimeAndSaleType>>
     TimeAndSaleType::ParentType::ALL;
-} // namespace dxfcpp
+
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

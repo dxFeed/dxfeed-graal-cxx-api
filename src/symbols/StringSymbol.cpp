@@ -8,7 +8,7 @@
 
 #include <memory>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 StringSymbol::StringSymbol(const StringSymbol &stringSymbol) noexcept : data_{stringSymbol.data_} {
 }
@@ -84,4 +84,4 @@ const std::string &StringSymbol::getData() const {
     return data_;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

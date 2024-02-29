@@ -18,7 +18,7 @@
 
 #include <range/v3/all.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::string toString(bool b) noexcept {
     return b ? "true" : "false";
@@ -232,4 +232,4 @@ std::string trimStr(const std::string &s) noexcept {
            ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

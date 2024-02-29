@@ -15,7 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_map>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Exchange attribute of CandleSymbol defines exchange identifier where data is
@@ -103,7 +103,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandleExchange> {
     std::size_t operator()(const dxfcpp::CandleExchange &candleExchange) const noexcept {

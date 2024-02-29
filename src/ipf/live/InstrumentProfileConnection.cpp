@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 static dxfcpp::InstrumentProfileConnection::State graalStateToState(dxfg_ipf_connection_state_t state) {
     switch (state) {
@@ -155,4 +155,4 @@ bool InstrumentProfileConnection::waitUntilCompleted(std::int64_t timeout) const
     return isolated::ipf::InstrumentProfileConnection::waitUntilCompleted(handle_.get(), timeout);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -22,7 +22,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <vector>
 #include <concepts>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.
@@ -126,6 +126,6 @@ struct DXFCPP_EXPORT TimeFormat {
     std::string format(std::int64_t timestamp) const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

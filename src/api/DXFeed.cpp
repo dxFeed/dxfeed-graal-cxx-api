@@ -14,7 +14,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::shared_ptr<DXFeed> DXFeed::getInstance() noexcept {
     if constexpr (Debugger::isDebug) {
@@ -136,4 +136,4 @@ std::string DXFeed::toString() const noexcept {
     return fmt::format("DXFeed{{{}}}", handle_.toString());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

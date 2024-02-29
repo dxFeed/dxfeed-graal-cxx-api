@@ -15,7 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Direction of the price movement. For example tick direction for last trade price.
@@ -61,6 +61,6 @@ struct Direction : Enum<Direction, std::uint32_t> {
 template <>
 const std::unordered_map<Direction::CodeType, std::reference_wrapper<const Direction>> Direction::ParentType::ALL;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

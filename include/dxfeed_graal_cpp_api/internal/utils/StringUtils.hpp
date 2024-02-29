@@ -15,7 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <optional>
 #include <thread>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT String {
     inline static const std::string EMPTY{};
@@ -197,6 +197,6 @@ DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
 
 DXFCPP_EXPORT std::string trimStr(const std::string &s) noexcept;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

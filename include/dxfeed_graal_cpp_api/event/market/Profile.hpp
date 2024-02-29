@@ -19,7 +19,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "ShortSaleRestriction.hpp"
 #include "TradingStatus.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -475,6 +475,6 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Greeks::TYPE = EventTypeEnum::GREEKS;
 
@@ -129,4 +129,4 @@ void Greeks::freeGraal(void *graalNative) noexcept {
     delete graalGreeks;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

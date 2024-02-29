@@ -9,7 +9,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const PriceType PriceType::REGULAR{0, "REGULAR"};
 const PriceType PriceType::INDICATIVE{1, "INDICATIVE"};
@@ -24,4 +24,4 @@ const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const Price
     {PriceType::FINAL.getCode(), std::cref(PriceType::FINAL)},
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

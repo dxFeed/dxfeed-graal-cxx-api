@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Trade::TYPE = EventTypeEnum::TRADE;
 
@@ -99,4 +99,4 @@ void Trade::freeGraal(void *graalNative) noexcept {
     delete graalTrade;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

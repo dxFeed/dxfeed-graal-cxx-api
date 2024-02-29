@@ -12,7 +12,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &SpreadOrder::TYPE = EventTypeEnum::SPREAD_ORDER;
 
@@ -112,4 +112,4 @@ void SpreadOrder::freeGraal(void *graalNative) noexcept {
     delete graalSpreadOrder;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

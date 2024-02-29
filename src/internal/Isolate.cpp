@@ -5,7 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
     if constexpr (Debugger::traceIsolates) {
@@ -138,11 +138,9 @@ GraalIsolateThreadHandle Isolate::get() noexcept {
     return static_cast<void *>(graal_get_current_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_)));
 }
 
-} // namespace dxfcpp
-
 // see isolated/isolated.hpp
 
-namespace dxfcpp::isolated {
+namespace isolated {
 
 constexpr auto equalsToZero = [](auto result) {
     return result == 0;
@@ -1817,4 +1815,6 @@ std::string Schedule::getTimeZoneId(/* dxfg_schedule_t* */ void *schedule) noexc
 }
 
 } // namespace schedule
-} // namespace dxfcpp::isolated
+} // namespace isolated
+
+DXFCPP_END_NAMESPACE

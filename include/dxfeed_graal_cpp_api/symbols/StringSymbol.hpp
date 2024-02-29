@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <variant>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal
@@ -132,7 +132,7 @@ inline StringSymbol operator""_s(const char *string, size_t length) noexcept {
 
 } // namespace literals
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::StringSymbol> {
     std::size_t operator()(const dxfcpp::StringSymbol &stringSymbol) const noexcept {

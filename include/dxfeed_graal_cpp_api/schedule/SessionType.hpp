@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 enum class SessionTypeEnum : std::uint32_t {
     /// Non-trading session type is used to mark periods of time during which trading is not allowed.
@@ -80,7 +80,7 @@ struct DXFCPP_EXPORT SessionType {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::SessionType> {
     std::size_t operator()(const dxfcpp::SessionType &sessionType) const noexcept {

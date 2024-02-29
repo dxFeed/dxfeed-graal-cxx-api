@@ -26,7 +26,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeed;
 struct MarketEvent;
@@ -754,6 +754,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     auto onSubscriptionClosed() noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

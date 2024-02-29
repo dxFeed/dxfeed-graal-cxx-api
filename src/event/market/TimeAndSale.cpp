@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void TimeAndSale::setExchangeCode(char exchangeCode) noexcept {
     data_.exchangeCode = utf8to16(exchangeCode);
@@ -157,4 +157,4 @@ void TimeAndSale::freeGraal(void *graalNative) noexcept {
     delete graalTimeAndSale;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

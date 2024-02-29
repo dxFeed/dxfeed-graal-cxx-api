@@ -17,7 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <mutex>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
 
@@ -271,6 +271,6 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     void setSpeed(double speed) const noexcept;
 };
 
-}
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

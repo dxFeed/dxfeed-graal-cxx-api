@@ -18,7 +18,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../managers/InstrumentProfileReaderManager.hpp"
 #include "../managers/OnDemandServiceManager.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 template <typename Manager> struct AddManagerMixin {
     mutable std::shared_ptr<Manager> manager_;
@@ -53,6 +53,6 @@ class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

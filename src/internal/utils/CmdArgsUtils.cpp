@@ -28,7 +28,7 @@
 #    include <date/date.h>
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 auto getUtcOffset() {
     const std::time_t epochPlus11H = 60 * 60 * 11;
@@ -229,4 +229,4 @@ std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const
            ranges::to<std::unordered_map<std::string, std::string>>();
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

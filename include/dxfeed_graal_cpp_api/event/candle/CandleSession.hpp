@@ -18,7 +18,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Session attribute of CandleSymbol defines trading that is used to build the candles.
@@ -188,7 +188,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandleSession> {
     std::size_t operator()(const dxfcpp::CandleSession &candleSession) const noexcept {

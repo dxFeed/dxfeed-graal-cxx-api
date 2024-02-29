@@ -16,7 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_map>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Candle alignment attribute of CandleSymbol defines how candle are aligned with respect to time.
@@ -166,7 +166,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandleAlignment> {
     std::size_t operator()(const dxfcpp::CandleAlignment &candleAlignment) const noexcept {

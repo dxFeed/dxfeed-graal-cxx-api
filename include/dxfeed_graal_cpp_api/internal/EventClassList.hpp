@@ -11,7 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT EventClassList {
     template <typename EventTypeIt>
@@ -57,6 +57,6 @@ struct DXFCPP_EXPORT EventClassList {
     std::unique_ptr<Impl> impl_;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

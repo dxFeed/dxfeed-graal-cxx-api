@@ -12,7 +12,7 @@
 #include <sstream>
 #include <thread>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 #if DXFCPP_DEBUG == 0
 #else
@@ -60,4 +60,4 @@ void Debugger::trace(std::string str) {
 
 #endif
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

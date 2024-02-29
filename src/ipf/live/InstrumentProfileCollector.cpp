@@ -17,7 +17,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct NonOwningInstrumentProfileIterator {
     dxfg_iterable_ip_t *iterable;
@@ -193,4 +193,4 @@ std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() co
     return IterableInstrumentProfile::create(iterable);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -24,7 +24,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #    undef NO_ERROR
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
+
 using GraalIsolateHandle = void *;
 using GraalIsolateThreadHandle = void *;
 using ConstGraalIsolateThreadHandle = const void *;
@@ -293,6 +294,6 @@ auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
                                                     std::forward<Args>(args)...);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

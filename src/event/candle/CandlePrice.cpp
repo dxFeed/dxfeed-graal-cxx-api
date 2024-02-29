@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const CandlePrice CandlePrice::LAST{"last"};
 const CandlePrice CandlePrice::BID{"bid"};
@@ -30,4 +30,4 @@ const std::vector<std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES
     std::cref(CandlePrice::MARK), std::cref(CandlePrice::SETTLEMENT),
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

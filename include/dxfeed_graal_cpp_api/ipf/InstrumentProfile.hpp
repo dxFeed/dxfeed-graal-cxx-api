@@ -17,7 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Represents basic profile information about market instrument.
@@ -1891,6 +1891,6 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

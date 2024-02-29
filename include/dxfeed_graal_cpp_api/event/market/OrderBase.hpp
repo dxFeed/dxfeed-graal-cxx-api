@@ -22,7 +22,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "Scope.hpp"
 #include "Side.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -673,8 +673,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @return string representation of this order event's fields.
      */
     std::string baseFieldsToString() const noexcept;
-}; // namespace dxfcpp
+};
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

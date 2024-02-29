@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const CandleType CandleType::TICK{"TICK", "t", 0LL};
 const CandleType CandleType::SECOND{"SECOND", "s", 1000LL};
@@ -51,4 +51,4 @@ const CandlePeriod CandlePeriod::DAY{1, CandleType::DAY};
 const CandlePeriod CandlePeriod::DEFAULT = TICK;
 const std::string CandlePeriod::ATTRIBUTE_KEY{};
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

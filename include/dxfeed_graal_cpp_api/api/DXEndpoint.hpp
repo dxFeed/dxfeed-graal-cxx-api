@@ -23,7 +23,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_set>
 #include <variant>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXPublisher;
 struct DXFeed;
@@ -524,6 +524,16 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      */
     static std::shared_ptr<DXEndpoint> getInstance(Role role) noexcept;
 
+    class Builder;
+
+    /**
+     * Creates new Builder instance.
+     * Use Builder::build() to build an instance of DXEndpoint when all configuration properties were set.
+     *
+     * @return the created endpoint builder.
+     */
+    static std::shared_ptr<Builder> newBuilder() noexcept;
+
     /**
      * Creates an endpoint with @ref Role::FEED "FEED" role.
      * The result of this method is the same as <b>`create(DXEndpoint::Role::FEED)`</b>.
@@ -865,16 +875,9 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
         std::shared_ptr<DXEndpoint> build() noexcept;
     };
 
-    /**
-     * Creates new Builder instance.
-     * Use Builder::build() to build an instance of DXEndpoint when all configuration properties were set.
-     *
-     * @return the created endpoint builder.
-     */
-    static std::shared_ptr<Builder> newBuilder() noexcept;
-
     std::string toString() const noexcept override;
 };
-} // namespace dxfcpp
+
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

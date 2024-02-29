@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 Schedule::Schedule(void *handle) noexcept : handle_(handle) {
 }
@@ -144,4 +144,4 @@ std::string Schedule::getTimeZoneId() const noexcept {
     return isolated::schedule::Schedule::getTimeZoneId(handle_.get());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

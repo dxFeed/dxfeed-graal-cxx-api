@@ -18,7 +18,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "OrderBase.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -939,6 +939,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

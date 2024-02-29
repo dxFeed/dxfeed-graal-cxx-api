@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 Session::Session(void *handle) noexcept : handle_(handle) {
 }
@@ -146,4 +146,4 @@ std::string Session::toString() const noexcept {
     return isolated::schedule::Session::toString(handle_.get());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

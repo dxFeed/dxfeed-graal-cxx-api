@@ -9,7 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "SessionType.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 enum class SessionFilterEnum : std::uint32_t {
     /** Accepts any session - useful for pure schedule navigation. */
@@ -121,7 +121,7 @@ struct DXFCPP_EXPORT SessionFilter {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::SessionFilter> {
     std::size_t operator()(const dxfcpp::SessionFilter &sessionFilter) const noexcept {

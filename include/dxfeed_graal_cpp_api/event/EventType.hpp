@@ -13,7 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../entity/EntityModule.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Marks all event types that can be received via dxFeed API.
@@ -128,6 +128,6 @@ template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public Eve
     virtual void setEventSymbol(const Symbol &eventSymbol) noexcept = 0;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

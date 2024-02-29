@@ -11,7 +11,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void TradeBase::fillData(void *graalNative) noexcept {
     if (graalNative == nullptr) {
@@ -69,4 +69,4 @@ std::string TradeBase::baseFieldsToString() const noexcept {
                        getTickDirection().toString(), isExtendedTradingHours());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "EventType.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT EventMapper {
     static std::vector<std::shared_ptr<EventType>> fromGraalList(void *graalNativeList) noexcept;
@@ -64,6 +64,6 @@ struct DXFCPP_EXPORT EventMapper {
     static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

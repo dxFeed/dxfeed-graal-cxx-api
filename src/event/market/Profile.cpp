@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Profile::TYPE = EventTypeEnum::PROFILE;
 
@@ -161,4 +161,4 @@ void Profile::freeGraal(void *graalNative) noexcept {
     delete graalProfile;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

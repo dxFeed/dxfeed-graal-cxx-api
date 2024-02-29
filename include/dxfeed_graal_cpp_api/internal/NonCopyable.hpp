@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 template <class T> class NonCopyable {
   public:
@@ -19,6 +19,6 @@ template <class T> class NonCopyable {
     ~NonCopyable() = default;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -14,7 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #    undef NO_ERROR
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 // TODO: serialization [EN-8232]
 struct DXFCPP_EXPORT Error {
@@ -84,6 +84,6 @@ class DXFCPP_EXPORT ErrorHandlingManager {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

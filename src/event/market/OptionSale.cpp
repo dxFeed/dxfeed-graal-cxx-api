@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &OptionSale::TYPE = EventTypeEnum::OPTION_SALE;
 
@@ -161,4 +161,4 @@ void OptionSale::freeGraal(void *graalNative) noexcept {
     delete graalOptionSale;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

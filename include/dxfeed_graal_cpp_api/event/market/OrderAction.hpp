@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Action enum for the Full Order Book (FOB) Orders. Action describes business meaning of the Order event:
@@ -139,6 +139,6 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
 template <>
 const std::unordered_map<OrderAction::CodeType, std::reference_wrapper<const OrderAction>> OrderAction::ParentType::ALL;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

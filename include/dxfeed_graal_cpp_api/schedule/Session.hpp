@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * <b>Session</b> represents a continuous period of time during which apply same rules regarding trading activity.
@@ -189,7 +189,7 @@ struct DXFCPP_EXPORT Session {
     std::string toString() const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Session> {
     std::size_t operator()(const dxfcpp::Session &session) const noexcept {

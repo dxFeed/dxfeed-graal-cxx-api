@@ -14,7 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct SymbolWrapper;
 class IndexedEventSubscriptionSymbol;
@@ -96,7 +96,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
     bool operator<(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::TimeSeriesSubscriptionSymbol> {
     std::size_t operator()(const dxfcpp::TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept {

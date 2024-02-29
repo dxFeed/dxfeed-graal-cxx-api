@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventClassList::Impl : public RawListWrapper<dxfg_event_clazz_list_t, [](dxfg_event_clazz_list_t &list,
                                                                                 std::size_t index, std::uint32_t id) {
@@ -45,4 +45,4 @@ void *EventClassList::getHandle() noexcept {
 
 EventClassList::~EventClassList() noexcept = default;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Summary::TYPE = EventTypeEnum::SUMMARY;
 
@@ -133,4 +133,4 @@ void Summary::freeGraal(void *graalNative) noexcept {
     delete graalSummary;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

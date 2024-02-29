@@ -17,7 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Identifies source of Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events.
@@ -521,6 +521,6 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

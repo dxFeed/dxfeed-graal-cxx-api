@@ -54,3 +54,12 @@
 #        define DXFCPP_CXX20_CONSTEXPR_STRING
 #    endif
 #endif
+
+#ifndef DXFCPP_BEGIN_NAMESPACE
+#    define DXFCPP_BEGIN_NAMESPACE                                                                                     \
+        namespace dxfcpp {                                                                                             \
+        inline namespace v1 {
+#    define DXFCPP_END_NAMESPACE                                                                                       \
+        }                                                                                                              \
+        }
+#endif

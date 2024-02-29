@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void InstrumentProfile::fillData(void *graalNative) noexcept {
     if (graalNative == nullptr) {
@@ -269,4 +269,4 @@ void InstrumentProfile::freeGraal(void *graalNative) noexcept {
     delete graalInstrumentProfile;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

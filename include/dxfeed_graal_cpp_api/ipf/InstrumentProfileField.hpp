@@ -17,7 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 enum class InstrumentProfileFieldEnum {
     TYPE,
@@ -130,6 +130,6 @@ class DXFCPP_EXPORT InstrumentProfileField {
     bool isNumericField() const;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

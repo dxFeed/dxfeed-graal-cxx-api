@@ -15,7 +15,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const std::string DXEndpoint::NAME_PROPERTY = "name";
 const std::string DXEndpoint::DXFEED_PROPERTIES_PROPERTY = "dxfeed.properties";
@@ -534,6 +534,14 @@ std::shared_ptr<DXEndpoint> DXEndpoint::getInstance(DXEndpoint::Role role) noexc
     return Impl::getInstance(role);
 }
 
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::newBuilder() noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXEndpoint::newBuilder()");
+    }
+
+    return DXEndpoint::Builder::create();
+}
+
 std::shared_ptr<DXEndpoint> DXEndpoint::create() noexcept {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::create()");
@@ -580,14 +588,6 @@ void DXEndpoint::close() noexcept {
 
 std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() noexcept {
     return {};
-}
-
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::newBuilder() noexcept {
-    if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint::newBuilder()");
-    }
-
-    return DXEndpoint::Builder::create();
 }
 
 struct BuilderHandle {};
@@ -730,7 +730,7 @@ static dxfc_dxendpoint_state_t stateToCApiState(dxfcpp::DXEndpoint::State state)
     return DXFC_DXENDPOINT_STATE_NOT_CONNECTED;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t *builderHandle) {
     if (!builderHandle) {

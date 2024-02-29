@@ -14,7 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../entity/SharedEntity.hpp"
 #include "InstrumentProfileCollector.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Connects to an instrument profile URL and reads instrument profiles with support of
@@ -245,6 +245,6 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

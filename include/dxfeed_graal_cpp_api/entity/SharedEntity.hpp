@@ -11,7 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "Entity.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /// Base abstract "shared entity" class. Has some helpers for dynamic polymorphism
 struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> {
@@ -71,6 +71,6 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

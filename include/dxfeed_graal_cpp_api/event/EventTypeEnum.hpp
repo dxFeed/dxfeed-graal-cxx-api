@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * The enumeration type that provides additional information about the dxFeed Graal C++-API event type.
@@ -183,7 +183,7 @@ class DXFCPP_EXPORT EventTypeEnum {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::EventTypeEnum> {
     std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept {

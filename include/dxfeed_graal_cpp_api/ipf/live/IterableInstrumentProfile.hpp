@@ -13,7 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../entity/SharedEntity.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 class InstrumentProfileCollector;
 
@@ -47,6 +47,6 @@ class DXFCPP_EXPORT IterableInstrumentProfile final {
     [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const noexcept;
 };
 
-}
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

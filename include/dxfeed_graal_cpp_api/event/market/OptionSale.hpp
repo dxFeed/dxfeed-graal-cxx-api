@@ -22,7 +22,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "TimeAndSale.hpp"
 #include "TimeAndSaleType.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -672,6 +672,6 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

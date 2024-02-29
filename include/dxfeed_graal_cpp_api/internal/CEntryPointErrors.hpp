@@ -19,7 +19,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #    undef NO_ERROR
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Enum of the possible error codes returned by internal GraalVM functions
@@ -139,7 +139,7 @@ inline constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum en
     case CEntryPointErrorsEnum::NO_ERROR:
         return "No error occurred.";
     case CEntryPointErrorsEnum::UNSPECIFIED:
-        return " An unspecified error occurred.";
+        return "An unspecified error occurred.";
     case CEntryPointErrorsEnum::NULL_ARGUMENT:
         return "An argument was NULL (nullptr).";
     case CEntryPointErrorsEnum::ALLOCATION_FAILED:
@@ -211,6 +211,6 @@ inline constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum en
     return nullptr;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

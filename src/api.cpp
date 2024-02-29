@@ -12,10 +12,10 @@
 #    undef NO_ERROR
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
 
 auto IS = Isolate::getInstance().toString();
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -10,7 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <string>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Source identifier for IndexedEvent.
@@ -93,7 +93,7 @@ class DXFCPP_EXPORT IndexedEventSource {
     static IndexedEventSource fromGraal(void *graalNative) noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::IndexedEventSource> {
     std::size_t operator()(const dxfcpp::IndexedEventSource &indexedEventSource) const noexcept {

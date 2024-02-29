@@ -6,7 +6,7 @@
 
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const ShortSaleRestriction ShortSaleRestriction::UNDEFINED{0, "UNDEFINED"};
 const ShortSaleRestriction ShortSaleRestriction::ACTIVE{1, "ACTIVE"};
@@ -20,4 +20,4 @@ const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<
         {ShortSaleRestriction::INACTIVE.getCode(), std::cref(ShortSaleRestriction::INACTIVE)},
     };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

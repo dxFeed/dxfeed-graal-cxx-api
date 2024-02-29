@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 InstrumentProfileReader::InstrumentProfileReader() noexcept : id_{Id<InstrumentProfileReader>::UNKNOWN}, handle_{} {
     handle_ = JavaObjectHandle<InstrumentProfileReader>(dxfcpp::isolated::ipf::InstrumentProfileReader::create());
@@ -79,4 +79,4 @@ InstrumentProfileReader::readFromFile(const std::string &address, const std::str
     return result;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

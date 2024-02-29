@@ -13,7 +13,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
     if constexpr (Debugger::isDebug) {
@@ -252,4 +252,4 @@ std::string DXFeedSubscription::toString() const noexcept {
     return fmt::format("DXFeedSubscription{{{}}}", handle_.toString());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

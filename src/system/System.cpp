@@ -13,7 +13,7 @@
 #    undef NO_ERROR
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 bool System::setProperty(const std::string &key, const std::string &value) {
     // TODO: check invalid utf-8 [EN-8233]
@@ -64,7 +64,7 @@ std::string System::getProperty(const std::string &key) {
     return result;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
     // TODO: check invalid utf-8 [EN-8233]

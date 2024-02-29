@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const InstrumentProfileField InstrumentProfileField::TYPE{InstrumentProfileFieldEnum::TYPE, "TYPE"};
 const InstrumentProfileField InstrumentProfileField::SYMBOL{InstrumentProfileFieldEnum::SYMBOL, "SYMBOL"};
@@ -115,4 +115,4 @@ bool InstrumentProfileField::isNumericField() const {
     return numericField_;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

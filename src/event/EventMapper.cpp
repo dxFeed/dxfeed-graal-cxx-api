@@ -11,7 +11,7 @@
 #include <utf8.h>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) noexcept {
     auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
@@ -359,4 +359,4 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
     return true;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

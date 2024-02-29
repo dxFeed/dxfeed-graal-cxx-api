@@ -13,7 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "EventFlag.hpp"
 #include "IndexedEventSource.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Represents an indexed collection of up-to-date information about some
@@ -114,6 +114,6 @@ struct DXFCPP_EXPORT IndexedEvent {
     virtual void setIndex(std::int64_t index) noexcept = 0;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

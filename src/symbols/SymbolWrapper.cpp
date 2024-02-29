@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::ptrdiff_t SymbolWrapper::SymbolListUtils::calculateGraalListSize(std::ptrdiff_t initSize) noexcept {
     using ListType = dxfg_symbol_list;
@@ -212,4 +212,4 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) noexcept {
     return {};
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Represents [wildcard] subscription to all events of the specific event type.
@@ -112,7 +112,7 @@ inline WildcardSymbol operator""_wcs(const char *, size_t) noexcept {
 
 } // namespace literals
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::WildcardSymbol> {
     std::size_t operator()(const dxfcpp::WildcardSymbol &wildcardSymbol) const noexcept {

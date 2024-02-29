@@ -21,7 +21,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../TimeSeriesEvent.hpp"
 #include "CandleSymbol.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -967,6 +967,6 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Type of an iceberg order.
@@ -39,6 +39,6 @@ struct IcebergType : Enum<IcebergType, std::uint32_t> {
 template <>
 const std::unordered_map<IcebergType::CodeType, std::reference_wrapper<const IcebergType>> IcebergType::ParentType::ALL;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

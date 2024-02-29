@@ -9,7 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/Common.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /// Helper enum for DayFilter
 enum class DayFilterEnum : std::uint32_t {
@@ -154,6 +154,6 @@ struct DXFCPP_EXPORT DayFilter {
               Tristate trading) noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

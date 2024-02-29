@@ -26,7 +26,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #    define DXFCPP_TRACE DXFCPP_DEBUG
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 #if DXFCPP_DEBUG == 0
 
@@ -75,6 +75,6 @@ struct DXFCPP_EXPORT Debugger {
 
 #endif
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

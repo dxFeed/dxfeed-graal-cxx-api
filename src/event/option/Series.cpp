@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Series::TYPE = EventTypeEnum::SERIES;
 
@@ -133,4 +133,4 @@ void Series::freeGraal(void *graalNative) noexcept {
     delete graalSeries;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

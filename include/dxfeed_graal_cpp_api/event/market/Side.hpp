@@ -15,7 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Side of an order or a trade.
@@ -41,6 +41,6 @@ struct Side : Enum<Side, std::uint32_t> {
 
 template <> const std::unordered_map<Side::CodeType, std::reference_wrapper<const Side>> Side::ParentType::ALL;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

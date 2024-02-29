@@ -16,7 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_map>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Price type attribute of CandleSymbol defines price that is used to build the candles.
@@ -190,7 +190,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandlePrice> {
     std::size_t operator()(const dxfcpp::CandlePrice &candlePrice) const noexcept {

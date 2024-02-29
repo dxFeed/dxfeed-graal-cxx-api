@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Underlying::TYPE = EventTypeEnum::UNDERLYING;
 
@@ -127,4 +127,4 @@ void Underlying::freeGraal(void *graalNative) noexcept {
     delete graalUnderlying;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

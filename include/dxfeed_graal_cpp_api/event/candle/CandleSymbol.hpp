@@ -24,7 +24,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <variant>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * The common "variant" type for the candle attribute types
@@ -327,7 +327,7 @@ inline CandleSymbol operator""_c(const char *string, size_t length) noexcept {
 
 } // namespace literals
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandleSymbol> {
     std::size_t operator()(const dxfcpp::CandleSymbol &candleSymbol) const noexcept {

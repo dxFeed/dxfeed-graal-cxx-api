@@ -11,7 +11,7 @@
 #include <utf8.h>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const Side Side::UNDEFINED{0, "UNDEFINED"};
 const Side Side::BUY{1, "BUY"};
@@ -24,4 +24,4 @@ const std::unordered_map<Side::CodeType, std::reference_wrapper<const Side>> Sid
     {Side::SELL.getCode(), std::cref(Side::SELL)},
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

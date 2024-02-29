@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct Schedule;
 struct Session;
@@ -283,7 +283,7 @@ struct DXFCPP_EXPORT Day {
     std::string toString() const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Day> {
     std::size_t operator()(const dxfcpp::Day &day) const noexcept {

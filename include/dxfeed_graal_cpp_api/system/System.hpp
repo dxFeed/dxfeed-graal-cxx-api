@@ -16,7 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <variant>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 /**
  * A class that allows to set JVM system properties and get the values of JVM system properties.
  */
@@ -51,6 +51,6 @@ struct DXFCPP_EXPORT System {
     static std::string getProperty(const std::string &key);
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

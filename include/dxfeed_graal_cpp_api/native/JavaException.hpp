@@ -5,13 +5,13 @@
 
 #include "../internal/Conf.hpp"
 
-DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
 #include <stdexcept>
 #include <string>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT JavaException : public std::runtime_error {
     static void throwIfJavaThreadExceptionExists();
@@ -21,6 +21,6 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
     JavaException(const std::string &message, const std::string &className, std::string stackTrace);
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

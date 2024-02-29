@@ -9,7 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Represents up-to-date information about some condition or state of an external entity that updates in real-time.
@@ -30,6 +30,6 @@ struct DXFCPP_EXPORT LastingEvent {
     using Ptr = std::shared_ptr<LastingEvent>;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -18,7 +18,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_set>
 #include <vector>
 
-namespace dxfcpp::isolated {
+DXFCPP_BEGIN_NAMESPACE
+
+namespace isolated {
 struct String {
     static bool release(const char *string) noexcept;
 };
@@ -30,10 +32,14 @@ struct StringList {
 struct TimeFormat {
     static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getDefault() noexcept;
     static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getGmt() noexcept;
-    static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat>& timeFormat) noexcept;
-    static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat>& timeFormat) noexcept;
-    static std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat>& timeFormat, const std::string &value) noexcept;
-    static std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat>& timeFormat, std::int64_t value) noexcept;
+    static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
+    withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat) noexcept;
+    static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
+    withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat) noexcept;
+    static std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
+                              const std::string &value) noexcept;
+    static std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
+                              std::int64_t value) noexcept;
 };
 
 struct Tools {
@@ -43,13 +49,18 @@ struct Tools {
 namespace api {
 struct DXEndpoint {
     static bool close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
-    static dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
-    static bool user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const std::string &user) noexcept;
-    static bool password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const std::string &password) noexcept;
-    static bool connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const std::string &address) noexcept;
+    static dxfcpp::DXEndpoint::State
+    getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
+    static bool user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                     const std::string &user) noexcept;
+    static bool password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                         const std::string &password) noexcept;
+    static bool connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                        const std::string &address) noexcept;
     static bool reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
     static bool disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
-    static bool disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
+    static bool
+    disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
     static bool /* int32_t */
     addStateChangeListener(
         /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
@@ -252,6 +263,8 @@ struct Schedule {
     static std::string getTimeZoneId(/* dxfg_schedule_t* */ void *schedule) noexcept;
 };
 } // namespace schedule
-} // namespace dxfcpp::isolated
+} // namespace isolated
+
+DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
