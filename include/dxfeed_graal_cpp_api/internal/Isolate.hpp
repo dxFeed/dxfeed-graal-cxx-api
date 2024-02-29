@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../native/GraalException.hpp"
 #include "CEntryPointErrors.hpp"
 #include "Common.hpp"
 #include "utils/StringUtils.hpp"
@@ -137,6 +138,29 @@ class Isolate final {
         return std::invoke(std::forward<F>(f), currentIsolateThread_.handle);
     }
 
+    template <typename F> auto runIsolatedThrow(F &&f) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle> {
+        if constexpr (Debugger::traceIsolates) {
+            Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() + ")");
+        }
+
+        // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
+        if (auto currentThreadHandle = get(); currentThreadHandle != nullptr) {
+            return std::invoke(std::forward<F>(f), currentThreadHandle);
+        }
+
+        if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
+            if constexpr (Debugger::traceIsolates) {
+                Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() +
+                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
+                                CEntryPointErrorsEnumToStr(result));
+            }
+
+            throw GraalException(result);
+        }
+
+        return std::invoke(std::forward<F>(f), currentIsolateThread_.handle);
+    }
+
     template <typename F, typename Arg, typename... Args>
     auto runIsolated(F &&f, Arg &&arg, Args &&...args)
         -> std::variant<CEntryPointErrorsEnum,
@@ -159,6 +183,33 @@ class Isolate final {
             }
 
             return result;
+        }
+
+        return std::invoke(std::forward<F>(f), currentIsolateThread_.handle, std::forward<Arg>(arg),
+                           std::forward<Args>(args)...);
+    }
+
+    template <typename F, typename Arg, typename... Args>
+    auto runIsolatedThrow(F &&f, Arg &&arg, Args &&...args)
+        -> std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...> {
+        if constexpr (Debugger::traceIsolates) {
+            Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() + ")");
+        }
+
+        // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
+        if (auto currentThreadHandle = get(); currentThreadHandle != nullptr) {
+            return std::invoke(std::forward<F>(f), currentThreadHandle, std::forward<Arg>(arg),
+                               std::forward<Args>(args)...);
+        }
+
+        if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
+            if constexpr (Debugger::traceIsolates) {
+                Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() +
+                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
+                                CEntryPointErrorsEnumToStr(result));
+            }
+
+            throw GraalException(result);
         }
 
         return std::invoke(std::forward<F>(f), currentIsolateThread_.handle, std::forward<Arg>(arg),
@@ -207,13 +258,22 @@ class Isolate final {
     }
 
     std::string toString() const noexcept {
-        return std::string("Isolate{") + dxfcpp::toString(handle_) +
-               ", main = " + mainIsolateThread_.toString() + ", current = " + currentIsolateThread_.toString() + "}";
+        return std::string("Isolate{") + dxfcpp::toString(handle_) + ", main = " + mainIsolateThread_.toString() +
+               ", current = " + currentIsolateThread_.toString() + "}";
     }
 };
 
 template <typename F> auto runIsolated(F &&f) {
     return Isolate::getInstance().runIsolated(std::forward<F>(f));
+}
+
+template <typename F> auto runIsolatedThrow(F &&f) {
+    return Isolate::getInstance().runIsolatedThrow(std::forward<F>(f));
+}
+
+template <typename F, typename Arg, typename... Args> auto runIsolatedThrow(F &&f, Arg &&arg, Args &&...args) {
+    return Isolate::getInstance().runIsolatedThrow(std::forward<F>(f), std::forward<Arg>(arg),
+                                                   std::forward<Args>(args)...);
 }
 
 template <typename F, typename R>
