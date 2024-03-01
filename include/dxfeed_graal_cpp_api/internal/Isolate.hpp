@@ -133,6 +133,8 @@ class Isolate final {
                                 CEntryPointErrorsEnumToStr(result));
             }
 
+            // TODO: Store "silent" errors [EN-8232]
+
             return result;
         }
 
@@ -182,6 +184,8 @@ class Isolate final {
                                 "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
                                 CEntryPointErrorsEnumToStr(result));
             }
+
+            // TODO: Store "silent" errors [EN-8232]
 
             return result;
         }

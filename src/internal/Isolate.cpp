@@ -21,8 +21,7 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
         return CEntryPointErrorsEnum::NO_ERROR;
     }
 
-    auto result =
-        static_cast<CEntryPointErrorsEnum>(graal_detach_thread(static_cast<graal_isolatethread_t *>(handle)));
+    auto result = static_cast<CEntryPointErrorsEnum>(graal_detach_thread(static_cast<graal_isolatethread_t *>(handle)));
 
     if (result == CEntryPointErrorsEnum::NO_ERROR) {
         if constexpr (Debugger::traceIsolates) {
@@ -83,9 +82,8 @@ Isolate::Isolate() noexcept : mtx_{} {
     }
 
     if constexpr (Debugger::traceIsolates) {
-        Debugger::trace(
-            "Isolate::Isolate() -> " + std::string("Isolate{") + dxfcpp::toString(handle_) +
-            ", main = " + mainIsolateThread_.toString() + ", current = " + currentIsolateThread_.toString() + "}");
+        Debugger::trace("Isolate::Isolate() -> " + std::string("Isolate{") + dxfcpp::toString(handle_) + ", main = " +
+                        mainIsolateThread_.toString() + ", current = " + currentIsolateThread_.toString() + "}");
     }
 }
 
@@ -157,10 +155,37 @@ constexpr auto doNothing = [](auto result) {
 constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction, auto defaultValue, auto &&...params) {
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&resultCheckerConverter, auto &&graalFunction, auto &&...params) {
-            return resultCheckerConverter(
-                graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...));
+            return resultCheckerConverter(graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...));
         },
         defaultValue, resultCheckerConverter, graalFunction, params...);
+}
+
+constexpr auto throwIfNullptr = [](auto v) {
+    return JavaException::throwIfNullptr(v);
+};
+
+constexpr auto throwIfLessThanZero = [](auto v) {
+    return JavaException::throwIfLessThanZero(v);
+};
+
+constexpr auto runGraalFunctionAndThrow(auto resultCheckerConverter, auto graalFunction, auto &&...params) {
+    return runIsolatedThrow(
+        [](auto threadHandle, auto &&resultCheckerConverter, auto &&graalFunction, auto &&...params) {
+            return resultCheckerConverter(graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...));
+        },
+        resultCheckerConverter, graalFunction, params...);
+}
+
+constexpr auto runGraalFunctionAndThrowIfNullptr(auto graalFunction, auto &&...params) {
+    return runIsolatedThrow(
+        [](auto threadHandle, auto &&graalFunction, auto &&...params) {
+            return throwIfNullptr(graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...));
+        },
+        graalFunction, params...);
+}
+
+constexpr auto runGraalFunctionAndThrowIfLessThanZero(auto graalFunction, auto &&...params) {
+    return runGraalFunctionAndThrow(throwIfLessThanZero, graalFunction, params...);
 }
 
 bool String::release(const char *string) noexcept {
@@ -203,8 +228,8 @@ TimeFormat::withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp
         return JavaObjectHandle<dxfcpp::TimeFormat>{nullptr};
     }
 
-    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(
-        toVoidPtr, dxfg_TimeFormat_withTimeZone, nullptr, static_cast<dxfg_time_format_t *>(timeFormat.get())));
+    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(toVoidPtr, dxfg_TimeFormat_withTimeZone, nullptr,
+                                                                 static_cast<dxfg_time_format_t *>(timeFormat.get())));
 }
 
 /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
@@ -214,8 +239,8 @@ TimeFormat::withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::
         return JavaObjectHandle<dxfcpp::TimeFormat>{nullptr};
     }
 
-    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(
-        toVoidPtr, dxfg_TimeFormat_withMillis, nullptr, static_cast<dxfg_time_format_t *>(timeFormat.get())));
+    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(toVoidPtr, dxfg_TimeFormat_withMillis, nullptr,
+                                                                 static_cast<dxfg_time_format_t *>(timeFormat.get())));
 }
 
 std::int64_t TimeFormat::parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
@@ -225,8 +250,8 @@ std::int64_t TimeFormat::parse(/* dxfg_time_format_t* */ const JavaObjectHandle<
         return 0;
     }
 
-    return runGraalFunction(doNothing, dxfg_TimeFormat_parse, 0,
-                            static_cast<dxfg_time_format_t *>(timeFormat.get()), value.c_str());
+    return runGraalFunction(doNothing, dxfg_TimeFormat_parse, 0, static_cast<dxfg_time_format_t *>(timeFormat.get()),
+                            value.c_str());
 }
 
 std::string TimeFormat::format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
@@ -288,8 +313,7 @@ bool DXEndpoint::close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXE
         return false;
     }
 
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_close, false,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_close, false, static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
 dxfcpp::DXEndpoint::State
@@ -310,8 +334,8 @@ bool DXEndpoint::user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEn
         return false;
     }
 
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_user, false,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()), user.c_str());
+    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_user, false, static_cast<dxfg_endpoint_t *>(endpoint.get()),
+                            user.c_str());
 }
 
 bool DXEndpoint::password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
@@ -371,27 +395,31 @@ bool /* int32_t */
 DXEndpoint::addStateChangeListener(
     /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
     /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
-        &listener) noexcept {
-    if (!endpoint || !listener) {
-        // TODO: Improve error handling [EN-8232]
-        return false;
+        &listener) {
+
+    if (!endpoint) {
+        throw std::invalid_argument("Unable to add DXEndpointStateChangeListener. The `endpoint` handle is invalid");
     }
 
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_addStateChangeListener, false,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                            static_cast<dxfg_endpoint_state_change_listener_t *>(listener.get()));
+    if (!listener) {
+        throw std::invalid_argument("Unable to add DXEndpointStateChangeListener. The `listener` handle is invalid");
+    }
+
+    return runGraalFunctionAndThrowIfLessThanZero(
+               dxfg_DXEndpoint_addStateChangeListener, static_cast<dxfg_endpoint_t *>(endpoint.get()),
+               static_cast<dxfg_endpoint_state_change_listener_t *>(listener.get())) == 0;
 }
 
 JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
-                                                                                              void *userData) noexcept {
+                                                                                              void *userData) {
     if (!userFunc) {
-        // TODO: Improve error handling [EN-8232]
-        return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>{nullptr};
+        throw std::invalid_argument(
+            "Unable to create DXEndpointStateChangeListener. The `userFunc` parameter is nullptr");
     }
 
-    return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>(
-        runGraalFunction(toVoidPtr, dxfg_PropertyChangeListener_new, nullptr,
-                         dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc), userData));
+    return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_PropertyChangeListener_new, dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc),
+        userData));
 }
 
 } // namespace api
@@ -449,8 +477,7 @@ InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ v
             return dxfg_InstrumentProfileReader_readFromFile(static_cast<graal_isolatethread_t *>(threadHandle),
                                                              params...);
         },
-        nullptr, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle),
-        address.c_str()));
+        nullptr, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle), address.c_str()));
 }
 
 /* dxfg_instrument_profile_list* */ void *
@@ -467,15 +494,15 @@ InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ v
             return dxfg_InstrumentProfileReader_readFromFile2(static_cast<graal_isolatethread_t *>(threadHandle),
                                                               params...);
         },
-        nullptr, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle),
-        address.c_str(), user.c_str(), password.c_str()));
+        nullptr, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle), address.c_str(),
+        user.c_str(), password.c_str()));
 }
 
 std::string InstrumentProfileReader::resolveSourceURL(const std::string &address) noexcept {
     auto resolvedURL = runIsolatedOrElse(
         [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileReader_resolveSourceURL(
-                static_cast<graal_isolatethread_t *>(threadHandle), params...);
+            return dxfg_InstrumentProfileReader_resolveSourceURL(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                                 params...);
         },
         nullptr, address.c_str());
 
@@ -503,8 +530,8 @@ std::int64_t InstrumentProfileCollector::getLastUpdateTime(
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileCollector_getLastUpdateTime(
-                static_cast<graal_isolatethread_t *>(threadHandle), params...);
+            return dxfg_InstrumentProfileCollector_getLastUpdateTime(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                                     params...);
         },
         0, static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle));
 }
@@ -535,8 +562,7 @@ InstrumentProfileCollector::view(/* dxfg_ipf_collector_t* */ void *instrumentPro
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileCollector_view(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                        params...);
+            return dxfg_InstrumentProfileCollector_view(static_cast<graal_isolatethread_t *>(threadHandle), params...);
         },
         nullptr, static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle)));
 }
@@ -550,8 +576,8 @@ bool InstrumentProfileCollector::addUpdateListener(/* dxfg_ipf_collector_t* */ v
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileCollector_addUpdateListener(
-                       static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
+            return dxfg_InstrumentProfileCollector_addUpdateListener(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                                     params...) == 0;
         },
         false, static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle),
         static_cast<dxfg_ipf_update_listener_t *>(listener));
@@ -584,8 +610,8 @@ bool InstrumentProfileCollector::removeUpdateListener(
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileConnection_createConnection(
-                static_cast<graal_isolatethread_t *>(threadHandle), params...);
+            return dxfg_InstrumentProfileConnection_createConnection(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                                     params...);
         },
         nullptr, address.c_str(), static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollectorHandle)));
 }
@@ -620,8 +646,8 @@ std::int64_t InstrumentProfileConnection::getUpdatePeriod(
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileConnection_getUpdatePeriod(
-                static_cast<graal_isolatethread_t *>(threadHandle), params...);
+            return dxfg_InstrumentProfileConnection_getUpdatePeriod(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                                    params...);
         },
         0, static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
 }
@@ -635,8 +661,8 @@ bool InstrumentProfileConnection::setUpdatePeriod(/* dxfg_ipf_connection_t * */ 
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileConnection_setUpdatePeriod(
-                       static_cast<graal_isolatethread_t *>(threadHandle), params...) == 0;
+            return dxfg_InstrumentProfileConnection_setUpdatePeriod(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                                    params...) == 0;
         },
         false, static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle), updatePeriod);
 }
@@ -684,8 +710,8 @@ std::int64_t InstrumentProfileConnection::getLastModified(
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileConnection_getLastModified(
-                static_cast<graal_isolatethread_t *>(threadHandle), params...);
+            return dxfg_InstrumentProfileConnection_getLastModified(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                                    params...);
         },
         0, static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnectionHandle));
 }
@@ -786,8 +812,7 @@ bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *g
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&list) {
-            return dxfg_CList_InstrumentProfile_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                        list) == 0;
+            return dxfg_CList_InstrumentProfile_release(static_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
         },
         false, static_cast<dxfg_instrument_profile_list *>(graalInstrumentProfileList));
 }
@@ -815,8 +840,7 @@ InstrumentProfileIterator::next(/* dxfg_iterable_ip_t * */ void *iterable) noexc
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&iterable) {
-            return dxfg_Iterable_InstrumentProfile_next(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                        iterable);
+            return dxfg_Iterable_InstrumentProfile_next(static_cast<graal_isolatethread_t *>(threadHandle), iterable);
         },
         nullptr, static_cast<dxfg_iterable_ip_t *>(iterable)));
 }
@@ -928,8 +952,7 @@ bool OnDemandService::replay(/* dxfg_on_demand_service_t * */ void *service, std
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&service, auto &&time) {
-            return dxfg_OnDemandService_replay(static_cast<graal_isolatethread_t *>(threadHandle), service,
-                                               time) == 0;
+            return dxfg_OnDemandService_replay(static_cast<graal_isolatethread_t *>(threadHandle), service, time) == 0;
         },
         false, static_cast<dxfg_on_demand_service_t *>(service), time);
 }
@@ -969,8 +992,7 @@ bool OnDemandService::stopAndResume(/* dxfg_on_demand_service_t * */ void *servi
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&service) {
-            return dxfg_OnDemandService_stopAndResume(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                      service) == 0;
+            return dxfg_OnDemandService_stopAndResume(static_cast<graal_isolatethread_t *>(threadHandle), service) == 0;
         },
         false, static_cast<dxfg_on_demand_service_t *>(service));
 }
@@ -983,8 +1005,7 @@ bool OnDemandService::stopAndClear(/* dxfg_on_demand_service_t * */ void *servic
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&service) {
-            return dxfg_OnDemandService_stopAndClear(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                     service) == 0;
+            return dxfg_OnDemandService_stopAndClear(static_cast<graal_isolatethread_t *>(threadHandle), service) == 0;
         },
         false, static_cast<dxfg_on_demand_service_t *>(service));
 }
@@ -997,8 +1018,8 @@ bool OnDemandService::setSpeed(/* dxfg_on_demand_service_t * */ void *service, d
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&service, auto &&speed) {
-            return dxfg_OnDemandService_setSpeed(static_cast<graal_isolatethread_t *>(threadHandle), service,
-                                                 speed) == 0;
+            return dxfg_OnDemandService_setSpeed(static_cast<graal_isolatethread_t *>(threadHandle), service, speed) ==
+                   0;
         },
         false, static_cast<dxfg_on_demand_service_t *>(service), speed);
 }
@@ -1456,8 +1477,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&session, auto &&time) {
-            return dxfg_Session_containsTime(static_cast<graal_isolatethread_t *>(threadHandle), session, time) ==
-                   1;
+            return dxfg_Session_containsTime(static_cast<graal_isolatethread_t *>(threadHandle), session, time) == 1;
         },
         false, static_cast<dxfg_session_t *>(session), time);
 }
@@ -1471,8 +1491,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&session, auto &&filter) {
-            return dxfg_Session_getPrevSession(static_cast<graal_isolatethread_t *>(threadHandle), session,
-                                               filter);
+            return dxfg_Session_getPrevSession(static_cast<graal_isolatethread_t *>(threadHandle), session, filter);
         },
         nullptr, static_cast<dxfg_session_t *>(session), static_cast<dxfg_session_filter_t *>(filter)));
 }
@@ -1486,8 +1505,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&session, auto &&filter) {
-            return dxfg_Session_getNextSession(static_cast<graal_isolatethread_t *>(threadHandle), session,
-                                               filter);
+            return dxfg_Session_getNextSession(static_cast<graal_isolatethread_t *>(threadHandle), session, filter);
         },
         nullptr, static_cast<dxfg_session_t *>(session), static_cast<dxfg_session_filter_t *>(filter)));
 }
@@ -1501,8 +1519,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&session, auto &&filter) {
-            return dxfg_Session_findPrevSession(static_cast<graal_isolatethread_t *>(threadHandle), session,
-                                                filter);
+            return dxfg_Session_findPrevSession(static_cast<graal_isolatethread_t *>(threadHandle), session, filter);
         },
         nullptr, static_cast<dxfg_session_t *>(session), static_cast<dxfg_session_filter_t *>(filter)));
 }
@@ -1516,8 +1533,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&session, auto &&filter) {
-            return dxfg_Session_findNextSession(static_cast<graal_isolatethread_t *>(threadHandle), session,
-                                                filter);
+            return dxfg_Session_findNextSession(static_cast<graal_isolatethread_t *>(threadHandle), session, filter);
         },
         nullptr, static_cast<dxfg_session_t *>(session), static_cast<dxfg_session_filter_t *>(filter)));
 }
@@ -1547,8 +1563,7 @@ bool Session::equals(/* dxfg_session_t* */ void *session, /* dxfg_session_t* */ 
 
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&session, auto &&otherSession) {
-            return dxfg_Session_equals(static_cast<graal_isolatethread_t *>(threadHandle), session,
-                                       otherSession) == 1;
+            return dxfg_Session_equals(static_cast<graal_isolatethread_t *>(threadHandle), session, otherSession) == 1;
         },
         false, static_cast<dxfg_session_t *>(session), static_cast<dxfg_session_t *>(otherSession));
 }
@@ -1588,8 +1603,7 @@ std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&instrumentProfile) {
-            return dxfg_Schedule_getInstance(static_cast<graal_isolatethread_t *>(threadHandle),
-                                             instrumentProfile);
+            return dxfg_Schedule_getInstance(static_cast<graal_isolatethread_t *>(threadHandle), instrumentProfile);
         },
         nullptr, static_cast<dxfg_instrument_profile_t *>(instrumentProfile)));
 }
@@ -1612,8 +1626,8 @@ std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&instrumentProfile, auto &&venue) {
-            return dxfg_Schedule_getInstance3(static_cast<graal_isolatethread_t *>(threadHandle),
-                                              instrumentProfile, venue.c_str());
+            return dxfg_Schedule_getInstance3(static_cast<graal_isolatethread_t *>(threadHandle), instrumentProfile,
+                                              venue.c_str());
         },
         nullptr, static_cast<dxfg_instrument_profile_t *>(instrumentProfile), venue));
 }
@@ -1663,8 +1677,8 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
                             ? std::numeric_limits<std::int32_t>::max()
                             : static_cast<std::int32_t>(data.size());
 
-            return dxfg_Schedule_setDefaults(static_cast<graal_isolatethread_t *>(threadHandle), data.data(),
-                                             size) == 0;
+            return dxfg_Schedule_setDefaults(static_cast<graal_isolatethread_t *>(threadHandle), data.data(), size) ==
+                   0;
         },
         false, data);
 }
@@ -1678,8 +1692,7 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&schedule, auto &&time) {
-            return dxfg_Schedule_getSessionByTime(static_cast<graal_isolatethread_t *>(threadHandle), schedule,
-                                                  time);
+            return dxfg_Schedule_getSessionByTime(static_cast<graal_isolatethread_t *>(threadHandle), schedule, time);
         },
         nullptr, static_cast<dxfg_schedule_t *>(schedule), time));
 }
@@ -1734,11 +1747,10 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&schedule, auto &&time, auto &&filter) {
-            return dxfg_Schedule_getNearestSessionByTime(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                         schedule, time, filter);
+            return dxfg_Schedule_getNearestSessionByTime(static_cast<graal_isolatethread_t *>(threadHandle), schedule,
+                                                         time, filter);
         },
-        nullptr, static_cast<dxfg_schedule_t *>(schedule), time,
-        static_cast<dxfg_session_filter_t *>(filter)));
+        nullptr, static_cast<dxfg_schedule_t *>(schedule), time, static_cast<dxfg_session_filter_t *>(filter)));
 }
 
 /* dxfg_session_t* */ void *Schedule::findNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time,
@@ -1750,11 +1762,10 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 
     return static_cast<void *>(runIsolatedOrElse(
         [](auto threadHandle, auto &&schedule, auto &&time, auto &&filter) {
-            return dxfg_Schedule_findNearestSessionByTime(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                          schedule, time, filter);
+            return dxfg_Schedule_findNearestSessionByTime(static_cast<graal_isolatethread_t *>(threadHandle), schedule,
+                                                          time, filter);
         },
-        nullptr, static_cast<dxfg_schedule_t *>(schedule), time,
-        static_cast<dxfg_session_filter_t *>(filter)));
+        nullptr, static_cast<dxfg_schedule_t *>(schedule), time, static_cast<dxfg_session_filter_t *>(filter)));
 }
 
 std::string Schedule::getName(/* dxfg_schedule_t* */ void *schedule) noexcept {

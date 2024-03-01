@@ -475,8 +475,13 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_;
     SimpleHandler<void(State, State)> onStateChange_{};
 
+    // Throws:
+    //   - std::bad_alloc if it was not possible to allocate the required amount of memory
+    //   - std::invalid_argument if endpointHandle is nullptr
+    //   - JavaException if something happened to dxFeed API backend
+    //   - GraalException if something happened to GraalVM
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
-                                              const std::unordered_map<std::string, std::string> &properties) noexcept;
+                                              const std::unordered_map<std::string, std::string> &properties);
 
     struct Impl;
 
