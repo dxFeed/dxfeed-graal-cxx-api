@@ -13,7 +13,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
 DXFCPP_BEGIN_NAMESPACE
 
+/**
+ * A wrapper over the interceptable Java exceptions thrown by the dxFeed Native Graal SDK
+ */
 struct DXFCPP_EXPORT JavaException : public std::runtime_error {
+    JavaException(const std::string &message, const std::string &className, std::string stackTrace);
+
     static void throwIfJavaThreadExceptionExists();
 
     template <typename T>
@@ -43,9 +48,14 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
         return v;
     }
 
-    std::string stackTrace;
+    /**
+     * @return Java exception's stack trace.
+     */
+    const std::string& getStackTrace() const&;
 
-    JavaException(const std::string &message, const std::string &className, std::string stackTrace);
+  private:
+
+    std::string stackTrace_;
 };
 
 DXFCPP_END_NAMESPACE

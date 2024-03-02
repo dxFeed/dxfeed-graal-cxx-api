@@ -14,11 +14,20 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
 DXFCPP_BEGIN_NAMESPACE
 
+/**
+ * The wrapper over CEntryPointErrorsEnum, the error code returned by GraalVM.
+ */
 struct DXFCPP_EXPORT GraalException : public std::runtime_error {
+    /**
+     * Constructs an exception.
+     *
+     * @param entryPointErrorsEnum The error code returned by GraalVM.
+     */
     explicit GraalException(CEntryPointErrorsEnum entryPointErrorsEnum)
         : std::runtime_error(createMessage(entryPointErrorsEnum)) {
     }
 
+  private:
     static inline std::string createMessage(CEntryPointErrorsEnum entryPointErrorsEnum) {
         auto result = CEntryPointErrorsEnumToStr(entryPointErrorsEnum);
 

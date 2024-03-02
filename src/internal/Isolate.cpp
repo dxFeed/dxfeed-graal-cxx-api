@@ -317,14 +317,12 @@ bool DXEndpoint::close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXE
 }
 
 dxfcpp::DXEndpoint::State
-DXEndpoint::getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
+DXEndpoint::getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
     if (!endpoint) {
-        // TODO: Improve error handling [EN-8232]
-        return dxfcpp::DXEndpoint::State::CLOSED;
+        throw std::invalid_argument("Unable to get state. The `endpoint` handle is invalid");
     }
 
-    return runGraalFunction(graalStateToState, dxfg_DXEndpoint_getState, dxfcpp::DXEndpoint::State::CLOSED,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
+    return graalStateToState(runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getState, static_cast<dxfg_endpoint_t *>(endpoint.get())));
 }
 
 bool DXEndpoint::user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,

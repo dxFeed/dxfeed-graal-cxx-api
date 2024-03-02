@@ -33,7 +33,11 @@ void JavaException::throwIfJavaThreadExceptionExists() {
 
 JavaException::JavaException(const std::string &message, const std::string &className, std::string stackTrace)
     : std::runtime_error(fmt::format("Java exception of type '{}' was thrown. {}", className, message)),
-      stackTrace(std::move(stackTrace)) {
+      stackTrace_(std::move(stackTrace)) {
+}
+
+const std::string& JavaException::getStackTrace() const& {
+    return stackTrace_;
 }
 
 DXFCPP_END_NAMESPACE

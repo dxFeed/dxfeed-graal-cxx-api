@@ -478,8 +478,8 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     // Throws:
     //   - std::bad_alloc if it was not possible to allocate the required amount of memory
     //   - std::invalid_argument if endpointHandle is nullptr
-    //   - JavaException if something happened to dxFeed API backend
-    //   - GraalException if something happened to GraalVM
+    //   - JavaException if something happened with the dxFeed API backend
+    //   - GraalException if something happened with the GraalVM
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties);
 
@@ -575,8 +575,11 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * @return the state.
      *
      * @see DXEndpoint
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
-    State getState() const noexcept;
+    State getState() const;
 
     /// @return `true` if the endpoint is closed
     bool isClosed() const noexcept;
