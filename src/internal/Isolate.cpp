@@ -322,7 +322,8 @@ DXEndpoint::getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEnd
         throw std::invalid_argument("Unable to get state. The `endpoint` handle is invalid");
     }
 
-    return graalStateToState(runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getState, static_cast<dxfg_endpoint_t *>(endpoint.get())));
+    return graalStateToState(runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getState,
+                                                                    static_cast<dxfg_endpoint_t *>(endpoint.get())));
 }
 
 bool DXEndpoint::user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
