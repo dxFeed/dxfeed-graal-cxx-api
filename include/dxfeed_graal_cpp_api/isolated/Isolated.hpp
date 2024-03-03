@@ -52,8 +52,8 @@ struct DXEndpoint {
 
     // Throws:
     //   std::invalid_argument if endpoint handle is invalid.
-    //   JavaException if result is nullptr (something happened to dxFeed API backend)
-    //   GraalException if something happened to GraalVM
+    //   JavaException if something happened with the dxFeed API backend
+    //   GraalException if something happened with the GraalVM
     static dxfcpp::DXEndpoint::State
     getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
