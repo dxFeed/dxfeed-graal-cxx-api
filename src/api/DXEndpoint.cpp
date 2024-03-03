@@ -139,12 +139,8 @@ DXEndpoint::State DXEndpoint::getState() const {
     return isolated::api::DXEndpoint::getState(handle_);
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) noexcept {
+std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
     // TODO: check invalid utf-8 [EN-8233]
-    if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXEndpoint{" + handle_.toString() + "}::user(user = " + user + ")");
-    }
-
     isolated::api::DXEndpoint::user(handle_, user);
 
     return sharedAs<DXEndpoint>();

@@ -57,8 +57,13 @@ struct DXEndpoint {
     static dxfcpp::DXEndpoint::State
     getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
+    // Throws:
+    //   std::invalid_argument if endpoint handle is invalid.
+    //   JavaException if something happened with the dxFeed API backend
+    //   GraalException if something happened with the GraalVM
     static bool user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                     const std::string &user) noexcept;
+                     const std::string &user);
+
     static bool password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
                          const std::string &password) noexcept;
     static bool connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,

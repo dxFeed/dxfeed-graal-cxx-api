@@ -638,8 +638,11 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * @param user The user name.
      *
      * @return this DXEndpoint.
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
-    std::shared_ptr<DXEndpoint> user(const std::string &user) noexcept;
+    std::shared_ptr<DXEndpoint> user(const std::string &user);
 
     /**
      * Changes password for this endpoint.
