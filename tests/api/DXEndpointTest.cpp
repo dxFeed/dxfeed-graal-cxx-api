@@ -156,3 +156,16 @@ TEST_CASE("dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList") {
     dxfcpp::SymbolWrapper::SymbolListUtils::freeGraalList(list2);
     dxfcpp::SymbolWrapper::SymbolListUtils::freeGraalList(list3);
 }
+
+TEST_CASE("DXEndpoint::user") {
+    using namespace std::literals;
+
+    //dxfcpp::System::setProperty("log.file", "log.txt");
+
+    auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::DXEndpoint::Role::FEED);
+
+    endpoint->user("\xe2\x28\xa1");
+    endpoint->connect("123123123");
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+}
