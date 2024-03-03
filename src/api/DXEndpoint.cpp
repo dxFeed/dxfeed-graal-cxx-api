@@ -556,7 +556,7 @@ DXEndpoint::Role DXEndpoint::getRole() const noexcept {
     return role_;
 }
 
-bool DXEndpoint::isClosed() const noexcept {
+bool DXEndpoint::isClosed() const {
     return getState() == State::CLOSED;
 }
 

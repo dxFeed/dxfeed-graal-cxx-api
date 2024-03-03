@@ -581,8 +581,12 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      */
     State getState() const;
 
-    /// @return `true` if the endpoint is closed
-    bool isClosed() const noexcept;
+    /**
+     * @return `true` if the endpoint is closed
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
+     */
+    bool isClosed() const;
 
     /**
      * @return The user defined endpoint's name
