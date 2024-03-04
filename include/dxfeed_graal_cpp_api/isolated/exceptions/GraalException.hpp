@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../../internal/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include "../internal/CEntryPointErrors.hpp"
+#include "../../internal/CEntryPointErrors.hpp"
 
 #include <stdexcept>
 #include <string>

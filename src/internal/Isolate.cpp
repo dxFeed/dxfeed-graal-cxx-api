@@ -292,7 +292,7 @@ Tools::parseSymbols(const std::string &symbolList) noexcept {
 
 namespace api {
 
-static dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
+dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) noexcept {
     switch (state) {
     case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
         return dxfcpp::DXEndpoint::State::NOT_CONNECTED;
