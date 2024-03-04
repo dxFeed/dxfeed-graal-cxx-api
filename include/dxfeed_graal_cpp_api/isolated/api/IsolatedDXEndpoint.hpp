@@ -19,12 +19,11 @@ namespace IsolatedDXEndpoint {
 //   std::invalid_argument if endpoint handle is invalid.
 //   JavaException if something happened with the dxFeed API backend
 //   GraalException if something happened with the GraalVM
-static dxfcpp::DXEndpoint::State
-getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
-}
+} // namespace IsolatedDXEndpoint
 
-}
+} // namespace isolated::api
 
 DXFCPP_END_NAMESPACE
 

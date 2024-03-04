@@ -5,6 +5,8 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
+
 DXFCPP_BEGIN_NAMESPACE
 
 CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
@@ -160,34 +162,6 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
         defaultValue, resultCheckerConverter, graalFunction, params...);
 }
 
-constexpr auto throwIfNullptr = [](auto v) {
-    return JavaException::throwIfNullptr(v);
-};
-
-constexpr auto throwIfLessThanZero = [](auto v) {
-    return JavaException::throwIfLessThanZero(v);
-};
-
-constexpr auto runGraalFunctionAndThrow(auto resultCheckerConverter, auto graalFunction, auto &&...params) {
-    return runIsolatedThrow(
-        [](auto threadHandle, auto &&resultCheckerConverter, auto &&graalFunction, auto &&...params) {
-            return resultCheckerConverter(graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...));
-        },
-        resultCheckerConverter, graalFunction, params...);
-}
-
-constexpr auto runGraalFunctionAndThrowIfNullptr(auto graalFunction, auto &&...params) {
-    return runIsolatedThrow(
-        [](auto threadHandle, auto &&graalFunction, auto &&...params) {
-            return throwIfNullptr(graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...));
-        },
-        graalFunction, params...);
-}
-
-constexpr auto runGraalFunctionAndThrowIfLessThanZero(auto graalFunction, auto &&...params) {
-    return runGraalFunctionAndThrow(throwIfLessThanZero, graalFunction, params...);
-}
-
 bool String::release(const char *string) noexcept {
     if (!string) {
         // TODO: Improve error handling [EN-8232]
@@ -292,21 +266,6 @@ Tools::parseSymbols(const std::string &symbolList) noexcept {
 
 namespace api {
 
-dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) noexcept {
-    switch (state) {
-    case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
-        return dxfcpp::DXEndpoint::State::NOT_CONNECTED;
-    case DXFG_ENDPOINT_STATE_CONNECTING:
-        return dxfcpp::DXEndpoint::State::CONNECTING;
-    case DXFG_ENDPOINT_STATE_CONNECTED:
-        return dxfcpp::DXEndpoint::State::CONNECTED;
-    case DXFG_ENDPOINT_STATE_CLOSED:
-        return dxfcpp::DXEndpoint::State::CLOSED;
-    }
-
-    return dxfcpp::DXEndpoint::State::NOT_CONNECTED;
-}
-
 bool DXEndpoint::close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
     if (!endpoint) {
         // TODO: Improve error handling [EN-8232]
@@ -314,16 +273,6 @@ bool DXEndpoint::close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXE
     }
 
     return runGraalFunction(equalsToZero, dxfg_DXEndpoint_close, false, static_cast<dxfg_endpoint_t *>(endpoint.get()));
-}
-
-dxfcpp::DXEndpoint::State
-DXEndpoint::getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw std::invalid_argument("Unable to get state. The `endpoint` handle is invalid");
-    }
-
-    return graalStateToState(runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getState,
-                                                                    static_cast<dxfg_endpoint_t *>(endpoint.get())));
 }
 
 bool DXEndpoint::user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,

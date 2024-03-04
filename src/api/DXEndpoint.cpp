@@ -136,7 +136,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
 }
 
 DXEndpoint::State DXEndpoint::getState() const {
-    return isolated::api::DXEndpoint::getState(handle_);
+    return isolated::api::IsolatedDXEndpoint::getState(handle_);
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {

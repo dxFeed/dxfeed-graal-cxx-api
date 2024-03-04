@@ -52,6 +52,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/exceptions/JavaException.hpp"
 #include "isolated/exceptions/GraalException.hpp"
 
+#include "isolated/api/IsolatedDXEndpoint.hpp"
+
 #include "ondemand/OnDemandService.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
