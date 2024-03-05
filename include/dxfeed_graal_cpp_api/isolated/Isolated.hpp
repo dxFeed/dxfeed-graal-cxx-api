@@ -65,16 +65,6 @@ struct DXEndpoint {
     static bool disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
     static bool
     disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
-
-    // Throws:
-    //   std::invalid_argument if endpoint or listener handle is invalid.
-    //   JavaException if something happened with the dxFeed API backend
-    //   GraalException if something happened with the GraalVM
-    static bool /* int32_t */
-    addStateChangeListener(
-        /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-        /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
-            &listener);
 };
 
 struct DXEndpointStateChangeListener {

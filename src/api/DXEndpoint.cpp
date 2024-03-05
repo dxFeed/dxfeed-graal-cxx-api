@@ -130,7 +130,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     endpoint->stateChangeListenerHandle_ = isolated::api::DXEndpointStateChangeListener::create(
         dxfcpp::bit_cast<void *>(&DXEndpoint::Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
 
-    isolated::api::DXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
+    isolated::api::IsolatedDXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
 
     return endpoint;
 }

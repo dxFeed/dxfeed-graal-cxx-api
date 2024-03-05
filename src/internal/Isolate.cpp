@@ -338,25 +338,6 @@ bool DXEndpoint::disconnectAndClear(
                             static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-bool /* int32_t */
-DXEndpoint::addStateChangeListener(
-    /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-    /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
-        &listener) {
-
-    if (!endpoint) {
-        throw std::invalid_argument("Unable to add DXEndpointStateChangeListener. The `endpoint` handle is invalid");
-    }
-
-    if (!listener) {
-        throw std::invalid_argument("Unable to add DXEndpointStateChangeListener. The `listener` handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfLessThanZero(
-               dxfg_DXEndpoint_addStateChangeListener, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-               static_cast<dxfg_endpoint_state_change_listener_t *>(listener.get())) == 0;
-}
-
 JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
                                                                                               void *userData) {
     if (!userFunc) {
