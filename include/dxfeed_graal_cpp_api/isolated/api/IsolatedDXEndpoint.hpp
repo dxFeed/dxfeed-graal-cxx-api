@@ -36,12 +36,27 @@ dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle
  *
  * @param endpoint The endpoint's handle.
  * @param listener The listener's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws std::invalid_argument if the endpoint handle or listener handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
 void
 addStateChangeListener(
+    /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+    /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
+        &listener);
+
+/**
+ * Calls the Graal SDK function in isolation to remove the state change listener to the endpoint.
+ *
+ * @param endpoint The endpoint's handle.
+ * @param listener The listener's handle.
+ * @throws std::invalid_argument if the endpoint handle or listener is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void
+removeStateChangeListener(
     /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
     /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
         &listener);
