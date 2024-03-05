@@ -153,8 +153,11 @@ set(dxFeedGraalCxxApi_InternalUtilsDebug_Sources
         src/internal/utils/debug/Debug.cpp
 )
 
+set(dxFeedGraalCxxApi_Exceptions_Sources
+        src/exceptions/JavaException.cpp
+)
+
 set(dxFeedGraalCxxApi_Isolated_Sources
-        src/isolated/exceptions/JavaException.cpp
         src/isolated/api/IsolatedDXEndpoint.cpp
 )
 
@@ -261,6 +264,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_InternalUtils_Sources}
         ${dxFeedGraalCxxApi_InternalUtilsDebug_Sources}
         ${dxFeedGraalCxxApi_Isolated_Sources}
+        ${dxFeedGraalCxxApi_Exceptions_Sources}
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
