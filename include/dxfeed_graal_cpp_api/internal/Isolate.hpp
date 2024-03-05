@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../isolated/exceptions/GraalException.hpp"
+#include "../exceptions/GraalException.hpp"
 #include "CEntryPointErrors.hpp"
 #include "Common.hpp"
 #include "utils/StringUtils.hpp"

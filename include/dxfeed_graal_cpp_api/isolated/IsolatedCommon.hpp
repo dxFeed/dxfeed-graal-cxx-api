@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "exceptions/JavaException.hpp"
+#include "../exceptions/JavaException.hpp"
 
 struct __graal_isolatethread_t;
 typedef struct __graal_isolatethread_t graal_isolatethread_t;
