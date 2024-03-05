@@ -31,12 +31,18 @@ void JavaException::throwIfJavaThreadExceptionExists() {
     throw JavaException(message, className, stackTrace);
 }
 
+void JavaException::throwException() {
+    runIsolatedThrow([](auto threadHandle) {
+        return throwIfNullptr(dxfg_throw_exception(static_cast<graal_isolatethread_t *>(threadHandle)));
+    });
+}
+
 JavaException::JavaException(const std::string &message, const std::string &className, std::string stackTrace)
     : std::runtime_error(fmt::format("Java exception of type '{}' was thrown. {}", className, message)),
       stackTrace_(std::move(stackTrace)) {
 }
 
-const std::string& JavaException::getStackTrace() const& {
+const std::string &JavaException::getStackTrace() const & {
     return stackTrace_;
 }
 

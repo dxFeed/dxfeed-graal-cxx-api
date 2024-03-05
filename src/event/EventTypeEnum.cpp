@@ -7,6 +7,8 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+const EventTypeEnum EventTypeEnum::INVALID_EVENT_TYPE{};
+
 const EventTypeEnum EventTypeEnum::QUOTE{DXFG_EVENT_QUOTE, "QUOTE", "Quote", true};
 const EventTypeEnum EventTypeEnum::PROFILE{DXFG_EVENT_PROFILE, "PROFILE", "Profile", true};
 const EventTypeEnum EventTypeEnum::SUMMARY{DXFG_EVENT_SUMMARY, "SUMMARY", "Summary", true};

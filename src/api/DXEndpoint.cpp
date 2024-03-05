@@ -577,7 +577,8 @@ void DXEndpoint::close() noexcept {
 }
 
 std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() noexcept {
-    return {};
+    return {EventTypeEnum::ALL.begin(), EventTypeEnum::ALL.end()};
+    //return isolated::api::IsolatedDXEndpoint::getEventTypes(handle_);
 }
 
 struct BuilderHandle {};

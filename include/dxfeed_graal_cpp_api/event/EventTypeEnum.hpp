@@ -55,6 +55,8 @@ class DXFCPP_EXPORT EventTypeEnum {
                                return static_cast<std::size_t>(eventTypeRef.get().getId());
                            })>;
 
+    static const EventTypeEnum INVALID_EVENT_TYPE;
+
     static const EventTypeEnum QUOTE;
     static const EventTypeEnum PROFILE;
     static const EventTypeEnum SUMMARY;
@@ -184,6 +186,26 @@ class DXFCPP_EXPORT EventTypeEnum {
         return isOnlyIndexed_;
     }
 };
+
+inline namespace literals {
+
+/**
+ * String literal that helps to construct EventTypeEnum from a char array.
+ *
+ * @param eventTypeString The event type name's char array
+ * @param length Tha char array's length
+ * @return EventTypeEnum built on char array
+ */
+inline EventTypeEnum operator""_et(const char *eventTypeString, size_t length) noexcept {
+    if (auto it = EventTypeEnum::ALL_BY_NAME.find(eventTypeString); it != EventTypeEnum::ALL_BY_NAME.end()) {
+        return it->second;
+    }
+
+    return EventTypeEnum::INVALID_EVENT_TYPE;
+}
+
+} // namespace literals
+
 
 DXFCPP_END_NAMESPACE
 

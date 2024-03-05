@@ -21,6 +21,8 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
 
     static void throwIfJavaThreadExceptionExists();
 
+    static void throwException();
+
     template <typename T>
     static constexpr T* throwIfNullptr(T* v) {
         if (v == nullptr) {
