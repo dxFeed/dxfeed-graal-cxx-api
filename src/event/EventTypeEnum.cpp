@@ -55,44 +55,36 @@ const std::vector<std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::AL
     std::cref(OPTION_SALE),
 };
 
-const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_NAME{
-    {QUOTE.getName(), std::cref(QUOTE)},
-    {PROFILE.getName(), std::cref(PROFILE)},
-    {SUMMARY.getName(), std::cref(SUMMARY)},
-    {GREEKS.getName(), std::cref(GREEKS)},
-    {CANDLE.getName(), std::cref(CANDLE)},
-    {UNDERLYING.getName(), std::cref(UNDERLYING)},
-    {THEO_PRICE.getName(), std::cref(THEO_PRICE)},
-    {TRADE.getName(), std::cref(TRADE)},
-    {TRADE_ETH.getName(), std::cref(TRADE_ETH)},
-    // {CONFIGURATION.getName(), std::cref(CONFIGURATION)},
-    // {MESSAGE.getName(), std::cref(MESSAGE)},
-    {TIME_AND_SALE.getName(), std::cref(TIME_AND_SALE)},
-    {ORDER.getName(), std::cref(ORDER)},
-    {ANALYTIC_ORDER.getName(), std::cref(ANALYTIC_ORDER)},
-    {SPREAD_ORDER.getName(), std::cref(SPREAD_ORDER)},
-    {SERIES.getName(), std::cref(SERIES)},
-    {OPTION_SALE.getName(), std::cref(OPTION_SALE)},
-};
+const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_NAME =
+    [](auto types) {
+        std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> result{};
 
-const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_CLASS_NAME{
-    {QUOTE.getClassName(), std::cref(QUOTE)},
-    {PROFILE.getClassName(), std::cref(PROFILE)},
-    {SUMMARY.getClassName(), std::cref(SUMMARY)},
-    {GREEKS.getClassName(), std::cref(GREEKS)},
-    {CANDLE.getClassName(), std::cref(CANDLE)},
-    {UNDERLYING.getClassName(), std::cref(UNDERLYING)},
-    {THEO_PRICE.getClassName(), std::cref(THEO_PRICE)},
-    {TRADE.getClassName(), std::cref(TRADE)},
-    {TRADE_ETH.getClassName(), std::cref(TRADE_ETH)},
-    // {CONFIGURATION.getClassName(), std::cref(CONFIGURATION)},
-    // {MESSAGE.getClassName(), std::cref(MESSAGE)},
-    {TIME_AND_SALE.getClassName(), std::cref(TIME_AND_SALE)},
-    {ORDER.getClassName(), std::cref(ORDER)},
-    {ANALYTIC_ORDER.getClassName(), std::cref(ANALYTIC_ORDER)},
-    {SPREAD_ORDER.getClassName(), std::cref(SPREAD_ORDER)},
-    {SERIES.getClassName(), std::cref(SERIES)},
-    {OPTION_SALE.getClassName(), std::cref(OPTION_SALE)},
-};
+        for (auto &&t : types) {
+            result.emplace(t.get().getName(), t);
+        }
+
+        return result;
+    }(EventTypeEnum::ALL);
+
+const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_CLASS_NAME =
+    [](auto types) {
+        std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> result{};
+
+        for (auto &&t : types) {
+            result.emplace(t.get().getClassName(), t);
+        }
+
+        return result;
+    }(EventTypeEnum::ALL);
+
+const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_ID = [](auto types) {
+    std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> result{};
+
+    for (auto &&t : types) {
+        result.emplace(t.get().getId(), t);
+    }
+
+    return result;
+}(EventTypeEnum::ALL);
 
 DXFCPP_END_NAMESPACE

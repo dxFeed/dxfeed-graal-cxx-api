@@ -26,11 +26,6 @@ namespace IsolatedDXEndpoint {
  */
 dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
-// Throws:
-//   std::invalid_argument if endpoint or listener handle is invalid.
-//   JavaException if something happened with the dxFeed API backend
-//   GraalException if something happened with the GraalVM
-
 /**
  * Calls the Graal SDK function in isolation to add the state change listener to the endpoint.
  *
@@ -60,6 +55,22 @@ removeStateChangeListener(
     /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
     /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
         &listener);
+
+//dxfg_feed_t*                    dxfg_DXEndpoint_getFeed(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
+//dxfg_publisher_t*               dxfg_DXEndpoint_getPublisher(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
+//int32_t                         dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, dxfg_executor_t *executor);
+
+/**
+ * Calls the Graal SDK function in isolation to retrieve event types from the endpoint.
+ *
+ * @param endpoint The endpoint's handle.
+ * @return A set of event types.
+ * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+/* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum> getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+
 
 } // namespace IsolatedDXEndpoint
 

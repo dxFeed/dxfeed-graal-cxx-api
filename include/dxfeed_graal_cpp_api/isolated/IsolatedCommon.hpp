@@ -48,11 +48,7 @@ constexpr auto runGraalFunctionAndThrow(auto resultCheckerConverter, auto graalF
 }
 
 constexpr auto runGraalFunctionAndThrowIfNullptr(auto graalFunction, auto &&...params) {
-    return runIsolatedThrow(
-        [](auto threadHandle, auto &&graalFunction, auto &&...params) {
-            return throwIfNullptr(graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...));
-        },
-        graalFunction, params...);
+    return runGraalFunctionAndThrow(throwIfNullptr, graalFunction, params...);
 }
 
 constexpr auto runGraalFunctionAndThrowIfLessThanZero(auto graalFunction, auto &&...params) {

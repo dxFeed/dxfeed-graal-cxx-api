@@ -58,6 +58,33 @@ void removeStateChangeListener(
                                            static_cast<dxfg_endpoint_state_change_listener_t *>(listener.get()));
 }
 
+/* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum>
+getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+    if (!endpoint) {
+        throw std::invalid_argument("Unable to retrieve event types. The `endpoint` handle is invalid");
+    }
+
+    std::unordered_set<EventTypeEnum> result{};
+
+    dxfg_event_clazz_list_t *eventTypesList = runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXEndpoint_getEventTypes, static_cast<dxfg_endpoint_t *>(endpoint.get()));
+
+    if (eventTypesList->size > 0) {
+        for (auto i = 0; i < eventTypesList->size; i++) {
+            dxfg_event_clazz_t ec = *eventTypesList->elements[static_cast<std::size_t>(i)];
+
+            if (auto etIt = EventTypeEnum::ALL_BY_ID.find(static_cast<std::uint32_t>(ec));
+                etIt != EventTypeEnum::ALL_BY_ID.end()) {
+                result.emplace(etIt->second.get());
+            }
+        }
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_EventClazz_release, eventTypesList);
+
+    return result;
+}
+
 } // namespace isolated::api::IsolatedDXEndpoint
 
 DXFCPP_END_NAMESPACE
