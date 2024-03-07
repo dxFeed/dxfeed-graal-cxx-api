@@ -583,6 +583,7 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
 
     /**
      * @return `true` if the endpoint is closed
+     * @throws std::invalid_argument if endpoint handle is invalid.
      * @throws JavaException if something happened with the dxFeed API backend
      * @throws GraalException if something happened with the GraalVM
      */
@@ -748,8 +749,12 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * <p><b>This method is blocking.</b>
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitNotConnected--)
+     *
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
-    void awaitNotConnected() noexcept;
+    void awaitNotConnected();
 
     /**
      * Waits until this endpoint stops processing data (becomes quiescent).
