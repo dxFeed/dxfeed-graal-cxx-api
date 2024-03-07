@@ -193,10 +193,10 @@ inline namespace literals {
  * String literal that helps to construct EventTypeEnum from a char array.
  *
  * @param eventTypeString The event type name's char array
- * @param length Tha char array's length
+ * @param length The char array's length
  * @return EventTypeEnum built on char array
  */
-inline EventTypeEnum operator""_et(const char *eventTypeString, size_t length) noexcept {
+inline EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept {
     if (auto it = EventTypeEnum::ALL_BY_NAME.find(eventTypeString); it != EventTypeEnum::ALL_BY_NAME.end()) {
         return it->second;
     }
