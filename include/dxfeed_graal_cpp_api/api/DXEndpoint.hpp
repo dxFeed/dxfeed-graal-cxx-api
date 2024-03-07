@@ -683,8 +683,12 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      *
      * @param address The data source address.
      * @return this DXEndpoint.
+     *
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend or if address string is malformed.
+     * @throws GraalException if something happened with the GraalVM
      */
-    std::shared_ptr<DXEndpoint> connect(const std::string &address) noexcept;
+    std::shared_ptr<DXEndpoint> connect(const std::string &address);
 
     /**
      * Terminates all established network connections and initiates connecting again with the same address.

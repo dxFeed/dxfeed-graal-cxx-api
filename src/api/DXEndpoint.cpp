@@ -157,13 +157,13 @@ std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) no
     return sharedAs<DXEndpoint>();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) noexcept {
+std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + address + ")");
     }
 
-    isolated::api::DXEndpoint::connect(handle_, address);
+    isolated::api::IsolatedDXEndpoint::connect(handle_, address);
 
     return sharedAs<DXEndpoint>();
 }
@@ -562,7 +562,7 @@ void DXEndpoint::close() noexcept {
 
 std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() noexcept {
     return {EventTypeEnum::ALL.begin(), EventTypeEnum::ALL.end()};
-    //return isolated::api::IsolatedDXEndpoint::getEventTypes(handle_);
+    // return isolated::api::IsolatedDXEndpoint::getEventTypes(handle_);
 }
 
 struct BuilderHandle {};

@@ -59,8 +59,6 @@ struct DXEndpoint {
 
     static bool password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
                          const std::string &password) noexcept;
-    static bool connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                        const std::string &address) noexcept;
 };
 
 struct DXEndpointStateChangeListener {

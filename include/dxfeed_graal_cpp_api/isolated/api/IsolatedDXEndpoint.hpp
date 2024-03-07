@@ -23,7 +23,8 @@ namespace IsolatedDXEndpoint {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-//int32_t                         dxfg_DXEndpoint_connect(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, const char *address);
+void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+             const std::string &address);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_reconnect` in isolation.

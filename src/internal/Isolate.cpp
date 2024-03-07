@@ -296,17 +296,6 @@ bool DXEndpoint::password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::
                             static_cast<dxfg_endpoint_t *>(endpoint.get()), password.c_str());
 }
 
-bool DXEndpoint::connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                         const std::string &address) noexcept {
-    if (!endpoint) {
-        // TODO: Improve error handling [EN-8232]
-        return false;
-    }
-
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_connect, false,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()), address.c_str());
-}
-
 JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
                                                                                               void *userData) {
     if (!userFunc) {
