@@ -193,23 +193,19 @@ void DXEndpoint::disconnectAndClear() noexcept {
 }
 
 void DXEndpoint::awaitNotConnected() {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXEndpoint{" + handle_.toString() + "}::awaitNotConnected()");
+    }
+
     isolated::api::IsolatedDXEndpoint::awaitNotConnected(handle_);
 }
 
-void DXEndpoint::awaitProcessed() noexcept {
+void DXEndpoint::awaitProcessed() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::awaitProcessed()");
     }
 
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_awaitProcessed(static_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
-        },
-        false);
+    isolated::api::IsolatedDXEndpoint::awaitProcessed(handle_);
 }
 
 void DXEndpoint::closeAndAwaitTermination() noexcept {

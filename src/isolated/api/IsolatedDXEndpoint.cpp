@@ -13,6 +13,16 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXEndpoint {
 
+void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+    if (!endpoint) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_awaitProcessed`. The `endpoint` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_awaitProcessed,
+                                           static_cast<dxfg_endpoint_t *>(endpoint.get()));
+}
+
 void awaitNotConnected(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw std::invalid_argument(

@@ -762,8 +762,12 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * all published data was written before closing this endpoint.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitProcessed--)
+     *
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
-    void awaitProcessed() noexcept;
+    void awaitProcessed();
 
     /**
      * Closes this endpoint and wait until all pending data processing tasks are completed.
