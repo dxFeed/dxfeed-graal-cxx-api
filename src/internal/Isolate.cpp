@@ -327,17 +327,6 @@ bool DXEndpoint::disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
                             static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-bool DXEndpoint::disconnectAndClear(
-    /* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
-    if (!endpoint) {
-        // TODO: Improve error handling [EN-8232]
-        return false;
-    }
-
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_disconnectAndClear, false,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
-}
-
 JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
                                                                                               void *userData) {
     if (!userFunc) {

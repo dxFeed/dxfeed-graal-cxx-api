@@ -725,8 +725,12 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * Use close() method to release all resources.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnectAndClear--)
+     *
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
-    void disconnectAndClear() noexcept;
+    void disconnectAndClear();
 
     /**
      * Closes this endpoint. All network connection are terminated as with ::disconnect() method and no further

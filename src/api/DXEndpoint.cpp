@@ -184,12 +184,12 @@ void DXEndpoint::disconnect() noexcept {
     isolated::api::DXEndpoint::disconnect(handle_);
 }
 
-void DXEndpoint::disconnectAndClear() noexcept {
+void DXEndpoint::disconnectAndClear() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::disconnectAndClear()");
     }
 
-    isolated::api::DXEndpoint::disconnectAndClear(handle_);
+    isolated::api::IsolatedDXEndpoint::disconnectAndClear(handle_);
 }
 
 void DXEndpoint::awaitNotConnected() {
