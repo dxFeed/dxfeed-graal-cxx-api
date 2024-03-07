@@ -307,26 +307,6 @@ bool DXEndpoint::connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
                             static_cast<dxfg_endpoint_t *>(endpoint.get()), address.c_str());
 }
 
-bool DXEndpoint::reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
-    if (!endpoint) {
-        // TODO: Improve error handling [EN-8232]
-        return false;
-    }
-
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_reconnect, false,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
-}
-
-bool DXEndpoint::disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
-    if (!endpoint) {
-        // TODO: Improve error handling [EN-8232]
-        return false;
-    }
-
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_disconnect, false,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
-}
-
 JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
                                                                                               void *userData) {
     if (!userFunc) {

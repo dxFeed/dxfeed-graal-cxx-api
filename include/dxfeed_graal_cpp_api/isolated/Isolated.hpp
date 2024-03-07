@@ -61,8 +61,6 @@ struct DXEndpoint {
                          const std::string &password) noexcept;
     static bool connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
                         const std::string &address) noexcept;
-    static bool reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
-    static bool disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
 };
 
 struct DXEndpointStateChangeListener {

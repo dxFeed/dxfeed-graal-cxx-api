@@ -168,20 +168,20 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) noex
     return sharedAs<DXEndpoint>();
 }
 
-void DXEndpoint::reconnect() noexcept {
+void DXEndpoint::reconnect() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::reconnect()");
     }
 
-    isolated::api::DXEndpoint::reconnect(handle_);
+    isolated::api::IsolatedDXEndpoint::reconnect(handle_);
 }
 
-void DXEndpoint::disconnect() noexcept {
+void DXEndpoint::disconnect() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::disconnect()");
     }
 
-    isolated::api::DXEndpoint::disconnect(handle_);
+    isolated::api::IsolatedDXEndpoint::disconnect(handle_);
 }
 
 void DXEndpoint::disconnectAndClear() {

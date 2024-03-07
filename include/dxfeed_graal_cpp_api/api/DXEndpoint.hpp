@@ -701,8 +701,12 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * an intermediate state State#NOT_CONNECTED depends on the implementation.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#reconnect--)
+     *
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
-    void reconnect() noexcept;
+    void reconnect();
 
     /**
      * Terminates all remote network connections.
@@ -713,8 +717,12 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
      * Use ::close() method to release all resources.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnect--)
+     *
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
-    void disconnect() noexcept;
+    void disconnect();
 
     /**
      * Terminates all remote network connections and clears stored data.
