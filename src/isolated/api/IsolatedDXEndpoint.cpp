@@ -116,6 +116,16 @@ void removeStateChangeListener(
                                            static_cast<dxfg_endpoint_state_change_listener_t *>(listener.get()));
 }
 
+void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+    if (!endpoint) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_getFeed`. The `endpoint` handle is invalid");
+    }
+
+    return dxfcpp::bit_cast<void *>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_DXEndpoint_getFeed, static_cast<dxfg_endpoint_t *>(endpoint.get())));
+}
+
 /* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum>
 getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
     if (!endpoint) {

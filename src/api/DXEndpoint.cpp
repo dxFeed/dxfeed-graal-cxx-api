@@ -104,6 +104,19 @@ struct DXEndpoint::Impl {
 
         return DXEndpoint::Impl::INSTANCES[role] = DXEndpoint::create(role);
     }
+
+    mutable std::mutex mutex_{};
+    std::shared_ptr<DXFeed> feed_{};
+
+    std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint>& handle) {
+        std::lock_guard lock{mutex_};
+
+        if (feed_) {
+            return feed_;
+        }
+
+        return feed_ = DXFeed::create(isolated::api::IsolatedDXEndpoint::getFeed(handle));
+    }
 };
 
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::Impl::INSTANCES{};
@@ -227,26 +240,12 @@ void DXEndpoint::closeAndAwaitTermination() noexcept {
     // TODO: close the Feed and Publisher
 }
 
-std::shared_ptr<DXFeed> DXEndpoint::getFeed() noexcept {
+std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::getFeed()");
     }
 
-    if (feed_) {
-        return feed_;
-    }
-
-    auto feedHandle =
-        !handle_ ? nullptr
-                 : runIsolatedOrElse(
-                       [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-                           return dxfg_DXEndpoint_getFeed(static_cast<graal_isolatethread_t *>(threadHandle), handle);
-                       },
-                       nullptr);
-
-    feed_ = DXFeed::create(feedHandle);
-
-    return feed_;
+    impl_->getFeed(handle_);
 }
 
 std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() noexcept {
@@ -479,7 +478,7 @@ std::string DXEndpoint::stateToString(DXEndpoint::State state) {
 }
 
 DXEndpoint::DXEndpoint() noexcept
-    : handle_{}, role_{}, feed_{}, publisher_{}, stateChangeListenerHandle_{}, onStateChange_{},
+    : handle_{}, role_{}, publisher_{}, stateChangeListenerHandle_{}, onStateChange_{},
       impl_(std::make_unique<DXEndpoint::Impl>()) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint()");
@@ -561,6 +560,8 @@ void DXEndpoint::close() noexcept {
 }
 
 std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() noexcept {
+    // TODO: implement [EN-8234]. Types must be different for STREAM and non-STREAM
+
     return {EventTypeEnum::ALL.begin(), EventTypeEnum::ALL.end()};
     // return isolated::api::IsolatedDXEndpoint::getEventTypes(handle_);
 }

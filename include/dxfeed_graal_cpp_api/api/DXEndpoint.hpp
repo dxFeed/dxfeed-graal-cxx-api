@@ -470,7 +470,6 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
     JavaObjectHandle<DXEndpoint> handle_;
     Role role_ = Role::FEED;
     std::string name_{};
-    std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
     JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_;
     SimpleHandler<void(State, State)> onStateChange_{};
@@ -803,8 +802,11 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
 
     /**
      * @return The feed that is associated with this endpoint.
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
-    std::shared_ptr<DXFeed> getFeed() noexcept;
+    std::shared_ptr<DXFeed> getFeed();
 
     /**
      * @return The publisher that is associated with this endpoint.
