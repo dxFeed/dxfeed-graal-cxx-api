@@ -30,7 +30,7 @@ struct DXFCPP_EXPORT StringSymbol final {
     StringSymbol &operator=(const StringSymbol &stringSymbol) noexcept;
     StringSymbol &operator=(StringSymbol &&) noexcept;
     StringSymbol() noexcept;
-    virtual ~StringSymbol() noexcept;
+    ~StringSymbol() noexcept;
 
     /**
      * Constructs StringSymbol from a char array

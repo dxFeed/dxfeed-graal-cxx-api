@@ -141,7 +141,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current series.
      */
-    virtual Series &withEventSymbol(const std::string &eventSymbol) noexcept {
+    Series &withEventSymbol(const std::string &eventSymbol) noexcept {
         MarketEvent::setEventSymbol(eventSymbol);
 
         return *this;

@@ -130,7 +130,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     SymbolWrapper &operator=(const SymbolWrapper &) noexcept = default;
     SymbolWrapper &operator=(SymbolWrapper &&) noexcept = default;
     SymbolWrapper() noexcept = default;
-    virtual ~SymbolWrapper() noexcept = default;
+    ~SymbolWrapper() noexcept = default;
 
     /**
      * Constructor for any wrapped symbol.
