@@ -245,7 +245,7 @@ std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::getFeed()");
     }
 
-    impl_->getFeed(handle_);
+    return impl_->getFeed(handle_);
 }
 
 std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() noexcept {
