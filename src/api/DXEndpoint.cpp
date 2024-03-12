@@ -108,7 +108,7 @@ struct DXEndpoint::Impl {
     mutable std::mutex mutex_{};
     std::shared_ptr<DXFeed> feed_{};
 
-    std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint>& handle) {
+    std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint> &handle) {
         std::lock_guard lock{mutex_};
 
         if (feed_) {
@@ -132,11 +132,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
                         ", role = " + roleToString(role) + ", properties[" + std::to_string(properties.size()) + "])");
     }
 
-    std::shared_ptr<DXEndpoint> endpoint{new DXEndpoint{}};
-
-    endpoint->handle_ = JavaObjectHandle<DXEndpoint>(endpointHandle);
-    endpoint->role_ = role;
-    endpoint->name_ = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
+    auto endpoint =
+        DXEndpoint::createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role,
+                                 properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{});
 
     auto id = ApiContext::getInstance()->getManager<DXEndpointManager>()->registerEntity(endpoint);
 
@@ -477,12 +475,22 @@ std::string DXEndpoint::stateToString(DXEndpoint::State state) {
     return "";
 }
 
-DXEndpoint::DXEndpoint() noexcept
+DXEndpoint::DXEndpoint(LockExternalConstructionTag)
     : handle_{}, role_{}, publisher_{}, stateChangeListenerHandle_{}, onStateChange_{},
       impl_(std::make_unique<DXEndpoint::Impl>()) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint()");
     }
+}
+
+DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name)
+    : role_{role}, name_{std::move(name)}, publisher_{}, stateChangeListenerHandle_{}, onStateChange_{},
+      impl_(std::make_unique<DXEndpoint::Impl>()) {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXEndpoint()");
+    }
+
+    handle_ = std::move(handle);
 }
 
 DXEndpoint::~DXEndpoint() noexcept {

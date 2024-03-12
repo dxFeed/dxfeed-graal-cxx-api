@@ -36,6 +36,21 @@ endif ()
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+
+if (DXFCXX_FEATURE_STACKTRACE)
+    if (TARGET Boost::stacktrace_windbg)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_windbg ole32 dbgeng)
+    elseif (TARGET Boost::stacktrace_backtrace)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_backtrace dl backtrace)
+    elseif (TARGET Boost::stacktrace_addr2line)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_addr2line dl)
+    elseif (TARGET Boost::stacktrace_basic)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_basic dl)
+    else ()
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_noop)
+    endif ()
+endif ()
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)

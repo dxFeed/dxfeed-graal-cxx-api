@@ -54,7 +54,7 @@ struct ConnectTool {
         std::optional<std::string> source;
         std::optional<std::string> properties;
         std::optional<std::string> tape;
-        bool isQuite;
+        bool isQuite{};
         bool forceStream{};
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {

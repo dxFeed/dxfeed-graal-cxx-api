@@ -176,7 +176,7 @@ struct OnDemandService;
  *
  * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html)
  */
-struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
+struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /// The alias to a type of shared pointer to the DXEndpoint object
     using Ptr = std::shared_ptr<DXEndpoint>;
 
@@ -486,10 +486,10 @@ struct DXFCPP_EXPORT DXEndpoint : SharedEntity {
 
     std::unique_ptr<Impl> impl_;
 
-  protected:
-    DXEndpoint() noexcept;
-
   public:
+    explicit DXEndpoint(LockExternalConstructionTag);
+    DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name);
+
     ~DXEndpoint() noexcept override;
 
     /**

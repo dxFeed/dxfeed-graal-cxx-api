@@ -348,7 +348,7 @@ struct LatencyTest {
                             ->build();
 
         auto sub = endpoint->getFeed()->createSubscription(
-            CmdArgsUtils::parseTypes(args.types.has_value() ? args.types.value() : "all"));
+            CmdArgsUtils::parseTypes(args.types.has_value() ? *args.types : "all"));
         auto diagnostic = Diagnostic::create(std::chrono::seconds(args.interval));
 
         sub->addEventListener([d = diagnostic](auto &&events) {
@@ -356,7 +356,7 @@ struct LatencyTest {
             d->handleEvents(events);
         });
 
-        sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols.has_value() ? args.symbols.value() : "all"));
+        sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols.has_value() ? *args.symbols : "all"));
         endpoint->connect(args.address);
         endpoint->awaitNotConnected();
         endpoint->closeAndAwaitTermination();

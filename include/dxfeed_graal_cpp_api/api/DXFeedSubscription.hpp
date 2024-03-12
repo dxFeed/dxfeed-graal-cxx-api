@@ -144,7 +144,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param eventType the event type.
      */
-    static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) noexcept {
+    static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription::create(eventType = " + eventType.getName() + ")");
         }
@@ -184,7 +184,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
         }
 #endif
-    static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) noexcept {
+    static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
         }
@@ -208,7 +208,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param eventTypes The event type collection.
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
-    static std::shared_ptr<DXFeedSubscription> create(std::initializer_list<EventTypeEnum> eventTypes) noexcept {
+    static std::shared_ptr<DXFeedSubscription> create(std::initializer_list<EventTypeEnum> eventTypes) {
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventTypes));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
@@ -236,7 +236,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
     template <typename EventTypesCollection>
-    static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept {
+    static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) {
         auto sub =
             std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);

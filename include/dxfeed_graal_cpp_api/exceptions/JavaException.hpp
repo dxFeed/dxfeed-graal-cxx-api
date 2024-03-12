@@ -51,7 +51,7 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
     }
 
     /**
-     * @return Java exception's stack trace.
+     * @return dxFeed Graal CXX API stack trace + Java (GraalVM) exception's stack trace.
      */
     const std::string& getStackTrace() const&;
 

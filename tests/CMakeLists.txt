@@ -20,6 +20,7 @@ set(CXX_EXTENSIONS OFF)
 set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-2.4.11)
 
 set(DXFC_TEST_SOURCES
+        exceptions/ExceptionsTest.cpp
         api/CandleSymbolTest.cpp
         api/DXEndpointTest.cpp
         api/DXPublisherTest.cpp
@@ -39,6 +40,21 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
     target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static)
+
+    if (DXFCXX_FEATURE_STACKTRACE)
+        if (TARGET Boost::stacktrace_windbg)
+            target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC Boost::stacktrace_windbg ole32 dbgeng)
+        elseif (TARGET Boost::stacktrace_backtrace)
+            target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC Boost::stacktrace_backtrace dl backtrace)
+        elseif (TARGET Boost::stacktrace_addr2line)
+            target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC Boost::stacktrace_addr2line dl)
+        elseif (TARGET Boost::stacktrace_basic)
+            target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC Boost::stacktrace_basic dl)
+        else ()
+            target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC Boost::stacktrace_noop)
+        endif ()
+    endif ()
+
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CXX_STANDARD 20)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CMAKE_C_STANDARD 11)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CXX_EXTENSIONS OFF)

@@ -142,7 +142,7 @@ struct DumpTool {
                 ->build();
 
         auto sub = inputEndpoint->getFeed()->createSubscription(
-            !args.types.has_value() ? CmdArgsUtils::parseTypes("all") : CmdArgsUtils::parseTypes(args.types.value()));
+            !args.types.has_value() ? CmdArgsUtils::parseTypes("all") : CmdArgsUtils::parseTypes(*args.types));
 
         if (!args.isQuite) {
             sub->addEventListener([](auto &&events) {

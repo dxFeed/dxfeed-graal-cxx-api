@@ -71,6 +71,24 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     }
 };
 
+template <typename T>
+struct RequireMakeShared : SharedEntity {
+  protected:
+
+    struct LockExternalConstructionTag {
+        explicit LockExternalConstructionTag() = default;
+    };
+
+  public:
+
+    template <typename... Args>
+    static auto createShared(Args&&... args) {
+        static_assert(std::is_convertible_v<T*, RequireMakeShared*>, "Must derive publicly from RequireMakeShared");
+
+        return std::make_shared<T>(LockExternalConstructionTag{}, std::forward<Args>(args)...);
+    }
+};
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

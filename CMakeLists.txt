@@ -49,6 +49,8 @@ option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
 option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
+option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" ON)
+
 include(FetchContent)
 
 set(FETCHCONTENT_QUIET FALSE)
@@ -124,12 +126,36 @@ FetchContent_Declare(
         USES_TERMINAL_DOWNLOAD TRUE
         GIT_PROGRESS TRUE
         DOWNLOAD_NO_EXTRACT FALSE
+        OVERRIDE_FIND_PACKAGE
 )
 FetchContent_MakeAvailable(fmt)
 
 #set(BUILD_TZ_LIB ON)
 #set(USE_SYSTEM_TZ_DB ON)
 add_subdirectory(third_party/date-3.0.1)
+
+set(BOOST_INCLUDE_LIBRARIES stacktrace)
+set(BOOST_ENABLE_CMAKE ON)
+
+FetchContent_Declare(
+        Boost
+        URL https://github.com/boostorg/boost/releases/download/boost-1.84.0/boost-1.84.0.7z # downloading a zip release speeds up the download
+        USES_TERMINAL_DOWNLOAD TRUE
+        GIT_PROGRESS TRUE
+        DOWNLOAD_NO_EXTRACT FALSE
+        OVERRIDE_FIND_PACKAGE
+)
+FetchContent_MakeAvailable(Boost)
+
+
+find_package(
+        Boost
+        1.84
+        REQUIRED
+        stacktrace
+        OPTIONAL_COMPONENTS
+        stacktrace_windbg, stacktrace_basic, stacktrace_windbg_cached, stacktrace_backtrace, stacktrace_addr2line, stacktrace_noop
+)
 
 # find_package(utf8cpp)
 # find_package(fmt)
@@ -155,6 +181,7 @@ set(dxFeedGraalCxxApi_InternalUtilsDebug_Sources
 )
 
 set(dxFeedGraalCxxApi_Exceptions_Sources
+        src/exceptions/GraalException.cpp
         src/exceptions/JavaException.cpp
 )
 
@@ -377,8 +404,44 @@ if (DXFCXX_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
 endif ()
 
-target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+
+if (TARGET Boost::stacktrace_windbg)
+    message(STATUS "Has Boost::stacktrace_windbg")
+endif ()
+
+if (TARGET Boost::stacktrace_backtrace)
+    message(STATUS "Has Boost::stacktrace_backtrace")
+endif ()
+
+if (TARGET Boost::stacktrace_addr2line)
+    message(STATUS "Has Boost::stacktrace_addr2line")
+endif ()
+
+if (TARGET Boost::stacktrace_basic)
+    message(STATUS "Has Boost::stacktrace_basic")
+endif ()
+
+
+if (DXFCXX_FEATURE_STACKTRACE)
+    if (TARGET Boost::stacktrace_windbg)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_windbg ole32 dbgeng)
+        target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost::stacktrace_windbg ole32 dbgeng)
+    elseif (TARGET Boost::stacktrace_backtrace)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_backtrace dl backtrace)
+        target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost::stacktrace_backtrace dl backtrace)
+    elseif (TARGET Boost::stacktrace_addr2line)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_addr2line dl)
+        target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost::stacktrace_addr2line dl)
+    elseif (TARGET Boost::stacktrace_basic)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_basic dl)
+        target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost::stacktrace_basic dl)
+    else ()
+        target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_noop)
+        target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost::stacktrace_noop)
+    endif ()
+endif ()
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")

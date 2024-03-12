@@ -6,6 +6,7 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <fmt/format.h>
+#include <boost/stacktrace.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -38,8 +39,8 @@ void JavaException::throwException() {
 }
 
 JavaException::JavaException(const std::string &message, const std::string &className, std::string stackTrace)
-    : std::runtime_error(fmt::format("Java exception of type '{}' was thrown. {}", className, message)),
-      stackTrace_(std::move(stackTrace)) {
+    : std::runtime_error(fmt::format("Java exception of type '{}' was thrown. {}", className, message)) {
+    stackTrace_ = std::move(stackTrace) + boost::stacktrace::to_string(boost::stacktrace::stacktrace());
 }
 
 const std::string &JavaException::getStackTrace() const & {

@@ -134,7 +134,7 @@ struct PerfTestTool {
 
       public:
         static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod,
-                                                  bool showCpuUsageByCore) noexcept {
+                                                  bool showCpuUsageByCore) {
             auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore));
 
             d->timer_ = Timer::schedule(

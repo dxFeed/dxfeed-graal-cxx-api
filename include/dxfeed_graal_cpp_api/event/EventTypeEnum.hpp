@@ -148,7 +148,7 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     friend bool operator<(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
                           const EventTypeEnum &eventTypeEnum2) noexcept {
-        return eventTypeEnum1.get().id_ == eventTypeEnum2.id_;
+        return eventTypeEnum1.get().id_ < eventTypeEnum2.id_;
     }
 
     /**
