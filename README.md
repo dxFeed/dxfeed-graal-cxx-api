@@ -71,9 +71,12 @@ our [customer portal](https://jira.in.devexperts.com/servicedesk/customer/portal
 
 Features planned with **high priority**:
 
+* Add unit tests and conduct different types of testing
 * Add necessary entities for more convenient API
   usage ([IPF](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html), [TimeSeriesEventModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/TimeSeriesEventModel.html), [OrderBookModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/market/OrderBookModel.html), [GetTimeSeriesPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getTimeSeriesPromise-java.lang.Class-java.lang.Object-long-long-),
   etc.)
+* Provide more samples
+* Provide performance test results along with a comparison with the old API version
 
 ---
 Features planned for the **next stage**:
