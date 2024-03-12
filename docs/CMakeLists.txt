@@ -13,9 +13,6 @@ endif ()
 
 project(BuildDocumentation)
 
-# first we can indicate the documentation build as an option and set it to ON by default
-option(DXFCXX_BUILD_DOC "Build documentation" ON)
-
 if (DXFCXX_BUILD_DOC)
 
     # check if Doxygen is installed

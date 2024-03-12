@@ -71,12 +71,9 @@ our [customer portal](https://jira.in.devexperts.com/servicedesk/customer/portal
 
 Features planned with **high priority**:
 
-* Add unit tests and conduct different types of testing
 * Add necessary entities for more convenient API
   usage ([IPF](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html), [TimeSeriesEventModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/TimeSeriesEventModel.html), [OrderBookModel](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/market/OrderBookModel.html), [GetTimeSeriesPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getTimeSeriesPromise-java.lang.Class-java.lang.Object-long-long-),
   etc.)
-* Provide more samples
-* Provide performance test results along with a comparison with the old API version
 
 ---
 Features planned for the **next stage**:
@@ -100,13 +97,13 @@ ready to answer any questions and help with the transition.
 
 #### Sample Mapping
 
-| # | Sample                                                                                                                   | Old Version                                                                                                     | New Version                                              |
-|:-:|:-------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------|
-| 1 | How to subscribe to `Order`, `SpreadOrder`, `Candle`, `TimeAndSale`, `Greeks`, `Series` snapshots                        | [SnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample)       | *Q1’2024*, please see [TBD](#future-development) section |
-| 2 | How to subscribe to depth of market                                                                                      | [PriceLevelBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample)         | *Q1’2024*, please see [TBD](#future-development) section |
-| 3 | How to subscribe to order snapshot with incremental updates                                                              | [IncSnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample) | *Q1’2024*, please see [TBD](#future-development) section |
-| 4 | How to get and display the full order book                                                              | [FullOrderBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/FullOrderBookSample) | *Q1’2024*, please see [TBD](#future-development) section |
-| 5 | How to access and visualize regional market data                                                             | [RegionalBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/RegionalBookSample) | *Q1’2024*, please see [TBD](#future-development) section |
+| # | Sample                                                                                            | Old Version                                                                                                     | New Version                                              |
+|:-:|:--------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------|
+| 1 | How to subscribe to `Order`, `SpreadOrder`, `Candle`, `TimeAndSale`, `Greeks`, `Series` snapshots | [SnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample)       | *Q1’2024*, please see [TBD](#future-development) section |
+| 2 | How to subscribe to depth of market                                                               | [PriceLevelBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample)         | *Q1’2024*, please see [TBD](#future-development) section |
+| 3 | How to subscribe to order snapshot with incremental updates                                       | [IncSnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample) | *Q1’2024*, please see [TBD](#future-development) section |
+| 4 | How to get and display the full order book                                                        | [FullOrderBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/FullOrderBookSample)           | *Q1’2024*, please see [TBD](#future-development) section |
+| 5 | How to access and visualize regional market data                                                  | [RegionalBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/RegionalBookSample)             | *Q1’2024*, please see [TBD](#future-development) section |
 
 ### Implementation Details
 
@@ -132,17 +129,17 @@ Below is a scheme of this process:
 
 ### Architectural Restrictions and Other Limitations of the Old Version
 
-| # | Limitation                                                                                                                                                                                                                                                                                                                            | How It’s Solved in the New Version                                                                                                                                                                                                                                                       |
-|:-:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1 | Single-threaded architecture limiting throughput                                                                                                                                                                                                                                                                                      | Based on the Java API, each subscription object ([DXFeedSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html)) *can* run on its own thread                                                                                                            |
-| 2 | User code in event callbacks (for example, [dxf_event_listener_t](https://docs.dxfeed.com/c-api/group__event-data-structures-event-subscription-stuff.html#gac8bcb70cd4c8857f286f4be65e9522c6)) is executed in the socket read thread, which can significantly reduce throughput                                                      | Socket processing threads and callback threads are separated                                                                                                                                                                                                                             |
-| 3 | In event callbacks, one market event type and one data portion always arrive (excluding snapshot subscription), which increases the load on the CPU with a large amount of incoming data                                                                                                                                              | Event callbacks can receive different market event types, and more than one by batch                                                                                                                                                                                                     |
-| 4 | It’s impossible to subscribe to data without getting [regionals](https://kb.dxfeed.com/en/data-model/exchange-codes.html) (if it is available for the market event) or only for a certain regional                                                                                                                                    | ```subscription->addSymbols({"AAPL"});``` - [composite](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-47603)<br>```subscription->addSymbols({"AAPL&Q"});``` - [regional](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-x--regional-quote-) |
-| 5 | It’s impossible to subscribe to Order event (excluding snapshot subscription) without getting: all [sources](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#order-x), Order by Quote (including regionals), Order by [MarketMaker](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#marketmaker-47603) | ```subscription->addSymbols(IndexedEventSubscriptionSymbol::create("AAPL", OrderSource::NTV));``` - [OrderSource](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/include/dxfeed_graal_native_cpp_api/event/market/OrderSource.hpp) determines which data is being subscribed to |
-| 6 | Data is mixed up when creating two subscriptions (regular and time series) for the same market event type. Both regular and time series data go to both subscriptions                                                                                                                                                                 | Each subscription instance receives only the data requested                                                                                                                                                                                                                              |
-| 7 | Each subsequent request for the same symbol set in a subscription instance overwrites the existing one in another subscription instance                                                                                                                                                                                               | Subscription instances and the data they receive are independent of each other                                                                                                                                                                                                           |
-| 8 | Removing a symbol from one subscription instance caused it to be removed from all others                                                                                                                                                                                                                                              | Subscription instances and the data they receive are independent of each other                                                                                                                                                                                                           |
-| 9 | Incorrect behavior when reading from a file (if a market event in the file hasn’t been subscribed to). Reading from a file always occurs at maximum speed. The supported format is binary only                                                                                                                                        | ```endpoint->connect("file:tape.txt[format=text]");``` - processing a text file with at it's "real" speed by timestamps<br>```endpoint->connect("file:tape.bin[format=binary,speed=max]");``` - processing a binary file with max speed                                                  |
+| # | Limitation                                                                                                                                                                                                                                                                                                                                   | How It’s Solved in the New Version                                                                                                                                                                                                                                                               |
+|:-:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1 | Single-threaded architecture limiting throughput                                                                                                                                                                                                                                                                                             | Based on the Java API, each subscription object ([DXFeedSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html)) *can* run on its own thread                                                                                                                    |
+| 2 | User code in event callbacks (for example, [dxf_event_listener_t](https://docs.dxfeed.com/c-api/group__event-data-structures-event-subscription-stuff.html#gac8bcb70cd4c8857f286f4be65e9522c6)) is executed in the socket read thread, which can significantly reduce throughput                                                             | Socket processing threads and callback threads are separated                                                                                                                                                                                                                                     |
+| 3 | In event callbacks, one market event type and one data portion always arrive (excluding snapshot subscription), which increases the load on the CPU with a large amount of incoming data                                                                                                                                                     | Event callbacks can receive different market event types, and more than one by batch                                                                                                                                                                                                             |
+| 4 | It’s impossible to subscribe to data without getting [regionals](https://kb.dxfeed.com/en/data-model/exchange-codes.html) (if it is available for the market event) or only for a certain regional                                                                                                                                           | ```subscription->addSymbols({"AAPL"});``` - [composite](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-47603)<br>```subscription->addSymbols({"AAPL&Q"});``` - [regional](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#quote-x--regional-quote-) |
+| 5 | It’s impossible to subscribe to Order event (excluding snapshot subscription) without getting: all [sources](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#order-x), Order by Quote (including regionals), Order by [MarketMaker](https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html#marketmaker-47603) | ```subscription->addSymbols(IndexedEventSubscriptionSymbol::create("AAPL", OrderSource::NTV));``` - [OrderSource](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/include/dxfeed_graal_native_cpp_api/event/market/OrderSource.hpp) determines which data is being subscribed to        |
+| 6 | Data is mixed up when creating two subscriptions (regular and time series) for the same market event type. Both regular and time series data go to both subscriptions                                                                                                                                                                        | Each subscription instance receives only the data requested                                                                                                                                                                                                                                      |
+| 7 | Each subsequent request for the same symbol set in a subscription instance overwrites the existing one in another subscription instance                                                                                                                                                                                                      | Subscription instances and the data they receive are independent of each other                                                                                                                                                                                                                   |
+| 8 | Removing a symbol from one subscription instance caused it to be removed from all others                                                                                                                                                                                                                                                     | Subscription instances and the data they receive are independent of each other                                                                                                                                                                                                                   |
+| 9 | Incorrect behavior when reading from a file (if a market event in the file hasn’t been subscribed to). Reading from a file always occurs at maximum speed. The supported format is binary only                                                                                                                                               | ```endpoint->connect("file:tape.txt[format=text]");``` - processing a text file with at it's "real" speed by timestamps<br>```endpoint->connect("file:tape.bin[format=binary,speed=max]");``` - processing a binary file with max speed                                                          |
 
 ## Documentation
 
@@ -215,11 +212,13 @@ A symlink on libpthread.so, libpthread.so.0, or libcoreclr.so must exist.
 
 ## Installation
 
-Examples of how to install the library and integrate with the library can be found [here](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples).
+Examples of how to install the library and integrate with the library can be
+found [here](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples).
 
 The API is delivered as a dynamic library (`dxFeedGraalCxxApi.so|dll|dylib`) and a static
 one (`dxFeedGraalCxxApi_static.a|lib`).
-Also, it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH` (Or use `RPATH`, `LD_LIBRARY_PATH`).
+Also, it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH` (Or
+use `RPATH`, `LD_LIBRARY_PATH`).
 
 ## Usage
 
@@ -335,12 +334,13 @@ Quote{AAPL, eventTime=0, time=20231130-152903.000, timeNanoPart=0, sequence=0, b
 
 </details>
 
-To familiarize with the dxLink protocol, please click [here](https://demo.dxfeed.com/dxlink-ws/debug/#/protocol). 
+To familiarize with the dxLink protocol, please click [here](https://demo.dxfeed.com/dxlink-ws/debug/#/protocol).
 
 ## Tools
 
 [Tools](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/)
-is a collection of utilities that allow you to subscribe to various market events for the specified symbols. The tools can
+is a collection of utilities that allow you to subscribe to various market events for the specified symbols. The tools
+can
 be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases) (including self-contained
 versions):
 
@@ -377,36 +377,35 @@ versions):
 - [x] [OnDemandSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp)
   a sample that demonstrates how to use the dxFeed on-demand history data replay service API
 
-
 ## Current State
 
 ### Endpoint Roles
 
 - [FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#FEED) connects to the remote data
   feed provider and is optimized for real-time or delayed data processing (**this is a default role**)
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 - [STREAM_FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_FEED) is similar to
   FEED and also connects to the remote data feed provider but is designed for bulk data parsing from files
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 - [PUBLISHER](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#PUBLISHER) connects to the
   remote publisher hub (also known as multiplexor) or creates a publisher on the local
   host ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/WriteTapeFile.java))
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 - [STREAM_PUBLISHER](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#STREAM_PUBLISHER) is
   similar to PUBLISHER and also connects to the remote publisher hub, but is designed for bulk data publishing
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 - [LOCAL_HUB](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#LOCAL_HUB) is a local hub
   without the ability to establish network connections. Events published via publisher are delivered to local feed only.
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 - [ON_DEMAND_FEED](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html#ON_DEMAND_FEED) is similar
   to FEED, but it is designed to be used with OnDemandService for historical data replay only
-  - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 
 ### Event Types
 
@@ -478,17 +477,22 @@ versions):
   application-specific attachment
     - [ ] dxFeed Graal C API
     - [ ] dxFeed Graal C++ API
+- [OptionSale](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/OptionSale.html) is an event that represents
+  a trade or another market event with the price (for example, market open/close price, etc.) for each option symbol
+  listed under the specified Underlying
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 
 ### Subscription Symbols
 
 - [String](https://en.cppreference.com/w/cpp/string/basic_string) is a string representation of the symbol
     - [ ] dxFeed Graal C API
     - [x] dxFeed Graal C++ API
-- [TimeSeriesSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/TimeSeriesSubscriptionSymbol.html) 
+- [TimeSeriesSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/TimeSeriesSubscriptionSymbol.html)
   represents subscription to time-series events
     - [ ] dxFeed Graal C API
     - [x] dxFeed Graal C++ API
-- [IndexedSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/IndexedEventSubscriptionSymbol.html) 
+- [IndexedSubscriptionSymbol](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/IndexedEventSubscriptionSymbol.html)
   represents subscription to a specific source of indexed events
     - [ ] dxFeed Graal C API
     - [x] dxFeed Graal C++ API
@@ -504,7 +508,8 @@ versions):
 
 ### Subscriptions & Models
 
-- [DXFeedSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html) is a subscription for a set of symbols and event types
+- [DXFeedSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html) is a subscription for
+  a set of symbols and event types
     - [ ] dxFeed Graal C API
     - [x] dxFeed Graal C++ API
 - [DXFeedTimeSeriesSubscription](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedTimeSeriesSubscription.html)
@@ -512,9 +517,11 @@ versions):
   types ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/api/DXFeedConnect.java))
     - [ ] dxFeed Graal C API
     - [ ] dxFeed Graal C++ API
-- [ObservableSubscription](https://github.com/devexperts/QD/blob/master/dxfeed-api/src/main/java/com/dxfeed/api/osub/ObservableSubscription.java) is an observable set of subscription symbols for the specific event type ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/PublishProfiles.java))
-  - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+- [ObservableSubscription](https://github.com/devexperts/QD/blob/master/dxfeed-api/src/main/java/com/dxfeed/api/osub/ObservableSubscription.java)
+  is an observable set of subscription symbols for the specific event
+  type ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/PublishProfiles.java))
+    - [ ] dxFeed Graal C API
+    - [ ] dxFeed Graal C++ API
 
 - [GetLastEvent](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEvent-E-) returns the last
   event for the specified event
@@ -576,29 +583,32 @@ versions):
 - [InstrumentProfile](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html) represents basic
   profile information about a market
   instrument ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedIpfConnect.java))
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
-- [InstrumentProfileReader](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfileReader.html) reads 
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
+- [InstrumentProfileReader](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfileReader.html) reads
   instrument profiles from the stream using Instrument Profile Format (IPF).
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
-- [InstrumentProfileConnection](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileConnection.html) 
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
+- [InstrumentProfileConnection](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileConnection.html)
   connects to an instrument profile URL and reads instrument profiles with support of streaming live updates.
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 - [InstrumentProfileCollector](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileCollector.html)
   collects instrument profile updates and provides the live instrument profiles
   list ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedLiveIpfSample.java))
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
 - [Schedule](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/schedule/Schedule.html) provides API to retrieve and
   explore various exchanges’ trading schedules and different financial instrument
   classes ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/schedule/ScheduleSample.java))
-  - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API
-- [Option Series](https://github.com/devexperts/QD/blob/master/dxfeed-api/src/main/java/com/dxfeed/ipf/option/OptionSeries.java) is a series of call and put options with different strike sharing the same attributes of expiration, last trading day, spc, multiplies, etc. ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/schedule/ScheduleSample.java))
-  - [ ] dxFeed Graal C API
-  - [ ] dxFeed Graal C++ API
+    - [ ] dxFeed Graal C API
+    - [x] dxFeed Graal C++ API
+- [Option Series](https://github.com/devexperts/QD/blob/master/dxfeed-api/src/main/java/com/dxfeed/ipf/option/OptionSeries.java)
+  is a series of call and put options with different strike sharing the same attributes of expiration, last trading day,
+  spc, multiplies,
+  etc. ([Java API sample](https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/option/DXFeedOptionChain.java))
+    - [ ] dxFeed Graal C API
+    - [ ] dxFeed Graal C++ API
 
 ### Services
 
