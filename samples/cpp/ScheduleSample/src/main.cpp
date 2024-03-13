@@ -185,43 +185,51 @@ void printNearestTradingSession(auto &&profile, auto time) {
  * A sample program that demonstrates different use cases of Schedule API.
  */
 int main(int argc, char *argv[]) {
-    if (argc > 1 && (argv[1] == "-h"s || argv[1] == "--help"s)) {
-        printUsage();
+    try {
+        if (argc > 1 && (argv[1] == "-h"s || argv[1] == "--help"s)) {
+            printUsage();
 
-        return 0;
+            return 0;
+        }
+
+        if (argc < 4 || argc > 5) {
+            std::cerr << "Wrong number of arguments" << std::endl;
+            printUsage();
+
+            return 1;
+        }
+
+        updateScheduleDefaults(argv[1]);
+
+        auto profiles = loadInstrumentProfiles(argv[2]);
+
+        checkAllSchedules(profiles);
+
+        std::string symbol = argv[3];
+
+        if (!profiles.contains(symbol)) {
+            std::cerr << "Could not find profile for " + symbol << std::endl;
+
+            return 2;
+        }
+
+        auto profile = profiles[symbol];
+
+        std::cout << "Found profile for " + symbol + ": " + profile->getDescription() << std::endl;
+
+        auto time = argc < 5 ? dxfcpp::now() : TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[4]);
+
+        std::cout << "Using timestamp " + TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(time) << std::endl;
+
+        printNext5Holidays(profile, time);
+        printCurrentSession(profile, time);
+        printNextTradingSession(profile, time);
+        printNearestTradingSession(profile, time);
+    } catch (const JavaException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    } catch (const GraalException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
     }
-
-    if (argc < 4 || argc > 5) {
-        std::cerr << "Wrong number of arguments" << std::endl;
-        printUsage();
-
-        return 1;
-    }
-
-    updateScheduleDefaults(argv[1]);
-
-    auto profiles = loadInstrumentProfiles(argv[2]);
-
-    checkAllSchedules(profiles);
-
-    std::string symbol = argv[3];
-
-    if (!profiles.contains(symbol)) {
-        std::cerr << "Could not find profile for " + symbol << std::endl;
-
-        return 2;
-    }
-
-    auto profile = profiles[symbol];
-
-    std::cout << "Found profile for " + symbol + ": " + profile->getDescription() << std::endl;
-
-    auto time = argc < 5 ? dxfcpp::now() : TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[4]);
-
-    std::cout << "Using timestamp " + TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(time) << std::endl;
-
-    printNext5Holidays(profile, time);
-    printCurrentSession(profile, time);
-    printNextTradingSession(profile, time);
-    printNearestTradingSession(profile, time);
 }

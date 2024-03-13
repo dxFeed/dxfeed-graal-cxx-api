@@ -234,41 +234,50 @@ struct PerfTestTool {
     };
 
     static void run(const Args &args) noexcept {
-        using namespace std::literals;
+        try {
+            using namespace std::literals;
 
-        auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
+            auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
 
-        System::setProperties(parsedProperties);
+            System::setProperties(parsedProperties);
 
-        auto endpoint = DXEndpoint::newBuilder()
-                            ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
-                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
-                            ->withProperties(parsedProperties)
-                            ->withName(NAME + "Tool-Feed")
-                            ->build();
+            auto endpoint =
+                DXEndpoint::newBuilder()
+                    ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
+                    ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
+                    ->withProperties(parsedProperties)
+                    ->withName(NAME + "Tool-Feed")
+                    ->build();
 
-        auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types));
-        auto diagnostic = Diagnostic::create(2s, args.showCpuUsageByCore);
+            auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types));
+            auto diagnostic = Diagnostic::create(2s, args.showCpuUsageByCore);
 
-        std::atomic<std::size_t> hash{};
+            std::atomic<std::size_t> hash{};
 
-        if (!args.detachListener) {
-            sub->addEventListener([d = diagnostic, &hash](auto &&events) {
-                d->addListenerCallsCounter(1);
-                d->addEventsCounter(events.size());
+            if (!args.detachListener) {
+                sub->addEventListener([d = diagnostic, &hash](auto &&events) {
+                    d->addListenerCallsCounter(1);
+                    d->addEventsCounter(events.size());
 
-                for (auto &&e : events) {
-                    hash += std::hash<std::shared_ptr<EventType>>{}(e);
-                }
-            });
+                    for (auto &&e : events) {
+                        hash += std::hash<std::shared_ptr<EventType>>{}(e);
+                    }
+                });
+            }
+
+            sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols));
+            endpoint->connect(args.address);
+            endpoint->awaitNotConnected();
+            endpoint->closeAndAwaitTermination();
+
+            std::cout << hash << std::endl;
+        } catch (const JavaException &e) {
+            std::cerr << e.what() << '\n';
+            std::cerr << e.getStackTrace() << '\n';
+        } catch (const GraalException &e) {
+            std::cerr << e.what() << '\n';
+            std::cerr << e.getStackTrace() << '\n';
         }
-
-        sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols));
-        endpoint->connect(args.address);
-        endpoint->awaitNotConnected();
-        endpoint->closeAndAwaitTermination();
-
-        std::cout << hash << std::endl;
     }
 };
 

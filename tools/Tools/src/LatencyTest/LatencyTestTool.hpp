@@ -334,32 +334,42 @@ struct LatencyTest {
     };
 
     static void run(const Args &args) noexcept {
-        using namespace std::literals;
+        try {
 
-        auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
+            using namespace std::literals;
 
-        System::setProperties(parsedProperties);
+            auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
 
-        auto endpoint = DXEndpoint::newBuilder()
-                            ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
-                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
-                            ->withProperties(parsedProperties)
-                            ->withName(NAME + "Tool-Feed")
-                            ->build();
+            System::setProperties(parsedProperties);
 
-        auto sub = endpoint->getFeed()->createSubscription(
-            CmdArgsUtils::parseTypes(args.types.has_value() ? *args.types : "all"));
-        auto diagnostic = Diagnostic::create(std::chrono::seconds(args.interval));
+            auto endpoint =
+                DXEndpoint::newBuilder()
+                    ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
+                    ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default.
+                    ->withProperties(parsedProperties)
+                    ->withName(NAME + "Tool-Feed")
+                    ->build();
 
-        sub->addEventListener([d = diagnostic](auto &&events) {
-            d->addListenerCallsCounter(1);
-            d->handleEvents(events);
-        });
+            auto sub = endpoint->getFeed()->createSubscription(
+                CmdArgsUtils::parseTypes(args.types.has_value() ? *args.types : "all"));
+            auto diagnostic = Diagnostic::create(std::chrono::seconds(args.interval));
 
-        sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols.has_value() ? *args.symbols : "all"));
-        endpoint->connect(args.address);
-        endpoint->awaitNotConnected();
-        endpoint->closeAndAwaitTermination();
+            sub->addEventListener([d = diagnostic](auto &&events) {
+                d->addListenerCallsCounter(1);
+                d->handleEvents(events);
+            });
+
+            sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols.has_value() ? *args.symbols : "all"));
+            endpoint->connect(args.address);
+            endpoint->awaitNotConnected();
+            endpoint->closeAndAwaitTermination();
+        } catch (const JavaException &e) {
+            std::cerr << e.what() << '\n';
+            std::cerr << e.getStackTrace() << '\n';
+        } catch (const GraalException &e) {
+            std::cerr << e.what() << '\n';
+            std::cerr << e.getStackTrace() << '\n';
+        }
     }
 };
 
