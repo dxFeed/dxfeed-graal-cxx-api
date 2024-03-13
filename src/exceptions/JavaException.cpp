@@ -40,7 +40,7 @@ void JavaException::throwException() {
 
 JavaException::JavaException(const std::string &message, const std::string &className, std::string stackTrace)
     : std::runtime_error(fmt::format("Java exception of type '{}' was thrown. {}", className, message)) {
-    stackTrace_ = std::move(stackTrace) + boost::stacktrace::to_string(boost::stacktrace::stacktrace());
+    stackTrace_ = std::move(stackTrace) + "\n" + boost::stacktrace::to_string(boost::stacktrace::stacktrace());
 }
 
 const std::string &JavaException::getStackTrace() const & {

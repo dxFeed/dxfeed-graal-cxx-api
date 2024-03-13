@@ -42,9 +42,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static)
 
     if (DXFCXX_FEATURE_STACKTRACE)
-        if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-            target_compile_definitions(${DXFC_TEST_BASENAME} PUBLIC _GNU_SOURCE=1)
-        endif ()
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE $<$<PLATFORM_ID:Darwin>:BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED>)
 
         if (TARGET Boost::stacktrace_windbg)
             target_link_libraries(${DXFC_TEST_BASENAME} PUBLIC Boost::stacktrace_windbg ole32 dbgeng)

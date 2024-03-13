@@ -22,12 +22,11 @@ struct DXFCPP_EXPORT GraalException : public std::runtime_error {
      * Constructs an exception.
      *
      * @param entryPointErrorsEnum The error code returned by GraalVM.
-     * @param stackTrace The additional stackTrace.
      */
-    GraalException(CEntryPointErrorsEnum entryPointErrorsEnum, std::string stackTrace = "");
+    GraalException(CEntryPointErrorsEnum entryPointErrorsEnum);
 
     /**
-     * @return dxFeed Graal CXX API stack trace + Java (GraalVM) exception's stack trace.
+     * @return dxFeed Graal CXX API stack trace
      */
     const std::string& getStackTrace() const&;
 

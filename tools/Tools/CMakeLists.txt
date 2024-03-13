@@ -44,9 +44,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ../../third_party/range-v3-0.
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only)
 
 if (DXFCXX_FEATURE_STACKTRACE)
-    if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-        target_compile_definitions(${PROJECT_NAME} PUBLIC _GNU_SOURCE=1)
-    endif ()
+    target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<PLATFORM_ID:Darwin>:BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED>)
 
     if (TARGET Boost::stacktrace_windbg)
         target_link_libraries(${PROJECT_NAME} PUBLIC Boost::stacktrace_windbg ole32 dbgeng)

@@ -10,9 +10,9 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum, std::string stackTrace)
+GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum)
     : std::runtime_error(createMessage(entryPointErrorsEnum)) {
-    stackTrace_ = std::move(stackTrace) + boost::stacktrace::to_string(boost::stacktrace::stacktrace());
+    stackTrace_ = boost::stacktrace::to_string(boost::stacktrace::stacktrace());
 }
 
 const std::string &GraalException::getStackTrace() const & {
