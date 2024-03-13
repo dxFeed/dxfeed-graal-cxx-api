@@ -618,4 +618,4 @@ versions):
     - [ ] dxFeed Graal C API
     - [x] dxFeed Graal C++ API
 
-<!-- 2024-03-13 3:03:30.31 -->
+<!-- 2024-03-13 3:04:42.54 -->
