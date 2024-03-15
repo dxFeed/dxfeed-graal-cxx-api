@@ -168,7 +168,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
     return sharedAs<DXEndpoint>();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) noexcept {
+std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
     // TODO: check invalid utf-8 [EN-8233]
     isolated::api::IsolatedDXEndpoint::password(handle_, password);
 
@@ -226,23 +226,12 @@ void DXEndpoint::awaitProcessed() {
     isolated::api::IsolatedDXEndpoint::awaitProcessed(handle_);
 }
 
-void DXEndpoint::closeAndAwaitTermination() noexcept {
+void DXEndpoint::closeAndAwaitTermination() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::closeAndAwaitTermination()");
     }
 
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_closeAndAwaitTermination(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                            handle) == 0;
-        },
-        false);
-
-    // TODO: close the Feed and Publisher
+    isolated::api::IsolatedDXEndpoint::closeAndAwaitTermination(handle_);
 }
 
 std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
@@ -551,12 +540,12 @@ SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &DXEndpoint::onStateCh
     return onStateChange_;
 }
 
-void DXEndpoint::close() noexcept {
+void DXEndpoint::close() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::close()");
     }
 
-    isolated::api::DXEndpoint::close(handle_);
+    isolated::api::IsolatedDXEndpoint::close(handle_);
 }
 
 std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() noexcept {

@@ -49,9 +49,6 @@ struct Tools {
 };
 
 namespace api {
-struct DXEndpoint {
-    static bool close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
-};
 
 struct DXEndpointStateChangeListener {
     // Throws:

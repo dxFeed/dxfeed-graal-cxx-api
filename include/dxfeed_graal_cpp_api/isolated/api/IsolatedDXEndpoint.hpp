@@ -17,10 +17,33 @@ namespace IsolatedDXEndpoint {
 
 // dxfg_endpoint_t*                dxfg_DXEndpoint_getInstance(graal_isolatethread_t *thread);
 // dxfg_endpoint_t*                dxfg_DXEndpoint_getInstance2(graal_isolatethread_t *thread, dxfg_endpoint_role_t
-// role); dxfg_endpoint_t*                dxfg_DXEndpoint_create(graal_isolatethread_t *thread); dxfg_endpoint_t*
-// dxfg_DXEndpoint_create2(graal_isolatethread_t *thread, dxfg_endpoint_role_t role); int32_t
-// dxfg_DXEndpoint_close(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint); int32_t
-// dxfg_DXEndpoint_closeAndAwaitTermination(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
+// role);
+//
+// dxfg_endpoint_t*                dxfg_DXEndpoint_create(graal_isolatethread_t *thread);
+//
+// dxfg_endpoint_t* dxfg_DXEndpoint_create2(graal_isolatethread_t *thread, dxfg_endpoint_role_t role);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_close` in isolation.
+ *
+ * @param endpoint The endpoint's handle.
+ * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_closeAndAwaitTermination` in isolation.
+ *
+ * @param endpoint The endpoint's handle.
+ * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+
+
 // dxfg_endpoint_role_t            dxfg_DXEndpoint_getRole(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
 
 /**

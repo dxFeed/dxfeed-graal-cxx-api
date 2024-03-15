@@ -309,15 +309,6 @@ void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std:
 
 namespace api {
 
-bool DXEndpoint::close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept {
-    if (!endpoint) {
-        // TODO: Improve error handling [EN-8232]
-        return false;
-    }
-
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_close, false, static_cast<dxfg_endpoint_t *>(endpoint.get()));
-}
-
 JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
                                                                                               void *userData) {
     if (!userFunc) {

@@ -655,7 +655,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException if something happened with the dxFeed API backend
      * @throws GraalException if something happened with the GraalVM
      */
-    std::shared_ptr<DXEndpoint> password(const std::string &password) noexcept;
+    std::shared_ptr<DXEndpoint> password(const std::string &password);
 
     /**
      * Connects to the specified remote address. Previously established connections are closed if
@@ -753,8 +753,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * All resources associated with this endpoint are released.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#close--)
+     *
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM.
      */
-    void close() noexcept;
+    void close();
 
     /**
      * Waits while this endpoint @ref ::getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
@@ -796,8 +800,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * <p><b>This method is blocking.</b>
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#closeAndAwaitTermination--)
+     *
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM.
      */
-    void closeAndAwaitTermination() noexcept;
+    void closeAndAwaitTermination();
 
     // TODO: implement [EN-8234]
     std::unordered_set<EventTypeEnum> getEventTypes() noexcept;
