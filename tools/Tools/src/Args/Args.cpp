@@ -103,4 +103,10 @@ const std::string ArticleArgRequired::HELP_TEXT{R"(
 Help article to show.
 )"};
 
+const std::string QdsArgs::NAME{"qds-args"};
+const std::size_t QdsArgs::POSITION{0};
+const std::string QdsArgs::HELP_TEXT{R"(
+Represents the arguments passed to the qds-tools.
+)"};
+
 }

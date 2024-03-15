@@ -683,6 +683,12 @@ constexpr std::pair<std::size_t, std::size_t> unpack(std::size_t v) noexcept {
     return {shr(v, sizeOfSize / 2), andOp(v, shr(~std::size_t{}, sizeOfSize / 2))};
 }
 
+template <typename T, typename U> T fitToType(const U &size) {
+    static_assert(sizeof(T) <= sizeof(U));
+
+    return static_cast<T>(static_cast<U>(std::numeric_limits<T>::max()) < size ? std::numeric_limits<T>::max() : size);
+}
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
