@@ -318,27 +318,6 @@ bool DXEndpoint::close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXE
     return runGraalFunction(equalsToZero, dxfg_DXEndpoint_close, false, static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-bool DXEndpoint::user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                      const std::string &user) {
-    if (!endpoint) {
-        throw std::invalid_argument("Unable to set user. The `endpoint` handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_user, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                                  user.c_str()) == 0;
-}
-
-bool DXEndpoint::password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                          const std::string &password) noexcept {
-    if (!endpoint) {
-        // TODO: Improve error handling [EN-8232]
-        return false;
-    }
-
-    return runGraalFunction(equalsToZero, dxfg_DXEndpoint_password, false,
-                            static_cast<dxfg_endpoint_t *>(endpoint.get()), password.c_str());
-}
-
 JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
                                                                                               void *userData) {
     if (!userFunc) {

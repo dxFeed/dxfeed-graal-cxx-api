@@ -13,6 +13,28 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXEndpoint {
 
+void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                        const std::string &user) {
+    if (!endpoint) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_user`. The `endpoint` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_user, static_cast<dxfg_endpoint_t *>(endpoint.get()),
+                                           user.c_str());
+}
+
+void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                            const std::string &password) {
+    if (!endpoint) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_password`. The `endpoint` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_password, static_cast<dxfg_endpoint_t *>(endpoint.get()),
+                                           password.c_str());
+}
+
 void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const std::string &address) {
     if (!endpoint) {
         throw std::invalid_argument(

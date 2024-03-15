@@ -51,16 +51,6 @@ struct Tools {
 namespace api {
 struct DXEndpoint {
     static bool close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) noexcept;
-
-    // Throws:
-    //   std::invalid_argument if endpoint handle is invalid.
-    //   JavaException if something happened with the dxFeed API backend
-    //   GraalException if something happened with the GraalVM
-    static bool user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                     const std::string &user);
-
-    static bool password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                         const std::string &password) noexcept;
 };
 
 struct DXEndpointStateChangeListener {

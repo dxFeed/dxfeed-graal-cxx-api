@@ -651,6 +651,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @param password The password.
      *
      * @return this DXEndpoint.
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
     std::shared_ptr<DXEndpoint> password(const std::string &password) noexcept;
 

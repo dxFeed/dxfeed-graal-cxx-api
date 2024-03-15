@@ -22,9 +22,30 @@ namespace IsolatedDXEndpoint {
 // dxfg_DXEndpoint_close(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint); int32_t
 // dxfg_DXEndpoint_closeAndAwaitTermination(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
 // dxfg_endpoint_role_t            dxfg_DXEndpoint_getRole(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
-// int32_t                         dxfg_DXEndpoint_user(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, const
-// char *user); int32_t                         dxfg_DXEndpoint_password(graal_isolatethread_t *thread, dxfg_endpoint_t
-// *endpoint, const char *password);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_user` in isolation.
+ *
+ * @param endpoint The endpoint's handle.
+ * @param user The user's name.
+ * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                        const std::string &user);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_password` in isolation.
+ *
+ * @param endpoint The endpoint's handle.
+ * @param password The user's password.
+ * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+                            const std::string &password);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_connect` in isolation.
@@ -143,8 +164,8 @@ void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void* /* dxfg_publisher_t* */ getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
-
+void * /* dxfg_publisher_t* */
+getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 // int32_t                         dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t
 // *endpoint, dxfg_executor_t *executor);
