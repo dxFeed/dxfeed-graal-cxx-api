@@ -34,6 +34,8 @@ struct TimeFormat {
 
 struct Tools {
     static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(const std::string &symbolList) noexcept;
+
+    static void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string>& args);
 };
 
 namespace api {
