@@ -17,8 +17,16 @@ DXFCPP_BEGIN_NAMESPACE
  * A wrapper over the interceptable Java exceptions thrown by the dxFeed Native Graal SDK
  */
 struct DXFCPP_EXPORT JavaException : public std::runtime_error {
+    /**
+     * Creates an exception using Java message, className and stack trace. Also uses current stack trace.
+     *
+     * @param message Java message.
+     * @param className Java class name.
+     * @param stackTrace Java stack trace.
+     */
     JavaException(const std::string &message, const std::string &className, std::string stackTrace);
 
+    /// Throws a JavaException if it exists (i.e. intercepted by Graal SDK)
     static void throwIfJavaThreadExceptionExists();
 
     static void throwException();

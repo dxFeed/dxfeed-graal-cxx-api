@@ -13,6 +13,10 @@
 
 #include <doctest.h>
 
+using namespace dxfcpp;
+using namespace dxfcpp::literals;
+using namespace std::literals;
+
 TEST_CASE("DXEndpoint::Builder") {
     auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
     auto endpoint = builder->build();
@@ -131,8 +135,6 @@ TEST_CASE("DXFeedSubscription") {
     auto types2 = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
 
     auto sub6 = dxfcpp::DXFeedSubscription::create(types2.begin(), types2.end());
-
-    dxfcpp::DXFeed::getInstance();
 }
 
 TEST_CASE("dxfcpp::DXFeed::getInstance()") { dxfcpp::DXFeed::getInstance(); }
@@ -171,4 +173,12 @@ TEST_CASE("DXEndpoint::user") {
     endpoint->connect("123123123");
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
+}
+
+TEST_CASE("DXEndpoint::getFeed and getPublisher") {
+    auto feed = DXEndpoint::getInstance()->getFeed();
+    auto publisher = DXEndpoint::getInstance()->getPublisher();
+
+    REQUIRE(DXFeed::getInstance() == feed);
+    REQUIRE(DXPublisher::getInstance() == publisher);
 }

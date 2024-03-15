@@ -126,6 +126,17 @@ void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle
         runGraalFunctionAndThrowIfNullptr(dxfg_DXEndpoint_getFeed, static_cast<dxfg_endpoint_t *>(endpoint.get())));
 }
 
+void * /* dxfg_publisher_t* */
+getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+    if (!endpoint) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_getPublisher`. The `endpoint` handle is invalid");
+    }
+
+    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(dxfg_DXEndpoint_getPublisher,
+                                                                      static_cast<dxfg_endpoint_t *>(endpoint.get())));
+}
+
 /* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum>
 getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
     if (!endpoint) {

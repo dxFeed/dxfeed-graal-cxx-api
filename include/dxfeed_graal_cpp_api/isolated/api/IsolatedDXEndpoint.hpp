@@ -135,8 +135,18 @@ void removeStateChangeListener(
  */
 void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
-// dxfg_publisher_t*               dxfg_DXEndpoint_getPublisher(graal_isolatethread_t *thread, dxfg_endpoint_t
-// *endpoint); int32_t                         dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_getPublisher` in isolation.
+ *
+ * @param endpoint The endpoint's handle.
+ * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void* /* dxfg_publisher_t* */ getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+
+
+// int32_t                         dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t
 // *endpoint, dxfg_executor_t *executor);
 
 /**

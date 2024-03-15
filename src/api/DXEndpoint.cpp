@@ -107,6 +107,7 @@ struct DXEndpoint::Impl {
 
     mutable std::mutex mutex_{};
     std::shared_ptr<DXFeed> feed_{};
+    std::shared_ptr<DXPublisher> publisher_{};
 
     std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint> &handle) {
         std::lock_guard lock{mutex_};
@@ -116,6 +117,16 @@ struct DXEndpoint::Impl {
         }
 
         return feed_ = DXFeed::create(isolated::api::IsolatedDXEndpoint::getFeed(handle));
+    }
+
+    std::shared_ptr<DXPublisher> getPublisher(const JavaObjectHandle<DXEndpoint> &handle) {
+        std::lock_guard lock{mutex_};
+
+        if (publisher_) {
+            return publisher_;
+        }
+
+        return publisher_ = DXPublisher::create(isolated::api::IsolatedDXEndpoint::getPublisher(handle));
     }
 };
 
@@ -251,22 +262,7 @@ std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() noexcept {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::getPublisher()");
     }
 
-    if (publisher_) {
-        return publisher_;
-    }
-
-    auto publisherHandle =
-        !handle_
-            ? nullptr
-            : runIsolatedOrElse(
-                  [handle = static_cast<dxfg_endpoint_t *>(handle_.get())](auto threadHandle) {
-                      return dxfg_DXEndpoint_getPublisher(static_cast<graal_isolatethread_t *>(threadHandle), handle);
-                  },
-                  nullptr);
-
-    publisher_ = DXPublisher::create(publisherHandle);
-
-    return publisher_;
+    return impl_->getPublisher(handle_);
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
@@ -476,7 +472,7 @@ std::string DXEndpoint::stateToString(DXEndpoint::State state) {
 }
 
 DXEndpoint::DXEndpoint(LockExternalConstructionTag)
-    : handle_{}, role_{}, publisher_{}, stateChangeListenerHandle_{}, onStateChange_{},
+    : handle_{}, role_{}, stateChangeListenerHandle_{}, onStateChange_{},
       impl_(std::make_unique<DXEndpoint::Impl>()) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint()");
@@ -484,7 +480,7 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag)
 }
 
 DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name)
-    : role_{role}, name_{std::move(name)}, publisher_{}, stateChangeListenerHandle_{}, onStateChange_{},
+    : role_{role}, name_{std::move(name)}, stateChangeListenerHandle_{}, onStateChange_{},
       impl_(std::make_unique<DXEndpoint::Impl>()) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint()");

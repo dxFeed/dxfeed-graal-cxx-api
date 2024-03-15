@@ -470,7 +470,6 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     JavaObjectHandle<DXEndpoint> handle_;
     Role role_ = Role::FEED;
     std::string name_{};
-    std::shared_ptr<DXPublisher> publisher_{};
     JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_;
     SimpleHandler<void(State, State)> onStateChange_{};
 
@@ -685,7 +684,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * @throws std::invalid_argument if endpoint handle is invalid.
      * @throws JavaException if something happened with the dxFeed API backend or if address string is malformed.
-     * @throws GraalException if something happened with the GraalVM
+     * @throws GraalException if something happened with the GraalVM.
      */
     std::shared_ptr<DXEndpoint> connect(const std::string &address);
 
@@ -707,7 +706,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * @throws std::invalid_argument if endpoint handle is invalid.
      * @throws JavaException if something happened with the dxFeed API backend
-     * @throws GraalException if something happened with the GraalVM
+     * @throws GraalException if something happened with the GraalVM.
      */
     void reconnect();
 
@@ -722,8 +721,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnect--)
      *
      * @throws std::invalid_argument if endpoint handle is invalid.
-     * @throws JavaException if something happened with the dxFeed API backend
-     * @throws GraalException if something happened with the GraalVM
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM.
      */
     void disconnect();
 
@@ -738,8 +737,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnectAndClear--)
      *
      * @throws std::invalid_argument if endpoint handle is invalid.
-     * @throws JavaException if something happened with the dxFeed API backend
-     * @throws GraalException if something happened with the GraalVM
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM.
      */
     void disconnectAndClear();
 
@@ -766,8 +765,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitNotConnected--)
      *
      * @throws std::invalid_argument if endpoint handle is invalid.
-     * @throws JavaException if something happened with the dxFeed API backend
-     * @throws GraalException if something happened with the GraalVM
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM.
      */
     void awaitNotConnected();
 
@@ -779,8 +778,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitProcessed--)
      *
      * @throws std::invalid_argument if endpoint handle is invalid.
-     * @throws JavaException if something happened with the dxFeed API backend
-     * @throws GraalException if something happened with the GraalVM
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM.
      */
     void awaitProcessed();
 
@@ -803,13 +802,16 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * @return The feed that is associated with this endpoint.
      * @throws std::invalid_argument if endpoint handle is invalid.
-     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws JavaException if something happened with the dxFeed API backend.
      * @throws GraalException if something happened with the GraalVM
      */
     std::shared_ptr<DXFeed> getFeed();
 
     /**
      * @return The publisher that is associated with this endpoint.
+     * @throws std::invalid_argument if endpoint handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM.
      */
     std::shared_ptr<DXPublisher> getPublisher() noexcept;
 
