@@ -353,6 +353,8 @@ versions):
   etc.)
 * [LatencyTest](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/LatencyTest/LatencyTestTool.hpp)
   connects to the specified address(es) and calculates latency
+* [Qds](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Qds/QdsTool.hpp)
+  collection of tools ported from the Java qds-tools
 
 ## Samples
 

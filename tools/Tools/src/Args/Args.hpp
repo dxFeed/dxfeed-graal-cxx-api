@@ -626,10 +626,34 @@ struct ArticleArgRequired : TailArg {
     }
 };
 
+struct QdsArgs : PositionalArg, RequiredMixin {
+    const static std::string NAME;
+    const static std::size_t POSITION;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return fmt::format("{} (pos. {})", NAME, POSITION);
+    }
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<QdsArgs>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return fmt::format("Required. {}", trimStr(HELP_TEXT));
+    }
+
+    static ParseResult<std::string> parse(const std::vector<std::string> &args) {
+        return RequiredMixin::parse<QdsArgs>(args);
+    }
+};
+
 using ArgType =
     std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired,
                  tools::SymbolsArg, tools::SymbolsArgRequired, tools::PropertiesArg, tools::FromTimeArg,
                  tools::SourceArg, tools::TapeArg, tools::QuiteArg, tools::ForceStreamArg, tools::CPUUsageByCoreArg,
-                 tools::DetachListenerArg, tools::IntervalArg, tools::HelpArg, tools::ArticleArgRequired>;
+                 tools::DetachListenerArg, tools::IntervalArg, tools::HelpArg, tools::ArticleArgRequired, QdsArgs>;
 
 } // namespace dxfcpp::tools
