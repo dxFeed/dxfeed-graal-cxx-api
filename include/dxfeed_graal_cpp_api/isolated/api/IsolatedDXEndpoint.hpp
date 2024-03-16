@@ -41,8 +41,8 @@ void /* int32_t */ close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
-
+void /* int32_t */
+closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 // dxfg_endpoint_role_t            dxfg_DXEndpoint_getRole(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
 
@@ -173,6 +173,7 @@ void removeStateChangeListener(
  * Calls the Graal SDK function `dxfg_DXEndpoint_getFeed` in isolation.
  *
  * @param endpoint The endpoint's handle.
+ * @return dxFeed Graal SDK DXFeed's handle.
  * @throws std::invalid_argument if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
@@ -183,6 +184,7 @@ void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle
  * Calls the Graal SDK function `dxfg_DXEndpoint_getPublisher` in isolation.
  *
  * @param endpoint The endpoint's handle.
+ * @return dxFeed Graal SDK DXPublisher's handle.
  * @throws std::invalid_argument if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
@@ -204,6 +206,19 @@ getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> 
  */
 /* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum>
 getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+
+namespace Builder {
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_newBuilder` in isolation.
+ *
+ * @return dxFeed Graal SDK DXEndpoint::Builder's handle.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void * /* dxfg_endpoint_builder_t* */ create();
+
+} // namespace Builder
 
 } // namespace IsolatedDXEndpoint
 

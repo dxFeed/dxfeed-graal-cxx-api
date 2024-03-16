@@ -207,6 +207,14 @@ getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint>
     return result;
 }
 
+namespace Builder {
+
+void * /* dxfg_endpoint_builder_t* */ create() {
+    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(dxfg_DXEndpoint_newBuilder));
+}
+
+} // namespace Builder
+
 } // namespace isolated::api::IsolatedDXEndpoint
 
 DXFCPP_END_NAMESPACE

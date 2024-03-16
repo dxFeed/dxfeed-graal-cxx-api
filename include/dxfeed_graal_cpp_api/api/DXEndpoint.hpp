@@ -829,16 +829,18 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.
      */
-    class DXFCPP_EXPORT Builder : public std::enable_shared_from_this<Builder> {
+    class DXFCPP_EXPORT Builder : public RequireMakeShared<Builder> {
         friend DXEndpoint;
 
         JavaObjectHandle<Builder> handle_;
         Role role_ = Role::FEED;
         std::unordered_map<std::string, std::string> properties_;
 
-        Builder() noexcept;
-
-        static std::shared_ptr<Builder> create() noexcept;
+        // Throws:
+        //   - std::bad_alloc if it was not possible to allocate the required amount of memory
+        //   - JavaException if something happened with the dxFeed API backend
+        //   - GraalException if something happened with the GraalVM
+        static std::shared_ptr<Builder> create();
 
         /**
          * Tries to load the default properties file for Role::FEED, Role::ON_DEMAND_FEED or Role::PUBLISHER role.
@@ -855,6 +857,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         void loadDefaultPropertiesImpl() noexcept;
 
       public:
+        explicit Builder(LockExternalConstructionTag) noexcept;
+
         /// Releases the GraalVM handle
         virtual ~Builder() noexcept;
 
@@ -909,7 +913,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
                 withProperty(k, v);
             }
 
-            return shared_from_this();
+            return sharedAs<Builder>();
         }
 
         /**

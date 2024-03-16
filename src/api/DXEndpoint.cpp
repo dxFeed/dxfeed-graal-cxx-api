@@ -146,12 +146,10 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     auto endpoint =
         DXEndpoint::createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role,
                                  properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{});
-
     auto id = ApiContext::getInstance()->getManager<DXEndpointManager>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::DXEndpointStateChangeListener::create(
         dxfcpp::bit_cast<void *>(&DXEndpoint::Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
-
     isolated::api::IsolatedDXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
 
     return endpoint;
@@ -250,20 +248,14 @@ std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() noexcept {
     return impl_->getPublisher(handle_);
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() noexcept {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder::create()");
     }
 
-    auto builder = std::shared_ptr<Builder>(new (std::nothrow) Builder{});
+    auto builder = createShared();
 
-    if (builder) {
-        builder->handle_ = JavaObjectHandle<DXEndpoint::Builder>(runIsolatedOrElse(
-            [](auto threadHandle) {
-                return dxfg_DXEndpoint_newBuilder(static_cast<graal_isolatethread_t *>(threadHandle));
-            },
-            nullptr));
-    }
+    builder->handle_ = JavaObjectHandle<DXEndpoint::Builder>(isolated::api::IsolatedDXEndpoint::Builder::create());
 
     return builder;
 }
@@ -323,7 +315,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
     role_ = role;
 
     if (!handle_) {
-        return shared_from_this();
+        return sharedAs<DXEndpoint::Builder>();
     }
 
     runIsolatedOrElse(
@@ -333,7 +325,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
         },
         false);
 
-    return shared_from_this();
+    return sharedAs<DXEndpoint::Builder>();
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
@@ -347,7 +339,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
     properties_[key] = value;
 
     if (!handle_) {
-        return shared_from_this();
+        return sharedAs<DXEndpoint::Builder>();
     }
 
     runIsolatedOrElse(
@@ -357,7 +349,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
         },
         false);
 
-    return shared_from_this();
+    return sharedAs<DXEndpoint::Builder>();
 }
 
 bool DXEndpoint::Builder::supportsProperty(const std::string &key) noexcept {
@@ -397,7 +389,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() noexcept {
     return DXEndpoint::create(endpointHandle, role_, properties_);
 }
 
-DXEndpoint::Builder::Builder() noexcept : handle_{}, properties_{} {
+DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept : handle_{}, properties_{} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder::Builder()");
     }
@@ -457,8 +449,7 @@ std::string DXEndpoint::stateToString(DXEndpoint::State state) {
 }
 
 DXEndpoint::DXEndpoint(LockExternalConstructionTag)
-    : handle_{}, role_{}, stateChangeListenerHandle_{}, onStateChange_{},
-      impl_(std::make_unique<DXEndpoint::Impl>()) {
+    : handle_{}, role_{}, stateChangeListenerHandle_{}, onStateChange_{}, impl_(std::make_unique<DXEndpoint::Impl>()) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint()");
     }
