@@ -222,7 +222,7 @@ std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
     return impl_->getFeed(handle_);
 }
 
-std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() noexcept {
+std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::getPublisher()");
     }

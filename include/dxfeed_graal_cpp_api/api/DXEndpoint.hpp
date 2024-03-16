@@ -824,7 +824,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException if something happened with the dxFeed API backend.
      * @throws GraalException if something happened with the GraalVM.
      */
-    std::shared_ptr<DXPublisher> getPublisher() noexcept;
+    std::shared_ptr<DXPublisher> getPublisher();
 
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.
