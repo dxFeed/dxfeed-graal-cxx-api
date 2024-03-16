@@ -1,6 +1,7 @@
 // Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -32,25 +33,6 @@ const std::string DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY = "dxendpoint.event
 const std::string DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY = "dxendpoint.storeEverything";
 const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
 const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
-
-static dxfg_endpoint_role_t roleToGraalRole(DXEndpoint::Role role) {
-    switch (role) {
-    case DXEndpoint::Role::FEED:
-        return DXFG_ENDPOINT_ROLE_FEED;
-    case DXEndpoint::Role::ON_DEMAND_FEED:
-        return DXFG_ENDPOINT_ROLE_ON_DEMAND_FEED;
-    case DXEndpoint::Role::STREAM_FEED:
-        return DXFG_ENDPOINT_ROLE_STREAM_FEED;
-    case DXEndpoint::Role::PUBLISHER:
-        return DXFG_ENDPOINT_ROLE_PUBLISHER;
-    case DXEndpoint::Role::STREAM_PUBLISHER:
-        return DXFG_ENDPOINT_ROLE_STREAM_PUBLISHER;
-    case DXEndpoint::Role::LOCAL_HUB:
-        return DXFG_ENDPOINT_ROLE_LOCAL_HUB;
-    }
-
-    return DXFG_ENDPOINT_ROLE_FEED;
-}
 
 static DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
     switch (state) {
@@ -307,23 +289,14 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() noexcept {
     }
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::Role role) noexcept {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::Role role) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withRole(role = " + roleToString(role) + ")");
     }
 
     role_ = role;
 
-    if (!handle_) {
-        return sharedAs<DXEndpoint::Builder>();
-    }
-
-    runIsolatedOrElse(
-        [role = role, handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_Builder_withRole(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                    roleToGraalRole(role)) == 0;
-        },
-        false);
+    isolated::api::IsolatedDXEndpoint::Builder::withRole(handle_, role);
 
     return sharedAs<DXEndpoint::Builder>();
 }

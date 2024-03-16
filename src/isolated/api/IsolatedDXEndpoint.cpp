@@ -207,10 +207,41 @@ getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint>
     return result;
 }
 
+dxfg_endpoint_role_t roleToGraalRole(DXEndpoint::Role role) {
+    switch (role) {
+    case DXEndpoint::Role::FEED:
+        return DXFG_ENDPOINT_ROLE_FEED;
+    case DXEndpoint::Role::ON_DEMAND_FEED:
+        return DXFG_ENDPOINT_ROLE_ON_DEMAND_FEED;
+    case DXEndpoint::Role::STREAM_FEED:
+        return DXFG_ENDPOINT_ROLE_STREAM_FEED;
+    case DXEndpoint::Role::PUBLISHER:
+        return DXFG_ENDPOINT_ROLE_PUBLISHER;
+    case DXEndpoint::Role::STREAM_PUBLISHER:
+        return DXFG_ENDPOINT_ROLE_STREAM_PUBLISHER;
+    case DXEndpoint::Role::LOCAL_HUB:
+        return DXFG_ENDPOINT_ROLE_LOCAL_HUB;
+    }
+
+    return DXFG_ENDPOINT_ROLE_FEED;
+}
+
 namespace Builder {
 
 void * /* dxfg_endpoint_builder_t* */ create() {
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(dxfg_DXEndpoint_newBuilder));
+}
+
+void /* int32_t */
+withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+         /* dxfg_endpoint_role_t */ dxfcpp::DXEndpoint::Role role) {
+    if (!builder) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_Builder_withRole`. The `builder` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(
+        dxfg_DXEndpoint_Builder_withRole, static_cast<dxfg_endpoint_builder_t *>(builder.get()), roleToGraalRole(role));
 }
 
 } // namespace Builder

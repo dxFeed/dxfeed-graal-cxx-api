@@ -860,7 +860,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         explicit Builder(LockExternalConstructionTag) noexcept;
 
         /// Releases the GraalVM handle
-        virtual ~Builder() noexcept;
+        ~Builder() noexcept override;
 
         /**
          * Changes name that is used to distinguish multiple endpoints
@@ -880,8 +880,11 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param role The endpoint's role
          *
          * @return `this` endpoint builder.
+         * @throws std::invalid_argument if builder handle is invalid.
+         * @throws JavaException if something happened with the dxFeed API backend.
+         * @throws GraalException if something happened with the GraalVM.
          */
-        std::shared_ptr<Builder> withRole(Role role) noexcept;
+        std::shared_ptr<Builder> withRole(Role role);
 
         /**
          * Sets the specified property. Unsupported properties are ignored.
