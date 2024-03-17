@@ -29,6 +29,7 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
 
     std::unordered_map<Id<EntityType>, std::shared_ptr<EntityType>> entitiesById_;
     std::unordered_map<std::shared_ptr<EntityType>, Id<EntityType>> idsByEntities_;
+    std::atomic<std::size_t> lastId_{};
     std::mutex mutex_;
 
     EntityManager() : entitiesById_{}, idsByEntities_{}, mutex_{} {
@@ -53,8 +54,13 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
 
         entitiesById_[id] = entity;
         idsByEntities_.emplace(std::make_pair(entity, id));
+        lastId_ = id.getValue();
 
         return id;
+    }
+
+    std::size_t getLastId() {
+        return lastId_;
     }
 
     bool unregisterEntity(std::shared_ptr<EntityType> entity) {

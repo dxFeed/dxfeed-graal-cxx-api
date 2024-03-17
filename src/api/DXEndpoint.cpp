@@ -125,9 +125,15 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
                         ", role = " + roleToString(role) + ", properties[" + std::to_string(properties.size()) + "])");
     }
 
-    auto endpoint =
-        DXEndpoint::createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role,
-                                 properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{});
+    auto name = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
+
+    if (name.empty()) {
+        std::size_t id = ApiContext::getInstance()->getManager<DXEndpointManager>()->getLastId();
+
+        name = fmt::format("qdcxx{}", (id <= 1) ? "" : fmt::format("-{}", id));
+    }
+
+    auto endpoint = DXEndpoint::createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, name);
     auto id = ApiContext::getInstance()->getManager<DXEndpointManager>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::DXEndpointStateChangeListener::create(
@@ -279,13 +285,7 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() noexcept {
         }
 
         // The default property file has the same value as the key.
-        runIsolatedOrElse(
-            [key = propertiesFileKey, value = propertiesFileKey,
-             handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-                return dxfg_DXEndpoint_Builder_withProperty(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                            key.c_str(), value.c_str()) == 0;
-            },
-            false);
+        withProperty(propertiesFileKey, propertiesFileKey);
     }
 }
 
