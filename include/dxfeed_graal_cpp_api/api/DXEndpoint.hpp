@@ -895,7 +895,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          *
          * @see ::supportsProperty(const std::string&)
          */
-        std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value) noexcept;
+        std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value);
 
         /**
          * Sets all supported properties from the provided properties object.

@@ -5,6 +5,9 @@
 
 #include "../../internal/Conf.hpp"
 
+#include <string>
+#include <string_view>
+
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../api/DXEndpoint.hpp"
@@ -56,7 +59,7 @@ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                        const std::string &user);
+                        std::string_view user);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_password` in isolation.
@@ -68,7 +71,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                            const std::string &password);
+                            std::string_view password);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_connect` in isolation.
@@ -78,7 +81,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const std::string &address);
+void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, std::string_view address);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_reconnect` in isolation.
@@ -221,19 +224,36 @@ void * /* dxfg_endpoint_builder_t* */ create();
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withRole` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
- * @param role The DXEndpoint's role.
+ * @param role The endpoint's role.
  * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> & builder, /* dxfg_endpoint_role_t */ dxfcpp::DXEndpoint::Role role);
+void /* int32_t */
+withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+         /* dxfg_endpoint_role_t */ dxfcpp::DXEndpoint::Role role);
 
-//int32_t                     dxfg_DXEndpoint_Builder_withName(graal_isolatethread_t *thread, dxfg_endpoint_builder_t *builder, const char *name);
+// int32_t                     dxfg_DXEndpoint_Builder_withName(graal_isolatethread_t *thread, dxfg_endpoint_builder_t
+// *builder, const char *name);
 
-//int32_t                     dxfg_DXEndpoint_Builder_withProperty(graal_isolatethread_t *thread, dxfg_endpoint_builder_t *builder, const char *key, const char *value);
-//int32_t                     dxfg_DXEndpoint_Builder_withProperties(graal_isolatethread_t *thread, dxfg_endpoint_builder_t *builder, const char *file_path);
-//int32_t                     dxfg_DXEndpoint_Builder_supportsProperty(graal_isolatethread_t *thread, dxfg_endpoint_builder_t *builder, const char *key);
-//dxfg_endpoint_t*            dxfg_DXEndpoint_Builder_build(graal_isolatethread_t *thread, dxfg_endpoint_builder_t *builder);
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withProperty` in isolation.
+ * @param builder The DXEndpoint::Builder's handle.
+ * @param key The endpoint's property key.
+ * @param value The endpoint's property value.
+ * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */
+withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+             std::string_view key, std::string_view value);
+
+// int32_t                     dxfg_DXEndpoint_Builder_withProperties(graal_isolatethread_t *thread,
+// dxfg_endpoint_builder_t *builder, const char *file_path); int32_t
+// dxfg_DXEndpoint_Builder_supportsProperty(graal_isolatethread_t *thread, dxfg_endpoint_builder_t *builder, const char
+// *key); dxfg_endpoint_t*            dxfg_DXEndpoint_Builder_build(graal_isolatethread_t *thread,
+// dxfg_endpoint_builder_t *builder);
 
 } // namespace Builder
 

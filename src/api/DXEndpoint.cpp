@@ -302,7 +302,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
-                                                                       const std::string &value) noexcept {
+                                                                       const std::string &value) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperty(key = " + key +
@@ -311,16 +311,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 
     properties_[key] = value;
 
-    if (!handle_) {
-        return sharedAs<DXEndpoint::Builder>();
-    }
-
-    runIsolatedOrElse(
-        [key = key, value = value, handle = static_cast<dxfg_endpoint_builder_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXEndpoint_Builder_withProperty(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                        key.c_str(), value.c_str()) == 0;
-        },
-        false);
+    isolated::api::IsolatedDXEndpoint::Builder::withProperty(handle_, key, value);
 
     return sharedAs<DXEndpoint::Builder>();
 }

@@ -35,35 +35,35 @@ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
 }
 
 void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                        const std::string &user) {
+                        std::string_view user) {
     if (!endpoint) {
         throw std::invalid_argument(
             "Unable to execute function `dxfg_DXEndpoint_user`. The `endpoint` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_user, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           user.c_str());
+                                           user.data());
 }
 
 void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                            const std::string &password) {
+                            std::string_view password) {
     if (!endpoint) {
         throw std::invalid_argument(
             "Unable to execute function `dxfg_DXEndpoint_password`. The `endpoint` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_password, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           password.c_str());
+                                           password.data());
 }
 
-void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const std::string &address) {
+void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, std::string_view address) {
     if (!endpoint) {
         throw std::invalid_argument(
             "Unable to execute function `dxfg_DXEndpoint_connect`. The `endpoint` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_connect, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           address.c_str());
+                                           address.data());
 }
 
 void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
@@ -242,6 +242,20 @@ withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoi
 
     runGraalFunctionAndThrowIfLessThanZero(
         dxfg_DXEndpoint_Builder_withRole, static_cast<dxfg_endpoint_builder_t *>(builder.get()), roleToGraalRole(role));
+}
+
+// dxfg_DXEndpoint_Builder_withProperty
+void /* int32_t */
+withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+             std::string_view key, std::string_view value) {
+    if (!builder) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_Builder_withProperty`. The `builder` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperty,
+                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()), key.data(),
+                                           value.data());
 }
 
 } // namespace Builder

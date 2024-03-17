@@ -18,8 +18,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <iostream>
 #include <mutex>
 #include <sstream>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
+#include <variant>
 
 #include "utils/debug/Debug.hpp"
 
@@ -688,6 +691,48 @@ template <typename T, typename U> T fitToType(const U &size) {
 
     return static_cast<T>(static_cast<U>(std::numeric_limits<T>::max()) < size ? std::numeric_limits<T>::max() : size);
 }
+
+/**
+ * A simple wrapper around strings or something similar to strings to reduce the amount of code for methods that take
+ * strings as input.
+ */
+struct StringLikeWrapper {
+    using DataType = std::variant<std::string, std::string_view>;
+
+    DataType data{};
+
+    StringLikeWrapper(std::string_view sv) : data{sv} {
+    }
+
+    StringLikeWrapper(const char *chars) : data{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
+    }
+
+    StringLikeWrapper(const std::string &s) : data{s} {
+    }
+
+    StringLikeWrapper(std::string &&s) : data{std::move(s)} {
+    }
+    
+    template <auto N>
+    StringLikeWrapper(const char (&chars)[N]) : StringLikeWrapper{std::string_view{chars, chars + N}} {
+    }
+
+    operator std::string() const {
+        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+            return {sv->data(), sv->size()};
+        } else {
+            return std::get<std::string>(data);
+        }
+    }
+
+    operator std::string_view() const {
+        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+            return *sv;
+        } else {
+            return std::get<std::string>(data);
+        }
+    }
+};
 
 DXFCPP_END_NAMESPACE
 
