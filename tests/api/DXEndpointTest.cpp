@@ -137,23 +137,24 @@ TEST_CASE("DXFeedSubscription") {
     auto sub6 = dxfcpp::DXFeedSubscription::create(types2.begin(), types2.end());
 }
 
-TEST_CASE("dxfcpp::DXFeed::getInstance()") { dxfcpp::DXFeed::getInstance(); }
+TEST_CASE("dxfcpp::DXFeed::getInstance()") {
+    dxfcpp::DXFeed::getInstance();
+}
 
 TEST_CASE("dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList") {
     using namespace std::literals;
 
-    auto* list = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList({"AAPL", "IBM"s, "TSLA"sv});
-    auto* list2 = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList(std::vector<std::string>{"XXX", "YYY", "ZZZ"});
+    auto *list = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList({"AAPL", "IBM"s, "TSLA"sv});
+    auto *list2 = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList(std::vector<std::string>{"XXX", "YYY", "ZZZ"});
 
     auto set = std::set<dxfcpp::SymbolWrapper>{"111", "222"sv, "333"s};
 
-    auto* list3 = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList(set.begin(), set.end());
+    auto *list3 = dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList(set.begin(), set.end());
 
     auto sl = dxfcpp::SymbolWrapper::SymbolListUtils::fromGraalList(list);
 
-
     std::cout << "Symbols:\n";
-    for (const auto& s : sl) {
+    for (const auto &s : sl) {
         std::cout << s.toString() << "\n";
     }
 
@@ -165,7 +166,7 @@ TEST_CASE("dxfcpp::SymbolWrapper::SymbolListUtils::toGraalList") {
 TEST_CASE("DXEndpoint::user") {
     using namespace std::literals;
 
-    //dxfcpp::System::setProperty("log.file", "log.txt");
+    // dxfcpp::System::setProperty("log.file", "log.txt");
 
     auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::DXEndpoint::Role::FEED);
 
@@ -181,4 +182,26 @@ TEST_CASE("DXEndpoint::getFeed and getPublisher") {
 
     REQUIRE(DXFeed::getInstance() == feed);
     REQUIRE(DXPublisher::getInstance() == publisher);
+}
+
+#include <thread>
+
+TEST_CASE("Test DXEndpoint + multi-thread setProperty") {
+    std::thread t{[] {
+        System::setProperty("test", "test");
+    }};
+    t.join();
+
+    auto endpoint = DXEndpoint::create();
+
+    for (int i = 0; i < 1000; ++i) {
+        std::thread t{[] {
+            System::setProperty("test", "test");
+        }};
+        t.join();
+    }
+
+    endpoint->close();
+
+    std::cout << "!!!!!\n" << std::endl;
 }
