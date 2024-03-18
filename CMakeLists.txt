@@ -149,14 +149,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Boost)
 
 
-find_package(
-        Boost
-        1.84
-        REQUIRED
-        stacktrace
-        OPTIONAL_COMPONENTS
-        stacktrace_windbg, stacktrace_basic, stacktrace_windbg_cached, stacktrace_backtrace, stacktrace_addr2line, stacktrace_noop
-)
+#find_package(
+#        Boost
+#        1.84
+#        REQUIRED
+#        stacktrace
+#)
 
 # find_package(utf8cpp)
 # find_package(fmt)

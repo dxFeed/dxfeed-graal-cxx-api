@@ -24,3 +24,12 @@ TEST_CASE("JavaException") {
         std::cerr << e.getStackTrace() << '\n';
     }
 }
+
+TEST_CASE("JavaException::throwException()") {
+    try {
+        JavaException::throwException();
+    } catch (const JavaException& e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    }
+}

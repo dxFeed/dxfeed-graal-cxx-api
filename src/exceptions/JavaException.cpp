@@ -5,8 +5,8 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <fmt/format.h>
 #include <boost/stacktrace.hpp>
+#include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -38,11 +38,11 @@ void JavaException::throwException() {
     });
 }
 
-std::string stackTraceToString(const boost::stacktrace::stacktrace& stacktrace) {
+std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) {
     std::string result;
 
-    for (auto&& frame : stacktrace) {
-        result += "        at ";
+    for (auto &&frame : stacktrace) {
+        result += "\tat ";
         auto frameString = boost::stacktrace::to_string(frame);
 
         if (frameString.empty()) {
@@ -94,9 +94,8 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace& stacktrace) 
 }
 
 JavaException::JavaException(const std::string &message, const std::string &className, std::string stackTrace)
-    : std::runtime_error(fmt::format("Java exception of type '{}' was thrown. {}", className, message)) {
-    //stackTrace_ = std::move(stackTrace) + "\n" + boost::stacktrace::to_string(boost::stacktrace::stacktrace());
-    stackTrace_ = std::move(stackTrace) + "\n" + stackTraceToString(boost::stacktrace::stacktrace());
+    : std::runtime_error(fmt::format("Java exception of type '{}' was thrown. {}", className, message)),
+      stackTrace_{std::move(stackTrace) + "\n" + stackTraceToString(boost::stacktrace::stacktrace())} {
 }
 
 const std::string &JavaException::getStackTrace() const & {
