@@ -871,7 +871,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          *
          * @return `this` endpoint builder.
          */
-        std::shared_ptr<Builder> withName(const std::string &name) noexcept;
+        std::shared_ptr<Builder> withName(const std::string &name);
 
         /**
          * Sets role for the created DXEndpoint.

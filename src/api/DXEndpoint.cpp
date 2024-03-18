@@ -365,7 +365,7 @@ DXEndpoint::Builder::~Builder() noexcept {
     }
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::string &name) noexcept {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::string &name) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");
