@@ -97,6 +97,14 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
         return false;
     }
 
+    template <typename H> bool unregisterEntity(H *handle) {
+        return unregisterEntity(Id<EntityType>::template from<H>(handle));
+    }
+
+    template <typename H> bool unregisterEntity(const H *handle) {
+        return unregisterEntity(Id<EntityType>::template from<H>(handle));
+    }
+
     std::shared_ptr<EntityType> getEntity(Id<EntityType> id) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "::getEntity(id = " + std::to_string(id.getValue()) + ")");
@@ -111,6 +119,28 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
         return {};
     }
 
+    template <typename H> std::shared_ptr<EntityType> getEntity(H *handle) {
+        return getEntity(Id<EntityType>::template from<H>(handle));
+    }
+
+    template <typename H> std::shared_ptr<EntityType> getEntity(const H *handle) {
+        return getEntity(Id<EntityType>::template from<H>(handle));
+    }
+
+    bool contains(Id<EntityType> id) {
+        std::lock_guard lockGuard{mutex_};
+
+        return entitiesById_.contains(id);
+    }
+
+    template <typename H> bool contains(H *handle) {
+        return contains(Id<EntityType>::template from<H>(handle));
+    }
+
+    template <typename H> bool contains(const H *handle) {
+        return contains(Id<EntityType>::template from<H>(handle));
+    }
+
     std::optional<Id<EntityType>> getId(std::shared_ptr<EntityType> entity) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "::getId(" + entity->toString() + ")");
@@ -123,6 +153,12 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
         }
 
         return {};
+    }
+
+    bool contains(std::shared_ptr<EntityType> entity) {
+        std::lock_guard lockGuard{mutex_};
+
+        return idsByEntities_.contains(entity);
     }
 };
 

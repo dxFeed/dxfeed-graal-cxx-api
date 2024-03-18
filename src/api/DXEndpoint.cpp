@@ -512,41 +512,26 @@ std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() noexcept {
 
 struct BuilderHandle {};
 
-struct BuilderRegistry {
-    static std::unordered_map<BuilderHandle *, std::shared_ptr<DXEndpoint::Builder>> builders;
+namespace BuilderRegistry {
+static std::shared_ptr<DXEndpoint::Builder> get(BuilderHandle *handle) {
+    return ApiContext::getInstance()->getManager<EntityManager<DXEndpoint::Builder>>()->getEntity(handle);
+}
 
-    static std::shared_ptr<DXEndpoint::Builder> get(BuilderHandle *handle) {
-        if (builders.contains(handle)) {
-            return builders[handle];
-        }
+static BuilderHandle *add(std::shared_ptr<DXEndpoint::Builder> builder) noexcept {
+    return dxfcpp::bit_cast<BuilderHandle *>(ApiContext::getInstance()
+                                                 ->getManager<EntityManager<DXEndpoint::Builder>>()
+                                                 ->registerEntity(builder)
+                                                 .getValue());
+}
 
-        return {};
+static bool remove(BuilderHandle *handle) {
+    if (!handle) {
+        return false;
     }
 
-    static BuilderHandle *add(std::shared_ptr<DXEndpoint::Builder> builder) noexcept {
-        auto handle = new (std::nothrow) BuilderHandle{};
-
-        builders[handle] = std::move(builder);
-
-        return handle;
-    }
-
-    static bool remove(BuilderHandle *handle) {
-        if (!handle) {
-            return false;
-        }
-
-        auto result = builders.erase(handle) == 1;
-
-        if (result) {
-            delete handle;
-        }
-
-        return result;
-    }
-};
-
-std::unordered_map<BuilderHandle *, std::shared_ptr<DXEndpoint::Builder>> BuilderRegistry::builders{};
+    return ApiContext::getInstance()->getManager<EntityManager<DXEndpoint::Builder>>()->unregisterEntity(handle);
+}
+}; // namespace BuilderRegistry
 
 struct EndpointWrapperHandle {};
 
@@ -560,23 +545,16 @@ struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
     }
 };
 
-struct EndpointWrapperRegistry {
-    static std::unordered_map<EndpointWrapperHandle *, std::shared_ptr<EndpointWrapper>> endpointWrappers;
-
+namespace EndpointWrapperRegistry {
     static std::shared_ptr<EndpointWrapper> get(EndpointWrapperHandle *handle) {
-        if (endpointWrappers.contains(handle)) {
-            return endpointWrappers[handle];
-        }
-
-        return {};
+        return ApiContext::getInstance()->getManager<EntityManager<EndpointWrapper>>()->getEntity(handle);
     }
 
     static EndpointWrapperHandle *add(std::shared_ptr<EndpointWrapper> endpointWrapper) noexcept {
-        auto handle = new (std::nothrow) EndpointWrapperHandle{};
-
-        endpointWrappers[handle] = std::move(endpointWrapper);
-
-        return handle;
+        return dxfcpp::bit_cast<EndpointWrapperHandle *>(ApiContext::getInstance()
+                                                             ->getManager<EntityManager<EndpointWrapper>>()
+                                                             ->registerEntity(endpointWrapper)
+                                                             .getValue());
     }
 
     static bool remove(EndpointWrapperHandle *handle) {
@@ -584,18 +562,9 @@ struct EndpointWrapperRegistry {
             return false;
         }
 
-        auto result = endpointWrappers.erase(handle) == 1;
-
-        if (result) {
-            delete handle;
-        }
-
-        return result;
+        return ApiContext::getInstance()->getManager<EntityManager<EndpointWrapper>>()->unregisterEntity(handle);
     }
 };
-
-std::unordered_map<EndpointWrapperHandle *, std::shared_ptr<EndpointWrapper>>
-    EndpointWrapperRegistry::endpointWrappers{};
 
 static dxfcpp::DXEndpoint::Role cApiRoleToRole(dxfc_dxendpoint_role_t role) {
     switch (role) {

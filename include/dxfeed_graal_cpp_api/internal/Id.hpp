@@ -41,6 +41,14 @@ template <typename T> struct Id {
         return Id<T>{value};
     }
 
+    template <typename H> static Id<T> from(H *handle) {
+        return Id<T>{dxfcpp::bit_cast<ValueType>(handle)};
+    }
+
+    template <typename H> static Id<T> from(const H *handle) {
+        return Id<T>{dxfcpp::bit_cast<ValueType>(handle)};
+    }
+
     template <typename U> bool operator==(const Id<U> &id) const {
         return getValue() == id.getValue();
     }
@@ -50,7 +58,7 @@ template <typename T> struct Id {
     }
 };
 
-template<typename T> const Id<T> Id<T>::UNKNOWN{static_cast<Id<T>::ValueType>(-1)};
+template <typename T> const Id<T> Id<T>::UNKNOWN{static_cast<Id<T>::ValueType>(-1)};
 
 DXFCPP_END_NAMESPACE
 

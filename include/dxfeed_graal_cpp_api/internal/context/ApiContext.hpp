@@ -43,13 +43,19 @@ class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
 
   public:
     static std::shared_ptr<ApiContext> getInstance() noexcept {
-        static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new (std::nothrow) ApiContext{});
+        static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new ApiContext{});
 
         return instance;
     }
 
     template <typename Manager> std::shared_ptr<Manager> getManager() const noexcept {
-        return AddManagerMixin<Manager>::getManager();
+        if constexpr (std::is_base_of_v<AddManagerMixin<Manager>, ApiContext>) {
+            return AddManagerMixin<Manager>::getManager();
+        } else {
+            static std::shared_ptr<Manager> instance = std::shared_ptr<Manager>(new Manager{});
+
+            return instance;
+        }
     }
 };
 
