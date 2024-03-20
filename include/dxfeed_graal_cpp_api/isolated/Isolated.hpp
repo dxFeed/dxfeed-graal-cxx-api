@@ -21,13 +21,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
-struct String {
-    static bool release(const char *string) noexcept;
-};
-
-struct StringList {
-    static bool release(/* dxfg_string_list* */ void *stringList) noexcept;
-};
 
 struct TimeFormat {
     static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getDefault() noexcept;

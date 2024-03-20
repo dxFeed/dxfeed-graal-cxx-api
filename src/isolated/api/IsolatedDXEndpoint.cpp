@@ -3,11 +3,8 @@
 
 #include <dxfg_api.h>
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-
-#include <fmt/format.h>
+#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 

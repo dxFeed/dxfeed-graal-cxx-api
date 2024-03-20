@@ -162,27 +162,6 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
         defaultValue, resultCheckerConverter, graalFunction, params...);
 }
 
-bool String::release(const char *string) noexcept {
-    if (!string) {
-        // TODO: Improve error handling [EN-8232]
-
-        return true;
-    }
-
-    return runGraalFunction(equalsToZero, dxfg_String_release, false, string);
-}
-
-bool StringList::release(/* dxfg_string_list* */ void *stringList) noexcept {
-    if (!stringList) {
-        // TODO: Improve error handling [EN-8232]
-
-        return true;
-    }
-
-    return runGraalFunction(equalsToZero, dxfg_CList_String_release, false,
-                            static_cast<dxfg_string_list *>(stringList));
-}
-
 /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> TimeFormat::getDefault() noexcept {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("TimeFormat::getDefault()");
@@ -239,7 +218,7 @@ std::string TimeFormat::format(/* dxfg_time_format_t* */ const JavaObjectHandle<
                                         static_cast<dxfg_time_format_t *>(timeFormat.get()), value);
     auto result = dxfcpp::toString(resolvedURL);
 
-    String::release(resolvedURL);
+    isolated::internal::IsolatedString::release(resolvedURL);
 
     return result;
 }
@@ -259,7 +238,7 @@ Tools::parseSymbols(const std::string &symbolList) noexcept {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
     }
 
-    StringList::release(graalStringList);
+    isolated::internal::IsolatedStringList::release(graalStringList);
 
     return result;
 }
@@ -391,7 +370,7 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
 
     auto result = dxfcpp::toString(resolvedURL);
 
-    String::release(resolvedURL);
+    isolated::internal::IsolatedString::release(resolvedURL);
 
     return result;
 }
@@ -515,7 +494,7 @@ std::string InstrumentProfileConnection::getAddress(
 
     auto result = dxfcpp::toString(address);
 
-    String::release(address);
+    isolated::internal::IsolatedString::release(address);
 
     return result;
 }
@@ -1261,7 +1240,7 @@ std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
 
     auto result = dxfcpp::toString(string);
 
-    String::release(string);
+    isolated::internal::IsolatedString::release(string);
 
     return result;
 }
@@ -1465,7 +1444,7 @@ std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
 
     auto result = dxfcpp::toString(string);
 
-    String::release(string);
+    isolated::internal::IsolatedString::release(string);
 
     return result;
 }
@@ -1539,7 +1518,7 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
         result.push_back(dxfcpp::toString(graalStringList->elements[i]));
     }
 
-    StringList::release(graalStringList);
+    isolated::internal::IsolatedStringList::release(graalStringList);
 
     return result;
 }
@@ -1665,7 +1644,7 @@ std::string Schedule::getName(/* dxfg_schedule_t* */ void *schedule) noexcept {
 
     auto result = dxfcpp::toString(string);
 
-    String::release(string);
+    isolated::internal::IsolatedString::release(string);
 
     return result;
 }
@@ -1684,7 +1663,7 @@ std::string Schedule::getTimeZoneDisplayName(/* dxfg_schedule_t* */ void *schedu
 
     auto result = dxfcpp::toString(string);
 
-    String::release(string);
+    isolated::internal::IsolatedString::release(string);
 
     return result;
 }
@@ -1703,7 +1682,7 @@ std::string Schedule::getTimeZoneId(/* dxfg_schedule_t* */ void *schedule) noexc
 
     auto result = dxfcpp::toString(string);
 
-    String::release(string);
+    isolated::internal::IsolatedString::release(string);
 
     return result;
 }

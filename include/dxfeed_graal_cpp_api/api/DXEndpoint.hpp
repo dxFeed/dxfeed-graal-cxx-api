@@ -852,9 +852,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Some methods that are not marked `noexcept` may throw exceptions:
      *
-     * @throws std::invalid_argument
-     * @throws JavaException
-     * @throws GraalException
+     * @throws std::invalid_argument if handle is invalid.
+     * @throws JavaException if something happened with the dxFeed API backend
+     * @throws GraalException if something happened with the GraalVM
      */
     class DXFCPP_EXPORT Builder : public RequireMakeShared<Builder> {
         friend DXEndpoint;

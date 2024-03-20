@@ -14,9 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-namespace isolated::api {
-
-namespace IsolatedDXEndpoint {
+namespace isolated::api::IsolatedDXEndpoint {
 
 // dxfg_endpoint_t*                dxfg_DXEndpoint_getInstance(graal_isolatethread_t *thread);
 // dxfg_endpoint_t*                dxfg_DXEndpoint_getInstance2(graal_isolatethread_t *thread, dxfg_endpoint_role_t
@@ -301,11 +299,10 @@ namespace StateChangeListener {
  */
 /* dxfg_endpoint_state_change_listener_t* */ JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
 create(/* dxfg_endpoint_state_change_listener_func */ void *userFunc, void *userData);
+
 } // namespace StateChangeListener
 
-} // namespace IsolatedDXEndpoint
-
-} // namespace isolated::api
+} // namespace isolated::api::IsolatedDXEndpoint
 
 DXFCPP_END_NAMESPACE
 
