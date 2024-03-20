@@ -146,10 +146,6 @@ constexpr auto equalsToZero = [](auto result) {
     return result == 0;
 };
 
-constexpr auto toVoidPtr = [](auto result) {
-    return static_cast<void *>(result);
-};
-
 constexpr auto doNothing = [](auto result) {
     return result;
 };
