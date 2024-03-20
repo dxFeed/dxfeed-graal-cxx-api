@@ -187,6 +187,7 @@ set(dxFeedGraalCxxApi_Exceptions_Sources
 set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXEndpoint.cpp
         src/isolated/internal/IsolatedString.cpp
+        src/isolated/internal/IsolatedTimeFormat.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources

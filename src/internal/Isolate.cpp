@@ -162,67 +162,6 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
         defaultValue, resultCheckerConverter, graalFunction, params...);
 }
 
-/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> TimeFormat::getDefault() noexcept {
-    if constexpr (Debugger::isDebug) {
-        Debugger::debug("TimeFormat::getDefault()");
-    }
-
-    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(toVoidPtr, dxfg_TimeFormat_DEFAULT, nullptr));
-}
-
-/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> TimeFormat::getGmt() noexcept {
-    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(toVoidPtr, dxfg_TimeFormat_GMT, nullptr));
-}
-
-/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
-TimeFormat::withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat) noexcept {
-    if (!timeFormat) {
-        // TODO: Improve error handling [EN-8232]
-        return JavaObjectHandle<dxfcpp::TimeFormat>{nullptr};
-    }
-
-    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(toVoidPtr, dxfg_TimeFormat_withTimeZone, nullptr,
-                                                                 static_cast<dxfg_time_format_t *>(timeFormat.get())));
-}
-
-/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
-TimeFormat::withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat) noexcept {
-    if (!timeFormat) {
-        // TODO: Improve error handling [EN-8232]
-        return JavaObjectHandle<dxfcpp::TimeFormat>{nullptr};
-    }
-
-    return JavaObjectHandle<dxfcpp::TimeFormat>(runGraalFunction(toVoidPtr, dxfg_TimeFormat_withMillis, nullptr,
-                                                                 static_cast<dxfg_time_format_t *>(timeFormat.get())));
-}
-
-std::int64_t TimeFormat::parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
-                               const std::string &value) noexcept {
-    if (!timeFormat) {
-        // TODO: Improve error handling [EN-8232]
-        return 0;
-    }
-
-    return runGraalFunction(doNothing, dxfg_TimeFormat_parse, 0, static_cast<dxfg_time_format_t *>(timeFormat.get()),
-                            value.c_str());
-}
-
-std::string TimeFormat::format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
-                               std::int64_t value) noexcept {
-    if (!timeFormat) {
-        // TODO: Improve error handling [EN-8232]
-        return dxfcpp::String::EMPTY;
-    }
-
-    auto resolvedURL = runGraalFunction(doNothing, dxfg_TimeFormat_format, nullptr,
-                                        static_cast<dxfg_time_format_t *>(timeFormat.get()), value);
-    auto result = dxfcpp::toString(resolvedURL);
-
-    isolated::internal::IsolatedString::release(resolvedURL);
-
-    return result;
-}
-
 std::unordered_set<std::string> /* dxfg_string_list* */
 Tools::parseSymbols(const std::string &symbolList) noexcept {
     std::unordered_set<std::string> result{};

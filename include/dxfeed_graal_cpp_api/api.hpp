@@ -54,6 +54,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
 #include "isolated/api/IsolatedDXEndpoint.hpp"
 #include "isolated/internal/IsolatedString.hpp"
+#include "isolated/internal/IsolatedTimeFormat.hpp"
 
 #include "ondemand/OnDemandService.hpp"
 

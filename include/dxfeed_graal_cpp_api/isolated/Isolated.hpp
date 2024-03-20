@@ -22,19 +22,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
 
-struct TimeFormat {
-    static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getDefault() noexcept;
-    static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getGmt() noexcept;
-    static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
-    withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat) noexcept;
-    static /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
-    withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat) noexcept;
-    static std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
-                              const std::string &value) noexcept;
-    static std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
-                              std::int64_t value) noexcept;
-};
-
 struct Tools {
     static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(const std::string &symbolList) noexcept;
 

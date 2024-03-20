@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -31,8 +32,7 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
 
     static void throwException();
 
-    template <typename T>
-    static constexpr T* throwIfNullptr(T* v) {
+    template <typename T> static constexpr T *throwIfNullptr(T *v) {
         if (v == nullptr) {
             throwIfJavaThreadExceptionExists();
         }
@@ -40,8 +40,7 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
         return v;
     }
 
-    template <typename T>
-    static constexpr const T* throwIfNullptr(const T* v) {
+    template <typename T> static constexpr const T *throwIfNullptr(const T *v) {
         if (v == nullptr) {
             throwIfJavaThreadExceptionExists();
         }
@@ -49,9 +48,28 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
         return v;
     }
 
-    template <typename T>
-    static constexpr T throwIfLessThanZero(T v) {
+    template <typename T> static constexpr T throwIfLessThanZero(T v) {
         if (v < T(0)) {
+            throwIfJavaThreadExceptionExists();
+        }
+
+        return v;
+    }
+
+    // Legacy
+    template <typename T> static constexpr T *throwIfMinusOne(T *v) {
+        if (dxfcpp::bit_cast<std::int64_t>(v) == -1LL ||
+            dxfcpp::bit_cast<std::int64_t>(v) == 0x00000000FFFFFFFFLL) {
+            throwIfJavaThreadExceptionExists();
+        }
+
+        return v;
+    }
+
+    // Legacy
+    template <typename T> static constexpr const T *throwIfMinusOne(const T *v) {
+        if (dxfcpp::bit_cast<std::int64_t>(v) == -1LL ||
+            dxfcpp::bit_cast<std::int64_t>(v) == 0x00000000FFFFFFFFLL) {
             throwIfJavaThreadExceptionExists();
         }
 
@@ -61,10 +79,9 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
     /**
      * @return dxFeed Graal CXX API stack trace + Java (GraalVM) exception's stack trace.
      */
-    const std::string& getStackTrace() const&;
+    const std::string &getStackTrace() const &;
 
   private:
-
     std::string stackTrace_;
 };
 

@@ -725,7 +725,7 @@ struct StringLikeWrapper {
         }
     }
 
-    operator std::string_view() const {
+    operator std::string_view() const& {
         if (auto sv = std::get_if<std::string_view>(&data); sv) {
             return *sv;
         } else {

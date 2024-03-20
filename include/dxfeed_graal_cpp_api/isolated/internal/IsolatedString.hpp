@@ -5,9 +5,6 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <string>
-#include <string_view>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
