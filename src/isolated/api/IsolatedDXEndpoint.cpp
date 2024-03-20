@@ -258,7 +258,59 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
                                            value.data());
 }
 
+// dxfg_DXEndpoint_Builder_withProperties
+void /* int32_t */
+withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+               std::string_view filePath) {
+    if (!builder) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_Builder_withProperties`. The `builder` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperties,
+                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()), filePath.data());
+}
+
+// dxfg_DXEndpoint_Builder_supportsProperty
+bool /* int32_t */
+supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+                 std::string_view key) {
+    if (!builder) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_Builder_supportsProperty`. The `builder` handle is invalid");
+    }
+
+    return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_supportsProperty,
+                                                  static_cast<dxfg_endpoint_builder_t *>(builder.get()),
+                                                  key.data()) == 1;
+}
+
+// dxfg_DXEndpoint_Builder_build
+void * /* dxfg_endpoint_t* */
+build(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder) {
+    if (!builder) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXEndpoint_Builder_build`. The `builder` handle is invalid");
+    }
+
+    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXEndpoint_Builder_build, static_cast<dxfg_endpoint_builder_t *>(builder.get())));
+}
+
 } // namespace Builder
+
+namespace StateChangeListener {
+JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> create(void *userFunc, void *userData) {
+    if (!userFunc) {
+        throw std::invalid_argument(
+            "Unable to create DXEndpointStateChangeListener. The `userFunc` parameter is nullptr");
+    }
+
+    return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_PropertyChangeListener_new, dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc),
+        userData));
+}
+} // namespace StateChangeListener
 
 } // namespace isolated::api::IsolatedDXEndpoint
 

@@ -48,19 +48,6 @@ struct Tools {
     static void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string>& args);
 };
 
-namespace api {
-
-struct DXEndpointStateChangeListener {
-    // Throws:
-    //   std::invalid_argument if userFunc is nullptr.
-    //   JavaException if something happened with the dxFeed API backend
-    //   GraalException if something happened with the GraalVM
-    static /* dxfg_endpoint_state_change_listener_t* */ JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
-    create(/* dxfg_endpoint_state_change_listener_func */ void *userFunc, void *userData);
-};
-
-} // namespace api
-
 namespace ipf {
 struct InstrumentProfileReader {
     static /* dxfg_instrument_profile_reader_t* */ void *create() noexcept;

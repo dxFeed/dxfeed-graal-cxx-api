@@ -249,13 +249,59 @@ void /* int32_t */
 withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
              std::string_view key, std::string_view value);
 
-// int32_t                     dxfg_DXEndpoint_Builder_withProperties(graal_isolatethread_t *thread,
-// dxfg_endpoint_builder_t *builder, const char *file_path); int32_t
-// dxfg_DXEndpoint_Builder_supportsProperty(graal_isolatethread_t *thread, dxfg_endpoint_builder_t *builder, const char
-// *key); dxfg_endpoint_t*            dxfg_DXEndpoint_Builder_build(graal_isolatethread_t *thread,
-// dxfg_endpoint_builder_t *builder);
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withProperties` in isolation.
+ * @param builder The DXEndpoint::Builder's handle.
+ * @param filePath The file with properties.
+ * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */
+withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+               std::string_view filePath);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_supportsProperty` in isolation.
+ * @param builder The DXEndpoint::Builder's handle.
+ * @param key The endpoint's property key to check.
+ * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+bool /* int32_t */
+supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+                 std::string_view key);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_build` in isolation.
+ * @param builder The DXEndpoint::Builder's handle.
+ * @return The DXEndpoint's handle.
+ *
+ * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void * /* dxfg_endpoint_t* */
+build(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder);
 
 } // namespace Builder
+
+namespace StateChangeListener {
+
+/**
+ * Calls the Graal SDK function `dxfg_PropertyChangeListener_new` in isolation.
+ * @param userFunc A user function that is used as a callback for the listener.
+ * @param userData User data, which is placed each time as a callback parameter when called from listener.
+ * @return The DXEndpointStateChangeListener's handle.
+ *
+ * @throws std::invalid_argument if userFunc is nullptr.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+/* dxfg_endpoint_state_change_listener_t* */ JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
+create(/* dxfg_endpoint_state_change_listener_func */ void *userFunc, void *userData);
+} // namespace StateChangeListener
 
 } // namespace IsolatedDXEndpoint
 

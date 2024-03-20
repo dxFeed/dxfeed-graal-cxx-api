@@ -307,22 +307,6 @@ void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std:
         false, l.list);
 }
 
-namespace api {
-
-JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> DXEndpointStateChangeListener::create(void *userFunc,
-                                                                                              void *userData) {
-    if (!userFunc) {
-        throw std::invalid_argument(
-            "Unable to create DXEndpointStateChangeListener. The `userFunc` parameter is nullptr");
-    }
-
-    return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_PropertyChangeListener_new, dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc),
-        userData));
-}
-
-} // namespace api
-
 namespace ipf {
 
 /* dxfg_instrument_profile_reader_t* */ void *InstrumentProfileReader::create() noexcept {
