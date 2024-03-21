@@ -122,7 +122,9 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
             return PUB_ANALYTIC_ORDER;
         }
 
-        if (eventType == EventTypeEnum::OT)
+        if (eventType == EventTypeEnum::OTC_MARKETS_ORDER) {
+            return PUB_OTC_MARKETS_ORDER;
+        }
 
         if (eventType == EventTypeEnum::SPREAD_ORDER) {
             return PUB_SPREAD_ORDER;
@@ -183,7 +185,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     /**
      * Default source for publishing custom order books.
-     * Order, AnalyticOrder and SpreadOrder events are @ref ::isPublishable() "publishable"
+     * Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events are @ref ::isPublishable() "publishable"
      * on this source and the corresponding subscription can be observed via DXPublisher.
      */
     static const OrderSource DEFAULT;
@@ -452,6 +454,39 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * observed via DXPublisher.
      */
     static const OrderSource memx;
+
+    /**
+     * Blue Ocean Technologies Alternative Trading System.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource OCEA;
+
+    /**
+     * Pink Sheets. Record for price level book.
+     * Pink sheets are listings for stocks that trade over-the-counter (OTC).
+     *
+     * Order and OtcMarketsOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
+     * subscription can be observed via DXPublisher.
+     */
+    static const OrderSource pink;
+
+    /**
+     * NYSE Arca traded securities
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource ARCA;
+
+    /**
+     * NYSE Arca traded securities. Record for price level book.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource arca;
 
     /**
      * Determines whether specified source identifier refers to special order source.
