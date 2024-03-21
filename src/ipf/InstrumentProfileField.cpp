@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const InstrumentProfileField InstrumentProfileField::TYPE{InstrumentProfileFieldEnum::TYPE, "TYPE"};
 const InstrumentProfileField InstrumentProfileField::SYMBOL{InstrumentProfileFieldEnum::SYMBOL, "SYMBOL"};
@@ -103,4 +103,16 @@ const std::unordered_map<std::string, std::reference_wrapper<const InstrumentPro
     {InstrumentProfileField::TRADING_HOURS.getName(), std::cref(InstrumentProfileField::TRADING_HOURS)},
 };
 
-} // namespace dxfcpp
+InstrumentProfileFieldEnum InstrumentProfileField::getFieldEnum() const {
+    return fieldEnum_;
+}
+
+InstrumentProfileFieldTypeEnum InstrumentProfileField::getTypeEnum() const {
+    return typeEnum_;
+}
+
+bool InstrumentProfileField::isNumericField() const {
+    return numericField_;
+}
+
+DXFCPP_END_NAMESPACE

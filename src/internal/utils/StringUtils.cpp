@@ -18,7 +18,7 @@
 
 #include <range/v3/all.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::string toString(bool b) noexcept {
     return b ? "true" : "false";
@@ -198,12 +198,12 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
 //    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
 }
 
-char *createCString(const std::string &s) noexcept {
+char *createCString(const std::string &s) {
     if (s == dxfcpp::String::NUL) {
         return nullptr;
     }
 
-    char *cString = new (std::nothrow) char[s.size() + 1];
+    char *cString = new char[s.size() + 1];
 
     if (!cString) {
         return nullptr;
@@ -232,4 +232,4 @@ std::string trimStr(const std::string &s) noexcept {
            ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

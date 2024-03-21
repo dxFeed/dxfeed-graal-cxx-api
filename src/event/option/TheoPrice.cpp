@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &TheoPrice::TYPE = EventTypeEnum::THEO_PRICE;
 
@@ -50,6 +50,7 @@ void TheoPrice::fillGraalData(void *graalNative) const noexcept {
 
     auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);
 
+    graalTheoPrice->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE;
     graalTheoPrice->event_flags = data_.eventFlags;
     graalTheoPrice->index = data_.index;
     graalTheoPrice->price = data_.price;
@@ -91,19 +92,12 @@ std::string TheoPrice::toString() const noexcept {
         dxfcpp::toString(getGamma()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
-void *TheoPrice::toGraal() const noexcept {
+void *TheoPrice::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTheoPrice = new (std::nothrow)
-        dxfg_theo_price_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE}}};
-
-    if (!graalTheoPrice) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalTheoPrice = new dxfg_theo_price_t{};
 
     fillGraalData(static_cast<void *>(graalTheoPrice));
 
@@ -126,4 +120,4 @@ void TheoPrice::freeGraal(void *graalNative) noexcept {
     delete graalTheoPrice;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

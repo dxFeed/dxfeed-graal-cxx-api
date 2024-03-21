@@ -11,7 +11,7 @@
 #include <utf8.h>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const Scope Scope::COMPOSITE{0, "COMPOSITE"};
 const Scope Scope::REGIONAL{1, "REGIONAL"};
@@ -26,4 +26,4 @@ const std::unordered_map<Scope::CodeType, std::reference_wrapper<const Scope>> S
     {Scope::ORDER.getCode(), std::cref(Scope::ORDER)},
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

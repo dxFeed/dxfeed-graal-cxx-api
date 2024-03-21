@@ -5,12 +5,14 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <utility>
 #include <variant>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal
@@ -28,7 +30,7 @@ struct DXFCPP_EXPORT StringSymbol final {
     StringSymbol &operator=(const StringSymbol &stringSymbol) noexcept;
     StringSymbol &operator=(StringSymbol &&) noexcept;
     StringSymbol() noexcept;
-    virtual ~StringSymbol() noexcept;
+    ~StringSymbol() noexcept;
 
     /**
      * Constructs StringSymbol from a char array
@@ -71,7 +73,7 @@ struct DXFCPP_EXPORT StringSymbol final {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const noexcept;
+    void *toGraal() const;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
@@ -80,7 +82,7 @@ struct DXFCPP_EXPORT StringSymbol final {
      */
     static void freeGraal(void *graalNative) noexcept;
 
-    static StringSymbol fromGraal(void *graalNative) noexcept;
+    static StringSymbol fromGraal(void *graalNative);
 
     /**
      * Returns a string representation of the current object.
@@ -130,10 +132,12 @@ inline StringSymbol operator""_s(const char *string, size_t length) noexcept {
 
 } // namespace literals
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::StringSymbol> {
     std::size_t operator()(const dxfcpp::StringSymbol &stringSymbol) const noexcept {
         return std::hash<std::string>{}(stringSymbol.getData());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

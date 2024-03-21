@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -12,10 +14,12 @@
 #include "../Common.hpp"
 #include "EntityManager.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 class InstrumentProfileReader;
 
 using InstrumentProfileReaderManager = EntityManager<InstrumentProfileReader>;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

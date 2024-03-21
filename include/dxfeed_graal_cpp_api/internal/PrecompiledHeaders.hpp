@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include "Conf.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
+
 #include <dxfg_api.h>
 
 #ifdef __cpp_lib_bit_cast
@@ -44,3 +48,5 @@
 #include "Common.hpp"
 #include "Handler.hpp"
 #include "Id.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

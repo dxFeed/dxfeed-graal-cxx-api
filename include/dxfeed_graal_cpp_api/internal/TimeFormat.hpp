@@ -5,23 +5,23 @@
 
 #include "Conf.hpp"
 
-#include <cstddef>
-#include <cstdint>
-#include <locale>
-#include <optional>
-#include <set>
-#include <string>
-#include <thread>
-#include <type_traits>
-#include <unordered_map>
-#include <utility>
-#include <vector>
-#include <concepts>
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-namespace dxfcpp {
+#include "JavaObjectHandle.hpp"
+
+#include <cstdint>
+#include <string>
+
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.
+ *
+ * Some methods that are not marked `noexcept` may throw exceptions:
+ *
+ * @throws std::invalid_argument if handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend
+ * @throws GraalException if something happened with the GraalVM
  */
 struct DXFCPP_EXPORT TimeFormat {
     /**
@@ -41,7 +41,8 @@ struct DXFCPP_EXPORT TimeFormat {
     JavaObjectHandle<TimeFormat> handle_;
 
   public:
-    explicit TimeFormat(void* handle = nullptr) noexcept;
+    explicit TimeFormat(void* handle = nullptr);
+    explicit TimeFormat(JavaObjectHandle<TimeFormat>&& handle);
     virtual ~TimeFormat() noexcept = default;
 
     TimeFormat(const TimeFormat &) = delete;
@@ -110,7 +111,7 @@ struct DXFCPP_EXPORT TimeFormat {
      * @param value String value to parse.
      * @return Date's timestamp parsed from <tt>value</tt> or `0` if <tt>value</tt> has wrong format.
      */
-    std::int64_t parse(const std::string& value) const noexcept;
+    std::int64_t parse(const std::string& value) const;
 
     /**
      * Converts timestamp into string according to the format
@@ -118,7 +119,9 @@ struct DXFCPP_EXPORT TimeFormat {
      * @param timestamp The date and time timestamp.
      * @return string representation of data and time or empty string on error
      */
-    std::string format(std::int64_t timestamp) const noexcept;
+    std::string format(std::int64_t timestamp) const;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

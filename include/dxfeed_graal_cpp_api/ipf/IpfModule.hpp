@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "InstrumentProfileField.hpp"
 #include "InstrumentProfile.hpp"
 #include "InstrumentProfileReader.hpp"
@@ -13,3 +15,5 @@
 #include "live/IterableInstrumentProfile.hpp"
 #include "live/InstrumentProfileCollector.hpp"
 #include "live/InstrumentProfileConnection.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

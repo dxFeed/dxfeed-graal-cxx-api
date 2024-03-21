@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void InstrumentProfile::fillData(void *graalNative) noexcept {
     if (graalNative == nullptr) {
@@ -67,7 +67,7 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
 
                 result.resize(strings->size);
 
-                for (int i = 0; i < strings->size; i++) {
+                for (std::int32_t i = 0; i < strings->size; i++) {
                     result[i] = dxfcpp::toString(strings->elements[i]);
                 }
 
@@ -81,7 +81,7 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
                     return result;
                 }
 
-                for (int i = 0; i < strings->size - 1; i += 2) {
+                for (std::int32_t i = 0; i < strings->size - 1; i += 2) {
                     auto key = dxfcpp::toString(strings->elements[i]);
 
                     if (key.empty()) {
@@ -96,7 +96,7 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
     };
 }
 
-void InstrumentProfile::fillGraalData(void *graalNative) const noexcept {
+void InstrumentProfile::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -138,14 +138,13 @@ void InstrumentProfile::fillGraalData(void *graalNative) const noexcept {
     if (data_.rawCustomFields.empty()) {
         graalInstrumentProfile->custom_fields = nullptr;
     } else {
-        graalInstrumentProfile->custom_fields = new (std::nothrow) dxfg_string_list{};
+        graalInstrumentProfile->custom_fields = new dxfg_string_list{};
         graalInstrumentProfile->custom_fields->size = static_cast<std::int32_t>(data_.rawCustomFields.size());
-        graalInstrumentProfile->custom_fields->elements =
-            new (std::nothrow) const char *[data_.rawCustomFields.size()] {
-                nullptr
-            };
+        graalInstrumentProfile->custom_fields->elements = new const char *[data_.rawCustomFields.size()] {
+            nullptr
+        };
 
-        for (int i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
+        for (std::int32_t i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
             // TODO: process null-strings. <null>?
             if (!data_.rawCustomFields[i].empty()) {
                 graalInstrumentProfile->custom_fields->elements[i] = createCString(data_.rawCustomFields[i]);
@@ -188,7 +187,7 @@ void InstrumentProfile::freeGraalData(void *graalNative) noexcept {
 
     if (graalInstrumentProfile->custom_fields) {
         if (graalInstrumentProfile->custom_fields->elements && graalInstrumentProfile->custom_fields->size > 0) {
-            for (int i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
+            for (std::int32_t i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
                 delete[] graalInstrumentProfile->custom_fields->elements[i];
             }
 
@@ -228,7 +227,7 @@ std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList
 
     std::vector<std::shared_ptr<InstrumentProfile>> result{};
 
-    auto list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto list = static_cast<ListType *>(graalList);
 
     if (list->size <= 0 || list->elements == nullptr) {
         return result;
@@ -236,21 +235,15 @@ std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList
 
     for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
         if (list->elements[elementIndex]) {
-            result.emplace_back(InstrumentProfile::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
+            result.emplace_back(InstrumentProfile::fromGraal(static_cast<void *>(list->elements[elementIndex])));
         }
     }
 
     return result;
 }
 
-void *InstrumentProfile::toGraal() const noexcept {
-    auto *graalInstrumentProfile = new (std::nothrow) dxfg_instrument_profile_t{};
-
-    if (!graalInstrumentProfile) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+void *InstrumentProfile::toGraal() const {
+    auto *graalInstrumentProfile = new dxfg_instrument_profile_t{};
 
     fillGraalData(static_cast<void *>(graalInstrumentProfile));
 
@@ -269,4 +262,4 @@ void InstrumentProfile::freeGraal(void *graalNative) noexcept {
     delete graalInstrumentProfile;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

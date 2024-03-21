@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventClassList::Impl : public RawListWrapper<dxfg_event_clazz_list_t, [](dxfg_event_clazz_list_t &list,
                                                                                 std::size_t index, std::uint32_t id) {
@@ -16,13 +16,10 @@ struct EventClassList::Impl : public RawListWrapper<dxfg_event_clazz_list_t, [](
 EventClassList::EventClassList() noexcept : impl_(std::make_unique<EventClassList::Impl>()) {
 }
 
-std::unique_ptr<EventClassList> EventClassList::create(std::size_t size) noexcept {
-    auto result = std::unique_ptr<EventClassList>(new (std::nothrow) EventClassList{});
+std::unique_ptr<EventClassList> EventClassList::create(std::size_t size) {
+    auto result = std::unique_ptr<EventClassList>(new EventClassList{});
 
-    // TODO: error handling [EN-8232]
-    if (result) {
-        result->impl_->init(static_cast<std::uint32_t>(size));
-    }
+    result->impl_->init(static_cast<std::uint32_t>(size));
 
     return result;
 }
@@ -45,4 +42,4 @@ void *EventClassList::getHandle() noexcept {
 
 EventClassList::~EventClassList() noexcept = default;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

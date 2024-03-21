@@ -28,7 +28,7 @@
 #    include <date/date.h>
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 auto getUtcOffset() {
     const std::time_t epochPlus11H = 60 * 60 * 11;
@@ -229,117 +229,4 @@ std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const
            ranges::to<std::unordered_map<std::string, std::string>>();
 }
 
-std::int64_t CmdArgsUtils::parseDateTime(const std::string &string) noexcept {
-    const static auto dateFormats = {
-        "%Y%m%d", "%Y-%m-%d",
-        //        "%Y\\%m\\%d",
-        //        "%Y/%m/%d",
-    };
-
-    const static auto timeFormats = {
-        "%H%M%S",
-        "%H:%M:%S",
-        "",
-    };
-
-    const static auto dateTimeSeparators = {
-        " ", "-", "T",
-        //        ""
-    };
-
-    const static auto timeZoneFormats = {
-        "%z",
-        "Z",
-        "",
-    };
-
-    const static auto formats = [&] {
-        std::vector<std::string> result{};
-
-        result.reserve(dateFormats.size() *
-                       ((timeFormats.size() - 1) * dateTimeSeparators.size() + 1 /* empty time format */) *
-                       timeZoneFormats.size());
-
-        for (auto df : dateFormats) {
-            for (auto tf : timeFormats) {
-                if (tf[0] != '\0') {
-                    for (auto sep : dateTimeSeparators) {
-                        for (auto tz : timeZoneFormats) {
-                            result.emplace_back(std::string{df} + sep + tf + tz);
-                        }
-                    }
-                } else {
-                    for (auto tz : timeZoneFormats) {
-                        result.emplace_back(std::string{df} + tz);
-                    }
-                }
-            }
-        }
-
-        return result;
-    }();
-
-#if !defined(__cpp_lib_chrono) || (__cpp_lib_chrono < 201907L)
-    using sys_millis = date::sys_time<std::chrono::milliseconds>;
-    using local_millis = date::local_time<std::chrono::milliseconds>;
-#else
-    using sys_millis = std::chrono::sys_time<std::chrono::milliseconds>;
-    using local_millis = std::chrono::local_time<std::chrono::milliseconds>;
-#endif
-
-    auto tryParse = []<typename TimePoint>(const std::string &format, const std::string &str,
-                                           TimePoint tp = {}) -> std::int64_t {
-        std::istringstream in{str};
-        std::string abbrev{};
-        std::chrono::minutes offset{};
-        std::int64_t offsetMillis{};
-
-#if !defined(__cpp_lib_chrono) || (__cpp_lib_chrono < 201907L)
-        date::from_stream(in, format.c_str(), tp, &abbrev, &offset);
-#else
-        std::chrono::from_stream(in, format.c_str(), tp, &abbrev, &offset);
-#endif
-
-        if (in.fail()) {
-            return -1LL;
-        }
-
-        offsetMillis = std::chrono::duration_cast<std::chrono::milliseconds>(offset).count();
-
-        if (format.ends_with('Z')) { // offsetMillis == 0
-            return tp.time_since_epoch().count();
-        } else if (offsetMillis == 0 && !format.ends_with('z')) {
-            return tp.time_since_epoch().count() - getUtcOffset();
-        }
-
-        return tp.time_since_epoch().count() - offsetMillis;
-    };
-
-    auto s = trimStr(string);
-
-    if (s.empty()) {
-        return -1;
-    }
-
-    if (s[0] == '0') {
-        return 0;
-    }
-
-    try {
-        for (const auto &f : formats) {
-            if (auto r = tryParse(f, s, local_millis{}); r != -1) {
-                return r;
-            }
-        }
-    } catch (...) {
-    }
-
-    try {
-        return std::stoll(s);
-    } catch (...) {
-    }
-
-    return -1;
-}
-
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 #include <optional>
 #include <unordered_map>
@@ -14,7 +16,7 @@
 
 #include "../NonCopyable.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 template <typename EntityType_> struct EntityManager : private NonCopyable<EntityManager<EntityType_>> {
     using EntityType = EntityType_;
@@ -27,6 +29,7 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
 
     std::unordered_map<Id<EntityType>, std::shared_ptr<EntityType>> entitiesById_;
     std::unordered_map<std::shared_ptr<EntityType>, Id<EntityType>> idsByEntities_;
+    std::atomic<std::size_t> lastId_{};
     std::mutex mutex_;
 
     EntityManager() : entitiesById_{}, idsByEntities_{}, mutex_{} {
@@ -51,8 +54,13 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
 
         entitiesById_[id] = entity;
         idsByEntities_.emplace(std::make_pair(entity, id));
+        lastId_ = id.getValue();
 
         return id;
+    }
+
+    std::size_t getLastId() {
+        return lastId_;
     }
 
     bool unregisterEntity(std::shared_ptr<EntityType> entity) {
@@ -89,6 +97,14 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
         return false;
     }
 
+    template <typename H> bool unregisterEntity(H *handle) {
+        return unregisterEntity(Id<EntityType>::template from<H>(handle));
+    }
+
+    template <typename H> bool unregisterEntity(const H *handle) {
+        return unregisterEntity(Id<EntityType>::template from<H>(handle));
+    }
+
     std::shared_ptr<EntityType> getEntity(Id<EntityType> id) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "::getEntity(id = " + std::to_string(id.getValue()) + ")");
@@ -101,6 +117,28 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
         }
 
         return {};
+    }
+
+    template <typename H> std::shared_ptr<EntityType> getEntity(H *handle) {
+        return getEntity(Id<EntityType>::template from<H>(handle));
+    }
+
+    template <typename H> std::shared_ptr<EntityType> getEntity(const H *handle) {
+        return getEntity(Id<EntityType>::template from<H>(handle));
+    }
+
+    bool contains(Id<EntityType> id) {
+        std::lock_guard lockGuard{mutex_};
+
+        return entitiesById_.contains(id);
+    }
+
+    template <typename H> bool contains(H *handle) {
+        return contains(Id<EntityType>::template from<H>(handle));
+    }
+
+    template <typename H> bool contains(const H *handle) {
+        return contains(Id<EntityType>::template from<H>(handle));
     }
 
     std::optional<Id<EntityType>> getId(std::shared_ptr<EntityType> entity) {
@@ -116,6 +154,14 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
 
         return {};
     }
+
+    bool contains(std::shared_ptr<EntityType> entity) {
+        std::lock_guard lockGuard{mutex_};
+
+        return idsByEntities_.contains(entity);
+    }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

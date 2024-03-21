@@ -8,12 +8,12 @@
 
 #include <memory>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
 
-void *IndexedEventSource::toGraal() const noexcept {
-    auto *graalSource = new (std::nothrow) dxfg_indexed_event_source_t{INDEXED_EVENT_SOURCE, id_, createCString(name_)};
+void *IndexedEventSource::toGraal() const {
+    auto *graalSource = new dxfg_indexed_event_source_t{INDEXED_EVENT_SOURCE, id_, createCString(name_)};
 
     return static_cast<void *>(graalSource);
 }
@@ -39,4 +39,4 @@ IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) noexcept {
     return {graalSource->id, graalSource->name};
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

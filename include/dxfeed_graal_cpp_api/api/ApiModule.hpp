@@ -5,9 +5,13 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "DXEndpoint.hpp"
 #include "DXFeed.hpp"
 #include "DXFeedSubscription.hpp"
 #include "DXPublisher.hpp"
 #include "FilteredSubscriptionSymbol.hpp"
 #include "osub/OsubModule.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -17,7 +17,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct NonOwningInstrumentProfileIterator {
     dxfg_iterable_ip_t *iterable;
@@ -58,7 +58,7 @@ struct NonOwningInstrumentProfileIterator {
 };
 
 struct InstrumentProfileCollector::Impl {
-    static void onInstrumentProfilesUpdate(graal_isolatethread_t *thread, dxfg_iterable_ip_t *profiles,
+    static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
                                            void *userData) noexcept {
         auto [collectorId, listenerId] = dxfcpp::unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
@@ -132,14 +132,8 @@ InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
     }
 }
 
-InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() noexcept {
-    auto collector = std::shared_ptr<InstrumentProfileCollector>(new (std::nothrow) InstrumentProfileCollector());
-
-    if (!collector) {
-        // TODO: dummy collector & error handling [EN-8232];
-
-        return collector;
-    }
+InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() {
+    auto collector = std::shared_ptr<InstrumentProfileCollector>(new InstrumentProfileCollector());
 
     collector->id_ =
         ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->registerEntity(collector);
@@ -193,4 +187,4 @@ std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() co
     return IterableInstrumentProfile::create(iterable);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

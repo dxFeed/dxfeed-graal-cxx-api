@@ -5,7 +5,9 @@
 
 #include "../internal/Conf.hpp"
 
-namespace dxfcpp {
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
@@ -34,7 +36,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param handle The graal Schedule's handle
      * @return The smart pointer for the Schedule object.
      */
-    static Schedule::Ptr create(void *handle) noexcept;
+    static Schedule::Ptr create(void *handle);
 
   public:
     /**
@@ -202,4 +204,6 @@ struct DXFCPP_EXPORT Schedule {
     std::string getTimeZoneId() const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

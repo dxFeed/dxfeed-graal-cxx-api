@@ -5,12 +5,14 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "utils/StringUtils.hpp"
 
 #include <memory>
 #include <string>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 template <typename T> struct JavaObjectHandle {
 #if DXFCPP_DEBUG == 1
@@ -20,6 +22,7 @@ template <typename T> struct JavaObjectHandle {
 #endif
 
     using Type = T;
+
     static DXFCPP_EXPORT void deleter(void *handle) noexcept;
     explicit JavaObjectHandle(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
         if constexpr (Debugger::isDebug) {
@@ -52,4 +55,6 @@ template <typename T> struct JavaObjectHandle {
     std::unique_ptr<void, decltype(&deleter)> impl_;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

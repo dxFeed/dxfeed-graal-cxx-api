@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &OptionSale::TYPE = EventTypeEnum::OPTION_SALE;
 
@@ -57,6 +57,7 @@ void OptionSale::fillGraalData(void *graalNative) const noexcept {
 
     auto graalOptionSale = static_cast<dxfg_option_sale_t *>(graalNative);
 
+    graalOptionSale->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE;
     graalOptionSale->event_flags = data_.eventFlags;
     graalOptionSale->index = data_.index;
     graalOptionSale->time_sequence = data_.timeSequence;
@@ -126,19 +127,12 @@ std::string OptionSale::toString() const noexcept {
         dxfcpp::toString(getDelta()), getOptionSymbol());
 }
 
-void *OptionSale::toGraal() const noexcept {
+void *OptionSale::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOptionSale = new (std::nothrow)
-        dxfg_option_sale_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE}}};
-
-    if (!graalOptionSale) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalOptionSale = new dxfg_option_sale_t{};
 
     fillGraalData(static_cast<void *>(graalOptionSale));
 
@@ -161,4 +155,4 @@ void OptionSale::freeGraal(void *graalNative) noexcept {
     delete graalOptionSale;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

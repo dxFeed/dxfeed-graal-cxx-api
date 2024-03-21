@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -15,7 +17,7 @@
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Identifies source of Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events.
@@ -87,7 +89,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     }
 
     static bool checkChar(char c) noexcept {
-        if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9') {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
             return true;
         }
 
@@ -96,7 +98,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         return false;
     }
 
-    static std::string decodeName(int id) noexcept {
+    static std::string decodeName(std::int32_t id) noexcept {
         if (id == 0) {
             // TODO: error handling: [EN-8232] throw IllegalArgumentException("Source name must contain from 1 to 4 characters");
 
@@ -149,7 +151,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const noexcept override;
+    void *toGraal() const override;
 
   public:
     /**
@@ -519,4 +521,6 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

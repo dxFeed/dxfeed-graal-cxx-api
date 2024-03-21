@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/Common.hpp"
 
 #include <cstdint>
@@ -15,7 +17,7 @@
 #include <utility>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Represents basic profile information about market instrument.
@@ -62,7 +64,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
     Data data_{};
 
     void fillData(void *graalNative) noexcept;
-    void fillGraalData(void *graalNative) const noexcept;
+    void fillGraalData(void *graalNative) const;
     static void freeGraalData(void *graalNative) noexcept;
 
     /**
@@ -100,7 +102,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const noexcept;
+    void *toGraal() const;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
@@ -1887,104 +1889,8 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
 
         return shared_from_this()->sharedAs<InstrumentProfile>();
     }
-
-//    /**
-//     * Returns field value with a specified name.
-//     * @param name name of field.
-//     * @return field value.
-//     */
-//  public String getField(String name) {
-//        InstrumentProfileField ipf = InstrumentProfileField.find(name);
-//        if (ipf != null)
-//            return ipf.getField(this);
-//        String value = getCustomField(name);
-//        return value == null ? "" : value;
-//    }
-//
-//    /**
-//     * Changes field value with a specified name.
-//     * @param name name of field.
-//     * @param value field value.
-//     */
-//  public void setField(String name, String value) {
-//        InstrumentProfileField ipf = InstrumentProfileField.find(name);
-//        if (ipf != null)
-//            ipf.setField(this, value);
-//        else
-//            setCustomField(name, value == null || value.isEmpty() ? "" : value);
-//    }
-//
-//    /**
-//     * Returns numeric field value with a specified name.
-//     * @param name name of field.
-//     * @return field value.
-//     */
-//  public double getNumericField(String name) {
-//        InstrumentProfileField ipf = InstrumentProfileField.find(name);
-//        if (ipf != null)
-//            return ipf.getNumericField(this);
-//        String value = getCustomField(name);
-//        return value == null || value.isEmpty() ? 0 :
-//               value.length() == 10 && value.charAt(4) == '-' && value.charAt(7) == '-' ? InstrumentProfileField.parseDate(value) :
-//                                                                                        InstrumentProfileField.parseNumber(value);
-//    }
-//
-//    /**
-//     * Changes numeric field value with a specified name.
-//     * @param name name of field.
-//     * @param value field value.
-//     */
-//  public void setNumericField(String name, double value) {
-//        InstrumentProfileField ipf = InstrumentProfileField.find(name);
-//        if (ipf != null)
-//            ipf.setNumericField(this, value);
-//        else
-//            setCustomField(name, InstrumentProfileField.formatNumber(value));
-//    }
-//
-//    /**
-//     * Returns day id value for a date field with a specified name.
-//     * @param name name of field.
-//     * @return day id value.
-//     */
-//  public int getDateField(String name) {
-//        InstrumentProfileField ipf = InstrumentProfileField.find(name);
-//        if (ipf != null)
-//            return (int) ipf.getNumericField(this);
-//        String value = getCustomField(name);
-//        return value == null || value.isEmpty() ? 0 : InstrumentProfileField.parseDate(value);
-//    }
-//
-//    /**
-//     * Changes day id value for a date field with a specified name.
-//     * @param name name of field.
-//     * @param value day id value.
-//     */
-//  public void setDateField(String name, int value) {
-//        InstrumentProfileField ipf = InstrumentProfileField.find(name);
-//        if (ipf != null)
-//            ipf.setNumericField(this, value);
-//        else
-//            setCustomField(name, InstrumentProfileField.formatDate(value));
-//    }
-//
-//    /**
-//     * Adds names of non-empty custom fields to specified collection.
-//     * @return <tt>true</tt> if {@code targetFieldNames} changed as a result of the call
-//     */
-//  public boolean addNonEmptyCustomFieldNames(Collection<? super String> targetFieldNames) {
-//        boolean updated = false;
-//        String[] customFields = this.customFields; // Atomic read.
-//        if (customFields != null)
-//            for (int i = customFields.length & ~1; (i -= 2) >= 0;) {
-//                String name = customFields[i]; // Atomic read.
-//                String value = customFields[i + 1]; // Atomic read.
-//                if (name != null && value != null && value.length() > 0)
-//                    if (targetFieldNames.add(name))
-//                        updated = true;
-//            }
-//        return updated;
-//    }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

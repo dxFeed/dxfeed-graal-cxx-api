@@ -6,7 +6,9 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+#include <fmt/format.h>
+
+DXFCPP_BEGIN_NAMESPACE
 
 std::ptrdiff_t SymbolWrapper::SymbolListUtils::calculateGraalListSize(std::ptrdiff_t initSize) noexcept {
     using ListType = dxfg_symbol_list;
@@ -21,32 +23,18 @@ std::ptrdiff_t SymbolWrapper::SymbolListUtils::calculateGraalListSize(std::ptrdi
     return initSize;
 }
 
-void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) noexcept {
+void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) {
     using ListType = dxfg_symbol_list;
     using SizeType = decltype(ListType::size);
     using ElementType = dxfg_symbol_t;
 
-    auto *list = new (std::nothrow) ListType{static_cast<SizeType>(size), nullptr};
-
-    if (!list) {
-        // TODO: error handling [EN-8232]
-        return nullptr;
-    }
+    auto *list = new ListType{static_cast<SizeType>(size), nullptr};
 
     if (size == 0) {
-        return dxfcpp::bit_cast<void *>(list);
+        return static_cast<void *>(list);
     }
 
-    list->elements = new (std::nothrow) ElementType *[size] {
-        nullptr
-    };
-
-    if (!list->elements) {
-        // TODO: error handling [EN-8232]
-        delete list;
-
-        return nullptr;
-    }
+    list->elements = new ElementType *[size] {nullptr};
 
     return list;
 }
@@ -62,7 +50,7 @@ bool SymbolWrapper::SymbolListUtils::setGraalListElement(void *graalList, std::p
         return false;
     }
 
-    dxfcpp::bit_cast<ListType *>(graalList)->elements[elementIdx] = dxfcpp::bit_cast<ElementType *>(element);
+    static_cast<ListType *>(graalList)->elements[elementIdx] = static_cast<ElementType *>(element);
 
     return true;
 }
@@ -70,17 +58,16 @@ bool SymbolWrapper::SymbolListUtils::setGraalListElement(void *graalList, std::p
 bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept {
     using ListType = dxfg_symbol_list;
     using SizeType = decltype(ListType::size);
-    using ElementType = dxfg_symbol_t;
 
     if (graalList == nullptr || count < 0 || count >= std::numeric_limits<SizeType>::max()) {
         return false;
     }
 
-    auto *list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto *list = static_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
         // TODO: error handling [EN-8232]
-        SymbolWrapper::freeGraal(dxfcpp::bit_cast<void *>(list->elements[i]));
+        SymbolWrapper::freeGraal(static_cast<void *>(list->elements[i]));
     }
 
     delete[] list->elements;
@@ -101,12 +88,12 @@ void SymbolWrapper::SymbolListUtils::freeGraalList(void *graalList) noexcept {
         return;
     }
 
-    auto list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto list = static_cast<ListType *>(graalList);
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
             if (list->elements[elementIndex]) {
-                SymbolWrapper::freeGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex]));
+                SymbolWrapper::freeGraal(static_cast<void *>(list->elements[elementIndex]));
             }
         }
 
@@ -130,12 +117,12 @@ std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *g
 
     std::vector<SymbolWrapper> result{};
 
-    auto list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto list = static_cast<ListType *>(graalList);
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
             if (list->elements[elementIndex]) {
-                result.emplace_back(SymbolWrapper::fromGraal(dxfcpp::bit_cast<void *>(list->elements[elementIndex])));
+                result.emplace_back(SymbolWrapper::fromGraal(static_cast<void *>(list->elements[elementIndex])));
             }
         }
     }
@@ -184,13 +171,13 @@ void SymbolWrapper::freeGraal(void *graalNative) noexcept {
     }
 }
 
-SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) noexcept {
+SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper::fromGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
     if (graalNative == nullptr) {
-        return {};
+        throw std::invalid_argument("Unable to create SymbolWrapper. The `graalNative` parameter is nullptr");
     }
 
     switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
@@ -208,9 +195,13 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) noexcept {
 
     case TIME_SERIES_SUBSCRIPTION:
         return TimeSeriesSubscriptionSymbol::fromGraal(graalNative);
+
+    default:
+        throw std::runtime_error(fmt::format("Unable to create SymbolWrapper. Unknown symbol type: {}",
+                                             static_cast<int>(static_cast<dxfg_symbol_t *>(graalNative)->type)));
     }
 
     return {};
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

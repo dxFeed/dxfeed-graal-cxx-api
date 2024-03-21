@@ -14,23 +14,31 @@
 int main(int argc, char *argv[]) {
     using namespace dxfcpp;
 
-    // Specified instrument name, for example AAPL, IBM, MSFT, etc.
-    auto symbol = argc > 1 ? argv[1] : "AAPL";
+    try {
+        // Specified instrument name, for example AAPL, IBM, MSFT, etc.
+        auto symbol = argc > 1 ? argv[1] : "AAPL";
 
-    // Creates a subscription attached to a default DXFeed with a Quote event type.
-    // The endpoint address to use is stored in the "dxfeed.properties" file.
-    auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
+        // Creates a subscription attached to a default DXFeed with a Quote event type.
+        // The endpoint address to use is stored in the "dxfeed.properties" file.
+        auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
 
-    // Listener must be attached before symbols are added.
-    subscription->addEventListener([](const auto &events) {
-        // Prints all received events.
-        for (const auto &e : events) {
-            std::cout << e << "\n";
-        }
-    });
+        // Listener must be attached before symbols are added.
+        subscription->addEventListener([](const auto &events) {
+            // Prints all received events.
+            for (const auto &e : events) {
+                std::cout << e << "\n";
+            }
+        });
 
-    // Adds specified symbol.
-    subscription->addSymbols(symbol);
+        // Adds specified symbol.
+        subscription->addSymbols(symbol);
 
-    std::cin.get();
+        std::cin.get();
+    } catch (const JavaException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    } catch (const GraalException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    }
 }

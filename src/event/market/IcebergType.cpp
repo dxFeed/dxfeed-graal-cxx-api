@@ -9,7 +9,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const IcebergType IcebergType::UNDEFINED{0, "UNDEFINED"};
 const IcebergType IcebergType::NATIVE{1, "NATIVE"};
@@ -22,4 +22,4 @@ const std::unordered_map<IcebergType::CodeType, std::reference_wrapper<const Ice
     {IcebergType::SYNTHETIC.getCode(), std::cref(IcebergType::SYNTHETIC)},
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

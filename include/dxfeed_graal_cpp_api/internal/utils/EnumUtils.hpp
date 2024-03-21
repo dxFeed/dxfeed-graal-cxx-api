@@ -5,9 +5,13 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <string>
 
-namespace dxfcpp::enum_utils {
+DXFCPP_BEGIN_NAMESPACE
+
+namespace enum_utils {
 
 /**
  * Returns a separated list of names of EventTypeEnum elements (CANDLE, QUOTE, TIME_AND_SALE etc).
@@ -41,5 +45,8 @@ DXFCPP_EXPORT std::string getEventTypeEnumClassNamesList(std::string separator =
  */
 DXFCPP_EXPORT std::string getMarketEventTypeEnumClassNamesList(std::string separator = std::string(",")) noexcept;
 
-}
+} // namespace enum_utils
 
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

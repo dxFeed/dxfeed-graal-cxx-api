@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
@@ -16,12 +18,15 @@
 #include <iostream>
 #include <mutex>
 #include <sstream>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
+#include <variant>
 
 #include "utils/debug/Debug.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 template <typename T>
 concept Integral = std::is_integral_v<T>;
@@ -31,8 +36,6 @@ concept EnumConcept = std::is_enum_v<T>;
 
 template <class From, class To>
 concept ConvertibleTo = std::is_convertible_v<From, To> && requires { static_cast<To>(std::declval<From>()); };
-
-#include <type_traits>
 
 namespace detail {
 template <typename T>
@@ -386,11 +389,13 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
         return value;
     }
 
-    if (shift >= sizeof(V) * 8) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return value << static_cast<std::make_unsigned_t<S>>(shift);
+    return value << unsignedShift;
 }
 
 /**
@@ -437,15 +442,13 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
         return value;
     }
 
-    if (shift >= sizeof(V) * CHAR_BIT) {
-        if (value < 0) {
-            return -1;
-        } else {
-            return 0;
-        }
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
+        return value < 0 ? -1 : 0;
     }
 
-    return value >> static_cast<std::make_unsigned_t<S>>(shift);
+    return value >> unsignedShift;
 }
 
 /**
@@ -508,11 +511,13 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return value << static_cast<std::make_unsigned_t<S>>(shift);
+    return value << unsignedShift;
 }
 
 /**
@@ -558,11 +563,13 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return static_cast<V>(static_cast<std::make_unsigned_t<V>>(value) >> static_cast<std::make_unsigned_t<S>>(shift));
+    return static_cast<V>(static_cast<std::make_unsigned_t<V>>(value) >> unsignedShift);
 }
 
 /**
@@ -685,4 +692,48 @@ template <typename T, typename U> T fitToType(const U &size) {
     return static_cast<T>(static_cast<U>(std::numeric_limits<T>::max()) < size ? std::numeric_limits<T>::max() : size);
 }
 
-} // namespace dxfcpp
+/**
+ * A simple wrapper around strings or something similar to strings to reduce the amount of code for methods that take
+ * strings as input.
+ */
+struct StringLikeWrapper {
+    using DataType = std::variant<std::string, std::string_view>;
+
+    DataType data{};
+
+    StringLikeWrapper(std::string_view sv) : data{sv} {
+    }
+
+    StringLikeWrapper(const char *chars) : data{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
+    }
+
+    StringLikeWrapper(const std::string &s) : data{s} {
+    }
+
+    StringLikeWrapper(std::string &&s) : data{std::move(s)} {
+    }
+    
+    template <auto N>
+    StringLikeWrapper(const char (&chars)[N]) : StringLikeWrapper{std::string_view{chars, chars + N}} {
+    }
+
+    operator std::string() const {
+        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+            return {sv->data(), sv->size()};
+        } else {
+            return std::get<std::string>(data);
+        }
+    }
+
+    operator std::string_view() const& {
+        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+            return *sv;
+        } else {
+            return std::get<std::string>(data);
+        }
+    }
+};
+
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

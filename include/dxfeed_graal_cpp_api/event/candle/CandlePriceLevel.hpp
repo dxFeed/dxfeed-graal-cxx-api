@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../internal/utils/StringUtils.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
@@ -13,7 +15,7 @@
 #include <type_traits>
 #include <unordered_map>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Candle price level attribute of CandleSymbol defines how candles shall be aggregated in respect to
@@ -172,10 +174,12 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandlePriceLevel> {
     std::size_t operator()(const dxfcpp::CandlePriceLevel &candlePriceLevel) const noexcept {
         return std::hash<double>{}(candlePriceLevel.getValue());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

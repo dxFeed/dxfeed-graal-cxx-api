@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -20,7 +22,7 @@
 #include "TimeAndSale.hpp"
 #include "TimeAndSaleType.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -93,7 +95,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const noexcept override;
+    void *toGraal() const override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
@@ -281,9 +283,9 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @param sequence the sequence.
      * @see ::getSequence()
      */
-    void setSequence(int sequence) noexcept {
+    void setSequence(std::int32_t sequence) noexcept {
         // TODO: Improve error handling [EN-8232]
-        assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
+        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
         data_.timeSequence = orOp(andOp(data_.timeSequence, ~MAX_SEQUENCE), sequence);
     }
@@ -670,4 +672,6 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

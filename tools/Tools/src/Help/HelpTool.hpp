@@ -20,6 +20,8 @@
 #include <unordered_map>
 #include <utility>
 #include <variant>
+#include <set>
+#include <vector>
 
 #include <fmt/chrono.h>
 #include <fmt/format.h>

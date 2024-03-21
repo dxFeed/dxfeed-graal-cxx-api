@@ -13,7 +13,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) noexcept {
     if constexpr (Debugger::isDebug) {
@@ -37,9 +37,9 @@ void DXFeedSubscription::addSymbolImpl(void *graalSymbol) const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
-            return dxfg_DXFeedSubscription_addSymbol(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                     dxfcpp::bit_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
+            return dxfg_DXFeedSubscription_addSymbol(static_cast<graal_isolatethread_t *>(threadHandle), handle,
+                                                     static_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
         },
         false);
 }
@@ -50,9 +50,9 @@ void DXFeedSubscription::addSymbolsImpl(void *graalSymbolList) const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
-            return dxfg_DXFeedSubscription_addSymbols(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      dxfcpp::bit_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
+            return dxfg_DXFeedSubscription_addSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle,
+                                                      static_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
         },
         false);
 }
@@ -63,9 +63,9 @@ void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
-            return dxfg_DXFeedSubscription_removeSymbol(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                        handle, dxfcpp::bit_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
+            return dxfg_DXFeedSubscription_removeSymbol(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                        handle, static_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
         },
         false);
 }
@@ -76,9 +76,9 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const noexcept
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
-            return dxfg_DXFeedSubscription_removeSymbols(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
-                                                         handle, dxfcpp::bit_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
+            return dxfg_DXFeedSubscription_removeSymbols(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                         handle, static_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
         },
         false);
 }
@@ -89,9 +89,9 @@ void DXFeedSubscription::setSymbolsImpl(void *graalSymbolList) const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
-            return dxfg_DXFeedSubscription_setSymbols(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      dxfcpp::bit_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
+            return dxfg_DXFeedSubscription_setSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle,
+                                                      static_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
         },
         false);
 }
@@ -102,16 +102,16 @@ std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const noexcept {
     }
 
     dxfg_symbol_list *list = runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_getSymbols(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle);
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXFeedSubscription_getSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle);
         },
         nullptr);
 
-    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(dxfcpp::bit_cast<void *>(list));
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
 
     runIsolatedOrElse(
         [list](auto threadHandle) {
-            return dxfg_CList_symbol_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
+            return dxfg_CList_symbol_release(static_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
         },
         false);
 
@@ -124,17 +124,17 @@ std::vector<SymbolWrapper> DXFeedSubscription::getDecoratedSymbolsImpl() const n
     }
 
     dxfg_symbol_list *list = runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_getDecoratedSymbols(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXFeedSubscription_getDecoratedSymbols(static_cast<graal_isolatethread_t *>(threadHandle),
                                                                handle);
         },
         nullptr);
 
-    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(dxfcpp::bit_cast<void *>(list));
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
 
     runIsolatedOrElse(
         [list](auto threadHandle) {
-            return dxfg_CList_symbol_release(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
+            return dxfg_CList_symbol_release(static_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
         },
         false);
 
@@ -147,8 +147,8 @@ void DXFeedSubscription::closeImpl() const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_close(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXFeedSubscription_close(static_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
         },
         false);
 }
@@ -159,8 +159,8 @@ void DXFeedSubscription::clearImpl() const noexcept {
     }
 
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_clear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXFeedSubscription_clear(static_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
         },
         false);
 }
@@ -171,8 +171,8 @@ bool DXFeedSubscription::isClosedImpl() const noexcept {
     }
 
     return runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_isClosed(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle) !=
+        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
+            return dxfg_DXFeedSubscription_isClosed(static_cast<graal_isolatethread_t *>(threadHandle), handle) !=
                    0;
         },
         false);
@@ -186,7 +186,7 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
 
     handle_ = JavaObjectHandle<DXFeedSubscription>(runIsolatedOrElse(
         [eventType](auto threadHandle) {
-            return dxfg_DXFeedSubscription_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+            return dxfg_DXFeedSubscription_new(static_cast<graal_isolatethread_t *>(threadHandle),
                                                static_cast<dxfg_event_clazz_t>(eventType.getId()));
         },
         nullptr));
@@ -195,8 +195,8 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) noexcept
 JavaObjectHandle<DXFeedSubscription>
 DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept {
     return JavaObjectHandle<DXFeedSubscription>(runIsolatedOrElse(
-        [listHandle = dxfcpp::bit_cast<dxfg_event_clazz_list_t *>(list->getHandle())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_new2(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), listHandle);
+        [listHandle = static_cast<dxfg_event_clazz_list_t *>(list->getHandle())](auto threadHandle) {
+            return dxfg_DXFeedSubscription_new2(static_cast<graal_isolatethread_t *>(threadHandle), listHandle);
         },
         nullptr));
 }
@@ -207,7 +207,7 @@ void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexc
         auto sub = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getEntity(id);
 
         if (sub) {
-            auto &&events = EventMapper::fromGraalList(dxfcpp::bit_cast<void *>(graalNativeEvents));
+            auto &&events = EventMapper::fromGraalList(static_cast<void *>(graalNativeEvents));
 
             sub->onEvent_(events);
         }
@@ -215,17 +215,17 @@ void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexc
 
     eventListenerHandle_ = JavaObjectHandle<DXFeedEventListener>(runIsolatedOrElse(
         [idValue = id.getValue(), onEvents](auto threadHandle) {
-            return dxfg_DXFeedEventListener_new(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), onEvents,
+            return dxfg_DXFeedEventListener_new(static_cast<graal_isolatethread_t *>(threadHandle), onEvents,
                                                 dxfcpp::bit_cast<void *>(idValue));
         },
         nullptr));
 
     if (handle_ && eventListenerHandle_) {
         runIsolatedOrElse(
-            [handle = dxfcpp::bit_cast<dxfg_subscription_t *>(handle_.get()),
+            [handle = static_cast<dxfg_subscription_t *>(handle_.get()),
              eventListenerHandle =
-                 dxfcpp::bit_cast<dxfg_feed_event_listener_t *>(eventListenerHandle_.get())](auto threadHandle) {
-                return dxfg_DXFeedSubscription_addEventListener(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+                 static_cast<dxfg_feed_event_listener_t *>(eventListenerHandle_.get())](auto threadHandle) {
+                return dxfg_DXFeedSubscription_addEventListener(static_cast<graal_isolatethread_t *>(threadHandle),
                                                                 handle, eventListenerHandle) == 0;
             },
             false);
@@ -252,4 +252,4 @@ std::string DXFeedSubscription::toString() const noexcept {
     return fmt::format("DXFeedSubscription{{{}}}", handle_.toString());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

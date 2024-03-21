@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 static dxfcpp::InstrumentProfileConnection::State graalStateToState(dxfg_ipf_connection_state_t state) {
     switch (state) {
@@ -62,10 +62,10 @@ InstrumentProfileConnection::InstrumentProfileConnection() noexcept
 
 InstrumentProfileConnection::Ptr
 InstrumentProfileConnection::createConnection(const std::string &address,
-                                              InstrumentProfileCollector::Ptr collector) noexcept {
-    std::shared_ptr<InstrumentProfileConnection> connection(new (std::nothrow) InstrumentProfileConnection{});
+                                              InstrumentProfileCollector::Ptr collector) {
+    std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 
-    if (!connection || !collector->handle_) {
+    if (!collector->handle_) {
         // TODO: dummy connection & error handling [EN-8232];
 
         return connection;
@@ -155,4 +155,4 @@ bool InstrumentProfileConnection::waitUntilCompleted(std::int64_t timeout) const
     return isolated::ipf::InstrumentProfileConnection::waitUntilCompleted(handle_.get(), timeout);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Trade::TYPE = EventTypeEnum::TRADE;
 
@@ -34,6 +34,10 @@ void Trade::fillGraalData(void *graalNative) const noexcept {
     }
 
     TradeBase::fillGraalData(graalNative);
+
+    auto graalTrade = static_cast<dxfg_trade_t *>(graalNative);
+
+    graalTrade->trade_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE;
 }
 
 std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) noexcept {
@@ -61,19 +65,12 @@ std::string Trade::toString() const noexcept {
     return fmt::format("Trade{{{}}}", baseFieldsToString());
 }
 
-void *Trade::toGraal() const noexcept {
+void *Trade::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTrade = new (std::nothrow)
-        dxfg_trade_t{.trade_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE}}}};
-
-    if (!graalTrade) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalTrade = new dxfg_trade_t{};
 
     fillGraalData(static_cast<void *>(graalTrade));
 
@@ -96,4 +93,4 @@ void Trade::freeGraal(void *graalNative) noexcept {
     delete graalTrade;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -5,13 +5,15 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../internal/Common.hpp"
 #include "../../internal/Id.hpp"
 #include "../../internal/JavaObjectHandle.hpp"
 
 #include "../../entity/SharedEntity.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 class InstrumentProfileCollector;
 
@@ -45,4 +47,6 @@ class DXFCPP_EXPORT IterableInstrumentProfile final {
     [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const noexcept;
 };
 
-}
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

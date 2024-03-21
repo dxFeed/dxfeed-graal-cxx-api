@@ -11,10 +11,10 @@
 #include <utf8.h>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) noexcept {
-    auto list = dxfcpp::bit_cast<dxfg_event_type_list *>(graalNativeList);
+    auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
 
     if (list->size <= 0) {
         return {};
@@ -117,7 +117,7 @@ void EventMapper::freeGraalList(void *graalList) noexcept {
         return;
     }
 
-    auto list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto list = static_cast<ListType *>(graalList);
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
@@ -128,41 +128,41 @@ void EventMapper::freeGraalList(void *graalList) noexcept {
                 // TODO: type traits
                 switch (e->clazz) {
                 case DXFG_EVENT_QUOTE:
-                    Quote::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Quote::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_PROFILE:
-                    Profile::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Profile::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_SUMMARY:
-                    Summary::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Summary::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_GREEKS:
-                    Greeks::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Greeks::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_CANDLE:
-                    Candle::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Candle::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_DAILY_CANDLE:
                     break;
                 case DXFG_EVENT_UNDERLYING:
-                    Underlying::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Underlying::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_THEO_PRICE:
-                    TheoPrice::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    TheoPrice::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_TRADE:
-                    Trade::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Trade::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_TRADE_ETH:
-                    TradeETH::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    TradeETH::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_CONFIGURATION:
@@ -170,29 +170,29 @@ void EventMapper::freeGraalList(void *graalList) noexcept {
                 case DXFG_EVENT_MESSAGE:
                     break;
                 case DXFG_EVENT_TIME_AND_SALE:
-                    TimeAndSale::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    TimeAndSale::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_ORDER_BASE:
                     break;
                 case DXFG_EVENT_ORDER:
-                    Order::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Order::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_ANALYTIC_ORDER:
-                    AnalyticOrder::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    AnalyticOrder::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_SPREAD_ORDER:
-                    SpreadOrder::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    SpreadOrder::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_SERIES:
-                    Series::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    Series::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_OPTION_SALE:
-                    OptionSale::freeGraal(dxfcpp::bit_cast<void *>(e));
+                    OptionSale::freeGraal(static_cast<void *>(e));
 
                     break;
                 }
@@ -218,32 +218,20 @@ std::ptrdiff_t EventMapper::calculateGraalListSize(std::ptrdiff_t initSize) noex
     return initSize;
 }
 
-void *EventMapper::newGraalList(std::ptrdiff_t size) noexcept {
+void *EventMapper::newGraalList(std::ptrdiff_t size) {
     using ListType = dxfg_event_type_list;
     using SizeType = decltype(ListType::size);
     using ElementType = dxfg_event_type_t;
 
-    auto *list = new (std::nothrow) ListType{static_cast<SizeType>(size), nullptr};
-
-    if (!list) {
-        // TODO: error handling [EN-8232]
-        return nullptr;
-    }
+    auto *list = new ListType{static_cast<SizeType>(size), nullptr};
 
     if (size == 0) {
-        return dxfcpp::bit_cast<void *>(list);
+        return static_cast<void *>(list);
     }
 
-    list->elements = new (std::nothrow) ElementType *[size] {
+    list->elements = new ElementType *[size] {
         nullptr
     };
-
-    if (!list->elements) {
-        // TODO: error handling [EN-8232]
-        delete list;
-
-        return nullptr;
-    }
 
     return list;
 }
@@ -258,7 +246,7 @@ bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx
         return false;
     }
 
-    dxfcpp::bit_cast<ListType *>(graalList)->elements[elementIdx] = dxfcpp::bit_cast<ElementType *>(element);
+    static_cast<ListType *>(graalList)->elements[elementIdx] = static_cast<ElementType *>(element);
 
     return true;
 }
@@ -266,13 +254,12 @@ bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx
 bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept {
     using ListType = dxfg_event_type_list;
     using SizeType = decltype(ListType::size);
-    using ElementType = dxfg_event_type_t;
 
     if (graalList == nullptr || count < 0 || count >= std::numeric_limits<SizeType>::max()) {
         return false;
     }
 
-    auto *list = dxfcpp::bit_cast<ListType *>(graalList);
+    auto *list = static_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
         // TODO: error handling [EN-8232]
@@ -283,41 +270,41 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
             // TODO: type traits
             switch (e->clazz) {
             case DXFG_EVENT_QUOTE:
-                Quote::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Quote::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_PROFILE:
-                Profile::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Profile::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_SUMMARY:
-                Summary::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Summary::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_GREEKS:
-                Greeks::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Greeks::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_CANDLE:
-                Candle::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Candle::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_DAILY_CANDLE:
                 break;
             case DXFG_EVENT_UNDERLYING:
-                Underlying::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Underlying::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_THEO_PRICE:
-                TheoPrice::freeGraal(dxfcpp::bit_cast<void *>(e));
+                TheoPrice::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_TRADE:
-                Trade::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Trade::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_TRADE_ETH:
-                TradeETH::freeGraal(dxfcpp::bit_cast<void *>(e));
+                TradeETH::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_CONFIGURATION:
@@ -325,29 +312,29 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
             case DXFG_EVENT_MESSAGE:
                 break;
             case DXFG_EVENT_TIME_AND_SALE:
-                TimeAndSale::freeGraal(dxfcpp::bit_cast<void *>(e));
+                TimeAndSale::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_ORDER_BASE:
                 break;
             case DXFG_EVENT_ORDER:
-                Order::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Order::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_ANALYTIC_ORDER:
-                AnalyticOrder::freeGraal(dxfcpp::bit_cast<void *>(e));
+                AnalyticOrder::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_SPREAD_ORDER:
-                SpreadOrder::freeGraal(dxfcpp::bit_cast<void *>(e));
+                SpreadOrder::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_SERIES:
-                Series::freeGraal(dxfcpp::bit_cast<void *>(e));
+                Series::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_OPTION_SALE:
-                OptionSale::freeGraal(dxfcpp::bit_cast<void *>(e));
+                OptionSale::freeGraal(static_cast<void *>(e));
 
                 break;
             }
@@ -360,4 +347,4 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
     return true;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

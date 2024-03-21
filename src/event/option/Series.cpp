@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Series::TYPE = EventTypeEnum::SERIES;
 
@@ -53,6 +53,7 @@ void Series::fillGraalData(void *graalNative) const noexcept {
 
     auto graalSeries = static_cast<dxfg_series_t *>(graalNative);
 
+    graalSeries->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_SERIES;
     graalSeries->event_flags = data_.eventFlags;
     graalSeries->index = data_.index;
     graalSeries->time_sequence = data_.timeSequence;
@@ -98,19 +99,12 @@ std::string Series::toString() const noexcept {
         dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
-void *Series::toGraal() const noexcept {
+void *Series::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSeries = new (std::nothrow)
-        dxfg_series_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SERIES}}};
-
-    if (!graalSeries) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalSeries = new dxfg_series_t{};
 
     fillGraalData(static_cast<void *>(graalSeries));
 
@@ -133,4 +127,4 @@ void Series::freeGraal(void *graalNative) noexcept {
     delete graalSeries;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

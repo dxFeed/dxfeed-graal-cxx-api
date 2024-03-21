@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
@@ -13,7 +15,7 @@
 #include <optional>
 #include <thread>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT String {
     inline static const std::string EMPTY{};
@@ -102,7 +104,7 @@ DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
 
 DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
 
-DXFCPP_EXPORT char *createCString(const std::string &s) noexcept;
+DXFCPP_EXPORT char *createCString(const std::string &s);
 
 DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) noexcept;
 
@@ -195,4 +197,6 @@ DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
 
 DXFCPP_EXPORT std::string trimStr(const std::string &s) noexcept;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

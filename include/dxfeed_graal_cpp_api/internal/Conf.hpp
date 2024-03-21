@@ -8,7 +8,19 @@
 #endif
 
 #ifndef DXFCXX_VERSION
-#define DXFCXX_VERSION "0.0.0"
+#    define DXFCXX_VERSION "0.0.0"
+#endif
+
+#if defined(_MSC_VER)
+#    ifndef DXFCXX_DISABLE_MSC_WARNINGS_PUSH
+#        define DXFCXX_DISABLE_MSC_WARNINGS_PUSH(...) __pragma(warning(push)) __pragma(warning(disable : __VA_ARGS__))
+#        define DXFCXX_DISABLE_MSC_WARNINGS_POP() __pragma(warning(pop))
+#    endif
+#else
+#    ifndef DXFCXX_DISABLE_MSC_WARNINGS_PUSH
+#        define DXFCXX_DISABLE_MSC_WARNINGS_PUSH(warnings)
+#        define DXFCXX_DISABLE_MSC_WARNINGS_POP()
+#    endif
 #endif
 
 #ifdef DXFCPP_EXPORT
@@ -41,4 +53,13 @@
 #    else
 #        define DXFCPP_CXX20_CONSTEXPR_STRING
 #    endif
+#endif
+
+#ifndef DXFCPP_BEGIN_NAMESPACE
+#    define DXFCPP_BEGIN_NAMESPACE                                                                                     \
+        namespace dxfcpp {                                                                                             \
+        inline namespace v1 {
+#    define DXFCPP_END_NAMESPACE                                                                                       \
+        }                                                                                                              \
+        }
 #endif

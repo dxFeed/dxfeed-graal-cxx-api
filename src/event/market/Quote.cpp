@@ -15,7 +15,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Quote::TYPE = EventTypeEnum::QUOTE;
 
@@ -87,6 +87,7 @@ void Quote::fillGraalData(void *graalNative) const noexcept {
 
     auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
 
+    graalQuote->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_QUOTE;
     graalQuote->time_millis_sequence = data_.timeMillisSequence;
     graalQuote->time_nano_part = data_.timeNanoPart;
     graalQuote->bid_time = data_.bidTime;
@@ -133,19 +134,12 @@ std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {
     }
 }
 
-void *Quote::toGraal() const noexcept {
+void *Quote::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalQuote = new (std::nothrow)
-        dxfg_quote_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_QUOTE}}};
-
-    if (!graalQuote) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalQuote = new dxfg_quote_t{};
 
     fillGraalData(static_cast<void *>(graalQuote));
 
@@ -168,4 +162,4 @@ void Quote::freeGraal(void *graalNative) noexcept {
     delete graalQuote;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

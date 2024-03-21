@@ -6,14 +6,14 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
-void *CandleSymbol::toGraal() const noexcept {
+void *CandleSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("CandleSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new (std::nothrow) dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_)};
+    auto *graalSymbol = new dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_)};
 
     return static_cast<void *>(graalSymbol);
 }
@@ -81,4 +81,4 @@ CandleSymbol &CandleSymbol::operator=(CandleSymbol &&candleSymbol) noexcept {
     return *this;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -11,7 +11,7 @@
 #include <utf8.h>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const TimeAndSaleType TimeAndSaleType::NEW{0, "NEW"};
 const TimeAndSaleType TimeAndSaleType::CORRECTION{1, "CORRECTION"};
@@ -25,4 +25,4 @@ const std::unordered_map<TimeAndSaleType::CodeType, std::reference_wrapper<const
         {TimeAndSaleType::CANCEL.getCode(), std::cref(TimeAndSaleType::CANCEL)},
     };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

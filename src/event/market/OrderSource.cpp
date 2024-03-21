@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const OrderSource OrderSource::COMPOSITE_BID(1, "COMPOSITE_BID", 0);
 const OrderSource OrderSource::COMPOSITE_ASK(2, "COMPOSITE_ASK", 0);
@@ -71,10 +71,10 @@ const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference
 
 std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 
-void *OrderSource::toGraal() const noexcept {
-    auto *graalSource = new (std::nothrow) dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
+void *OrderSource::toGraal() const {
+    auto *graalSource = new dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
 
     return static_cast<void *>(graalSource);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

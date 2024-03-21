@@ -12,7 +12,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Order::TYPE = EventTypeEnum::ORDER;
 
@@ -37,6 +37,7 @@ void Order::fillGraalData(void *graalNative) const noexcept {
 
     auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
 
+    graalOrder->order_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_ORDER;
     graalOrder->market_maker = createCString(orderData_.marketMaker);
 }
 
@@ -77,19 +78,12 @@ std::string Order::toString() const noexcept {
     return fmt::format("Order{{{}, marketMaker={}}}", baseFieldsToString(), getMarketMaker());
 }
 
-void *Order::toGraal() const noexcept {
+void *Order::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOrder = new (std::nothrow)
-        dxfg_order_t{.order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_ORDER}}}};
-
-    if (!graalOrder) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalOrder = new dxfg_order_t{};
 
     fillGraalData(static_cast<void *>(graalOrder));
 
@@ -112,4 +106,4 @@ void Order::freeGraal(void *graalNative) noexcept {
     delete graalOrder;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

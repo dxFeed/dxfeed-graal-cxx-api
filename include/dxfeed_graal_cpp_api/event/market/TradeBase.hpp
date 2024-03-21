@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -15,7 +17,7 @@
 #include "../LastingEvent.hpp"
 #include "MarketEvent.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -193,7 +195,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      */
     void setSequence(std::int32_t sequence) noexcept {
         // TODO: Improve error handling [EN-8232]
-        assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
+        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
         tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
     }
@@ -392,4 +394,6 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     std::string baseFieldsToString() const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

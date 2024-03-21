@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
@@ -15,7 +17,7 @@
 #include <mutex>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
 
@@ -111,7 +113,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * @param endpoint the endpoint.
      * @return the on-demand service.
      */
-    static std::shared_ptr<OnDemandService> getInstance(std::shared_ptr<DXEndpoint> endpoint) noexcept;
+    static std::shared_ptr<OnDemandService> getInstance(std::shared_ptr<DXEndpoint> endpoint);
 
     /**
      * Returns DXEndpoint that is associated with this on-demand service.
@@ -269,4 +271,6 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     void setSpeed(double speed) const noexcept;
 };
 
-}
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

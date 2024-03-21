@@ -11,7 +11,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void OrderBase::fillData(void *graalNative) noexcept {
     if (graalNative == nullptr) {
@@ -81,4 +81,4 @@ std::string OrderBase::baseFieldsToString() const noexcept {
         dxfcpp::toString(getTradePrice()), dxfcpp::toString(getTradeSize()));
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

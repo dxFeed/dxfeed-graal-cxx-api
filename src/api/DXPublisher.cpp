@@ -14,9 +14,9 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
-std::shared_ptr<DXPublisher> DXPublisher::getInstance() noexcept {
+std::shared_ptr<DXPublisher> DXPublisher::getInstance() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXPublisher::getInstance()");
     }
@@ -24,21 +24,17 @@ std::shared_ptr<DXPublisher> DXPublisher::getInstance() noexcept {
     return DXEndpoint::getInstance()->getPublisher();
 }
 
-std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) noexcept {
+std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXPublisher::create(" + dxfcpp::toString(handle) + ")");
     }
 
-    std::shared_ptr<DXPublisher> publisher{new (std::nothrow) DXPublisher{}};
+    std::shared_ptr<DXPublisher> publisher{new DXPublisher{}};
 
     auto id = ApiContext::getInstance()->getManager<DXPublisherManager>()->registerEntity(publisher);
     ignore_unused(id);
 
-    // TODO: error handling [EN-8232]
-
-    if (publisher) {
-        publisher->handle_ = JavaObjectHandle<DXPublisher>(handle);
-    }
+    publisher->handle_ = JavaObjectHandle<DXPublisher>(handle);
 
     return publisher;
 }
@@ -49,11 +45,11 @@ std::string DXPublisher::toString() const noexcept {
 
 void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
     runIsolatedOrElse(
-        [handle = dxfcpp::bit_cast<dxfg_publisher_t *>(handle_.get()), graalEventsList](auto threadHandle) {
-            return dxfg_DXPublisher_publishEvents(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                  dxfcpp::bit_cast<dxfg_event_type_list *>(graalEventsList)) == 0;
+        [handle = static_cast<dxfg_publisher_t *>(handle_.get()), graalEventsList](auto threadHandle) {
+            return dxfg_DXPublisher_publishEvents(static_cast<graal_isolatethread_t *>(threadHandle), handle,
+                                                  static_cast<dxfg_event_type_list *>(graalEventsList)) == 0;
         },
         false);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

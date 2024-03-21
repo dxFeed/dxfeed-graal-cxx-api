@@ -13,7 +13,7 @@
 #    undef NO_ERROR
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 bool System::setProperty(const std::string &key, const std::string &value) {
     // TODO: check invalid utf-8 [EN-8233]
@@ -24,7 +24,7 @@ bool System::setProperty(const std::string &key, const std::string &value) {
     auto result = runIsolatedOrElse(
         [key = key, value = value](auto threadHandle) {
             return static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(
-                       dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
+                       static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
                    CEntryPointErrorsEnum::NO_ERROR;
         },
         false);
@@ -47,10 +47,10 @@ std::string System::getProperty(const std::string &key) {
             std::string resultString{};
 
             if (auto result =
-                    dxfg_system_get_property(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), key.c_str());
+                    dxfg_system_get_property(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str());
                 result != nullptr) {
                 resultString = result;
-                dxfg_system_release_property(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), result);
+                dxfg_system_release_property(static_cast<graal_isolatethread_t *>(threadHandle), result);
             }
 
             return resultString;
@@ -64,7 +64,7 @@ std::string System::getProperty(const std::string &key) {
     return result;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
     // TODO: check invalid utf-8 [EN-8233]

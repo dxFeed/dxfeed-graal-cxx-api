@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -20,7 +22,7 @@
 #include "Scope.hpp"
 #include "Side.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -334,7 +336,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @see OrderBase::getSequence()
      */
     void setSequence(std::int32_t sequence) noexcept {
-        if (sequence < 0 || sequence > MAX_SEQUENCE) {
+        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
             // TODO: error handling: [EN-8232] throw IllegalArgumentException();
 
             return;
@@ -671,6 +673,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @return string representation of this order event's fields.
      */
     std::string baseFieldsToString() const noexcept;
-}; // namespace dxfcpp
+};
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -5,12 +5,14 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 #include <vector>
 
 #include "EventType.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT EventMapper {
     static std::vector<std::shared_ptr<EventType>> fromGraalList(void *graalNativeList) noexcept;
@@ -57,9 +59,11 @@ struct DXFCPP_EXPORT EventMapper {
 
   private:
     static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
-    static void *newGraalList(std::ptrdiff_t size) noexcept;
+    static void *newGraalList(std::ptrdiff_t size);
     static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
     static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

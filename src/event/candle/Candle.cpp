@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Candle::TYPE = EventTypeEnum::CANDLE;
 
@@ -54,6 +54,7 @@ void Candle::fillGraalData(void *graalNative) const noexcept {
 
     auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
+    graalCandle->event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_CANDLE;
     graalCandle->event_symbol = createCString(eventSymbol_.value_or(CandleSymbol::NUL).toString());
     graalCandle->event_time = data_.eventTime;
     graalCandle->event_flags = data_.eventFlags;
@@ -114,19 +115,13 @@ std::string Candle::toString() const noexcept {
         dxfcpp::toString(getOpenInterest()));
 }
 
-void *Candle::toGraal() const noexcept {
+void *Candle::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
     auto *graalCandle =
-        new (std::nothrow) dxfg_candle_t{.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_CANDLE}};
-
-    if (!graalCandle) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+        new dxfg_candle_t{};
 
     fillGraalData(static_cast<void *>(graalCandle));
 
@@ -149,4 +144,4 @@ void Candle::freeGraal(void *graalNative) noexcept {
     delete graalCandle;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

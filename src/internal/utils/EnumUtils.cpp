@@ -22,7 +22,9 @@
 
 using namespace std::literals;
 
-namespace dxfcpp::enum_utils {
+DXFCPP_BEGIN_NAMESPACE
+
+namespace enum_utils {
 
 std::string getEventTypeEnumNamesList(std::string separator) noexcept {
     return EventTypeEnum::ALL_BY_NAME | ranges::views::keys | ranges::views::join(separator) | ranges::to<std::string>;
@@ -47,4 +49,6 @@ std::string getMarketEventTypeEnumClassNamesList(std::string separator) noexcept
            ranges::views::keys | ranges::views::join(separator) | ranges::to<std::string>;
 }
 
-} // namespace dxfcpp::enum_utils
+} // namespace enum_utils
+
+DXFCPP_END_NAMESPACE

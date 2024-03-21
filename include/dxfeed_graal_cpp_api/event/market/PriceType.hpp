@@ -5,12 +5,14 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
 
 #include <cstdint>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Type of the price value.
@@ -42,4 +44,6 @@ struct PriceType : Enum<PriceType, std::uint32_t> {
 template <>
 const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const PriceType>> PriceType::ParentType::ALL;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

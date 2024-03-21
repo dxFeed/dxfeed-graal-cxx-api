@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../symbols/SymbolWrapper.hpp"
 
 #include "CandleAlignment.hpp"
@@ -22,7 +24,7 @@
 #include <utility>
 #include <variant>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * The common "variant" type for the candle attribute types
@@ -265,7 +267,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    virtual void *toGraal() const noexcept;
+    virtual void *toGraal() const;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
@@ -325,10 +327,12 @@ inline CandleSymbol operator""_c(const char *string, size_t length) noexcept {
 
 } // namespace literals
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandleSymbol> {
     std::size_t operator()(const dxfcpp::CandleSymbol &candleSymbol) const noexcept {
         return std::hash<std::string>{}(candleSymbol.toString());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

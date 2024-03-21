@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Greeks::TYPE = EventTypeEnum::GREEKS;
 
@@ -51,6 +51,7 @@ void Greeks::fillGraalData(void *graalNative) const noexcept {
 
     auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
 
+    graalGreeks->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_GREEKS;
     graalGreeks->event_flags = data_.eventFlags;
     graalGreeks->index = data_.index;
     graalGreeks->price = data_.price;
@@ -94,19 +95,12 @@ std::string Greeks::toString() const noexcept {
         dxfcpp::toString(getVega()));
 }
 
-void *Greeks::toGraal() const noexcept {
+void *Greeks::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalGreeks = new (std::nothrow)
-        dxfg_greeks_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_GREEKS}}};
-
-    if (!graalGreeks) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalGreeks = new dxfg_greeks_t{};
 
     fillGraalData(static_cast<void *>(graalGreeks));
 
@@ -129,4 +123,4 @@ void Greeks::freeGraal(void *graalNative) noexcept {
     delete graalGreeks;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

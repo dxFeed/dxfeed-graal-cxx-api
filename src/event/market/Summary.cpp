@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Summary::TYPE = EventTypeEnum::SUMMARY;
 
@@ -52,6 +52,7 @@ void Summary::fillGraalData(void *graalNative) const noexcept {
 
     auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
 
+    graalSummary->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_SUMMARY;
     graalSummary->day_id = data_.dayId;
     graalSummary->day_open_price = data_.dayOpenPrice;
     graalSummary->day_high_price = data_.dayHighPrice;
@@ -86,31 +87,24 @@ std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) noexcept {
 }
 
 std::string Summary::toString() const noexcept {
-    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
-                       "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
-                       "prevDayVolume={}, openInterest={}}}",
-                       MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-                       day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
-                       dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()),
-                       dxfcpp::toString(getDayLowPrice()), dxfcpp::toString(getDayClosePrice()),
-                       getDayClosePriceType().toString(), day_util::getYearMonthDayByDayId(getPrevDayId()),
-                       dxfcpp::toString(getPrevDayClosePrice()), getPrevDayClosePriceType().toString(),
-                       dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
+    return fmt::format(
+        "Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
+        "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
+        "prevDayVolume={}, openInterest={}}}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
+        dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()), dxfcpp::toString(getDayLowPrice()),
+        dxfcpp::toString(getDayClosePrice()), getDayClosePriceType().toString(),
+        day_util::getYearMonthDayByDayId(getPrevDayId()), dxfcpp::toString(getPrevDayClosePrice()),
+        getPrevDayClosePriceType().toString(), dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
 }
 
-void *Summary::toGraal() const noexcept {
+void *Summary::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSummary = new (std::nothrow)
-        dxfg_summary_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SUMMARY}}};
-
-    if (!graalSummary) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalSummary = new dxfg_summary_t{};
 
     fillGraalData(static_cast<void *>(graalSummary));
 
@@ -133,4 +127,4 @@ void Summary::freeGraal(void *graalNative) noexcept {
     delete graalSummary;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

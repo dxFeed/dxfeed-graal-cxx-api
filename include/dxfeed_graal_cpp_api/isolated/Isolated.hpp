@@ -5,6 +5,10 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../internal/TimeFormat.hpp"
+
 #include "../api/DXEndpoint.hpp"
 
 #include "../ipf/live/InstrumentProfileConnection.hpp"
@@ -14,39 +18,15 @@
 #include <unordered_set>
 #include <vector>
 
-namespace dxfcpp::isolated {
-struct String {
-    static bool release(const char *string) noexcept;
-};
+DXFCPP_BEGIN_NAMESPACE
 
-struct StringList {
-    static bool release(/* dxfg_string_list* */ void *stringList) noexcept;
-};
-
-struct TimeFormat {
-    static /* dxfg_time_format_t* */ void *getDefault() noexcept;
-    static /* dxfg_time_format_t* */ void *getGmt() noexcept;
-    static /* dxfg_time_format_t* */ void *withTimeZone(/* dxfg_time_format_t* */ void *timeFormat) noexcept;
-    static /* dxfg_time_format_t* */ void *withMillis(/* dxfg_time_format_t* */ void *timeFormat) noexcept;
-    static std::int64_t parse(/* dxfg_time_format_t* */ void *timeFormat, const std::string &value) noexcept;
-    static std::string format(/* dxfg_time_format_t* */ void *timeFormat, std::int64_t value) noexcept;
-};
+namespace isolated {
 
 struct Tools {
     static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(const std::string &symbolList) noexcept;
 
     static void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string>& args);
 };
-
-namespace api {
-struct DXEndpoint {
-    static bool close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
-    static dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
-    static bool user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &user) noexcept;
-    static bool password(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &password) noexcept;
-    static bool connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &address) noexcept;
-};
-} // namespace api
 
 namespace ipf {
 struct InstrumentProfileReader {
@@ -236,4 +216,8 @@ struct Schedule {
     static std::string getTimeZoneId(/* dxfg_schedule_t* */ void *schedule) noexcept;
 };
 } // namespace schedule
-} // namespace dxfcpp::isolated
+} // namespace isolated
+
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

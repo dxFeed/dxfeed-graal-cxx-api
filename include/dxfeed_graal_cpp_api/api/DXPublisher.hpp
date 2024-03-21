@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
@@ -19,7 +21,7 @@
 #include <mutex>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
 class EventTypeEnum;
@@ -69,7 +71,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
   private:
     JavaObjectHandle<DXPublisher> handle_;
 
-    static std::shared_ptr<DXPublisher> create(void *handle) noexcept;
+    static std::shared_ptr<DXPublisher> create(void *handle);
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
@@ -92,7 +94,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @ref DXEndpoint "DXEndpoint"::@ref DXEndpoint::getInstance() "getInstance"(DXEndpoint::Role::PUBLISHER)->@ref
      * DXEndpoint::getPublisher() "getPublisher"().
      */
-    static std::shared_ptr<DXPublisher> getInstance() noexcept;
+    static std::shared_ptr<DXPublisher> getInstance();
 
     /**
      * Publishes events to the corresponding feed. If the @ref DXEndpoint "endpoint" of this publisher has
@@ -220,4 +222,6 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
