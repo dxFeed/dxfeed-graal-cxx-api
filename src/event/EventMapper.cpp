@@ -218,32 +218,20 @@ std::ptrdiff_t EventMapper::calculateGraalListSize(std::ptrdiff_t initSize) noex
     return initSize;
 }
 
-void *EventMapper::newGraalList(std::ptrdiff_t size) noexcept {
+void *EventMapper::newGraalList(std::ptrdiff_t size) {
     using ListType = dxfg_event_type_list;
     using SizeType = decltype(ListType::size);
     using ElementType = dxfg_event_type_t;
 
-    auto *list = new (std::nothrow) ListType{static_cast<SizeType>(size), nullptr};
-
-    if (!list) {
-        // TODO: error handling [EN-8232]
-        return nullptr;
-    }
+    auto *list = new ListType{static_cast<SizeType>(size), nullptr};
 
     if (size == 0) {
         return static_cast<void *>(list);
     }
 
-    list->elements = new (std::nothrow) ElementType *[size] {
+    list->elements = new ElementType *[size] {
         nullptr
     };
-
-    if (!list->elements) {
-        // TODO: error handling [EN-8232]
-        delete list;
-
-        return nullptr;
-    }
 
     return list;
 }

@@ -76,18 +76,12 @@ std::string AnalyticOrder::toString() const noexcept {
         dxfcpp::toString(getIcebergExecutedSize()), getIcebergType().toString());
 }
 
-void *AnalyticOrder::toGraal() const noexcept {
+void *AnalyticOrder::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalAnalyticOrder = new (std::nothrow) dxfg_analytic_order_t{};
-
-    if (!graalAnalyticOrder) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalAnalyticOrder = new dxfg_analytic_order_t{};
 
     fillGraalData(static_cast<void *>(graalAnalyticOrder));
 

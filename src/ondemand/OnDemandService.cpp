@@ -32,15 +32,15 @@ std::shared_ptr<OnDemandService> OnDemandService::getInstance() noexcept {
     return getInstance(DXEndpoint::getInstance(DXEndpoint::Role::ON_DEMAND_FEED));
 }
 
-std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DXEndpoint> endpoint) noexcept {
+std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DXEndpoint> endpoint) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("OnDemandService::getInstance(" + endpoint->toString() + ")");
     }
 
-    std::shared_ptr<OnDemandService> onDemandService{new (std::nothrow) OnDemandService{}};
+    std::shared_ptr<OnDemandService> onDemandService{new OnDemandService{}};
 
-    if (!onDemandService || !endpoint->handle_) {
-        // TODO: dummy service & error handling [EN-8232];
+    if (!endpoint->handle_) {
+        // TODO: error handling [EN-8232];
 
         return onDemandService;
     }

@@ -59,7 +59,7 @@ struct DXFCPP_EXPORT EventMapper {
 
   private:
     static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
-    static void *newGraalList(std::ptrdiff_t size) noexcept;
+    static void *newGraalList(std::ptrdiff_t size);
     static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
     static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
 };

@@ -11,12 +11,13 @@ DXFCPP_BEGIN_NAMESPACE
 Schedule::Schedule(void *handle) noexcept : handle_(handle) {
 }
 
-Schedule::Ptr Schedule::create(void *handle) noexcept {
+Schedule::Ptr Schedule::create(void *handle) {
     if (!handle) {
-        return {};
+        throw std::invalid_argument(
+            "Unable to create a Schedule object. The handle is nullptr");
     }
 
-    return std::shared_ptr<Schedule>(new (std::nothrow) Schedule(handle));
+    return std::shared_ptr<Schedule>(new Schedule(handle));
 }
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) noexcept {

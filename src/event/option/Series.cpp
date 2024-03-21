@@ -99,18 +99,12 @@ std::string Series::toString() const noexcept {
         dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
-void *Series::toGraal() const noexcept {
+void *Series::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSeries = new (std::nothrow) dxfg_series_t{};
-
-    if (!graalSeries) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalSeries = new dxfg_series_t{};
 
     fillGraalData(static_cast<void *>(graalSeries));
 

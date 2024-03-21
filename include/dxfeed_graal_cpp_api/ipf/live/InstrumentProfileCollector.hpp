@@ -76,7 +76,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * @return The new InstrumentProfileCollector
      */
-    static Ptr create() noexcept;
+    static Ptr create();
 
     /**
      * Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.

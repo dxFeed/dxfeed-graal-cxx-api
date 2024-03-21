@@ -123,18 +123,12 @@ std::string TimeAndSale::toString() const noexcept {
                        getSeller().empty() ? std::string{} : fmt::format(", seller='{}'", getSeller()));
 }
 
-void *TimeAndSale::toGraal() const noexcept {
+void *TimeAndSale::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTimeAndSale = new (std::nothrow) dxfg_time_and_sale_t{};
-
-    if (!graalTimeAndSale) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalTimeAndSale = new dxfg_time_and_sale_t{};
 
     fillGraalData(static_cast<void *>(graalTimeAndSale));
 

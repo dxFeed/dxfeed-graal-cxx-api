@@ -84,7 +84,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const noexcept override;
+    void *toGraal() const override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).

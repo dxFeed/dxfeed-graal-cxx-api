@@ -132,14 +132,8 @@ InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
     }
 }
 
-InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() noexcept {
-    auto collector = std::shared_ptr<InstrumentProfileCollector>(new (std::nothrow) InstrumentProfileCollector());
-
-    if (!collector) {
-        // TODO: dummy collector & error handling [EN-8232];
-
-        return collector;
-    }
+InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() {
+    auto collector = std::shared_ptr<InstrumentProfileCollector>(new InstrumentProfileCollector());
 
     collector->id_ =
         ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->registerEntity(collector);

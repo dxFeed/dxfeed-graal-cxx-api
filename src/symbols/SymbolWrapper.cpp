@@ -6,6 +6,8 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <fmt/format.h>
+
 DXFCPP_BEGIN_NAMESPACE
 
 std::ptrdiff_t SymbolWrapper::SymbolListUtils::calculateGraalListSize(std::ptrdiff_t initSize) noexcept {
@@ -21,32 +23,18 @@ std::ptrdiff_t SymbolWrapper::SymbolListUtils::calculateGraalListSize(std::ptrdi
     return initSize;
 }
 
-void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) noexcept {
+void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) {
     using ListType = dxfg_symbol_list;
     using SizeType = decltype(ListType::size);
     using ElementType = dxfg_symbol_t;
 
-    auto *list = new (std::nothrow) ListType{static_cast<SizeType>(size), nullptr};
-
-    if (!list) {
-        // TODO: error handling [EN-8232]
-        return nullptr;
-    }
+    auto *list = new ListType{static_cast<SizeType>(size), nullptr};
 
     if (size == 0) {
         return static_cast<void *>(list);
     }
 
-    list->elements = new (std::nothrow) ElementType *[size] {
-        nullptr
-    };
-
-    if (!list->elements) {
-        // TODO: error handling [EN-8232]
-        delete list;
-
-        return nullptr;
-    }
+    list->elements = new ElementType *[size] {nullptr};
 
     return list;
 }
@@ -183,13 +171,13 @@ void SymbolWrapper::freeGraal(void *graalNative) noexcept {
     }
 }
 
-SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) noexcept {
+SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper::fromGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
     if (graalNative == nullptr) {
-        return {};
+        throw std::invalid_argument("Unable to create SymbolWrapper. The `graalNative` parameter is nullptr");
     }
 
     switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
@@ -207,6 +195,10 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) noexcept {
 
     case TIME_SERIES_SUBSCRIPTION:
         return TimeSeriesSubscriptionSymbol::fromGraal(graalNative);
+
+    default:
+        throw std::runtime_error(fmt::format("Unable to create SymbolWrapper. Unknown symbol type: {}",
+                                             static_cast<int>(static_cast<dxfg_symbol_t *>(graalNative)->type)));
     }
 
     return {};

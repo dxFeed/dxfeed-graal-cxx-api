@@ -36,7 +36,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param handle The graal Schedule's handle
      * @return The smart pointer for the Schedule object.
      */
-    static Schedule::Ptr create(void *handle) noexcept;
+    static Schedule::Ptr create(void *handle);
 
   public:
     /**

@@ -41,7 +41,7 @@ struct DXFCPP_EXPORT Session {
      * @param handle The graal Session's handle
      * @return The smart pointer for the Session object.
      */
-    static Session::Ptr create(void *handle) noexcept;
+    static Session::Ptr create(void *handle);
 
   public:
     /**

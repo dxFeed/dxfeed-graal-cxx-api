@@ -41,12 +41,12 @@ StringSymbol::StringSymbol() noexcept {
 
 StringSymbol::~StringSymbol() noexcept = default;
 
-void *StringSymbol::toGraal() const noexcept {
+void *StringSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("StringSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new (std::nothrow) dxfg_string_symbol_t{{STRING}, createCString(data_)};
+    auto *graalSymbol = new dxfg_string_symbol_t{{STRING}, createCString(data_)};
 
     return static_cast<void *>(graalSymbol);
 }
@@ -66,18 +66,18 @@ void StringSymbol::freeGraal(void *graalNative) noexcept {
     delete graalSymbol;
 }
 
-StringSymbol StringSymbol::fromGraal(void *graalNative) noexcept {
+StringSymbol StringSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("StringSymbol::fromGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
     if (graalNative == nullptr) {
-        return {};
+        throw std::invalid_argument("Unable to create StringSymbol. The `graalNative` parameter is nullptr");
     }
 
     auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
 
-    return {graalSymbol->symbol};
+    return {dxfcpp::toString(graalSymbol->symbol)};
 }
 
 const std::string &StringSymbol::getData() const {

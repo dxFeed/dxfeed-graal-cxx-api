@@ -16,15 +16,15 @@ int64_t TimeSeriesSubscriptionSymbol::getFromTime() const {
     return fromTime_;
 }
 
-void *TimeSeriesSubscriptionSymbol::toGraal() const noexcept {
+void *TimeSeriesSubscriptionSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("TimeSeriesSubscriptionSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new (std::nothrow)
-        dxfg_time_series_subscription_symbol_t{.supper = {.type = dxfg_symbol_type_t::TIME_SERIES_SUBSCRIPTION},
-                                               .symbol = static_cast<dxfg_symbol_t *>(getEventSymbol()->toGraal()),
-                                               .from_time = fromTime_};
+    auto *graalSymbol =
+        new dxfg_time_series_subscription_symbol_t{.supper = {.type = dxfg_symbol_type_t::TIME_SERIES_SUBSCRIPTION},
+                                                   .symbol = static_cast<dxfg_symbol_t *>(getEventSymbol()->toGraal()),
+                                                   .from_time = fromTime_};
 
     return static_cast<void *>(graalSymbol);
 }

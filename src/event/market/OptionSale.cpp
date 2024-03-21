@@ -127,18 +127,12 @@ std::string OptionSale::toString() const noexcept {
         dxfcpp::toString(getDelta()), getOptionSymbol());
 }
 
-void *OptionSale::toGraal() const noexcept {
+void *OptionSale::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOptionSale = new (std::nothrow) dxfg_option_sale_t{};
-
-    if (!graalOptionSale) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalOptionSale = new dxfg_option_sale_t{};
 
     fillGraalData(static_cast<void *>(graalOptionSale));
 

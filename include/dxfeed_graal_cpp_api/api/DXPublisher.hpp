@@ -71,7 +71,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
   private:
     JavaObjectHandle<DXPublisher> handle_;
 
-    static std::shared_ptr<DXPublisher> create(void *handle) noexcept;
+    static std::shared_ptr<DXPublisher> create(void *handle);
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
@@ -94,7 +94,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @ref DXEndpoint "DXEndpoint"::@ref DXEndpoint::getInstance() "getInstance"(DXEndpoint::Role::PUBLISHER)->@ref
      * DXEndpoint::getPublisher() "getPublisher"().
      */
-    static std::shared_ptr<DXPublisher> getInstance() noexcept;
+    static std::shared_ptr<DXPublisher> getInstance();
 
     /**
      * Publishes events to the corresponding feed. If the @ref DXEndpoint "endpoint" of this publisher has

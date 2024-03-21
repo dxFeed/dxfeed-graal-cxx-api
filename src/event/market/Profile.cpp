@@ -127,18 +127,12 @@ std::string Profile::toString() const noexcept {
         dxfcpp::toString(getShares()), dxfcpp::toString(getFreeFloat()));
 }
 
-void *Profile::toGraal() const noexcept {
+void *Profile::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalProfile = new (std::nothrow) dxfg_profile_t{};
-
-    if (!graalProfile) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalProfile = new dxfg_profile_t{};
 
     fillGraalData(static_cast<void *>(graalProfile));
 

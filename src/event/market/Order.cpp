@@ -78,18 +78,12 @@ std::string Order::toString() const noexcept {
     return fmt::format("Order{{{}, marketMaker={}}}", baseFieldsToString(), getMarketMaker());
 }
 
-void *Order::toGraal() const noexcept {
+void *Order::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOrder = new (std::nothrow) dxfg_order_t{};
-
-    if (!graalOrder) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalOrder = new dxfg_order_t{};
 
     fillGraalData(static_cast<void *>(graalOrder));
 

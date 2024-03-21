@@ -115,19 +115,13 @@ std::string Candle::toString() const noexcept {
         dxfcpp::toString(getOpenInterest()));
 }
 
-void *Candle::toGraal() const noexcept {
+void *Candle::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
     auto *graalCandle =
-        new (std::nothrow) dxfg_candle_t{};
-
-    if (!graalCandle) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+        new dxfg_candle_t{};
 
     fillGraalData(static_cast<void *>(graalCandle));
 

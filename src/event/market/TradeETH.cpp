@@ -65,18 +65,12 @@ std::string TradeETH::toString() const noexcept {
     return fmt::format("TradeETH{{{}}}", baseFieldsToString());
 }
 
-void *TradeETH::toGraal() const noexcept {
+void *TradeETH::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTradeEth = new (std::nothrow) dxfg_trade_eth_t{};
-
-    if (!graalTradeEth) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalTradeEth = new dxfg_trade_eth_t{};
 
     fillGraalData(static_cast<void *>(graalTradeEth));
 

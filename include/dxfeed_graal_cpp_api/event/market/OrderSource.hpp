@@ -151,7 +151,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const noexcept override;
+    void *toGraal() const override;
 
   public:
     /**

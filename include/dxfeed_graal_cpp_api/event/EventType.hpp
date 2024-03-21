@@ -70,7 +70,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    virtual void *toGraal() const noexcept = 0;
+    virtual void *toGraal() const = 0;
 
     ///
     std::string toString() const noexcept override {

@@ -93,18 +93,12 @@ std::string Underlying::toString() const noexcept {
         dxfcpp::toString(getPutCallRatio()));
 }
 
-void *Underlying::toGraal() const noexcept {
+void *Underlying::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalUnderlying = new (std::nothrow) dxfg_underlying_t{};
-
-    if (!graalUnderlying) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalUnderlying = new dxfg_underlying_t{};
 
     fillGraalData(static_cast<void *>(graalUnderlying));
 

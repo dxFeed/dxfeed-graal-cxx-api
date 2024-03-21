@@ -99,18 +99,12 @@ std::string Summary::toString() const noexcept {
         getPrevDayClosePriceType().toString(), dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
 }
 
-void *Summary::toGraal() const noexcept {
+void *Summary::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSummary = new (std::nothrow) dxfg_summary_t{};
-
-    if (!graalSummary) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalSummary = new dxfg_summary_t{};
 
     fillGraalData(static_cast<void *>(graalSummary));
 

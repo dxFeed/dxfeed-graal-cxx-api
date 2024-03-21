@@ -95,18 +95,12 @@ std::string Greeks::toString() const noexcept {
         dxfcpp::toString(getVega()));
 }
 
-void *Greeks::toGraal() const noexcept {
+void *Greeks::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalGreeks = new (std::nothrow) dxfg_greeks_t{};
-
-    if (!graalGreeks) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalGreeks = new dxfg_greeks_t{};
 
     fillGraalData(static_cast<void *>(graalGreeks));
 

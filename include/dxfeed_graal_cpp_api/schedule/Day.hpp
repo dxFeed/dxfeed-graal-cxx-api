@@ -55,7 +55,7 @@ struct DXFCPP_EXPORT Day {
      * @param handle The graal Day's handle
      * @return The smart pointer for the Day object.
      */
-    static Day::Ptr create(void *handle) noexcept;
+    static Day::Ptr create(void *handle);
 
   public:
     /**

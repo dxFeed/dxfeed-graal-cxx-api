@@ -16,7 +16,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-std::shared_ptr<DXPublisher> DXPublisher::getInstance() noexcept {
+std::shared_ptr<DXPublisher> DXPublisher::getInstance() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXPublisher::getInstance()");
     }
@@ -24,21 +24,17 @@ std::shared_ptr<DXPublisher> DXPublisher::getInstance() noexcept {
     return DXEndpoint::getInstance()->getPublisher();
 }
 
-std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) noexcept {
+std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXPublisher::create(" + dxfcpp::toString(handle) + ")");
     }
 
-    std::shared_ptr<DXPublisher> publisher{new (std::nothrow) DXPublisher{}};
+    std::shared_ptr<DXPublisher> publisher{new DXPublisher{}};
 
     auto id = ApiContext::getInstance()->getManager<DXPublisherManager>()->registerEntity(publisher);
     ignore_unused(id);
 
-    // TODO: error handling [EN-8232]
-
-    if (publisher) {
-        publisher->handle_ = JavaObjectHandle<DXPublisher>(handle);
-    }
+    publisher->handle_ = JavaObjectHandle<DXPublisher>(handle);
 
     return publisher;
 }

@@ -11,12 +11,13 @@ DXFCPP_BEGIN_NAMESPACE
 Session::Session(void *handle) noexcept : handle_(handle) {
 }
 
-Session::Ptr Session::create(void *handle) noexcept {
+Session::Ptr Session::create(void *handle) {
     if (!handle) {
-        return {};
+        throw std::invalid_argument(
+            "Unable to create a Session object. The handle is nullptr");
     }
 
-    return std::shared_ptr<Session>(new (std::nothrow) Session(handle));
+    return std::shared_ptr<Session>(new Session(handle));
 }
 
 Day::Ptr Session::getDay() const noexcept {

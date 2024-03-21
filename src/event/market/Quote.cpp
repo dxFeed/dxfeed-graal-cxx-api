@@ -134,18 +134,12 @@ std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {
     }
 }
 
-void *Quote::toGraal() const noexcept {
+void *Quote::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalQuote = new (std::nothrow) dxfg_quote_t{};
-
-    if (!graalQuote) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalQuote = new dxfg_quote_t{};
 
     fillGraalData(static_cast<void *>(graalQuote));
 

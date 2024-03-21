@@ -78,18 +78,12 @@ std::string SpreadOrder::toString() const noexcept {
     return fmt::format("SpreadOrder{{{}, spreadSymbol={}}}", baseFieldsToString(), getSpreadSymbol());
 }
 
-void *SpreadOrder::toGraal() const noexcept {
+void *SpreadOrder::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSpreadOrder = new (std::nothrow) dxfg_spread_order_t{};
-
-    if (!graalSpreadOrder) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalSpreadOrder = new dxfg_spread_order_t{};
 
     fillGraalData(static_cast<void *>(graalSpreadOrder));
 

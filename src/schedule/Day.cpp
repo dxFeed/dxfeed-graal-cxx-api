@@ -11,12 +11,13 @@ DXFCPP_BEGIN_NAMESPACE
 Day::Day(void *handle) noexcept : handle_(handle) {
 }
 
-Day::Ptr Day::create(void *handle) noexcept {
+Day::Ptr Day::create(void *handle) {
     if (!handle) {
-        return {};
+        throw std::invalid_argument(
+            "Unable to create a Day object. The handle is nullptr");
     }
 
-    return std::shared_ptr<Day>(new (std::nothrow) Day(handle));
+    return std::shared_ptr<Day>(new Day(handle));
 }
 
 std::shared_ptr<Schedule> Day::getSchedule() const noexcept {

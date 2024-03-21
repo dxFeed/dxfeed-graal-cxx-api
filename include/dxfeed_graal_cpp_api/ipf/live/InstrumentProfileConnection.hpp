@@ -102,7 +102,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return new instrument profile connection.
      */
-    static Ptr createConnection(const std::string &address, InstrumentProfileCollector::Ptr collector) noexcept;
+    static Ptr createConnection(const std::string &address, InstrumentProfileCollector::Ptr collector);
 
     /**
      * Returns the address of this instrument profile connection.

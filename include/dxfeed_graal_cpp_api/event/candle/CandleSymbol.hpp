@@ -267,7 +267,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    virtual void *toGraal() const noexcept;
+    virtual void *toGraal() const;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).

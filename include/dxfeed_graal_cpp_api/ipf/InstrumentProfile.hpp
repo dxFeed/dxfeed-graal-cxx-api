@@ -64,7 +64,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
     Data data_{};
 
     void fillData(void *graalNative) noexcept;
-    void fillGraalData(void *graalNative) const noexcept;
+    void fillGraalData(void *graalNative) const;
     static void freeGraalData(void *graalNative) noexcept;
 
     /**
@@ -102,7 +102,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const noexcept;
+    void *toGraal() const;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).

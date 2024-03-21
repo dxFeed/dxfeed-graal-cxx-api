@@ -62,10 +62,10 @@ InstrumentProfileConnection::InstrumentProfileConnection() noexcept
 
 InstrumentProfileConnection::Ptr
 InstrumentProfileConnection::createConnection(const std::string &address,
-                                              InstrumentProfileCollector::Ptr collector) noexcept {
-    std::shared_ptr<InstrumentProfileConnection> connection(new (std::nothrow) InstrumentProfileConnection{});
+                                              InstrumentProfileCollector::Ptr collector) {
+    std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 
-    if (!connection || !collector->handle_) {
+    if (!collector->handle_) {
         // TODO: dummy connection & error handling [EN-8232];
 
         return connection;

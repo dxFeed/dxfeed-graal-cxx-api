@@ -92,18 +92,12 @@ std::string TheoPrice::toString() const noexcept {
         dxfcpp::toString(getGamma()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
-void *TheoPrice::toGraal() const noexcept {
+void *TheoPrice::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTheoPrice = new (std::nothrow) dxfg_theo_price_t{};
-
-    if (!graalTheoPrice) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalTheoPrice = new dxfg_theo_price_t{};
 
     fillGraalData(static_cast<void *>(graalTheoPrice));
 

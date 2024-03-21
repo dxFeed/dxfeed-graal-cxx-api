@@ -92,7 +92,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
         return static_cast<void *>(&list_);
     }
 
-    void init(std::size_t size) noexcept {
+    void init(std::size_t size) {
         if constexpr (Debugger::traceLists) {
             Debugger::trace(getDebugName() + "::init(" + std::to_string(size) + ")");
         }
@@ -106,34 +106,10 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
         }
 
         list_.size = static_cast<typename RawGraalListTraits<List>::SizeType>(size);
-        list_.elements = new (std::nothrow) typename RawGraalListTraits<List>::ElementType *[list_.size];
-
-        if (!list_.elements) {
-            if constexpr (Debugger::traceLists) {
-                Debugger::trace(getDebugName() + "::init(" + std::to_string(size) + "): !list_.elements");
-            }
-
-            release();
-
-            return;
-        }
-
-        bool needToRelease = false;
+        list_.elements = new typename RawGraalListTraits<List>::ElementType *[list_.size];
 
         for (typename RawGraalListTraits<List>::SizeType i = 0; i < list_.size; i++) {
-            list_.elements[i] = new (std::nothrow) typename RawGraalListTraits<List>::ElementType{};
-
-            if (!list_.elements[i]) {
-                needToRelease = true;
-            }
-        }
-
-        if (needToRelease) {
-            if constexpr (Debugger::traceLists) {
-                Debugger::trace(getDebugName() + "::init({}): needToRelease");
-            }
-
-            release();
+            list_.elements[i] = new typename RawGraalListTraits<List>::ElementType{};
         }
     }
 

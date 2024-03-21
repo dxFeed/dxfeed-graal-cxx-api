@@ -113,7 +113,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * @param endpoint the endpoint.
      * @return the on-demand service.
      */
-    static std::shared_ptr<OnDemandService> getInstance(std::shared_ptr<DXEndpoint> endpoint) noexcept;
+    static std::shared_ptr<OnDemandService> getInstance(std::shared_ptr<DXEndpoint> endpoint);
 
     /**
      * Returns DXEndpoint that is associated with this on-demand service.

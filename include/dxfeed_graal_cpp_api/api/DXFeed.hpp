@@ -125,7 +125,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
 
-    static std::shared_ptr<DXFeed> create(void *feedHandle) noexcept;
+    static std::shared_ptr<DXFeed> create(void *feedHandle);
 
   protected:
     DXFeed() noexcept : handle_{} {

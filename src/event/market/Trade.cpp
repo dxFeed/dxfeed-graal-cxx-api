@@ -65,18 +65,12 @@ std::string Trade::toString() const noexcept {
     return fmt::format("Trade{{{}}}", baseFieldsToString());
 }
 
-void *Trade::toGraal() const noexcept {
+void *Trade::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTrade = new (std::nothrow) dxfg_trade_t{};
-
-    if (!graalTrade) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalTrade = new dxfg_trade_t{};
 
     fillGraalData(static_cast<void *>(graalTrade));
 

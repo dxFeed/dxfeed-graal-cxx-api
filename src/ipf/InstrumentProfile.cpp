@@ -96,7 +96,7 @@ void InstrumentProfile::fillData(void *graalNative) noexcept {
     };
 }
 
-void InstrumentProfile::fillGraalData(void *graalNative) const noexcept {
+void InstrumentProfile::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -138,12 +138,11 @@ void InstrumentProfile::fillGraalData(void *graalNative) const noexcept {
     if (data_.rawCustomFields.empty()) {
         graalInstrumentProfile->custom_fields = nullptr;
     } else {
-        graalInstrumentProfile->custom_fields = new (std::nothrow) dxfg_string_list{};
+        graalInstrumentProfile->custom_fields = new dxfg_string_list{};
         graalInstrumentProfile->custom_fields->size = static_cast<std::int32_t>(data_.rawCustomFields.size());
-        graalInstrumentProfile->custom_fields->elements =
-            new (std::nothrow) const char *[data_.rawCustomFields.size()] {
-                nullptr
-            };
+        graalInstrumentProfile->custom_fields->elements = new const char *[data_.rawCustomFields.size()] {
+            nullptr
+        };
 
         for (std::int32_t i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
             // TODO: process null-strings. <null>?
@@ -243,14 +242,8 @@ std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList
     return result;
 }
 
-void *InstrumentProfile::toGraal() const noexcept {
-    auto *graalInstrumentProfile = new (std::nothrow) dxfg_instrument_profile_t{};
-
-    if (!graalInstrumentProfile) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+void *InstrumentProfile::toGraal() const {
+    auto *graalInstrumentProfile = new dxfg_instrument_profile_t{};
 
     fillGraalData(static_cast<void *>(graalInstrumentProfile));
 
