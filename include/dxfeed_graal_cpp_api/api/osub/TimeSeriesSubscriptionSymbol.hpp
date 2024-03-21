@@ -42,7 +42,7 @@ class IndexedEventSubscriptionSymbol;
  */
 class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubscriptionSymbol,
                                                          public FilteredSubscriptionSymbol {
-    std::int64_t fromTime_;
+    std::int64_t fromTime_{};
 
   public:
     /**
@@ -50,14 +50,19 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
      * @param fromTime the subscription time.
      */
-    TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, std::int64_t fromTime) noexcept;
+    TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, std::int64_t fromTime);
 
-    TimeSeriesSubscriptionSymbol(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept;
+    TimeSeriesSubscriptionSymbol(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol);
+
     TimeSeriesSubscriptionSymbol(TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept;
-    TimeSeriesSubscriptionSymbol &operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept;
+
+    TimeSeriesSubscriptionSymbol &operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol);
+
     TimeSeriesSubscriptionSymbol &operator=(TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept;
+
     TimeSeriesSubscriptionSymbol() noexcept = default;
-    virtual ~TimeSeriesSubscriptionSymbol() noexcept = default;
+
+    ~TimeSeriesSubscriptionSymbol() noexcept override = default;
 
     /**
      * Returns the subscription time.
@@ -82,7 +87,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      */
     static void freeGraal(void *graalNative) noexcept;
 
-    static TimeSeriesSubscriptionSymbol fromGraal(void *graalNative) noexcept;
+    static TimeSeriesSubscriptionSymbol fromGraal(void *graalNative);
 
     /**
      * Returns string representation of this time-series subscription symbol.

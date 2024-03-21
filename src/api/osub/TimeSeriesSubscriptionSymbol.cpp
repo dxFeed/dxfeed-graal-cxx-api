@@ -8,7 +8,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, int64_t fromTime) noexcept
+TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, int64_t fromTime)
     : IndexedEventSubscriptionSymbol(eventSymbol, IndexedEventSource::DEFAULT), fromTime_(fromTime) {
 }
 
@@ -45,7 +45,7 @@ void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) noexcept {
     delete graalSymbol;
 }
 
-TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graalNative) noexcept {
+TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("TimeSeriesSubscriptionSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
@@ -79,7 +79,7 @@ bool TimeSeriesSubscriptionSymbol::operator<(
 }
 
 TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(
-    const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept
+    const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol)
     : IndexedEventSubscriptionSymbol(timeSeriesSubscriptionSymbol), fromTime_{timeSeriesSubscriptionSymbol.fromTime_} {
 }
 
@@ -90,7 +90,7 @@ TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(
 }
 
 TimeSeriesSubscriptionSymbol &
-TimeSeriesSubscriptionSymbol::operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
+TimeSeriesSubscriptionSymbol::operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) {
     if (this == &timeSeriesSubscriptionSymbol) {
         return *this;
     }
