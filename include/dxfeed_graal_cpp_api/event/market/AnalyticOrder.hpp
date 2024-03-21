@@ -121,24 +121,20 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @return The current analytic order.
      */
     AnalyticOrder &withEventSymbol(const std::string &eventSymbol) noexcept override {
-        MarketEvent::setEventSymbol(eventSymbol);
-
-        return *this;
+        return dynamic_cast<AnalyticOrder &>(Order::withEventSymbol(eventSymbol));
     }
 
     /**
      * Changes event's symbol and returns a shared pointer to the current analytic order.
      *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Order>(new
-     * Order(...))` or `std::make_shared<Order>(...)`
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
+     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
      *
      * @param eventSymbol The symbol of this event.
      * @return A shared pointer to the current order.
      */
     AnalyticOrder::Ptr withEventSymbolShared(const std::string &eventSymbol) noexcept {
-        MarketEvent::setEventSymbol(eventSymbol);
-
-        return shared_from_this()->sharedAs<AnalyticOrder>();
+        return Order::withEventSymbolShared(eventSymbol)->sharedAs<AnalyticOrder>();
     }
 
     /**

@@ -42,7 +42,7 @@ option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.6" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.7" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
@@ -248,6 +248,7 @@ set(dxFeedGraalCxxApi_EventCandle_Sources
 
 set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/AnalyticOrder.cpp
+        src/event/market/OtcMarketsOrder.cpp
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
         src/event/market/MarketEvent.cpp

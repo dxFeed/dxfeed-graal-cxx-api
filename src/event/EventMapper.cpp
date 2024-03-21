@@ -85,6 +85,10 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
             result.emplace_back(AnalyticOrder::fromGraal(e));
 
             break;
+        case DXFG_EVENT_OTC_MARKETS_ORDER:
+            result.emplace_back(OtcMarketsOrder::fromGraal(e));
+
+            break;
         case DXFG_EVENT_SPREAD_ORDER:
             result.emplace_back(SpreadOrder::fromGraal(e));
 
@@ -181,6 +185,10 @@ void EventMapper::freeGraalList(void *graalList) noexcept {
                     break;
                 case DXFG_EVENT_ANALYTIC_ORDER:
                     AnalyticOrder::freeGraal(static_cast<void *>(e));
+
+                    break;
+                case DXFG_EVENT_OTC_MARKETS_ORDER:
+                    OtcMarketsOrder::freeGraal(static_cast<void *>(e));
 
                     break;
                 case DXFG_EVENT_SPREAD_ORDER:
@@ -323,6 +331,10 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
                 break;
             case DXFG_EVENT_ANALYTIC_ORDER:
                 AnalyticOrder::freeGraal(static_cast<void *>(e));
+
+                break;
+            case DXFG_EVENT_OTC_MARKETS_ORDER:
+                OtcMarketsOrder::freeGraal(static_cast<void *>(e));
 
                 break;
             case DXFG_EVENT_SPREAD_ORDER:

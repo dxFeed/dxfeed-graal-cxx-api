@@ -424,6 +424,11 @@ versions):
   information to this order
     - [ ] dxFeed Graal C API
     - [x] dxFeed Graal C++ API
+- [OtcMarketsOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/OtcMarketsOrder.html) represents an
+  extension of Order introducing analytic information, e.g., adding iceberg-related
+  information to this order
+  - [ ] dxFeed Graal C API
+  - [ ] dxFeed Graal C++ API
 - [Trade](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Trade.html) is a snapshot of the price and size
   of the last trade during regular trading hours and an overall day
   volume and day turnover
