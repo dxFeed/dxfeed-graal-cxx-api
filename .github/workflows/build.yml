@@ -12,12 +12,13 @@ jobs:
     strategy:
       matrix:
         config:
-          - name: win-vs2022
-            image: windows-latest
-            os: windows
-            cores: 4
-            cc: 'cl'
-            cxx: 'cl'
+# Waiting for 1.1.7
+#          - name: win-vs2022
+#            image: windows-latest
+#            os: windows
+#            cores: 4
+#            cc: 'cl'
+#            cxx: 'cl'
           - name: macos-13-xcode-15
             image: macos-13
             os: macos
