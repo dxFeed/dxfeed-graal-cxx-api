@@ -66,7 +66,6 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
      * @throws std::invalid_argument
-     * @throws std::bad_alloc
      */
     static IndexedEventSubscriptionSymbol fromGraal(void *graalNative);
 
@@ -76,16 +75,13 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      *
      * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
      * @param source the source.
-     * @throws std::bad_alloc
      */
     IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol, const IndexedEventSource &source);
 
-    /// @throws std::bad_alloc
     IndexedEventSubscriptionSymbol(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
 
     IndexedEventSubscriptionSymbol(IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept;
 
-    /// @throws std::bad_alloc
     IndexedEventSubscriptionSymbol &
     operator=(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
 

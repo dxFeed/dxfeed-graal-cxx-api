@@ -51,7 +51,8 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
     }
 
     if (graalNative == nullptr) {
-        return {};
+        throw std::invalid_argument(
+            "Unable to create TimeSeriesSubscriptionSymbol. The `graalNative` parameter is nullptr");
     }
 
     auto *graalSymbol = static_cast<dxfg_time_series_subscription_symbol_t *>(graalNative);
