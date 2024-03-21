@@ -7,11 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-//#ifdef __cpp_lib_bit_cast
-//#    include <bit>
-//#endif
-
-#include <bit>
+#ifdef __cpp_lib_bit_cast
+#    include <bit>
+#endif
 #include <climits>
 #include <cstring>
 
@@ -55,6 +53,12 @@ struct IpfPropertyChangeListener {};
 
 struct InstrumentProfileUpdateListener {};
 
+#if defined(__clang__)
+constexpr bool isClangFlavouredCompiler = true;
+#else
+constexpr bool isClangFlavouredCompiler = false;
+#endif
+
 template <typename... T> constexpr void ignore_unused(const T &...) {
 }
 
@@ -74,14 +78,14 @@ constexpr To bit_cast(const From &from)
     requires(sizeof(To) == sizeof(From))
 #endif
 {
-//#ifdef __cpp_lib_bit_cast
+#ifdef __cpp_lib_bit_cast
     if (is_constant_evaluated())
         return std::bit_cast<To>(from);
-//#endif
-//    auto to = To();
-//    // The cast suppresses a bogus -Wclass-memaccess on GCC.
-//    std::memcpy(static_cast<void *>(&to), &from, sizeof(to));
-//    return to;
+#endif
+    auto to = To();
+    // The cast suppresses a bogus -Wclass-memaccess on GCC.
+    std::memcpy(static_cast<void *>(&to), &from, sizeof(to));
+    return to;
 }
 
 /// Lightweight implementation of "nullable bool"
