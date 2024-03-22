@@ -83,7 +83,7 @@ void *OtcMarketsOrder::toGraal() const {
     return static_cast<void *>(graalOtcMarketsOrder);
 }
 
-void OtcMarketsOrder::freeGraal(void *graalNative) noexcept {
+void OtcMarketsOrder::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

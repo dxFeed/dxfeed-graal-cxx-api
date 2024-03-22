@@ -167,7 +167,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
     /// Creates new OTC Markets order event with default values.
     OtcMarketsOrder() noexcept = default;

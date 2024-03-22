@@ -146,10 +146,6 @@ constexpr auto equalsToZero = [](auto result) {
     return result == 0;
 };
 
-constexpr auto doNothing = [](auto result) {
-    return result;
-};
-
 constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction, auto defaultValue, auto &&...params) {
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&resultCheckerConverter, auto &&graalFunction, auto &&...params) {
@@ -159,15 +155,10 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
 }
 
 std::unordered_set<std::string> /* dxfg_string_list* */
-Tools::parseSymbols(const std::string &symbolList) noexcept {
+Tools::parseSymbols(std::string_view symbolList) {
     std::unordered_set<std::string> result{};
 
-    auto graalStringList = runGraalFunction(doNothing, dxfg_Tools_parseSymbols, nullptr, symbolList.c_str());
-
-    if (!graalStringList) {
-        // TODO: Improve error handling [EN-8232]
-        return result;
-    }
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
@@ -214,11 +205,7 @@ struct NativeStringList final {
 void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {
     NativeStringList l{args};
 
-    runIsolatedOrElse(
-        [](auto threadHandle, auto &&list) {
-            return dxfg_Tools_main(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
-        },
-        false, l.list);
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_Tools_main, l.list);
 }
 
 namespace ipf {

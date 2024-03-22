@@ -66,7 +66,6 @@ bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std:
     auto *list = static_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
-        // TODO: error handling [EN-8232]
         SymbolWrapper::freeGraal(static_cast<void *>(list->elements[i]));
     }
 
