@@ -17,6 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../EventTypeEnum.hpp"
 
 #include "Order.hpp"
+#include "OtcMarketsPriceType.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -319,8 +320,8 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     }
 
     /**
-     * Changes unique per-symbol index of this OTC Markets order and returns a shared pointer to it. Note, that this method also
-     * changes
+     * Changes unique per-symbol index of this OTC Markets order and returns a shared pointer to it. Note, that this
+     * method also changes
      * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
      * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
      *
@@ -985,23 +986,54 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
         return sharedAs<OtcMarketsOrder>();
     }
 
-    //    /**
-    //     * Returns OTC Markets price type of this OTC Markets order events.
-    //     * @return OTC Markets price type of this OTC Markets order events.
-    //     */
-    //  public OtcMarketsPriceType getOtcMarketsPriceType() {
-    //        return OtcMarketsPriceType.valueOf(Util.getBits(otcMarketsFlags, OTC_PRICE_TYPE_MASK,
-    //        OTC_PRICE_TYPE_SHIFT));
-    //    }
-    //
-    //    /**
-    //     * Changes OTC Markets price type of this OTC Markets order events.
-    //     * @param otcPriceType OTC Markets price type of this OTC Markets order events.
-    //     */
-    //  public void setOtcMarketsPriceType(OtcMarketsPriceType otcPriceType) {
-    //        otcMarketsFlags = Util.setBits(otcMarketsFlags, OTC_PRICE_TYPE_MASK, OTC_PRICE_TYPE_SHIFT,
-    //        otcPriceType.getCode());
-    //    }
+    /**
+     * Returns OTC Markets price type of this OTC Markets order events.
+     *
+     * @return OTC Markets price type of this OTC Markets order events.
+     */
+    const OtcMarketsPriceType &getOtcMarketsPriceType() const & noexcept {
+        return OtcMarketsPriceType::valueOf(
+            getBits(otcMarketsOrderData_.otcMarketsFlags, OTC_PRICE_TYPE_MASK, OTC_PRICE_TYPE_SHIFT));
+    }
+
+    /**
+     * Changes OTC Markets price type of this OTC Markets order events.
+     *
+     * @param otcPriceType OTC Markets price type of this OTC Markets order events.
+     */
+    void setOtcMarketsPriceType(const OtcMarketsPriceType &otcPriceType) noexcept {
+        otcMarketsOrderData_.otcMarketsFlags = setBits(otcMarketsOrderData_.otcMarketsFlags, OTC_PRICE_TYPE_MASK,
+                                                       OTC_PRICE_TYPE_SHIFT, otcPriceType.getCode());
+    }
+
+    /**
+     * Changes OTC Markets price type of this OTC Markets order events.
+     * Returns the current OTC Markets order.
+     *
+     * @param otcPriceType OTC Markets price type of this OTC Markets order events.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withOtcMarketsPriceType(const OtcMarketsPriceType &otcPriceType) noexcept {
+        setOtcMarketsPriceType(otcPriceType);
+
+        return *this;
+    }
+
+    /**
+     * Changes OTC Markets price type of this OTC Markets order events.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param otcPriceType OTC Markets price type of this OTC Markets order events.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withUnsolicitedShared(const OtcMarketsPriceType &otcPriceType) noexcept {
+        setOtcMarketsPriceType(otcPriceType);
+
+        return sharedAs<OtcMarketsOrder>();
+    }
 
     /**
      * Returns whether this event should NOT be considered for the inside price.

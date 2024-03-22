@@ -65,7 +65,10 @@ OtcMarketsOrder::Ptr OtcMarketsOrder::fromGraal(void *graalNative) {
 }
 
 std::string OtcMarketsOrder::toString() const noexcept {
-    return fmt::format("OtcMarketsOrder{{{}, marketMaker={}}}", baseFieldsToString(), getMarketMaker());
+    return fmt::format("OtcMarketsOrder{{{}, marketMaker={}, QAP={}, open={}, unsolicited={}, priceType={}, "
+                       "saturated={}, autoEx={}, NMS={}}}",
+                       baseFieldsToString(), getMarketMaker(), getQuoteAccessPayment(), isOpen(), isUnsolicited(),
+                       getOtcMarketsPriceType().toString(), isSaturated(), isAutoExecution(), isNmsConditional());
 }
 
 void *OtcMarketsOrder::toGraal() const {

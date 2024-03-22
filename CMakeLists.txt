@@ -248,6 +248,7 @@ set(dxFeedGraalCxxApi_EventCandle_Sources
 
 set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/AnalyticOrder.cpp
+        src/event/market/OtcMarketsPriceType.cpp
         src/event/market/OtcMarketsOrder.cpp
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
