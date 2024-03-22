@@ -210,27 +210,21 @@ void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std:
 
 namespace ipf {
 
-/* dxfg_instrument_profile_reader_t* */ void *InstrumentProfileReader::create() noexcept {
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle) {
-            return dxfg_InstrumentProfileReader_new(static_cast<graal_isolatethread_t *>(threadHandle));
-        },
-        nullptr));
+/* dxfg_instrument_profile_reader_t* */ dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader>
+InstrumentProfileReader::create() {
+    return dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader>{
+        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_new)};
 }
 
 std::int64_t InstrumentProfileReader::getLastModified(
-    /* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
-    if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling [EN-8232]
-        return 0;
+    /* dxfg_instrument_profile_reader_t * */ const dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader> &handle) {
+    if (!handle) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_InstrumentProfileReader_getLastModified`. The handle is invalid");
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileReader_getLastModified(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                                params...);
-        },
-        0, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle));
+    return runGraalFunctionAndThrowIfLessThanZero(dxfg_InstrumentProfileReader_getLastModified,
+                                                  static_cast<dxfg_instrument_profile_reader_t *>(handle.get()));
 }
 
 bool InstrumentProfileReader::wasComplete(

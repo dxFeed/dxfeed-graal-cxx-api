@@ -45,7 +45,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     Id<InstrumentProfileReader> id_;
     JavaObjectHandle<InstrumentProfileReader> handle_;
 
-    InstrumentProfileReader() noexcept;
+    InstrumentProfileReader();
 
   public:
     /// The alias to a type of shared pointer to the InstrumentProfileReader object
@@ -59,13 +59,13 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      *
      * @return The new InstrumentProfileReader
      */
-    static Ptr create() noexcept;
+    static Ptr create();
 
     /**
      * Returns last modification time (in milliseconds) from last InstrumentProfileReader::readFromFile() operation
      * or zero if it is unknown.
      */
-    std::int64_t getLastModified() const noexcept;
+    std::int64_t getLastModified() const;
 
     /**
      * Returns `true` if IPF was fully read on last InstrumentProfileReader::readFromFile() operation.

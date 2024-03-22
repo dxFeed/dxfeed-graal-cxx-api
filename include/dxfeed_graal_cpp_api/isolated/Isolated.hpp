@@ -31,10 +31,10 @@ struct Tools {
 
 namespace ipf {
 struct InstrumentProfileReader {
-    static /* dxfg_instrument_profile_reader_t* */ void *create() noexcept;
+    static /* dxfg_instrument_profile_reader_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileReader> create();
 
     static std::int64_t
-    getLastModified(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
+    getLastModified(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileReader>& handle);
 
     static bool wasComplete(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
 
