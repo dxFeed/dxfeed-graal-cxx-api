@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
@@ -22,106 +23,88 @@ DXFCPP_BEGIN_NAMESPACE
 struct EventMapper;
 
 /**
- * Order event is a snapshot for a full available market depth for a symbol.
- * The collection of order events of a symbol represents the most recent information
- * that is available about orders on the market at any given moment of time.
- * Order events give information on several levels of details, called scopes - see {@link Scope}.
- * Scope of an order is available via {@link #getScope scope} property.
+ * Represents an extension of Order for the symbols traded on the OTC Markets. It includes the OTC Markets specific
+ * quote data, such as @ref OtcMarketsOrder::getQuoteAccessPayment() "Quote Access Payment (QAP) value",
+ * @ref OtcMarketsOrder::getOtcMarketsPriceType() "Quote Price Type",
+ * @ref OtcMarketsOrder::isOpen() "Open/Closed status",
+ * and @ref OtcMarketsOrder::isUnsolicited() "Unsolicited quote indicator". The original event (OTC Quote) published by
+ * the exchange is presented in the form of two separate OTCMarketsOrder events (bid and ask side).
+ * Note that the description of the fields (e.g. QAP) uses the original "quote" term.
+ * <p>
+ * For more information about original fields, QAP, Quote Flags and Extended Quote Flags,
+ * see <a href="https://downloads.dxfeed.com/specifications/OTC_Markets_Multicast_Data_Feeds.pdf">OTC Markets Multicast
+ * Data Feed</a>. <p> For more information about display requirements, see <a
+ * href="https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf">OTC Markets Display
+ * Requirements</a>.
  *
- * <p> Order events arrive from
- * multiple sources for the same market symbol and are distinguished by their
- * {@link #getIndex index}. Index is a unique per symbol identifier of the event.
+ * <p> Like regular orders, OTC Markets order events arrive from multiple sources for the same market symbol and are
+ * distinguished by their @ref ::getIndex "index".
  * It is unique across all the sources of depth information for the symbol.
- * The event with {@link #getSizeAsDouble() sizeAsDouble} either {@code 0} or {@link Double#NaN NaN}
- * is a signal to remove previously received order for the corresponding index.
- * The method {@link #hasSize() hasSize} is a convenient method to test for size presence.
+ * The event with @ref ::getSize() "size" either `0` or `NaN` is a signal to remove previously received order for the
+ * corresponding index.
+ * The method ::hasSize() is a convenient method to test for size presence.
  *
- * <p> Events from finer-grained {@link Scope} of detail give more information and include events
- * from coarse-grained {@link Scope} of detail. For a consistent representation of the market depth
- * to the end-user, order events must be filtered to remove coarse-grained events that
- * are superseded by the finer-grained events.
+ * <h3>Quote Flags</h3>
  *
- * <h3>Properties</h3>
- *
- * {@code Order} event has the following properties:
- *
+ * Quote Flags from OTC Markets are mapped to the access methods of this class as follows:
  * <ul>
- * <li>{@link #getEventSymbol() eventSymbol} - symbol of this event;
- * <li>{@link #getSource() source} - source of this event;
- * <li>{@link #getEventFlags() eventFlags} - transactional event flags;
- * <li>{@link #getIndex() index} - unique per-symbol index of this order;
- * <li>{@link #getTime() time} - time of this order;
- * <li>{@link #getTimeNanoPart() timeNanoPart} - microseconds and nanoseconds time part of this order;
- * <li>{@link #getSequence() sequence} - sequence of this order;
- * <li>{@link #getPrice() price} - price of this order;
- * <li>{@link #getSize() size} - size of this order as integer number (rounded toward zero);
- * <li>{@link #getSizeAsDouble() sizeAsDouble} - size of this order as floating number with fractions;
- * <li>{@link #getExecutedSize()} - executed size of this order;
- * <li>{@link #getCount() count} - number of individual orders in this aggregate order;
- * <li>{@link #getExchangeCode() exchangeCode} - exchange code of this order;
- * <li>{@link #getOrderSide() orderSide} - side of this order;
- * <li>{@link #getScope() scope} - scope of this order;
- * <li>{@link #getMarketMaker() marketMaker} - market maker or other aggregate identifier of this order.
+ *     <li>Update Side - @ref OtcMarketsOrder::getOrderSide() "orderSide"
+ *     <li>State - @ref OtcMarketsOrder::isOpen() "open"
+ *     <li>Ask/Bid Unsolicited - @ref OtcMarketsOrder::isUnsolicited() "unsolicited"
+ *     <li>Ask/Bid Priced, Aks/Bid OW/BW - @ref OtcMarketsOrder::getOtcMarketsPriceType() "otcMarketsPriceType"
+ * </ul>
+ *
+ * <h3>Extended Quote Flags</h3>
+ *
+ * Extended Quote Flags from OTC Markets are mapped to the access methods of this class as follows:
+ * <ul>
+ *     <li>QuoteSaturatedFlag - @ref OtcMarketsOrder::isSaturated() "saturated"
+ *     <li>Bid/Offer AutoExFlag - @ref OtcMarketsOrder::isAutoExecution() "autoExecution"
+ *     <li>NMSConditionalQuoteFlag - @ref OtcMarketsOrder::isNmsConditional() "nmsConditional"
  * </ul>
  *
  * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
- * Some order event sources provide a consistent view of the price-level or detailed order book. Their updates
- * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
- * The corresponding information is carried in {@link #getEventFlags() eventFlags} property.
+ * OTC Markets order event sources provide a consistent view of the order book. Their updates
+ * may incorporate multiple changes to individual orders that have to be processed at the same time.
+ * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
  *
- * <p> See <a href="OrderBase.html#eventFlagsSection">Event Flags</a> section of {@link OrderBase}
- * class documentation for details.
- *
- * <p> The composite quotes with {@link Scope#COMPOSITE} and regional quotes with {@link Scope#REGIONAL} come
- * individually from different venues and are not related to each other in any transactional way. The result of
- * {@link #getEventFlags() getEventFlags} method for them is always zero.
- *
- * <p> {@link OrderBookModel} class contains all the appropriate logic to deal with transactions and snapshots
- * for {@link Order} events. The client-visible changes to the model are reported only when the snapshot for the
- * specific source id is received completely and when there is no ongoing transaction for the specific source id.
- * It relies on the code of {@link AbstractIndexedEventModel} to handle this logic.
- * Use the source code of {@link AbstractIndexedEventModel} for clarification on transactions and snapshot logic.
+ * <p> See the "Event Flags" section of OrderBase class documentation for details.
  *
  * <h3>Publishing order books</h3>
  *
- * When publishing an order event with {@link DXPublisher#publishEvents(Collection) DXPublisher.publishEvents}
- * method, least significant 32 bits of order {@link #getIndex() index} must be in a range of from 0 to
- * {@link Integer#MAX_VALUE} inclusive.
- * Use {@link #setSource(OrderSource) setSource} method after {@link #setIndex(long) setIndex} to properly
- * include source identifier into the index.
+ * When publishing an order event with DXPublisher::publishEvents() method, least significant 32 bits of
+ * order @ref ::getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()`
+ * inclusive. Use ::setSource() method after ::setIndex() to properly include source identifier into the
+ * index.
  *
- * A snapshot has to be published in the <em>descending</em> order of {@link #getIndex() index}, starting with
- * an event with the largest index and marking it with {@link #SNAPSHOT_BEGIN} bit in {@link #getEventFlags() eventFlags},
- * and finishing the snapshot with an event that has zero 32 least significant bits of index.
- * {@link #SNAPSHOT_END} bit in {@link #getEventFlags() eventFlags} is optional during publishing.
+ * A snapshot has to be published in the <em>descending</em> order of @ref ::getIndex() "index", starting with
+ * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref ::getEventFlags()
+ * "eventFlags", and finishing the snapshot with an event that has zero 32 least significant bits of index.
+ * EventFlag::SNAPSHOT_END bit in @ref ::getEventFlags() "eventFlags" is optional during publishing.
  * It will be properly set on receiving end anyway.
  *
  * <h3>Limitations</h3>
  *
- * This event type cannot be used with {@link DXFeed#getLastEvent DXFeed.getLastEvent} method.
+ * This event type cannot be used with DXFeed::getLastEvent() method.
  *
  * <h3><a name="fobSection">Full Order Book Support</a></h3>
  *
  * Some feeds provide support for "Full Order Book" (FOB) where additional fields will be available:
  * <ul>
- * <li>{@link #getAction() action} - event business meaning (see {@link OrderAction} for more details)</li>
- * <li>{@link #getActionTime() actionTime} - time of the last action</li>
- * <li>{@link #getOrderId() orderId} - ID of this order</li>
- * <li>{@link #getAuxOrderId() auxOrderId} - additional ID for this order</li>
- * <li>{@link #getTradeId() tradeId} - trade (order execution) ID</li>
- * <li>{@link #getTradePrice() tradePrice} - price of the trade</li>
- * <li>{@link #getTradeSize() tradeSize} - size of the trade</li>
+ * <li>@ref ::getAction() "action" - event business meaning (see OrderAction for more details)</li>
+ * <li>@ref ::getActionTime() "actionTime" - time of the last action</li>
+ * <li>@ref ::getOrderId() "orderId" - ID of this OTC Markets order</li>
+ * <li>@ref ::getAuxOrderId() "auxOrderId" - additional ID for this OTC Markets order</li>
+ * <li>@ref ::getTradeId() "tradeId" - trade (order execution) ID</li>
+ * <li>@ref ::getTradePrice() "tradePrice" - price of the trade</li>
+ * <li>@ref ::getTradeSize() "tradeSize" - size of the trade</li>
  * </ul>
  *
  * <h3>Implementation details</h3>
  *
- * This event is implemented on top of QDS record {@code Quote} for composite quotes with {@link Scope#COMPOSITE},
- * record {@code Quote&X} for regional exchange best quotes with {@link Scope#REGIONAL},
- * record {@code MarketMaker} for market-maker quotes and futures price level aggregates with {@link Scope#AGGREGATE},
- * record {@code Order} for the most fine-grained {@link Scope#ORDER} with zero source id,
- * and records {@code Order#<source-id>} for specific source ids,
- * where {@code <source-id>} is up to 4 ASCII characters with a mnemonic for the source like "NTV".
+ * This event is implemented on top of QDS records `OtcMarketsOrder#<source-id>`,
+ * where `<source-id>` is up to 4 ASCII characters with a mnemonic for the source like "pink".
  */
 class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     friend struct EventMapper;
@@ -147,7 +130,6 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     static constexpr std::uint32_t UNSOLICITED = 1 << 1;
     static constexpr std::uint32_t OPEN = 1;
 
-  protected:
     struct OtcMarketsOrderData {
         std::int32_t quoteAccessPayment{};
         std::int32_t otcMarketsFlags{};
@@ -159,7 +141,16 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     void fillGraalData(void *graalNative) const noexcept override;
 
   public:
-    static std::shared_ptr<OtcMarketsOrder> fromGraal(void *graalNative);
+    /// The alias to a type of shared pointer to the OtcMarketsOrder object
+    using Ptr = std::shared_ptr<OtcMarketsOrder>;
+
+    /// The alias to a type of unique pointer to the OtcMarketsOrder object
+    using Unique = std::unique_ptr<OtcMarketsOrder>;
+
+    /// Type identifier and additional information about the current event class.
+    static const EventTypeEnum &TYPE;
+
+    static OtcMarketsOrder::Ptr fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -177,16 +168,6 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      */
     static void freeGraal(void *graalNative) noexcept;
 
-  public:
-    /// The alias to a type of shared pointer to the OtcMarketsOrder object
-    using Ptr = std::shared_ptr<OtcMarketsOrder>;
-
-    /// The alias to a type of unique pointer to the OtcMarketsOrder object
-    using Unique = std::unique_ptr<OtcMarketsOrder>;
-
-    /// Type identifier and additional information about the current event class.
-    static const EventTypeEnum &TYPE;
-
     /// Creates new OTC Markets order event with default values.
     OtcMarketsOrder() noexcept = default;
 
@@ -197,6 +178,8 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      */
     explicit OtcMarketsOrder(std::string eventSymbol) noexcept : Order(std::move(eventSymbol)) {
     }
+
+    // MarketEvent methods
 
     /**
      * Changes event's symbol and returns the current OTC Markets order.
@@ -211,16 +194,965 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     /**
      * Changes event's symbol and returns a shared pointer to the current OTC Markets order.
      *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Order>(new
-     * Order(...))` or `std::make_shared<Order>(...)`
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
      *
      * @param eventSymbol The symbol of this event.
-     * @return A shared pointer to the current order.
+     * @return A shared pointer to the current OTC Markets order.
      */
     OtcMarketsOrder::Ptr withEventSymbolShared(const std::string &eventSymbol) noexcept {
         return Order::withEventSymbolShared(eventSymbol)->sharedAs<OtcMarketsOrder>();
     }
 
+    /**
+     * Changes event's creation time and returns the current OTC Markets order.
+     *
+     * @param eventTime the difference, measured in milliseconds, between the event creation time and
+     * midnight, January 1, 1970 UTC.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withEventTime(std::int64_t eventTime) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withEventTime(eventTime));
+    }
+
+    /**
+     * Changes event's creation time and returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param eventTime the difference, measured in milliseconds, between the event creation time and
+     * midnight, January 1, 1970 UTC.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withEventTimeShared(std::int64_t eventTime) noexcept {
+        return Order::withEventTimeShared(eventTime)->sharedAs<OtcMarketsOrder>();
+    }
+
+    // OrderBase methods
+
+    /**
+     * Changes event's source and returns the current OTC Markets order.
+     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
+     *
+     * @param source source of this event.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withSource(const OrderSource &source) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withSource(source));
+    }
+
+    /**
+     * Changes event's source and returns a shared pointer to the current OTC Markets order.
+     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param source source of this event.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withSourceShared(const OrderSource &source) noexcept {
+        return Order::withSourceShared(source)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes transactional event flags and returns the current OTC Markets order.
+     * See EventFlag "Event Flags" section.
+     *
+     * @param eventFlags transactional event flags.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withEventFlags(std::int32_t eventFlags) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withEventFlags(eventFlags));
+    }
+
+    /**
+     * Changes transactional event flags and returns a shared pointer to the current OTC Markets order.
+     * See EventFlag "Event Flags" section.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param eventFlags transactional event flags.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withEventFlagsShared(std::int32_t eventFlags) noexcept {
+        return Order::withEventFlagsShared(eventFlags)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes transactional event flags and returns the current OTC Markets order.
+     * See EventFlag "Event Flags" section.
+     *
+     * @param eventFlags transactional event flags' mask.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withEventFlags(eventFlags));
+    }
+
+    /**
+     * Changes transactional event flags and returns a shared pointer to the current OTC Markets order.
+     * See EventFlag "Event Flags" section.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param eventFlags transactional event flags' mask.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withEventFlagsShared(const EventFlagsMask &eventFlags) noexcept {
+        return Order::withEventFlagsShared(eventFlags)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes unique per-symbol index of this OTC Markets order and returns it. Note, that this method also changes
+     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
+     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
+     *
+     * @param index unique per-symbol index of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withIndex(std::int64_t index) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withIndex(index));
+    }
+
+    /**
+     * Changes unique per-symbol index of this OTC Markets order and returns a shared pointer to it. Note, that this method also
+     * changes
+     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
+     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param index unique per-symbol index of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withIndexShared(std::int64_t index) noexcept {
+        return Order::withIndexShared(index)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes time of this OTC Markets order and returns it.
+     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+     *
+     * @param time time of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withTime(std::int64_t time) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withTime(time));
+    }
+
+    /**
+     * Changes time of this OTC Markets order and returns a shared pointer to it.
+     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param time time of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withTimeShared(std::int64_t time) noexcept {
+        return Order::withTimeShared(time)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes microseconds and nanoseconds time part of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param timeNanoPart microseconds and nanoseconds time part of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withTimeNanoPart(timeNanoPart));
+    }
+
+    /**
+     * Changes microseconds and nanoseconds time part of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param timeNanoPart microseconds and nanoseconds time part of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withTimeNanoPartShared(std::int32_t timeNanoPart) noexcept {
+        return Order::withTimeNanoPartShared(timeNanoPart)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes @ref OrderBase::getSequence() "sequence number" of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param sequence the sequence.
+     * @return The current OTC Markets order.
+     * @see OrderBase::getSequence()
+     */
+    OtcMarketsOrder &withSequence(std::int32_t sequence) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withSequence(sequence));
+    }
+
+    /**
+     * Changes @ref OrderBase::getSequence() "sequence number" of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param sequence the sequence.
+     * @return A shared pointer to the current OTC Markets order.
+     * @see OrderBase::getSequence()
+     */
+    OtcMarketsOrder::Ptr withSequenceShared(std::int32_t sequence) noexcept {
+        return Order::withSequenceShared(sequence)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes time of this OTC Markets order and returns it.
+     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+     *
+     * @param timeNanos The time of this OTC Markets order in nanoseconds.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withTimeNanos(std::int64_t timeNanos) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withTimeNanos(timeNanos));
+    }
+
+    /**
+     * Changes time of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param timeNanos time of this OTC Markets order in nanoseconds.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withTimeNanosShared(std::int64_t timeNanos) noexcept {
+        return Order::withTimeNanosShared(timeNanos)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes action of this OTC Markets order and returns it.
+     *
+     * @param action The side of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withAction(const OrderAction &action) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withAction(action));
+    }
+
+    /**
+     * Changes action of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param action The action of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withActionShared(const OrderAction &action) noexcept {
+        return Order::withActionShared(action)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes time of the last action and returns current OTC Markets order.
+     *
+     * @param actionTime The last order action time.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withActionTime(std::int64_t actionTime) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withActionTime(actionTime));
+    }
+
+    /**
+     * Changes time of the last action and returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param actionTime The last order action time.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withActionTimeShared(std::int64_t actionTime) noexcept {
+        return Order::withActionTimeShared(actionTime)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes order ID.
+     * Returns the current OTC Markets order.
+     *
+     * @param orderId The order ID.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withOrderId(std::int64_t orderId) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withOrderId(orderId));
+    }
+
+    /**
+     * Changes order ID.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param orderId order ID.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withOrderIdShared(std::int64_t orderId) noexcept {
+        return Order::withOrderIdShared(orderId)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes auxiliary order ID.
+     * Returns the current OTC Markets order.
+     *
+     * @param auxOrderId The auxiliary order ID.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withAuxOrderId(auxOrderId));
+    }
+
+    /**
+     * Changes auxiliary order ID.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param auxOrderId The auxiliary order ID.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withAuxOrderIdShared(std::int64_t auxOrderId) noexcept {
+        return Order::withAuxOrderIdShared(auxOrderId)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes price of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param price The price of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withPrice(double price) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withPrice(price));
+    }
+
+    /**
+     * Changes price of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param price The price of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withPriceShared(double price) noexcept {
+        return Order::withPriceShared(price)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes size of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param size The size of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withSize(double size) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withSize(size));
+    }
+
+    /**
+     * Changes size of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param size The size of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withSizeShared(double size) noexcept {
+        return Order::withSizeShared(size)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes executed size of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param executedSize The executed size of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withExecutedSize(double executedSize) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withExecutedSize(executedSize));
+    }
+
+    /**
+     * Changes executed size of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param executedSize The executed size of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withExecutedSizeShared(double executedSize) noexcept {
+        return Order::withExecutedSizeShared(executedSize)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes number of individual orders in this aggregate order.
+     * Returns the current OTC Markets order.
+     *
+     * @param count The number of individual orders in this aggregate order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withCount(std::int64_t count) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withCount(count));
+    }
+
+    /**
+     * Changes number of individual orders in this aggregate order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param count The number of individual orders in this aggregate order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withCountShared(std::int64_t count) noexcept {
+        return Order::withCountShared(count)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes trade ID.
+     * Returns the current OTC Markets order.
+     *
+     * @param tradeId The trade ID.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withTradeId(std::int64_t tradeId) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withTradeId(tradeId));
+    }
+
+    /**
+     * Changes trade ID.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param tradeId The trade ID.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withTradeIdShared(std::int64_t tradeId) noexcept {
+        return Order::withTradeIdShared(tradeId)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes trade price.
+     * Returns the current OTC Markets order.
+     *
+     * @param tradePrice The trade price.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withTradePrice(double tradePrice) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withTradePrice(tradePrice));
+    }
+
+    /**
+     * Changes trade price.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param tradePrice The trade price.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withTradePriceShared(double tradePrice) noexcept {
+        return Order::withTradePriceShared(tradePrice)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes trade size.
+     * Returns the current OTC Markets order.
+     *
+     * @param tradeSize The trade size.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withTradeSize(double tradeSize) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withTradeSize(tradeSize));
+    }
+
+    /**
+     * Changes trade size.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param tradeSize The trade size.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withTradeSizeShared(double tradeSize) noexcept {
+        return Order::withTradeSizeShared(tradeSize)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes exchange code of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param exchangeCode The exchange code of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withExchangeCode(char exchangeCode) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withExchangeCode(exchangeCode));
+    }
+
+    /**
+     * Changes exchange code of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param exchangeCode The exchange code of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withExchangeCodeShared(char exchangeCode) noexcept {
+        return Order::withExchangeCodeShared(exchangeCode)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes exchange code of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param exchangeCode The exchange code of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withExchangeCode(std::int16_t exchangeCode) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withExchangeCode(exchangeCode));
+    }
+
+    /**
+     * Changes exchange code of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param exchangeCode The exchange code of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withExchangeCodeShared(std::int16_t exchangeCode) noexcept {
+        return Order::withExchangeCodeShared(exchangeCode)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes side of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param side The side of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withOrderSide(const Side &side) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withOrderSide(side));
+    }
+
+    /**
+     * Changes side of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param side The side of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withOrderSideShared(const Side &side) noexcept {
+        return Order::withOrderSideShared(side)->sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Changes scope of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param scope The scope of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withScope(const Scope &scope) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withScope(scope));
+    }
+
+    /**
+     * Changes scope of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param scope The scope of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withScopeShared(const Scope &scope) noexcept {
+        return Order::withScopeShared(scope)->sharedAs<OtcMarketsOrder>();
+    }
+
+    // Order methods
+
+    /**
+     * Changes market maker or other aggregate identifier of this OTC Markets order.
+     * Returns the current OTC Markets order.
+     *
+     * @param marketMaker The market maker or other aggregate identifier of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withMarketMaker(std::string marketMaker) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withMarketMaker(std::move(marketMaker)));
+    }
+
+    /**
+     * Changes market maker or other aggregate identifier of this OTC Markets order.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param marketMaker The market maker or other aggregate identifier of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withMarketMakerShared(std::string marketMaker) noexcept {
+        return Order::withMarketMakerShared(std::move(marketMaker))->sharedAs<OtcMarketsOrder>();
+    }
+
+    // OtcMarketsOrder methods
+
+    /**
+     * Returns Quote Access Payment (QAP) of this OTC Markets order.
+     * QAP functionality allows participants to dynamically set access fees or rebates,
+     * in real-time and on a per-security basis through OTC Dealer or OTC FIX connections.
+     * Positive integers (1 to 30) indicate a rebate, and negative integers (-1 to -30) indicate an access fee.
+     * 0 indicates no rebate or access fee.
+     *
+     * @return QAP of this OTC Markets order.
+     */
+    std::int32_t getQuoteAccessPayment() const noexcept {
+        return otcMarketsOrderData_.quoteAccessPayment;
+    }
+
+    /**
+     * Changes Quote Access Payment (QAP) of this OTC Markets order.
+     *
+     * @param quoteAccessPayment QAP of this OTC Markets order.
+     */
+    void setQuoteAccessPayment(std::int32_t quoteAccessPayment) noexcept {
+        otcMarketsOrderData_.quoteAccessPayment = quoteAccessPayment;
+    }
+
+    /**
+     * Changes Quote Access Payment (QAP) and returns the current OTC Markets order.
+     *
+     * @param quoteAccessPayment QAP of this OTC Markets order.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withQuoteAccessPayment(std::int32_t quoteAccessPayment) noexcept {
+        setQuoteAccessPayment(quoteAccessPayment);
+
+        return *this;
+    }
+
+    /**
+     * Changes Quote Access Payment (QAP) and returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param quoteAccessPayment QAP of this OTC Markets order.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withQuoteAccessPaymentShared(std::int32_t quoteAccessPayment) noexcept {
+        setQuoteAccessPayment(quoteAccessPayment);
+
+        return sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Returns whether this event is available for business within the operating hours of the OTC Link system.
+     * All quotes will be closed at the start of the trading day and will remain closed until the traders open theirs.
+     *
+     * @return `true` if this event is available for business within the operating hours of the OTC Link system.
+     */
+    bool isOpen() const noexcept {
+        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, OPEN) != 0;
+    }
+
+    /**
+     * Changes whether this event is available for business within the operating hours of the OTC Link system.
+     *
+     * @param open `true` if this event is available for business within the operating hours of the OTC Link system.
+     */
+    void setOpen(bool open) noexcept {
+        otcMarketsOrderData_.otcMarketsFlags = open ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, OPEN)
+                                                    : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~OPEN);
+    }
+
+    /**
+     * Changes whether this event is available for business within the operating hours of the OTC Link system.
+     * Returns the current OTC Markets order.
+     *
+     * @param open `true` if this event is available for business within the operating hours of the OTC Link system.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withOpen(bool open) noexcept {
+        setOpen(open);
+
+        return *this;
+    }
+
+    /**
+     * Changes whether this event is available for business within the operating hours of the OTC Link system.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param open `true` if this event is available for business within the operating hours of the OTC Link system.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withOpenShared(bool open) noexcept {
+        setOpen(open);
+
+        return sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Returns whether this event is unsolicited.
+     *
+     * @return `true` if this event is unsolicited.
+     */
+    bool isUnsolicited() const noexcept {
+        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, UNSOLICITED) != 0;
+    }
+
+    /**
+     * Changes whether this event is unsolicited.
+     *
+     * @param unsolicited `true` if this event is unsolicited.
+     */
+    void setUnsolicited(bool unsolicited) noexcept {
+        otcMarketsOrderData_.otcMarketsFlags = unsolicited
+                                                   ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, UNSOLICITED)
+                                                   : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~UNSOLICITED);
+    }
+
+    /**
+     * Changes whether this event is unsolicited.
+     * Returns the current OTC Markets order.
+     *
+     * @param unsolicited `true` if this event is unsolicited.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withUnsolicited(bool unsolicited) noexcept {
+        setUnsolicited(unsolicited);
+
+        return *this;
+    }
+
+    /**
+     * Changes whether this event is unsolicited.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param unsolicited `true` if this event is unsolicited.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withUnsolicitedShared(bool unsolicited) noexcept {
+        setUnsolicited(unsolicited);
+
+        return sharedAs<OtcMarketsOrder>();
+    }
+
+    //    /**
+    //     * Returns OTC Markets price type of this OTC Markets order events.
+    //     * @return OTC Markets price type of this OTC Markets order events.
+    //     */
+    //  public OtcMarketsPriceType getOtcMarketsPriceType() {
+    //        return OtcMarketsPriceType.valueOf(Util.getBits(otcMarketsFlags, OTC_PRICE_TYPE_MASK,
+    //        OTC_PRICE_TYPE_SHIFT));
+    //    }
+    //
+    //    /**
+    //     * Changes OTC Markets price type of this OTC Markets order events.
+    //     * @param otcPriceType OTC Markets price type of this OTC Markets order events.
+    //     */
+    //  public void setOtcMarketsPriceType(OtcMarketsPriceType otcPriceType) {
+    //        otcMarketsFlags = Util.setBits(otcMarketsFlags, OTC_PRICE_TYPE_MASK, OTC_PRICE_TYPE_SHIFT,
+    //        otcPriceType.getCode());
+    //    }
+
+    /**
+     * Returns whether this event should NOT be considered for the inside price.
+     *
+     * @return `true` if this event should NOT be considered for the inside price.
+     */
+    bool isSaturated() const noexcept {
+        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, SATURATED) != 0;
+    }
+
+    /**
+     * Changes whether this event should NOT be considered for the inside price.
+     *
+     * @param saturated `true` if this event should NOT be considered for the inside price.
+     */
+    void setSaturated(bool saturated) noexcept {
+        otcMarketsOrderData_.otcMarketsFlags = saturated
+                                                   ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, SATURATED)
+                                                   : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~SATURATED);
+    }
+
+    /**
+     * Changes whether this event should NOT be considered for the inside price.
+     * Returns the current OTC Markets order.
+     *
+     * @param saturated `true` if this event should NOT be considered for the inside price.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withSaturated(bool saturated) noexcept {
+        setSaturated(saturated);
+
+        return *this;
+    }
+
+    /**
+     * Changes whether this event should NOT be considered for the inside price.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param saturated `true` if this event should NOT be considered for the inside price.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withSaturatedShared(bool saturated) noexcept {
+        setSaturated(saturated);
+
+        return sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Returns whether this event is in 'AutoEx' mode.
+     * If this event is in 'AutoEx' mode then a response to an OTC Link trade message will be immediate.
+     *
+     * @return `true` if this event is in 'AutoEx' mode.
+     */
+    bool isAutoExecution() const noexcept {
+        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, AUTO_EXECUTION) != 0;
+    }
+
+    /**
+     * Changes whether this event is in 'AutoEx' mode.
+     *
+     * @param autoExecution `true` if this event is in 'AutoEx' mode.
+     */
+    void setAutoExecution(bool autoExecution) noexcept {
+        otcMarketsOrderData_.otcMarketsFlags =
+            autoExecution ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, AUTO_EXECUTION)
+                          : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~AUTO_EXECUTION);
+    }
+
+    /**
+     * Changes whether this event is in 'AutoEx' mode.
+     * Returns the current OTC Markets order.
+     *
+     * @param autoExecution `true` if this event is in 'AutoEx' mode.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withAutoExecution(bool autoExecution) noexcept {
+        setAutoExecution(autoExecution);
+
+        return *this;
+    }
+
+    /**
+     * Changes whether this event is in 'AutoEx' mode.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param autoExecution `true` if this event is in 'AutoEx' mode.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withAutoExecutionShared(bool autoExecution) noexcept {
+        setAutoExecution(autoExecution);
+
+        return sharedAs<OtcMarketsOrder>();
+    }
+
+    /**
+     * Returns whether this event represents a NMS conditional.
+     * This flag indicates the displayed @ref #getSize() "size" is a round lot at least two times greater than the
+     * minimum round lot size in the security and a trade message relating to the event cannot be sent or filled for
+     * less than the displayed size.
+     *
+     * @return `true` if this event represents a NMS conditional.
+     */
+    bool isNmsConditional() const noexcept {
+        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, NMS_CONDITIONAL) != 0;
+    }
+
+    /**
+     * Changes whether this event represents a NMS conditional.
+     *
+     * @param nmsConditional `true` if this event represents a NMS conditional.
+     */
+    void setNmsConditional(bool nmsConditional) noexcept {
+        otcMarketsOrderData_.otcMarketsFlags =
+            nmsConditional ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, NMS_CONDITIONAL)
+                           : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~NMS_CONDITIONAL);
+    }
+
+    /**
+     * Changes whether this event represents a NMS conditional.
+     * Returns the current OTC Markets order.
+     *
+     * @param nmsConditional `true` if this event represents a NMS conditional.
+     * @return The current OTC Markets order.
+     */
+    OtcMarketsOrder &withNmsConditional(bool nmsConditional) noexcept {
+        setNmsConditional(nmsConditional);
+
+        return *this;
+    }
+
+    /**
+     * Changes whether this event represents a NMS conditional.
+     * Returns a shared pointer to the current OTC Markets order.
+     *
+     * @warning Please do not use this method unless the object was created with `std::shared_ptr<OtcMarketsOrder>(new
+     * OtcMarketsOrder(...))` or `std::make_shared<OtcMarketsOrder>(...)`
+     *
+     * @param nmsConditional `true` if this event represents a NMS conditional.
+     * @return A shared pointer to the current OTC Markets order.
+     */
+    OtcMarketsOrder::Ptr withNmsConditionalShared(bool nmsConditional) noexcept {
+        setNmsConditional(nmsConditional);
+
+        return sharedAs<OtcMarketsOrder>();
+    }
 
     /**
      * Returns a string representation of the current object.
@@ -229,7 +1161,6 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      */
     std::string toString() const noexcept override;
 };
-
 
 DXFCPP_END_NAMESPACE
 

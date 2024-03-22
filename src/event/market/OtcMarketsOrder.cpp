@@ -45,7 +45,7 @@ void OtcMarketsOrder::fillGraalData(void *graalNative) const noexcept {
     graalOtcMarketsOrder->otc_markets_flags = otcMarketsOrderData_.otcMarketsFlags;
 }
 
-std::shared_ptr<OtcMarketsOrder> OtcMarketsOrder::fromGraal(void *graalNative) {
+OtcMarketsOrder::Ptr OtcMarketsOrder::fromGraal(void *graalNative) {
     if (!graalNative) {
         throw std::invalid_argument("Unable to create OtcMarketsOrder. The `graalNative` parameter is nullptr");
     }
