@@ -169,38 +169,7 @@ Tools::parseSymbols(std::string_view symbolList) {
     return result;
 }
 
-struct NativeStringList final {
-    explicit NativeStringList(const std::vector<std::string> &values) {
-        if (values.empty()) {
-            list = nullptr;
-        } else {
-            list = new dxfg_string_list{};
-            list->size = fitToType<decltype(dxfg_string_list::size)>(values.size());
-            list->elements = new const char *[list->size] {
-                nullptr
-            };
-
-            for (int i = 0; i < list->size; i++) {
-                if (!values[i].empty()) {
-                    list->elements[i] = createCString(values[i]);
-                }
-            }
-        }
-    }
-
-    ~NativeStringList() {
-        if (list) {
-            for (int i = 0; i < list->size; i++) {
-                delete[] list->elements[i];
-            }
-
-            delete[] list->elements;
-            delete list;
-        }
-    }
-
-    dxfg_string_list *list = nullptr;
-};
+using NativeStringList = typename isolated::internal::NativeStringListWrapper<dxfg_string_list>;
 
 void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {
     NativeStringList l{args};
