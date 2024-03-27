@@ -29,7 +29,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(const std::string &symbols) noexcept;
+    static std::unordered_set<SymbolWrapper> parseSymbols(const std::string &symbols);
 
     /**
      * Parses an input string and returns a set of symbols.
@@ -71,7 +71,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(const std::string &symbols) noexcept;
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(const std::string &symbols);
 
     /**
      * Parses an input string and returns a set of candle symbols.

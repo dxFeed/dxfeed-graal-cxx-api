@@ -6,7 +6,6 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include "dxfeed_graal_cpp_api/event/market/AnalyticOrder.hpp"
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
@@ -70,10 +69,11 @@ std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) noexc
 }
 
 std::string AnalyticOrder::toString() const noexcept {
-    return fmt::format(
-        "AnalyticOrder{{{}, icebergPeakSize={}, icebergHiddenSize={}, icebergExecutedSize={}, icebergType={}}}",
-        baseFieldsToString(), dxfcpp::toString(getIcebergPeakSize()), dxfcpp::toString(getIcebergHiddenSize()),
-        dxfcpp::toString(getIcebergExecutedSize()), getIcebergType().toString());
+    return fmt::format("AnalyticOrder{{{}, marketMaker={}, icebergPeakSize={}, icebergHiddenSize={}, "
+                       "icebergExecutedSize={}, icebergType={}}}",
+                       baseFieldsToString(), getMarketMaker(), dxfcpp::toString(getIcebergPeakSize()),
+                       dxfcpp::toString(getIcebergHiddenSize()), dxfcpp::toString(getIcebergExecutedSize()),
+                       getIcebergType().toString());
 }
 
 void *AnalyticOrder::toGraal() const {

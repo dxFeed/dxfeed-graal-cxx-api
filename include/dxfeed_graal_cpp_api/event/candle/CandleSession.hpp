@@ -113,14 +113,13 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
      *
      * @param s The string representation of candle session attribute.
      * @return The candle session attribute (reference) or std::nullopt if there is no supported attribute's value.
+     * @throws std::invalid_argument
      */
-    static std::optional<std::reference_wrapper<const CandleSession>> parse(const std::string &s) noexcept {
+    static std::reference_wrapper<const CandleSession> parse(const std::string &s) {
         auto n = s.length();
 
         if (n == 0) {
-            // TODO: error handling [EN-8232] throw IllegalArgumentException("Missing candle session");
-
-            return std::nullopt;
+            throw std::invalid_argument("Missing candle session");
         }
 
         auto found = BY_STRING.find(s);
@@ -137,9 +136,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
             }
         }
 
-        // TODO: error handling [EN-8232] throw IllegalArgumentException("Unknown candle session: " + s);
-
-        return std::nullopt;
+        throw std::invalid_argument("Unknown candle session: " + s);
     }
 
     /**
@@ -151,11 +148,11 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
      * @return candle session attribute of the given candle symbol string or std::nullopt if there is no supported
      * attribute's value.
      */
-    static std::optional<std::reference_wrapper<const CandleSession>>
-    getAttributeForSymbol(const std::string &symbol) noexcept {
+    static std::reference_wrapper<const CandleSession>
+    getAttributeForSymbol(const std::string &symbol) {
         auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
-        return !stringOpt ? DEFAULT : parse(stringOpt.value());
+        return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
     }
 
     /**
@@ -171,20 +168,21 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
             return symbol;
         }
 
-        auto other = parse(a.value());
+        try {
+            auto other = parse(a.value());
 
-        if (other.has_value()) {
-            if (other.value() == DEFAULT) {
+            if (other == DEFAULT) {
                 return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
             }
 
-            if (a.value() != other.value().get().toString()) {
-                return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY,
-                                                                      other.value().get().toString());
+            if (a.value() != other.get().toString()) {
+                return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.get().toString());
             }
-        }
 
-        return symbol;
+            return symbol;
+        } catch (const std::invalid_argument&) {
+            return symbol;
+        }
     }
 };
 

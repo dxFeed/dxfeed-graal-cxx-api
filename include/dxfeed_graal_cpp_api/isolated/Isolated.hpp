@@ -14,6 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../ipf/live/InstrumentProfileConnection.hpp"
 
 #include <cstdint>
+#include <string_view>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -23,17 +24,17 @@ DXFCPP_BEGIN_NAMESPACE
 namespace isolated {
 
 struct Tools {
-    static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(const std::string &symbolList) noexcept;
+    static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(std::string_view symbolList);
 
     static void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string>& args);
 };
 
 namespace ipf {
 struct InstrumentProfileReader {
-    static /* dxfg_instrument_profile_reader_t* */ void *create() noexcept;
+    static /* dxfg_instrument_profile_reader_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileReader> create();
 
     static std::int64_t
-    getLastModified(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
+    getLastModified(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileReader>& handle);
 
     static bool wasComplete(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
 

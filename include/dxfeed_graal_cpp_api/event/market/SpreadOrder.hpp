@@ -691,7 +691,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param tradeId The trade ID.
      * @return A shared pointer to the current spread order.
      */
-    SpreadOrder::Ptr withTradeShared(std::int64_t tradeId) noexcept {
+    SpreadOrder::Ptr withTradeIdShared(std::int64_t tradeId) noexcept {
         OrderBase::setTradeId(tradeId);
 
         return shared_from_this()->sharedAs<SpreadOrder>();

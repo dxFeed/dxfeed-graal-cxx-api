@@ -146,6 +146,8 @@ class DXFCPP_EXPORT Order : public OrderBase {
     explicit Order(std::string eventSymbol) noexcept : OrderBase(std::move(eventSymbol)) {
     }
 
+    // MarketEvent methods
+
     /**
      * Changes event's symbol and returns the current order.
      *
@@ -170,7 +172,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withEventSymbolShared(const std::string &eventSymbol) noexcept {
         MarketEvent::setEventSymbol(eventSymbol);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -199,8 +201,10 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withEventTimeShared(std::int64_t eventTime) noexcept {
         MarketEvent::setEventTime(eventTime);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
+
+    // OrderBase methods
 
     /**
      * Changes event's source and returns the current order.
@@ -228,7 +232,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withSourceShared(const OrderSource &source) noexcept {
         OrderBase::setSource(source);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -257,7 +261,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withEventFlagsShared(std::int32_t eventFlags) noexcept {
         OrderBase::setEventFlags(eventFlags);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -286,7 +290,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withEventFlagsShared(const EventFlagsMask &eventFlags) noexcept {
         OrderBase::setEventFlags(eventFlags);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -318,7 +322,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withIndexShared(std::int64_t index) noexcept {
         OrderBase::setIndex(index);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -347,7 +351,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withTimeShared(std::int64_t time) noexcept {
         OrderBase::setTime(time);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -376,7 +380,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withTimeNanoPartShared(std::int32_t timeNanoPart) noexcept {
         OrderBase::setTimeNanoPart(timeNanoPart);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -407,7 +411,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withSequenceShared(std::int32_t sequence) noexcept {
         OrderBase::setSequence(sequence);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -437,7 +441,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withTimeNanosShared(std::int64_t timeNanos) noexcept {
         OrderBase::setTimeNanos(timeNanos);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -465,7 +469,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withActionShared(const OrderAction &action) noexcept {
         OrderBase::setAction(action);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -492,7 +496,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withActionTimeShared(std::int64_t actionTime) noexcept {
         OrderBase::setActionTime(actionTime);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -521,7 +525,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withOrderIdShared(std::int64_t orderId) noexcept {
         OrderBase::setOrderId(orderId);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -550,7 +554,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withAuxOrderIdShared(std::int64_t auxOrderId) noexcept {
         OrderBase::setAuxOrderId(auxOrderId);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -579,7 +583,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withPriceShared(double price) noexcept {
         OrderBase::setPrice(price);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -608,7 +612,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withSizeShared(double size) noexcept {
         OrderBase::setSize(size);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -637,7 +641,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withExecutedSizeShared(double executedSize) noexcept {
         OrderBase::setExecutedSize(executedSize);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -666,7 +670,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withCountShared(std::int64_t count) noexcept {
         OrderBase::setCount(count);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -692,10 +696,10 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param tradeId The trade ID.
      * @return A shared pointer to the current order.
      */
-    Order::Ptr withTradeShared(std::int64_t tradeId) noexcept {
+    Order::Ptr withTradeIdShared(std::int64_t tradeId) noexcept {
         OrderBase::setTradeId(tradeId);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -724,7 +728,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withTradePriceShared(double tradePrice) noexcept {
         OrderBase::setTradePrice(tradePrice);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -753,7 +757,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withTradeSizeShared(double tradeSize) noexcept {
         OrderBase::setTradeSize(tradeSize);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -782,7 +786,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withExchangeCodeShared(char exchangeCode) noexcept {
         OrderBase::setExchangeCode(exchangeCode);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -811,7 +815,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withExchangeCodeShared(std::int16_t exchangeCode) noexcept {
         OrderBase::setExchangeCode(exchangeCode);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -840,7 +844,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withOrderSideShared(const Side &side) noexcept {
         OrderBase::setOrderSide(side);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**
@@ -869,10 +873,10 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withScopeShared(const Scope &scope) noexcept {
         OrderBase::setScope(scope);
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
-    // ----------------------------
+    // Order methods
 
     /**
      * Returns market maker or other aggregate identifier of this order.
@@ -934,7 +938,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order::Ptr withMarketMakerShared(std::string marketMaker) noexcept {
         setMarketMaker(std::move(marketMaker));
 
-        return shared_from_this()->sharedAs<Order>();
+        return sharedAs<Order>();
     }
 
     /**

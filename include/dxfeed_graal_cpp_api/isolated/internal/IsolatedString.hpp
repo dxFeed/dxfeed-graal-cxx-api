@@ -7,6 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <vector>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::internal {
@@ -22,7 +24,7 @@ namespace IsolatedString {
  * @throws GraalException if something happened with the GraalVM.
  */
 bool release(const char *string);
-}
+} // namespace IsolatedString
 
 namespace IsolatedStringList {
 /**
@@ -35,9 +37,42 @@ namespace IsolatedStringList {
  * @throws GraalException if something happened with the GraalVM.
  */
 bool release(/* dxfg_string_list* */ void *stringList);
-}
+} // namespace IsolatedStringList
 
-}
+template <typename L> struct NativeStringListWrapper final {
+    explicit NativeStringListWrapper(const std::vector<std::string> &values) {
+        if (values.empty()) {
+            list = nullptr;
+        } else {
+            list = new L{};
+            list->size = fitToType<decltype(L::size)>(values.size());
+            list->elements = new const char *[list->size] {
+                nullptr
+            };
+
+            for (int i = 0; i < list->size; i++) {
+                if (!values[i].empty()) {
+                    list->elements[i] = createCString(values[i]);
+                }
+            }
+        }
+    }
+
+    ~NativeStringListWrapper() {
+        if (list) {
+            for (int i = 0; i < list->size; i++) {
+                delete[] list->elements[i];
+            }
+
+            delete[] list->elements;
+            delete list;
+        }
+    }
+
+    L *list = nullptr;
+};
+
+} // namespace isolated::internal
 
 DXFCPP_END_NAMESPACE
 

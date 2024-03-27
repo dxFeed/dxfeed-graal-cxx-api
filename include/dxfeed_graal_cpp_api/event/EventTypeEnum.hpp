@@ -77,6 +77,7 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     static const EventTypeEnum ORDER;
     static const EventTypeEnum ANALYTIC_ORDER;
+    static const EventTypeEnum OTC_MARKETS_ORDER;
     static const EventTypeEnum SPREAD_ORDER;
     static const EventTypeEnum SERIES;
     static const EventTypeEnum OPTION_SALE;

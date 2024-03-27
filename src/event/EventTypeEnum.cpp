@@ -33,6 +33,8 @@ const EventTypeEnum EventTypeEnum::TIME_AND_SALE{
 const EventTypeEnum EventTypeEnum::ORDER{DXFG_EVENT_ORDER, "ORDER", "Order", false, true};
 const EventTypeEnum EventTypeEnum::ANALYTIC_ORDER{DXFG_EVENT_ANALYTIC_ORDER, "ANALYTIC_ORDER", "AnalyticOrder", false,
                                                   true};
+const EventTypeEnum EventTypeEnum::OTC_MARKETS_ORDER{DXFG_EVENT_OTC_MARKETS_ORDER, "OTC_MARKETS_ORDER",
+                                                     "OtcMarketsOrder", false, true};
 const EventTypeEnum EventTypeEnum::SPREAD_ORDER{DXFG_EVENT_SPREAD_ORDER, "SPREAD_ORDER", "SpreadOrder", false, true};
 const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, "SERIES", "Series", false, true};
 const EventTypeEnum EventTypeEnum::OPTION_SALE{DXFG_EVENT_OPTION_SALE, "OPTION_SALE", "OptionSale", false, true};
@@ -52,6 +54,7 @@ const std::vector<std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::AL
     std::cref(TIME_AND_SALE),
     std::cref(ORDER),
     std::cref(ANALYTIC_ORDER),
+    std::cref(OTC_MARKETS_ORDER),
     std::cref(SPREAD_ORDER),
     std::cref(SERIES),
     std::cref(OPTION_SALE),
@@ -79,14 +82,15 @@ const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum
         return result;
     }(EventTypeEnum::ALL);
 
-const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_ID = [](auto types) {
-    std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> result{};
+const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_ID =
+    [](auto types) {
+        std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> result{};
 
-    for (auto &&t : types) {
-        result.emplace(t.get().getId(), t);
-    }
+        for (auto &&t : types) {
+            result.emplace(t.get().getId(), t);
+        }
 
-    return result;
-}(EventTypeEnum::ALL);
+        return result;
+    }(EventTypeEnum::ALL);
 
 DXFCPP_END_NAMESPACE

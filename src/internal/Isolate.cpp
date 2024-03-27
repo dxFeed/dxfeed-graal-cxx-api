@@ -146,10 +146,6 @@ constexpr auto equalsToZero = [](auto result) {
     return result == 0;
 };
 
-constexpr auto doNothing = [](auto result) {
-    return result;
-};
-
 constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction, auto defaultValue, auto &&...params) {
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&resultCheckerConverter, auto &&graalFunction, auto &&...params) {
@@ -159,15 +155,10 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
 }
 
 std::unordered_set<std::string> /* dxfg_string_list* */
-Tools::parseSymbols(const std::string &symbolList) noexcept {
+Tools::parseSymbols(std::string_view symbolList) {
     std::unordered_set<std::string> result{};
 
-    auto graalStringList = runGraalFunction(doNothing, dxfg_Tools_parseSymbols, nullptr, symbolList.c_str());
-
-    if (!graalStringList) {
-        // TODO: Improve error handling [EN-8232]
-        return result;
-    }
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
@@ -178,72 +169,31 @@ Tools::parseSymbols(const std::string &symbolList) noexcept {
     return result;
 }
 
-struct NativeStringList final {
-    explicit NativeStringList(const std::vector<std::string> &values) {
-        if (values.empty()) {
-            list = nullptr;
-        } else {
-            list = new dxfg_string_list{};
-            list->size = fitToType<decltype(dxfg_string_list::size)>(values.size());
-            list->elements = new const char *[list->size] {
-                nullptr
-            };
-
-            for (int i = 0; i < list->size; i++) {
-                if (!values[i].empty()) {
-                    list->elements[i] = createCString(values[i]);
-                }
-            }
-        }
-    }
-
-    ~NativeStringList() {
-        if (list) {
-            for (int i = 0; i < list->size; i++) {
-                delete[] list->elements[i];
-            }
-
-            delete[] list->elements;
-            delete list;
-        }
-    }
-
-    dxfg_string_list *list = nullptr;
-};
+using NativeStringList = typename isolated::internal::NativeStringListWrapper<dxfg_string_list>;
 
 void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {
     NativeStringList l{args};
 
-    runIsolatedOrElse(
-        [](auto threadHandle, auto &&list) {
-            return dxfg_Tools_main(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
-        },
-        false, l.list);
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_Tools_main, l.list);
 }
 
 namespace ipf {
 
-/* dxfg_instrument_profile_reader_t* */ void *InstrumentProfileReader::create() noexcept {
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle) {
-            return dxfg_InstrumentProfileReader_new(static_cast<graal_isolatethread_t *>(threadHandle));
-        },
-        nullptr));
+/* dxfg_instrument_profile_reader_t* */ dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader>
+InstrumentProfileReader::create() {
+    return dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader>{
+        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_new)};
 }
 
 std::int64_t InstrumentProfileReader::getLastModified(
-    /* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
-    if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling [EN-8232]
-        return 0;
+    /* dxfg_instrument_profile_reader_t * */ const dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader> &handle) {
+    if (!handle) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_InstrumentProfileReader_getLastModified`. The handle is invalid");
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileReader_getLastModified(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                                params...);
-        },
-        0, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle));
+    return runGraalFunctionAndThrowIfLessThanZero(dxfg_InstrumentProfileReader_getLastModified,
+                                                  static_cast<dxfg_instrument_profile_reader_t *>(handle.get()));
 }
 
 bool InstrumentProfileReader::wasComplete(

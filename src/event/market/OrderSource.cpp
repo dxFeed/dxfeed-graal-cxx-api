@@ -15,7 +15,8 @@ const OrderSource OrderSource::REGIONAL_ASK(4, "REGIONAL_ASK", 0);
 const OrderSource OrderSource::AGGREGATE_BID(5, "AGGREGATE_BID", 0);
 const OrderSource OrderSource::AGGREGATE_ASK(6, "AGGREGATE_ASK", 0);
 const OrderSource OrderSource::DEFAULT(0, "DEFAULT",
-                                       PUB_ORDER | PUB_ANALYTIC_ORDER | PUB_SPREAD_ORDER | FULL_ORDER_BOOK);
+                                       PUB_ORDER | PUB_ANALYTIC_ORDER | PUB_OTC_MARKETS_ORDER | PUB_SPREAD_ORDER |
+                                           FULL_ORDER_BOOK);
 
 const OrderSource OrderSource::NTV("NTV", PUB_ORDER | FULL_ORDER_BOOK);
 const OrderSource OrderSource::ntv("ntv", PUB_ORDER);
@@ -50,6 +51,10 @@ const OrderSource OrderSource::smfe("smfe", PUB_ORDER);
 const OrderSource OrderSource::iex("iex", PUB_ORDER);
 const OrderSource OrderSource::MEMX("MEMX", PUB_ORDER);
 const OrderSource OrderSource::memx("memx", PUB_ORDER);
+const OrderSource OrderSource::OCEA("OCEA", PUB_ORDER);
+const OrderSource OrderSource::pink("pink", PUB_ORDER | PUB_OTC_MARKETS_ORDER);
+const OrderSource OrderSource::ARCA("ARCA", PUB_ORDER);
+const OrderSource OrderSource::arca("arca", PUB_ORDER);
 
 const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
     OrderSource::PREDEFINED_SOURCES =
@@ -63,11 +68,13 @@ const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference
             }
 
             return result;
-        }({COMPOSITE_BID, COMPOSITE_ASK, REGIONAL_BID, REGIONAL_ASK, AGGREGATE_BID, AGGREGATE_ASK, DEFAULT, NTV,
-           ntv,           NFX,           ESPD,         XNFI,         ICE,           ISE,           DEA,     DEX,
-           dex,           BYX,           BZX,          bzx,          BATE,          CHIX,          CEUX,    BXTR,
-           IST,           BI20,          ABE,          FAIR,         GLBX,          glbx,          ERIS,    XEUR,
-           xeur,          CFE,           C2OX,         SMFE,         smfe,          iex,           MEMX,    memx});
+        }({//
+           COMPOSITE_BID, COMPOSITE_ASK, REGIONAL_BID, REGIONAL_ASK, AGGREGATE_BID, AGGREGATE_ASK,
+           //
+           DEFAULT,
+           //
+           NTV, ntv, NFX, ESPD, XNFI, ICE, ISE, DEA, DEX, dex, BYX, BZX, bzx, BATE, CHIX, CEUX, BXTR, IST, BI20, ABE,
+           FAIR, GLBX, glbx, ERIS, XEUR, xeur, CFE, C2OX, SMFE, smfe, iex, MEMX, memx, OCEA, pink, ARCA, arca});
 
 std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 
