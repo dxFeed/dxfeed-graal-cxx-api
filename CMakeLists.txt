@@ -22,7 +22,7 @@ set(FMTLIB_VERSION "10.2.1")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
-set(RANGE_VERSION "v3-0.12")
+set(RANGE_VERSION "0.12")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -346,12 +346,12 @@ add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-${RANGE_VERSION}/include)
+target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
         DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
 target_include_directories(${PROJECT_NAME}_static PUBLIC include)
-target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-${RANGE_VERSION}/include)
+target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
