@@ -749,7 +749,9 @@ struct StringLikeWrapper {
 
         // At the moment, clang\apple clang does not support a version of the `from_chars` function (needed for
         // `std::string_view`) for the `double` type.
-        if constexpr (requires { std::chars_format::general; } && requires { std::from_chars(sw.data(), sw.data() + sw.size(), result); }) {
+        if constexpr (
+            requires { std::chars_format::general; } &&
+            requires { std::from_chars(sw.data(), sw.data() + sw.size(), result, std::chars_format::general); }) {
             std::from_chars(sw.data(), sw.data() + sw.size(), result);
         } else {
             auto s = this->operator std::string();
