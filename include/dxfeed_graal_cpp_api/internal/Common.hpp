@@ -13,6 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <climits>
 #include <cstring>
 
+#include <charconv>
 #include <chrono>
 #include <cmath>
 #include <iostream>
@@ -22,7 +23,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string_view>
 #include <type_traits>
 #include <utility>
-#include <charconv>
 #include <variant>
 
 #include "utils/debug/Debug.hpp"
@@ -743,11 +743,19 @@ struct StringLikeWrapper {
     }
 
     explicit operator double() const {
-        double result{};
-
         auto sw = this->operator std::string_view();
 
-        std::from_chars(sw.data(), sw.data() + sw.size(), result);
+        double result{};
+
+        // At the moment, clang\apple clang does not support a version of the `from_chars` function (needed for
+        // `std::string_view`) for the `double` type.
+        if constexpr (requires { std::from_chars(sw.data(), sw.data() + sw.size(), result); }) {
+            std::from_chars(sw.data(), sw.data() + sw.size(), result);
+        } else {
+            auto s = this->operator std::string();
+
+            result = std::stod(s);
+        }
 
         return result;
     }
