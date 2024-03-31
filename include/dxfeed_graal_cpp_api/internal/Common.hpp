@@ -60,6 +60,12 @@ constexpr bool isClangFlavouredCompiler = true;
 constexpr bool isClangFlavouredCompiler = false;
 #endif
 
+#if defined(_LIBCPP_VERSION)
+constexpr bool isLibCPP = true;
+#else
+constexpr bool isLibCPP = false;
+#endif
+
 template <typename... T> constexpr void ignore_unused(const T &...) {
 }
 
@@ -743,20 +749,18 @@ struct StringLikeWrapper {
     }
 
     explicit operator double() const {
-        auto sw = this->operator std::string_view();
-
         double result{};
 
-        // At the moment, clang\apple clang does not support a version of the `from_chars` function (needed for
-        // `std::string_view`) for the `double` type.
-        if constexpr (
-            requires { std::chars_format::general; } &&
-            requires { std::from_chars(sw.data(), sw.data() + sw.size(), result, std::chars_format::general); }) {
-            std::from_chars(sw.data(), sw.data() + sw.size(), result);
-        } else {
+        // At the moment, clang\apple clang's std lib does not support a version of the `from_chars` function (needed
+        // for `std::string_view`) for the `double` type.
+        if constexpr (isLibCPP) {
             auto s = this->operator std::string();
-
+            
             result = std::stod(s);
+        } else {
+            auto sw = this->operator std::string_view();
+
+            std::from_chars(sw.data(), sw.data() + sw.size(), result);
         }
 
         return result;
