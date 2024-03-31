@@ -100,12 +100,12 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     Data data_{};
 
-    void fillData(void *graalNative) noexcept;
-    void fillGraalData(void *graalNative) const noexcept;
+    void fillData(void *graalNative);
+    void fillGraalData(void *graalNative) const;
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-    static std::shared_ptr<Candle> fromGraal(void *graalNative) noexcept;
+    static std::shared_ptr<Candle> fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -203,7 +203,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withEventSymbolShared(const CandleSymbol &eventSymbol) noexcept {
         Candle::setEventSymbol(eventSymbol);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     ///
@@ -242,10 +242,8 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withEventTimeShared(std::int64_t eventTime) noexcept {
         Candle::setEventTime(eventTime);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
-
-    std::string toString() const noexcept override;
 
     ///
     std::int32_t getEventFlags() const noexcept override {
@@ -288,7 +286,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withEventFlagsShared(std::int32_t eventFlags) noexcept {
         Candle::setEventFlags(eventFlags);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     ///
@@ -322,7 +320,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withEventFlagsShared(const EventFlagsMask &eventFlags) noexcept {
         Candle::setEventFlags(eventFlags);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     ///
@@ -356,7 +354,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withIndexShared(std::int64_t index) noexcept {
         Candle::setIndex(index);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     ///
@@ -411,7 +409,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withTimeShared(std::int64_t time) noexcept {
         Candle::setTime(time);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -430,10 +428,14 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      *
      * @param sequence the sequence.
      * @see Candle::getSequence()
+     * @throws std::invalid_argument if sequence is below zero or above ::MAX_SEQUENCE.
      */
-    void setSequence(std::int32_t sequence) noexcept {
-        // TODO: Improve error handling [EN-8232]
+    void setSequence(std::int32_t sequence) {
         assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+            throw std::invalid_argument("Invalid value for argument `sequence`: " + std::to_string(sequence));
+        }
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }
@@ -466,7 +468,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withSequenceShared(std::int32_t sequence) noexcept {
         Candle::setSequence(sequence);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -511,7 +513,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withCountShared(std::int64_t count) noexcept {
         Candle::setCount(count);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -556,7 +558,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withOpenShared(double open) noexcept {
         Candle::setOpen(open);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -601,7 +603,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withHighShared(double high) noexcept {
         Candle::setHigh(high);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -646,7 +648,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withLowShared(double low) noexcept {
         Candle::setLow(low);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -691,7 +693,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withCloseShared(double close) noexcept {
         Candle::setClose(close);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -736,7 +738,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withVolumeShared(double volume) noexcept {
         Candle::setVolume(volume);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -783,7 +785,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withVWAPShared(double vwap) noexcept {
         Candle::setVWAP(vwap);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -828,7 +830,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withBidVolumeShared(double bidVolume) noexcept {
         Candle::setBidVolume(bidVolume);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -873,7 +875,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withAskVolumeShared(double askVolume) noexcept {
         Candle::setAskVolume(askVolume);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -918,7 +920,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withImpVolatilityShared(double impVolatility) noexcept {
         Candle::setImpVolatility(impVolatility);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
 
     /**
@@ -963,8 +965,10 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     Candle::Ptr withOpenInterestShared(double openInterest) noexcept {
         Candle::setOpenInterest(openInterest);
 
-        return shared_from_this()->sharedAs<Candle>();
+        return sharedAs<Candle>();
     }
+
+    std::string toString() const noexcept override;
 };
 
 DXFCPP_END_NAMESPACE

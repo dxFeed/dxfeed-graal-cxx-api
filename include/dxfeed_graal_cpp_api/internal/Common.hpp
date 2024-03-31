@@ -712,7 +712,7 @@ struct StringLikeWrapper {
 
     StringLikeWrapper(std::string &&s) : data{std::move(s)} {
     }
-    
+
     template <auto N>
     StringLikeWrapper(const char (&chars)[N]) : StringLikeWrapper{std::string_view{chars, chars + N}} {
     }
@@ -725,12 +725,51 @@ struct StringLikeWrapper {
         }
     }
 
-    operator std::string_view() const& {
+    operator std::string_view() const & {
         if (auto sv = std::get_if<std::string_view>(&data); sv) {
             return *sv;
         } else {
             return std::get<std::string>(data);
         }
+    }
+
+    bool operator==(const StringLikeWrapper &sw) const {
+        return sw.operator std::string_view() == this->operator std::string_view();
+    }
+
+    friend std::string operator+(const StringLikeWrapper &sw1, const StringLikeWrapper &sw2) {
+        return sw1.operator std::string() + sw2.operator std::string();
+    }
+
+    explicit operator double() const {
+        double result{};
+
+        auto sw = this->operator std::string_view();
+
+        std::from_chars(sw.data(), sw.data() + sw.size(), result);
+
+        return result;
+    }
+};
+
+struct StringHash {
+    using HashType = std::hash<std::string_view>;
+    using is_transparent = void;
+
+    std::size_t operator()(const char *str) const {
+        return HashType{}(str);
+    }
+
+    std::size_t operator()(std::string_view str) const {
+        return HashType{}(str);
+    }
+
+    std::size_t operator()(std::string const &str) const {
+        return HashType{}(str);
+    }
+
+    std::size_t operator()(const StringLikeWrapper &sw) const {
+        return HashType{}(sw);
     }
 };
 

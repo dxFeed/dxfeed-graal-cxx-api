@@ -58,7 +58,7 @@ TEST_CASE("Candle Periods") {
 
             INFO("val = ", val, ", type.getName() = ", type.getName(), ", type.toString() = ", type.toString(),
                  ", p.toString() = ", p.toString(), ", s2 = ", s2,
-                 ", CandlePeriod::parse(s2)->toString() = ", CandlePeriod::parse(s2)->toString());
+                 ", CandlePeriod::parse(s2).toString() = ", CandlePeriod::parse(s2).toString());
 
             REQUIRE(CandlePeriodOpt{p} == CandlePeriod::parse(s2));
         }

@@ -21,7 +21,7 @@ struct DXFCPP_EXPORT CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this attribute set.
      */
-    virtual std::string changeAttributeForSymbol(const std::string &symbol) const noexcept = 0;
+    virtual std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const = 0;
 };
 
 DXFCPP_END_NAMESPACE

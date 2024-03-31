@@ -20,7 +20,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Candle::TYPE = EventTypeEnum::CANDLE;
 
-void Candle::fillData(void *graalNative) noexcept {
+void Candle::fillData(void *graalNative) {
     if (graalNative == nullptr) {
         return;
     }
@@ -47,7 +47,7 @@ void Candle::fillData(void *graalNative) noexcept {
     };
 }
 
-void Candle::fillGraalData(void *graalNative) const noexcept {
+void Candle::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -82,7 +82,7 @@ void Candle::freeGraalData(void *graalNative) noexcept {
     delete[] graalCandle->event_symbol;
 }
 
-std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -91,28 +91,11 @@ std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) noexcept {
         return {};
     }
 
-    try {
-        auto candle = std::make_shared<Candle>();
+    auto candle = std::make_shared<Candle>();
 
-        candle->fillData(graalNative);
+    candle->fillData(graalNative);
 
-        return candle;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
-}
-
-std::string Candle::toString() const noexcept {
-    return fmt::format(
-        "Candle{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, count={}, open={}, high={}, low={}, "
-        "close={}, volume={}, vwap={}, bidVolume={}, askVolume={}, impVolatility={}, openInterest={}}}",
-        getEventSymbol().toString(), TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()),
-        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), getCount(),
-        dxfcpp::toString(getOpen()), dxfcpp::toString(getHigh()), dxfcpp::toString(getLow()),
-        dxfcpp::toString(getClose()), dxfcpp::toString(getVolume()), dxfcpp::toString(getVWAP()),
-        dxfcpp::toString(getBidVolume()), dxfcpp::toString(getAskVolume()), dxfcpp::toString(getImpVolatility()),
-        dxfcpp::toString(getOpenInterest()));
+    return candle;
 }
 
 void *Candle::toGraal() const {
@@ -142,6 +125,18 @@ void Candle::freeGraal(void *graalNative) noexcept {
     freeGraalData(graalNative);
 
     delete graalCandle;
+}
+
+std::string Candle::toString() const noexcept {
+    return fmt::format(
+        "Candle{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, count={}, open={}, high={}, low={}, "
+        "close={}, volume={}, vwap={}, bidVolume={}, askVolume={}, impVolatility={}, openInterest={}}}",
+        getEventSymbol().toString(), TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), getCount(),
+        dxfcpp::toString(getOpen()), dxfcpp::toString(getHigh()), dxfcpp::toString(getLow()),
+        dxfcpp::toString(getClose()), dxfcpp::toString(getVolume()), dxfcpp::toString(getVWAP()),
+        dxfcpp::toString(getBidVolume()), dxfcpp::toString(getAskVolume()), dxfcpp::toString(getImpVolatility()),
+        dxfcpp::toString(getOpenInterest()));
 }
 
 DXFCPP_END_NAMESPACE

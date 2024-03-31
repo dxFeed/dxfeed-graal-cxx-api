@@ -109,7 +109,9 @@ struct DXFCPP_EXPORT CandleType {
      */
     static const CandleType PRICE_RENKO;
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>> BY_STRING;
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, dxfcpp::StringHash,
+                                    std::equal_to<>>
+        BY_STRING;
     static const std::vector<std::reference_wrapper<const CandleType>> VALUES;
 
   private:
@@ -117,8 +119,9 @@ struct DXFCPP_EXPORT CandleType {
     std::string string_{};
     std::int64_t periodIntervalMillis_{};
 
-    CandleType(std::string name, std::string string, std::int64_t periodIntervalMillis) noexcept
-        : name_{std::move(name)}, string_{std::move(string)}, periodIntervalMillis_{periodIntervalMillis} {
+    CandleType(const dxfcpp::StringLikeWrapper &name, const dxfcpp::StringLikeWrapper &string,
+               std::int64_t periodIntervalMillis) noexcept
+        : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {
     }
 
   public:
@@ -155,6 +158,7 @@ struct DXFCPP_EXPORT CandleType {
      * distinguish it from CandleType::MINUTE that is represented as `"m"`.
      *
      * @return string representation of this candle price type.
+     * @throws std::invalid_argument if the string representation is invalid.
      */
     const std::string &toString() const & noexcept {
         return string_;
@@ -166,18 +170,17 @@ struct DXFCPP_EXPORT CandleType {
      * (including the one that was returned by CandleType::toString()) and case is ignored for parsing.
      *
      * @param s The string representation of candle type.
-     * @return A candle type or std::nullopt if the string representation is invalid.
+     * @return A candle type.
      */
-    static std::optional<std::reference_wrapper<const CandleType>> parse(const std::string &s) noexcept {
-        auto n = s.length();
+    static std::reference_wrapper<const CandleType> parse(const dxfcpp::StringLikeWrapper &s) {
+        auto sw = s.operator std::string_view();
+        auto n = sw.length();
 
         if (n == 0) {
-            // TODO: error handling [EN-8232] throw IllegalArgumentException("Missing candle type");
-
-            return std::nullopt;
+            throw std::invalid_argument("Missing candle type");
         }
 
-        auto result = BY_STRING.find(s);
+        auto result = BY_STRING.find(sw);
 
         if (result != BY_STRING.end()) {
             return result->second;
@@ -187,19 +190,17 @@ struct DXFCPP_EXPORT CandleType {
             const auto &name = typeRef.get().getName();
 
             // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc
-            if (name.length() >= n && iEquals(name.substr(0, n), s)) {
+            if (name.length() >= n && iEquals(name.substr(0, n), sw)) {
                 return typeRef;
             }
 
             // Ticks, Minutes, Seconds, etc
-            if (s.ends_with("s") && iEquals(name, s.substr(0, n - 1))) {
+            if (sw.ends_with("s") && iEquals(name, sw.substr(0, n - 1))) {
                 return typeRef;
             }
         }
 
-        // TODO: error handling [EN-8232] throw IllegalArgumentException("Unknown candle type: " + s);
-
-        return std::nullopt;
+        throw std::invalid_argument("Unknown candle type: " + s);
     }
 
     bool operator==(const CandleType &candleType) const noexcept {
