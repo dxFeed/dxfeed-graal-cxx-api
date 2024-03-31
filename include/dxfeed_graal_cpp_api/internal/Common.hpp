@@ -54,18 +54,6 @@ struct IpfPropertyChangeListener {};
 
 struct InstrumentProfileUpdateListener {};
 
-#if defined(__clang__)
-constexpr bool isClangFlavouredCompiler = true;
-#else
-constexpr bool isClangFlavouredCompiler = false;
-#endif
-
-#if defined(_LIBCPP_VERSION)
-constexpr bool isLibCPP = true;
-#else
-constexpr bool isLibCPP = false;
-#endif
-
 template <typename... T> constexpr void ignore_unused(const T &...) {
 }
 
@@ -755,7 +743,7 @@ struct StringLikeWrapper {
         // for `std::string_view`) for the `double` type.
         if constexpr (isLibCPP) {
             auto s = this->operator std::string();
-            
+
             result = std::stod(s);
         } else {
             auto sw = this->operator std::string_view();
