@@ -22,6 +22,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string_view>
 #include <type_traits>
 #include <utility>
+#include <charconv>
 #include <variant>
 
 #include "utils/debug/Debug.hpp"
