@@ -634,7 +634,7 @@ template <std::size_t Bits> struct hashMixImpl;
 
 template <> struct hashMixImpl<64> {
     constexpr static std::uint64_t fn(std::uint64_t x) noexcept {
-        std::uint64_t const m = (std::uint64_t(0xe9846af) << 32) + 0x9b1a615d;
+        std::uint64_t const m = (static_cast<std::uint64_t>(0xe9846af) << 32) + 0x9b1a615d;
 
         x ^= x >> 32;
         x *= m;
