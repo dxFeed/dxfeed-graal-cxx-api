@@ -90,7 +90,7 @@ void Profile::freeGraalData(void *graalNative) noexcept {
     delete[] graalProfile->status_reason;
 }
 
-std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -139,7 +139,7 @@ void *Profile::toGraal() const {
     return static_cast<void *>(graalProfile);
 }
 
-void Profile::freeGraal(void *graalNative) noexcept {
+void Profile::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

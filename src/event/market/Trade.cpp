@@ -40,7 +40,7 @@ void Trade::fillGraalData(void *graalNative) const noexcept {
     graalTrade->trade_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE;
 }
 
-std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -77,7 +77,7 @@ void *Trade::toGraal() const {
     return static_cast<void *>(graalTrade);
 }
 
-void Trade::freeGraal(void *graalNative) noexcept {
+void Trade::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

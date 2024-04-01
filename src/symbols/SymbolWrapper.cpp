@@ -34,7 +34,9 @@ void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) {
         return static_cast<void *>(list);
     }
 
-    list->elements = new ElementType *[size] {nullptr};
+    list->elements = new ElementType *[size] {
+        nullptr
+    };
 
     return list;
 }
@@ -55,7 +57,7 @@ bool SymbolWrapper::SymbolListUtils::setGraalListElement(void *graalList, std::p
     return true;
 }
 
-bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept {
+bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
     using ListType = dxfg_symbol_list;
     using SizeType = decltype(ListType::size);
 
@@ -75,7 +77,7 @@ bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std:
     return true;
 }
 
-void SymbolWrapper::SymbolListUtils::freeGraalList(void *graalList) noexcept {
+void SymbolWrapper::SymbolListUtils::freeGraalList(void *graalList) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper::SymbolListUtils::freeGraalList(graalList = " + toStringAny(graalList) + ")");
     }
@@ -102,7 +104,7 @@ void SymbolWrapper::SymbolListUtils::freeGraalList(void *graalList) noexcept {
     delete list;
 }
 
-std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *graalList) noexcept {
+std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *graalList) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper::SymbolListUtils::fromGraalList(graalList = " + toStringAny(graalList) + ")");
     }
@@ -131,9 +133,9 @@ std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *g
 
 template void *
 SymbolWrapper::SymbolListUtils::toGraalList<dxfcpp::SymbolWrapper const *>(dxfcpp::SymbolWrapper const *,
-                                                                           dxfcpp::SymbolWrapper const *) noexcept;
+                                                                           dxfcpp::SymbolWrapper const *);
 
-void SymbolWrapper::freeGraal(void *graalNative) noexcept {
+void SymbolWrapper::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper::SymbolListUtils::freeGraal(graalNative = " + toStringAny(graalNative) + ")");
     }

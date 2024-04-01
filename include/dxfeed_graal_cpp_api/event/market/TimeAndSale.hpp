@@ -114,7 +114,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-    static std::shared_ptr<TimeAndSale> fromGraal(void *graalNative) noexcept;
+    static std::shared_ptr<TimeAndSale> fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -130,7 +130,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
   public:
     /**

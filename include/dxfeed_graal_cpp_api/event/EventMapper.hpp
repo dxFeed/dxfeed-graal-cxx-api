@@ -15,9 +15,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT EventMapper {
-    static std::vector<std::shared_ptr<EventType>> fromGraalList(void *graalNativeList) noexcept;
+    static std::vector<std::shared_ptr<EventType>> fromGraalList(void *graalNativeList);
 
-    template <typename EventIt> static void *toGraalList(EventIt begin, EventIt end) noexcept {
+    template <typename EventIt> static void *toGraalList(EventIt begin, EventIt end) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("EventMapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
         }
@@ -55,13 +55,13 @@ struct DXFCPP_EXPORT EventMapper {
         return list;
     }
 
-    static void freeGraalList(void *graalList) noexcept;
+    static void freeGraalList(void *graalList);
 
   private:
     static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
     static void *newGraalList(std::ptrdiff_t size);
     static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
-    static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
+    static bool freeGraalListElements(void *graalList, std::ptrdiff_t count);
 };
 
 DXFCPP_END_NAMESPACE

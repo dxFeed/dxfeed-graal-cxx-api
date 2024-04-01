@@ -84,7 +84,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
     void fillGraalData(void *graalNative) const noexcept override;
 
   public:
-    static std::shared_ptr<Underlying> fromGraal(void *graalNative) noexcept;
+    static std::shared_ptr<Underlying> fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -100,7 +100,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
   public:
     /**

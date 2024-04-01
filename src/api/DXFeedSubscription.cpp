@@ -96,7 +96,7 @@ void DXFeedSubscription::setSymbolsImpl(void *graalSymbolList) const noexcept {
         false);
 }
 
-std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const noexcept {
+std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const {
     if (!handle_) {
         return {};
     }
@@ -118,7 +118,7 @@ std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const noexcept {
     return result;
 }
 
-std::vector<SymbolWrapper> DXFeedSubscription::getDecoratedSymbolsImpl() const noexcept {
+std::vector<SymbolWrapper> DXFeedSubscription::getDecoratedSymbolsImpl() const {
     if (!handle_) {
         return {};
     }
@@ -201,7 +201,7 @@ DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique
         nullptr));
 }
 
-void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) noexcept {
+void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) {
     auto onEvents = [](graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
         auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
         auto sub = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getEntity(id);

@@ -47,7 +47,7 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>>
-InstrumentProfileReader::readFromFile(const std::string &address) const noexcept {
+InstrumentProfileReader::readFromFile(const std::string &address) const {
     if (!handle_) {
         return {};
     }
@@ -62,7 +62,7 @@ InstrumentProfileReader::readFromFile(const std::string &address) const noexcept
 
 std::vector<std::shared_ptr<InstrumentProfile>>
 InstrumentProfileReader::readFromFile(const std::string &address, const std::string &user,
-                                      const std::string &password) const noexcept {
+                                      const std::string &password) const {
     if (!handle_) {
         return {};
     }

@@ -18,7 +18,7 @@ void *IndexedEventSource::toGraal() const {
     return static_cast<void *>(graalSource);
 }
 
-void IndexedEventSource::freeGraal(void *graalNative) noexcept {
+void IndexedEventSource::freeGraal(void *graalNative) {
     if (graalNative == nullptr) {
         return;
     }
@@ -29,7 +29,7 @@ void IndexedEventSource::freeGraal(void *graalNative) noexcept {
     delete graalSource;
 }
 
-IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) noexcept {
+IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) {
     auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
 
     if (graalSource == nullptr) {

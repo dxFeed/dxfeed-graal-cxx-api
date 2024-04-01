@@ -22,7 +22,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct NonOwningInstrumentProfileIterator {
     dxfg_iterable_ip_t *iterable;
 
-    [[nodiscard]] bool hasNext() const noexcept {
+    [[nodiscard]] bool hasNext() const {
         if (!iterable) {
             return false;
         }
@@ -30,7 +30,7 @@ struct NonOwningInstrumentProfileIterator {
         return isolated::ipf::InstrumentProfileIterator::hasNext(iterable);
     }
 
-    [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const noexcept {
+    [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const {
         if (!iterable) {
             return {};
         }
@@ -42,7 +42,7 @@ struct NonOwningInstrumentProfileIterator {
         return result;
     };
 
-    [[nodiscard]] std::vector<std::shared_ptr<InstrumentProfile>> collect() const noexcept {
+    [[nodiscard]] std::vector<std::shared_ptr<InstrumentProfile>> collect() const {
         if (!iterable) {
             return {};
         }
@@ -59,7 +59,7 @@ struct NonOwningInstrumentProfileIterator {
 
 struct InstrumentProfileCollector::Impl {
     static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
-                                           void *userData) noexcept {
+                                           void *userData) {
         auto [collectorId, listenerId] = dxfcpp::unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
         auto id = Id<InstrumentProfileCollector>::from(collectorId);
@@ -149,7 +149,7 @@ std::int64_t InstrumentProfileCollector::getLastUpdateTime() const noexcept {
     return dxfcpp::isolated::ipf::InstrumentProfileCollector::getLastUpdateTime(handle_.get());
 }
 
-void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const noexcept {
+void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const {
     if (!handle_) {
         return;
     }
@@ -163,7 +163,7 @@ void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<Instrum
     }
 }
 
-void InstrumentProfileCollector::updateInstrumentProfile(const InstrumentProfile &ip) const noexcept {
+void InstrumentProfileCollector::updateInstrumentProfile(const InstrumentProfile &ip) const {
     if (!handle_) {
         return;
     }

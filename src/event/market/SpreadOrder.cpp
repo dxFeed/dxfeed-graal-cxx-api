@@ -53,7 +53,7 @@ void SpreadOrder::freeGraalData(void *graalNative) noexcept {
     delete[] graalSpreadOrder->spread_symbol;
 }
 
-std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -90,7 +90,7 @@ void *SpreadOrder::toGraal() const {
     return static_cast<void *>(graalSpreadOrder);
 }
 
-void SpreadOrder::freeGraal(void *graalNative) noexcept {
+void SpreadOrder::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

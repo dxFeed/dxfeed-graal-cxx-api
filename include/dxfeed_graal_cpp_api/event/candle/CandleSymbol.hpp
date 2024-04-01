@@ -274,9 +274,9 @@ struct DXFCPP_EXPORT CandleSymbol {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
-    static CandleSymbol fromGraal(void *graalNative) noexcept;
+    static CandleSymbol fromGraal(void *graalNative);
 
     /**
      * Converts the given string symbol into the candle symbol object.

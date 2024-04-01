@@ -111,7 +111,7 @@ std::string Quote::toString() const noexcept {
         dxfcpp::toString(getAskPrice()), dxfcpp::toString(getAskSize()));
 }
 
-std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -146,7 +146,7 @@ void *Quote::toGraal() const {
     return static_cast<void *>(graalQuote);
 }
 
-void Quote::freeGraal(void *graalNative) noexcept {
+void Quote::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

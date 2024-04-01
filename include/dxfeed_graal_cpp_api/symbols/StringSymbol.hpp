@@ -80,7 +80,7 @@ struct DXFCPP_EXPORT StringSymbol final {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
     static StringSymbol fromGraal(void *graalNative);
 

@@ -13,7 +13,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) noexcept {
+std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) {
     auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
 
     if (list->size <= 0) {
@@ -109,7 +109,7 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
     return result;
 }
 
-void EventMapper::freeGraalList(void *graalList) noexcept {
+void EventMapper::freeGraalList(void *graalList) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("EventMapper::freeGraalList(graalList = " + toStringAny(graalList) + ")");
     }
@@ -259,7 +259,7 @@ bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx
     return true;
 }
 
-bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept {
+bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
     using ListType = dxfg_event_type_list;
     using SizeType = decltype(ListType::size);
 

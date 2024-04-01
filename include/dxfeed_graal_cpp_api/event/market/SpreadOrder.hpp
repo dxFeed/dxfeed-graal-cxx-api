@@ -106,7 +106,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-    static std::shared_ptr<SpreadOrder> fromGraal(void *graalNative) noexcept;
+    static std::shared_ptr<SpreadOrder> fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -122,7 +122,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
   public:
     /// The alias to a type of shared pointer to the SpreadOrder object

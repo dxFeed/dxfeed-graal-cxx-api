@@ -78,7 +78,7 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
     void fillGraalData(void *graalNative) const noexcept override;
 
   public:
-    static std::shared_ptr<Trade> fromGraal(void *graalNative) noexcept;
+    static std::shared_ptr<Trade> fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -94,7 +94,7 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
   public:
     /// The alias to a type of shared pointer to the Trade object

@@ -52,7 +52,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     static JavaObjectHandle<DXFeedSubscription>
     createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept;
 
-    void setEventListenerHandle(Id<DXFeedSubscription> id) noexcept;
+    void setEventListenerHandle(Id<DXFeedSubscription> id);
 
     bool tryToSetEventListenerHandle() noexcept;
 
@@ -112,9 +112,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 
     void setSymbolsImpl(void *graalSymbolList) const noexcept;
 
-    std::vector<SymbolWrapper> getSymbolsImpl() const noexcept;
+    std::vector<SymbolWrapper> getSymbolsImpl() const;
 
-    std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const noexcept;
+    std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const;
 
   public:
     /// The alias to a type of shared pointer to the DXFeedSubscription object
@@ -499,7 +499,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const noexcept {
+    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
@@ -557,7 +557,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const noexcept {
+    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
@@ -616,7 +616,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const noexcept {
+    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }

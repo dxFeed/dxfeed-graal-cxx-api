@@ -87,7 +87,7 @@ void TimeAndSale::freeGraalData(void *graalNative) noexcept {
     delete[] graalTimeAndSale->seller;
 }
 
-std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -135,7 +135,7 @@ void *TimeAndSale::toGraal() const {
     return static_cast<void *>(graalTimeAndSale);
 }
 
-void TimeAndSale::freeGraal(void *graalNative) noexcept {
+void TimeAndSale::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

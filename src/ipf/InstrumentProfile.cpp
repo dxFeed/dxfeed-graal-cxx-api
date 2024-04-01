@@ -198,7 +198,7 @@ void InstrumentProfile::freeGraalData(void *graalNative) noexcept {
     }
 }
 
-std::shared_ptr<InstrumentProfile> InstrumentProfile::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<InstrumentProfile> InstrumentProfile::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -217,7 +217,7 @@ std::shared_ptr<InstrumentProfile> InstrumentProfile::fromGraal(void *graalNativ
     return {};
 }
 
-std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList(void *graalList) noexcept {
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList(void *graalList) {
     using ListType = dxfg_instrument_profile_list;
     using SizeType = decltype(ListType::size);
 
@@ -250,7 +250,7 @@ void *InstrumentProfile::toGraal() const {
     return static_cast<void *>(graalInstrumentProfile);
 }
 
-void InstrumentProfile::freeGraal(void *graalNative) noexcept {
+void InstrumentProfile::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

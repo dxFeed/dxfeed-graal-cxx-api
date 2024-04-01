@@ -84,11 +84,14 @@ void Candle::freeGraalData(void *graalNative) noexcept {
 
 std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Candle. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Candle. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
     }
 
     auto candle = std::make_shared<Candle>();
@@ -111,13 +114,17 @@ void *Candle::toGraal() const {
     return static_cast<void *>(graalCandle);
 }
 
-void Candle::freeGraal(void *graalNative) noexcept {
+void Candle::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Candle's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
+
     }
 
     auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);

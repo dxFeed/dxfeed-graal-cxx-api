@@ -65,7 +65,7 @@ void Summary::fillGraalData(void *graalNative) const noexcept {
     graalSummary->flags = data_.flags;
 }
 
-std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -111,7 +111,7 @@ void *Summary::toGraal() const {
     return static_cast<void *>(graalSummary);
 }
 
-void Summary::freeGraal(void *graalNative) noexcept {
+void Summary::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

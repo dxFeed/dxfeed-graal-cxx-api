@@ -89,7 +89,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     void fillGraalData(void *graalNative) const noexcept override;
 
   public:
-    static std::shared_ptr<Series> fromGraal(void *graalNative) noexcept;
+    static std::shared_ptr<Series> fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -105,7 +105,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
   public:
     /**

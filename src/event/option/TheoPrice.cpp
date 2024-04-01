@@ -61,7 +61,7 @@ void TheoPrice::fillGraalData(void *graalNative) const noexcept {
     graalTheoPrice->interest = data_.interest;
 }
 
-std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -104,7 +104,7 @@ void *TheoPrice::toGraal() const {
     return static_cast<void *>(graalTheoPrice);
 }
 
-void TheoPrice::freeGraal(void *graalNative) noexcept {
+void TheoPrice::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

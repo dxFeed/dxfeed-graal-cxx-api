@@ -40,7 +40,7 @@ void TradeETH::fillGraalData(void *graalNative) const noexcept {
     graalTradeEth->trade_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE_ETH;
 }
 
-std::shared_ptr<TradeETH> TradeETH::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<TradeETH> TradeETH::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -77,7 +77,7 @@ void *TradeETH::toGraal() const {
     return static_cast<void *>(graalTradeEth);
 }
 
-void TradeETH::freeGraal(void *graalNative) noexcept {
+void TradeETH::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

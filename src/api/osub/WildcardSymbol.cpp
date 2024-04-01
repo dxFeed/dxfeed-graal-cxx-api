@@ -22,13 +22,13 @@ void *WildcardSymbol::toGraal() const noexcept {
     return dxfcpp::bit_cast<void *>(&wildcardGraalSymbol);
 }
 
-void WildcardSymbol::freeGraal(void *) noexcept {
+void WildcardSymbol::freeGraal(void *) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("WildcardSymbol::freeGraal()");
     }
 }
 
-const WildcardSymbol &WildcardSymbol::fromGraal(void *) noexcept {
+const WildcardSymbol &WildcardSymbol::fromGraal(void *) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("WildcardSymbol::fromGraal()");
     }

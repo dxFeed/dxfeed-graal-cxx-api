@@ -88,25 +88,23 @@ void OptionSale::freeGraalData(void *graalNative) noexcept {
     delete[] graalOptionSale->option_symbol;
 }
 
-std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create OptionSale. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Order. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE))));
     }
 
-    try {
         auto optionSale = std::make_shared<OptionSale>();
 
         optionSale->fillData(graalNative);
 
         return optionSale;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
 }
 
 void OptionSale::setExchangeCode(char exchangeCode) noexcept {
@@ -139,7 +137,7 @@ void *OptionSale::toGraal() const {
     return static_cast<void *>(graalOptionSale);
 }
 
-void OptionSale::freeGraal(void *graalNative) noexcept {
+void OptionSale::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

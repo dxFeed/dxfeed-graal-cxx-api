@@ -44,7 +44,7 @@ class DXFCPP_EXPORT IterableInstrumentProfile final {
      *
      * @return the next element in the iteration or std::shared_ptr<InstrumentProfile>{nullptr}
      */
-    [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const noexcept;
+    [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const;
 };
 
 DXFCPP_END_NAMESPACE

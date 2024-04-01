@@ -7,12 +7,12 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <concepts>
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <utility>
 #include <variant>
-#include <concepts>
 
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
@@ -65,10 +65,10 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
         static void *newGraalList(std::ptrdiff_t size);
         static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
-        static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
+        static bool freeGraalListElements(void *graalList, std::ptrdiff_t count);
 
       public:
-        template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) noexcept {
+        template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) {
             if constexpr (Debugger::isDebug) {
                 Debugger::debug("SymbolWrapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
             }
@@ -116,9 +116,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
             return SymbolListUtils::toGraalList(collection.begin(), collection.end());
         }
 
-        static void freeGraalList(void *graalList) noexcept;
+        static void freeGraalList(void *graalList);
 
-        static std::vector<SymbolWrapper> fromGraalList(void *graalList) noexcept;
+        static std::vector<SymbolWrapper> fromGraalList(void *graalList);
     };
 
   private:
@@ -220,7 +220,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
     static SymbolWrapper fromGraal(void *graalNative);
 

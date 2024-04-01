@@ -67,7 +67,7 @@ void Series::fillGraalData(void *graalNative) const noexcept {
     graalSeries->interest = data_.interest;
 }
 
-std::shared_ptr<Series> Series::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Series> Series::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -111,7 +111,7 @@ void *Series::toGraal() const {
     return static_cast<void *>(graalSeries);
 }
 
-void Series::freeGraal(void *graalNative) noexcept {
+void Series::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

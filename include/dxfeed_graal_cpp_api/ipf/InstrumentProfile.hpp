@@ -92,8 +92,8 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
     }
 
   public:
-    static std::shared_ptr<InstrumentProfile> fromGraal(void *graalNative) noexcept;
-    static std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList) noexcept;
+    static std::shared_ptr<InstrumentProfile> fromGraal(void *graalNative);
+    static std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -109,7 +109,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
     /// The alias to a type of shared pointer to the InstrumentProfile object
     using Ptr = std::shared_ptr<InstrumentProfile>;

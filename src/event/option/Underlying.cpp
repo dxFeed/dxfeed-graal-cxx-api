@@ -61,7 +61,7 @@ void Underlying::fillGraalData(void *graalNative) const noexcept {
     graalUnderlying->put_call_ratio = data_.putCallRatio;
 }
 
-std::shared_ptr<Underlying> Underlying::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Underlying> Underlying::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -105,7 +105,7 @@ void *Underlying::toGraal() const {
     return static_cast<void *>(graalUnderlying);
 }
 
-void Underlying::freeGraal(void *graalNative) noexcept {
+void Underlying::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }

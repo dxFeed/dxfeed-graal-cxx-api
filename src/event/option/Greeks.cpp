@@ -63,7 +63,7 @@ void Greeks::fillGraalData(void *graalNative) const noexcept {
     graalGreeks->vega = data_.vega;
 }
 
-std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) {
     if (!graalNative) {
         return {};
     }
@@ -107,7 +107,7 @@ void *Greeks::toGraal() const {
     return static_cast<void *>(graalGreeks);
 }
 
-void Greeks::freeGraal(void *graalNative) noexcept {
+void Greeks::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
