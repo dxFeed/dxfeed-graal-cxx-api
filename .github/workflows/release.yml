@@ -262,7 +262,7 @@ jobs:
           /p:CL_MPCount=${{matrix.config.cores}}
 
       - name: Pack [Lib]
-        working-directory: ${{github.workspace}}/build-${{matrix.buildType}}
+        working-directory: "${{github.workspace}}/build-${{matrix.buildType}}"
         run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Pack [Samples]
