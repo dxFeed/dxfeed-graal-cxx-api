@@ -24,8 +24,8 @@ int main() {
         auto pub = endpoint->getPublisher();
 
         // Creates new Quote market events.
-        auto quote1 = std::make_shared<Quote>("TEST1")->withBidPriceShared(10.1)->withAskPriceShared(10.2);
-        auto quote2 = std::make_shared<Quote>("TEST2")->withBidPriceShared(17.1)->withAskPriceShared(17.2);
+        auto quote1 = std::make_shared<Quote>("TEST1")->withBidPrice(10.1).withAskPrice(10.2).sharedAs<Quote>();
+        auto quote2 = std::make_shared<Quote>("TEST2")->withBidPrice(17.1).withAskPrice(17.2).sharedAs<Quote>();
 
         // Publish events.
         pub->publishEvents({quote1, quote2});
