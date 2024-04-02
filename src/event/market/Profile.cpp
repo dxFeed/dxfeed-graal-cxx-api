@@ -90,25 +90,23 @@ void Profile::freeGraalData(void *graalNative) noexcept {
     delete[] graalProfile->status_reason;
 }
 
-std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Profile. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_PROFILE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Profile. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_PROFILE))));
     }
 
-    try {
-        auto profile = std::make_shared<Profile>();
+    auto profile = std::make_shared<Profile>();
 
-        profile->fillData(graalNative);
+    profile->fillData(graalNative);
 
-        return profile;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return profile;
 }
 
 std::string Profile::toString() const noexcept {
@@ -139,13 +137,16 @@ void *Profile::toGraal() const {
     return static_cast<void *>(graalProfile);
 }
 
-void Profile::freeGraal(void *graalNative) noexcept {
+void Profile::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_PROFILE) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Profile's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_PROFILE))));
     }
 
     auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);

@@ -206,7 +206,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @param begin The beginning of the collection of events.
      * @param end The end of events collection.
      */
-    template <typename EventIt> void publishEvents(EventIt begin, EventIt end) noexcept {
+    template <typename EventIt> void publishEvents(EventIt begin, EventIt end) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::publishEvents(events = " + elementsToString(begin, end) + ")");
         }

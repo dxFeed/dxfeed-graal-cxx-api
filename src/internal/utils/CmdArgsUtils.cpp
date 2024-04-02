@@ -124,7 +124,7 @@ std::unordered_set<std::string> parseStringSymbols(const std::string &symbols) n
     return result;
 }
 
-std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &symbols) noexcept {
+std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &symbols) {
     auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
@@ -148,7 +148,7 @@ std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(std::optional<std::
     return {};
 }
 
-std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::string &symbols) noexcept {
+std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::string &symbols) {
     auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {

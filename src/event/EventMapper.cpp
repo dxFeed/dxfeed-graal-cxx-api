@@ -13,7 +13,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) noexcept {
+std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) {
     auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
 
     if (list->size <= 0) {
@@ -85,6 +85,10 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
             result.emplace_back(AnalyticOrder::fromGraal(e));
 
             break;
+        case DXFG_EVENT_OTC_MARKETS_ORDER:
+            result.emplace_back(OtcMarketsOrder::fromGraal(e));
+
+            break;
         case DXFG_EVENT_SPREAD_ORDER:
             result.emplace_back(SpreadOrder::fromGraal(e));
 
@@ -97,6 +101,9 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
             result.emplace_back(OptionSale::fromGraal(e));
 
             break;
+
+        default:
+            throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
         }
     }
 
@@ -105,7 +112,7 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
     return result;
 }
 
-void EventMapper::freeGraalList(void *graalList) noexcept {
+void EventMapper::freeGraalList(void *graalList) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("EventMapper::freeGraalList(graalList = " + toStringAny(graalList) + ")");
     }
@@ -183,6 +190,10 @@ void EventMapper::freeGraalList(void *graalList) noexcept {
                     AnalyticOrder::freeGraal(static_cast<void *>(e));
 
                     break;
+                case DXFG_EVENT_OTC_MARKETS_ORDER:
+                    OtcMarketsOrder::freeGraal(static_cast<void *>(e));
+
+                    break;
                 case DXFG_EVENT_SPREAD_ORDER:
                     SpreadOrder::freeGraal(static_cast<void *>(e));
 
@@ -195,6 +206,8 @@ void EventMapper::freeGraalList(void *graalList) noexcept {
                     OptionSale::freeGraal(static_cast<void *>(e));
 
                     break;
+                default:
+                    throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
                 }
             }
         }
@@ -251,7 +264,7 @@ bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx
     return true;
 }
 
-bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept {
+bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
     using ListType = dxfg_event_type_list;
     using SizeType = decltype(ListType::size);
 
@@ -262,7 +275,6 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
     auto *list = static_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
-        // TODO: error handling [EN-8232]
         if (list->elements[i]) {
             auto *e = list->elements[i];
 
@@ -325,6 +337,10 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
                 AnalyticOrder::freeGraal(static_cast<void *>(e));
 
                 break;
+            case DXFG_EVENT_OTC_MARKETS_ORDER:
+                OtcMarketsOrder::freeGraal(static_cast<void *>(e));
+
+                break;
             case DXFG_EVENT_SPREAD_ORDER:
                 SpreadOrder::freeGraal(static_cast<void *>(e));
 
@@ -337,6 +353,9 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) n
                 OptionSale::freeGraal(static_cast<void *>(e));
 
                 break;
+
+            default:
+                throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
             }
         }
     }

@@ -40,25 +40,23 @@ void Trade::fillGraalData(void *graalNative) const noexcept {
     graalTrade->trade_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_TRADE;
 }
 
-std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Trade. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TRADE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Trade. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_TRADE))));
     }
 
-    try {
-        auto trade = std::make_shared<Trade>();
+    auto trade = std::make_shared<Trade>();
 
-        trade->fillData(graalNative);
+    trade->fillData(graalNative);
 
-        return trade;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return trade;
 }
 
 std::string Trade::toString() const noexcept {
@@ -77,13 +75,16 @@ void *Trade::toGraal() const {
     return static_cast<void *>(graalTrade);
 }
 
-void Trade::freeGraal(void *graalNative) noexcept {
+void Trade::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TRADE) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Trade's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_TRADE))));
     }
 
     auto graalTrade = static_cast<dxfg_trade_t *>(graalNative);

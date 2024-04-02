@@ -111,27 +111,23 @@ std::string Quote::toString() const noexcept {
         dxfcpp::toString(getAskPrice()), dxfcpp::toString(getAskSize()));
 }
 
-std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Quote. The `graalNative` parameter is nullptr");
     }
 
-    auto eventType = static_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != dxfg_event_clazz_t::DXFG_EVENT_QUOTE) {
-        return {};
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
+        throw std::invalid_argument(
+            fmt::format("Unable to create Quote. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_QUOTE))));
     }
 
-    try {
-        auto quote = std::make_shared<Quote>();
+    auto quote = std::make_shared<Quote>();
 
-        quote->fillData(graalNative);
+    quote->fillData(graalNative);
 
-        return quote;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return quote;
 }
 
 void *Quote::toGraal() const {
@@ -146,13 +142,16 @@ void *Quote::toGraal() const {
     return static_cast<void *>(graalQuote);
 }
 
-void Quote::freeGraal(void *graalNative) noexcept {
+void Quote::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_QUOTE) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Quote's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_QUOTE))));
     }
 
     auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);

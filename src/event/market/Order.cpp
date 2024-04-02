@@ -53,25 +53,23 @@ void Order::freeGraalData(void *graalNative) noexcept {
     delete[] graalOrder->market_maker;
 }
 
-std::shared_ptr<Order> Order::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Order> Order::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Order. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_ORDER) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Order. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_ORDER))));
     }
 
-    try {
-        auto order = std::make_shared<Order>();
+    auto order = std::make_shared<Order>();
 
-        order->fillData(graalNative);
+    order->fillData(graalNative);
 
-        return order;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return order;
 }
 
 std::string Order::toString() const noexcept {
@@ -90,13 +88,16 @@ void *Order::toGraal() const {
     return static_cast<void *>(graalOrder);
 }
 
-void Order::freeGraal(void *graalNative) noexcept {
+void Order::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_ORDER) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Order's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_ORDER))));
     }
 
     auto graalOrder = static_cast<dxfg_order_t *>(graalNative);

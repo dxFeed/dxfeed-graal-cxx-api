@@ -88,9 +88,9 @@ class DXFCPP_EXPORT IndexedEventSource {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
-    static IndexedEventSource fromGraal(void *graalNative) noexcept;
+    static IndexedEventSource fromGraal(void *graalNative);
 };
 
 DXFCPP_END_NAMESPACE

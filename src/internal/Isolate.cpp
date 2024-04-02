@@ -146,10 +146,6 @@ constexpr auto equalsToZero = [](auto result) {
     return result == 0;
 };
 
-constexpr auto doNothing = [](auto result) {
-    return result;
-};
-
 constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction, auto defaultValue, auto &&...params) {
     return runIsolatedOrElse(
         [](auto threadHandle, auto &&resultCheckerConverter, auto &&graalFunction, auto &&...params) {
@@ -159,15 +155,10 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
 }
 
 std::unordered_set<std::string> /* dxfg_string_list* */
-Tools::parseSymbols(const std::string &symbolList) noexcept {
+Tools::parseSymbols(std::string_view symbolList) {
     std::unordered_set<std::string> result{};
 
-    auto graalStringList = runGraalFunction(doNothing, dxfg_Tools_parseSymbols, nullptr, symbolList.c_str());
-
-    if (!graalStringList) {
-        // TODO: Improve error handling [EN-8232]
-        return result;
-    }
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
@@ -178,78 +169,37 @@ Tools::parseSymbols(const std::string &symbolList) noexcept {
     return result;
 }
 
-struct NativeStringList final {
-    explicit NativeStringList(const std::vector<std::string> &values) {
-        if (values.empty()) {
-            list = nullptr;
-        } else {
-            list = new dxfg_string_list{};
-            list->size = fitToType<decltype(dxfg_string_list::size)>(values.size());
-            list->elements = new const char *[list->size] {
-                nullptr
-            };
-
-            for (int i = 0; i < list->size; i++) {
-                if (!values[i].empty()) {
-                    list->elements[i] = createCString(values[i]);
-                }
-            }
-        }
-    }
-
-    ~NativeStringList() {
-        if (list) {
-            for (int i = 0; i < list->size; i++) {
-                delete[] list->elements[i];
-            }
-
-            delete[] list->elements;
-            delete list;
-        }
-    }
-
-    dxfg_string_list *list = nullptr;
-};
+using NativeStringList = typename isolated::internal::NativeStringListWrapper<dxfg_string_list>;
 
 void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {
     NativeStringList l{args};
 
-    runIsolatedOrElse(
-        [](auto threadHandle, auto &&list) {
-            return dxfg_Tools_main(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
-        },
-        false, l.list);
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_Tools_main, l.list);
 }
 
 namespace ipf {
 
-/* dxfg_instrument_profile_reader_t* */ void *InstrumentProfileReader::create() noexcept {
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle) {
-            return dxfg_InstrumentProfileReader_new(static_cast<graal_isolatethread_t *>(threadHandle));
-        },
-        nullptr));
+/* dxfg_instrument_profile_reader_t* */ dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader>
+InstrumentProfileReader::create() {
+    return dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader>{
+        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_new)};
 }
 
 std::int64_t InstrumentProfileReader::getLastModified(
-    /* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
-    if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling [EN-8232]
-        return 0;
+    /* dxfg_instrument_profile_reader_t * */ const dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader> &handle) {
+    if (!handle) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_InstrumentProfileReader_getLastModified`. The handle is invalid");
     }
 
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileReader_getLastModified(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                                params...);
-        },
-        0, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle));
+    return runGraalFunctionAndThrowIfLessThanZero(dxfg_InstrumentProfileReader_getLastModified,
+                                                  static_cast<dxfg_instrument_profile_reader_t *>(handle.get()));
 }
 
 bool InstrumentProfileReader::wasComplete(
     /* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
     if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -265,7 +215,7 @@ bool InstrumentProfileReader::wasComplete(
 InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
                                       const std::string &address) noexcept {
     if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -282,7 +232,7 @@ InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ v
                                       const std::string &address, const std::string &user,
                                       const std::string &password) noexcept {
     if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -321,7 +271,7 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
 std::int64_t InstrumentProfileCollector::getLastUpdateTime(
     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {
     if (!instrumentProfileCollectorHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -337,7 +287,7 @@ bool InstrumentProfileCollector::updateInstrumentProfile(
     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
     /* dxfg_instrument_profile_t * */ void *ip) noexcept {
     if (!instrumentProfileCollectorHandle || !ip) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -353,7 +303,7 @@ bool InstrumentProfileCollector::updateInstrumentProfile(
 /* dxfg_iterable_ip_t* */ void *
 InstrumentProfileCollector::view(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {
     if (!instrumentProfileCollectorHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -367,7 +317,7 @@ InstrumentProfileCollector::view(/* dxfg_ipf_collector_t* */ void *instrumentPro
 bool InstrumentProfileCollector::addUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
                                                    /* dxfg_ipf_update_listener_t* */ void *listener) noexcept {
     if (!instrumentProfileCollectorHandle || !listener) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -384,7 +334,7 @@ bool InstrumentProfileCollector::removeUpdateListener(
     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
     /* dxfg_ipf_update_listener_t* */ void *listener) noexcept {
     if (!instrumentProfileCollectorHandle || !listener) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -401,7 +351,7 @@ bool InstrumentProfileCollector::removeUpdateListener(
     const std::string &address,
     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept {
     if (!instrumentProfileCollectorHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -416,7 +366,7 @@ bool InstrumentProfileCollector::removeUpdateListener(
 std::string InstrumentProfileConnection::getAddress(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::String::EMPTY;
     }
 
@@ -437,7 +387,7 @@ std::string InstrumentProfileConnection::getAddress(
 std::int64_t InstrumentProfileConnection::getUpdatePeriod(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -452,7 +402,7 @@ std::int64_t InstrumentProfileConnection::getUpdatePeriod(
 bool InstrumentProfileConnection::setUpdatePeriod(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
                                                   std::int64_t updatePeriod) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -478,14 +428,14 @@ static dxfcpp::InstrumentProfileConnection::State graalStateToState(dxfg_ipf_con
         return dxfcpp::InstrumentProfileConnection::State::CLOSED;
     }
 
-    // TODO: Improve error handling [EN-8232]
+    // TODO: Improve error handling
     return dxfcpp::InstrumentProfileConnection::State::NOT_CONNECTED;
 }
 
 dxfcpp::InstrumentProfileConnection::State
 InstrumentProfileConnection::getState(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::InstrumentProfileConnection::State::CLOSED;
     }
 
@@ -501,7 +451,7 @@ InstrumentProfileConnection::getState(/* dxfg_ipf_connection_t * */ void *instru
 std::int64_t InstrumentProfileConnection::getLastModified(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -516,7 +466,7 @@ std::int64_t InstrumentProfileConnection::getLastModified(
 bool InstrumentProfileConnection::start(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -531,7 +481,7 @@ bool InstrumentProfileConnection::start(
 bool InstrumentProfileConnection::close(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -547,7 +497,7 @@ bool InstrumentProfileConnection::addStateChangeListener(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
     /* dxfg_ipf_connection_state_change_listener_t * */ void *listener) noexcept {
     if (!instrumentProfileConnectionHandle || !listener) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -559,7 +509,7 @@ bool InstrumentProfileConnection::addStateChangeListener(
 bool InstrumentProfileConnection::waitUntilCompleted(
     /* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle, std::int64_t timeoutInMs) noexcept {
     if (!instrumentProfileConnectionHandle) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -576,7 +526,7 @@ bool InstrumentProfileConnection::waitUntilCompleted(
 IpfPropertyChangeListener::create(/* dxfg_ipf_connection_state_change_listener_func */ void *userFunc,
                                   void *userData) noexcept {
     if (!userFunc) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -590,7 +540,7 @@ IpfPropertyChangeListener::create(/* dxfg_ipf_connection_state_change_listener_f
 
 bool InstrumentProfile::release(/* dxfg_instrument_profile_t* */ void *ip) noexcept {
     if (!ip) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -603,7 +553,7 @@ bool InstrumentProfile::release(/* dxfg_instrument_profile_t* */ void *ip) noexc
 
 bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *graalInstrumentProfileList) noexcept {
     if (!graalInstrumentProfileList) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -616,7 +566,7 @@ bool InstrumentProfileList::release(/* dxfg_instrument_profile_list * */ void *g
 
 bool InstrumentProfileIterator::hasNext(/* dxfg_iterable_ip_t * */ void *iterable) noexcept {
     if (!iterable) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -631,7 +581,7 @@ bool InstrumentProfileIterator::hasNext(/* dxfg_iterable_ip_t * */ void *iterabl
 /* dxfg_instrument_profile_t* */ void *
 InstrumentProfileIterator::next(/* dxfg_iterable_ip_t * */ void *iterable) noexcept {
     if (!iterable) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -646,7 +596,7 @@ InstrumentProfileIterator::next(/* dxfg_iterable_ip_t * */ void *iterable) noexc
 InstrumentProfileUpdateListener::create(/* dxfg_ipf_update_listener_function */ void *userFunc,
                                         void *userData) noexcept {
     if (!userFunc) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -664,7 +614,7 @@ namespace ondemand {
 
 /* dxfg_on_demand_service_t* */ void *OnDemandService::getInstance(/* dxfg_endpoint_t * */ void *endpoint) noexcept {
     if (!endpoint) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -677,7 +627,7 @@ namespace ondemand {
 
 bool OnDemandService::isReplaySupported(/* dxfg_on_demand_service_t * */ void *service) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -691,7 +641,7 @@ bool OnDemandService::isReplaySupported(/* dxfg_on_demand_service_t * */ void *s
 
 bool OnDemandService::isReplay(/* dxfg_on_demand_service_t * */ void *service) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -704,7 +654,7 @@ bool OnDemandService::isReplay(/* dxfg_on_demand_service_t * */ void *service) n
 
 bool OnDemandService::isClear(/* dxfg_on_demand_service_t * */ void *service) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -717,7 +667,7 @@ bool OnDemandService::isClear(/* dxfg_on_demand_service_t * */ void *service) no
 
 std::int64_t OnDemandService::getTime(/* dxfg_on_demand_service_t * */ void *service) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -730,7 +680,7 @@ std::int64_t OnDemandService::getTime(/* dxfg_on_demand_service_t * */ void *ser
 
 double OnDemandService::getSpeed(/* dxfg_on_demand_service_t * */ void *service) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0.0;
     }
 
@@ -743,7 +693,7 @@ double OnDemandService::getSpeed(/* dxfg_on_demand_service_t * */ void *service)
 
 bool OnDemandService::replay(/* dxfg_on_demand_service_t * */ void *service, std::int64_t time) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -756,7 +706,7 @@ bool OnDemandService::replay(/* dxfg_on_demand_service_t * */ void *service, std
 
 bool OnDemandService::replay(/* dxfg_on_demand_service_t * */ void *service, std::int64_t time, double speed) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -770,7 +720,7 @@ bool OnDemandService::replay(/* dxfg_on_demand_service_t * */ void *service, std
 
 bool OnDemandService::pause(/* dxfg_on_demand_service_t * */ void *service) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -783,7 +733,7 @@ bool OnDemandService::pause(/* dxfg_on_demand_service_t * */ void *service) noex
 
 bool OnDemandService::stopAndResume(/* dxfg_on_demand_service_t * */ void *service) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -796,7 +746,7 @@ bool OnDemandService::stopAndResume(/* dxfg_on_demand_service_t * */ void *servi
 
 bool OnDemandService::stopAndClear(/* dxfg_on_demand_service_t * */ void *service) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -809,7 +759,7 @@ bool OnDemandService::stopAndClear(/* dxfg_on_demand_service_t * */ void *servic
 
 bool OnDemandService::setSpeed(/* dxfg_on_demand_service_t * */ void *service, double speed) noexcept {
     if (!service) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -827,7 +777,7 @@ namespace schedule {
 
 /* dxfg_schedule_t* */ void *Day::getSchedule(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -840,7 +790,7 @@ namespace schedule {
 
 std::int32_t Day::getDayId(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -853,7 +803,7 @@ std::int32_t Day::getDayId(/* dxfg_day_t* */ void *day) noexcept {
 
 std::int32_t Day::getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -866,7 +816,7 @@ std::int32_t Day::getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept {
 
 std::int32_t Day::getYear(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -879,7 +829,7 @@ std::int32_t Day::getYear(/* dxfg_day_t* */ void *day) noexcept {
 
 std::int32_t Day::getMonthOfYear(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -892,7 +842,7 @@ std::int32_t Day::getMonthOfYear(/* dxfg_day_t* */ void *day) noexcept {
 
 std::int32_t Day::getDayOfMonth(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -905,7 +855,7 @@ std::int32_t Day::getDayOfMonth(/* dxfg_day_t* */ void *day) noexcept {
 
 std::int32_t Day::getDayOfWeek(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -918,7 +868,7 @@ std::int32_t Day::getDayOfWeek(/* dxfg_day_t* */ void *day) noexcept {
 
 bool Day::isHoliday(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -931,7 +881,7 @@ bool Day::isHoliday(/* dxfg_day_t* */ void *day) noexcept {
 
 bool Day::isShortDay(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -944,7 +894,7 @@ bool Day::isShortDay(/* dxfg_day_t* */ void *day) noexcept {
 
 bool Day::isTrading(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -957,7 +907,7 @@ bool Day::isTrading(/* dxfg_day_t* */ void *day) noexcept {
 
 std::int64_t Day::getStartTime(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -970,7 +920,7 @@ std::int64_t Day::getStartTime(/* dxfg_day_t* */ void *day) noexcept {
 
 std::int64_t Day::getEndTime(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -983,7 +933,7 @@ std::int64_t Day::getEndTime(/* dxfg_day_t* */ void *day) noexcept {
 
 bool Day::containsTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -996,7 +946,7 @@ bool Day::containsTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept 
 
 std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -1009,7 +959,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 
 /* dxfg_session_t* */ void *Day::getSessionByTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1023,7 +973,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 /* dxfg_session_t* */ void *Day::getFirstSession(/* dxfg_day_t* */ void *day,
                                                  /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1037,7 +987,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 /* dxfg_session_t* */ void *Day::getLastSession(/* dxfg_day_t* */ void *day,
                                                 /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1051,7 +1001,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 /* dxfg_session_t* */ void *Day::findFirstSession(/* dxfg_day_t* */ void *day,
                                                   /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1065,7 +1015,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 /* dxfg_session_t* */ void *Day::findLastSession(/* dxfg_day_t* */ void *day,
                                                  /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1079,7 +1029,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 /* dxfg_day_t* */ void *Day::getPrevDay(/* dxfg_day_t* */ void *day,
                                         /* dxfg_day_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1093,7 +1043,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 /* dxfg_day_t* */ void *Day::getNextDay(/* dxfg_day_t* */ void *day,
                                         /* dxfg_day_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1107,7 +1057,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 /* dxfg_day_t* */ void *Day::findPrevDay(/* dxfg_day_t* */ void *day,
                                          /* dxfg_day_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1120,7 +1070,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 
 /* dxfg_day_t* */ void *Day::findNextDay(/* dxfg_day_t* */ void *day, /* dxfg_day_filter_t* */ void *filter) noexcept {
     if (!day || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1133,7 +1083,7 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
 
 std::size_t Day::getHashCode(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::bit_cast<std::size_t>(day);
     }
 
@@ -1146,7 +1096,7 @@ std::size_t Day::getHashCode(/* dxfg_day_t* */ void *day) noexcept {
 
 bool Day::equals(/* dxfg_day_t* */ void *day, /* dxfg_day_t* */ void *otherDay) noexcept {
     if (!day || !otherDay) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -1163,7 +1113,7 @@ bool Day::equals(/* dxfg_day_t* */ void *day, /* dxfg_day_t* */ void *otherDay) 
 
 std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
     if (!day) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::String::EMPTY;
     }
 
@@ -1190,7 +1140,7 @@ std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
 
 /* dxfg_day_t* */ void *Session::getDay(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1203,7 +1153,7 @@ std::string Day::toString(/* dxfg_day_t* */ void *day) noexcept {
 
 std::int32_t Session::getType(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -1216,7 +1166,7 @@ std::int32_t Session::getType(/* dxfg_session_t* */ void *session) noexcept {
 
 bool Session::isTrading(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -1229,7 +1179,7 @@ bool Session::isTrading(/* dxfg_session_t* */ void *session) noexcept {
 
 bool Session::isEmpty(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -1242,7 +1192,7 @@ bool Session::isEmpty(/* dxfg_session_t* */ void *session) noexcept {
 
 std::int64_t Session::getStartTime(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -1255,7 +1205,7 @@ std::int64_t Session::getStartTime(/* dxfg_session_t* */ void *session) noexcept
 
 std::int64_t Session::getEndTime(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return 0;
     }
 
@@ -1268,7 +1218,7 @@ std::int64_t Session::getEndTime(/* dxfg_session_t* */ void *session) noexcept {
 
 bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t time) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -1282,7 +1232,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 /* dxfg_session_t* */ void *Session::getPrevSession(/* dxfg_session_t* */ void *session,
                                                     /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!session || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1296,7 +1246,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 /* dxfg_session_t* */ void *Session::getNextSession(/* dxfg_session_t* */ void *session,
                                                     /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!session || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1310,7 +1260,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 /* dxfg_session_t* */ void *Session::findPrevSession(/* dxfg_session_t* */ void *session,
                                                      /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!session || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1324,7 +1274,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 /* dxfg_session_t* */ void *Session::findNextSession(/* dxfg_session_t* */ void *session,
                                                      /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!session || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1337,7 +1287,7 @@ bool Session::containsTime(/* dxfg_session_t* */ void *session, std::int64_t tim
 
 std::size_t Session::getHashCode(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::bit_cast<std::size_t>(session);
     }
 
@@ -1350,7 +1300,7 @@ std::size_t Session::getHashCode(/* dxfg_session_t* */ void *session) noexcept {
 
 bool Session::equals(/* dxfg_session_t* */ void *session, /* dxfg_session_t* */ void *otherSession) noexcept {
     if (!session || !otherSession) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return false;
     }
 
@@ -1367,7 +1317,7 @@ bool Session::equals(/* dxfg_session_t* */ void *session, /* dxfg_session_t* */ 
 
 std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
     if (!session) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::String::EMPTY;
     }
 
@@ -1394,7 +1344,7 @@ std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
 
 /* dxfg_schedule_t* */ void *Schedule::getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept {
     if (!instrumentProfile) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1417,7 +1367,7 @@ std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
 /* dxfg_schedule_t* */ void *Schedule::getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile,
                                                    const std::string &venue) noexcept {
     if (!instrumentProfile) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1433,7 +1383,7 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
     std::vector<std::string> result{};
 
     if (!instrumentProfile) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return result;
     }
 
@@ -1445,7 +1395,7 @@ std::vector<std::string> Schedule::getTradingVenues(/* dxfg_instrument_profile_t
         nullptr, static_cast<dxfg_instrument_profile_t *>(instrumentProfile));
 
     if (!graalStringList) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return result;
     }
 
@@ -1483,7 +1433,7 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 /* dxfg_session_t* */ void *Schedule::getSessionByTime(/* dxfg_schedule_t* */ void *schedule,
                                                        std::int64_t time) noexcept {
     if (!schedule) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1496,7 +1446,7 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 
 /* dxfg_day_t* */ void *Schedule::getDayByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time) noexcept {
     if (!schedule) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1509,7 +1459,7 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 
 /* dxfg_day_t* */ void *Schedule::getDayById(/* dxfg_schedule_t* */ void *schedule, std::int32_t dayId) noexcept {
     if (!schedule) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1523,7 +1473,7 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 /* dxfg_day_t* */ void *Schedule::getDayByYearMonthDay(/* dxfg_schedule_t* */ void *schedule,
                                                        std::int32_t yearMonthDay) noexcept {
     if (!schedule) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1538,7 +1488,7 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 /* dxfg_session_t* */ void *Schedule::getNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time,
                                                               /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!schedule || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1553,7 +1503,7 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 /* dxfg_session_t* */ void *Schedule::findNearestSessionByTime(/* dxfg_schedule_t* */ void *schedule, std::int64_t time,
                                                                /* dxfg_session_filter_t* */ void *filter) noexcept {
     if (!schedule || !filter) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return nullptr;
     }
 
@@ -1567,7 +1517,7 @@ bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
 
 std::string Schedule::getName(/* dxfg_schedule_t* */ void *schedule) noexcept {
     if (!schedule) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::String::EMPTY;
     }
 
@@ -1586,7 +1536,7 @@ std::string Schedule::getName(/* dxfg_schedule_t* */ void *schedule) noexcept {
 
 std::string Schedule::getTimeZoneDisplayName(/* dxfg_schedule_t* */ void *schedule) noexcept {
     if (!schedule) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::String::EMPTY;
     }
 
@@ -1605,7 +1555,7 @@ std::string Schedule::getTimeZoneDisplayName(/* dxfg_schedule_t* */ void *schedu
 
 std::string Schedule::getTimeZoneId(/* dxfg_schedule_t* */ void *schedule) noexcept {
     if (!schedule) {
-        // TODO: Improve error handling [EN-8232]
+        // TODO: Improve error handling
         return dxfcpp::String::EMPTY;
     }
 

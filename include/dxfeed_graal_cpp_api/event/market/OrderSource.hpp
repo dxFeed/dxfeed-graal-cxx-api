@@ -37,15 +37,17 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     static constexpr std::uint32_t PUB_ORDER = 0x0001U;
     static constexpr std::uint32_t PUB_ANALYTIC_ORDER = 0x0002U;
-    static constexpr std::uint32_t PUB_SPREAD_ORDER = 0x0004U;
-    static constexpr std::uint32_t FULL_ORDER_BOOK = 0x0008U;
-    static constexpr std::uint32_t FLAGS_SIZE = 4U;
+    static constexpr std::uint32_t PUB_OTC_MARKETS_ORDER = 0x0004;
+    static constexpr std::uint32_t PUB_SPREAD_ORDER = 0x0008U;
+    static constexpr std::uint32_t FULL_ORDER_BOOK = 0x0010U;
+
+    static constexpr std::uint32_t FLAGS_SIZE = 5U;
 
   public:
-    static const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>> PREDEFINED_SOURCES;
+    static const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
+        PREDEFINED_SOURCES;
 
   private:
-
     static inline std::mutex MTX_{};
     static std::unordered_map<std::int32_t, OrderSource> USER_SOURCES_;
 
@@ -56,53 +58,41 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {
     }
 
-    OrderSource(const std::string &name, std::uint32_t pubFlags) noexcept
-        : OrderSource(composeId(name), name, pubFlags) {
+    OrderSource(const std::string &name, std::uint32_t pubFlags) : OrderSource(composeId(name), name, pubFlags) {
     }
 
     OrderSource(std::int32_t id, const std::string &name) noexcept
         : IndexedEventSource(id, name), pubFlags_{0}, builtin_{false} {
     }
 
-    static std::int32_t composeId(const std::string &name) noexcept {
+    static std::int32_t composeId(const std::string &name) {
         std::int32_t sourceId = 0;
 
         auto n = name.length();
 
         if (n == 0 || n > 4) {
-            // TODO: error handling: [EN-8232] IllegalArgumentException("Source name must contain from 1 to 4 characters");
-
-            return -1;
+            throw std::invalid_argument("Source name must contain from 1 to 4 characters");
         }
 
         for (auto c : name) {
-            if (!checkChar(c)) {
-                // TODO: error handling [EN-8232]
-
-                return -1;
-            }
-
+            checkChar(c);
             sourceId = orOp(sal(sourceId, 8), c);
         }
 
         return sourceId;
     }
 
-    static bool checkChar(char c) noexcept {
+    static void checkChar(char c) {
         if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
-            return true;
+            return;
         }
 
-        // TODO: error handling: [EN-8232] IllegalArgumentException("Source name must contain only alphanumeric characters");
-
-        return false;
+        throw std::invalid_argument("Source name must contain only alphanumeric characters");
     }
 
-    static std::string decodeName(std::int32_t id) noexcept {
+    static std::string decodeName(std::int32_t id) {
         if (id == 0) {
-            // TODO: error handling: [EN-8232] throw IllegalArgumentException("Source name must contain from 1 to 4 characters");
-
-            return "";
+            throw std::invalid_argument("Source name must contain from 1 to 4 characters");
         }
 
         std::string name(4, '\0');
@@ -116,17 +106,14 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
             char c = static_cast<char>(andOp(sar(id, i), 0xff));
 
-            if (!checkChar(c)) {
-                return "";
-            }
-
+            checkChar(c);
             name[n++] = c;
         }
 
         return name.substr(0, n);
     }
 
-    static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType) noexcept {
+    static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType) {
         if (eventType == EventTypeEnum::ORDER) {
             return PUB_ORDER;
         }
@@ -135,13 +122,15 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
             return PUB_ANALYTIC_ORDER;
         }
 
+        if (eventType == EventTypeEnum::OTC_MARKETS_ORDER) {
+            return PUB_OTC_MARKETS_ORDER;
+        }
+
         if (eventType == EventTypeEnum::SPREAD_ORDER) {
             return PUB_SPREAD_ORDER;
         }
 
-        // TODO: error handling: [EN-8232] throw IllegalArgumentException("Invalid order event type: " + eventType);
-
-        return 0;
+        throw std::invalid_argument("Invalid order event type: " + eventType.getName());
     }
 
     /**
@@ -196,7 +185,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     /**
      * Default source for publishing custom order books.
-     * Order, AnalyticOrder and SpreadOrder events are @ref ::isPublishable() "publishable"
+     * Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events are @ref ::isPublishable() "publishable"
      * on this source and the corresponding subscription can be observed via DXPublisher.
      */
     static const OrderSource DEFAULT;
@@ -467,6 +456,39 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource memx;
 
     /**
+     * Blue Ocean Technologies Alternative Trading System.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource OCEA;
+
+    /**
+     * Pink Sheets. Record for price level book.
+     * Pink sheets are listings for stocks that trade over-the-counter (OTC).
+     *
+     * Order and OtcMarketsOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
+     * subscription can be observed via DXPublisher.
+     */
+    static const OrderSource pink;
+
+    /**
+     * NYSE Arca traded securities
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource ARCA;
+
+    /**
+     * NYSE Arca traded securities. Record for price level book.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource arca;
+
+    /**
      * Determines whether specified source identifier refers to special order source.
      * Special order sources are used for wrapping non-order events into order events.
      *
@@ -483,7 +505,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @param sourceId the source identifier.
      * @return order source.
      */
-    static const OrderSource &valueOf(std::int32_t sourceId) noexcept {
+    static const OrderSource &valueOf(std::int32_t sourceId) {
         if (auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
             return found->second;
         }
@@ -504,7 +526,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @param name the name of the source.
      * @return order source.
      */
-    static const OrderSource &valueOf(const std::string &name) noexcept {
+    static const OrderSource &valueOf(const std::string &name) {
         if (auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
             return found->second;
         }

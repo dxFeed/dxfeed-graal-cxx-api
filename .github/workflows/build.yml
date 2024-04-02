@@ -40,7 +40,7 @@ jobs:
             cxx: 'clang++'
         buildType: [ Release, Debug ]
 
-    name: ${{ matrix.config.name }}-${{matrix.buildType}}
+    name: "${{ matrix.config.name }}-${{matrix.buildType}}"
     runs-on: ${{ matrix.config.image }}
 
     steps:

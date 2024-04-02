@@ -11,8 +11,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <iterator>
 #include <locale>
-#include <string>
 #include <optional>
+#include <string>
 #include <thread>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -179,6 +179,12 @@ inline bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
 }
 
 DXFCPP_EXPORT inline bool iEquals(const std::string &first, const std::string &second) noexcept {
+    const std::locale &locale = std::locale();
+
+    return equals(first, second, detail::IsIEqual(locale));
+}
+
+DXFCPP_EXPORT inline bool iEquals(std::string_view first, std::string_view second) noexcept {
     const std::locale &locale = std::locale();
 
     return equals(first, second, detail::IsIEqual(locale));

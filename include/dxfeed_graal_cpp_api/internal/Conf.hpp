@@ -63,3 +63,45 @@
         }                                                                                                              \
         }
 #endif
+
+#ifdef __has_include
+# if __has_include(<ciso646>)
+#  include <ciso646>
+# elif __has_include(<iso646.h>)
+#  include <iso646.h>
+# endif
+#else
+#include <ciso646>
+#endif
+
+DXFCPP_BEGIN_NAMESPACE
+
+#if defined(__clang__)
+constexpr bool isClangFlavouredCompiler = true;
+#else
+constexpr bool isClangFlavouredCompiler = false;
+#endif
+
+#ifdef _LIBCPP_VERSION
+constexpr bool isLibCPP = true;
+constexpr bool isLibCXX = false;
+constexpr bool isMSSTL = false;
+constexpr bool isUnknownSTL = false;
+#elif __GLIBCXX__ // Note: only version 6.1 or newer define this in ciso646
+constexpr bool isLibCPP = false;
+constexpr bool isLibCXX = true;
+constexpr bool isMSSTL = false;
+constexpr bool isUnknownSTL = false;
+#elif _CPPLIB_VER // Note: used by Visual Studio
+constexpr bool isLibCPP = false;
+constexpr bool isLibCXX = false;
+constexpr bool isMSSTL = true;
+constexpr bool isUnknownSTL = false;
+#else
+constexpr bool isLibCPP = false;
+constexpr bool isLibCXX = false;
+constexpr bool isMSSTL = false;
+constexpr bool isUnknownSTL = true;
+#endif
+
+DXFCPP_END_NAMESPACE

@@ -18,11 +18,11 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-InstrumentProfileReader::InstrumentProfileReader() noexcept : id_{Id<InstrumentProfileReader>::UNKNOWN}, handle_{} {
-    handle_ = JavaObjectHandle<InstrumentProfileReader>(dxfcpp::isolated::ipf::InstrumentProfileReader::create());
+InstrumentProfileReader::InstrumentProfileReader() : id_{Id<InstrumentProfileReader>::UNKNOWN}, handle_{} {
+    handle_ = dxfcpp::isolated::ipf::InstrumentProfileReader::create();
 }
 
-InstrumentProfileReader::Ptr InstrumentProfileReader::create() noexcept {
+InstrumentProfileReader::Ptr InstrumentProfileReader::create() {
     auto reader = std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
 
     reader->id_ = ApiContext::getInstance()->getManager<InstrumentProfileReaderManager>()->registerEntity(reader);
@@ -30,12 +30,8 @@ InstrumentProfileReader::Ptr InstrumentProfileReader::create() noexcept {
     return reader;
 }
 
-std::int64_t InstrumentProfileReader::getLastModified() const noexcept {
-    if (!handle_) {
-        return 0;
-    }
-
-    return isolated::ipf::InstrumentProfileReader::getLastModified(handle_.get());
+std::int64_t InstrumentProfileReader::getLastModified() const {
+    return isolated::ipf::InstrumentProfileReader::getLastModified(handle_);
 }
 
 bool InstrumentProfileReader::wasComplete() const noexcept {
@@ -51,7 +47,7 @@ std::string InstrumentProfileReader::resolveSourceURL(const std::string &address
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>>
-InstrumentProfileReader::readFromFile(const std::string &address) const noexcept {
+InstrumentProfileReader::readFromFile(const std::string &address) const {
     if (!handle_) {
         return {};
     }
@@ -66,7 +62,7 @@ InstrumentProfileReader::readFromFile(const std::string &address) const noexcept
 
 std::vector<std::shared_ptr<InstrumentProfile>>
 InstrumentProfileReader::readFromFile(const std::string &address, const std::string &user,
-                                      const std::string &password) const noexcept {
+                                      const std::string &password) const {
     if (!handle_) {
         return {};
     }

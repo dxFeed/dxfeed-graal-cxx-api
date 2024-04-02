@@ -57,7 +57,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
     /**
      * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure (recursively

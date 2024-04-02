@@ -29,7 +29,7 @@ void *TimeSeriesSubscriptionSymbol::toGraal() const {
     return static_cast<void *>(graalSymbol);
 }
 
-void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) noexcept {
+void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("TimeSeriesSubscriptionSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
     }

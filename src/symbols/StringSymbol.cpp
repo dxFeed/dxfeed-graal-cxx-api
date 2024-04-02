@@ -51,7 +51,7 @@ void *StringSymbol::toGraal() const {
     return static_cast<void *>(graalSymbol);
 }
 
-void StringSymbol::freeGraal(void *graalNative) noexcept {
+void StringSymbol::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("StringSymbol::freeGraal(graalNative = " + toStringAny(graalNative) + ")");
     }

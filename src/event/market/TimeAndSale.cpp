@@ -87,25 +87,23 @@ void TimeAndSale::freeGraalData(void *graalNative) noexcept {
     delete[] graalTimeAndSale->seller;
 }
 
-std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create TimeAndSale. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create TimeAndSale. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE))));
     }
 
-    try {
-        auto timeAndSale = std::make_shared<TimeAndSale>();
+    auto timeAndSale = std::make_shared<TimeAndSale>();
 
-        timeAndSale->fillData(graalNative);
+    timeAndSale->fillData(graalNative);
 
-        return timeAndSale;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return timeAndSale;
 }
 
 std::string TimeAndSale::toString() const noexcept {
@@ -135,13 +133,16 @@ void *TimeAndSale::toGraal() const {
     return static_cast<void *>(graalTimeAndSale);
 }
 
-void TimeAndSale::freeGraal(void *graalNative) noexcept {
+void TimeAndSale::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free TimeAndSale's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_TIME_AND_SALE))));
     }
 
     auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);

@@ -29,7 +29,7 @@ void *IndexedEventSubscriptionSymbol::toGraal() const {
     return static_cast<void *>(graalSymbol);
 }
 
-void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) noexcept {
+void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) {
     if (graalNative == nullptr) {
         return;
     }

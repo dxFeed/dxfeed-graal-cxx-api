@@ -33,7 +33,7 @@ std::shared_ptr<IterableInstrumentProfile> IterableInstrumentProfile::create(voi
     return isolated::ipf::InstrumentProfileIterator::hasNext(handle_.get());
 }
 
-[[nodiscard]] std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const noexcept {
+[[nodiscard]] std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const {
     if (!handle_) {
         return {};
     }

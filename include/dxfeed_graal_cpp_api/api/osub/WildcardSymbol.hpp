@@ -74,9 +74,9 @@ struct DXFCPP_EXPORT WildcardSymbol final {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
-    static const WildcardSymbol &fromGraal(void *graalNative) noexcept;
+    static const WildcardSymbol &fromGraal(void *graalNative);
 
     /**
      * Returns string representation of this wildcard subscription symbol.

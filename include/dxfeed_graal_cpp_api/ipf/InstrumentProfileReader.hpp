@@ -45,7 +45,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     Id<InstrumentProfileReader> id_;
     JavaObjectHandle<InstrumentProfileReader> handle_;
 
-    InstrumentProfileReader() noexcept;
+    InstrumentProfileReader();
 
   public:
     /// The alias to a type of shared pointer to the InstrumentProfileReader object
@@ -59,13 +59,13 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      *
      * @return The new InstrumentProfileReader
      */
-    static Ptr create() noexcept;
+    static Ptr create();
 
     /**
      * Returns last modification time (in milliseconds) from last InstrumentProfileReader::readFromFile() operation
      * or zero if it is unknown.
      */
-    std::int64_t getLastModified() const noexcept;
+    std::int64_t getLastModified() const;
 
     /**
      * Returns `true` if IPF was fully read on last InstrumentProfileReader::readFromFile() operation.
@@ -96,7 +96,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param address URL of file to read from
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address) const noexcept;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address) const;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified basic user and password
@@ -117,7 +117,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @return list of instrument profiles
      */
     std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address, const std::string &user,
-                                                                 const std::string &password) const noexcept;
+                                                                 const std::string &password) const;
 };
 
 DXFCPP_END_NAMESPACE

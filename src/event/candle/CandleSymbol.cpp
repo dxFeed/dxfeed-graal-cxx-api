@@ -18,7 +18,7 @@ void *CandleSymbol::toGraal() const {
     return static_cast<void *>(graalSymbol);
 }
 
-void CandleSymbol::freeGraal(void *graalNative) noexcept {
+void CandleSymbol::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("CandleSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
     }
@@ -33,7 +33,7 @@ void CandleSymbol::freeGraal(void *graalNative) noexcept {
     delete graalSymbol;
 }
 
-CandleSymbol CandleSymbol::fromGraal(void *graalNative) noexcept {
+CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("CandleSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }

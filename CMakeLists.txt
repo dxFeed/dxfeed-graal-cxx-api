@@ -17,6 +17,13 @@ project(dxFeedGraalCxxApi)
 
 set(DXFCXX_VERSION "v1.3.5" CACHE STRING "The dxFeed Graal CXX API package version")
 
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.10" CACHE STRING "")
+set(FMTLIB_VERSION "10.2.1")
+set(BOOST_VERSION "1.84.0")
+set(UTFCPP_VERSION "3.2.3")
+set(DATE_VERSION "3.0.1")
+set(RANGE_VERSION "0.12")
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
@@ -42,7 +49,6 @@ option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.6" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
@@ -116,9 +122,8 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Console)
 
-add_subdirectory(third_party/utfcpp-3.2.3)
+add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
-set(FMTLIB_VERSION "10.2.1")
 set(FMT_INSTALL OFF)
 
 FetchContent_Declare(
@@ -133,14 +138,14 @@ FetchContent_MakeAvailable(fmt)
 
 #set(BUILD_TZ_LIB ON)
 #set(USE_SYSTEM_TZ_DB ON)
-add_subdirectory(third_party/date-3.0.1)
+add_subdirectory(third_party/date-${DATE_VERSION})
 
 set(BOOST_INCLUDE_LIBRARIES stacktrace)
 set(BOOST_ENABLE_CMAKE ON)
 
 FetchContent_Declare(
         Boost
-        URL https://github.com/boostorg/boost/releases/download/boost-1.84.0/boost-1.84.0.7z # downloading a zip release speeds up the download
+        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.7z # downloading a zip release speeds up the download
         USES_TERMINAL_DOWNLOAD TRUE
         GIT_PROGRESS TRUE
         DOWNLOAD_NO_EXTRACT FALSE
@@ -248,6 +253,8 @@ set(dxFeedGraalCxxApi_EventCandle_Sources
 
 set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/AnalyticOrder.cpp
+        src/event/market/OtcMarketsPriceType.cpp
+        src/event/market/OtcMarketsOrder.cpp
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
         src/event/market/MarketEvent.cpp
@@ -339,12 +346,12 @@ add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-0.12/include)
+target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
         DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
 target_include_directories(${PROJECT_NAME}_static PUBLIC include)
-target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-0.12/include)
+target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 

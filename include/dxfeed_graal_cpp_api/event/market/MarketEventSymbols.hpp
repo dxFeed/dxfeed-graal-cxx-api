@@ -182,8 +182,6 @@ struct DXFCPP_EXPORT MarketEventSymbols {
 
             return std::nullopt;
         } catch (...) {
-            // TODO: error handling: [EN-8232]
-
             return std::nullopt;
         }
     }
@@ -216,8 +214,6 @@ struct DXFCPP_EXPORT MarketEventSymbols {
 
             return symbol.substr(0, i) + symbol.substr(j);
         } catch (...) {
-            // TODO: error handling: [EN-8232]
-
             return symbol;
         }
     }
