@@ -58,20 +58,20 @@
 #ifndef DXFCPP_BEGIN_NAMESPACE
 #    define DXFCPP_BEGIN_NAMESPACE                                                                                     \
         namespace dxfcpp {                                                                                             \
-        inline namespace v1 {
+        inline namespace v2 {
 #    define DXFCPP_END_NAMESPACE                                                                                       \
         }                                                                                                              \
         }
 #endif
 
 #ifdef __has_include
-# if __has_include(<ciso646>)
-#  include <ciso646>
-# elif __has_include(<iso646.h>)
-#  include <iso646.h>
-# endif
+#    if __has_include(<ciso646> )
+#        include <ciso646>
+#    elif __has_include(<iso646.h>)
+#        include <iso646.h>
+#    endif
 #else
-#include <ciso646>
+#    include <ciso646>
 #endif
 
 DXFCPP_BEGIN_NAMESPACE
