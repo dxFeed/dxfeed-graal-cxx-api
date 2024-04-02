@@ -133,7 +133,7 @@ class Isolate final {
                                 CEntryPointErrorsEnumToStr(result));
             }
 
-            // TODO: Store "silent" errors [EN-8232]
+            // TODO: Store "silent" errors
 
             return result;
         }
@@ -185,7 +185,7 @@ class Isolate final {
                                 CEntryPointErrorsEnumToStr(result));
             }
 
-            // TODO: Store "silent" errors [EN-8232]
+            // TODO: Store "silent" errors
 
             return result;
         }

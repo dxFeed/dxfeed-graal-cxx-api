@@ -63,23 +63,21 @@ void TheoPrice::fillGraalData(void *graalNative) const noexcept {
 
 std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create TheoPrice. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create TheoPrice. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE))));
     }
 
-    try {
-        auto theoPrice = std::make_shared<TheoPrice>();
+    auto theoPrice = std::make_shared<TheoPrice>();
 
-        theoPrice->fillData(graalNative);
+    theoPrice->fillData(graalNative);
 
-        return theoPrice;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return theoPrice;
 }
 
 std::string TheoPrice::toString() const noexcept {
@@ -110,7 +108,10 @@ void TheoPrice::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free TheoPrice's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_THEO_PRICE))));
     }
 
     auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);

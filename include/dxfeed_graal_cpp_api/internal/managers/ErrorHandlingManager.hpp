@@ -41,7 +41,7 @@ struct DXFCPP_EXPORT Error {
     }
 };
 
-// TODO: implement retrieving, grouping methods [EN-8232]
+// TODO: implement retrieving, grouping methods
 class DXFCPP_EXPORT ErrorHandlingManager {
     static constexpr std::size_t DEFAULT_ERROR_COLLECTION_CAPACITY{1024ULL};
     static inline const Error NO_ERROR{Error::UNKNOWN_ID, 0, "", "NO ERROR"};

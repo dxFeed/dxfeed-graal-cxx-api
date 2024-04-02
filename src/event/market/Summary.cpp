@@ -67,23 +67,21 @@ void Summary::fillGraalData(void *graalNative) const noexcept {
 
 std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Summary. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SUMMARY) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Summary. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SUMMARY))));
     }
 
-    try {
-        auto summary = std::make_shared<Summary>();
+    auto summary = std::make_shared<Summary>();
 
-        summary->fillData(graalNative);
+    summary->fillData(graalNative);
 
-        return summary;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return summary;
 }
 
 std::string Summary::toString() const noexcept {
@@ -117,7 +115,10 @@ void Summary::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SUMMARY) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Summary's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SUMMARY))));
     }
 
     auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);

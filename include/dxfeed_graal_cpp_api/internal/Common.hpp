@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+#include "utils/StringUtils.hpp"
+
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #ifdef __cpp_lib_bit_cast
@@ -96,31 +98,6 @@ enum class Tristate : std::uint8_t {
 inline auto now() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
         .count();
-}
-
-template <typename M, typename F, typename... Args> inline void callWithLock(M &mtx, F &&f, Args &&...args) noexcept {
-    std::once_flag once{};
-
-    try {
-        std::lock_guard guard{mtx};
-
-        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-    }
-}
-
-template <typename M, typename F, typename... Args>
-inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
-    std::once_flag once{};
-
-    try {
-        std::lock_guard guard{mtx};
-
-        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
-    } catch (...) {
-        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
-    }
 }
 
 namespace math {
@@ -304,9 +281,8 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
 }
 
 constexpr static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
-    // TODO: error handling [EN-8232]
     if (month < 1 || month > 12) {
-        return -1;
+        throw std::invalid_argument("invalid month " + std::to_string(month));
     }
 
     std::int32_t dayOfYear = DAY_OF_YEAR[month] + day - 1;
@@ -775,6 +751,18 @@ struct StringHash {
         return HashType{}(sw);
     }
 };
+
+namespace util {
+inline void throwInvalidChar(char c, const std::string &name) {
+    throw std::invalid_argument("Invalid " + name + ": " + encodeChar(c));
+}
+
+inline void checkChar(char c, std::uint32_t mask, const std::string &name) {
+    if ((andOp(c, ~mask)) != 0) {
+        throwInvalidChar(c, name);
+    }
+}
+} // namespace util
 
 DXFCPP_END_NAMESPACE
 

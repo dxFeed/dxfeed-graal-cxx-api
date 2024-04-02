@@ -101,6 +101,9 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
             result.emplace_back(OptionSale::fromGraal(e));
 
             break;
+
+        default:
+            throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
         }
     }
 
@@ -203,6 +206,8 @@ void EventMapper::freeGraalList(void *graalList) {
                     OptionSale::freeGraal(static_cast<void *>(e));
 
                     break;
+                default:
+                    throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
                 }
             }
         }
@@ -270,7 +275,6 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
     auto *list = static_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
-        // TODO: error handling [EN-8232]
         if (list->elements[i]) {
             auto *e = list->elements[i];
 
@@ -349,6 +353,9 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
                 OptionSale::freeGraal(static_cast<void *>(e));
 
                 break;
+
+            default:
+                throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
             }
         }
     }

@@ -206,7 +206,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @param index the event index.
      * @see ::getIndex()
      */
-    void setIndex(std::int64_t index) noexcept override {
+    void setIndex(std::int64_t index) override {
         data_.index = index;
     }
 
@@ -287,9 +287,12 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @param sequence the sequence.
      * @see ::getSequence()
      */
-    void setSequence(std::int32_t sequence) noexcept {
-        // TODO: Improve error handling [EN-8232]
+    void setSequence(std::int32_t sequence) {
         assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+            throw std::invalid_argument("Invalid sequence value = " + std::to_string(sequence));
+        }
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }
@@ -450,8 +453,8 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param tradeThroughExempt TradeThroughExempt flag of this time and sale event.
      */
-    void setTradeThroughExempt(char tradeThroughExempt) noexcept {
-        // TODO: error handling [EN-8232] //util::checkChar(tradeThroughExempt, TTE_MASK, "tradeThroughExempt");
+    void setTradeThroughExempt(char tradeThroughExempt) {
+        util::checkChar(tradeThroughExempt, TTE_MASK, "tradeThroughExempt");
 
         data_.flags = setBits(data_.flags, TTE_MASK, TTE_SHIFT, tradeThroughExempt);
     }

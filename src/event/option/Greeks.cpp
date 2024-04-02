@@ -65,23 +65,21 @@ void Greeks::fillGraalData(void *graalNative) const noexcept {
 
 std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Greeks. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_GREEKS) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Greeks. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_GREEKS))));
     }
 
-    try {
-        auto greeks = std::make_shared<Greeks>();
+    auto greeks = std::make_shared<Greeks>();
 
-        greeks->fillData(graalNative);
+    greeks->fillData(graalNative);
 
-        return greeks;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return greeks;
 }
 
 std::string Greeks::toString() const noexcept {
@@ -113,7 +111,10 @@ void Greeks::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_GREEKS) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Greeks's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_GREEKS))));
     }
 
     auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);

@@ -22,8 +22,7 @@ Schedule::Ptr Schedule::create(void *handle) {
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        // TODO: error handling [EN-8232]
-        return {};
+        throw std::invalid_argument("The profile is nullptr");
     }
 
     auto graalProfile = profile->toGraal();
@@ -39,8 +38,7 @@ Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) {
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) {
     if (!profile) {
-        // TODO: error handling [EN-8232]
-        return {};
+        throw std::invalid_argument("The profile is nullptr");
     }
 
     auto graalProfile = profile->toGraal();
@@ -52,8 +50,7 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, 
 
 std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        // TODO: error handling [EN-8232]
-        return {};
+        throw std::invalid_argument("The profile is nullptr");
     }
 
     auto graalProfile = profile->toGraal();

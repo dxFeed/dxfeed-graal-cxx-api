@@ -92,7 +92,7 @@ char utf16to8(std::int16_t in) noexcept {
 
         return out.empty() ? char{} : out[0];
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return char{};
     }
 }
@@ -106,7 +106,7 @@ std::string utf16toUtf8String(std::int16_t in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return "";
     }
 }
@@ -119,7 +119,7 @@ std::string utf16toUtf8String(const std::u16string &in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return "";
     }
 }
@@ -132,7 +132,7 @@ std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return "";
     }
 }
@@ -146,7 +146,7 @@ std::int16_t utf8to16(char in) noexcept {
 
         return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return std::int16_t{};
     }
 }

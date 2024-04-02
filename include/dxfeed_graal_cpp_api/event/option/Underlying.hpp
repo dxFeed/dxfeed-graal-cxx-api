@@ -176,7 +176,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      * @param index the event index.
      * @see ::getIndex()
      */
-    void setIndex(std::int64_t index) noexcept override {
+    void setIndex(std::int64_t index) override {
         data_.index = index;
     }
 
@@ -217,9 +217,12 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      * @param sequence the sequence.
      * @see ::getSequence()
      */
-    void setSequence(std::int32_t sequence) noexcept {
-        // TODO: Improve error handling [EN-8232]
+    void setSequence(std::int32_t sequence) {
         assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+            throw std::invalid_argument("Invalid value for argument `sequence`: " + std::to_string(sequence));
+        }
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }

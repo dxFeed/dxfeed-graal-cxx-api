@@ -20,7 +20,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../symbols/SymbolWrapper.hpp"
 #include "osub/WildcardSymbol.hpp"
 
-
 #include <concepts>
 #include <memory>
 #include <type_traits>
@@ -47,10 +46,10 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
     SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
 
-    explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
+    explicit DXFeedSubscription(const EventTypeEnum &eventType);
 
     static JavaObjectHandle<DXFeedSubscription>
-    createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept;
+    createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
     void setEventListenerHandle(Id<DXFeedSubscription> id);
 
@@ -62,7 +61,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
         }
 #endif
-    DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
+    DXFeedSubscription(EventTypeIt begin, EventTypeIt end)
         : eventTypes_(begin, end), handle_{}, eventListenerHandle_{}, onEvent_{} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
@@ -70,20 +69,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
 
-        if (!list) {
-            // TODO: error handling [EN-8232]
-            return;
-        }
-
         handle_ = createSubscriptionHandleFromEventClassList(list);
     }
 
-    DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
+    DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes)
         : DXFeedSubscription(eventTypes.begin(), eventTypes.end()) {
     }
 
     template <typename EventTypesCollection>
-    explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
+    explicit DXFeedSubscription(EventTypesCollection &&eventTypes)
 #if __cpp_concepts
         requires requires {
             {

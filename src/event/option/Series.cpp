@@ -69,23 +69,21 @@ void Series::fillGraalData(void *graalNative) const noexcept {
 
 std::shared_ptr<Series> Series::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Series. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SERIES) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Series. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SERIES))));
     }
 
-    try {
-        auto series = std::make_shared<Series>();
+    auto series = std::make_shared<Series>();
 
-        series->fillData(graalNative);
+    series->fillData(graalNative);
 
-        return series;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return series;
 }
 
 std::string Series::toString() const noexcept {
@@ -117,7 +115,10 @@ void Series::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SERIES) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Series's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SERIES))));
     }
 
     auto graalSeries = static_cast<dxfg_series_t *>(graalNative);

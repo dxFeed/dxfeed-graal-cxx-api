@@ -148,9 +148,12 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @see Quote::getSequence()
      */
-    void setSequence(std::int32_t sequence) noexcept {
-        // TODO: Improve error handling [EN-8232]
+    void setSequence(std::int32_t sequence) {
         assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+            throw std::invalid_argument("Invalid sequence value = " + std::to_string(sequence));
+        }
 
         data_.timeMillisSequence = orOp(andOp(data_.timeMillisSequence, ~MAX_SEQUENCE), sequence);
     }

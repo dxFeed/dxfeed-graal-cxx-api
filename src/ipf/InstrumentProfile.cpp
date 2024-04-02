@@ -200,21 +200,14 @@ void InstrumentProfile::freeGraalData(void *graalNative) noexcept {
 
 std::shared_ptr<InstrumentProfile> InstrumentProfile::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create InstrumentProfile. The `graalNative` parameter is nullptr");
     }
 
-    try {
-        auto instrumentProfile = std::make_shared<InstrumentProfile>();
+    auto instrumentProfile = std::make_shared<InstrumentProfile>();
 
-        instrumentProfile->fillData(graalNative);
+    instrumentProfile->fillData(graalNative);
 
-        return instrumentProfile;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
-
-    return {};
+    return instrumentProfile;
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList(void *graalList) {

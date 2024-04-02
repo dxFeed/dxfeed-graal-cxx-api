@@ -232,7 +232,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @param index the event index.
      * @see OptionSale::getIndex()
      */
-    void setIndex(std::int64_t index) noexcept override {
+    void setIndex(std::int64_t index) override {
         data_.index = index;
     }
 
@@ -404,9 +404,12 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @param sequence the sequence.
      * @see ::getSequence()
      */
-    void setSequence(std::int32_t sequence) noexcept {
-        // TODO: Improve error handling [EN-8232]
+    void setSequence(std::int32_t sequence) {
         assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+            throw std::invalid_argument("Invalid sequence value = " + std::to_string(sequence));
+        }
 
         data_.timeSequence = orOp(andOp(data_.timeSequence, ~MAX_SEQUENCE), sequence);
     }
@@ -505,17 +508,17 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
         data_.price = price;
     }
 
-  /**
- * Changes price of this option sale event.
- * Returns the current option sale.
- *
- * @param price The price of this option sale.
- * @return The current option sale.
- */
-  OptionSale &withPrice(double price) noexcept {
-      OptionSale::setPrice(price);
+    /**
+     * Changes price of this option sale event.
+     * Returns the current option sale.
+     *
+     * @param price The price of this option sale.
+     * @return The current option sale.
+     */
+    OptionSale &withPrice(double price) noexcept {
+        OptionSale::setPrice(price);
 
-      return *this;
+        return *this;
     }
 
     /**
@@ -621,9 +624,8 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @param tradeThroughExempt TradeThroughExempt flag of this option sale event.
      */
-    void setTradeThroughExempt(char tradeThroughExempt) noexcept {
-        // TODO: error handling [EN-8232] //util::checkChar(tradeThroughExempt, TimeAndSale::TTE_MASK,
-        // "tradeThroughExempt");
+    void setTradeThroughExempt(char tradeThroughExempt) {
+        util::checkChar(tradeThroughExempt, TimeAndSale::TTE_MASK, "tradeThroughExempt");
 
         data_.flags = setBits(data_.flags, TimeAndSale::TTE_MASK, TimeAndSale::TTE_SHIFT, tradeThroughExempt);
     }

@@ -111,7 +111,7 @@ struct DXFCPP_EXPORT IndexedEvent {
      *
      * @param index unique per-symbol index of this event.
      */
-    virtual void setIndex(std::int64_t index) noexcept = 0;
+    virtual void setIndex(std::int64_t index) = 0;
 };
 
 DXFCPP_END_NAMESPACE
