@@ -148,21 +148,6 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes event's symbol and returns a shared pointer to the current series.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Series>(new
-     * Series(...))` or `std::make_shared<Series>(...)`
-     *
-     * @param eventSymbol The symbol of this event.
-     * @return A shared pointer to the current series.
-     */
-    Series::Ptr withEventSymbolShared(const std::string &eventSymbol) noexcept {
-        MarketEvent::setEventSymbol(eventSymbol);
-
-        return shared_from_this()->sharedAs<Series>();
-    }
-
-    /**
      * Changes event's creation time and returns the current series.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
@@ -173,22 +158,6 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
         MarketEvent::setEventTime(eventTime);
 
         return *this;
-    }
-
-    /**
-     * Changes event's creation time and returns a shared pointer to the current series.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Series>(new
-     * Series(...))` or `std::make_shared<Series>(...)`
-     *
-     * @param eventTime the difference, measured in milliseconds, between the event creation time and
-     * midnight, January 1, 1970 UTC.
-     * @return A shared pointer to the current series.
-     */
-    Series::Ptr withEventTimeShared(std::int64_t eventTime) noexcept {
-        MarketEvent::setEventTime(eventTime);
-
-        return shared_from_this()->sharedAs<Series>();
     }
 
     ///
@@ -230,22 +199,6 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes transactional event flags and returns a shared pointer to the current series.
-     * See EventFlag "Event Flags" section.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Series>(new
-     * Series(...))` or `std::make_shared<Series>(...)`
-     *
-     * @param eventFlags transactional event flags.
-     * @return A shared pointer to the current series.
-     */
-    Series::Ptr withEventFlagsShared(std::int32_t eventFlags) noexcept {
-        Series::setEventFlags(eventFlags);
-
-        return shared_from_this()->sharedAs<Series>();
-    }
-
-    /**
      * Changes transactional event flags and returns the current series.
      * See EventFlag "Event Flags" section.
      *
@@ -256,22 +209,6 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
         Series::setEventFlags(eventFlags);
 
         return *this;
-    }
-
-    /**
-     * Changes transactional event flags and returns a shared pointer to the current series.
-     * See EventFlag "Event Flags" section.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Series>(new
-     * Series(...))` or `std::make_shared<Series>(...)`
-     *
-     * @param eventFlags transactional event flags' mask.
-     * @return A shared pointer to the current series.
-     */
-    Series::Ptr withEventFlagsShared(const EventFlagsMask &eventFlags) noexcept {
-        Series::setEventFlags(eventFlags);
-
-        return shared_from_this()->sharedAs<Series>();
     }
 
     /**
@@ -305,21 +242,6 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
         Series::setIndex(index);
 
         return *this;
-    }
-
-    /**
-     * Changes unique per-symbol index of this series and returns a shared pointer to it.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Series>(new
-     * Series(...))` or `std::make_shared<Series>(...)`
-     *
-     * @param index unique per-symbol index of this order.
-     * @return A shared pointer to the current series.
-     */
-    Series::Ptr withIndexShared(std::int64_t index) noexcept {
-        Series::setIndex(index);
-
-        return shared_from_this()->sharedAs<Series>();
     }
 
     /**
@@ -381,22 +303,6 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes time of this series and returns a shared pointer to it.
-     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Series>(new
-     * Series(...))` or `std::make_shared<Series>(...)`
-     *
-     * @param time time of this series.
-     * @return A shared pointer to the current series.
-     */
-    Series::Ptr withTimeShared(std::int64_t time) noexcept {
-        Series::setTime(time);
-
-        return shared_from_this()->sharedAs<Series>();
-    }
-
-    /**
      * Returns sequence number of this series event to distinguish trades that have the same
      * @ref ::getTime() "time". This sequence number does not have to be unique and
      * does not need to be sequential. Sequence can range from 0 to ::MAX_SEQUENCE.
@@ -432,23 +338,6 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
         Series::setSequence(sequence);
 
         return *this;
-    }
-
-    /**
-     * Changes @ref Series::getSequence() "sequence number" of this series.
-     * Returns a shared pointer to the current series.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<Series>(new
-     * Series(...))` or `std::make_shared<Series>(...)`
-     *
-     * @param sequence the sequence.
-     * @return A shared pointer to the current series.
-     * @see Series::getSequence()
-     */
-    Series::Ptr withSequenceShared(std::int32_t sequence) noexcept {
-        Series::setSequence(sequence);
-
-        return shared_from_this()->sharedAs<Series>();
     }
 
     /**

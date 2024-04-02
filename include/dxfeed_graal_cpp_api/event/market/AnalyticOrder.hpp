@@ -127,19 +127,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes event's symbol and returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param eventSymbol The symbol of this event.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withEventSymbolShared(const std::string &eventSymbol) noexcept {
-        return Order::withEventSymbolShared(eventSymbol)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes event's creation time and returns the current analytic order.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
@@ -148,20 +135,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withEventTime(std::int64_t eventTime) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withEventTime(eventTime));
-    }
-
-    /**
-     * Changes event's creation time and returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param eventTime the difference, measured in milliseconds, between the event creation time and
-     * midnight, January 1, 1970 UTC.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withEventTimeShared(std::int64_t eventTime) noexcept {
-        return Order::withEventTimeShared(eventTime)->sharedAs<AnalyticOrder>();
     }
 
     // OrderBase methods
@@ -178,20 +151,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes event's source and returns a shared pointer to the current analytic order.
-     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param source source of this event.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withSourceShared(const OrderSource &source) noexcept {
-        return Order::withSourceShared(source)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes transactional event flags and returns the current analytic order.
      * See EventFlag "Event Flags" section.
      *
@@ -203,20 +162,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes transactional event flags and returns a shared pointer to the current analytic order.
-     * See EventFlag "Event Flags" section.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param eventFlags transactional event flags.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withEventFlagsShared(std::int32_t eventFlags) noexcept {
-        return Order::withEventFlagsShared(eventFlags)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes transactional event flags and returns the current analytic order.
      * See EventFlag "Event Flags" section.
      *
@@ -225,20 +170,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withEventFlags(eventFlags));
-    }
-
-    /**
-     * Changes transactional event flags and returns a shared pointer to the current analytic order.
-     * See EventFlag "Event Flags" section.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param eventFlags transactional event flags' mask.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withEventFlagsShared(const EventFlagsMask &eventFlags) noexcept {
-        return Order::withEventFlagsShared(eventFlags)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -254,22 +185,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes unique per-symbol index of this analytic order and returns a shared pointer to it. Note, that this
-     * method also changes
-     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
-     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param index unique per-symbol index of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withIndexShared(std::int64_t index) noexcept {
-        return Order::withIndexShared(index)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes time of this analytic order and returns it.
      * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
      *
@@ -281,20 +196,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes time of this analytic order and returns a shared pointer to it.
-     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param time time of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withTimeShared(std::int64_t time) noexcept {
-        return Order::withTimeShared(time)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes microseconds and nanoseconds time part of this analytic order.
      * Returns the current analytic order.
      *
@@ -303,20 +204,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withTimeNanoPart(timeNanoPart));
-    }
-
-    /**
-     * Changes microseconds and nanoseconds time part of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param timeNanoPart microseconds and nanoseconds time part of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withTimeNanoPartShared(std::int32_t timeNanoPart) noexcept {
-        return Order::withTimeNanoPartShared(timeNanoPart)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -332,21 +219,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes @ref OrderBase::getSequence() "sequence number" of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param sequence the sequence.
-     * @return A shared pointer to the current analytic order.
-     * @see OrderBase::getSequence()
-     */
-    AnalyticOrder::Ptr withSequenceShared(std::int32_t sequence) noexcept {
-        return Order::withSequenceShared(sequence)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes time of this analytic order and returns it.
      * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
      *
@@ -355,21 +227,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withTimeNanos(std::int64_t timeNanos) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withTimeNanos(timeNanos));
-    }
-
-    /**
-     * Changes time of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param timeNanos time of this analytic order in nanoseconds.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withTimeNanosShared(std::int64_t timeNanos) noexcept {
-        return Order::withTimeNanosShared(timeNanos)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -383,20 +240,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes action of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param action The action of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withActionShared(const OrderAction &action) noexcept {
-        return Order::withActionShared(action)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes time of the last action and returns current analytic order.
      *
      * @param actionTime The last order action time.
@@ -404,19 +247,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withActionTime(std::int64_t actionTime) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withActionTime(actionTime));
-    }
-
-    /**
-     * Changes time of the last action and returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param actionTime The last order action time.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withActionTimeShared(std::int64_t actionTime) noexcept {
-        return Order::withActionTimeShared(actionTime)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -431,20 +261,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes order ID.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param orderId order ID.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withOrderIdShared(std::int64_t orderId) noexcept {
-        return Order::withOrderIdShared(orderId)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes auxiliary order ID.
      * Returns the current analytic order.
      *
@@ -453,20 +269,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withAuxOrderId(auxOrderId));
-    }
-
-    /**
-     * Changes auxiliary order ID.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param auxOrderId The auxiliary order ID.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withAuxOrderIdShared(std::int64_t auxOrderId) noexcept {
-        return Order::withAuxOrderIdShared(auxOrderId)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -481,20 +283,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes price of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param price The price of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withPriceShared(double price) noexcept {
-        return Order::withPriceShared(price)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes size of this analytic order.
      * Returns the current analytic order.
      *
@@ -503,20 +291,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withSize(double size) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withSize(size));
-    }
-
-    /**
-     * Changes size of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param size The size of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withSizeShared(double size) noexcept {
-        return Order::withSizeShared(size)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -531,20 +305,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes executed size of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param executedSize The executed size of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withExecutedSizeShared(double executedSize) noexcept {
-        return Order::withExecutedSizeShared(executedSize)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes number of individual orders in this aggregate order.
      * Returns the current analytic order.
      *
@@ -553,20 +313,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withCount(std::int64_t count) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withCount(count));
-    }
-
-    /**
-     * Changes number of individual orders in this aggregate order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param count The number of individual orders in this aggregate order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withCountShared(std::int64_t count) noexcept {
-        return Order::withCountShared(count)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -581,20 +327,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes trade ID.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param tradeId The trade ID.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withTradeIdShared(std::int64_t tradeId) noexcept {
-        return Order::withTradeIdShared(tradeId)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes trade price.
      * Returns the current analytic order.
      *
@@ -606,20 +338,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes trade price.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param tradePrice The trade price.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withTradePriceShared(double tradePrice) noexcept {
-        return Order::withTradePriceShared(tradePrice)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes trade size.
      * Returns the current analytic order.
      *
@@ -628,20 +346,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withTradeSize(double tradeSize) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withTradeSize(tradeSize));
-    }
-
-    /**
-     * Changes trade size.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param tradeSize The trade size.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withTradeSizeShared(double tradeSize) noexcept {
-        return Order::withTradeSizeShared(tradeSize)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -657,20 +361,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
 
     /**
      * Changes exchange code of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param exchangeCode The exchange code of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withExchangeCodeShared(char exchangeCode) noexcept {
-        return Order::withExchangeCodeShared(exchangeCode)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
-     * Changes exchange code of this analytic order.
      * Returns the current analytic order.
      *
      * @param exchangeCode The exchange code of this analytic order.
@@ -678,20 +368,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withExchangeCode(exchangeCode));
-    }
-
-    /**
-     * Changes exchange code of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param exchangeCode The exchange code of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withExchangeCodeShared(std::int16_t exchangeCode) noexcept {
-        return Order::withExchangeCodeShared(exchangeCode)->sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -706,20 +382,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes side of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param side The side of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withOrderSideShared(const Side &side) noexcept {
-        return Order::withOrderSideShared(side)->sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Changes scope of this analytic order.
      * Returns the current analytic order.
      *
@@ -728,20 +390,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withScope(const Scope &scope) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withScope(scope));
-    }
-
-    /**
-     * Changes scope of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param scope The scope of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withScopeShared(const Scope &scope) noexcept {
-        return Order::withScopeShared(scope)->sharedAs<AnalyticOrder>();
     }
 
     // Order methods
@@ -755,20 +403,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withMarketMaker(std::string marketMaker) noexcept {
         return dynamic_cast<AnalyticOrder &>(Order::withMarketMaker(std::move(marketMaker)));
-    }
-
-    /**
-     * Changes market maker or other aggregate identifier of this analytic order.
-     * Returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param marketMaker The market maker or other aggregate identifier of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withMarketMakerShared(std::string marketMaker) noexcept {
-        return Order::withMarketMakerShared(std::move(marketMaker))->sharedAs<AnalyticOrder>();
     }
 
     // AnalyticOrder methods
@@ -804,21 +438,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes iceberg peak size and returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param icebergPeakSize iceberg peak size of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withIcebergPeakSizeShared(double icebergPeakSize) noexcept {
-        setIcebergPeakSize(icebergPeakSize);
-
-        return sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Returns iceberg hidden size of this analytic order.
      *
      * @return iceberg hidden size of this analytic order.
@@ -846,21 +465,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
         setIcebergHiddenSize(icebergHiddenSize);
 
         return *this;
-    }
-
-    /**
-     * Changes iceberg hidden size and returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param icebergHiddenSize iceberg hidden size of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withIcebergHiddenSizeShared(double icebergHiddenSize) noexcept {
-        setIcebergHiddenSize(icebergHiddenSize);
-
-        return sharedAs<AnalyticOrder>();
     }
 
     /**
@@ -895,21 +499,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes iceberg executed size and returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param icebergExecutedSize iceberg executed size of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withIcebergExecutedSizeShared(double icebergExecutedSize) noexcept {
-        setIcebergExecutedSize(icebergExecutedSize);
-
-        return sharedAs<AnalyticOrder>();
-    }
-
-    /**
      * Returns iceberg type of this analytic order.
      *
      * @return iceberg type of this analytic order.
@@ -938,21 +527,6 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
         setIcebergType(icebergType);
 
         return *this;
-    }
-
-    /**
-     * Changes iceberg type and returns a shared pointer to the current analytic order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<AnalyticOrder>(new
-     * AnalyticOrder(...))` or `std::make_shared<AnalyticOrder>(...)`
-     *
-     * @param icebergType iceberg type of this analytic order.
-     * @return A shared pointer to the current analytic order.
-     */
-    AnalyticOrder::Ptr withIcebergTypeShared(const IcebergType &icebergType) noexcept {
-        setIcebergType(icebergType);
-
-        return sharedAs<AnalyticOrder>();
     }
 
     /**

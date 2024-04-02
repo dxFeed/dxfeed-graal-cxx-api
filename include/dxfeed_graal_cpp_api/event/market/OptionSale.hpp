@@ -132,6 +132,35 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     explicit OptionSale(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
     }
 
+    // MarketEvent methods
+
+    /**
+     * Changes event's symbol and returns the current option sale.
+     *
+     * @param eventSymbol The symbol of this event.
+     * @return The current option sale.
+     */
+    OptionSale &withEventSymbol(const std::string &eventSymbol) noexcept {
+        MarketEvent::setEventSymbol(eventSymbol);
+
+        return *this;
+    }
+
+    /**
+     * Changes event's creation time and returns the current option sale.
+     *
+     * @param eventTime the difference, measured in milliseconds, between the event creation time and
+     * midnight, January 1, 1970 UTC.
+     * @return The current option sale.
+     */
+    OptionSale &withEventTime(std::int64_t eventTime) noexcept {
+        MarketEvent::setEventTime(eventTime);
+
+        return *this;
+    }
+
+    // IndexedEvent methods
+
     ///
     const IndexedEventSource &getSource() const & noexcept override {
         return IndexedEventSource::DEFAULT;
@@ -152,9 +181,34 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
         data_.eventFlags = eventFlags;
     }
 
+    /**
+     * Changes transactional event flags and returns the current option sale.
+     * See EventFlag "Event Flags" section.
+     *
+     * @param eventFlags transactional event flags.
+     * @return The current option sale.
+     */
+    OptionSale &withEventFlags(std::int32_t eventFlags) noexcept {
+        OptionSale::setEventFlags(eventFlags);
+
+        return *this;
+    }
+
     ///
     void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
         data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
+    }
+
+    /**
+     * Changes transactional event flags and returns the current option sale.
+     *
+     * @param eventFlags transactional event flags' mask.
+     * @return The current option sale.
+     */
+    OptionSale &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
+        OptionSale::setEventFlags(eventFlags);
+
+        return *this;
     }
 
     /**
@@ -183,6 +237,21 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
+     * Changes unique per-symbol index of this event.
+     * Returns the current option sale.
+     *
+     * @param index unique per-symbol index of this option sale.
+     * @return The current option sale.
+     */
+    OptionSale &withIndex(std::int64_t index) noexcept {
+        OptionSale::setIndex(index);
+
+        return *this;
+    }
+
+    // OptionSale methods
+
+    /**
      * Returns time and sequence of this event packaged into single long value.
      *
      * @return time and sequence of this event.
@@ -201,6 +270,19 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      */
     void setTimeSequence(std::int64_t timeSequence) noexcept {
         data_.timeSequence = timeSequence;
+    }
+
+    /**
+     * Changes time and sequence of this event.
+     * Returns the current option sale.
+     *
+     * @param timeSequence the time and sequence.
+     * @return The current option sale.
+     */
+    OptionSale &withTimeSequence(std::int64_t timeSequence) noexcept {
+        OptionSale::setTimeSequence(timeSequence);
+
+        return *this;
     }
 
     /**
@@ -228,6 +310,19 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
+     * Changes timestamp of the event in milliseconds.
+     * Returns the current option sale.
+     *
+     * @param time timestamp of the event in milliseconds.
+     * @return The current option sale.
+     */
+    OptionSale &withTime(std::int64_t time) noexcept {
+        OptionSale::setTime(time);
+
+        return *this;
+    }
+
+    /**
      * Returns time of the original event in nanoseconds.
      * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
      *
@@ -249,12 +344,38 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
+     * Changes time of this option sale and returns it.
+     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+     *
+     * @param timeNanos The time of this option sale in nanoseconds.
+     * @return The current option sale.
+     */
+    OptionSale &withTimeNanos(std::int64_t timeNanos) noexcept {
+        OptionSale::setTimeNanos(timeNanos);
+
+        return *this;
+    }
+
+    /**
      * Changes microseconds and nanoseconds time part of the original event.
      *
      * @param timeNanoPart microseconds and nanoseconds time part of the original event.
      */
     void setTimeNanoPart(std::int32_t timeNanoPart) noexcept {
         data_.timeNanoPart = timeNanoPart;
+    }
+
+    /**
+     * Changes microseconds and nanoseconds time part of this option sale.
+     * Returns the current option sale.
+     *
+     * @param timeNanoPart microseconds and nanoseconds time part of this option sale.
+     * @return The current option sale.
+     */
+    OptionSale &withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
+        OptionSale::setTimeNanoPart(timeNanoPart);
+
+        return *this;
     }
 
     /**
@@ -291,6 +412,20 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
+     * Changes @ref ::getSequence() "sequence number" of this event.
+     * Returns the current option sale.
+     *
+     * @param sequence the sequence.
+     * @return The current option sale.
+     * @see ::getSequence()
+     */
+    OptionSale &withSequence(std::int32_t sequence) noexcept {
+        OptionSale::setSequence(sequence);
+
+        return *this;
+    }
+
+    /**
      * Returns exchange code of this option sale event.
      *
      * @return exchange code of this option sale event.
@@ -319,11 +454,37 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes exchange code of this option sale event.
+     * Returns the current option sale.
+     *
+     * @param exchangeCode The exchange code of this option sale.
+     * @return The current option sale.
+     */
+    OptionSale &withExchangeCode(char exchangeCode) noexcept {
+        OptionSale::setExchangeCode(exchangeCode);
+
+        return *this;
+    }
+
+    /**
+     * Changes exchange code of this option sale event.
      *
      * @param exchangeCode exchange code of this option sale event.
      */
     void setExchangeCode(std::int16_t exchangeCode) noexcept {
         data_.exchangeCode = exchangeCode;
+    }
+
+    /**
+     * Changes exchange code of this option sale event.
+     * Returns the current order.
+     *
+     * @param exchangeCode The exchange code of this option sale.
+     * @return The current option sale.
+     */
+    OptionSale &withExchangeCode(std::int16_t exchangeCode) noexcept {
+        OptionSale::setExchangeCode(exchangeCode);
+
+        return *this;
     }
 
     /**
@@ -342,6 +503,19 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      */
     void setPrice(double price) noexcept {
         data_.price = price;
+    }
+
+  /**
+ * Changes price of this option sale event.
+ * Returns the current option sale.
+ *
+ * @param price The price of this option sale.
+ * @return The current option sale.
+ */
+  OptionSale &withPrice(double price) noexcept {
+      OptionSale::setPrice(price);
+
+      return *this;
     }
 
     /**
