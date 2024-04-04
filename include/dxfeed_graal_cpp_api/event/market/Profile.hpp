@@ -9,8 +9,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <memory>
-#include <string>
 #include <optional>
+#include <string>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
@@ -73,7 +73,23 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-    static std::shared_ptr<Profile> fromGraal(void *graalNative);
+    /// The alias to a type of shared pointer to the Profile object
+    using Ptr = std::shared_ptr<Profile>;
+
+    /// The alias to a type of unique pointer to the Profile object
+    using Unique = std::unique_ptr<Profile>;
+
+    /// Type identifier and additional information about the current event class.
+    static const EventTypeEnum &TYPE;
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static Ptr fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -90,16 +106,6 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
     static void freeGraal(void *graalNative);
-
-  public:
-    /// The alias to a type of shared pointer to the Profile object
-    using Ptr = std::shared_ptr<Profile>;
-
-    /// The alias to a type of unique pointer to the Profile object
-    using Unique = std::unique_ptr<Profile>;
-
-    /// Type identifier and additional information about the current event class.
-    static const EventTypeEnum &TYPE;
 
     /// Creates new profile event with default values.
     Profile() noexcept = default;

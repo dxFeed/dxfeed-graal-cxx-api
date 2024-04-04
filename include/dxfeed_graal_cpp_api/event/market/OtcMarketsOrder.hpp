@@ -151,7 +151,14 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
 
-    static OtcMarketsOrder::Ptr fromGraal(void *graalNative);
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static Ptr fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).

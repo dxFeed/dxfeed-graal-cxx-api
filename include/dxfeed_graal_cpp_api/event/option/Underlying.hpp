@@ -84,7 +84,30 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
     void fillGraalData(void *graalNative) const noexcept override;
 
   public:
-    static std::shared_ptr<Underlying> fromGraal(void *graalNative);
+    /// The alias to a type of shared pointer to the Underlying object
+    using Ptr = std::shared_ptr<Underlying>;
+
+    /// The alias to a type of unique pointer to the Underlying object
+    using Unique = std::unique_ptr<Underlying>;
+
+    /// Type identifier and additional information about the current event class.
+    static const EventTypeEnum &TYPE;
+
+    /**
+     * Maximum allowed sequence value.
+     *
+     * @see ::setSequence()
+     */
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static Ptr fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -101,23 +124,6 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
     static void freeGraal(void *graalNative);
-
-  public:
-    /**
-     * Maximum allowed sequence value.
-     *
-     * @see ::setSequence()
-     */
-    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
-
-    /// The alias to a type of shared pointer to the Underlying object
-    using Ptr = std::shared_ptr<Underlying>;
-
-    /// The alias to a type of unique pointer to the Underlying object
-    using Unique = std::unique_ptr<Underlying>;
-
-    /// Type identifier and additional information about the current event class.
-    static const EventTypeEnum &TYPE;
 
     /// Creates new underlying event with default values.
     Underlying() noexcept = default;

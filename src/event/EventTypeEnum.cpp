@@ -50,7 +50,7 @@ const std::vector<std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::AL
     std::cref(TRADE),
     std::cref(TRADE_ETH),
     // std::cref(CONFIGURATION),
-    // std::cref(MESSAGE),
+    std::cref(MESSAGE),
     std::cref(TIME_AND_SALE),
     std::cref(ORDER),
     std::cref(ANALYTIC_ORDER),

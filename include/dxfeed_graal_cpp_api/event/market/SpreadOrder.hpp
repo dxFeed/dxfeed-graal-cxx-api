@@ -10,8 +10,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cassert>
 #include <cstdint>
 #include <memory>
-#include <string>
 #include <optional>
+#include <string>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
@@ -106,7 +106,23 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-    static std::shared_ptr<SpreadOrder> fromGraal(void *graalNative);
+    /// The alias to a type of shared pointer to the SpreadOrder object
+    using Ptr = std::shared_ptr<SpreadOrder>;
+
+    /// The alias to a type of unique pointer to the SpreadOrder object
+    using Unique = std::unique_ptr<SpreadOrder>;
+
+    /// Type identifier and additional information about the current event class.
+    static const EventTypeEnum &TYPE;
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static Ptr fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -123,16 +139,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
     static void freeGraal(void *graalNative);
-
-  public:
-    /// The alias to a type of shared pointer to the SpreadOrder object
-    using Ptr = std::shared_ptr<SpreadOrder>;
-
-    /// The alias to a type of unique pointer to the SpreadOrder object
-    using Unique = std::unique_ptr<SpreadOrder>;
-
-    /// Type identifier and additional information about the current event class.
-    static const EventTypeEnum &TYPE;
 
     /// Creates new spread order event with default values.
     SpreadOrder() noexcept = default;

@@ -205,17 +205,13 @@ char *createCString(const std::string &s) {
 
     char *cString = new char[s.size() + 1];
 
-    if (!cString) {
-        return nullptr;
-    }
-
     std::copy(s.begin(), s.end(), cString);
     cString[s.size()] = '\0';
 
     return cString;
 }
 
-DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) noexcept {
+DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) {
     if (!s) {
         return nullptr;
     }

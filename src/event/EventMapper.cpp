@@ -11,6 +11,9 @@
 #include <utf8.h>
 #include <utility>
 
+#include <fmt/core.h>
+#include <fmt/format.h>
+
 DXFCPP_BEGIN_NAMESPACE
 
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) {
@@ -26,7 +29,7 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
     for (std::size_t i = 0; i < static_cast<std::size_t>(list->size); i++) {
         auto *e = list->elements[i];
 
-        // TODO: implement other types
+        // TODO: implement other types [EN-8235]
         // TODO: type traits
         switch (e->clazz) {
         case DXFG_EVENT_QUOTE:
@@ -70,6 +73,8 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
         case DXFG_EVENT_CONFIGURATION:
             break;
         case DXFG_EVENT_MESSAGE:
+            result.emplace_back(Message::fromGraal(e));
+
             break;
         case DXFG_EVENT_TIME_AND_SALE:
             result.emplace_back(TimeAndSale::fromGraal(e));
@@ -131,7 +136,7 @@ void EventMapper::freeGraalList(void *graalList) {
             if (list->elements[elementIndex]) {
                 auto *e = list->elements[elementIndex];
 
-                // TODO: implement other types [EN-8235] [EN-8236]
+                // TODO: implement other types [EN-8235]
                 // TODO: type traits
                 switch (e->clazz) {
                 case DXFG_EVENT_QUOTE:
@@ -175,6 +180,8 @@ void EventMapper::freeGraalList(void *graalList) {
                 case DXFG_EVENT_CONFIGURATION:
                     break;
                 case DXFG_EVENT_MESSAGE:
+                    Message::freeGraal(static_cast<void *>(e));
+
                     break;
                 case DXFG_EVENT_TIME_AND_SALE:
                     TimeAndSale::freeGraal(static_cast<void *>(e));
@@ -278,7 +285,7 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
         if (list->elements[i]) {
             auto *e = list->elements[i];
 
-            // TODO: implement other types [EN-8235] [EN-8236]
+            // TODO: implement other types [EN-8235]
             // TODO: type traits
             switch (e->clazz) {
             case DXFG_EVENT_QUOTE:
@@ -322,6 +329,8 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
             case DXFG_EVENT_CONFIGURATION:
                 break;
             case DXFG_EVENT_MESSAGE:
+                Message::freeGraal(static_cast<void *>(e));
+
                 break;
             case DXFG_EVENT_TIME_AND_SALE:
                 TimeAndSale::freeGraal(static_cast<void *>(e));
