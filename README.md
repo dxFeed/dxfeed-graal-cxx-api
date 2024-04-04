@@ -482,7 +482,7 @@ versions):
 - [Message](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Message.html) is an event with an
   application-specific attachment
     - [ ] dxFeed Graal C API
-    - [ ] dxFeed Graal C++ API
+    - [x] dxFeed Graal C++ API
 - [OptionSale](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/OptionSale.html) is an event that represents
   a trade or another market event with the price (for example, market open/close price, etc.) for each option symbol
   listed under the specified Underlying
