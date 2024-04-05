@@ -27,6 +27,32 @@ class DXFCPP_EXPORT IndexedEventSource {
      */
     static const IndexedEventSource DEFAULT;
 
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    virtual void *toGraal() const;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative);
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static IndexedEventSource fromGraal(void *graalNative);
+
     IndexedEventSource() noexcept = default;
     virtual ~IndexedEventSource() noexcept = default;
 
@@ -73,24 +99,6 @@ class DXFCPP_EXPORT IndexedEventSource {
     auto operator<(const IndexedEventSource &indexedEventSource) const {
         return id_ < indexedEventSource.id_;
     }
-
-    /**
-     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
-     * Returns the pointer to the filled structure.
-     *
-     * @return The pointer to the filled dxFeed Graal SDK structure
-     */
-    virtual void *toGraal() const;
-
-    /**
-     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
-     *
-     * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     */
-    static void freeGraal(void *graalNative);
-
-    static IndexedEventSource fromGraal(void *graalNative);
 };
 
 DXFCPP_END_NAMESPACE

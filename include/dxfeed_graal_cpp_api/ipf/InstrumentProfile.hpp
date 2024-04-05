@@ -92,12 +92,34 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
     }
 
   public:
-    static std::shared_ptr<InstrumentProfile> fromGraal(void *graalNative);
-    static std::vector<std::shared_ptr<InstrumentProfile>> fromGraalList(void *graalList);
+    /// The alias to a type of shared pointer to the InstrumentProfile object
+    using Ptr = std::shared_ptr<InstrumentProfile>;
+
+    /// The alias to a type of unique pointer to the InstrumentProfile object
+    using Unique = std::unique_ptr<InstrumentProfile>;
 
     /**
-     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static Ptr fromGraal(void *graalNative);
+
+    /**
+     * Creates a vector of objects of the current type and fills it with data from the the dxFeed Graal SDK list of
+     * structures.
+     *
+     * @param graalList The pointer to the dxFeed Graal SDK list of structures.
+     * @return The vector of objects of current type
+     * @throws std::invalid_argument
+     */
+    static std::vector<Ptr> fromGraalList(void *graalList);
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure.
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity.
      * Returns the pointer to the filled structure.
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
@@ -105,17 +127,11 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
     void *toGraal() const;
 
     /**
-     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     * Releases the memory occupied by the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
     static void freeGraal(void *graalNative);
-
-    /// The alias to a type of shared pointer to the InstrumentProfile object
-    using Ptr = std::shared_ptr<InstrumentProfile>;
-
-    /// The alias to a type of unique pointer to the InstrumentProfile object
-    using Unique = std::unique_ptr<InstrumentProfile>;
 
     /**
      * Creates new instrument profile with default values.

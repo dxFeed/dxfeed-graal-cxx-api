@@ -286,6 +286,10 @@ set(dxFeedGraalCxxApi_EventOption_Sources
         src/event/option/Series.cpp
 )
 
+set(dxFeedGraalCxxApi_EventMisc_Sources
+        src/event/misc/Message.cpp
+)
+
 set(dxFeedGraalCxxApi_Schedule_Sources
         src/schedule/SessionFilter.cpp
         src/schedule/SessionType.cpp
@@ -311,7 +315,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_EventCandle_Sources}
         ${dxFeedGraalCxxApi_EventMarket_Sources}
         ${dxFeedGraalCxxApi_EventOption_Sources}
-        ${dxFeedGraalCxxApi_EventOption_Sources}
+        ${dxFeedGraalCxxApi_EventMisc_Sources}
         ${dxFeedGraalCxxApi_Schedule_Sources}
 )
 
