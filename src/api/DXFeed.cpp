@@ -40,8 +40,6 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
                                                       subHandle) == 0;
             },
             false)) {
-
-        subscriptions_.emplace(subscription);
     }
 }
 
@@ -61,8 +59,6 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
                                                       subHandle) == 0;
             },
             false)) {
-
-        subscriptions_.erase(subscription);
     }
 }
 
@@ -82,8 +78,6 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
                                                               handle, subHandle) == 0;
             },
             false)) {
-
-        subscriptions_.erase(subscription);
     }
 }
 
