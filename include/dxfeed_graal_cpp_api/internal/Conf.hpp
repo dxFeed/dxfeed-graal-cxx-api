@@ -47,14 +47,6 @@
 #    define DXFCPP_EXPORT_TEMPLATE_DEFINE
 #endif
 
-#ifndef DXFCPP_CXX20_CONSTEXPR_STRING
-#    if defined(__cpp_lib_constexpr_string)
-#        define DXFCPP_CXX20_CONSTEXPR_STRING
-#    else
-#        define DXFCPP_CXX20_CONSTEXPR_STRING
-#    endif
-#endif
-
 #ifndef DXFCPP_BEGIN_NAMESPACE
 #    define DXFCPP_BEGIN_NAMESPACE                                                                                     \
         namespace dxfcpp {                                                                                             \
@@ -102,6 +94,14 @@ constexpr bool isLibCPP = false;
 constexpr bool isLibCXX = false;
 constexpr bool isMSSTL = false;
 constexpr bool isUnknownSTL = true;
+#endif
+
+#ifndef DXFCPP_CXX20_CONSTEXPR_STRING
+#    if defined(__cpp_lib_constexpr_string) && ((defined(__GNUC__) && __GNUC__ >= 12) || (defined(__clang_major__) && __clang_major__ >= 15) || (defined(_MSC_VER) && _MSC_VER >= 1929))
+#        define DXFCPP_CXX20_CONSTEXPR_STRING constexpr
+#    else
+#        define DXFCPP_CXX20_CONSTEXPR_STRING
+#    endif
 #endif
 
 DXFCPP_END_NAMESPACE
