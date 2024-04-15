@@ -49,7 +49,7 @@
 
 #ifndef DXFCPP_CXX20_CONSTEXPR_STRING
 #    if defined(__cpp_lib_constexpr_string)
-#        define DXFCPP_CXX20_CONSTEXPR_STRING constexpr
+#        define DXFCPP_CXX20_CONSTEXPR_STRING
 #    else
 #        define DXFCPP_CXX20_CONSTEXPR_STRING
 #    endif
