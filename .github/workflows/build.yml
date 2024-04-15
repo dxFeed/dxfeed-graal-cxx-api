@@ -12,25 +12,25 @@ jobs:
     strategy:
       matrix:
         config:
-#          - name: win-vs2022
-#            image: windows-latest
-#            os: windows
-#            cores: 4
-#            cc: 'cl'
-#            cxx: 'cl'
-#          - name: macos-13-xcode-15
-#            image: macos-13
-#            os: macos
-#            cores: 4
-#            xcode: '15.0'
-#            cc: 'clang'
-#            cxx: 'clang++'
-#          - name: ubuntu-22.04-gcc-13
-#            image: ubuntu-22.04
-#            os: linux
-#            cores: 4
-#            cc: 'gcc-13'
-#            cxx: 'g++-13'
+          - name: win-vs2022
+            image: windows-latest
+            os: windows
+            cores: 4
+            cc: 'cl'
+            cxx: 'cl'
+          - name: macos-13-xcode-15
+            image: macos-13
+            os: macos
+            cores: 4
+            xcode: '15.0'
+            cc: 'clang'
+            cxx: 'clang++'
+          - name: ubuntu-22.04-gcc-13
+            image: ubuntu-22.04
+            os: linux
+            cores: 4
+            cc: 'gcc-13'
+            cxx: 'g++-13'
 #          - name: ubuntu-22.04-gcc-9
 #            image: ubuntu-22.04
 #            os: linux
@@ -43,13 +43,13 @@ jobs:
             cores: 4
             cc: 'gcc-11'
             cxx: 'g++-11'
-#          - name: macos-14-xcode-15
-#            image: macos-14
-#            os: macos
-#            cores: 3
-#            xcode: '15.0'
-#            cc: 'clang'
-#            cxx: 'clang++'
+          - name: macos-14-xcode-15
+            image: macos-14
+            os: macos
+            cores: 3
+            xcode: '15.0'
+            cc: 'clang'
+            cxx: 'clang++'
         buildType: [ Release, Debug ]
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}"
