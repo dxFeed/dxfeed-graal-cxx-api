@@ -461,6 +461,7 @@ endif ()
 
 if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/PrintQuoteEvents)
+    add_subdirectory(samples/cpp/PublishProfiles)
     add_subdirectory(samples/cpp/DxFeedSample)
     add_subdirectory(samples/cpp/WriteTapeFile)
     add_subdirectory(samples/cpp/ConvertTapeFile)
