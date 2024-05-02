@@ -25,7 +25,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
 class EventTypeEnum;
-class ObservableSubscription;
+struct ObservableSubscription;
 
 /**
  * Provides API for publishing of events to local or remote DXFeed.
