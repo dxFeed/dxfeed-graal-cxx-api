@@ -21,7 +21,7 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener {
     virtual ~ObservableSubscriptionChangeListener() = default;
 
     virtual void symbolsAdded(const std::unordered_set<SymbolWrapper> &symbols) = 0;
-    virtual void symbolsRemoved(const std::unordered_set<SymbolWrapper> &symbols){};
+    virtual void symbolsRemoved(const std::unordered_set<SymbolWrapper> & /*symbols*/){};
     virtual void subscriptionClosed(){};
 };
 
