@@ -42,6 +42,28 @@ struct DXFCPP_EXPORT ObservableSubscription {
      * @see #getEventTypes()
      */
     virtual bool containsEventType(const EventTypeEnum &eventType) = 0;
+
+    /**
+     * Adds subscription change listener. This method does nothing if subscription is closed.
+     * Otherwise, it installs the corresponding listener and immediately
+     * invokes ObservableSubscriptionChangeListener::symbolsAdded() on the given listener while holding the lock for
+     * this subscription. This way the given listener synchronously receives existing subscription state and is
+     * synchronously notified on all changes in subscription afterwards.
+     *
+     * @param listener The subscription change listener.
+     * @return The listener id
+     */
+    virtual std::size_t addChangeListener(ObservableSubscriptionChangeListener &&listener) = 0;
+
+    /**
+     * Removes subscription change listener by id. This method does nothing if the listener with the given id was not
+     * installed or was already removed as subscription change listener for this subscription. Otherwise it removes the
+     * corresponding listener and immediately invokes ObservableSubscriptionChangeListener::subscriptionClosed() on the
+     * given listener while holding the lock for this subscription.
+     *
+     * @param id The subscription change listener id.
+     */
+    virtual void removeChangeListener(std::size_t id) = 0;
 };
 
 DXFCPP_END_NAMESPACE
