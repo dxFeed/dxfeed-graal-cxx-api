@@ -23,6 +23,12 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener {
     virtual void symbolsAdded(const std::unordered_set<SymbolWrapper> &symbols) = 0;
     virtual void symbolsRemoved(const std::unordered_set<SymbolWrapper> & /*symbols*/){};
     virtual void subscriptionClosed(){};
+
+    static std::unique_ptr<ObservableSubscriptionChangeListener> create();
+};
+
+struct DXFCPP_EXPORT ObservableSubscriptionChangeListenerImpl : ObservableSubscriptionChangeListener {
+
 };
 
 DXFCPP_END_NAMESPACE
