@@ -206,6 +206,7 @@ set(dxFeedGraalCxxApi_ApiOsub_Sources
         src/api/osub/WildcardSymbol.cpp
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
+        src/api/osub/ObservableSubscriptionChangeListener.cpp
 )
 
 set(dxFeedGraalCxxApi_Ipf_Sources

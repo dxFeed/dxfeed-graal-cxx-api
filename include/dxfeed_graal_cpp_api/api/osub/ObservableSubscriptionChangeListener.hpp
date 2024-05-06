@@ -18,17 +18,13 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT ObservableSubscriptionChangeListener {
-    virtual ~ObservableSubscriptionChangeListener() = default;
+    // virtual void symbolsAdded(const std::unordered_set<SymbolWrapper> &symbols) = 0;
+    // virtual void symbolsRemoved(const std::unordered_set<SymbolWrapper> & /*symbols*/){};
+    // virtual void subscriptionClosed(){};
 
-    virtual void symbolsAdded(const std::unordered_set<SymbolWrapper> &symbols) = 0;
-    virtual void symbolsRemoved(const std::unordered_set<SymbolWrapper> & /*symbols*/){};
-    virtual void subscriptionClosed(){};
+    JavaObjectHandle<ObservableSubscriptionChangeListener> handle_;
 
-    static std::unique_ptr<ObservableSubscriptionChangeListener> create();
-};
-
-struct DXFCPP_EXPORT ObservableSubscriptionChangeListenerImpl : ObservableSubscriptionChangeListener {
-
+    ObservableSubscriptionChangeListener();
 };
 
 DXFCPP_END_NAMESPACE
