@@ -17,14 +17,27 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct DXFCPP_EXPORT ObservableSubscriptionChangeListener {
-    // virtual void symbolsAdded(const std::unordered_set<SymbolWrapper> &symbols) = 0;
-    // virtual void symbolsRemoved(const std::unordered_set<SymbolWrapper> & /*symbols*/){};
-    // virtual void subscriptionClosed(){};
+struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<ObservableSubscriptionChangeListener> {
+    explicit ObservableSubscriptionChangeListener(LockExternalConstructionTag);
+  ~ObservableSubscriptionChangeListener() noexcept override;
 
+    static std::shared_ptr<ObservableSubscriptionChangeListener>
+    create(std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded);
+
+    static std::shared_ptr<ObservableSubscriptionChangeListener>
+    create(std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded,
+           std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved,
+           std::function<void()> onSubscriptionClosed);
+
+  private:
     JavaObjectHandle<ObservableSubscriptionChangeListener> handle_;
+    SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded_{};
+    SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved_{};
+    SimpleHandler<void()> onSubscriptionClosed_{};
 
-    ObservableSubscriptionChangeListener();
+    struct Impl;
+
+    std::unique_ptr<Impl> impl_;
 };
 
 DXFCPP_END_NAMESPACE
