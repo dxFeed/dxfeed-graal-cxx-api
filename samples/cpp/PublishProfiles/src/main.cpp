@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
         auto publisher = endpoint->getPublisher();
 
         // Observe Profile subscriptions and publish profiles for "xxx:TEST" symbols
-        // publisher->getSubscription(Profile::TYPE)->addChangeListener(ObservableSubscriptionChangeListener {
+        // publisher->getSubscription(Profile::TYPE)->addChangeListener(ObservableSubscriptionChangeListener::create(
         //     [publisher](auto&& symbols) /* symbolsAdded */ {
         //         std::vector<std::shared_ptr<Profile>> events{};
         //         events.reserve(symbols.sise());
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
         //         events.shrink_to_fit();
         //         publisher->publishEvents(events);
         //     }
-        // });
+        // ));
 
         std::cin.get();
     } catch (const JavaException &e) {

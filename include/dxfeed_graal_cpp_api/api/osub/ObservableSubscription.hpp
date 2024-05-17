@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../event/IndexedEventSource.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
+#include "ObservableSubscriptionChangeListener.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -53,7 +54,7 @@ struct DXFCPP_EXPORT ObservableSubscription {
      * @param listener The subscription change listener.
      * @return The listener id
      */
-    virtual std::size_t addChangeListener(ObservableSubscriptionChangeListener &&listener) = 0;
+    virtual std::size_t addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) = 0;
 
     /**
      * Removes subscription change listener by id. This method does nothing if the listener with the given id was not

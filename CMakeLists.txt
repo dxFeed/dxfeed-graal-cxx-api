@@ -200,6 +200,7 @@ set(dxFeedGraalCxxApi_Api_Sources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
+        src/api/DXPublisherObservableSubscription.cpp
         src/api/DXPublisher.cpp
 )
 
