@@ -27,6 +27,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 class DXFCPP_EXPORT DXPublisherObservableSubscription : public ObservableSubscription, public SharedEntity {
+    JavaObjectHandle<DXPublisherObservableSubscription> handle_;
+
   public:
     bool isClosed() override;
     std::unordered_set<EventTypeEnum> getEventTypes() override;
