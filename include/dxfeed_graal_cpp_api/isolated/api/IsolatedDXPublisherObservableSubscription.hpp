@@ -26,16 +26,57 @@ namespace isolated::api::IsolatedDXPublisherObservableSubscription {
 bool /* int32_t */
 isClosed(/* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub);
 
-
+/**
+ * Calls the Graal SDK function `dxfg_ObservableSubscription_getEventTypes` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @return The event types set.
+ * @throws std::invalid_argument if DXPublisherObservableSubscription's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
 std::unordered_set<EventTypeEnum> /* dxfg_event_clazz_list_t* */ getEventTypes(
     /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub);
+
+/**
+ * Calls the Graal SDK function `dxfg_ObservableSubscription_containsEventType` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @param eventType The type of event that is checked.
+ * @return `true` if this subscription contains the corresponding event type.
+ * @throws std::invalid_argument if DXPublisherObservableSubscription's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
 bool /* int32_t */ containsEventType(
     /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
-    /* dxfg_event_clazz_t */ EventTypeEnum eventType);
+    /* dxfg_event_clazz_t */ const EventTypeEnum & eventType);
+
+/**
+ * Calls the Graal SDK function `dxfg_ObservableSubscription_addChangeListener` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @param listener The listener's handle.
+ * @throws std::invalid_argument if DXPublisherObservableSubscription's or ObservableSubscriptionChangeListener's handle
+ * is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
 void /* int32_t */ addChangeListener(
     /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
         &listener);
+
+/**
+ * Calls the Graal SDK function `dxfg_ObservableSubscription_removeChangeListener` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @param listener The listener's handle.
+ * @throws std::invalid_argument if DXPublisherObservableSubscription's or ObservableSubscriptionChangeListener's handle
+ * is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
 void /* int32_t */ removeChangeListener(
     /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>

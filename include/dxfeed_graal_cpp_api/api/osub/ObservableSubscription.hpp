@@ -39,6 +39,9 @@ struct DXFCPP_EXPORT ObservableSubscription {
     virtual std::unordered_set<EventTypeEnum> getEventTypes() = 0;
 
     /**
+     * Returns `true` if this subscription contains the corresponding event type.
+     *
+     * @param eventType The type of event that is checked.
      * @return `true` if this subscription contains the corresponding event type.
      * @see #getEventTypes()
      */
