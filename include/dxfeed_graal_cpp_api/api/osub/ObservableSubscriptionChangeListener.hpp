@@ -7,13 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../event/IndexedEventSource.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
 
-#include <cstdint>
 #include <memory>
 #include <unordered_set>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -29,7 +26,10 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<Ob
            std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved,
            std::function<void()> onSubscriptionClosed);
 
+    const JavaObjectHandle<ObservableSubscriptionChangeListener> &getHandle() const;
+
   private:
+    mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<ObservableSubscriptionChangeListener> handle_;
     SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded_{};
     SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved_{};
