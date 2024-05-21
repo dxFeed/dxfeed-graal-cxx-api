@@ -39,17 +39,26 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
     return publisher;
 }
 
+std::shared_ptr<ObservableSubscription> DXPublisher::getSubscription(const EventTypeEnum &eventType) {
+    std::lock_guard guard{mutex_};
+
+    if (subscription_) {
+        return subscription_;
+    }
+
+    subscription_ = DXPublisherObservableSubscription::create(isolated::api::IsolatedDXPublisher::getSubscription(handle_, eventType));
+
+    return subscription_;
+}
+
 std::string DXPublisher::toString() const noexcept {
     return fmt::format("DXPublisher{{{}}}", handle_.toString());
 }
 
 void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
-    runIsolatedOrElse(
-        [handle = static_cast<dxfg_publisher_t *>(handle_.get()), graalEventsList](auto threadHandle) {
-            return dxfg_DXPublisher_publishEvents(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                  static_cast<dxfg_event_type_list *>(graalEventsList)) == 0;
-        },
-        false);
+    std::lock_guard guard{mutex_};
+
+    isolated::api::IsolatedDXPublisher::publishEvents(handle_, graalEventsList);
 }
 
 DXFCPP_END_NAMESPACE

@@ -5,9 +5,9 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <unordered_set>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include <unordered_set>
 
 #include "../../api/DXPublisherObservableSubscription.hpp"
 

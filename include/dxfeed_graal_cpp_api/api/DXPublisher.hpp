@@ -69,13 +69,15 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     friend struct DXEndpoint;
 
   private:
+    mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<DXPublisher> handle_;
+    std::shared_ptr<ObservableSubscription> subscription_{};
 
     static std::shared_ptr<DXPublisher> create(void *handle);
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
-    DXPublisher() noexcept : handle_{} {
+    DXPublisher() noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXPublisher()");
         }
@@ -217,7 +219,30 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
         EventMapper::freeGraalList(list);
     }
 
-    std::shared_ptr<ObservableSubscription> getSubscription(const EventTypeEnum &);
+    /**
+     * Returns observable set of subscribed symbols for the specified event type.
+     * Note, that subscription is represented by SymbolWrapper symbols. Check the type of each symbol
+     * in ObservableSubscription using SymbolWrapper::isStringSymbol(), SymbolWrapper::isWildcardSymbol(),
+     * SymbolWrapper::isIndexedEventSubscriptionSymbol(), SymbolWrapper::isTimeSeriesSubscriptionSymbol(),
+     * SymbolWrapper::isCandleSymbol().
+     *
+     * <p> The set of subscribed symbols contains WildcardSymbol::ALL if and
+     * only if there is a subscription to this wildcard symbol.
+     *
+     * <p> If DXFeedTimeSeriesSubscription is used to subscribe to time-service of the events of this type, then
+     * instances of TimeSeriesSubscriptionSymbol class represent the corresponding subscription item.
+     *
+     * <p> The resulting observable subscription can generate repeated ObservableSubscriptionChangeListener::onSymbolsAdded_ notifications to
+     * its listeners for the same symbols without the corresponding ObservableSubscriptionChangeListener::onSymbolsRemoved_
+     * notifications in between them. It happens when subscription disappears, cached data is lost, and subscription
+     * reappears again. On each ObservableSubscriptionChangeListener::onSymbolsAdded_
+     * notification data provider shall @ref DXPublisher::publishEvents() "publish" the most recent events for
+     * the corresponding symbols.
+     *
+     * @param eventType The event type.
+     * @return Observable subscription for the specified event type.
+     */
+    std::shared_ptr<ObservableSubscription> getSubscription(const EventTypeEnum &eventType);
 
     std::string toString() const noexcept override;
 };

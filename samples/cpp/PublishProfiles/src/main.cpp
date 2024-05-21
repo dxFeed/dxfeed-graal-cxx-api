@@ -29,28 +29,28 @@ int main(int argc, char *argv[]) {
         auto publisher = endpoint->getPublisher();
 
         // Observe Profile subscriptions and publish profiles for "xxx:TEST" symbols
-        // publisher->getSubscription(Profile::TYPE)->addChangeListener(ObservableSubscriptionChangeListener::create(
-        //     [publisher](auto&& symbols) /* symbolsAdded */ {
-        //         std::vector<std::shared_ptr<Profile>> events{};
-        //         events.reserve(symbols.sise());
-        //
-        //         for (auto&& symbol : symbols) {
-        //             if (symbol.isStringSymbol()) {
-        //                 auto s = symbol.asStringSymbol();
-        //
-        //                 if (s.size() > 5 && s.rfind(":TEST") == s.size() - 5) {
-        //                     auto profile = std::make_shared<Profile>(s);
-        //
-        //                     profile->setDescription("Test symbol");
-        //                     events.push_back(profile);
-        //                 }
-        //             }
-        //         }
-        //
-        //         events.shrink_to_fit();
-        //         publisher->publishEvents(events);
-        //     }
-        // ));
+        publisher->getSubscription(Profile::TYPE)
+            ->addChangeListener(
+                ObservableSubscriptionChangeListener::create([publisher](auto &&symbols) /* symbolsAdded */ {
+                    std::vector<std::shared_ptr<Profile>> events{};
+                    events.reserve(symbols.size());
+
+                    for (auto &&symbol : symbols) {
+                        if (symbol.isStringSymbol()) {
+                            auto s = symbol.asStringSymbol();
+
+                            if (s.size() > 5 && s.rfind(":TEST") == s.size() - 5) {
+                                auto profile = std::make_shared<Profile>(s);
+
+                                profile->setDescription("Test symbol");
+                                events.push_back(profile);
+                            }
+                        }
+                    }
+
+                    events.shrink_to_fit();
+                    publisher->publishEvents(events);
+                }));
 
         std::cin.get();
     } catch (const JavaException &e) {
