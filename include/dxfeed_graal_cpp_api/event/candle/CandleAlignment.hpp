@@ -141,7 +141,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle symbol string with the normalized representation of the the candle alignment attribute.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
+    static std::string
     normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 

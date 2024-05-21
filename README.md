@@ -350,6 +350,7 @@ versions):
   is a simple demonstration of how to get Instrument Profiles
 - [x] [DxFeedLiveIpfSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp)
   is a simple demonstration of how to get live updates for Instrument Profiles
+- [x] [PublishProfiles](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PublishProfiles/src/main.cpp) is a simple demonstration of how to publish market events
 - [x] [ScheduleSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp)
   is a simple demonstration of how to get various scheduling information for instruments
 - [x] [OnDemandSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp)

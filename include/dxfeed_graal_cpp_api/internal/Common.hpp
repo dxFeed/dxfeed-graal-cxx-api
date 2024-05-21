@@ -280,7 +280,7 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
     return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
 }
 
-constexpr static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
+static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
     if (month < 1 || month > 12) {
         throw std::invalid_argument("invalid month " + std::to_string(month));
     }

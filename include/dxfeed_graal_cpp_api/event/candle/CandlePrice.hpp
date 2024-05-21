@@ -163,7 +163,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the the candle price type attribute.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
+    static std::string
     normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 

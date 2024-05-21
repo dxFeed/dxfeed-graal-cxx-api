@@ -56,4 +56,7 @@ template struct JavaObjectHandle<DayFilter>;
 
 template struct JavaObjectHandle<TimeFormat>;
 
+template struct JavaObjectHandle<ObservableSubscriptionChangeListener>;
+template struct JavaObjectHandle<DXPublisherObservableSubscription>;
+
 DXFCPP_END_NAMESPACE

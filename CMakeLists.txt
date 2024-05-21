@@ -17,7 +17,7 @@ project(dxFeedGraalCxxApi)
 
 set(DXFCXX_VERSION "v2.0.0-rc3" CACHE STRING "The dxFeed Graal CXX API package version")
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.12" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.16" CACHE STRING "")
 set(FMTLIB_VERSION "10.2.1")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -191,6 +191,9 @@ set(dxFeedGraalCxxApi_Exceptions_Sources
 
 set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXEndpoint.cpp
+        src/isolated/api/IsolatedDXPublisher.cpp
+        src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
+        src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
         src/isolated/internal/IsolatedString.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
 )
@@ -199,6 +202,7 @@ set(dxFeedGraalCxxApi_Api_Sources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
+        src/api/DXPublisherObservableSubscription.cpp
         src/api/DXPublisher.cpp
 )
 
@@ -206,6 +210,7 @@ set(dxFeedGraalCxxApi_ApiOsub_Sources
         src/api/osub/WildcardSymbol.cpp
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
+        src/api/osub/ObservableSubscriptionChangeListener.cpp
 )
 
 set(dxFeedGraalCxxApi_Ipf_Sources
@@ -461,6 +466,7 @@ endif ()
 
 if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/PrintQuoteEvents)
+    add_subdirectory(samples/cpp/PublishProfiles)
     add_subdirectory(samples/cpp/DxFeedSample)
     add_subdirectory(samples/cpp/WriteTapeFile)
     add_subdirectory(samples/cpp/ConvertTapeFile)

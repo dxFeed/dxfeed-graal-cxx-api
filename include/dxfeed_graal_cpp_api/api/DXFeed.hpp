@@ -122,9 +122,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
   private:
     JavaObjectHandle<DXFeed> handle_;
-
-    std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
-
     static std::shared_ptr<DXFeed> create(void *feedHandle);
 
   protected:

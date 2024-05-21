@@ -215,7 +215,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the the candle period attribute.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
+    static std::string
     normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 

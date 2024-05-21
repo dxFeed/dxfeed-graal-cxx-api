@@ -16,9 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "../symbols/StringSymbol.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-#include "osub/WildcardSymbol.hpp"
 
 #include <concepts>
 #include <memory>
@@ -693,6 +691,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     /**
      * Returns `true` if this subscription contains the corresponding event type.
      *
+     * @param eventType The type of event that is checked.
      * @return `true` if this subscription contains the corresponding event type.
      *
      * @see DXFeedSubscription::getEventTypes()
