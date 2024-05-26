@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include "osub/ObservableSubscription.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -34,7 +35,7 @@ struct LastingEvent;
 /**
  * Subscription for a set of symbols and event types.
  */
-class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
+class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity, public ObservableSubscription {
     friend struct DXFeed;
 
     std::unordered_set<EventTypeEnum> eventTypes_;
