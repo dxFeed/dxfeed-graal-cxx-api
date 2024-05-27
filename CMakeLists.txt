@@ -191,6 +191,7 @@ set(dxFeedGraalCxxApi_Exceptions_Sources
 
 set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXEndpoint.cpp
+        src/isolated/api/IsolatedDXFeedSubscription.cpp
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp

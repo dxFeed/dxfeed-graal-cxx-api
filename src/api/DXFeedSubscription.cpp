@@ -31,6 +31,38 @@ void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) noexcept {
     feed->detachSubscription(sharedAs<DXFeedSubscription>());
 }
 
+std::size_t DXFeedSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
+    isolated::api::IsolatedDXFeedSubscription::addChangeListener(handle_, listener->getHandle());
+
+    std::lock_guard guard{changeListenersMutex_};
+
+    if (lastChangeListenerId_ >= FAKE_CHANGE_LISTENER_ID - 1) {
+        return FAKE_CHANGE_LISTENER_ID;
+    }
+
+    auto id = ++lastChangeListenerId_;
+
+    changeListeners_.emplace(id, listener);
+
+    return id;
+}
+
+void DXFeedSubscription::removeChangeListener(std::size_t changeListenerId) {
+    std::lock_guard guard{changeListenersMutex_};
+
+    if (changeListenerId == FAKE_CHANGE_LISTENER_ID) {
+        return;
+    }
+
+    if (auto found = changeListeners_.find(changeListenerId); found != changeListeners_.end()) {
+        auto listener = found->second;
+
+        isolated::api::IsolatedDXFeedSubscription::removeChangeListener(handle_, listener->getHandle());
+
+        changeListeners_.erase(found);
+    }
+}
+
 void DXFeedSubscription::addSymbolImpl(void *graalSymbol) const noexcept {
     if (!handle_) {
         return;
@@ -165,7 +197,7 @@ void DXFeedSubscription::clearImpl() const noexcept {
         false);
 }
 
-bool DXFeedSubscription::isClosedImpl() const noexcept {
+bool DXFeedSubscription::isClosedImpl() const {
     if (!handle_) {
         return false;
     }
@@ -177,7 +209,7 @@ bool DXFeedSubscription::isClosedImpl() const noexcept {
         false);
 }
 
-DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType)
+DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag, const EventTypeEnum &eventType)
     : eventTypes_{eventType}, handle_{}, eventListenerHandle_{}, onEvent_{} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
@@ -236,7 +268,7 @@ void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) {
 }
 
 bool DXFeedSubscription::tryToSetEventListenerHandle() noexcept {
-    std::lock_guard lock{listenerMutex_};
+    std::lock_guard lock{eventListenerMutex_};
 
     if (!eventListenerHandle_) {
         auto idOpt =
