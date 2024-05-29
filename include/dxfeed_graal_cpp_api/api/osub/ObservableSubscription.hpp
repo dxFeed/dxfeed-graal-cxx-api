@@ -61,7 +61,7 @@ struct DXFCPP_EXPORT ObservableSubscription {
 
     /**
      * Removes subscription change listener by id. This method does nothing if the listener with the given id was not
-     * installed or was already removed as subscription change listener for this subscription. Otherwise it removes the
+     * installed or was already removed as subscription change listener for this subscription. Otherwise, it removes the
      * corresponding listener and immediately invokes ObservableSubscriptionChangeListener::subscriptionClosed() on the
      * given listener while holding the lock for this subscription.
      *

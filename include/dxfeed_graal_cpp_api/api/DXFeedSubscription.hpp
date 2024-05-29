@@ -71,6 +71,7 @@ private:
     DXFeedSubscription(LockExternalConstructionTag, EventTypeIt begin, EventTypeIt end)
         : eventTypes_(begin, end), handle_{}, eventListenerHandle_{}, onEvent_{} {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
@@ -129,6 +130,7 @@ private:
 
     ~DXFeedSubscription() override {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
         }
 
@@ -147,6 +149,7 @@ private:
      */
     static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("DXFeedSubscription::create(eventType = " + eventType.getName() + ")");
         }
 
@@ -187,6 +190,7 @@ private:
 #endif
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
         }
 
@@ -267,8 +271,9 @@ private:
      * event listeners and subscription change listeners and makes sure that no more listeners
      * can be added.
      */
-    void close() noexcept {
+    void close() const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::close()");
         }
 
@@ -453,6 +458,7 @@ private:
      */
     void addSymbols(const SymbolWrapper &symbolWrapper) const noexcept {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::addSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
 
@@ -477,6 +483,7 @@ private:
      */
     void removeSymbols(const SymbolWrapper &symbolWrapper) const noexcept {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::removeSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
         }
 
@@ -501,6 +508,7 @@ private:
      */
     template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
@@ -559,6 +567,7 @@ private:
      */
     template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
@@ -618,6 +627,7 @@ private:
      */
     template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
@@ -666,6 +676,7 @@ private:
      */
     void clear() const noexcept {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::clear()");
         }
 
@@ -681,6 +692,7 @@ private:
      */
     bool isClosed() override {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::isClosed()");
         }
 
@@ -718,6 +730,7 @@ private:
      */
     std::vector<SymbolWrapper> getSymbols() const noexcept {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::getSymbols()");
         }
 
@@ -732,8 +745,9 @@ private:
      *
      * @return A set of decorated subscribed symbols.
      */
-    std::vector<SymbolWrapper> getDecoratedSymbols() noexcept {
+    std::vector<SymbolWrapper> getDecoratedSymbols() const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::getDecoratedSymbols()");
         }
 
