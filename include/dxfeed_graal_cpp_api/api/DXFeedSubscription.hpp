@@ -36,10 +36,10 @@ struct LastingEvent;
  * Subscription for a set of symbols and event types.
  */
 class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscription>, public ObservableSubscription {
-public:
+  public:
     static constexpr std::size_t FAKE_CHANGE_LISTENER_ID{static_cast<std::size_t>(-1)};
 
-private:
+  private:
     friend struct DXFeed;
 
     inline static std::atomic<std::size_t> lastChangeListenerId_{};
@@ -53,14 +53,41 @@ private:
     std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners_;
     std::recursive_mutex changeListenersMutex_{};
 
-    DXFeedSubscription(LockExternalConstructionTag, const EventTypeEnum &eventType);
-
     static JavaObjectHandle<DXFeedSubscription>
     createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
     void setEventListenerHandle(Id<DXFeedSubscription> id);
 
     bool tryToSetEventListenerHandle() noexcept;
+
+    void closeImpl() const noexcept;
+
+    void clearImpl() const noexcept;
+
+    bool isClosedImpl() const;
+
+    void addSymbolImpl(void *graalSymbol) const noexcept;
+
+    void addSymbolsImpl(void *graalSymbolList) const noexcept;
+
+    void removeSymbolImpl(void *graalSymbol) const noexcept;
+
+    void removeSymbolsImpl(void *graalSymbolList) const noexcept;
+
+    void setSymbolsImpl(void *graalSymbolList) const noexcept;
+
+    std::vector<SymbolWrapper> getSymbolsImpl() const;
+
+    std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const;
+
+  public:
+    /// The alias to a type of shared pointer to the DXFeedSubscription object
+    using Ptr = std::shared_ptr<DXFeedSubscription>;
+
+    /// The alias to a type of unique pointer to the DXFeedSubscription object
+    using Unique = std::unique_ptr<DXFeedSubscription>;
+
+    DXFeedSubscription(LockExternalConstructionTag, const EventTypeEnum &eventType);
 
     template <typename EventTypeIt>
 #if __cpp_concepts
@@ -97,33 +124,6 @@ private:
         : DXFeedSubscription(tag, std::begin(std::forward<EventTypesCollection>(eventTypes)),
                              std::end(std::forward<EventTypesCollection>(eventTypes))) {
     }
-
-    void closeImpl() const noexcept;
-
-    void clearImpl() const noexcept;
-
-    bool isClosedImpl() const;
-
-    void addSymbolImpl(void *graalSymbol) const noexcept;
-
-    void addSymbolsImpl(void *graalSymbolList) const noexcept;
-
-    void removeSymbolImpl(void *graalSymbol) const noexcept;
-
-    void removeSymbolsImpl(void *graalSymbolList) const noexcept;
-
-    void setSymbolsImpl(void *graalSymbolList) const noexcept;
-
-    std::vector<SymbolWrapper> getSymbolsImpl() const;
-
-    std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const;
-
-  public:
-    /// The alias to a type of shared pointer to the DXFeedSubscription object
-    using Ptr = std::shared_ptr<DXFeedSubscription>;
-
-    /// The alias to a type of unique pointer to the DXFeedSubscription object
-    using Unique = std::unique_ptr<DXFeedSubscription>;
 
     ///
     std::string toString() const noexcept override;

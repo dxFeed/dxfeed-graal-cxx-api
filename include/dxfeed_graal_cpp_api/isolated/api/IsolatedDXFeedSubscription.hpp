@@ -58,14 +58,42 @@ dxfg_executor_t*          dxfg_DXFeedSubscription_getExecutor(graal_isolatethrea
 
 int32_t                   dxfg_DXFeedSubscription_setExecutor(graal_isolatethread_t *thread, dxfg_executor_t *executor);
 
-int32_t                   dxfg_DXFeedSubscription_addChangeListener(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_observable_subscription_change_listener_t *listener);
-
-int32_t                   dxfg_DXFeedSubscription_removeChangeListener(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_observable_subscription_change_listener_t *listener);
-
 */
+
 
 // dxfg_DXFeedSubscription_new
 JavaObjectHandle<DXFeedSubscription> /* dxfg_subscription_t* */ create(/* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_addChangeListener` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @param listener The listener's handle.
+ * @throws std::invalid_argument if DXFeedSubscription's or ObservableSubscriptionChangeListener's handle
+ * is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ addChangeListener(
+    /* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+    /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
+        &listener);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_removeChangeListener` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @param listener The listener's handle.
+ * @throws std::invalid_argument if DXFeedSubscription's or ObservableSubscriptionChangeListener's handle
+ * is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ removeChangeListener(
+    /* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+    /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
+        &listener);
+
 
 namespace DXFeedEventListener {
 

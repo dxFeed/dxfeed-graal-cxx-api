@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../event/IndexedEventSource.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
+#include "../../event/EventTypeEnum.hpp"
 #include "ObservableSubscriptionChangeListener.hpp"
 
 #include <cstdint>
