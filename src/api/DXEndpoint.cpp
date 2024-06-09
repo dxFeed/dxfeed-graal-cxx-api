@@ -140,7 +140,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     auto id = ApiContext::getInstance()->getManager<DXEndpointManager>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
-        dxfcpp::bit_cast<void *>(&DXEndpoint::Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
+        dxfcpp::bit_cast<void *>(&Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
     isolated::api::IsolatedDXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
 
     return endpoint;
