@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../symbols/SymbolWrapper.hpp"
-#include "../entity/SharedEntity.hpp"
+#include "../../entity/SharedEntity.hpp"
 
 #include <memory>
 #include <unordered_set>
