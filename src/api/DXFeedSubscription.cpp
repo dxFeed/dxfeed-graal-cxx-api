@@ -224,7 +224,7 @@ DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag tag, const Ev
         Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
 
-    eventTypes_ = {eventType};
+    eventTypes_ = std::unordered_set{eventType};
     handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
 }
 

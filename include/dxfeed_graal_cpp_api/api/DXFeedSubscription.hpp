@@ -108,7 +108,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
-        eventTypes_ = {begin, end};
+        eventTypes_ = std::unordered_set{begin, end};
 
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
 
