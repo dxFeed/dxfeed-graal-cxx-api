@@ -94,29 +94,11 @@ void DXFeedSubscription::addSymbolsImpl(void *graalSymbolList) const {
 }
 
 void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) const {
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
-            return dxfg_DXFeedSubscription_removeSymbol(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                        static_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
-        },
-        false);
+    isolated::api::IsolatedDXFeedSubscription::removeSymbol(handle_, graalSymbol);
 }
 
 void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
-            return dxfg_DXFeedSubscription_removeSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                         static_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
-        },
-        false);
+    isolated::api::IsolatedDXFeedSubscription::removeSymbols(handle_, graalSymbolList);
 }
 
 void DXFeedSubscription::setSymbolsImpl(void *graalSymbolList) const {
