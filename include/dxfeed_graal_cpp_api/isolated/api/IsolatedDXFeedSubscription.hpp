@@ -17,9 +17,6 @@ namespace isolated::api::IsolatedDXFeedSubscription {
 
 /*
 
-int32_t                   dxfg_DXFeedSubscription_addEventListener(graal_isolatethread_t *thread, dxfg_subscription_t
-*sub, dxfg_feed_event_listener_t *listener);
-
 int32_t                   dxfg_DXFeedSubscription_removeEventListener(graal_isolatethread_t *thread, dxfg_subscription_t
 *sub, dxfg_feed_event_listener_t *listener);
 
@@ -112,6 +109,21 @@ void /* int32_t */ close(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
 void /* int32_t */
 addEventListener(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                  /* dxfg_feed_event_listener_t * */ const JavaObjectHandle<DXFeedEventListener> &listener);
+
+// int32_t dxfg_DXFeedSubscription_removeEventListener(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_feed_event_listener_t *listener);
+
+// int32_t dxfg_DXFeedSubscription_addSymbol(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_symbol_t *symbol);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_addSymbol` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @param symbol The symbol.
+ * @throws std::invalid_argument if DXFeedSubscription's handle is invalid or the symbol is nullptr.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ addSymbol(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub, /* dxfg_symbol_t * */ void* symbol);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_addChangeListener` in isolation.

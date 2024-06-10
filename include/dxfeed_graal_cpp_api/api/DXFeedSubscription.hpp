@@ -272,14 +272,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * event listeners and subscription change listeners and makes sure that no more listeners
      * can be added.
      */
-    void close() const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::close()");
-        }
-
-        closeImpl();
-    }
+    void close() const;
 
     /**
      * Adds listener for events.

@@ -25,7 +25,7 @@ struct DXFeedSubscription::Impl {
 
             sub->onEvent_(events);
         }
-    };
+    }
 };
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) {
@@ -42,6 +42,15 @@ void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) {
     }
 
     feed->detachSubscription(sharedAs<DXFeedSubscription>());
+}
+
+void DXFeedSubscription::close() const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug(toString() + "::close()");
+    }
+
+    closeImpl();
 }
 
 std::size_t DXFeedSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
@@ -77,16 +86,7 @@ void DXFeedSubscription::removeChangeListener(std::size_t changeListenerId) {
 }
 
 void DXFeedSubscription::addSymbolImpl(void *graalSymbol) const {
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbol](auto threadHandle) {
-            return dxfg_DXFeedSubscription_addSymbol(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                     static_cast<dxfg_symbol_t *>(graalSymbol)) == 0;
-        },
-        false);
+    isolated::api::IsolatedDXFeedSubscription::addSymbol(handle_, graalSymbol);
 }
 
 void DXFeedSubscription::addSymbolsImpl(void *graalSymbolList) const {

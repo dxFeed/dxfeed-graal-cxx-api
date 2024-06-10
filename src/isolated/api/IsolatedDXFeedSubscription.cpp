@@ -54,6 +54,23 @@ addEventListener(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscr
                                            static_cast<dxfg_feed_event_listener_t *>(listener.get()));
 }
 
+void /* int32_t */ addSymbol(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                             /* dxfg_symbol_t * */ void *symbol) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_addSymbol`. The `sub` handle is invalid");
+    }
+
+    if (!symbol) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_addSymbol`. The "
+                                    "`symbol` is nullptr");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_addSymbol,
+                                           static_cast<dxfg_subscription_t *>(sub.get()),
+                                           static_cast<dxfg_symbol_t *>(symbol));
+}
+
 void /* int32_t */ addChangeListener(
     /* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
