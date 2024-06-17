@@ -17,13 +17,6 @@ namespace isolated::api::IsolatedDXFeedSubscription {
 
 /*
 
-int32_t                   dxfg_DXFeedSubscription_clear(graal_isolatethread_t *thread, dxfg_subscription_t *sub);
-
-int32_t                   dxfg_DXFeedSubscription_attach(graal_isolatethread_t *thread, dxfg_subscription_t *sub,
-dxfg_feed_t *feed);
-
-int32_t                   dxfg_DXFeedSubscription_detach(graal_isolatethread_t *thread, dxfg_subscription_t *sub,
-dxfg_feed_t *feed);
 
 int32_t                   dxfg_DXFeedSubscription_isClosed(graal_isolatethread_t *thread, dxfg_subscription_t *sub);
 
@@ -145,6 +138,32 @@ void /* int32_t */ removeSymbol(/* dxfg_subscription_t * */ const JavaObjectHand
  */
 void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                                  /* dxfg_symbol_list * */ void *symbols);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_clear` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+
+// int32_t dxfg_DXFeedSubscription_attach(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_feed_t *feed);
+
+// int32_t dxfg_DXFeedSubscription_detach(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_feed_t *feed);
+
+// int32_t dxfg_DXFeedSubscription_isClosed(graal_isolatethread_t *thread, dxfg_subscription_t *sub);
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_clear` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @return `true` if subscription is closed.
+ * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_addChangeListener` in isolation.

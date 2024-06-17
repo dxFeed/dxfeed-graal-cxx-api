@@ -164,27 +164,11 @@ void DXFeedSubscription::closeImpl() const {
 }
 
 void DXFeedSubscription::clearImpl() const {
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_clear(static_cast<graal_isolatethread_t *>(threadHandle), handle) == 0;
-        },
-        false);
+     isolated::api::IsolatedDXFeedSubscription::clear(handle_);
 }
 
 bool DXFeedSubscription::isClosedImpl() const {
-    if (!handle_) {
-        return false;
-    }
-
-    return runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_isClosed(static_cast<graal_isolatethread_t *>(threadHandle), handle) != 0;
-        },
-        false);
+    return isolated::api::IsolatedDXFeedSubscription::isClosed(handle_);
 }
 
 DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag)

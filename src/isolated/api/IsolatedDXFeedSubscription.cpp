@@ -122,6 +122,26 @@ void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHan
                                            static_cast<dxfg_symbol_list *>(symbols));
 }
 
+void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_clear`. The `sub` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_clear,
+                                           static_cast<dxfg_subscription_t *>(sub.get()));
+}
+
+bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_isClosed`. The `sub` handle is invalid");
+    }
+
+    return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_isClosed,
+                                                  static_cast<dxfg_subscription_t *>(sub.get())) == 1;
+}
+
 void /* int32_t */ addChangeListener(
     /* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
