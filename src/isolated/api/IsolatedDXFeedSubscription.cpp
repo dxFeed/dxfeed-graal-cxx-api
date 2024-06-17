@@ -142,6 +142,54 @@ bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<D
                                                   static_cast<dxfg_subscription_t *>(sub.get())) == 1;
 }
 
+std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_getSymbols`. The `sub` handle is invalid");
+    }
+
+    dxfg_symbol_list *list = runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXFeedSubscription_getSymbols, static_cast<dxfg_subscription_t *>(sub.get()));
+
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_symbol_release, list);
+
+    return result;
+}
+
+void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub, /* dxfg_symbol_list * */ void* symbols) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The `sub` handle is invalid");
+    }
+
+    if (!symbols) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The "
+                                    "`symbols` is nullptr");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setSymbols,
+                                           static_cast<dxfg_subscription_t *>(sub.get()),
+                                           static_cast<dxfg_symbol_list *>(symbols));
+}
+
+std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_getDecoratedSymbols`. The `sub` handle is invalid");
+    }
+
+    dxfg_symbol_list *list = runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXFeedSubscription_getDecoratedSymbols, static_cast<dxfg_subscription_t *>(sub.get()));
+
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_symbol_release, list);
+
+    return result;
+}
+
 void /* int32_t */ addChangeListener(
     /* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>

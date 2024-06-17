@@ -15,34 +15,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXFeedSubscription {
 
-/*
-
-
-int32_t                   dxfg_DXFeedSubscription_isClosed(graal_isolatethread_t *thread, dxfg_subscription_t *sub);
-
-dxfg_event_clazz_list_t*  dxfg_DXFeedSubscription_getEventTypes(graal_isolatethread_t *thread, dxfg_subscription_t
-*sub);
-
-int32_t                   dxfg_DXFeedSubscription_containsEventType(graal_isolatethread_t *thread, dxfg_subscription_t
-*sub, dxfg_event_clazz_t eventClazz);
-
-dxfg_symbol_list*         dxfg_DXFeedSubscription_getSymbols(graal_isolatethread_t *thread, dxfg_subscription_t *sub);
-
-int32_t                   dxfg_DXFeedSubscription_setSymbol(graal_isolatethread_t *thread, dxfg_subscription_t *sub,
-dxfg_symbol_t *symbol);
-
-int32_t                   dxfg_DXFeedSubscription_setSymbols(graal_isolatethread_t *thread, dxfg_subscription_t *sub,
-dxfg_symbol_list *symbols);
-
-dxfg_symbol_list*         dxfg_DXFeedSubscription_getDecoratedSymbols(graal_isolatethread_t *thread, dxfg_subscription_t
-*sub);
-
-dxfg_executor_t*          dxfg_DXFeedSubscription_getExecutor(graal_isolatethread_t *thread, dxfg_subscription_t *sub);
-
-int32_t                   dxfg_DXFeedSubscription_setExecutor(graal_isolatethread_t *thread, dxfg_executor_t *executor);
-
-*/
-
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_new` in isolation.
  *
@@ -153,9 +125,8 @@ void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
 
 // int32_t dxfg_DXFeedSubscription_detach(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_feed_t *feed);
 
-// int32_t dxfg_DXFeedSubscription_isClosed(graal_isolatethread_t *thread, dxfg_subscription_t *sub);
 /**
- * Calls the Graal SDK function `dxfg_DXFeedSubscription_clear` in isolation.
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_isClosed` in isolation.
  *
  * @param sub The subscription's handle.
  * @return `true` if subscription is closed.
@@ -164,6 +135,51 @@ void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
  * @throws GraalException if something happened with the GraalVM.
  */
 bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+
+// dxfg_event_clazz_list_t*  dxfg_DXFeedSubscription_getEventTypes(graal_isolatethread_t *thread, dxfg_subscription_t
+// *sub);
+
+// int32_t dxfg_DXFeedSubscription_containsEventType(graal_isolatethread_t *thread, dxfg_subscription_t *sub,
+// dxfg_event_clazz_t eventClazz);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_getSymbols` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @return The subscription's symbols.
+ * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+
+// int32_t dxfg_DXFeedSubscription_setSymbol(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_symbol_t *symbol);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_setSymbols` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @param symbols The subscription's symbols.
+ * @throws std::invalid_argument if DXFeedSubscription's handle is invalid or the symbols is nullptr.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub, /* dxfg_symbol_list * */ void* symbols);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_getDecoratedSymbols` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @return The subscription's decorated symbols.
+ * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+
+// dxfg_executor_t* dxfg_DXFeedSubscription_getExecutor(graal_isolatethread_t *thread, dxfg_subscription_t *sub);
+
+// int32_t dxfg_DXFeedSubscription_setExecutor(graal_isolatethread_t *thread, dxfg_executor_t *executor);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_addChangeListener` in isolation.

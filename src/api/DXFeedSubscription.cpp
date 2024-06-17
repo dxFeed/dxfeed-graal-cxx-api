@@ -102,61 +102,15 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
 }
 
 void DXFeedSubscription::setSymbolsImpl(void *graalSymbolList) const {
-    if (!handle_) {
-        return;
-    }
-
-    runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get()), graalSymbolList](auto threadHandle) {
-            return dxfg_DXFeedSubscription_setSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      static_cast<dxfg_symbol_list *>(graalSymbolList)) == 0;
-        },
-        false);
+    isolated::api::IsolatedDXFeedSubscription::setSymbols(handle_, graalSymbolList);
 }
 
 std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const {
-    if (!handle_) {
-        return {};
-    }
-
-    dxfg_symbol_list *list = runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_getSymbols(static_cast<graal_isolatethread_t *>(threadHandle), handle);
-        },
-        nullptr);
-
-    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
-
-    runIsolatedOrElse(
-        [list](auto threadHandle) {
-            return dxfg_CList_symbol_release(static_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
-        },
-        false);
-
-    return result;
+    return isolated::api::IsolatedDXFeedSubscription::getSymbols(handle_);
 }
 
 std::vector<SymbolWrapper> DXFeedSubscription::getDecoratedSymbolsImpl() const {
-    if (!handle_) {
-        return {};
-    }
-
-    dxfg_symbol_list *list = runIsolatedOrElse(
-        [handle = static_cast<dxfg_subscription_t *>(handle_.get())](auto threadHandle) {
-            return dxfg_DXFeedSubscription_getDecoratedSymbols(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                               handle);
-        },
-        nullptr);
-
-    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
-
-    runIsolatedOrElse(
-        [list](auto threadHandle) {
-            return dxfg_CList_symbol_release(static_cast<graal_isolatethread_t *>(threadHandle), list) == 0;
-        },
-        false);
-
-    return result;
+    return isolated::api::IsolatedDXFeedSubscription::getDecoratedSymbols(handle_);
 }
 
 void DXFeedSubscription::closeImpl() const {
