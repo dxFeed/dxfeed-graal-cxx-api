@@ -197,7 +197,7 @@ void DXFeedSubscription::clear() const {
     isolated::api::IsolatedDXFeedSubscription::clear(handle_);
 }
 
-bool DXFeedSubscription::isClosed() override {
+bool DXFeedSubscription::isClosed() {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::isClosed()");
@@ -206,11 +206,11 @@ bool DXFeedSubscription::isClosed() override {
     return isolated::api::IsolatedDXFeedSubscription::isClosed(handle_);
 }
 
-std::unordered_set<EventTypeEnum> DXFeedSubscription::getEventTypes() override {
+std::unordered_set<EventTypeEnum> DXFeedSubscription::getEventTypes() {
     return eventTypes_;
 }
 
-bool DXFeedSubscription::containsEventType(const EventTypeEnum &eventType) override {
+bool DXFeedSubscription::containsEventType(const EventTypeEnum &eventType) {
     return eventTypes_.contains(eventType);
 }
 
