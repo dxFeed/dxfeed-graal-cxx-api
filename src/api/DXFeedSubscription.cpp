@@ -28,6 +28,97 @@ struct DXFeedSubscription::Impl {
     }
 };
 
+JavaObjectHandle<DXFeedSubscription>
+DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) {
+    return isolated::api::IsolatedDXFeedSubscription::create(list);
+}
+
+void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) {
+    eventListenerHandle_ = isolated::api::IsolatedDXFeedSubscription::DXFeedEventListener::create(
+        dxfcpp::bit_cast<void *>(&Impl::onEvents), dxfcpp::bit_cast<void *>(id.getValue()));
+
+    isolated::api::IsolatedDXFeedSubscription::addEventListener(handle_, eventListenerHandle_);
+}
+
+bool DXFeedSubscription::tryToSetEventListenerHandle() {
+    std::lock_guard lock{eventListenerMutex_};
+
+    if (!eventListenerHandle_) {
+        auto idOpt =
+            ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getId(sharedAs<DXFeedSubscription>());
+
+        if (!idOpt) {
+            return false;
+        }
+
+        setEventListenerHandle(idOpt.value());
+    }
+
+    return true;
+}
+
+void DXFeedSubscription::addSymbolsImpl(void *graalSymbolList) const {
+    isolated::api::IsolatedDXFeedSubscription::addSymbols(handle_, graalSymbolList);
+}
+
+void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
+    isolated::api::IsolatedDXFeedSubscription::removeSymbols(handle_, graalSymbolList);
+}
+
+void DXFeedSubscription::setSymbolsImpl(void *graalSymbolList) const {
+    isolated::api::IsolatedDXFeedSubscription::setSymbols(handle_, graalSymbolList);
+}
+
+DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag)
+    : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
+}
+
+DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag tag, const EventTypeEnum &eventType)
+    : DXFeedSubscription{tag} {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
+    }
+
+    eventTypes_ = std::unordered_set{eventType};
+    handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
+}
+
+std::string DXFeedSubscription::toString() const noexcept {
+    return fmt::format("DXFeedSubscription{{{}}}", handle_.toString());
+}
+
+DXFeedSubscription::~DXFeedSubscription() {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
+    }
+
+    close();
+}
+
+std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEnum &eventType) {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("DXFeedSubscription::create(eventType = " + eventType.getName() + ")");
+    }
+
+    auto sub = createShared(eventType);
+    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+    dxfcpp::ignore_unused(id);
+
+    return sub;
+}
+
+std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(std::initializer_list<EventTypeEnum> eventTypes) {
+    auto sub = createShared(eventTypes);
+    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+    dxfcpp::ignore_unused(id);
+
+    return sub;
+}
+
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::attach(feed = " + feed->toString() + ")");
@@ -50,7 +141,95 @@ void DXFeedSubscription::close() const {
         Debugger::debug(toString() + "::close()");
     }
 
-    closeImpl();
+    isolated::api::IsolatedDXFeedSubscription::close(handle_);
+}
+
+void DXFeedSubscription::removeEventListener(std::size_t listenerId) {
+    onEvent_ -= listenerId;
+}
+
+DXFeedSubscription::OnEventHandler &DXFeedSubscription::onEvent() {
+    tryToSetEventListenerHandle();
+
+    return onEvent_;
+}
+
+void DXFeedSubscription::addSymbols(const SymbolWrapper &symbolWrapper) const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug(toString() + "::addSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
+    }
+
+    auto graal = symbolWrapper.toGraalUnique();
+
+    isolated::api::IsolatedDXFeedSubscription::addSymbol(handle_, graal.get());
+}
+
+void DXFeedSubscription::removeSymbols(const SymbolWrapper &symbolWrapper) const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug(toString() + "::removeSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
+    }
+
+    auto graal = symbolWrapper.toGraalUnique();
+
+    isolated::api::IsolatedDXFeedSubscription::removeSymbol(handle_, graal.get());
+}
+
+void DXFeedSubscription::addSymbols(std::initializer_list<SymbolWrapper> collection) const {
+    addSymbols(collection.begin(), collection.end());
+}
+
+void DXFeedSubscription::removeSymbols(std::initializer_list<SymbolWrapper> collection) const {
+    removeSymbols(collection.begin(), collection.end());
+}
+
+void DXFeedSubscription::setSymbols(std::initializer_list<SymbolWrapper> collection) const {
+    setSymbols(collection.begin(), collection.end());
+}
+
+void DXFeedSubscription::clear() const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug(toString() + "::clear()");
+    }
+
+    isolated::api::IsolatedDXFeedSubscription::clear(handle_);
+}
+
+bool DXFeedSubscription::isClosed() override {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug(toString() + "::isClosed()");
+    }
+
+    return isolated::api::IsolatedDXFeedSubscription::isClosed(handle_);
+}
+
+std::unordered_set<EventTypeEnum> DXFeedSubscription::getEventTypes() override {
+    return eventTypes_;
+}
+
+bool DXFeedSubscription::containsEventType(const EventTypeEnum &eventType) override {
+    return eventTypes_.contains(eventType);
+}
+
+std::vector<SymbolWrapper> DXFeedSubscription::getSymbols() const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug(toString() + "::getSymbols()");
+    }
+
+    return isolated::api::IsolatedDXFeedSubscription::getSymbols(handle_);
+}
+
+std::vector<SymbolWrapper> DXFeedSubscription::getDecoratedSymbols() const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug(toString() + "::getDecoratedSymbols()");
+    }
+
+    return isolated::api::IsolatedDXFeedSubscription::getDecoratedSymbols(handle_);
 }
 
 std::size_t DXFeedSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
@@ -83,102 +262,6 @@ void DXFeedSubscription::removeChangeListener(std::size_t changeListenerId) {
 
         changeListeners_.erase(found);
     }
-}
-
-void DXFeedSubscription::addSymbolImpl(void *graalSymbol) const {
-    isolated::api::IsolatedDXFeedSubscription::addSymbol(handle_, graalSymbol);
-}
-
-void DXFeedSubscription::addSymbolsImpl(void *graalSymbolList) const {
-    isolated::api::IsolatedDXFeedSubscription::addSymbols(handle_, graalSymbolList);
-}
-
-void DXFeedSubscription::removeSymbolImpl(void *graalSymbol) const {
-    isolated::api::IsolatedDXFeedSubscription::removeSymbol(handle_, graalSymbol);
-}
-
-void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
-    isolated::api::IsolatedDXFeedSubscription::removeSymbols(handle_, graalSymbolList);
-}
-
-void DXFeedSubscription::setSymbolsImpl(void *graalSymbolList) const {
-    isolated::api::IsolatedDXFeedSubscription::setSymbols(handle_, graalSymbolList);
-}
-
-std::vector<SymbolWrapper> DXFeedSubscription::getSymbolsImpl() const {
-    return isolated::api::IsolatedDXFeedSubscription::getSymbols(handle_);
-}
-
-std::vector<SymbolWrapper> DXFeedSubscription::getDecoratedSymbolsImpl() const {
-    return isolated::api::IsolatedDXFeedSubscription::getDecoratedSymbols(handle_);
-}
-
-void DXFeedSubscription::closeImpl() const {
-    isolated::api::IsolatedDXFeedSubscription::close(handle_);
-}
-
-void DXFeedSubscription::clearImpl() const {
-     isolated::api::IsolatedDXFeedSubscription::clear(handle_);
-}
-
-bool DXFeedSubscription::isClosedImpl() const {
-    return isolated::api::IsolatedDXFeedSubscription::isClosed(handle_);
-}
-
-DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag)
-    : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
-}
-
-DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag tag, const EventTypeEnum &eventType)
-    : DXFeedSubscription{tag} {
-    if constexpr (Debugger::isDebug) {
-        Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
-    }
-
-    eventTypes_ = std::unordered_set{eventType};
-    handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
-}
-
-JavaObjectHandle<DXFeedSubscription>
-DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) {
-    return isolated::api::IsolatedDXFeedSubscription::create(list);
-}
-
-void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) {
-    eventListenerHandle_ = isolated::api::IsolatedDXFeedSubscription::DXFeedEventListener::create(
-        dxfcpp::bit_cast<void *>(&Impl::onEvents), dxfcpp::bit_cast<void *>(id.getValue()));
-
-    isolated::api::IsolatedDXFeedSubscription::addEventListener(handle_, eventListenerHandle_);
-}
-
-bool DXFeedSubscription::tryToSetEventListenerHandle() {
-    std::lock_guard lock{eventListenerMutex_};
-
-    if (!eventListenerHandle_) {
-        auto idOpt =
-            ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getId(sharedAs<DXFeedSubscription>());
-
-        if (!idOpt) {
-            return false;
-        }
-
-        setEventListenerHandle(idOpt.value());
-    }
-
-    return true;
-}
-
-std::string DXFeedSubscription::toString() const noexcept {
-    return fmt::format("DXFeedSubscription{{{}}}", handle_.toString());
-}
-
-DXFeedSubscription::~DXFeedSubscription() {
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
-    }
-
-    closeImpl();
 }
 
 DXFCPP_END_NAMESPACE
