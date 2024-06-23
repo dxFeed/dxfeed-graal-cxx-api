@@ -63,4 +63,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
 #include "ondemand/OnDemandService.hpp"
 
+#include "promise/Promise.hpp"
+
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
