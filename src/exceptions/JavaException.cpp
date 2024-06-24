@@ -96,7 +96,7 @@ JavaException::JavaException(const std::string &message, const std::string &clas
       stackTrace_{std::move(stackTrace) + "\n" + stackTraceToString(boost::stacktrace::stacktrace())} {
 }
 
-JavaException create(void* exceptionHandle) {
+JavaException JavaException::create(void* exceptionHandle) {
     if (exceptionHandle == nullptr) {
         return JavaException("", "", "");
     }
