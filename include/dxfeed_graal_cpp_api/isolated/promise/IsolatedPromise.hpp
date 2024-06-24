@@ -7,17 +7,18 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../event/EventType.hpp"
+#include "../../exceptions/JavaException.hpp"
+
+#include <memory>
+#include <vector>
+
 DXFCPP_BEGIN_NAMESPACE
 
-namespace isolated::api::IsolatedPromise {
+namespace isolated::promise::IsolatedPromise {
 
 /*
 
-dxfg_event_type_t*    dxfg_Promise_EventType_getResult(graal_isolatethread_t *thread, dxfg_promise_event_t *promise);
-dxfg_event_type_list* dxfg_Promise_List_EventType_getResult(graal_isolatethread_t *thread, dxfg_promise_events_t *promise);
-dxfg_exception_t*     dxfg_Promise_getException(graal_isolatethread_t *thread, dxfg_promise_t *promise);
-int32_t               dxfg_Promise_await(graal_isolatethread_t *thread, dxfg_promise_t *promise);
-int32_t               dxfg_Promise_await2(graal_isolatethread_t *thread, dxfg_promise_t *promise, int32_t timeoutInMilliseconds);
 int32_t               dxfg_Promise_awaitWithoutException(graal_isolatethread_t *thread, dxfg_promise_t *promise, int32_t timeoutInMilliseconds);
 int32_t               dxfg_Promise_cancel(graal_isolatethread_t *thread, dxfg_promise_t *promise);
 int32_t               dxfg_Promise_List_EventType_complete(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_event_type_list* events);
@@ -75,6 +76,60 @@ bool /* int32_t */ hasException(/* dxfg_promise_t * */ void* promise);
  * @throws GraalException if something happened with the GraalVM.
  */
 bool /* int32_t */ isCancelled(/* dxfg_promise_t * */ void* promise);
+
+/**
+ * Calls the Graal SDK function `dxfg_Promise_EventType_getResult` in isolation.
+ *
+ * @param promise The promise's handle.
+ * @return event by promise
+ * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_event_t * */ void* promise);
+
+/**
+ * Calls the Graal SDK function `dxfg_Promise_List_EventType_getResult` in isolation.
+ *
+ * @param promise The promise's handle.
+ * @return events by promise
+ * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+std::vector<std::shared_ptr<EventType>> /* dxfg_event_type_list* */ getResults(/* dxfg_promise_events_t * */ void* promise);
+
+/**
+ * Calls the Graal SDK function `dxfg_Promise_getException` in isolation.
+ *
+ * @param promise The promise's handle.
+ * @return exception by promise
+ * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void* promise);
+
+/**
+ * Calls the Graal SDK function `dxfg_Promise_await` in isolation.
+ *
+ * @param promise The promise's handle.
+ * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ await(/* dxfg_promise_t * */ void* promise);
+
+/**
+ * Calls the Graal SDK function `dxfg_Promise_await2` in isolation.
+ *
+ * @param promise The promise's handle.
+ * @param timeoutInMilliseconds The promise's timeout.
+ * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */ await(/* dxfg_promise_t * */ void* promise, std::int32_t timeoutInMilliseconds);
 
 
 }

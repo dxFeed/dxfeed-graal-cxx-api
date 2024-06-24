@@ -19,9 +19,7 @@ void JavaException::throwIfJavaThreadExceptionExists() {
         return;
     }
 
-    auto message = toString(exception->message);
-    auto className = toString(exception->class_name);
-    auto stackTrace = toString(exception->print_stack_trace);
+    auto javaException = create(exception);
 
     runIsolatedThrow(
         [](auto threadHandle, auto &&...params) {
@@ -29,7 +27,7 @@ void JavaException::throwIfJavaThreadExceptionExists() {
         },
         exception);
 
-    throw JavaException(message, className, stackTrace);
+    throw javaException;
 }
 
 void JavaException::throwException() {
@@ -96,6 +94,16 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
 JavaException::JavaException(const std::string &message, const std::string &className, std::string stackTrace)
     : std::runtime_error(fmt::format("Java exception of type '{}' was thrown. {}", className, message)),
       stackTrace_{std::move(stackTrace) + "\n" + stackTraceToString(boost::stacktrace::stacktrace())} {
+}
+
+JavaException create(void* exceptionHandle) {
+    if (exceptionHandle == nullptr) {
+        return JavaException("", "", "");
+    }
+
+    dxfg_exception_t *exception = dxfcpp::bit_cast<dxfg_exception_t*>(exceptionHandle);
+
+    return JavaException(toString(exception->message), toString(exception->class_name), toString(exception->print_stack_trace));
 }
 
 const std::string &JavaException::getStackTrace() const & {

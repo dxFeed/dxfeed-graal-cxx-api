@@ -27,6 +27,14 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
      */
     JavaException(const std::string &message, const std::string &className, std::string stackTrace);
 
+    /**
+     * Creates an exception using native (GraalVM) Java exception handle
+     *
+     * @param exceptionHandle The native Java exception handle.
+     * @return An exception.
+     */
+    static JavaException create(void* exceptionHandle);
+
     /// Throws a JavaException if it exists (i.e. intercepted by Graal SDK)
     static void throwIfJavaThreadExceptionExists();
 
