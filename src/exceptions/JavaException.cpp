@@ -27,7 +27,7 @@ void JavaException::throwIfJavaThreadExceptionExists() {
         },
         exception);
 
-    throw javaException;
+    throw javaException; // NOLINT(*-throw-by-value-catch-by-reference)
 }
 
 void JavaException::throwException() {
@@ -96,14 +96,14 @@ JavaException::JavaException(const std::string &message, const std::string &clas
       stackTrace_{std::move(stackTrace) + "\n" + stackTraceToString(boost::stacktrace::stacktrace())} {
 }
 
-JavaException JavaException::create(void* exceptionHandle) {
+JavaException JavaException::create(void *exceptionHandle) {
     if (exceptionHandle == nullptr) {
-        return JavaException("", "", "");
+        return {"", "", ""};
     }
 
-    dxfg_exception_t *exception = dxfcpp::bit_cast<dxfg_exception_t*>(exceptionHandle);
+    auto *exception = dxfcpp::bit_cast<dxfg_exception_t *>(exceptionHandle);
 
-    return JavaException(toString(exception->message), toString(exception->class_name), toString(exception->print_stack_trace));
+    return {toString(exception->message), toString(exception->class_name), toString(exception->print_stack_trace)};
 }
 
 const std::string &JavaException::getStackTrace() const & {
