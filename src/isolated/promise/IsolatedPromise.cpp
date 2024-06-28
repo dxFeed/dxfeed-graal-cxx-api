@@ -51,8 +51,8 @@ std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_ev
             "Unable to execute function `dxfg_Promise_EventType_getResult`. The `promise` is nullptr");
     }
 
-    auto *graalEvent =
-        runGraalFunctionAndThrowIfNullptr(dxfg_Promise_EventType_getResult, static_cast<dxfg_promise_t *>(promise));
+    auto *graalEvent = runGraalFunctionAndThrowIfNullptr(dxfg_Promise_EventType_getResult,
+                                                         static_cast<dxfg_promise_event_t *>(promise));
 
     auto result = dxfcpp::EventMapper::fromGraal(graalEvent);
 
@@ -69,7 +69,7 @@ getResults(/* dxfg_promise_events_t * */ void *promise) {
     }
 
     auto *graalEvents = runGraalFunctionAndThrowIfNullptr(dxfg_Promise_List_EventType_getResult,
-                                                          static_cast<dxfg_promise_t *>(promise));
+                                                          static_cast<dxfg_promise_events_t *>(promise));
 
     auto result = dxfcpp::EventMapper::fromGraalList(graalEvents);
 
@@ -88,7 +88,7 @@ JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void *
 
     auto result = JavaException::create(graalException);
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Exception_release, graalException);
+    runGraalFunction(dxfg_Exception_release, graalException);
 
     return result;
 }
