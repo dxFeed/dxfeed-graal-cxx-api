@@ -16,7 +16,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-std::shared_ptr<DXFeed> DXFeed::getInstance() noexcept {
+std::shared_ptr<DXFeed> DXFeed::getInstance() {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeed::getInstance()");
     }
@@ -24,7 +24,7 @@ std::shared_ptr<DXFeed> DXFeed::getInstance() noexcept {
     return DXEndpoint::getInstance()->getFeed();
 }
 
-void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
+void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::attachSubscription(" + subscription->toString() + ")");
     }
@@ -43,7 +43,7 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 }
 
-void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
+void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::detachSubscription(" + subscription->toString() + ")");
     }
@@ -62,7 +62,7 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 }
 
-void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) noexcept {
+void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::detachSubscriptionAndClear(" + subscription->toString() + ")");
     }
@@ -81,7 +81,7 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     }
 }
 
-std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) noexcept {
+std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::createSubscription(eventType = " + eventType.getName() + ")");
     }
@@ -93,8 +93,7 @@ std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEn
     return sub;
 }
 
-std::shared_ptr<DXFeedSubscription>
-DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept {
+std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::createSubscription(eventTypes = " +
                         namesToString(eventTypes.begin(), eventTypes.end()) + ")");
@@ -120,6 +119,16 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
 
     return feed;
+}
+
+Promise<std::vector<std::shared_ptr<TimeSeriesEvent>>> DXFeed::getTimeSeriesPromise(const EventTypeEnum &eventType,
+                                                                                    const SymbolWrapper &symbol,
+                                                                                    std::int64_t fromTime,
+                                                                                    std::int64_t toTime) {
+
+    // TODO: impelement
+
+    return {};
 }
 
 std::string DXFeed::toString() const noexcept {

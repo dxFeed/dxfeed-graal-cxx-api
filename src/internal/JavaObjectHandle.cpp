@@ -26,7 +26,31 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
     dxfcpp::ignore_unused(result);
 
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " + dxfcpp::toString(result));
+        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                        dxfcpp::toString(result));
+    }
+}
+
+template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexcept {
+    auto result = runIsolatedOrElse(
+        [handle = handle](auto threadHandle) {
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
+            }
+
+            if (handle) {
+                return dxfg_CList_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                            static_cast<dxfg_java_object_handler_list *>(handle)) == 0;
+            }
+
+            return true;
+        },
+        false);
+    dxfcpp::ignore_unused(result);
+
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                        dxfcpp::toString(result));
     }
 }
 

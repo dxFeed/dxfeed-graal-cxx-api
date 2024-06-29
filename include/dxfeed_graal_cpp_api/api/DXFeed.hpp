@@ -12,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../promise/Promise.hpp"
 
 #include "DXFeedSubscription.hpp"
 
@@ -146,7 +147,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * @return The DXFeed instance
      */
-    static std::shared_ptr<DXFeed> getInstance() noexcept;
+    static std::shared_ptr<DXFeed> getInstance();
 
     /**
      * Attaches the given subscription to this feed. This method does nothing if the
@@ -164,7 +165,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeedSubscription
      */
-    void attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept;
+    void attachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
 
     /**
      * Detaches the given subscription from this feed. This method does nothing if the
@@ -178,7 +179,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeedSubscription
      */
-    void detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) noexcept;
+    void detachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
 
     /**
      * Detaches the given subscription from this feed and clears data delivered to this subscription
@@ -188,7 +189,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeed::detachSubscription()
      */
-    void detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) noexcept;
+    void detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription);
 
     /**
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.
@@ -202,7 +203,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param eventType The type of event
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypeEnum &eventType) noexcept;
+    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypeEnum &eventType);
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -235,7 +236,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypeIt>
-    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) noexcept {
+    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("{}::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
@@ -259,7 +260,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param eventTypes The initializer list of event types
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept;
+    std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes);
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -281,7 +282,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypesCollection>
-    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) noexcept {
+    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::createSubscription(eventTypes = " +
                             namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
@@ -293,6 +294,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
         return sub;
     }
+
+    Promise<std::vector<std::shared_ptr<TimeSeriesEvent>>> getTimeSeriesPromise(const EventTypeEnum &eventType,
+                                                                   const SymbolWrapper &symbol, std::int64_t fromTime,
+                                                                   std::int64_t toTime);
 
     std::string toString() const noexcept override;
 };
