@@ -46,6 +46,14 @@ constexpr auto throwIfMinusOne = [](auto v) {
     return JavaException::throwIfMinusOne(v);
 };
 
+constexpr auto runGraalFunction(auto graalFunction, auto &&...params) {
+    return runIsolatedThrow(
+        [](auto threadHandle, auto &&graalFunction, auto &&...params) {
+            return graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...);
+        },
+        graalFunction, params...);
+}
+
 constexpr auto runGraalFunctionAndThrow(auto resultCheckerConverter, auto graalFunction, auto &&...params) {
     return runIsolatedThrow(
         [](auto threadHandle, auto &&resultCheckerConverter, auto &&graalFunction, auto &&...params) {

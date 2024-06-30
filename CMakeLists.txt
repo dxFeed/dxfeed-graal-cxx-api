@@ -190,10 +190,13 @@ set(dxFeedGraalCxxApi_Exceptions_Sources
 )
 
 set(dxFeedGraalCxxApi_Isolated_Sources
+        src/isolated/api/IsolatedDXFeed.cpp
         src/isolated/api/IsolatedDXEndpoint.cpp
+        src/isolated/api/IsolatedDXFeedSubscription.cpp
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
+        src/isolated/promise/IsolatedPromise.cpp
         src/isolated/internal/IsolatedString.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
 )
@@ -225,6 +228,10 @@ set(dxFeedGraalCxxApi_Ipf_Sources
 
 set(dxFeedGraalCxxApi_OnDemand_Sources
         src/ondemand/OnDemandService.cpp
+)
+
+set(dxFeedGraalCxxApi_Promise_Sources
+        src/promise/Promise.cpp
 )
 
 set(dxFeedGraalCxxApi_Symbols_Sources
@@ -314,6 +321,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
+        ${dxFeedGraalCxxApi_Promise_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}
         ${dxFeedGraalCxxApi_System_Sources}
         ${dxFeedGraalCxxApi_Event_Sources}
@@ -371,6 +379,14 @@ set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
 
 #A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
 set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
+
+# https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
+# https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
+# https://github.com/actions/runner-images/issues/10004
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_definitions(${PROJECT_NAME} PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+    target_compile_definitions(${PROJECT_NAME}_static PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+endif ()
 
 target_compile_options(${PROJECT_NAME}
         PUBLIC
@@ -468,6 +484,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/PrintQuoteEvents)
     add_subdirectory(samples/cpp/PublishProfiles)
     add_subdirectory(samples/cpp/DxFeedSample)
+    add_subdirectory(samples/cpp/FetchDailyCandles)
     add_subdirectory(samples/cpp/WriteTapeFile)
     add_subdirectory(samples/cpp/ConvertTapeFile)
     add_subdirectory(samples/cpp/DxFeedFileParser)

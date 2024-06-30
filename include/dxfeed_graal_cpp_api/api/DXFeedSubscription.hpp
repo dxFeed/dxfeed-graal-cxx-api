@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include "osub/ObservableSubscription.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -34,79 +35,43 @@ struct LastingEvent;
 /**
  * Subscription for a set of symbols and event types.
  */
-class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
+class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscription>, public ObservableSubscription {
+  public:
+    static constexpr std::size_t FAKE_CHANGE_LISTENER_ID{static_cast<std::size_t>(-1)};
+
+    ///
+    using OnEventHandler = SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)>;
+
+  private:
     friend struct DXFeed;
+
+    inline static std::atomic<std::size_t> lastChangeListenerId_{};
+
+    struct Impl;
+
+    std::unique_ptr<Impl> impl_;
 
     std::unordered_set<EventTypeEnum> eventTypes_;
     JavaObjectHandle<DXFeedSubscription> handle_;
 
-    std::mutex listenerMutex_{};
+    std::mutex eventListenerMutex_{};
     JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
-    SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
-
-    explicit DXFeedSubscription(const EventTypeEnum &eventType);
+    OnEventHandler onEvent_{};
+    std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners_;
+    std::recursive_mutex changeListenersMutex_{};
 
     static JavaObjectHandle<DXFeedSubscription>
     createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
     void setEventListenerHandle(Id<DXFeedSubscription> id);
 
-    bool tryToSetEventListenerHandle() noexcept;
+    bool tryToSetEventListenerHandle();
 
-    template <typename EventTypeIt>
-#if __cpp_concepts
-        requires requires(EventTypeIt iter) {
-            { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
-        }
-#endif
-    DXFeedSubscription(EventTypeIt begin, EventTypeIt end)
-        : eventTypes_(begin, end), handle_{}, eventListenerHandle_{}, onEvent_{} {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
+    void addSymbolsImpl(void *graalSymbolList) const;
 
-        auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
+    void removeSymbolsImpl(void *graalSymbolList) const;
 
-        handle_ = createSubscriptionHandleFromEventClassList(list);
-    }
-
-    DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes)
-        : DXFeedSubscription(eventTypes.begin(), eventTypes.end()) {
-    }
-
-    template <typename EventTypesCollection>
-    explicit DXFeedSubscription(EventTypesCollection &&eventTypes)
-#if __cpp_concepts
-        requires requires {
-            {
-                DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
-                                   std::end(std::forward<EventTypesCollection>(eventTypes)))
-            };
-        }
-#endif
-        : DXFeedSubscription(std::begin(std::forward<EventTypesCollection>(eventTypes)),
-                             std::end(std::forward<EventTypesCollection>(eventTypes))) {
-    }
-
-    void closeImpl() const noexcept;
-
-    void clearImpl() const noexcept;
-
-    bool isClosedImpl() const noexcept;
-
-    void addSymbolImpl(void *graalSymbol) const noexcept;
-
-    void addSymbolsImpl(void *graalSymbolList) const noexcept;
-
-    void removeSymbolImpl(void *graalSymbol) const noexcept;
-
-    void removeSymbolsImpl(void *graalSymbolList) const noexcept;
-
-    void setSymbolsImpl(void *graalSymbolList) const noexcept;
-
-    std::vector<SymbolWrapper> getSymbolsImpl() const;
-
-    std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const;
+    void setSymbolsImpl(void *graalSymbolList) const;
 
   public:
     /// The alias to a type of shared pointer to the DXFeedSubscription object
@@ -115,16 +80,51 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     /// The alias to a type of unique pointer to the DXFeedSubscription object
     using Unique = std::unique_ptr<DXFeedSubscription>;
 
+    DXFeedSubscription(LockExternalConstructionTag);
+
+    DXFeedSubscription(LockExternalConstructionTag, const EventTypeEnum &eventType);
+
+    template <typename EventTypeIt>
+#if __cpp_concepts
+        requires requires(EventTypeIt iter) {
+            { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
+        }
+#endif
+    DXFeedSubscription(LockExternalConstructionTag tag, EventTypeIt begin, EventTypeIt end) : DXFeedSubscription{tag} {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
+        }
+
+        eventTypes_ = std::unordered_set<EventTypeEnum>{begin, end};
+
+        auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
+
+        handle_ = createSubscriptionHandleFromEventClassList(list);
+    }
+
+    DXFeedSubscription(LockExternalConstructionTag tag, std::initializer_list<EventTypeEnum> eventTypes)
+        : DXFeedSubscription(tag, eventTypes.begin(), eventTypes.end()) {
+    }
+
+    template <typename EventTypesCollection>
+    explicit DXFeedSubscription(LockExternalConstructionTag tag, EventTypesCollection &&eventTypes)
+#if __cpp_concepts
+        requires requires {
+            {
+                DXFeedSubscription(tag, std::begin(std::forward<EventTypesCollection>(eventTypes)),
+                                   std::end(std::forward<EventTypesCollection>(eventTypes)))
+            };
+        }
+#endif
+        : DXFeedSubscription(tag, std::begin(std::forward<EventTypesCollection>(eventTypes)),
+                             std::end(std::forward<EventTypesCollection>(eventTypes))) {
+    }
+
     ///
     std::string toString() const noexcept override;
 
-    ~DXFeedSubscription() override {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
-        }
-
-        closeImpl();
-    }
+    ~DXFeedSubscription() override;
 
     /**
      * Creates <i>detached</i> subscription for a single event type.
@@ -136,18 +136,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param eventType the event type.
      */
-    static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeedSubscription::create(eventType = " + eventType.getName() + ")");
-        }
-
-        auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventType));
-        auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
-
-        dxfcpp::ignore_unused(id);
-
-        return sub;
-    }
+    static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType);
 
     /**
      * Creates <i>detached</i> subscription for the given collection of event types.
@@ -178,10 +167,11 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 #endif
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
         }
 
-        auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(begin, end));
+        auto sub = createShared(begin, end);
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
         dxfcpp::ignore_unused(id);
@@ -200,14 +190,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param eventTypes The event type collection.
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
-    static std::shared_ptr<DXFeedSubscription> create(std::initializer_list<EventTypeEnum> eventTypes) {
-        auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventTypes));
-        auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
-
-        dxfcpp::ignore_unused(id);
-
-        return sub;
-    }
+    static std::shared_ptr<DXFeedSubscription> create(std::initializer_list<EventTypeEnum> eventTypes);
 
     /**
      * Creates <i>detached</i> subscription for the given collection of event types.
@@ -229,8 +212,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      */
     template <typename EventTypesCollection>
     static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) {
-        auto sub =
-            std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
+        auto sub = createShared(std::forward<EventTypesCollection>(eventTypes));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
         dxfcpp::ignore_unused(id);
@@ -243,14 +225,14 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param feed The feed to attach to.
      */
-    void attach(std::shared_ptr<DXFeed> feed) noexcept;
+    void attach(std::shared_ptr<DXFeed> feed);
 
     /**
      * Detaches subscription from the specified feed.
      *
      * @param feed The feed to detach from.
      */
-    void detach(std::shared_ptr<DXFeed> feed) noexcept;
+    void detach(std::shared_ptr<DXFeed> feed);
 
     /**
      * Closes this subscription and makes it <i>permanently detached</i>.
@@ -259,13 +241,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * event listeners and subscription change listeners and makes sure that no more listeners
      * can be added.
      */
-    void close() noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::close()");
-        }
-
-        closeImpl();
-    }
+    void close() const;
 
     /**
      * Adds listener for events.
@@ -299,7 +275,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @return The listener id
      */
     template <typename EventListener>
-    std::size_t addEventListener(EventListener &&listener) noexcept
+    std::size_t addEventListener(EventListener &&listener)
 #if __cpp_concepts
         requires requires {
             { listener(std::vector<std::shared_ptr<EventType>>{}) } -> std::same_as<void>;
@@ -307,7 +283,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 #endif
     {
         if (!tryToSetEventListenerHandle()) {
-            return SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)>::FAKE_ID;
+            return OnEventHandler::FAKE_ID;
         }
 
         return onEvent_ += listener;
@@ -354,7 +330,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @return The listener id
      */
     template <typename EventT>
-    std::size_t addEventListener(std::function<void(const std::vector<std::shared_ptr<EventT>> &)> &&listener) noexcept
+    std::size_t addEventListener(std::function<void(const std::vector<std::shared_ptr<EventT>> &)> &&listener)
 #if __cpp_concepts
         requires std::is_base_of_v<EventType, EventT> &&
                  (requires {
@@ -394,9 +370,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param listenerId The listener id
      */
-    void removeEventListener(std::size_t listenerId) noexcept {
-        onEvent_ -= listenerId;
-    }
+    void removeEventListener(std::size_t listenerId);
 
     /**
      * Returns a reference to an incoming events' handler (delegate), to which listeners can be added and removed.
@@ -421,11 +395,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return The incoming events' handler (delegate)
      */
-    auto &onEvent() noexcept {
-        tryToSetEventListenerHandle();
-
-        return onEvent_;
-    }
+    OnEventHandler &onEvent();
 
     /**
      * Adds the specified symbol to the set of subscribed symbols.
@@ -443,15 +413,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param symbolWrapper The symbol.
      */
-    void addSymbols(const SymbolWrapper &symbolWrapper) const noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::addSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
-        }
-
-        auto graal = symbolWrapper.toGraalUnique();
-
-        addSymbolImpl(graal.get());
-    }
+    void addSymbols(const SymbolWrapper &symbolWrapper) const;
 
     /**
      * Removes the specified symbol from the set of subscribed symbols.
@@ -467,15 +429,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param symbolWrapper The symbol.
      */
-    void removeSymbols(const SymbolWrapper &symbolWrapper) const noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::removeSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
-        }
-
-        auto graal = symbolWrapper.toGraalUnique();
-
-        removeSymbolImpl(graal.get());
-    }
+    void removeSymbols(const SymbolWrapper &symbolWrapper) const;
 
     /**
      * Adds the specified collection (using iterators) of symbols to the set of subscribed symbols.
@@ -493,6 +447,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      */
     template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
@@ -517,7 +472,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param collection The symbols collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void addSymbols(const SymbolsCollection &collection) const noexcept {
+    void addSymbols(const SymbolsCollection &collection) const {
         addSymbols(std::begin(collection), std::end(collection));
     }
 
@@ -531,9 +486,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param collection The symbols collection
      */
-    void addSymbols(std::initializer_list<SymbolWrapper> collection) const noexcept {
-        addSymbols(collection.begin(), collection.end());
-    }
+    void addSymbols(std::initializer_list<SymbolWrapper> collection) const;
 
     /**
      * Removes the specified collection (using iterators) of symbols from the set of subscribed symbols.
@@ -551,6 +504,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      */
     template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
@@ -575,7 +529,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param collection The symbols collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void removeSymbols(SymbolsCollection &&collection) const noexcept {
+    void removeSymbols(SymbolsCollection &&collection) const {
         removeSymbols(std::begin(collection), std::end(collection));
     }
 
@@ -589,9 +543,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param collection The symbols collection
      */
-    void removeSymbols(std::initializer_list<SymbolWrapper> collection) const noexcept {
-        removeSymbols(collection.begin(), collection.end());
-    }
+    void removeSymbols(std::initializer_list<SymbolWrapper> collection) const;
 
     /**
      * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using
@@ -610,6 +562,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      */
     template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
 
@@ -634,7 +587,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param collection The symbols collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void setSymbols(SymbolsCollection &&collection) const noexcept {
+    void setSymbols(SymbolsCollection &&collection) const {
         setSymbols(std::begin(collection), std::end(collection));
     }
 
@@ -649,20 +602,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param collection The symbols collection
      */
-    void setSymbols(std::initializer_list<SymbolWrapper> collection) const noexcept {
-        setSymbols(collection.begin(), collection.end());
-    }
+    void setSymbols(std::initializer_list<SymbolWrapper> collection) const;
 
     /**
      * Clears the set of subscribed symbols.
      */
-    void clear() const noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::clear()");
-        }
-
-        clearImpl();
-    }
+    void clear() const;
 
     /**
      * Returns `true` if this subscription is closed.
@@ -671,22 +616,14 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @see DXFeedSubscription::close()
      */
-    bool isClosed() const noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::isClosed()");
-        }
-
-        return isClosedImpl();
-    }
+    bool isClosed() override;
 
     /**
      * Returns a set of subscribed event types.
      *
      * @return A set of subscribed event types.
      */
-    const std::unordered_set<EventTypeEnum> &getEventTypes() const noexcept {
-        return eventTypes_;
-    }
+    std::unordered_set<EventTypeEnum> getEventTypes() override;
 
     /**
      * Returns `true` if this subscription contains the corresponding event type.
@@ -696,9 +633,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @see DXFeedSubscription::getEventTypes()
      */
-    bool containsEventType(const EventTypeEnum &eventType) const noexcept {
-        return eventTypes_.contains(eventType);
-    }
+    bool containsEventType(const EventTypeEnum &eventType) override;
 
     /**
      * Returns a set of subscribed symbols (depending on the actual implementation of subscription).
@@ -708,13 +643,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return A set of subscribed symbols.
      */
-    std::vector<SymbolWrapper> getSymbols() const noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::getSymbols()");
-        }
-
-        return getSymbolsImpl();
-    }
+    std::vector<SymbolWrapper> getSymbols() const;
 
     /**
      * Returns a set of decorated symbols (depending on the actual implementation of subscription).
@@ -724,27 +653,11 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @return A set of decorated subscribed symbols.
      */
-    std::vector<SymbolWrapper> getDecoratedSymbols() noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug(toString() + "::getDecoratedSymbols()");
-        }
+    std::vector<SymbolWrapper> getDecoratedSymbols() const;
 
-        return getDecoratedSymbolsImpl();
-    }
+    std::size_t addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) override;
 
-    auto getExecutor() noexcept;
-
-    template <typename Executor> void setExecutor(Executor &&executor) noexcept;
-
-    template <typename ChangeListener> std::size_t addChangeListener(ChangeListener &&changeListener) noexcept;
-
-    void removeChangeListener(std::size_t changeListenerId) noexcept;
-
-    auto onSymbolsAdded() noexcept;
-
-    auto onSymbolsRemoved() noexcept;
-
-    auto onSubscriptionClosed() noexcept;
+    void removeChangeListener(std::size_t changeListenerId) override;
 };
 
 DXFCPP_END_NAMESPACE

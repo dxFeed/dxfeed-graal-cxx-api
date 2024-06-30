@@ -52,14 +52,14 @@ DXPublisherObservableSubscription::addChangeListener(std::shared_ptr<ObservableS
     return id;
 }
 
-void DXPublisherObservableSubscription::removeChangeListener(std::size_t id) {
+void DXPublisherObservableSubscription::removeChangeListener(std::size_t changeListenerId) {
     std::lock_guard guard{listenersMutex_};
 
-    if (id == FAKE_LISTENER_ID) {
+    if (changeListenerId == FAKE_LISTENER_ID) {
         return;
     }
 
-    if (auto found = listeners_.find(id); found != listeners_.end()) {
+    if (auto found = listeners_.find(changeListenerId); found != listeners_.end()) {
         auto listener = found->second;
 
         isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(handle_, listener->getHandle());
