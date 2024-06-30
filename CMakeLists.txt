@@ -15,7 +15,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 project(dxFeedGraalCxxApi)
 
-set(DXFCXX_VERSION "v2.0.0-rc3" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v2.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.16" CACHE STRING "")
 set(FMTLIB_VERSION "10.2.1")
