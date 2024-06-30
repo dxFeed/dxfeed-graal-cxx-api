@@ -355,6 +355,8 @@ versions):
   is a simple demonstration of how to get various scheduling information for instruments
 - [x] [OnDemandSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp)
   a sample that demonstrates how to use the dxFeed on-demand history data replay service API
+- [x] [FetchDailyCandles](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/FetchDailyCandles/src/main.cpp)
+  a sample that demonstrates how to fetch last 20 days of candles for a specified symbol and print them.
 
 ## Current State
 

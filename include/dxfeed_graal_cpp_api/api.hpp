@@ -52,14 +52,19 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "exceptions/JavaException.hpp"
 #include "exceptions/GraalException.hpp"
 
+#include "isolated/api/IsolatedDXFeed.hpp"
 #include "isolated/api/IsolatedDXEndpoint.hpp"
+#include "isolated/api/IsolatedDXFeedSubscription.hpp"
 #include "isolated/api/IsolatedDXPublisher.hpp"
 #include "isolated/api/IsolatedDXPublisherObservableSubscription.hpp"
 #include "isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
+#include "isolated/promise/IsolatedPromise.hpp"
 #include "isolated/internal/IsolatedString.hpp"
 #include "isolated/internal/IsolatedTimeFormat.hpp"
 #include "isolated/internal/IsolatedTools.hpp"
 
 #include "ondemand/OnDemandService.hpp"
+
+#include "promise/Promise.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -55,6 +55,47 @@ template <typename T> struct JavaObjectHandle {
     std::unique_ptr<void, decltype(&deleter)> impl_;
 };
 
+template <typename T> struct JavaObjectHandleList {
+#if DXFCPP_DEBUG == 1
+    static auto getDebugName() {
+        return std::string("JavaObjectHandleList<") + typeid(T).name() + ">";
+    }
+#endif
+
+    using Type = T;
+
+    static DXFCPP_EXPORT void deleter(void *handle) noexcept;
+    explicit JavaObjectHandleList(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
+        }
+    }
+
+    JavaObjectHandleList(const JavaObjectHandleList &) = delete;
+    JavaObjectHandleList(JavaObjectHandleList &&) noexcept = default;
+    JavaObjectHandleList &operator=(const JavaObjectHandleList &) = delete;
+    JavaObjectHandleList &operator=(JavaObjectHandleList &&) noexcept = default;
+    virtual ~JavaObjectHandleList() noexcept = default;
+
+    [[nodiscard]] std::string toString() const noexcept {
+        if (impl_)
+            return dxfcpp::toString(impl_.get());
+        else
+            return "nullptr";
+    }
+
+    [[nodiscard]] void *get() const noexcept {
+        return impl_.get();
+    }
+
+    explicit operator bool() const noexcept {
+        return static_cast<bool>(impl_);
+    }
+
+  private:
+    std::unique_ptr<void, decltype(&deleter)> impl_;
+};
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
