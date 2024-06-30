@@ -98,7 +98,7 @@ JavaException::JavaException(const std::string &message, const std::string &clas
 
 JavaException JavaException::create(void *exceptionHandle) {
     if (exceptionHandle == nullptr) {
-        return {"", "", ""};
+        return {"null", "", ""};
     }
 
     auto *exception = dxfcpp::bit_cast<dxfg_exception_t *>(exceptionHandle);

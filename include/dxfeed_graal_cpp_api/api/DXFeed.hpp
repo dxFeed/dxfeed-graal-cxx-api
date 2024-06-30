@@ -125,6 +125,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     JavaObjectHandle<DXFeed> handle_;
     static std::shared_ptr<DXFeed> create(void *feedHandle);
 
+    void *getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, std::int64_t fromTime,
+                                   std::int64_t toTime) const;
+
   protected:
     DXFeed() noexcept : handle_{} {
         if constexpr (Debugger::isDebug) {
@@ -295,9 +298,21 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         return sub;
     }
 
-    Promise<std::vector<std::shared_ptr<TimeSeriesEvent>>> getTimeSeriesPromise(const EventTypeEnum &eventType,
-                                                                   const SymbolWrapper &symbol, std::int64_t fromTime,
-                                                                   std::int64_t toTime);
+    /**
+     * Requests time series of events for the specified event type, symbol, and a range of time.
+     * @tparam E The type of event.
+     * @param symbol The symbol.
+     * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
+     * @param toTime The time, inclusive, to request events to (see TimeSeriesEvent::getTime()).
+     *               Use `std::numeric_limits<std::int64_t>::max()` or `LLONG_MAX` macro to retrieve events without an
+     * upper limit on time.
+     * @return The promise for the result of the request.
+     */
+    template <Derived<TimeSeriesEvent> E>
+    Promise<std::vector<std::shared_ptr<E>>> getTimeSeriesPromise(const SymbolWrapper &symbol, std::int64_t fromTime,
+                                                                  std::int64_t toTime) const {
+        return Promise<std::vector<std::shared_ptr<E>>>(getTimeSeriesPromiseImpl(E::TYPE, symbol, fromTime, toTime));
+    }
 
     std::string toString() const noexcept override;
 };

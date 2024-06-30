@@ -121,14 +121,9 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     return feed;
 }
 
-Promise<std::vector<std::shared_ptr<TimeSeriesEvent>>> DXFeed::getTimeSeriesPromise(const EventTypeEnum &eventType,
-                                                                                    const SymbolWrapper &symbol,
-                                                                                    std::int64_t fromTime,
-                                                                                    std::int64_t toTime) {
-
-    // TODO: impelement
-
-    return {};
+void *DXFeed::getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
+                                       std::int64_t fromTime, std::int64_t toTime) const {
+    return isolated::api::IsolatedDXFeed::getTimeSeriesPromise(handle_, eventType, symbol, fromTime, toTime);
 }
 
 std::string DXFeed::toString() const noexcept {

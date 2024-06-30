@@ -8,13 +8,13 @@
 
 void fetchAndPrint(const dxfcpp::CandleSymbol &candleSymbol, std::int64_t toTime, std::int64_t fromTime) {
     // Use default DXFeed instance for that data feed address is defined by dxfeed.properties file
-    // auto result = dxfcpp::DXFeed::getInstance()
-    //                   ->getTimeSeriesPromise<dxfcpp::Candle>(candleSymbol, fromTime, toTime)
-    //                   ->await(std::chrono::seconds(5));
-    //
-    // for (auto candle : result) {
-    //     std::cout << candle->toString();
-    // }
+    auto result = dxfcpp::DXFeed::getInstance()
+                      ->getTimeSeriesPromise<dxfcpp::Candle>(candleSymbol, fromTime, toTime)
+                      .await(std::chrono::seconds(5));
+
+    for (const auto &candle : result) {
+        std::cout << candle->toString() << "\n";
+    }
 }
 
 // Fetches last 20 days of candles for a specified symbol, prints them, and exits.

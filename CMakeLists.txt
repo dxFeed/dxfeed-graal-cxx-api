@@ -230,6 +230,10 @@ set(dxFeedGraalCxxApi_OnDemand_Sources
         src/ondemand/OnDemandService.cpp
 )
 
+set(dxFeedGraalCxxApi_Promise_Sources
+        src/promise/Promise.cpp
+)
+
 set(dxFeedGraalCxxApi_Symbols_Sources
         src/symbols/StringSymbol.cpp
         src/symbols/SymbolWrapper.cpp
@@ -317,6 +321,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
+        ${dxFeedGraalCxxApi_Promise_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}
         ${dxFeedGraalCxxApi_System_Sources}
         ${dxFeedGraalCxxApi_Event_Sources}
