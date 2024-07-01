@@ -200,6 +200,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/promise/IsolatedPromise.cpp
         src/isolated/internal/IsolatedString.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
+        src/isolated/internal/IsolatedTools.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources

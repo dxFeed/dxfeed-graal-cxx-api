@@ -13,12 +13,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-namespace isolated::internal {
-//    namespace IsolatedTools {
-//    std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(std::string_view symbolList);
-//
-//    void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string>& args);
-//    }
+namespace isolated::internal::IsolatedTools {
+
+std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(std::string_view symbolList);
+
+void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string>& args);
+
 }
 
 
