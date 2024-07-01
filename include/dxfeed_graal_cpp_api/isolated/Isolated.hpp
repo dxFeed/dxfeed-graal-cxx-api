@@ -146,6 +146,7 @@ struct Day {
     static std::int64_t getEndTime(/* dxfg_day_t* */ void *day) noexcept;
     static bool containsTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
     static std::int64_t getResetTime(/* dxfg_day_t* */ void *day) noexcept;
+    static /* dxfg_session_list* */ void* getSessions(/* dxfg_day_t* */ void *day);
     static /* dxfg_session_t* */ void *getSessionByTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
     static /* dxfg_session_t* */ void *getFirstSession(/* dxfg_day_t* */ void *day,
                                                        /* dxfg_session_filter_t* */ void *filter) noexcept;

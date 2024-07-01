@@ -957,6 +957,19 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
         0, static_cast<dxfg_day_t *>(day));
 }
 
+/* dxfg_session_list* */ void *Day::getSessions(/* dxfg_day_t* */ void *day) {
+    if (!day) {
+        // TODO: Improve error handling
+        return nullptr;
+    }
+
+    return static_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getSessions(static_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day)));
+}
+
 /* dxfg_session_t* */ void *Day::getSessionByTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept {
     if (!day) {
         // TODO: Improve error handling

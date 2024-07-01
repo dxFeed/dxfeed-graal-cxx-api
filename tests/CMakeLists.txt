@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
 set(CXX_EXTENSIONS OFF)
 
-set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-2.4.11)
+set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-${DOCTEST_VERSION} ../third_party/range-v3-${RANGE_VERSION}/include)
 
 set(DXFC_TEST_SOURCES
         exceptions/ExceptionsTest.cpp
@@ -28,6 +28,7 @@ set(DXFC_TEST_SOURCES
         api/EventsTest.cpp
         api/MarketEventSymbolsTest.cpp
         api/OrderSourceTest.cpp
+        schedule/ScheduleTest.cpp
         system/SystemTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 

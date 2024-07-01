@@ -21,15 +21,15 @@
 
 namespace dxfcpp::tools {
 
-decltype(ranges::views::filter([](const auto &s) {
+inline decltype(ranges::views::filter([](const auto &s) {
     return !s.empty();
 })) filterNonEmpty{};
 
-decltype(ranges::views::transform([](auto &&s) {
+inline decltype(ranges::views::transform([](auto &&s) {
     return s | ranges::to<std::string>();
 })) transformToString{};
 
-decltype(ranges::views::transform([](const std::string &s) {
+inline decltype(ranges::views::transform([](const std::string &s) {
     return trimStr(s);
 })) trim{};
 

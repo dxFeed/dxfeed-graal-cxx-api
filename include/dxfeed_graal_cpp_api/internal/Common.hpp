@@ -184,7 +184,16 @@ static constexpr std::int32_t getNanoPartFromNanos(std::int64_t timeNanos) {
 
 namespace time_util {
 /// Number of milliseconds in a second.
-static const std::int64_t SECOND = 1000LL;
+static constexpr std::int64_t SECOND = 1000LL;
+
+/// Number of milliseconds in a minute.
+static constexpr std::int64_t MINUTE = 60LL * SECOND;
+
+/// Number of milliseconds in an hour.
+static constexpr std::int64_t HOUR = 60LL * MINUTE;
+
+/// Number of milliseconds in an day.
+static constexpr std::int64_t DAY = 24LL * HOUR;
 
 /**
  * Returns correct number of milliseconds with proper handling negative values.
