@@ -61,7 +61,7 @@ std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::Time
             "Unable to execute function `dxfg_TimeFormat_format`. The `timeFormat` handle is invalid");
     }
 
-    auto format = runGraalFunctionAndThrowIfMinusOne(dxfg_TimeFormat_format,
+    auto format = runGraalFunctionAndThrowIfNullptr(dxfg_TimeFormat_format,
                                                      static_cast<dxfg_time_format_t *>(timeFormat.get()), value);
     auto result = dxfcpp::toString(format);
 
