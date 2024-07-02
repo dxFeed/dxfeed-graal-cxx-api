@@ -3,7 +3,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventFlag EventFlag::TX_PENDING{0x01u, "TX_PENDING"};
 const EventFlag EventFlag::REMOVE_EVENT{0x02u, "REMOVE_EVENT"};
@@ -14,4 +14,4 @@ const EventFlag EventFlag::SNAPSHOT_SNIP{0x10u, "SNAPSHOT_SNIP"};
 const EventFlag EventFlag::SNAPSHOT_MODE{0x40u, "SNAPSHOT_MODE"};
 const EventFlag EventFlag::REMOVE_SYMBOL{0x80u, "REMOVE_SYMBOL"};
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

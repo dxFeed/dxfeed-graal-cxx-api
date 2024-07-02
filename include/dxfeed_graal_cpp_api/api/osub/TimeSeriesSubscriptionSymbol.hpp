@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../symbols/SymbolWrapper.hpp"
 #include "../FilteredSubscriptionSymbol.hpp"
 
@@ -12,7 +14,7 @@
 #include <memory>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct SymbolWrapper;
 class IndexedEventSubscriptionSymbol;
@@ -40,7 +42,7 @@ class IndexedEventSubscriptionSymbol;
  */
 class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubscriptionSymbol,
                                                          public FilteredSubscriptionSymbol {
-    std::int64_t fromTime_;
+    std::int64_t fromTime_{};
 
   public:
     /**
@@ -48,14 +50,19 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
      * @param fromTime the subscription time.
      */
-    TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, std::int64_t fromTime) noexcept;
+    TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, std::int64_t fromTime);
 
-    TimeSeriesSubscriptionSymbol(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept;
+    TimeSeriesSubscriptionSymbol(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol);
+
     TimeSeriesSubscriptionSymbol(TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept;
-    TimeSeriesSubscriptionSymbol &operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept;
+
+    TimeSeriesSubscriptionSymbol &operator=(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol);
+
     TimeSeriesSubscriptionSymbol &operator=(TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept;
+
     TimeSeriesSubscriptionSymbol() noexcept = default;
-    virtual ~TimeSeriesSubscriptionSymbol() noexcept = default;
+
+    ~TimeSeriesSubscriptionSymbol() noexcept override = default;
 
     /**
      * Returns the subscription time.
@@ -71,16 +78,24 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const noexcept override;
+    void *toGraal() const override;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
-    static TimeSeriesSubscriptionSymbol fromGraal(void *graalNative) noexcept;
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure (recursively
+     * if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static TimeSeriesSubscriptionSymbol fromGraal(void *graalNative);
 
     /**
      * Returns string representation of this time-series subscription symbol.
@@ -94,10 +109,12 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
     bool operator<(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::TimeSeriesSubscriptionSymbol> {
     std::size_t operator()(const dxfcpp::TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept {
         return std::hash<std::unique_ptr<dxfcpp::SymbolWrapper>>{}(timeSeriesSubscriptionSymbol.getEventSymbol());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

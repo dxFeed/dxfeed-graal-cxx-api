@@ -6,23 +6,23 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 Schedule::Schedule(void *handle) noexcept : handle_(handle) {
 }
 
-Schedule::Ptr Schedule::create(void *handle) noexcept {
+Schedule::Ptr Schedule::create(void *handle) {
     if (!handle) {
-        return {};
+        throw std::invalid_argument(
+            "Unable to create a Schedule object. The handle is nullptr");
     }
 
-    return std::shared_ptr<Schedule>(new (std::nothrow) Schedule(handle));
+    return std::shared_ptr<Schedule>(new Schedule(handle));
 }
 
-Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) noexcept {
+Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        // TODO: error handling [EN-8232]
-        return {};
+        throw std::invalid_argument("The profile is nullptr");
     }
 
     auto graalProfile = profile->toGraal();
@@ -32,14 +32,13 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) 
     return schedule;
 }
 
-Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) noexcept {
+Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) {
     return create(isolated::schedule::Schedule::getInstance(scheduleDefinition));
 }
 
-Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) noexcept {
+Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) {
     if (!profile) {
-        // TODO: error handling [EN-8232]
-        return {};
+        throw std::invalid_argument("The profile is nullptr");
     }
 
     auto graalProfile = profile->toGraal();
@@ -49,10 +48,9 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, 
     return schedule;
 }
 
-std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) noexcept {
+std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        // TODO: error handling [EN-8232]
-        return {};
+        throw std::invalid_argument("The profile is nullptr");
     }
 
     auto graalProfile = profile->toGraal();
@@ -144,4 +142,4 @@ std::string Schedule::getTimeZoneId() const noexcept {
     return isolated::schedule::Schedule::getTimeZoneId(handle_.get());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -7,7 +7,7 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 DayFilter::DayFilter(DayFilterEnum code, std::string name, std::uint32_t dayOfWeekMask, Tristate holiday,
                      Tristate shortDay, Tristate trading) noexcept
@@ -72,4 +72,4 @@ const DayFilter DayFilter::WEEK_DAY(DayFilterEnum::WEEK_DAY, "WEEK_DAY", 0x3EU, 
 const DayFilter DayFilter::WEEK_END(DayFilterEnum::WEEK_END, "WEEK_END", 0xC0, Tristate::NONE, Tristate::NONE,
                                     Tristate::NONE);
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

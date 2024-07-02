@@ -2,6 +2,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 #include <mutex>
 #include <string>
@@ -12,7 +14,7 @@
 #    undef NO_ERROR
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 // TODO: serialization [EN-8232]
 struct DXFCPP_EXPORT Error {
@@ -39,7 +41,7 @@ struct DXFCPP_EXPORT Error {
     }
 };
 
-// TODO: implement retrieving, grouping methods [EN-8232]
+// TODO: implement retrieving, grouping methods
 class DXFCPP_EXPORT ErrorHandlingManager {
     static constexpr std::size_t DEFAULT_ERROR_COLLECTION_CAPACITY{1024ULL};
     static inline const Error NO_ERROR{Error::UNKNOWN_ID, 0, "", "NO ERROR"};
@@ -82,4 +84,6 @@ class DXFCPP_EXPORT ErrorHandlingManager {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

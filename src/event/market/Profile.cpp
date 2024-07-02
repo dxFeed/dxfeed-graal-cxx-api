@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Profile::TYPE = EventTypeEnum::PROFILE;
 
@@ -58,6 +58,7 @@ void Profile::fillGraalData(void *graalNative) const noexcept {
 
     auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
 
+    graalProfile->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_PROFILE;
     graalProfile->description = createCString(data_.description);
     graalProfile->status_reason = createCString(data_.statusReason);
     graalProfile->halt_start_time = data_.haltStartTime;
@@ -89,69 +90,63 @@ void Profile::freeGraalData(void *graalNative) noexcept {
     delete[] graalProfile->status_reason;
 }
 
-std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Profile. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_PROFILE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Profile. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_PROFILE))));
     }
 
-    try {
-        auto profile = std::make_shared<Profile>();
+    auto profile = std::make_shared<Profile>();
 
-        profile->fillData(graalNative);
+    profile->fillData(graalNative);
 
-        return profile;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return profile;
 }
 
 std::string Profile::toString() const noexcept {
-    return fmt::format("Profile{{{}, eventTime={}, description='{}', SSR={}, status={}, statusReason='{}', "
-                       "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
-                       "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
-                       "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
-                       MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-                       getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(),
-                       getStatusReason(), TimeFormat::DEFAULT.format(getHaltStartTime()),
-                       TimeFormat::DEFAULT.format(getHaltEndTime()), dxfcpp::toString(getHighLimitPrice()),
-                       dxfcpp::toString(getLowLimitPrice()), dxfcpp::toString(getHigh52WeekPrice()),
-                       dxfcpp::toString(getLow52WeekPrice()), dxfcpp::toString(getBeta()),
-                       dxfcpp::toString(getEarningsPerShare()), dxfcpp::toString(getDividendFrequency()),
-                       dxfcpp::toString(getExDividendAmount()), day_util::getYearMonthDayByDayId(getExDividendDayId()),
-                       dxfcpp::toString(getShares()), dxfcpp::toString(getFreeFloat()));
+    return fmt::format(
+        "Profile{{{}, eventTime={}, description='{}', SSR={}, status={}, statusReason='{}', "
+        "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "
+        "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
+        "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(), getStatusReason(),
+        TimeFormat::DEFAULT.format(getHaltStartTime()), TimeFormat::DEFAULT.format(getHaltEndTime()),
+        dxfcpp::toString(getHighLimitPrice()), dxfcpp::toString(getLowLimitPrice()),
+        dxfcpp::toString(getHigh52WeekPrice()), dxfcpp::toString(getLow52WeekPrice()), dxfcpp::toString(getBeta()),
+        dxfcpp::toString(getEarningsPerShare()), dxfcpp::toString(getDividendFrequency()),
+        dxfcpp::toString(getExDividendAmount()), day_util::getYearMonthDayByDayId(getExDividendDayId()),
+        dxfcpp::toString(getShares()), dxfcpp::toString(getFreeFloat()));
 }
 
-void *Profile::toGraal() const noexcept {
+void *Profile::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalProfile = new (std::nothrow)
-        dxfg_profile_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_PROFILE}}};
-
-    if (!graalProfile) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalProfile = new dxfg_profile_t{};
 
     fillGraalData(static_cast<void *>(graalProfile));
 
     return static_cast<void *>(graalProfile);
 }
 
-void Profile::freeGraal(void *graalNative) noexcept {
+void Profile::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_PROFILE) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Profile's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_PROFILE))));
     }
 
     auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
@@ -161,4 +156,4 @@ void Profile::freeGraal(void *graalNative) noexcept {
     delete graalProfile;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

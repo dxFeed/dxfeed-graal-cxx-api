@@ -9,29 +9,37 @@ using namespace std::literals;
 
 /// Write events to a tape file.
 int main() {
-    // Create an appropriate endpoint.
-    auto endpoint = DXEndpoint::newBuilder()
-                        // Is required for tape connector to be able to receive everything.
-                        ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-                        ->withRole(dxfcpp::DXEndpoint::Role::PUBLISHER)
-                        ->build();
+    try {
+        // Create an appropriate endpoint.
+        auto endpoint = DXEndpoint::newBuilder()
+                            // Is required for tape connector to be able to receive everything.
+                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
+                            ->withRole(dxfcpp::DXEndpoint::Role::PUBLISHER)
+                            ->build();
 
-    // Connect to the address, remove [format=text] or change on [format=binary] for binary format
-    endpoint->connect("tape:WriteTapeFile.out.txt[format=text]");
+        // Connect to the address, remove [format=text] or change on [format=binary] for binary format
+        endpoint->connect("tape:WriteTapeFile.out.txt[format=text]");
 
-    // Get publisher.
-    auto pub = endpoint->getPublisher();
+        // Get publisher.
+        auto pub = endpoint->getPublisher();
 
-    // Creates new Quote market events.
-    auto quote1 = std::make_shared<Quote>("TEST1")->withBidPriceShared(10.1)->withAskPriceShared(10.2);
-    auto quote2 = std::make_shared<Quote>("TEST2")->withBidPriceShared(17.1)->withAskPriceShared(17.2);
+        // Creates new Quote market events.
+        auto quote1 = std::make_shared<Quote>("TEST1")->withBidPrice(10.1).withAskPrice(10.2).sharedAs<Quote>();
+        auto quote2 = std::make_shared<Quote>("TEST2")->withBidPrice(17.1).withAskPrice(17.2).sharedAs<Quote>();
 
-    // Publish events.
-    pub->publishEvents({quote1, quote2});
+        // Publish events.
+        pub->publishEvents({quote1, quote2});
 
-    // Wait until all data is written, close, and wait until it closes.
-    endpoint->awaitProcessed();
-    endpoint->closeAndAwaitTermination();
+        // Wait until all data is written, close, and wait until it closes.
+        endpoint->awaitProcessed();
+        endpoint->closeAndAwaitTermination();
+    } catch (const JavaException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    } catch (const GraalException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    }
 
     return 0;
 }

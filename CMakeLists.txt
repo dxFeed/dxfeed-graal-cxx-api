@@ -15,7 +15,14 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 project(dxFeedGraalCxxApi)
 
-set(DXFCXX_VERSION "v1.3.0" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v2.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
+
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.16" CACHE STRING "")
+set(FMTLIB_VERSION "10.2.1")
+set(BOOST_VERSION "1.84.0")
+set(UTFCPP_VERSION "3.2.3")
+set(DATE_VERSION "3.0.1")
+set(RANGE_VERSION "0.12")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -36,19 +43,23 @@ endif ()
 option(DXFCXX_BUILD_UNIT_TESTS "Build tests" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_BUILD_SAMPLES "Build samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_BUILD_TOOLS "Build tools" ${DXFCXX_IS_ROOT_PROJECT})
+option(DXFCXX_BUILD_DOC "Build documentation" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL "Prepare install" ON)
 option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.6" CACHE STRING "")
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
 option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
+option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" ON)
+
 include(FetchContent)
+
+set(FETCHCONTENT_QUIET FALSE)
 
 set(DXFCXX_GRAAL_TARGET_PLATFORM "unknown-unknown" CACHE STRING "")
 set(DXFCXX_TARGET_PLATFORM "unknown-unknown" CACHE STRING "")
@@ -57,10 +68,17 @@ set(DXFCXX_GRAAL_TARGET_OS "unknown" CACHE STRING "")
 set(DXFCXX_TARGET_CPU "unknown" CACHE STRING "")
 set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 
-include(ParseAndDetectPlatforms.cmake)
+include(cmake/ParseAndDetectPlatforms.cmake)
+include(cmake/LinkStacktrace.cmake)
 
 if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
-    FetchContent_Declare(DxFeedGraalNativeSdk URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+    FetchContent_Declare(
+            DxFeedGraalNativeSdk
+            URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            DOWNLOAD_NO_EXTRACT FALSE
+    )
 else ()
     if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
         set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
@@ -72,24 +90,76 @@ else ()
         set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
     endif ()
 
-    FetchContent_Declare(DxFeedGraalNativeSdk URL ${DXFEED_GRAAL_NATIVE_SDK_URL})
+    FetchContent_Declare(
+            DxFeedGraalNativeSdk
+            URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            DOWNLOAD_NO_EXTRACT FALSE
+    )
 endif ()
 
 FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 # DxFeedGraalNativeSdk_SOURCE_DIR
 
-FetchContent_Declare(Process GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default)
+FetchContent_Declare(
+        Process
+        GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default
+        USES_TERMINAL_DOWNLOAD TRUE
+        GIT_PROGRESS TRUE
+        DOWNLOAD_NO_EXTRACT FALSE
+)
+
 FetchContent_MakeAvailable(Process)
 
-FetchContent_Declare(Console GIT_REPOSITORY "https://github.com/ttldtor/Console.git" GIT_TAG default)
+FetchContent_Declare(
+        Console
+        GIT_REPOSITORY "https://github.com/ttldtor/Console.git" GIT_TAG default
+        USES_TERMINAL_DOWNLOAD TRUE
+        GIT_PROGRESS TRUE
+        DOWNLOAD_NO_EXTRACT FALSE
+)
+
 FetchContent_MakeAvailable(Console)
 
-add_subdirectory(third_party/utfcpp-3.2.3)
+add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
+
 set(FMT_INSTALL OFF)
-add_subdirectory(third_party/fmt-10.0.0)
+
+FetchContent_Declare(
+        fmt
+        URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
+        USES_TERMINAL_DOWNLOAD TRUE
+        GIT_PROGRESS TRUE
+        DOWNLOAD_NO_EXTRACT FALSE
+        OVERRIDE_FIND_PACKAGE
+)
+FetchContent_MakeAvailable(fmt)
+
 #set(BUILD_TZ_LIB ON)
 #set(USE_SYSTEM_TZ_DB ON)
-add_subdirectory(third_party/date-3.0.1)
+add_subdirectory(third_party/date-${DATE_VERSION})
+
+set(BOOST_INCLUDE_LIBRARIES stacktrace)
+set(BOOST_ENABLE_CMAKE ON)
+
+FetchContent_Declare(
+        Boost
+        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.7z # downloading a zip release speeds up the download
+        USES_TERMINAL_DOWNLOAD TRUE
+        GIT_PROGRESS TRUE
+        DOWNLOAD_NO_EXTRACT FALSE
+        OVERRIDE_FIND_PACKAGE
+)
+FetchContent_MakeAvailable(Boost)
+
+
+#find_package(
+#        Boost
+#        1.84
+#        REQUIRED
+#        stacktrace
+#)
 
 # find_package(utf8cpp)
 # find_package(fmt)
@@ -114,10 +184,25 @@ set(dxFeedGraalCxxApi_InternalUtilsDebug_Sources
         src/internal/utils/debug/Debug.cpp
 )
 
+set(dxFeedGraalCxxApi_Exceptions_Sources
+        src/exceptions/GraalException.cpp
+        src/exceptions/JavaException.cpp
+)
+
+set(dxFeedGraalCxxApi_Isolated_Sources
+        src/isolated/api/IsolatedDXEndpoint.cpp
+        src/isolated/api/IsolatedDXPublisher.cpp
+        src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
+        src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
+        src/isolated/internal/IsolatedString.cpp
+        src/isolated/internal/IsolatedTimeFormat.cpp
+)
+
 set(dxFeedGraalCxxApi_Api_Sources
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
         src/api/DXFeedSubscription.cpp
+        src/api/DXPublisherObservableSubscription.cpp
         src/api/DXPublisher.cpp
 )
 
@@ -125,6 +210,7 @@ set(dxFeedGraalCxxApi_ApiOsub_Sources
         src/api/osub/WildcardSymbol.cpp
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
+        src/api/osub/ObservableSubscriptionChangeListener.cpp
 )
 
 set(dxFeedGraalCxxApi_Ipf_Sources
@@ -172,6 +258,8 @@ set(dxFeedGraalCxxApi_EventCandle_Sources
 
 set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/AnalyticOrder.cpp
+        src/event/market/OtcMarketsPriceType.cpp
+        src/event/market/OtcMarketsOrder.cpp
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
         src/event/market/MarketEvent.cpp
@@ -203,6 +291,10 @@ set(dxFeedGraalCxxApi_EventOption_Sources
         src/event/option/Series.cpp
 )
 
+set(dxFeedGraalCxxApi_EventMisc_Sources
+        src/event/misc/Message.cpp
+)
+
 set(dxFeedGraalCxxApi_Schedule_Sources
         src/schedule/SessionFilter.cpp
         src/schedule/SessionType.cpp
@@ -216,6 +308,8 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Internal_Sources}
         ${dxFeedGraalCxxApi_InternalUtils_Sources}
         ${dxFeedGraalCxxApi_InternalUtilsDebug_Sources}
+        ${dxFeedGraalCxxApi_Isolated_Sources}
+        ${dxFeedGraalCxxApi_Exceptions_Sources}
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
@@ -226,7 +320,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_EventCandle_Sources}
         ${dxFeedGraalCxxApi_EventMarket_Sources}
         ${dxFeedGraalCxxApi_EventOption_Sources}
-        ${dxFeedGraalCxxApi_EventOption_Sources}
+        ${dxFeedGraalCxxApi_EventMisc_Sources}
         ${dxFeedGraalCxxApi_Schedule_Sources}
 )
 
@@ -261,68 +355,95 @@ add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-0.12/include)
+target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-        DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1)
+        DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
 target_include_directories(${PROJECT_NAME}_static PUBLIC include)
-target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-0.12/include)
+target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
-        FMT_HEADER_ONLY=1)
+        FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
+
+set(DXFCXX_MSVC_COMPILE_OPTIONS "/W2")
+set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS "/PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>")
+set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
+set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
+
+#A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
+set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
 
 target_compile_options(${PROJECT_NAME}
         PUBLIC
-        $<$<COMPILE_LANG_AND_ID:C,CXX,MSVC>:
-        /W2
-        >
-)
-
-target_compile_options(${PROJECT_NAME}_static
-        PUBLIC
-        $<$<COMPILE_LANG_AND_ID:C,CXX,MSVC>:
-        /W2
-        >
-)
-
-target_compile_options(${PROJECT_NAME}
-        PUBLIC
-        $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
-        -fPIC
-        -Wall
-        -Wextra
-        -pedantic
-        >
+        $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
 )
 
 target_link_options(${PROJECT_NAME}
         PUBLIC
-        $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
-        -fPIC
-        >)
+        $<$<AND:$<COMPILE_LANG_AND_ID:CXX,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
+        $<$<AND:$<COMPILE_LANG_AND_ID:C,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+)
+
+if (MINGW)
+    target_link_options(${PROJECT_NAME}
+            PUBLIC
+            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${DXFCXX_MINGW_DEBUG_LINK_OPTIONS}>
+    )
+endif ()
 
 target_compile_options(${PROJECT_NAME}_static
         PUBLIC
-        $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
-        -fPIC
-        -Wall
-        -Wextra
-        -pedantic
-        >
+        $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
 )
 
 target_link_options(${PROJECT_NAME}_static
         PUBLIC
-        $<$<COMPILE_LANG_AND_ID:C,CXX,GNU,Clang,AppleClang,Intel>:
-        -fPIC
-        >)
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+)
+
+if (MINGW)
+    target_link_options(${PROJECT_NAME}_static
+            PUBLIC
+            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${DXFCXX_MINGW_DEBUG_LINK_OPTIONS}>
+    )
+endif ()
 
 if (DXFCXX_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(${PROJECT_NAME} PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
     target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
 endif ()
 
-target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+
+if (TARGET Boost::stacktrace_windbg)
+    message(STATUS "Has Boost::stacktrace_windbg")
+endif ()
+
+if (TARGET Boost::stacktrace_backtrace)
+    message(STATUS "Has Boost::stacktrace_backtrace")
+endif ()
+
+if (TARGET Boost::stacktrace_addr2line)
+    message(STATUS "Has Boost::stacktrace_addr2line")
+endif ()
+
+if (TARGET Boost::stacktrace_basic)
+    message(STATUS "Has Boost::stacktrace_basic")
+endif ()
+
+if (DXFCXX_FEATURE_STACKTRACE)
+    LinkStacktrace(${PROJECT_NAME})
+    LinkStacktrace(${PROJECT_NAME}_static)
+endif ()
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
     target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
@@ -345,6 +466,7 @@ endif ()
 
 if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/PrintQuoteEvents)
+    add_subdirectory(samples/cpp/PublishProfiles)
     add_subdirectory(samples/cpp/DxFeedSample)
     add_subdirectory(samples/cpp/WriteTapeFile)
     add_subdirectory(samples/cpp/ConvertTapeFile)
@@ -355,6 +477,8 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/ScheduleSample)
     add_subdirectory(samples/cpp/OnDemandSample)
 endif ()
+
+add_subdirectory(docs)
 
 if (DXFCXX_BUILD_TOOLS)
     add_subdirectory(tools/Tools)

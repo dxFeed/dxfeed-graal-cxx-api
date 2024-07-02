@@ -5,12 +5,14 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * The enumeration type that provides additional information about the dxFeed Graal C++-API event type.
@@ -53,6 +55,8 @@ class DXFCPP_EXPORT EventTypeEnum {
                                return static_cast<std::size_t>(eventTypeRef.get().getId());
                            })>;
 
+    static const EventTypeEnum INVALID_EVENT_TYPE;
+
     static const EventTypeEnum QUOTE;
     static const EventTypeEnum PROFILE;
     static const EventTypeEnum SUMMARY;
@@ -73,6 +77,7 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     static const EventTypeEnum ORDER;
     static const EventTypeEnum ANALYTIC_ORDER;
+    static const EventTypeEnum OTC_MARKETS_ORDER;
     static const EventTypeEnum SPREAD_ORDER;
     static const EventTypeEnum SERIES;
     static const EventTypeEnum OPTION_SALE;
@@ -82,6 +87,8 @@ class DXFCPP_EXPORT EventTypeEnum {
     static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> ALL_BY_NAME;
 
     static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> ALL_BY_CLASS_NAME;
+
+    static const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> ALL_BY_ID;
 
     EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", "Invalid", false} {
     }
@@ -142,7 +149,7 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     friend bool operator<(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
                           const EventTypeEnum &eventTypeEnum2) noexcept {
-        return eventTypeEnum1.get().id_ == eventTypeEnum2.id_;
+        return eventTypeEnum1.get().id_ < eventTypeEnum2.id_;
     }
 
     /**
@@ -181,7 +188,27 @@ class DXFCPP_EXPORT EventTypeEnum {
     }
 };
 
-} // namespace dxfcpp
+inline namespace literals {
+
+/**
+ * String literal that helps to construct EventTypeEnum from a char array.
+ *
+ * @param eventTypeString The event type name's char array
+ * @param length The char array's length
+ * @return EventTypeEnum built on char array
+ */
+inline EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept {
+    if (auto it = EventTypeEnum::ALL_BY_NAME.find(eventTypeString); it != EventTypeEnum::ALL_BY_NAME.end()) {
+        return it->second;
+    }
+
+    return EventTypeEnum::INVALID_EVENT_TYPE;
+}
+
+} // namespace literals
+
+
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::EventTypeEnum> {
     std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept {
@@ -194,3 +221,5 @@ template <> struct DXFCPP_EXPORT std::hash<std::reference_wrapper<const dxfcpp::
         return static_cast<std::size_t>(eventType.get().getId());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -3,11 +3,13 @@
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "dxfeed_graal_c_api/api.h"
-#include "dxfeed_graal_cpp_api/api.hpp"
+#include <string>
 #include <thread>
 #include <unordered_map>
 #include <vector>
+
+#include <dxfeed_graal_c_api/api.h>
+#include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <doctest.h>
 
@@ -107,4 +109,9 @@ TEST_CASE("System properties can be set, as well as get their values. Multi-thre
     REQUIRE(ok == true);
 
     CHECK(dxfcpp::System::getProperty("PropertyName") == "123");
+}
+
+TEST_CASE("Invalid UTF8" * doctest::may_fail()) {
+    dxfcpp::System::setProperty("\xe2\x28\xa1", "\xe2\x28\xa1");
+    REQUIRE(dxfcpp::System::getProperty("\xe2\x28\xa1") == "\xe2\x28\xa1");
 }

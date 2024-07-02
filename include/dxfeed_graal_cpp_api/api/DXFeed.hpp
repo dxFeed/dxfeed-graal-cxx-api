@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
@@ -17,7 +19,7 @@
 #include <mutex>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
 class EventTypeEnum;
@@ -120,10 +122,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
   private:
     JavaObjectHandle<DXFeed> handle_;
-
-    std::unordered_set<std::shared_ptr<DXFeedSubscription>> subscriptions_{};
-
-    static std::shared_ptr<DXFeed> create(void *feedHandle) noexcept;
+    static std::shared_ptr<DXFeed> create(void *feedHandle);
 
   protected:
     DXFeed() noexcept : handle_{} {
@@ -298,4 +297,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

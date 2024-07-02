@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../internal/Common.hpp"
 #include "../../internal/Id.hpp"
 #include "../../internal/JavaObjectHandle.hpp"
@@ -15,7 +17,7 @@
 
 #include <unordered_map>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 class InstrumentProfileConnection;
 
@@ -74,7 +76,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * @return The new InstrumentProfileCollector
      */
-    static Ptr create() noexcept;
+    static Ptr create();
 
     /**
      * Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
@@ -103,7 +105,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * @param ip The instrument profile.
      */
-    void updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const noexcept;
+    void updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const;
 
     /**
      * Convenience method to update one instrument profile in this collector. This is a shortcut for:
@@ -113,7 +115,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * @param ip The instrument profile.
      */
-    void updateInstrumentProfile(const InstrumentProfile &ip) const noexcept;
+    void updateInstrumentProfile(const InstrumentProfile &ip) const;
 
     /**
      * Returns a concurrent view of the set of instrument profiles.
@@ -204,4 +206,6 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

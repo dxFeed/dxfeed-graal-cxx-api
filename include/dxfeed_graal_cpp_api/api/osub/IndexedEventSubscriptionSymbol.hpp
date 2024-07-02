@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../event/IndexedEventSource.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
 
@@ -12,7 +14,7 @@
 #include <memory>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 class IndexedEventSource;
 struct SymbolWrapper;
@@ -48,14 +50,14 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    virtual void *toGraal() const noexcept;
+    virtual void *toGraal() const;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
     /**
      * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure (recursively
@@ -63,8 +65,9 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
+     * @throws std::invalid_argument
      */
-    static IndexedEventSubscriptionSymbol fromGraal(void *graalNative) noexcept;
+    static IndexedEventSubscriptionSymbol fromGraal(void *graalNative);
 
   public:
     /**
@@ -73,12 +76,15 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
      * @param source the source.
      */
-    IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol, const IndexedEventSource &source) noexcept;
+    IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol, const IndexedEventSource &source);
 
-    IndexedEventSubscriptionSymbol(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept;
+    IndexedEventSubscriptionSymbol(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
+
     IndexedEventSubscriptionSymbol(IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept;
+
     IndexedEventSubscriptionSymbol &
-    operator=(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept;
+    operator=(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
+
     IndexedEventSubscriptionSymbol &operator=(IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept;
     IndexedEventSubscriptionSymbol() noexcept = default;
     virtual ~IndexedEventSubscriptionSymbol() noexcept = default;
@@ -109,7 +115,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     bool operator<(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::IndexedEventSubscriptionSymbol> {
     std::size_t
@@ -118,3 +124,5 @@ template <> struct DXFCPP_EXPORT std::hash<dxfcpp::IndexedEventSubscriptionSymbo
                std::hash<dxfcpp::IndexedEventSource>{}(indexedEventSubscriptionSymbol.getSource()) * 31;
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

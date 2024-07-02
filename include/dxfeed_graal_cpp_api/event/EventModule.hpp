@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "EventFlag.hpp"
 #include "EventMapper.hpp"
 #include "EventType.hpp"
@@ -17,3 +19,5 @@
 #include "market/MarketModule.hpp"
 #include "misc/MiscModule.hpp"
 #include "option/OptionModule.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -55,22 +55,31 @@ int main(int argc, char *argv[]) {
     using namespace dxfcpp;
     using namespace std::string_literals;
 
-    if (argc < 2) {
-        std::cout << R"(
+    try {
+
+        if (argc < 2) {
+            std::cout << R"(
 Usage:
 DxFeedSample <symbol>
 
 Where:
     symbol - Is security symbol (e.g. IBM, AAPL, SPX etc.)
 )";
-        return 0;
+            return 0;
+        }
+
+        // Specified instrument name, for example AAPL, IBM, MSFT, etc.
+        auto symbol = argv[1];
+
+        testQuoteListener(symbol);
+        testQuoteAndTradeListener(symbol);
+
+        std::cin.get();
+    } catch (const JavaException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    } catch (const GraalException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
     }
-
-    // Specified instrument name, for example AAPL, IBM, MSFT, etc.
-    auto symbol = argv[1];
-
-    testQuoteListener(symbol);
-    testQuoteAndTradeListener(symbol);
-
-    std::cin.get();
 }

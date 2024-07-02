@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &OptionSale::TYPE = EventTypeEnum::OPTION_SALE;
 
@@ -57,6 +57,7 @@ void OptionSale::fillGraalData(void *graalNative) const noexcept {
 
     auto graalOptionSale = static_cast<dxfg_option_sale_t *>(graalNative);
 
+    graalOptionSale->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE;
     graalOptionSale->event_flags = data_.eventFlags;
     graalOptionSale->index = data_.index;
     graalOptionSale->time_sequence = data_.timeSequence;
@@ -87,25 +88,23 @@ void OptionSale::freeGraalData(void *graalNative) noexcept {
     delete[] graalOptionSale->option_symbol;
 }
 
-std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create OptionSale. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Order. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE))));
     }
 
-    try {
         auto optionSale = std::make_shared<OptionSale>();
 
         optionSale->fillData(graalNative);
 
         return optionSale;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
 }
 
 void OptionSale::setExchangeCode(char exchangeCode) noexcept {
@@ -126,26 +125,19 @@ std::string OptionSale::toString() const noexcept {
         dxfcpp::toString(getDelta()), getOptionSymbol());
 }
 
-void *OptionSale::toGraal() const noexcept {
+void *OptionSale::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOptionSale = new (std::nothrow)
-        dxfg_option_sale_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE}}};
-
-    if (!graalOptionSale) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalOptionSale = new dxfg_option_sale_t{};
 
     fillGraalData(static_cast<void *>(graalOptionSale));
 
     return static_cast<void *>(graalOptionSale);
 }
 
-void OptionSale::freeGraal(void *graalNative) noexcept {
+void OptionSale::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
@@ -161,4 +153,4 @@ void OptionSale::freeGraal(void *graalNative) noexcept {
     delete graalOptionSale;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

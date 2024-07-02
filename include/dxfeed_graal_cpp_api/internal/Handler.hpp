@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <deque>
 #include <functional>
 #include <future>
@@ -12,7 +14,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * A thread-safe class that allows to asynchronously notify listeners with a given signature.
@@ -417,4 +419,6 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

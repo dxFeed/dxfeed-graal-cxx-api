@@ -16,11 +16,11 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Candle::TYPE = EventTypeEnum::CANDLE;
 
-void Candle::fillData(void *graalNative) noexcept {
+void Candle::fillData(void *graalNative) {
     if (graalNative == nullptr) {
         return;
     }
@@ -47,13 +47,14 @@ void Candle::fillData(void *graalNative) noexcept {
     };
 }
 
-void Candle::fillGraalData(void *graalNative) const noexcept {
+void Candle::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
+    graalCandle->event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_CANDLE;
     graalCandle->event_symbol = createCString(eventSymbol_.value_or(CandleSymbol::NUL).toString());
     graalCandle->event_time = data_.eventTime;
     graalCandle->event_flags = data_.eventFlags;
@@ -81,25 +82,56 @@ void Candle::freeGraalData(void *graalNative) noexcept {
     delete[] graalCandle->event_symbol;
 }
 
-std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Candle. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create Candle. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
     }
 
-    try {
-        auto candle = std::make_shared<Candle>();
+    auto candle = std::make_shared<Candle>();
 
-        candle->fillData(graalNative);
+    candle->fillData(graalNative);
 
-        return candle;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
+    return candle;
+}
+
+void *Candle::toGraal() const {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::toGraal()");
     }
+
+    auto *graalCandle =
+        new dxfg_candle_t{};
+
+    fillGraalData(static_cast<void *>(graalCandle));
+
+    return static_cast<void *>(graalCandle);
+}
+
+void Candle::freeGraal(void *graalNative) {
+    if (!graalNative) {
+        return;
+    }
+
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
+        throw std::invalid_argument(
+            fmt::format("Unable to free Candle's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
+
+    }
+
+    auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+
+    freeGraalData(graalNative);
+
+    delete graalCandle;
 }
 
 std::string Candle::toString() const noexcept {
@@ -114,39 +146,4 @@ std::string Candle::toString() const noexcept {
         dxfcpp::toString(getOpenInterest()));
 }
 
-void *Candle::toGraal() const noexcept {
-    if constexpr (Debugger::isDebug) {
-        Debugger::debug(toString() + "::toGraal()");
-    }
-
-    auto *graalCandle =
-        new (std::nothrow) dxfg_candle_t{.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_CANDLE}};
-
-    if (!graalCandle) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
-
-    fillGraalData(static_cast<void *>(graalCandle));
-
-    return static_cast<void *>(graalCandle);
-}
-
-void Candle::freeGraal(void *graalNative) noexcept {
-    if (!graalNative) {
-        return;
-    }
-
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
-        return;
-    }
-
-    auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
-
-    freeGraalData(graalNative);
-
-    delete graalCandle;
-}
-
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

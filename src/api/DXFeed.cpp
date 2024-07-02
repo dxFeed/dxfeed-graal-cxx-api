@@ -14,7 +14,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::shared_ptr<DXFeed> DXFeed::getInstance() noexcept {
     if constexpr (Debugger::isDebug) {
@@ -34,14 +34,12 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 
     if (runIsolatedOrElse(
-            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_attachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+                return dxfg_DXFeed_attachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
                                                       subHandle) == 0;
             },
             false)) {
-
-        subscriptions_.emplace(subscription);
     }
 }
 
@@ -55,14 +53,12 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 
     if (runIsolatedOrElse(
-            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscription(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle), handle,
+            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
                                                       subHandle) == 0;
             },
             false)) {
-
-        subscriptions_.erase(subscription);
     }
 }
 
@@ -76,14 +72,12 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     }
 
     if (runIsolatedOrElse(
-            [handle = dxfcpp::bit_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = dxfcpp::bit_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscriptionAndClear(dxfcpp::bit_cast<graal_isolatethread_t *>(threadHandle),
+            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+                return dxfg_DXFeed_detachSubscriptionAndClear(static_cast<graal_isolatethread_t *>(threadHandle),
                                                               handle, subHandle) == 0;
             },
             false)) {
-
-        subscriptions_.erase(subscription);
     }
 }
 
@@ -113,21 +107,17 @@ DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) noex
     return sub;
 }
 
-std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) noexcept {
+std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeed::create(" + dxfcpp::toString(feedHandle) + ")");
     }
 
-    std::shared_ptr<DXFeed> feed{new (std::nothrow) DXFeed{}};
+    std::shared_ptr<DXFeed> feed{new DXFeed{}};
 
     auto id = ApiContext::getInstance()->getManager<DXFeedManager>()->registerEntity(feed);
     ignore_unused(id);
 
-    // TODO: error handling [EN-8232]
-
-    if (feed) {
-        feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
-    }
+    feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
 
     return feed;
 }
@@ -136,4 +126,4 @@ std::string DXFeed::toString() const noexcept {
     return fmt::format("DXFeed{{{}}}", handle_.toString());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

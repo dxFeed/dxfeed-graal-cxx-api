@@ -5,13 +5,15 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 
 #include "IndexedEvent.hpp"
 #include "IndexedEventSource.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Represents time-series snapshots of some process that is evolving in time or actual events in some external system
@@ -131,4 +133,6 @@ struct DXFCPP_EXPORT TimeSeriesEvent : public IndexedEvent {
     virtual std::int64_t getTime() const noexcept = 0;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -57,24 +57,33 @@ int main(int argc, char *argv[]) {
     using namespace dxfcpp;
     using namespace std::string_literals;
 
-    if (argc < 3) {
-        printUsage();
+    try {
 
-        return 0;
-    }
+        if (argc < 3) {
+            printUsage();
 
-    auto types = CmdArgsUtils::parseTypes(argv[1]);
-    auto ipfFile = argv[2];
-
-    auto sub = DXFeed::getInstance()->createSubscription(types);
-
-    sub->addEventListener<MarketEvent>([](auto &&events) {
-        for (auto &&event : events) {
-            std::cout << event->getEventSymbol() + ": " + event->toString() << std::endl;
+            return 0;
         }
-    });
 
-    sub->addSymbols(getSymbols(ipfFile));
+        auto types = CmdArgsUtils::parseTypes(argv[1]);
+        auto ipfFile = argv[2];
 
-    std::this_thread::sleep_for(std::chrono::days(365));
+        auto sub = DXFeed::getInstance()->createSubscription(types);
+
+        sub->addEventListener<MarketEvent>([](auto &&events) {
+            for (auto &&event : events) {
+                std::cout << event->getEventSymbol() + ": " + event->toString() << std::endl;
+            }
+        });
+
+        sub->addSymbols(getSymbols(ipfFile));
+
+        std::this_thread::sleep_for(std::chrono::days(365));
+    } catch (const JavaException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    } catch (const GraalException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    }
 }

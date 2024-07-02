@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/EventClassList.hpp"
 #include "../internal/context/ApiContext.hpp"
 
@@ -14,17 +16,14 @@
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "../symbols/StringSymbol.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-#include "osub/WildcardSymbol.hpp"
-
 
 #include <concepts>
 #include <memory>
 #include <type_traits>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeed;
 struct MarketEvent;
@@ -45,12 +44,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
     SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)> onEvent_{};
 
-    explicit DXFeedSubscription(const EventTypeEnum &eventType) noexcept;
+    explicit DXFeedSubscription(const EventTypeEnum &eventType);
 
     static JavaObjectHandle<DXFeedSubscription>
-    createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) noexcept;
+    createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
-    void setEventListenerHandle(Id<DXFeedSubscription> id) noexcept;
+    void setEventListenerHandle(Id<DXFeedSubscription> id);
 
     bool tryToSetEventListenerHandle() noexcept;
 
@@ -60,7 +59,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
         }
 #endif
-    DXFeedSubscription(EventTypeIt begin, EventTypeIt end) noexcept
+    DXFeedSubscription(EventTypeIt begin, EventTypeIt end)
         : eventTypes_(begin, end), handle_{}, eventListenerHandle_{}, onEvent_{} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
@@ -68,20 +67,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
 
-        if (!list) {
-            // TODO: error handling [EN-8232]
-            return;
-        }
-
         handle_ = createSubscriptionHandleFromEventClassList(list);
     }
 
-    DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes) noexcept
+    DXFeedSubscription(std::initializer_list<EventTypeEnum> eventTypes)
         : DXFeedSubscription(eventTypes.begin(), eventTypes.end()) {
     }
 
     template <typename EventTypesCollection>
-    explicit DXFeedSubscription(EventTypesCollection &&eventTypes) noexcept
+    explicit DXFeedSubscription(EventTypesCollection &&eventTypes)
 #if __cpp_concepts
         requires requires {
             {
@@ -110,9 +104,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
 
     void setSymbolsImpl(void *graalSymbolList) const noexcept;
 
-    std::vector<SymbolWrapper> getSymbolsImpl() const noexcept;
+    std::vector<SymbolWrapper> getSymbolsImpl() const;
 
-    std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const noexcept;
+    std::vector<SymbolWrapper> getDecoratedSymbolsImpl() const;
 
   public:
     /// The alias to a type of shared pointer to the DXFeedSubscription object
@@ -142,13 +136,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      *
      * @param eventType the event type.
      */
-    static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) noexcept {
+    static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription::create(eventType = " + eventType.getName() + ")");
         }
 
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventType));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+        dxfcpp::ignore_unused(id);
 
         return sub;
     }
@@ -180,13 +176,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
             { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
         }
 #endif
-    static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) noexcept {
+    static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
         }
 
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(begin, end));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+        dxfcpp::ignore_unused(id);
 
         return sub;
     }
@@ -202,9 +200,11 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param eventTypes The event type collection.
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
-    static std::shared_ptr<DXFeedSubscription> create(std::initializer_list<EventTypeEnum> eventTypes) noexcept {
+    static std::shared_ptr<DXFeedSubscription> create(std::initializer_list<EventTypeEnum> eventTypes) {
         auto sub = std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(eventTypes));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+        dxfcpp::ignore_unused(id);
 
         return sub;
     }
@@ -228,10 +228,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
     template <typename EventTypesCollection>
-    static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) noexcept {
+    static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) {
         auto sub =
             std::shared_ptr<DXFeedSubscription>(new DXFeedSubscription(std::forward<EventTypesCollection>(eventTypes)));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+        dxfcpp::ignore_unused(id);
 
         return sub;
     }
@@ -489,7 +491,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const noexcept {
+    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
@@ -547,7 +549,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const noexcept {
+    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
@@ -606,7 +608,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
      * @param begin The beginning of the collection of symbols.
      * @param end The end of symbol collection.
      */
-    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const noexcept {
+    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
         }
@@ -689,6 +691,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     /**
      * Returns `true` if this subscription contains the corresponding event type.
      *
+     * @param eventType The type of event that is checked.
      * @return `true` if this subscription contains the corresponding event type.
      *
      * @see DXFeedSubscription::getEventTypes()
@@ -744,4 +747,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public SharedEntity {
     auto onSubscriptionClosed() noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

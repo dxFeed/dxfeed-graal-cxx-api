@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -15,7 +17,7 @@
 #include "MarketEvent.hpp"
 #include "PriceType.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -62,25 +64,6 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     void fillGraalData(void *graalNative) const noexcept override;
 
   public:
-    static std::shared_ptr<Summary> fromGraal(void *graalNative) noexcept;
-
-    /**
-     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
-     * Returns the pointer to the filled structure.
-     *
-     * @return The pointer to the filled dxFeed Graal SDK structure
-     */
-    void *toGraal() const noexcept override;
-
-    /**
-     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
-     *
-     * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     */
-    static void freeGraal(void *graalNative) noexcept;
-
-  public:
     /// The alias to a type of shared pointer to the Summary object
     using Ptr = std::shared_ptr<Summary>;
 
@@ -89,6 +72,31 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
 
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static Ptr fromGraal(void *graalNative);
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    void *toGraal() const override;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative);
 
     /// Creates new summary event with default values.
     Summary() noexcept = default;
@@ -313,4 +321,6 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

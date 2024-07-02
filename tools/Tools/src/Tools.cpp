@@ -65,6 +65,18 @@ const std::vector<ArgType> PerfTestTool::ARGS{AddressArgRequired{}, TypesArgRequ
                                               PropertiesArg{},      ForceStreamArg{},   CPUUsageByCoreArg{},
                                               DetachListenerArg{},  HelpArg{}};
 
+const std::string QdsTool::NAME{"Qds"};
+const std::string QdsTool::SHORT_DESCRIPTION{"A collection of tools ported from the Java qds-tools."};
+const std::string QdsTool::DESCRIPTION{R"(
+A collection of tools ported from the Java qds-tools.
+)"};
+const std::vector<std::string> QdsTool::USAGE{
+    NAME + " \"<qds-args>\" [<options>]",
+};
+const std::vector<std::string> QdsTool::ADDITIONAL_INFO{};
+
+const std::vector<ArgType> QdsTool::ARGS{QdsArgs{}, PropertiesArg{}, HelpArg{}};
+
 const std::unordered_map<std::string, std::string> HelpTool::EMBEDDED_ARTICLES{
     {"Connect",
      R"(This tool is used to connect to some address with specified subscription, and log or tape received data. By default it
@@ -366,11 +378,10 @@ const std::vector<std::string> HelpTool::ALL_ARTICLE_NAMES =
     EMBEDDED_ARTICLES | ranges::views::keys | ranges::to<std::vector<std::string>>();
 
 const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::ALL_TOOLS{
-    {ConnectTool::getName(), ConnectTool{}},
-    {DumpTool::getName(), DumpTool{}},
-    {HelpTool::getName(), HelpTool{}},
-    {LatencyTest::getName(), LatencyTest{}},
-    {PerfTestTool::getName(), PerfTestTool{}}};
+    {ConnectTool::getName(), ConnectTool{}},   {DumpTool::getName(), DumpTool{}},
+    {HelpTool::getName(), HelpTool{}},         {LatencyTest::getName(), LatencyTest{}},
+    {PerfTestTool::getName(), PerfTestTool{}}, {QdsTool::getName(), QdsTool{}},
+};
 
 const std::vector<std::string> tools::HelpTool::ALL_TOOL_NAMES =
     tools::HelpTool::ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();

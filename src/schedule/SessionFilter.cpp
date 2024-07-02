@@ -6,9 +6,9 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 // The SessionFilter static fields are initialized in CandleSession.cpp
 // The SessionFilter constructor is implemented in CandleSession.cpp
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

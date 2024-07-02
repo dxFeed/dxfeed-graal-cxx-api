@@ -5,9 +5,11 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <string>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Attribute of the CandleSymbol.
@@ -19,7 +21,9 @@ struct DXFCPP_EXPORT CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this attribute set.
      */
-    virtual std::string changeAttributeForSymbol(const std::string &symbol) const noexcept = 0;
+    virtual std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const = 0;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

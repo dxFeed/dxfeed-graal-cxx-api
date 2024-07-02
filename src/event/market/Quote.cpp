@@ -15,7 +15,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &Quote::TYPE = EventTypeEnum::QUOTE;
 
@@ -87,6 +87,7 @@ void Quote::fillGraalData(void *graalNative) const noexcept {
 
     auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
 
+    graalQuote->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_QUOTE;
     graalQuote->time_millis_sequence = data_.timeMillisSequence;
     graalQuote->time_nano_part = data_.timeNanoPart;
     graalQuote->bid_time = data_.bidTime;
@@ -110,55 +111,47 @@ std::string Quote::toString() const noexcept {
         dxfcpp::toString(getAskPrice()), dxfcpp::toString(getAskSize()));
 }
 
-std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create Quote. The `graalNative` parameter is nullptr");
     }
 
-    auto eventType = static_cast<dxfg_event_type_t *>(graalNative);
-
-    if (eventType->clazz != dxfg_event_clazz_t::DXFG_EVENT_QUOTE) {
-        return {};
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
+        throw std::invalid_argument(
+            fmt::format("Unable to create Quote. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_QUOTE))));
     }
 
-    try {
-        auto quote = std::make_shared<Quote>();
+    auto quote = std::make_shared<Quote>();
 
-        quote->fillData(graalNative);
+    quote->fillData(graalNative);
 
-        return quote;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return quote;
 }
 
-void *Quote::toGraal() const noexcept {
+void *Quote::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalQuote = new (std::nothrow)
-        dxfg_quote_t{.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_QUOTE}}};
-
-    if (!graalQuote) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalQuote = new dxfg_quote_t{};
 
     fillGraalData(static_cast<void *>(graalQuote));
 
     return static_cast<void *>(graalQuote);
 }
 
-void Quote::freeGraal(void *graalNative) noexcept {
+void Quote::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_QUOTE) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free Quote's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_QUOTE))));
     }
 
     auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
@@ -168,4 +161,4 @@ void Quote::freeGraal(void *graalNative) noexcept {
     delete graalQuote;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

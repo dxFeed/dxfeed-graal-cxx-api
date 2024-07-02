@@ -18,7 +18,7 @@
 #    include <TargetConditionals.h>
 #endif
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::string getOSName() noexcept {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__CYGWIN__)
@@ -112,4 +112,4 @@ std::string Platform::getPlatformInfo() noexcept {
     return fmt::format("{} {}({} core{})", getOSName(), getOSArchitecture(), cores, (cores > 1 ? "s" : ""));
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

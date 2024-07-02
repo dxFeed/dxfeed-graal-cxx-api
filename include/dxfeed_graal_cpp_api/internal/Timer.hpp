@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <chrono>
 #include <deque>
 #include <functional>
@@ -15,7 +17,7 @@
 
 #include "Common.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct Timer {
   private:
@@ -27,7 +29,7 @@ struct Timer {
 
   public:
     template <typename F, typename Delay, typename Period>
-    static std::shared_ptr<Timer> schedule(F &&f, Delay &&delay, Period &&period) noexcept {
+    static std::shared_ptr<Timer> schedule(F &&f, Delay &&delay, Period &&period) {
         auto t = std::shared_ptr<Timer>(new Timer());
 
         t->future_ = std::make_unique<std::future<void>>(std::async(
@@ -51,4 +53,6 @@ struct Timer {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -11,7 +11,7 @@
 #include <utf8.h>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const Direction Direction::UNDEFINED{0, "UNDEFINED"};
 const Direction Direction::DOWN{1, "DOWN"};
@@ -30,4 +30,4 @@ const std::unordered_map<Direction::CodeType, std::reference_wrapper<const Direc
     {Direction::UP.getCode(), std::cref(Direction::UP)},
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

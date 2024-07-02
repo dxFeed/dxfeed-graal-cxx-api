@@ -5,10 +5,12 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <string>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Source identifier for IndexedEvent.
@@ -24,6 +26,32 @@ class DXFCPP_EXPORT IndexedEventSource {
      * The default source with zero @ref ::id() "identifier" for all events that do not support multiple sources.
      */
     static const IndexedEventSource DEFAULT;
+
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    virtual void *toGraal() const;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative);
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static IndexedEventSource fromGraal(void *graalNative);
 
     IndexedEventSource() noexcept = default;
     virtual ~IndexedEventSource() noexcept = default;
@@ -71,30 +99,14 @@ class DXFCPP_EXPORT IndexedEventSource {
     auto operator<(const IndexedEventSource &indexedEventSource) const {
         return id_ < indexedEventSource.id_;
     }
-
-    /**
-     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
-     * Returns the pointer to the filled structure.
-     *
-     * @return The pointer to the filled dxFeed Graal SDK structure
-     */
-    virtual void *toGraal() const noexcept;
-
-    /**
-     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
-     *
-     * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     */
-    static void freeGraal(void *graalNative) noexcept;
-
-    static IndexedEventSource fromGraal(void *graalNative) noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::IndexedEventSource> {
     std::size_t operator()(const dxfcpp::IndexedEventSource &indexedEventSource) const noexcept {
         return static_cast<std::size_t>(indexedEventSource.id());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

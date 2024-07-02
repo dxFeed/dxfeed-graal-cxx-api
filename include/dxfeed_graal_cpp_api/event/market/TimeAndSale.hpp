@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
@@ -19,7 +21,7 @@
 #include "Side.hpp"
 #include "TimeAndSaleType.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 class OptionSale;
@@ -112,32 +114,6 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-    static std::shared_ptr<TimeAndSale> fromGraal(void *graalNative) noexcept;
-
-    /**
-     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
-     * Returns the pointer to the filled structure.
-     *
-     * @return The pointer to the filled dxFeed Graal SDK structure
-     */
-    void *toGraal() const noexcept override;
-
-    /**
-     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
-     *
-     * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     */
-    static void freeGraal(void *graalNative) noexcept;
-
-  public:
-    /**
-     * Maximum allowed sequence value.
-     *
-     * @see ::setSequence()
-     */
-    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
-
     /// The alias to a type of shared pointer to the TimeAndSale object
     using Ptr = std::shared_ptr<TimeAndSale>;
 
@@ -146,6 +122,38 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
 
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
+
+    /**
+     * Maximum allowed sequence value.
+     *
+     * @see ::setSequence()
+     */
+    static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static Ptr fromGraal(void *graalNative);
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    void *toGraal() const override;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative);
 
     /// Creates new time and sale event with default values.
     TimeAndSale() noexcept = default;
@@ -204,7 +212,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @param index the event index.
      * @see ::getIndex()
      */
-    void setIndex(std::int64_t index) noexcept override {
+    void setIndex(std::int64_t index) override {
         data_.index = index;
     }
 
@@ -285,9 +293,12 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @param sequence the sequence.
      * @see ::getSequence()
      */
-    void setSequence(int sequence) noexcept {
-        // TODO: Improve error handling [EN-8232]
-        assert(sequence >= 0 && sequence <= MAX_SEQUENCE);
+    void setSequence(std::int32_t sequence) {
+        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+            throw std::invalid_argument("Invalid sequence value = " + std::to_string(sequence));
+        }
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
     }
@@ -448,8 +459,8 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param tradeThroughExempt TradeThroughExempt flag of this time and sale event.
      */
-    void setTradeThroughExempt(char tradeThroughExempt) noexcept {
-        // TODO: error handling [EN-8232] //util::checkChar(tradeThroughExempt, TTE_MASK, "tradeThroughExempt");
+    void setTradeThroughExempt(char tradeThroughExempt) {
+        util::checkChar(tradeThroughExempt, TTE_MASK, "tradeThroughExempt");
 
         data_.flags = setBits(data_.flags, TTE_MASK, TTE_SHIFT, tradeThroughExempt);
     }
@@ -645,4 +656,6 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

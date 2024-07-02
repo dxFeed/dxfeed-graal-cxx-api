@@ -5,10 +5,12 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <optional>
 #include <string>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Helper class to compose and parse symbols for market events.
@@ -180,8 +182,6 @@ struct DXFCPP_EXPORT MarketEventSymbols {
 
             return std::nullopt;
         } catch (...) {
-            // TODO: error handling: [EN-8232]
-
             return std::nullopt;
         }
     }
@@ -214,8 +214,6 @@ struct DXFCPP_EXPORT MarketEventSymbols {
 
             return symbol.substr(0, i) + symbol.substr(j);
         } catch (...) {
-            // TODO: error handling: [EN-8232]
-
             return symbol;
         }
     }
@@ -321,4 +319,6 @@ struct DXFCPP_EXPORT MarketEventSymbols {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

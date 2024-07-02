@@ -16,7 +16,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 IterableInstrumentProfile::IterableInstrumentProfile(void *handle) noexcept : handle_(handle) {
 }
@@ -33,7 +33,7 @@ std::shared_ptr<IterableInstrumentProfile> IterableInstrumentProfile::create(voi
     return isolated::ipf::InstrumentProfileIterator::hasNext(handle_.get());
 }
 
-[[nodiscard]] std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const noexcept {
+[[nodiscard]] std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const {
     if (!handle_) {
         return {};
     }
@@ -45,4 +45,4 @@ std::shared_ptr<IterableInstrumentProfile> IterableInstrumentProfile::create(voi
     return result;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

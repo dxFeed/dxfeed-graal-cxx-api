@@ -6,7 +6,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 void MarketEvent::fillData(void *graalNative) noexcept {
     if (graalNative == nullptr) {
@@ -40,4 +40,4 @@ void MarketEvent::freeGraalData(void *graalNative) noexcept {
     delete[] graalMarketEvent->event_symbol;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -5,53 +5,36 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../internal/TimeFormat.hpp"
+
 #include "../api/DXEndpoint.hpp"
 
 #include "../ipf/live/InstrumentProfileConnection.hpp"
 
 #include <cstdint>
+#include <string_view>
 #include <string>
 #include <unordered_set>
 #include <vector>
 
-namespace dxfcpp::isolated {
-struct String {
-    static bool release(const char *string) noexcept;
-};
+DXFCPP_BEGIN_NAMESPACE
 
-struct StringList {
-    static bool release(/* dxfg_string_list* */ void *stringList) noexcept;
-};
-
-struct TimeFormat {
-    static /* dxfg_time_format_t* */ void *getDefault() noexcept;
-    static /* dxfg_time_format_t* */ void *getGmt() noexcept;
-    static /* dxfg_time_format_t* */ void *withTimeZone(/* dxfg_time_format_t* */ void *timeFormat) noexcept;
-    static /* dxfg_time_format_t* */ void *withMillis(/* dxfg_time_format_t* */ void *timeFormat) noexcept;
-    static std::int64_t parse(/* dxfg_time_format_t* */ void *timeFormat, const std::string &value) noexcept;
-    static std::string format(/* dxfg_time_format_t* */ void *timeFormat, std::int64_t value) noexcept;
-};
+namespace isolated {
 
 struct Tools {
-    static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(const std::string &symbolList) noexcept;
-};
+    static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(std::string_view symbolList);
 
-namespace api {
-struct DXEndpoint {
-    static bool close(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
-    static dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle) noexcept;
-    static bool user(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &user) noexcept;
-    static bool password(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &password) noexcept;
-    static bool connect(/* dxfg_endpoint_t* */ void *graalDXEndpointHandle, const std::string &address) noexcept;
+    static void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string>& args);
 };
-} // namespace api
 
 namespace ipf {
 struct InstrumentProfileReader {
-    static /* dxfg_instrument_profile_reader_t* */ void *create() noexcept;
+    static /* dxfg_instrument_profile_reader_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileReader> create();
 
     static std::int64_t
-    getLastModified(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
+    getLastModified(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileReader>& handle);
 
     static bool wasComplete(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
 
@@ -234,4 +217,8 @@ struct Schedule {
     static std::string getTimeZoneId(/* dxfg_schedule_t* */ void *schedule) noexcept;
 };
 } // namespace schedule
-} // namespace dxfcpp::isolated
+} // namespace isolated
+
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

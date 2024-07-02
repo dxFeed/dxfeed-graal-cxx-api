@@ -5,11 +5,13 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/Common.hpp"
 
 #include <cstdint>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Defines standard types of InstrumentProfile. Note that other (unknown) types
@@ -41,4 +43,6 @@ template <>
 const std::unordered_map<InstrumentProfileType::CodeType, std::reference_wrapper<const InstrumentProfileType>>
     InstrumentProfileType::ParentType::ALL;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

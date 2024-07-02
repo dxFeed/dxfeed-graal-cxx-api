@@ -12,7 +12,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const EventTypeEnum &SpreadOrder::TYPE = EventTypeEnum::SPREAD_ORDER;
 
@@ -37,6 +37,7 @@ void SpreadOrder::fillGraalData(void *graalNative) const noexcept {
 
     auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
 
+    graalSpreadOrder->order_base.market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER;
     graalSpreadOrder->spread_symbol = createCString(spreadOrderData_.spreadSymbol);
 }
 
@@ -52,57 +53,51 @@ void SpreadOrder::freeGraalData(void *graalNative) noexcept {
     delete[] graalSpreadOrder->spread_symbol;
 }
 
-std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) noexcept {
+std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) {
     if (!graalNative) {
-        return {};
+        throw std::invalid_argument("Unable to create SpreadOrder. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SPREAD_ORDER) {
-        return {};
+        throw std::invalid_argument(
+            fmt::format("Unable to create SpreadOrder. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER))));
     }
 
-    try {
-        auto spreadOrder = std::make_shared<SpreadOrder>();
+    auto spreadOrder = std::make_shared<SpreadOrder>();
 
-        spreadOrder->fillData(graalNative);
+    spreadOrder->fillData(graalNative);
 
-        return spreadOrder;
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-        return {};
-    }
+    return spreadOrder;
 }
 
 std::string SpreadOrder::toString() const noexcept {
     return fmt::format("SpreadOrder{{{}, spreadSymbol={}}}", baseFieldsToString(), getSpreadSymbol());
 }
 
-void *SpreadOrder::toGraal() const noexcept {
+void *SpreadOrder::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSpreadOrder = new (std::nothrow) dxfg_spread_order_t{
-        .order_base = {.market_event = {.event_type = {.clazz = dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER}}}};
-
-    if (!graalSpreadOrder) {
-        // TODO: error handling [EN-8232]
-
-        return nullptr;
-    }
+    auto *graalSpreadOrder = new dxfg_spread_order_t{};
 
     fillGraalData(static_cast<void *>(graalSpreadOrder));
 
     return static_cast<void *>(graalSpreadOrder);
 }
 
-void SpreadOrder::freeGraal(void *graalNative) noexcept {
+void SpreadOrder::freeGraal(void *graalNative) {
     if (!graalNative) {
         return;
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SPREAD_ORDER) {
-        return;
+        throw std::invalid_argument(
+            fmt::format("Unable to free SpreadOrder's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
+                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SPREAD_ORDER))));
     }
 
     auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
@@ -112,4 +107,4 @@ void SpreadOrder::freeGraal(void *graalNative) noexcept {
     delete graalSpreadOrder;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -5,6 +5,8 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -12,7 +14,7 @@
 
 #include "utils/StringUtils.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct Debugger;
 
@@ -84,13 +86,13 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
 
     void *getHandle() noexcept {
         if constexpr (Debugger::traceLists) {
-            Debugger::trace(getDebugName() + "::getHandle() -> " + dxfcpp::toString(dxfcpp::bit_cast<void *>(&list_)));
+            Debugger::trace(getDebugName() + "::getHandle() -> " + dxfcpp::toString(static_cast<void *>(&list_)));
         }
 
-        return dxfcpp::bit_cast<void *>(&list_);
+        return static_cast<void *>(&list_);
     }
 
-    void init(std::size_t size) noexcept {
+    void init(std::size_t size) {
         if constexpr (Debugger::traceLists) {
             Debugger::trace(getDebugName() + "::init(" + std::to_string(size) + ")");
         }
@@ -104,34 +106,10 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
         }
 
         list_.size = static_cast<typename RawGraalListTraits<List>::SizeType>(size);
-        list_.elements = new (std::nothrow) typename RawGraalListTraits<List>::ElementType *[list_.size];
-
-        if (!list_.elements) {
-            if constexpr (Debugger::traceLists) {
-                Debugger::trace(getDebugName() + "::init(" + std::to_string(size) + "): !list_.elements");
-            }
-
-            release();
-
-            return;
-        }
-
-        bool needToRelease = false;
+        list_.elements = new typename RawGraalListTraits<List>::ElementType *[list_.size];
 
         for (typename RawGraalListTraits<List>::SizeType i = 0; i < list_.size; i++) {
-            list_.elements[i] = new (std::nothrow) typename RawGraalListTraits<List>::ElementType{};
-
-            if (!list_.elements[i]) {
-                needToRelease = true;
-            }
-        }
-
-        if (needToRelease) {
-            if constexpr (Debugger::traceLists) {
-                Debugger::trace(getDebugName() + "::init({}): needToRelease");
-            }
-
-            release();
+            list_.elements[i] = new typename RawGraalListTraits<List>::ElementType{};
         }
     }
 
@@ -166,4 +144,6 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

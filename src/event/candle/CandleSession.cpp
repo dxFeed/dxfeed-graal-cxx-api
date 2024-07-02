@@ -7,7 +7,7 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const SessionType SessionType::NO_TRADING{SessionTypeEnum::NO_TRADING, "NO_TRADING", false};
 const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARKET", true};
@@ -48,4 +48,5 @@ const std::vector<std::reference_wrapper<const CandleSession>> CandleSession::VA
     std::cref(CandleSession::ANY),
     std::cref(CandleSession::REGULAR),
 };
-} // namespace dxfcpp
+
+DXFCPP_END_NAMESPACE

@@ -9,7 +9,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const OrderAction OrderAction::UNDEFINED{0, "UNDEFINED"};
 const OrderAction OrderAction::NEW{1, "NEW"};
@@ -34,4 +34,4 @@ const std::unordered_map<OrderAction::CodeType, std::reference_wrapper<const Ord
     {OrderAction::BUST.getCode(), std::cref(OrderAction::BUST)},
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

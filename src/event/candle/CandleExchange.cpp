@@ -6,9 +6,9 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const CandleExchange CandleExchange::COMPOSITE{'\0'};
 const CandleExchange CandleExchange::DEFAULT = COMPOSITE;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

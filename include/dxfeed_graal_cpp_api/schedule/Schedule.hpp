@@ -5,7 +5,9 @@
 
 #include "../internal/Conf.hpp"
 
-namespace dxfcpp {
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
@@ -34,7 +36,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param handle The graal Schedule's handle
      * @return The smart pointer for the Schedule object.
      */
-    static Schedule::Ptr create(void *handle) noexcept;
+    static Schedule::Ptr create(void *handle);
 
   public:
     /**
@@ -43,7 +45,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param profile The instrument profile those schedule is requested
      * @return The default schedule instance for specified instrument profile
      */
-    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile) noexcept;
+    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile);
 
     /**
      * Returns default schedule instance for specified schedule definition.
@@ -51,7 +53,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param scheduleDefinition The schedule definition of requested schedule
      * @return The default schedule instance for specified schedule definition
      */
-    static Schedule::Ptr getInstance(const std::string &scheduleDefinition) noexcept;
+    static Schedule::Ptr getInstance(const std::string &scheduleDefinition);
 
     /**
      * Returns schedule instance for specified instrument profile and trading venue.
@@ -60,7 +62,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param venue The trading venue those schedule is requested
      * @return The schedule instance for specified instrument profile and trading venue
      */
-    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) noexcept;
+    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue);
 
     /**
      * Returns trading venues for specified instrument profile.
@@ -68,7 +70,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param profile The instrument profile those trading venues are requested
      * @return trading venues for specified instrument profile
      */
-    static std::vector<std::string> getTradingVenues(std::shared_ptr<InstrumentProfile> profile) noexcept;
+    static std::vector<std::string> getTradingVenues(std::shared_ptr<InstrumentProfile> profile);
 
     /**
      * Downloads defaults using specified download config and optionally start periodic download.
@@ -202,4 +204,6 @@ struct DXFCPP_EXPORT Schedule {
     std::string getTimeZoneId() const noexcept;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

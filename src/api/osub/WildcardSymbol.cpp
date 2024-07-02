@@ -3,10 +3,10 @@
 
 #include <dxfg_api.h>
 
-#include "dxfeed_graal_c_api/api.h"
-#include "dxfeed_graal_cpp_api/api.hpp"
+#include <dxfeed_graal_c_api/api.h>
+#include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 const std::string WildcardSymbol::RESERVED_PREFIX = "*";
 
@@ -22,13 +22,13 @@ void *WildcardSymbol::toGraal() const noexcept {
     return dxfcpp::bit_cast<void *>(&wildcardGraalSymbol);
 }
 
-void WildcardSymbol::freeGraal(void *) noexcept {
+void WildcardSymbol::freeGraal(void *) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("WildcardSymbol::freeGraal()");
     }
 }
 
-const WildcardSymbol &WildcardSymbol::fromGraal(void *) noexcept {
+const WildcardSymbol &WildcardSymbol::fromGraal(void *) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("WildcardSymbol::fromGraal()");
     }
@@ -36,4 +36,4 @@ const WildcardSymbol &WildcardSymbol::fromGraal(void *) noexcept {
     return WildcardSymbol::ALL;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

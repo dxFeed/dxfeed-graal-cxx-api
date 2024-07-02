@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -12,7 +14,7 @@
 
 #include "../EventType.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Base class for all market events. All market events are POCO that
@@ -87,4 +89,6 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

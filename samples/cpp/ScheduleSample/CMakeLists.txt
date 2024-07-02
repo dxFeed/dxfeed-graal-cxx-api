@@ -36,6 +36,11 @@ endif ()
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+
+if (DXFCXX_FEATURE_STACKTRACE)
+    LinkStacktrace(${PROJECT_NAME})
+endif ()
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
         ${CMAKE_CURRENT_SOURCE_DIR}/schedule.properties

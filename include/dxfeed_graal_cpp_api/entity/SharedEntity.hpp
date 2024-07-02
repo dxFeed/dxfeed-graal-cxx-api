@@ -5,11 +5,13 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <memory>
 
 #include "Entity.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /// Base abstract "shared entity" class. Has some helpers for dynamic polymorphism
 struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> {
@@ -69,4 +71,24 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     }
 };
 
-} // namespace dxfcpp
+template <typename T>
+struct RequireMakeShared : SharedEntity {
+  protected:
+
+    struct LockExternalConstructionTag {
+        explicit LockExternalConstructionTag() = default;
+    };
+
+  public:
+
+    template <typename... Args>
+    static auto createShared(Args&&... args) {
+        static_assert(std::is_convertible_v<T*, RequireMakeShared*>, "Must derive publicly from RequireMakeShared");
+
+        return std::make_shared<T>(LockExternalConstructionTag{}, std::forward<Args>(args)...);
+    }
+};
+
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

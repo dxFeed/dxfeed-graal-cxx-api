@@ -7,47 +7,115 @@ on:
   pull_request:
   workflow_dispatch:
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: 'Release'
-  XCODE_VERSION: '15.0'
-  GCC_VERSION: '12'
-
 jobs:
   build:
     strategy:
       matrix:
-        #        os: [windows-latest, macos-latest, ubuntu-latest]
-        os: [ windows-latest, macos-13, ubuntu-22.04 ]
-    runs-on: ${{ matrix.os }}
+        config:
+          - name: win-vs2022
+            image: windows-latest
+            os: windows
+            cores: 4
+            cc: 'cl'
+            cxx: 'cl'
+          - name: macos-13-xcode-15
+            image: macos-13
+            os: macos
+            cores: 4
+            xcode: '15.0'
+            cc: 'clang'
+            cxx: 'clang++'
+          - name: ubuntu-24.04-clang-18
+            image: ubuntu-24.04
+            os: linux
+            cores: 4
+            cc: 'clang-18'
+            cxx: 'clang++-18'
+          - name: ubuntu-24.04-gcc-14
+            image: ubuntu-24.04
+            os: linux
+            cores: 4
+            cc: 'gcc-14'
+            cxx: 'g++-14'
+          - name: ubuntu-24.04-gcc-12
+            image: ubuntu-24.04
+            os: linux
+            cores: 4
+            cc: 'gcc-12'
+            cxx: 'g++-12'
+#          - name: ubuntu-22.04-gcc-9
+#            image: ubuntu-22.04
+#            os: linux
+#            cores: 4
+#            cc: 'gcc-9'
+#            cxx: 'g++-9'
+          - name: ubuntu-22.04-gcc-11
+            image: ubuntu-22.04
+            os: linux
+            cores: 4
+            cc: 'gcc-11'
+            cxx: 'g++-11'
+          - name: macos-14-xcode-15
+            image: macos-14
+            os: macos
+            cores: 3
+            xcode: '15.0'
+            cc: 'clang'
+            cxx: 'clang++'
+        buildType: [ Release, Debug ]
+
+    name: "${{ matrix.config.name }}-${{matrix.buildType}}"
+    runs-on: ${{ matrix.config.image }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Select Xcode version
-        if: ${{ contains(matrix.os, 'macos') }}
-        run: sudo xcode-select -s '/Applications/Xcode_${{env.XCODE_VERSION}}.app/Contents/Developer'
+        if: ${{ contains(matrix.config.os, 'macos') }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
 
       - name: Prepare build
         run: |
           ls
           mkdir ${{github.workspace}}/build    
 
-      - name: Configure CMake (!Ubuntu)
-        if: ${{ !contains(matrix.os, 'ubuntu') }}
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Configure CMake
+        if: ${{ contains(matrix.config.os, 'mac') }}
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_BUILD_DOC=OFF
 
-      - name: Configure CMake (Ubuntu)
-        env:
-          CC: gcc-${{env.GCC_VERSION}}
-          CXX: g++-${{env.GCC_VERSION}}
-        if: ${{ contains(matrix.os, 'ubuntu') }}
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Configure CMake
+        if: ${{ contains(matrix.config.os, 'linux') }}
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_BUILD_DOC=OFF
 
+      - name: Configure CMake
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_BUILD_DOC=OFF
 
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        if: ${{ !contains(matrix.config.os, 'win') }}
+        run: >
+          cmake --build ${{github.workspace}}/build --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
+
+      - name: Build
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          cmake --build ${{github.workspace}}/build --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
+          --
+          /p:CL_MPCount=${{matrix.config.cores}}
 
       - name: Test
         working-directory: ${{github.workspace}}/build
-        run: ctest -C ${{env.BUILD_TYPE}} --extra-verbose
+        run: ctest -C ${{matrix.buildType}} --extra-verbose

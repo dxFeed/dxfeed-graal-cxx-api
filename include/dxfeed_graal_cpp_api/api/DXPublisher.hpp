@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
@@ -19,11 +21,11 @@
 #include <mutex>
 #include <unordered_set>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
 class EventTypeEnum;
-class ObservableSubscription;
+struct ObservableSubscription;
 
 /**
  * Provides API for publishing of events to local or remote DXFeed.
@@ -67,13 +69,15 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     friend struct DXEndpoint;
 
   private:
+    mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<DXPublisher> handle_;
+    std::shared_ptr<ObservableSubscription> subscription_{};
 
-    static std::shared_ptr<DXPublisher> create(void *handle) noexcept;
+    static std::shared_ptr<DXPublisher> create(void *handle);
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
-    DXPublisher() noexcept : handle_{} {
+    DXPublisher() noexcept {
         if constexpr (Debugger::isDebug) {
             Debugger::debug("DXPublisher()");
         }
@@ -92,7 +96,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @ref DXEndpoint "DXEndpoint"::@ref DXEndpoint::getInstance() "getInstance"(DXEndpoint::Role::PUBLISHER)->@ref
      * DXEndpoint::getPublisher() "getPublisher"().
      */
-    static std::shared_ptr<DXPublisher> getInstance() noexcept;
+    static std::shared_ptr<DXPublisher> getInstance();
 
     /**
      * Publishes events to the corresponding feed. If the @ref DXEndpoint "endpoint" of this publisher has
@@ -182,7 +186,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     /**
      * Publishes events to the corresponding feed.
      *
-     * @param collection The collection of events to publish.
+     * @param events The collection of events to publish.
      */
     void publishEvents(std::initializer_list<std::shared_ptr<EventType>> events) noexcept {
         publishEvents(std::begin(events), std::end(events));
@@ -204,7 +208,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @param begin The beginning of the collection of events.
      * @param end The end of events collection.
      */
-    template <typename EventIt> void publishEvents(EventIt begin, EventIt end) noexcept {
+    template <typename EventIt> void publishEvents(EventIt begin, EventIt end) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(toString() + "::publishEvents(events = " + elementsToString(begin, end) + ")");
         }
@@ -215,9 +219,34 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
         EventMapper::freeGraalList(list);
     }
 
-    std::shared_ptr<ObservableSubscription> getSubscription(const EventTypeEnum &);
+    /**
+     * Returns observable set of subscribed symbols for the specified event type.
+     * Note, that subscription is represented by SymbolWrapper symbols. Check the type of each symbol
+     * in ObservableSubscription using SymbolWrapper::isStringSymbol(), SymbolWrapper::isWildcardSymbol(),
+     * SymbolWrapper::isIndexedEventSubscriptionSymbol(), SymbolWrapper::isTimeSeriesSubscriptionSymbol(),
+     * SymbolWrapper::isCandleSymbol().
+     *
+     * <p> The set of subscribed symbols contains WildcardSymbol::ALL if and
+     * only if there is a subscription to this wildcard symbol.
+     *
+     * <p> If DXFeedTimeSeriesSubscription is used to subscribe to time-service of the events of this type, then
+     * instances of TimeSeriesSubscriptionSymbol class represent the corresponding subscription item.
+     *
+     * <p> The resulting observable subscription can generate repeated ObservableSubscriptionChangeListener::onSymbolsAdded_ notifications to
+     * its listeners for the same symbols without the corresponding ObservableSubscriptionChangeListener::onSymbolsRemoved_
+     * notifications in between them. It happens when subscription disappears, cached data is lost, and subscription
+     * reappears again. On each ObservableSubscriptionChangeListener::onSymbolsAdded_
+     * notification data provider shall @ref DXPublisher::publishEvents() "publish" the most recent events for
+     * the corresponding symbols.
+     *
+     * @param eventType The event type.
+     * @return Observable subscription for the specified event type.
+     */
+    std::shared_ptr<ObservableSubscription> getSubscription(const EventTypeEnum &eventType);
 
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

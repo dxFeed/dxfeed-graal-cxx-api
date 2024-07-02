@@ -11,6 +11,7 @@
 #include "../Dump/DumpTool.hpp"
 #include "../LatencyTest/LatencyTestTool.hpp"
 #include "../PerfTest/PerfTestTool.hpp"
+#include "../Qds/QdsTool.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -19,6 +20,8 @@
 #include <unordered_map>
 #include <utility>
 #include <variant>
+#include <set>
+#include <vector>
 
 #include <fmt/chrono.h>
 #include <fmt/format.h>
@@ -33,7 +36,7 @@ namespace dxfcpp::tools {
 
 struct HelpTool {
     using Tool =
-        std::variant<tools::ConnectTool, tools::DumpTool, tools::HelpTool, tools::LatencyTest, tools::PerfTestTool>;
+        std::variant<tools::ConnectTool, tools::DumpTool, tools::HelpTool, tools::LatencyTest, tools::PerfTestTool, tools::QdsTool>;
 
     static const std::unordered_map<std::string, std::string> EMBEDDED_ARTICLES;
     static const std::string NAME;

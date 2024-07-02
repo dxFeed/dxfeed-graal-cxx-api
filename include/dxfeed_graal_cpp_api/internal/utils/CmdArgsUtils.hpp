@@ -5,6 +5,8 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../event/EventTypeEnum.hpp"
 
 #include <cstddef>
@@ -16,7 +18,7 @@
 
 #include "../../symbols/SymbolWrapper.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT CmdArgsUtils final {
     /**
@@ -27,7 +29,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(const std::string &symbols) noexcept;
+    static std::unordered_set<SymbolWrapper> parseSymbols(const std::string &symbols);
 
     /**
      * Parses an input string and returns a set of symbols.
@@ -69,7 +71,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(const std::string &symbols) noexcept;
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(const std::string &symbols);
 
     /**
      * Parses an input string and returns a set of candle symbols.
@@ -191,48 +193,8 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
 
         return {};
     }
-
-    /**
-     * Parses Date+Time string and converts to timestamp
-     *
-     * @param string Date+Time string
-     * @return UTC timestamp
-     */
-    static std::int64_t parseDateTime(const std::string &string) noexcept;
-
-    /**
-     * Parses Date+Time string and converts to timestamp
-     *
-     * @param string Date+Time string
-     * @return UTC timestamp
-     */
-    static std::int64_t parseDateTime(const char *string) noexcept {
-        return parseDateTime(std::string(string));
-    }
-
-    /**
-     * Parses Date+Time string and converts to timestamp
-     *
-     * @param string Date+Time string
-     * @return UTC timestamp
-     */
-    static std::int64_t parseDateTime(std::string_view string) noexcept {
-        return parseDateTime(string.data());
-    }
-
-    /**
-     * Parses Date+Time string and converts to timestamp
-     *
-     * @param string Date+Time string
-     * @return UTC timestamp
-     */
-    static std::int64_t parseDateTime(std::optional<std::string> string) noexcept {
-        if (string.has_value()) {
-            return parseDateTime(string.value());
-        }
-
-        return -1;
-    }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

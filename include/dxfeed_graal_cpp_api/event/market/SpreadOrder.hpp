@@ -5,18 +5,20 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
-#include <string>
 #include <optional>
+#include <string>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
 
 #include "OrderBase.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
@@ -104,25 +106,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
-    static std::shared_ptr<SpreadOrder> fromGraal(void *graalNative) noexcept;
-
-    /**
-     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
-     * Returns the pointer to the filled structure.
-     *
-     * @return The pointer to the filled dxFeed Graal SDK structure
-     */
-    void *toGraal() const noexcept override;
-
-    /**
-     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
-     *
-     * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     */
-    static void freeGraal(void *graalNative) noexcept;
-
-  public:
     /// The alias to a type of shared pointer to the SpreadOrder object
     using Ptr = std::shared_ptr<SpreadOrder>;
 
@@ -131,6 +114,31 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
 
     /// Type identifier and additional information about the current event class.
     static const EventTypeEnum &TYPE;
+
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static Ptr fromGraal(void *graalNative);
+
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
+    void *toGraal() const override;
+
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     */
+    static void freeGraal(void *graalNative);
 
     /// Creates new spread order event with default values.
     SpreadOrder() noexcept = default;
@@ -156,21 +164,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes event's symbol and returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param eventSymbol The symbol of this event.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withEventSymbolShared(const std::string &eventSymbol) noexcept {
-        MarketEvent::setEventSymbol(eventSymbol);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes event's creation time and returns the current spread order.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
@@ -181,22 +174,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         MarketEvent::setEventTime(eventTime);
 
         return *this;
-    }
-
-    /**
-     * Changes event's creation time and returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param eventTime The difference, measured in milliseconds, between the event creation time and
-     * midnight, January 1, 1970 UTC.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withEventTimeShared(std::int64_t eventTime) noexcept {
-        MarketEvent::setEventTime(eventTime);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -213,22 +190,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes event's source and returns a shared pointer to the current spread order.
-     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param source The source of this event.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withSourceShared(const OrderSource &source) noexcept {
-        OrderBase::setSource(source);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes transactional event flags and returns the current spread order.
      * See EventFlag "Event Flags" section.
      *
@@ -242,22 +203,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes transactional event flags and returns a shared pointer to the current spread order.
-     * See EventFlag "Event Flags" section.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param eventFlags The transactional event flags.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withEventFlagsShared(std::int32_t eventFlags) noexcept {
-        OrderBase::setEventFlags(eventFlags);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes transactional event flags and returns the current spread order.
      * See EventFlag "Event Flags" section.
      *
@@ -268,22 +213,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setEventFlags(eventFlags);
 
         return *this;
-    }
-
-    /**
-     * Changes transactional event flags and returns a shared pointer to the current spread order.
-     * See EventFlag "Event Flags" section.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param eventFlags The transactional event flags' mask.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withEventFlagsShared(const EventFlagsMask &eventFlags) noexcept {
-        OrderBase::setEventFlags(eventFlags);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -301,24 +230,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes unique per-symbol index of this spread order and returns a shared pointer to it. Note, that this method
-     * also changes
-     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
-     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param index The unique per-symbol index of this order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withIndexShared(std::int64_t index) noexcept {
-        OrderBase::setIndex(index);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes time of this spread order and returns it.
      * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
      *
@@ -332,22 +243,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes time of this spread order and returns a shared pointer to it.
-     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param time The time of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withTimeShared(std::int64_t time) noexcept {
-        OrderBase::setTime(time);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes microseconds and nanoseconds time part of this spread order.
      * Returns the current spread order.
      *
@@ -358,22 +253,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setTimeNanoPart(timeNanoPart);
 
         return *this;
-    }
-
-    /**
-     * Changes microseconds and nanoseconds time part of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param timeNanoPart The microseconds and nanoseconds time part of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withTimeNanoPartShared(std::int32_t timeNanoPart) noexcept {
-        OrderBase::setTimeNanoPart(timeNanoPart);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -391,23 +270,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes @ref OrderBase::getSequence() "sequence number" of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param sequence The sequence.
-     * @return A shared pointer to the current spread order.
-     * @see OrderBase::getSequence()
-     */
-    SpreadOrder::Ptr withSequenceShared(std::int32_t sequence) noexcept {
-        OrderBase::setSequence(sequence);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes time of this spread order and returns it.
      * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
      *
@@ -418,23 +280,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setTimeNanos(timeNanos);
 
         return *this;
-    }
-
-    /**
-     * Changes time of this spread order.
-     * Returns a shared pointer to the current spread order.
-     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param timeNanos The time of this spread order in nanoseconds.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withTimeNanosShared(std::int64_t timeNanos) noexcept {
-        OrderBase::setTimeNanos(timeNanos);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -450,22 +295,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes action of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param action The action of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withActionShared(const OrderAction &action) noexcept {
-        OrderBase::setAction(action);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes time of the last action and returns current spread order.
      *
      * @param actionTime The last spread order action time.
@@ -475,21 +304,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setActionTime(actionTime);
 
         return *this;
-    }
-
-    /**
-     * Changes time of the last action and returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param actionTime The last spread order action time.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withActionTimeShared(std::int64_t actionTime) noexcept {
-        OrderBase::setActionTime(actionTime);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -506,22 +320,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes spread order ID.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param orderId The spread order ID.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withOrderIdShared(std::int64_t orderId) noexcept {
-        OrderBase::setOrderId(orderId);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes auxiliary spread order ID.
      * Returns the current spread order.
      *
@@ -532,22 +330,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setAuxOrderId(auxOrderId);
 
         return *this;
-    }
-
-    /**
-     * Changes auxiliary spread order ID.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param auxOrderId The auxiliary spread order ID.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withAuxOrderIdShared(std::int64_t auxOrderId) noexcept {
-        OrderBase::setAuxOrderId(auxOrderId);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -564,22 +346,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes price of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param price The price of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withPriceShared(double price) noexcept {
-        OrderBase::setPrice(price);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes size of this spread order.
      * Returns the current spread order.
      *
@@ -590,22 +356,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setSize(size);
 
         return *this;
-    }
-
-    /**
-     * Changes size of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param size The size of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withSizeShared(double size) noexcept {
-        OrderBase::setSize(size);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -622,22 +372,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes executed size of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param executedSize The executed size of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withExecutedSizeShared(double executedSize) noexcept {
-        OrderBase::setExecutedSize(executedSize);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes number of individual spread orders in this aggregate spread order.
      * Returns the current spread order.
      *
@@ -648,22 +382,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setCount(count);
 
         return *this;
-    }
-
-    /**
-     * Changes number of individual spread orders in this aggregate spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param count The number of individual spread orders in this aggregate spread spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withCountShared(std::int64_t count) noexcept {
-        OrderBase::setCount(count);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -680,22 +398,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes trade ID.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param tradeId The trade ID.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withTradeShared(std::int64_t tradeId) noexcept {
-        OrderBase::setTradeId(tradeId);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes trade price.
      * Returns the current spread order.
      *
@@ -709,22 +411,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes trade price.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param tradePrice The trade price.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withTradePriceShared(double tradePrice) noexcept {
-        OrderBase::setTradePrice(tradePrice);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes trade size.
      * Returns the current spread order.
      *
@@ -735,22 +421,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setTradeSize(tradeSize);
 
         return *this;
-    }
-
-    /**
-     * Changes trade size.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param tradeSize The trade size.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withTradeSizeShared(double tradeSize) noexcept {
-        OrderBase::setTradeSize(tradeSize);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -768,22 +438,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
 
     /**
      * Changes exchange code of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param exchangeCode The exchange code of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withExchangeCodeShared(char exchangeCode) noexcept {
-        OrderBase::setExchangeCode(exchangeCode);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
-     * Changes exchange code of this spread order.
      * Returns the current spread order.
      *
      * @param exchangeCode The exchange code of this spread order.
@@ -793,22 +447,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setExchangeCode(exchangeCode);
 
         return *this;
-    }
-
-    /**
-     * Changes exchange code of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param exchangeCode The exchange code of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withExchangeCodeShared(std::int16_t exchangeCode) noexcept {
-        OrderBase::setExchangeCode(exchangeCode);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -825,22 +463,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes side of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param side The side of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withOrderSideShared(const Side &side) noexcept {
-        OrderBase::setOrderSide(side);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Changes scope of this spread order.
      * Returns the current spread order.
      *
@@ -851,22 +473,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
         OrderBase::setScope(scope);
 
         return *this;
-    }
-
-    /**
-     * Changes scope of this spread order.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param scope The scope of this spread order.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withScopeShared(const Scope &scope) noexcept {
-        OrderBase::setScope(scope);
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
     }
 
     /**
@@ -914,22 +520,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     }
 
     /**
-     * Changes spread symbol of this event.
-     * Returns a shared pointer to the current spread order.
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<SpreadOrder>(new
-     * SpreadOrder(...))` or `std::make_shared<SpreadOrder>(...)`
-     *
-     * @param spreadSymbol spread symbol of this event.
-     * @return A shared pointer to the current spread order.
-     */
-    SpreadOrder::Ptr withSpreadSymbolShared(std::string spreadSymbol) noexcept {
-        setSpreadSymbol(std::move(spreadSymbol));
-
-        return shared_from_this()->sharedAs<SpreadOrder>();
-    }
-
-    /**
      * Returns a string representation of the current object.
      *
      * @return a string representation
@@ -937,4 +527,6 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     std::string toString() const noexcept override;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

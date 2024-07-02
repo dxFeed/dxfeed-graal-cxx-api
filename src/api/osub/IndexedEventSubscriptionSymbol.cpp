@@ -3,14 +3,12 @@
 
 #include <dxfg_api.h>
 
-#include "dxfeed_graal_c_api/api.h"
-#include "dxfeed_graal_cpp_api/api.hpp"
-#include "dxfeed_graal_cpp_api/api/osub/IndexedEventSubscriptionSymbol.hpp"
+#include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol,
-                                                               const IndexedEventSource &source) noexcept
+                                                               const IndexedEventSource &source)
     : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), source_(source) {
 }
 
@@ -22,12 +20,8 @@ const IndexedEventSource &IndexedEventSubscriptionSymbol::getSource() const {
     return source_;
 }
 
-void *IndexedEventSubscriptionSymbol::toGraal() const noexcept {
-    if constexpr (Debugger::isDebug) {
-        Debugger::debug("IndexedEventSubscriptionSymbol::toGraal()");
-    }
-
-    auto *graalSymbol = new (std::nothrow) dxfg_indexed_event_subscription_symbol_t{
+void *IndexedEventSubscriptionSymbol::toGraal() const {
+    auto *graalSymbol = new dxfg_indexed_event_subscription_symbol_t{
         .supper = {.type = dxfg_symbol_type_t::INDEXED_EVENT_SUBSCRIPTION},
         .symbol = static_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()),
         .source = static_cast<dxfg_indexed_event_source_t *>(source_.toGraal())};
@@ -35,11 +29,7 @@ void *IndexedEventSubscriptionSymbol::toGraal() const noexcept {
     return static_cast<void *>(graalSymbol);
 }
 
-void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) noexcept {
-    if constexpr (Debugger::isDebug) {
-        Debugger::debug("IndexedEventSubscriptionSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
-    }
-
+void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) {
     if (graalNative == nullptr) {
         return;
     }
@@ -52,13 +42,14 @@ void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) noexcept {
     delete graalSymbol;
 }
 
-IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *graalNative) noexcept {
+IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("IndexedEventSubscriptionSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
     if (graalNative == nullptr) {
-        return {};
+        throw std::invalid_argument(
+            "Unable to create IndexedEventSubscriptionSymbol. The `graalNative` parameter is nullptr");
     }
 
     auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
@@ -87,7 +78,7 @@ bool IndexedEventSubscriptionSymbol::operator<(
             source_ < indexedEventSubscriptionSymbol.source_);
 }
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(
-    const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
+    const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) {
     eventSymbol_ = std::make_unique<SymbolWrapper>(*indexedEventSubscriptionSymbol.eventSymbol_);
     source_ = indexedEventSubscriptionSymbol.source_;
 }
@@ -98,8 +89,8 @@ IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(
     source_ = indexedEventSubscriptionSymbol.source_;
 }
 
-IndexedEventSubscriptionSymbol &IndexedEventSubscriptionSymbol::operator=(
-    const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
+IndexedEventSubscriptionSymbol &
+IndexedEventSubscriptionSymbol::operator=(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) {
     if (this == &indexedEventSubscriptionSymbol) {
         return *this;
     }
@@ -122,4 +113,4 @@ IndexedEventSubscriptionSymbol::operator=(IndexedEventSubscriptionSymbol &&index
     return *this;
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

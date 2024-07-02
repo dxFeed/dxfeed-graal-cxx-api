@@ -47,50 +47,57 @@ Examples:
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 4) {
-        printUsage();
+    try {
+        if (argc < 4) {
+            printUsage();
 
-        return 0;
-    }
-
-    std::atomic<std::size_t> eventCounter{};
-    std::mutex ioMtx{};
-
-    // Parse args.
-    std::string address = argv[1];
-    auto types = CmdArgsUtils::parseTypes(argv[2]);
-    auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
-    auto time = -1ULL;
-
-    if (argc >= 5) {
-        time = CmdArgsUtils::parseDateTime(argv[4]);
-    }
-
-    // Create an endpoint and connect to specified address.
-    auto endpoint = DXEndpoint::create()->connect(address);
-
-    // Create a subscription with specified types attached to feed.
-    auto sub = endpoint->getFeed()->createSubscription(types);
-
-    // Add an event listener.
-    sub->addEventListener([&ioMtx](const auto &events) {
-        std::lock_guard lock{ioMtx};
-
-        for (auto &&e : events) {
-            std::cout << e << "\n";
+            return 0;
         }
-    });
 
-    // Add symbols.
-    if (time != -1) {
-        sub->addSymbols(symbols | ranges::views::transform([time](const auto &s) {
-                            return TimeSeriesSubscriptionSymbol(s, time);
-                        }));
-    } else {
-        sub->addSymbols(symbols);
+        std::mutex ioMtx{};
+
+        // Parse args.
+        std::string address = argv[1];
+        auto types = CmdArgsUtils::parseTypes(argv[2]);
+        auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
+        auto time = -1LL;
+
+        if (argc >= 5) {
+            time = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[4]);
+        }
+
+        // Create an endpoint and connect to specified address.
+        auto endpoint = DXEndpoint::create()->connect(address);
+
+        // Create a subscription with specified types attached to feed.
+        auto sub = endpoint->getFeed()->createSubscription(types);
+
+        // Add an event listener.
+        sub->addEventListener([&ioMtx](const auto &events) {
+            std::lock_guard lock{ioMtx};
+
+            for (auto &&e : events) {
+                std::cout << e << "\n";
+            }
+        });
+
+        // Add symbols.
+        if (time != -1) {
+            sub->addSymbols(symbols | ranges::views::transform([time](const auto &s) {
+                                return TimeSeriesSubscriptionSymbol(s, time);
+                            }));
+        } else {
+            sub->addSymbols(symbols);
+        }
+
+        std::cin.get();
+    } catch (const JavaException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    } catch (const GraalException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
     }
-
-    std::cin.get();
 
     return 0;
 }

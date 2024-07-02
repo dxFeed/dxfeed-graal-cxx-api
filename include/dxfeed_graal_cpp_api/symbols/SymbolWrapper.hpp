@@ -5,12 +5,14 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include <concepts>
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <utility>
 #include <variant>
-#include <concepts>
 
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
@@ -19,7 +21,7 @@
 #include "../internal/Common.hpp"
 #include "StringSymbol.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * A concept describing a symbol that can be wrapped.
@@ -61,12 +63,12 @@ struct DXFCPP_EXPORT SymbolWrapper final {
 
     class DXFCPP_EXPORT SymbolListUtils final {
         static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
-        static void *newGraalList(std::ptrdiff_t size) noexcept;
+        static void *newGraalList(std::ptrdiff_t size);
         static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
-        static bool freeGraalListElements(void *graalList, std::ptrdiff_t count) noexcept;
+        static bool freeGraalListElements(void *graalList, std::ptrdiff_t count);
 
       public:
-        template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) noexcept {
+        template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) {
             if constexpr (Debugger::isDebug) {
                 Debugger::debug("SymbolWrapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
             }
@@ -114,9 +116,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
             return SymbolListUtils::toGraalList(collection.begin(), collection.end());
         }
 
-        static void freeGraalList(void *graalList) noexcept;
+        static void freeGraalList(void *graalList);
 
-        static std::vector<SymbolWrapper> fromGraalList(void *graalList) noexcept;
+        static std::vector<SymbolWrapper> fromGraalList(void *graalList);
     };
 
   private:
@@ -128,7 +130,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     SymbolWrapper &operator=(const SymbolWrapper &) noexcept = default;
     SymbolWrapper &operator=(SymbolWrapper &&) noexcept = default;
     SymbolWrapper() noexcept = default;
-    virtual ~SymbolWrapper() noexcept = default;
+    ~SymbolWrapper() noexcept = default;
 
     /**
      * Constructor for any wrapped symbol.
@@ -218,9 +220,16 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
-    static SymbolWrapper fromGraal(void *graalNative) noexcept;
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static SymbolWrapper fromGraal(void *graalNative);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -367,10 +376,12 @@ inline SymbolWrapper operator""_sw(const char *string, size_t length) noexcept {
 
 } // namespace literals
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::SymbolWrapper> {
     std::size_t operator()(const dxfcpp::SymbolWrapper &symbolWrapper) const noexcept {
         return std::hash<dxfcpp::SymbolWrapper::DataType>{}(symbolWrapper.getData());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

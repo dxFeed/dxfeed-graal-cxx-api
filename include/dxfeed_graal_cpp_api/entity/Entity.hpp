@@ -5,7 +5,9 @@
 
 #include "../internal/Conf.hpp"
 
-namespace dxfcpp {
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+DXFCPP_BEGIN_NAMESPACE
 
 /// Base abstract class for all dxFeed C++ API entities
 struct DXFCPP_EXPORT Entity {
@@ -13,4 +15,6 @@ struct DXFCPP_EXPORT Entity {
     virtual ~Entity() noexcept = default;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -14,7 +14,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 OnDemandService::OnDemandService() noexcept : handle_{} {
     if constexpr (Debugger::isDebug) {
@@ -32,17 +32,15 @@ std::shared_ptr<OnDemandService> OnDemandService::getInstance() noexcept {
     return getInstance(DXEndpoint::getInstance(DXEndpoint::Role::ON_DEMAND_FEED));
 }
 
-std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DXEndpoint> endpoint) noexcept {
+std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DXEndpoint> endpoint) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("OnDemandService::getInstance(" + endpoint->toString() + ")");
     }
 
-    std::shared_ptr<OnDemandService> onDemandService{new (std::nothrow) OnDemandService{}};
+    std::shared_ptr<OnDemandService> onDemandService{new OnDemandService{}};
 
-    if (!onDemandService || !endpoint->handle_) {
-        // TODO: dummy service & error handling [EN-8232];
-
-        return onDemandService;
+    if (!endpoint->handle_) {
+        throw std::invalid_argument("The endpoint's handle is invalid");
     }
 
     auto id = ApiContext::getInstance()->getManager<OnDemandServiceManager>()->registerEntity(onDemandService);
@@ -147,4 +145,4 @@ void OnDemandService::setSpeed(double speed) const noexcept {
     isolated::ondemand::OnDemandService::setSpeed(handle_.get(), speed);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

@@ -5,15 +5,17 @@
 
 #include "Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT EventClassList {
     template <typename EventTypeIt>
-    static std::unique_ptr<EventClassList> create(EventTypeIt begin, EventTypeIt end) noexcept {
+    static std::unique_ptr<EventClassList> create(EventTypeIt begin, EventTypeIt end) {
         auto size = std::distance(begin, end);
 
         if (size <= 0) {
@@ -46,7 +48,7 @@ struct DXFCPP_EXPORT EventClassList {
     ~EventClassList() noexcept;
 
   private:
-    static std::unique_ptr<EventClassList> create(std::size_t size) noexcept;
+    static std::unique_ptr<EventClassList> create(std::size_t size);
 
     EventClassList() noexcept;
 
@@ -55,4 +57,6 @@ struct DXFCPP_EXPORT EventClassList {
     std::unique_ptr<Impl> impl_;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

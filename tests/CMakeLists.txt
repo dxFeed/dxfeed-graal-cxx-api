@@ -20,7 +20,9 @@ set(CXX_EXTENSIONS OFF)
 set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-2.4.11)
 
 set(DXFC_TEST_SOURCES
+        exceptions/ExceptionsTest.cpp
         api/CandleSymbolTest.cpp
+        api/DataIntegrityTest.cpp
         api/DXEndpointTest.cpp
         api/DXPublisherTest.cpp
         api/EventsTest.cpp
@@ -38,7 +40,12 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
-    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static)
+    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
+
+    if (DXFCXX_FEATURE_STACKTRACE)
+        LinkStacktrace(${DXFC_TEST_BASENAME})
+    endif ()
+
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CXX_STANDARD 20)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CMAKE_C_STANDARD 11)
     set_property(TARGET ${DXFC_TEST_BASENAME} PROPERTY CXX_EXTENSIONS OFF)

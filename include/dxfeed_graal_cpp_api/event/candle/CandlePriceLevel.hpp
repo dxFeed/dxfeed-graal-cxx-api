@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../internal/utils/StringUtils.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
@@ -13,7 +15,7 @@
 #include <type_traits>
 #include <unordered_map>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Candle price level attribute of CandleSymbol defines how candles shall be aggregated in respect to
@@ -93,7 +95,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price level set.
      */
-    std::string changeAttributeForSymbol(const std::string &symbol) const noexcept override {
+    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override {
         return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                                 : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
     }
@@ -104,27 +106,21 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * and case is ignored for parsing.
      *
      * @param s string representation of candle price level.
-     * @return candle price level or std::nullopt if the string representation is invalid or value is invalid
+     * @return candle price level.
      */
-    static std::optional<CandlePriceLevel> parse(const std::string &s) noexcept {
-        try {
-            return valueOf(std::stod(s));
-        } catch (...) {
-            return std::nullopt;
-        }
+    static CandlePriceLevel parse(const dxfcpp::StringLikeWrapper &s) {
+        return valueOf(std::stod(s));
     }
 
     /**
      * Returns candle price level with the given value.
      *
      * @param value candle price level value.
-     * @return candle price level with the given value and type or std::nullopt if value is invalid
+     * @return candle price level with the given value and type.
      */
-    static std::optional<CandlePriceLevel> valueOf(double value) noexcept {
+    static CandlePriceLevel valueOf(double value) {
         if (std::isinf(value) || (value == 0.0 && std::signbit(value))) {
-            // TODO: error handling [EN-8232] throw IllegalArgumentException("Incorrect candle price level: " + value);
-
-            return std::nullopt;
+            throw std::invalid_argument("Incorrect candle price level: " + dxfcpp::toString(value));
         }
 
         return std::isnan(value) ? DEFAULT : CandlePriceLevel(value);
@@ -135,9 +131,9 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * The result is CandlePriceLevel::DEFAULT if the symbol does not have candle price level attribute.
      *
      * @param symbol candle symbol string.
-     * @return candle price level of the given candle symbol string or std::nullopt if there is no supported attribute's
+     * @return candle price level of the given candle symbol string.
      */
-    static std::optional<CandlePriceLevel> getAttributeForSymbol(const std::string &symbol) noexcept {
+    static CandlePriceLevel getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         return !stringOpt ? DEFAULT : parse(stringOpt.value());
@@ -149,33 +145,38 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the the candle price level attribute.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string normalizeAttributeForSymbol(const std::string &symbol) noexcept {
+    static std::string
+    normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {
             return symbol;
         }
 
-        auto other = parse(a.value());
+        try {
+            auto other = parse(a.value());
 
-        if (other.has_value()) {
-            if (other.value() == DEFAULT) {
+            if (other == DEFAULT) {
                 return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
             }
 
-            if (a.value() != other.value().toString()) {
-                return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.value().toString());
+            if (a.value() != other.toString()) {
+                return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.toString());
             }
-        }
 
-        return symbol;
+            return symbol;
+        } catch (const std::invalid_argument &) {
+            return symbol;
+        }
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::CandlePriceLevel> {
     std::size_t operator()(const dxfcpp::CandlePriceLevel &candlePriceLevel) const noexcept {
         return std::hash<double>{}(candlePriceLevel.getValue());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

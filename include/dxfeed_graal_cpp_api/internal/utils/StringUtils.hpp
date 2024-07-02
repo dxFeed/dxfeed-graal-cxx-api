@@ -5,15 +5,17 @@
 
 #include "../Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
 #include <locale>
-#include <string>
 #include <optional>
+#include <string>
 #include <thread>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT String {
     inline static const std::string EMPTY{};
@@ -102,9 +104,9 @@ DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
 
 DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
 
-DXFCPP_EXPORT char *createCString(const std::string &s) noexcept;
+DXFCPP_EXPORT char *createCString(const std::string &s);
 
-DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) noexcept;
+DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s);
 
 template <typename It>
     requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }
@@ -182,6 +184,12 @@ DXFCPP_EXPORT inline bool iEquals(const std::string &first, const std::string &s
     return equals(first, second, detail::IsIEqual(locale));
 }
 
+DXFCPP_EXPORT inline bool iEquals(std::string_view first, std::string_view second) noexcept {
+    const std::locale &locale = std::locale();
+
+    return equals(first, second, detail::IsIEqual(locale));
+}
+
 DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
     const std::locale &locale = std::locale();
     std::string result{};
@@ -195,4 +203,6 @@ DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
 
 DXFCPP_EXPORT std::string trimStr(const std::string &s) noexcept;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

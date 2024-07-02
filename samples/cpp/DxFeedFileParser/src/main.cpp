@@ -26,46 +26,55 @@ Where:
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 4) {
-        printUsage();
+    try {
 
-        return 0;
-    }
+        if (argc < 4) {
+            printUsage();
 
-    std::atomic<std::size_t> eventCounter{};
-    std::mutex ioMtx{};
-
-    // Parse args.
-    std::string fileName = argv[1];
-    auto types = CmdArgsUtils::parseTypes(argv[2]);
-    auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
-
-    // Create endpoint specifically for file parsing.
-    auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
-    auto feed = endpoint->getFeed();
-
-    // Subscribe to a specified event and symbol.
-    auto sub = feed->createSubscription(types);
-    sub->addEventListener([&eventCounter, &ioMtx](const auto &events) {
-        std::lock_guard lock{ioMtx};
-
-        for (auto &&e : events) {
-            std::cout << (++eventCounter) << ": " << e << "\n";
+            return 0;
         }
-    });
 
-    // Add symbols.
-    sub->addSymbols(symbols);
+        std::atomic<std::size_t> eventCounter{};
+        std::mutex ioMtx{};
 
-    // Connect endpoint to a file.
-    endpoint->connect("file:" + fileName + "[speed=max]");
+        // Parse args.
+        std::string fileName = argv[1];
+        auto types = CmdArgsUtils::parseTypes(argv[2]);
+        auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
 
-    // Wait until file is completely parsed.
-    endpoint->awaitNotConnected();
+        // Create endpoint specifically for file parsing.
+        auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
+        auto feed = endpoint->getFeed();
 
-    // Close endpoint when we're done.
-    // This method will gracefully close endpoint, waiting while data processing completes.
-    endpoint->closeAndAwaitTermination();
+        // Subscribe to a specified event and symbol.
+        auto sub = feed->createSubscription(types);
+        sub->addEventListener([&eventCounter, &ioMtx](const auto &events) {
+            std::lock_guard lock{ioMtx};
+
+            for (auto &&e : events) {
+                std::cout << (++eventCounter) << ": " << e << "\n";
+            }
+        });
+
+        // Add symbols.
+        sub->addSymbols(symbols);
+
+        // Connect endpoint to a file.
+        endpoint->connect("file:" + fileName + "[speed=max]");
+
+        // Wait until file is completely parsed.
+        endpoint->awaitNotConnected();
+
+        // Close endpoint when we're done.
+        // This method will gracefully close endpoint, waiting while data processing completes.
+        endpoint->closeAndAwaitTermination();
+    } catch (const JavaException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    } catch (const GraalException &e) {
+        std::cerr << e.what() << '\n';
+        std::cerr << e.getStackTrace() << '\n';
+    }
 
     return 0;
 }

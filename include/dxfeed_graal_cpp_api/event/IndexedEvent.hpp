@@ -5,13 +5,15 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 
 #include "EventFlag.hpp"
 #include "IndexedEventSource.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Represents an indexed collection of up-to-date information about some
@@ -109,7 +111,9 @@ struct DXFCPP_EXPORT IndexedEvent {
      *
      * @param index unique per-symbol index of this event.
      */
-    virtual void setIndex(std::int64_t index) noexcept = 0;
+    virtual void setIndex(std::int64_t index) = 0;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

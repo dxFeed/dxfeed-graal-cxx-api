@@ -5,12 +5,14 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <utility>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Represents [wildcard] subscription to all events of the specific event type.
@@ -52,7 +54,7 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     WildcardSymbol &operator=(const WildcardSymbol &) noexcept = default;
     WildcardSymbol &operator=(WildcardSymbol &&) noexcept = default;
     WildcardSymbol() noexcept = default;
-    virtual ~WildcardSymbol() noexcept = default;
+    ~WildcardSymbol() noexcept = default;
 
     const std::string &getSymbol() const noexcept {
         return symbol_;
@@ -72,9 +74,16 @@ struct DXFCPP_EXPORT WildcardSymbol final {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      */
-    static void freeGraal(void *graalNative) noexcept;
+    static void freeGraal(void *graalNative);
 
-    static const WildcardSymbol &fromGraal(void *graalNative) noexcept;
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws std::invalid_argument
+     */
+    static const WildcardSymbol &fromGraal(void *graalNative);
 
     /**
      * Returns string representation of this wildcard subscription symbol.
@@ -110,10 +119,12 @@ inline WildcardSymbol operator""_wcs(const char *, size_t) noexcept {
 
 } // namespace literals
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::WildcardSymbol> {
     std::size_t operator()(const dxfcpp::WildcardSymbol &wildcardSymbol) const noexcept {
         return std::hash<std::string>{}(wildcardSymbol.getSymbol());
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

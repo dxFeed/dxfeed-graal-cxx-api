@@ -5,7 +5,9 @@
 
 #include "../internal/Conf.hpp"
 
-namespace dxfcpp {
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * This marker interface marks subscription symbol classes (like TimeSeriesSubscriptionSymbol)
@@ -24,4 +26,6 @@ namespace dxfcpp {
  */
 struct FilteredSubscriptionSymbol {};
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

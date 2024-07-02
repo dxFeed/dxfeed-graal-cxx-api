@@ -18,7 +18,7 @@
 
 #include <range/v3/all.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 std::string toString(bool b) noexcept {
     return b ? "true" : "false";
@@ -92,7 +92,7 @@ char utf16to8(std::int16_t in) noexcept {
 
         return out.empty() ? char{} : out[0];
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return char{};
     }
 }
@@ -106,7 +106,7 @@ std::string utf16toUtf8String(std::int16_t in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return "";
     }
 }
@@ -119,7 +119,7 @@ std::string utf16toUtf8String(const std::u16string &in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return "";
     }
 }
@@ -132,7 +132,7 @@ std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept {
 
         return out;
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return "";
     }
 }
@@ -146,7 +146,7 @@ std::int16_t utf8to16(char in) noexcept {
 
         return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
     } catch (...) {
-        // TODO: error handling [EN-8232]
+        // TODO: error handling
         return std::int16_t{};
     }
 }
@@ -198,16 +198,12 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
 //    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
 }
 
-char *createCString(const std::string &s) noexcept {
+char *createCString(const std::string &s) {
     if (s == dxfcpp::String::NUL) {
         return nullptr;
     }
 
-    char *cString = new (std::nothrow) char[s.size() + 1];
-
-    if (!cString) {
-        return nullptr;
-    }
+    char *cString = new char[s.size() + 1];
 
     std::copy(s.begin(), s.end(), cString);
     cString[s.size()] = '\0';
@@ -215,7 +211,7 @@ char *createCString(const std::string &s) noexcept {
     return cString;
 }
 
-DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) noexcept {
+DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) {
     if (!s) {
         return nullptr;
     }
@@ -232,4 +228,4 @@ std::string trimStr(const std::string &s) noexcept {
            ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

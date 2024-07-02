@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <algorithm>
 #include <cstdint>
 #include <numeric>
@@ -14,7 +16,7 @@
 
 #include "../internal/Common.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
@@ -316,7 +318,7 @@ class DXFCPP_EXPORT EventFlag final {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
 
 ///
 template <> struct std::hash<dxfcpp::EventFlag> {
@@ -325,7 +327,7 @@ template <> struct std::hash<dxfcpp::EventFlag> {
     }
 };
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /// The event flags' mask (a set of bit flags)
 class EventFlagsMask final {
@@ -437,4 +439,6 @@ class EventFlagsMask final {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

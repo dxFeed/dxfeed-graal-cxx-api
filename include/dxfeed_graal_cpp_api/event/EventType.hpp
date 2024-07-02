@@ -5,13 +5,15 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <memory>
 #include <string>
 
 #include "../entity/EntityModule.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Marks all event types that can be received via dxFeed API.
@@ -68,7 +70,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    virtual void *toGraal() const noexcept = 0;
+    virtual void *toGraal() const = 0;
 
     ///
     std::string toString() const noexcept override {
@@ -126,4 +128,6 @@ template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public Eve
     virtual void setEventSymbol(const Symbol &eventSymbol) noexcept = 0;
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

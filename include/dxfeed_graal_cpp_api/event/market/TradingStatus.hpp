@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
@@ -13,7 +15,7 @@
 #include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Trading status of an instrument.
@@ -41,4 +43,6 @@ template <>
 const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>>
     TradingStatus::ParentType::ALL;
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

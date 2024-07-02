@@ -5,23 +5,31 @@
 
 #include "Conf.hpp"
 
+#include "utils/StringUtils.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
 #include <climits>
 #include <cstring>
 
+#include <charconv>
 #include <chrono>
 #include <cmath>
 #include <iostream>
 #include <mutex>
 #include <sstream>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
+#include <variant>
 
 #include "utils/debug/Debug.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 template <typename T>
 concept Integral = std::is_integral_v<T>;
@@ -31,8 +39,6 @@ concept EnumConcept = std::is_enum_v<T>;
 
 template <class From, class To>
 concept ConvertibleTo = std::is_convertible_v<From, To> && requires { static_cast<To>(std::declval<From>()); };
-
-#include <type_traits>
 
 namespace detail {
 template <typename T>
@@ -49,12 +55,6 @@ struct DXEndpointStateChangeListener {};
 struct IpfPropertyChangeListener {};
 
 struct InstrumentProfileUpdateListener {};
-
-#if defined(__clang__)
-constexpr bool isClangFlavouredCompiler = true;
-#else
-constexpr bool isClangFlavouredCompiler = false;
-#endif
 
 template <typename... T> constexpr void ignore_unused(const T &...) {
 }
@@ -98,31 +98,6 @@ enum class Tristate : std::uint8_t {
 inline auto now() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
         .count();
-}
-
-template <typename M, typename F, typename... Args> inline void callWithLock(M &mtx, F &&f, Args &&...args) noexcept {
-    std::once_flag once{};
-
-    try {
-        std::lock_guard guard{mtx};
-
-        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
-    } catch (...) {
-        // TODO: error handling [EN-8232]
-    }
-}
-
-template <typename M, typename F, typename... Args>
-inline void tryCallWithLock(M &mtx, F &&f, Args &&...args) noexcept {
-    std::once_flag once{};
-
-    try {
-        std::lock_guard guard{mtx};
-
-        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
-    } catch (...) {
-        return std::call_once(once, std::forward<F>(f), std::forward<Args>(args)...);
-    }
 }
 
 namespace math {
@@ -305,10 +280,9 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
     return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
 }
 
-constexpr static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
-    // TODO: error handling [EN-8232]
+static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
     if (month < 1 || month > 12) {
-        return -1;
+        throw std::invalid_argument("invalid month " + std::to_string(month));
     }
 
     std::int32_t dayOfYear = DAY_OF_YEAR[month] + day - 1;
@@ -386,11 +360,13 @@ template <Integral V, Integral S> static constexpr V leftArithmeticShift(V value
         return value;
     }
 
-    if (shift >= sizeof(V) * 8) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return value << static_cast<std::make_unsigned_t<S>>(shift);
+    return value << unsignedShift;
 }
 
 /**
@@ -437,15 +413,13 @@ template <Integral V, Integral S> static constexpr V rightArithmeticShift(V valu
         return value;
     }
 
-    if (shift >= sizeof(V) * CHAR_BIT) {
-        if (value < 0) {
-            return -1;
-        } else {
-            return 0;
-        }
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
+        return value < 0 ? -1 : 0;
     }
 
-    return value >> static_cast<std::make_unsigned_t<S>>(shift);
+    return value >> unsignedShift;
 }
 
 /**
@@ -508,11 +482,13 @@ template <Integral V, Integral S> static constexpr V leftLogicalShift(V value, S
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return value << static_cast<std::make_unsigned_t<S>>(shift);
+    return value << unsignedShift;
 }
 
 /**
@@ -558,11 +534,13 @@ template <Integral V, Integral S> static constexpr V rightLogicalShift(V value, 
         return value;
     }
 
-    if (static_cast<std::size_t>(shift) >= sizeof(V) * CHAR_BIT) {
+    auto unsignedShift = static_cast<std::make_unsigned_t<S>>(shift);
+
+    if (unsignedShift >= sizeof(V) * CHAR_BIT) {
         return 0;
     }
 
-    return static_cast<V>(static_cast<std::make_unsigned_t<V>>(value) >> static_cast<std::make_unsigned_t<S>>(shift));
+    return static_cast<V>(static_cast<std::make_unsigned_t<V>>(value) >> unsignedShift);
 }
 
 /**
@@ -632,7 +610,7 @@ template <std::size_t Bits> struct hashMixImpl;
 
 template <> struct hashMixImpl<64> {
     constexpr static std::uint64_t fn(std::uint64_t x) noexcept {
-        std::uint64_t const m = (std::uint64_t(0xe9846af) << 32) + 0x9b1a615d;
+        std::uint64_t const m = (static_cast<std::uint64_t>(0xe9846af) << 32) + 0x9b1a615d;
 
         x ^= x >> 32;
         x *= m;
@@ -679,4 +657,113 @@ constexpr std::pair<std::size_t, std::size_t> unpack(std::size_t v) noexcept {
     return {shr(v, sizeOfSize / 2), andOp(v, shr(~std::size_t{}, sizeOfSize / 2))};
 }
 
-} // namespace dxfcpp
+template <typename T, typename U> T fitToType(const U &size) {
+    static_assert(sizeof(T) <= sizeof(U));
+
+    return static_cast<T>(static_cast<U>(std::numeric_limits<T>::max()) < size ? std::numeric_limits<T>::max() : size);
+}
+
+/**
+ * A simple wrapper around strings or something similar to strings to reduce the amount of code for methods that take
+ * strings as input.
+ */
+struct StringLikeWrapper {
+    using DataType = std::variant<std::string, std::string_view>;
+
+    DataType data{};
+
+    StringLikeWrapper(std::string_view sv) : data{sv} {
+    }
+
+    StringLikeWrapper(const char *chars) : data{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
+    }
+
+    StringLikeWrapper(const std::string &s) : data{s} {
+    }
+
+    StringLikeWrapper(std::string &&s) : data{std::move(s)} {
+    }
+
+    template <auto N>
+    StringLikeWrapper(const char (&chars)[N]) : StringLikeWrapper{std::string_view{chars, chars + N}} {
+    }
+
+    operator std::string() const {
+        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+            return {sv->data(), sv->size()};
+        } else {
+            return std::get<std::string>(data);
+        }
+    }
+
+    operator std::string_view() const & {
+        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+            return *sv;
+        } else {
+            return std::get<std::string>(data);
+        }
+    }
+
+    bool operator==(const StringLikeWrapper &sw) const {
+        return sw.operator std::string_view() == this->operator std::string_view();
+    }
+
+    friend std::string operator+(const StringLikeWrapper &sw1, const StringLikeWrapper &sw2) {
+        return sw1.operator std::string() + sw2.operator std::string();
+    }
+
+    explicit operator double() const {
+        double result{};
+
+        // At the moment, clang\apple clang's std lib does not support a version of the `from_chars` function (needed
+        // for `std::string_view`) for the `double` type.
+#ifdef _LIBCPP_VERSION
+        auto s = this->operator std::string();
+
+        result = std::stod(s);
+#else
+        auto sw = this->operator std::string_view();
+
+        std::from_chars(sw.data(), sw.data() + sw.size(), result);
+#endif
+
+        return result;
+    }
+};
+
+struct StringHash {
+    using HashType = std::hash<std::string_view>;
+    using is_transparent = void;
+
+    std::size_t operator()(const char *str) const {
+        return HashType{}(str);
+    }
+
+    std::size_t operator()(std::string_view str) const {
+        return HashType{}(str);
+    }
+
+    std::size_t operator()(std::string const &str) const {
+        return HashType{}(str);
+    }
+
+    std::size_t operator()(const StringLikeWrapper &sw) const {
+        return HashType{}(sw);
+    }
+};
+
+namespace util {
+inline void throwInvalidChar(char c, const std::string &name) {
+    throw std::invalid_argument("Invalid " + name + ": " + encodeChar(c));
+}
+
+inline void checkChar(char c, std::uint32_t mask, const std::string &name) {
+    if ((andOp(c, ~mask)) != 0) {
+        throwInvalidChar(c, name);
+    }
+}
+} // namespace util
+
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

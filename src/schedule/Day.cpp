@@ -6,17 +6,18 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 Day::Day(void *handle) noexcept : handle_(handle) {
 }
 
-Day::Ptr Day::create(void *handle) noexcept {
+Day::Ptr Day::create(void *handle) {
     if (!handle) {
-        return {};
+        throw std::invalid_argument(
+            "Unable to create a Day object. The handle is nullptr");
     }
 
-    return std::shared_ptr<Day>(new (std::nothrow) Day(handle));
+    return std::shared_ptr<Day>(new Day(handle));
 }
 
 std::shared_ptr<Schedule> Day::getSchedule() const noexcept {
@@ -231,4 +232,4 @@ std::string Day::toString() const noexcept {
     return isolated::schedule::Day::toString(handle_.get());
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

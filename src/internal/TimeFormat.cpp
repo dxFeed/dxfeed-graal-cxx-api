@@ -4,34 +4,31 @@
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
+#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedTimeFormat.hpp>
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
-TimeFormat::TimeFormat(void *handle) noexcept : handle_(handle){};
+TimeFormat::TimeFormat(void *handle) : handle_(handle){};
 
-const TimeFormat TimeFormat::DEFAULT(isolated::TimeFormat::getDefault());
-const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS(DEFAULT.handle_
-                                                     ? isolated::TimeFormat::withMillis(DEFAULT.handle_.get())
-                                                     : nullptr);
+TimeFormat::TimeFormat(JavaObjectHandle<TimeFormat> &&handle) : handle_(std::move(handle)){};
+
+const TimeFormat TimeFormat::DEFAULT(isolated::internal::IsolatedTimeFormat::getDefault());
+const TimeFormat
+    TimeFormat::DEFAULT_WITH_MILLIS(DEFAULT.handle_
+                                        ? isolated::internal::IsolatedTimeFormat::withMillis(DEFAULT.handle_)
+                                        : JavaObjectHandle<TimeFormat>{nullptr});
 const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE(
-    DEFAULT_WITH_MILLIS.handle_ ? isolated::TimeFormat::withTimeZone(DEFAULT_WITH_MILLIS.handle_.get()) : nullptr);
-const TimeFormat TimeFormat::GMT(isolated::TimeFormat::getGmt());
+    DEFAULT_WITH_MILLIS.handle_ ? isolated::internal::IsolatedTimeFormat::withTimeZone(DEFAULT_WITH_MILLIS.handle_)
+                                : JavaObjectHandle<TimeFormat>{nullptr});
+const TimeFormat TimeFormat::GMT(isolated::internal::IsolatedTimeFormat::getGmt());
 
-std::int64_t TimeFormat::parse(const std::string &value) const noexcept {
-    if (!handle_) {
-        return 0;
-    }
-
-    return isolated::TimeFormat::parse(handle_.get(), value);
+std::int64_t TimeFormat::parse(const std::string &value) const {
+    return isolated::internal::IsolatedTimeFormat::parse(handle_, value);
 }
 
-std::string TimeFormat::format(std::int64_t timestamp) const noexcept {
-    if (!handle_) {
-        return dxfcpp::String::EMPTY;
-    }
-
-    return isolated::TimeFormat::format(handle_.get(), timestamp);
+std::string TimeFormat::format(std::int64_t timestamp) const {
+    return isolated::internal::IsolatedTimeFormat::format(handle_, timestamp);
 }
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE

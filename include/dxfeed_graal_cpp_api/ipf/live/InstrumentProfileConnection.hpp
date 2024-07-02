@@ -5,6 +5,8 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../internal/Common.hpp"
 #include "../../internal/Id.hpp"
 #include "../../internal/JavaObjectHandle.hpp"
@@ -12,7 +14,7 @@
 #include "../../entity/SharedEntity.hpp"
 #include "InstrumentProfileCollector.hpp"
 
-namespace dxfcpp {
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Connects to an instrument profile URL and reads instrument profiles with support of
@@ -100,7 +102,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return new instrument profile connection.
      */
-    static Ptr createConnection(const std::string &address, InstrumentProfileCollector::Ptr collector) noexcept;
+    static Ptr createConnection(const std::string &address, InstrumentProfileCollector::Ptr collector);
 
     /**
      * Returns the address of this instrument profile connection.
@@ -243,4 +245,6 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     }
 };
 
-} // namespace dxfcpp
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
