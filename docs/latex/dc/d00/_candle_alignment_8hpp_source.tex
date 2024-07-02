@@ -9,171 +9,176 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Candle\ alignment\ attribute\ of\ CandleSymbol\ defines\ how\ candle\ are\ aligned\ with\ respect\ to\ time.}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00019\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ Candle\ alignment\ attribute\ of\ CandleSymbol\ defines\ how\ candle\ are\ aligned\ with\ respect\ to\ time.}}
 \DoxyCodeLine{00023\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ This\ attribute\ is\ encoded\ in\ a\ symbol\ string\ with}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::getAttributeStringByKey()\ "{}MarketEventSymbols.getAttributeStringByKey"{},}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::changeAttributeStringByKey()\ "{}changeAttributeStringByKey"{},\ and}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::removeAttributeStringByKey()\ "{}removeAttributeStringByKey"{}\ methods.}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ The\ key\ to\ use\ with\ these\ methods\ is\ available\ via\ CandleAlignment::ATTRIBUTE\_KEY\ constant.}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandleAlignment::toString()}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00031\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment}{CandleAlignment}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol_attribute}{CandleSymbolAttribute}}\ \{}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ Align\ candles\ on\ midnight.}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment}{CandleAlignment}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ab95ed2f5e64efe8830103df7629e4c1f}{MIDNIGHT}};}
-\DoxyCodeLine{00036\ }
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ Align\ candles\ on\ trading\ sessions.}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment}{CandleAlignment}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a8dd12d56ad5062c13fc3e851979290ec}{SESSION}};}
-\DoxyCodeLine{00041\ }
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Default\ alignment\ is\ CandleAlignment::MIDNIGHT.}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment}{CandleAlignment}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ad319fa0d642c63c839955597b73011b8}{DEFAULT}};}
-\DoxyCodeLine{00046\ }
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ The\ attribute\ key\ that\ is\ used\ to\ store\ the\ value\ of\ CandleAlignment\ in}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ a\ symbol\ string\ using\ methods\ of\ MarketEventSymbols\ class.}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ of\ this\ constant\ is\ "{}a"{}.}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandleAlignment::toString()}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a9c3c16aad08be954175dc6b05a0f80f8}{ATTRIBUTE\_KEY}};}
-\DoxyCodeLine{00054\ }
-\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ CandleAlignment>>\ BY\_STRING;}
-\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::reference\_wrapper<\textcolor{keyword}{const}\ CandleAlignment>>\ VALUES;}
-\DoxyCodeLine{00057\ }
-\DoxyCodeLine{00058\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00059\ \ \ \ \ std::string\ string\_\{\};}
-\DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{explicit}\ CandleAlignment(\textcolor{keyword}{const}\ std::string\ \&string)\ \textcolor{keyword}{noexcept}\ :\ string\_\{string\}\ \{}
-\DoxyCodeLine{00062\ \ \ \ \ \}}
-\DoxyCodeLine{00063\ }
-\DoxyCodeLine{00064\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00065\ \ \ \ \ CandleAlignment()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandleAlignment()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ attribute\ is\ encoded\ in\ a\ symbol\ string\ with}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::getAttributeStringByKey()\ "{}MarketEventSymbols.getAttributeStringByKey"{},}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::changeAttributeStringByKey()\ "{}changeAttributeStringByKey"{},\ and}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::removeAttributeStringByKey()\ "{}removeAttributeStringByKey"{}\ methods.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ The\ key\ to\ use\ with\ these\ methods\ is\ available\ via\ CandleAlignment::ATTRIBUTE\_KEY\ constant.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandleAlignment::toString()}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00033\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_candle_symbol_attribute}{CandleSymbolAttribute}}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ Align\ candles\ on\ midnight.}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}\ \mbox{\hyperlink{struct_candle_alignment_a079e387c53a40c7660131a528d509851}{MIDNIGHT}};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ *\ Align\ candles\ on\ trading\ sessions.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}\ \mbox{\hyperlink{struct_candle_alignment_a18335909e5dfa7eb38ec5787418e3035}{SESSION}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ Default\ alignment\ is\ CandleAlignment::MIDNIGHT.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}\ \mbox{\hyperlink{struct_candle_alignment_a0363ed33802a705c64abded7697e442d}{DEFAULT}};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ The\ attribute\ key\ that\ is\ used\ to\ store\ the\ value\ of\ CandleAlignment\ in}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ a\ symbol\ string\ using\ methods\ of\ MarketEventSymbols\ class.}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ of\ this\ constant\ is\ "{}a"{}.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandleAlignment::toString()}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{struct_candle_alignment_a8ce587e43a5f8496c1a8ea0bf24b9499}{ATTRIBUTE\_KEY}};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ CandleAlignment>,\ dxfcpp::StringHash,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::equal\_to<>>}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ BY\_STRING;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::reference\_wrapper<\textcolor{keyword}{const}\ CandleAlignment>>\ VALUES;}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00063\ \ \ \ \ std::string\ string\_\{\};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{explicit}\ CandleAlignment(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&string)\ \textcolor{keyword}{noexcept}\ :\ string\_\{string\}\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \}}
 \DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ event\ symbol\ string\ with\ this\ candle\ alignment\ set.}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ original\ candle\ event\ symbol.}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ event\ symbol\ string\ with\ this\ candle\ alignment\ set.}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00074\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a426f389234b0a589656ddad8cc2b74f8}{changeAttributeForSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this}\ ==\ DEFAULT\ ?\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY)}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ toString());}
-\DoxyCodeLine{00077\ \ \ \ \ \}}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ candle\ alignment.}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ The\ string\ representation\ of\ candle\ alignment\ "{}m"{}\ for\ CandleAlignment::MIDNIGHT\ and\ "{}s"{}\ for}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ CandleAlignment::SESSION.}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ candle\ alignment.}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00086\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a4f16418a25fd794525150713eb80a559}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_;}
-\DoxyCodeLine{00088\ \ \ \ \ \}}
-\DoxyCodeLine{00089\ }
-\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment}{CandleAlignment}}\ \&candleAlignment)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_\ ==\ candleAlignment.string\_;}
+\DoxyCodeLine{00068\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00069\ \ \ \ \ CandleAlignment()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandleAlignment()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ event\ symbol\ string\ with\ this\ candle\ alignment\ set.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ original\ candle\ event\ symbol.}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ event\ symbol\ string\ with\ this\ candle\ alignment\ set.}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00078\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_candle_alignment_aa9405c16faa8dc0447b3f92f84d30de0}{changeAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this}\ ==\ DEFAULT\ ?\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY)}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ toString());}
+\DoxyCodeLine{00081\ \ \ \ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ candle\ alignment.}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ The\ string\ representation\ of\ candle\ alignment\ "{}m"{}\ for\ CandleAlignment::MIDNIGHT\ and\ "{}s"{}\ for}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ CandleAlignment::SESSION.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ candle\ alignment.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_candle_alignment_aaad3e93c3271d2ece752681fb490ed57}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_;}
 \DoxyCodeLine{00092\ \ \ \ \ \}}
 \DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ string\ representation\ of\ candle\ alignment\ into\ object.}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ Any\ string\ that\ was\ returned\ by\ CandleAlignment::toString()\ can\ be\ parsed\ and\ case\ is\ ignored\ for\ parsing.}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ @param\ s\ The\ string\ representation\ of\ candle\ alignment.}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ candle\ alignment\ (reference)\ or\ std::nullopt\ if\ there\ is\ no\ supported\ attribute's\ value.}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{reference\_wrapper}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{CandleAlignment}}>>\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{parse}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_ae875c63bbb077e66431d8d84840679bc}{s}})\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ found\ =\ BY\_STRING.find(s);}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (found\ !=\ BY\_STRING.end())\ \{}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&alignmentRef\ :\ VALUES)\ \{}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&alignmentStr\ =\ alignmentRef.get().toString();}
-\DoxyCodeLine{00110\ }
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (iEquals(alignmentStr,\ s))\ \{}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ alignmentRef;}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}\ \&candleAlignment)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_\ ==\ candleAlignment.string\_;}
+\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ string\ representation\ of\ candle\ alignment\ into\ object.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ Any\ string\ that\ was\ returned\ by\ CandleAlignment::toString()\ can\ be\ parsed\ and\ case\ is\ ignored\ for\ parsing.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ @param\ s\ The\ string\ representation\ of\ candle\ alignment.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ candle\ alignment\ (reference)}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument\ if\ the\ string\ representation\ is\ invalid.}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{static}\ std::reference\_wrapper<\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}>\ \mbox{\hyperlink{struct_candle_alignment_ade94ab6dbb87166f7715142fa38ffc93}{parse}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&s)\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ found\ =\ BY\_STRING.find(s);}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (found\ !=\ BY\_STRING.end())\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&alignmentRef\ :\ VALUES)\ \{}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&alignmentStr\ =\ alignmentRef.get().toString();}
 \DoxyCodeLine{00115\ }
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ [EN-\/8232]\ throw\ IllegalArgumentException("{}Unknown\ candle\ alignment:\ "{}\ +\ s);}}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
-\DoxyCodeLine{00119\ \ \ \ \ \}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (iEquals(alignmentStr,\ s))\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ alignmentRef;}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ alignment\ of\ the\ given\ candle\ symbol\ string.}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ CandleAlignment::DEFAULT\ if\ the\ symbol\ does\ not\ have\ candle\ alignment\ attribute\ or\ std::nullopt\ if}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ there\ is\ no\ supported\ attribute's\ value.}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ candle\ symbol\ string.}}
-\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ alignment\ of\ the\ given\ candle\ symbol\ string\ or\ std::nullopt\ if\ there\ is\ no\ supported\ attribute's}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ value.}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{reference\_wrapper}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{CandleAlignment}}>>}
-\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{getAttributeForSymbol}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a203b3d3db2b4a855273c109905b83c7b}{symbol}})\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ stringOpt\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
-\DoxyCodeLine{00133\ }
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !stringOpt\ ?\ DEFAULT\ :\ parse(stringOpt.value());}
-\DoxyCodeLine{00135\ \ \ \ \ \}}
-\DoxyCodeLine{00136\ }
-\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ candle\ alignment\ attribute.}}
-\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ candle\ symbol\ string.}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ the\ candle\ alignment\ attribute.}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_alignment_a73236ab6ee1b26baba0336680655ef5e}{normalizeAttributeForSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ a\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
-\DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!a)\ \{}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00149\ }
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ other\ =\ parse(a.value());}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown\ candle\ alignment:\ "{}}\ +\ s);}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ alignment\ of\ the\ given\ candle\ symbol\ string.}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ CandleAlignment::DEFAULT\ if\ the\ symbol\ does\ not\ have\ candle\ alignment\ attribute.}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ candle\ symbol\ string.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ alignment\ of\ the\ given\ candle\ symbol\ string.}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{static}\ std::reference\_wrapper<\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}>}
+\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{struct_candle_alignment_a7c8a575e946b2b09b6d09abb52e58bf2}{getAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ stringOpt\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !stringOpt\ ?\ std::cref(DEFAULT)\ :\ parse(stringOpt.value());}
+\DoxyCodeLine{00136\ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ candle\ alignment\ attribute.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ candle\ symbol\ string.}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ the\ candle\ alignment\ attribute.}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{static}\ std::string}
+\DoxyCodeLine{00145\ \ \ \ \ \mbox{\hyperlink{struct_candle_alignment_a897ee6b3194cbdf5f6cd97538764e1ea}{normalizeAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ a\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!a)\ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00151\ }
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other.has\_value())\ \{}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other.value()\ ==\ DEFAULT)\ \{}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00156\ }
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (a.value()\ !=\ other.value().get().toString())\ \{}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.value().get().toString());}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ other\ =\ parse(a.value());}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other\ ==\ DEFAULT)\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (a.value()\ !=\ other.get().toString())\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ other.get().toString());}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00162\ }
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
-\DoxyCodeLine{00164\ \ \ \ \ \}}
-\DoxyCodeLine{00165\ \};}
-\DoxyCodeLine{00166\ }
-\DoxyCodeLine{00167\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
-\DoxyCodeLine{00168\ }
-\DoxyCodeLine{00169\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment}{CandleAlignment}}>\ \{}
-\DoxyCodeLine{00170\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_alignment}{CandleAlignment}}\ \&candleAlignment)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(candleAlignment.toString());}
-\DoxyCodeLine{00172\ \ \ \ \ \}}
-\DoxyCodeLine{00173\ \};}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::invalid\_argument\ \&)\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00167\ \ \ \ \ \}}
+\DoxyCodeLine{00168\ \};}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}>\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_candle_alignment}{CandleAlignment}}\ \&candleAlignment)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(candleAlignment.toString());}
+\DoxyCodeLine{00175\ \ \ \ \ \}}
+\DoxyCodeLine{00176\ \};}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

@@ -1,0 +1,889 @@
+\doxysubsection{DXFeed\+Subscription Class Reference}
+\hypertarget{class_d_x_feed_subscription}{}\label{class_d_x_feed_subscription}\index{DXFeedSubscription@{DXFeedSubscription}}
+
+
+Subscription for a set of symbols and event types.  
+
+
+
+
+{\ttfamily \#include $<$DXFeed\+Subscription.\+hpp$>$}
+
+Inheritance diagram for DXFeed\+Subscription\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{dc/d00/class_d_x_feed_subscription}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_d_x_feed_subscription_ae70a204c34fd1043a1ed951636ef9917}\label{class_d_x_feed_subscription_ae70a204c34fd1043a1ed951636ef9917} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} object. \end{DoxyCompactList}\item 
+\Hypertarget{class_d_x_feed_subscription_a3de7fbc2375e6c27817da79849d82724}\label{class_d_x_feed_subscription_a3de7fbc2375e6c27817da79849d82724} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_ab3f47d037c4beb66826df634088b5eb8}{attach}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_feed}{DXFeed}} $>$ feed) noexcept
+\begin{DoxyCompactList}\small\item\em Attaches subscription to the specified feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_abe5fa8fdc03fe385d685195a938e11a2}{detach}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_feed}{DXFeed}} $>$ feed) noexcept
+\begin{DoxyCompactList}\small\item\em Detaches subscription from the specified feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_a5643eabb939f2c293f6dbd1936f136c1}{close}} () noexcept
+\begin{DoxyCompactList}\small\item\em Closes this subscription and makes it {\itshape permanently detached}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Listener $>$ }\\std\+::size\+\_\+t \mbox{\hyperlink{class_d_x_feed_subscription_a5bccde40320ad27942299b88519b379c}{add\+Event\+Listener}} (Event\+Listener \&\&listener) noexcept
+\begin{DoxyCompactList}\small\item\em Adds listener for events. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename EventT $>$ }\\std\+::size\+\_\+t \mbox{\hyperlink{class_d_x_feed_subscription_a298f960e5354be4470194fc5ee5eb355}{add\+Event\+Listener}} (std\+::function$<$ void(const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ EventT $>$ $>$ \&)$>$ \&\&listener) noexcept
+\begin{DoxyCompactList}\small\item\em Adds typed listener for events. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_a2d6ef57f0b8086b38cadb2a2cc0b36cd}{remove\+Event\+Listener}} (std\+::size\+\_\+t listener\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Removes listener for events. \end{DoxyCompactList}\item 
+auto \& \mbox{\hyperlink{class_d_x_feed_subscription_ad868a6f48bee30e9f7a5d3aac5ecc703}{on\+Event}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a reference to an incoming events\textquotesingle{} handler (delegate), to which listeners can be added and removed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_a43713365d3db41d8cf9e3a9e894611a4}{add\+Symbols}} (const \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} \&symbol\+Wrapper) const noexcept
+\begin{DoxyCompactList}\small\item\em Adds the specified symbol to the set of subscribed symbols. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_af29bdc6a01648d0148f7776115843912}{remove\+Symbols}} (const \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} \&symbol\+Wrapper) const noexcept
+\begin{DoxyCompactList}\small\item\em Removes the specified symbol from the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Symbol\+It $>$ }\\void \mbox{\hyperlink{class_d_x_feed_subscription_a2a9fdf1593cce9f642b953025f84c43d}{add\+Symbols}} (Symbol\+It begin, Symbol\+It end) const
+\begin{DoxyCompactList}\small\item\em Adds the specified collection (using iterators) of symbols to the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{concept_convertible_to_symbol_wrapper_collection}{Convertible\+To\+Symbol\+Wrapper\+Collection}} Symbols\+Collection$>$ }\\void \mbox{\hyperlink{class_d_x_feed_subscription_a8719b461ec8b0b66d3e960253086c055}{add\+Symbols}} (const Symbols\+Collection \&collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Adds the specified collection of symbols to the set of subscribed symbols. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_ab82037cfcd057d0db055ba3758d93694}{add\+Symbols}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Adds the specified collection (initializer list) of symbols to the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Symbol\+It $>$ }\\void \mbox{\hyperlink{class_d_x_feed_subscription_a542a164bf6ebb60daaf69fd1859887fa}{remove\+Symbols}} (Symbol\+It begin, Symbol\+It end) const
+\begin{DoxyCompactList}\small\item\em Removes the specified collection (using iterators) of symbols from the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{concept_convertible_to_symbol_wrapper_collection}{Convertible\+To\+Symbol\+Wrapper\+Collection}} Symbols\+Collection$>$ }\\void \mbox{\hyperlink{class_d_x_feed_subscription_a5cc7f10fb829083167a8d01dfb112e3e}{remove\+Symbols}} (Symbols\+Collection \&\&collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Removes the specified collection of symbols from the set of subscribed symbols. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_a3b8aef4012950c25bca5cedd4a73c845}{remove\+Symbols}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Removes the specified collection (initializer list) of symbols from the set of subscribed symbols. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Symbol\+It $>$ }\\void \mbox{\hyperlink{class_d_x_feed_subscription_acc00804915e18fcf303837490b04d485}{set\+Symbols}} (Symbol\+It begin, Symbol\+It end) const
+\begin{DoxyCompactList}\small\item\em Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using iterators). \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{concept_convertible_to_symbol_wrapper_collection}{Convertible\+To\+Symbol\+Wrapper\+Collection}} Symbols\+Collection$>$ }\\void \mbox{\hyperlink{class_d_x_feed_subscription_a9ad2f34ec69be21ebedac7077b4c713c}{set\+Symbols}} (Symbols\+Collection \&\&collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Changes the set of subscribed symbols so that it contains just the symbols from the specified collection. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d_x_feed_subscription_a5ab23255e26a9c942fbd03690e7a5d2f}{set\+Symbols}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ collection) const noexcept
+\begin{DoxyCompactList}\small\item\em Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (initializer list). \end{DoxyCompactList}\item 
+\Hypertarget{class_d_x_feed_subscription_a974eb22993bde1be71c4b5a5929a3a3c}\label{class_d_x_feed_subscription_a974eb22993bde1be71c4b5a5929a3a3c} 
+void {\bfseries clear} () const noexcept
+\begin{DoxyCompactList}\small\item\em Clears the set of subscribed symbols. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_d_x_feed_subscription_a4e4de3f593ae3f88eb798462aef52fe5}{is\+Closed}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this subscription is closed. \end{DoxyCompactList}\item 
+const std\+::unordered\+\_\+set$<$ \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} $>$ \& \mbox{\hyperlink{class_d_x_feed_subscription_a66ebdb86699e9d4440a4bf3df417bdde}{get\+Event\+Types}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a set of subscribed event types. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_d_x_feed_subscription_ada7a6592d8beb6860ec24ba910d34912}{contains\+Event\+Type}} (const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \&event\+Type) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this subscription contains the corresponding event type. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ \mbox{\hyperlink{class_d_x_feed_subscription_ab06ac7dade4243205f545807aa908c9e}{get\+Symbols}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a set of subscribed symbols (depending on the actual implementation of subscription). \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ \mbox{\hyperlink{class_d_x_feed_subscription_afd1212c8e9515798e8764883bad337b4}{get\+Decorated\+Symbols}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a set of decorated symbols (depending on the actual implementation of subscription). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{struct_shared_entity_ae774e293e95fbf8ebb4d22f714e80272}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a348c971deaca898a477262e5bd190d03}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{class_d_x_feed_subscription_af005352b49ba4869a7e47ea691b372f1}{create}} (const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \&event\+Type)
+\begin{DoxyCompactList}\small\item\em Creates {\itshape detached} subscription for a single event type. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Type\+It $>$ }\\static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{class_d_x_feed_subscription_a775137328b7dad6dc7198004694bd084}{create}} (Event\+Type\+It begin, Event\+Type\+It end)
+\begin{DoxyCompactList}\small\item\em Creates {\itshape detached} subscription for the given collection of event types. \end{DoxyCompactList}\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{class_d_x_feed_subscription_ad55a139d48d9e8a560b9d1a2f0ceccb4}{create}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} $>$ event\+Types)
+\begin{DoxyCompactList}\small\item\em Creates {\itshape detached} subscription for the given collection of event types. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Types\+Collection $>$ }\\static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{class_d_x_feed_subscription_ab0d1014b24a1545dd9d31895c1807f10}{create}} (Event\+Types\+Collection \&\&event\+Types)
+\begin{DoxyCompactList}\small\item\em Creates {\itshape detached} subscription for the given collection of event types. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_d_x_feed_subscription_a4e6ad01ed4025c9974f67c29f8aa28e3}\label{class_d_x_feed_subscription_a4e6ad01ed4025c9974f67c29f8aa28e3} 
+struct {\bfseries DXFeed}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Subscription for a set of symbols and event types. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_d_x_feed_subscription_a5bccde40320ad27942299b88519b379c}\index{DXFeedSubscription@{DXFeedSubscription}!addEventListener@{addEventListener}}
+\index{addEventListener@{addEventListener}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addEventListener()}{addEventListener()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a5bccde40320ad27942299b88519b379c} 
+template$<$typename Event\+Listener $>$ \\
+std\+::size\+\_\+t DXFeed\+Subscription\+::add\+Event\+Listener (\begin{DoxyParamCaption}\item[{Event\+Listener \&\&}]{listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds listener for events. 
+
+Event lister can be added only when subscription is not producing any events. The subscription must be either empty (its set of \doxylink{class_d_x_feed_subscription_ab06ac7dade4243205f545807aa908c9e}{symbols} is empty or not \doxylink{class_d_x_feed_subscription_ab3f47d037c4beb66826df634088b5eb8}{attached} to any feed (its set of change listeners is empty).
+
+This method does nothing if this subscription is closed.
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addEventListener([](\textcolor{keyword}{auto}\ \&\&events)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&e\ :\ events)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ quote\ =\ e-\/>template\ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{sharedAs<dxfcpp::Quote>}}();\ quote)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Q\ \ \ :\ "{}}\ +\ quote-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ tns\ =\ e-\/>template\ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{sharedAs<dxfcpp::TimeAndSale>}}();\ tns)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}TnS\ :\ "{}}\ +\ tns-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addSymbols(\{\textcolor{stringliteral}{"{}\$TOP10L/Q"{}},\ \textcolor{stringliteral}{"{}\$SP500\#45"{}},\ \textcolor{stringliteral}{"{}\$TICK"{}},\ \textcolor{stringliteral}{"{}SPX"{}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Listener} & The listener type. Listener can be callable with signature\+: {\ttfamily void(const std\+::vector\texorpdfstring{$<$}{<}std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{struct_event_type}{Event\+Type}\texorpdfstring{$>$}{>}\&)} \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The event listener \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The listener id 
+\end{DoxyReturn}
+\Hypertarget{class_d_x_feed_subscription_a298f960e5354be4470194fc5ee5eb355}\index{DXFeedSubscription@{DXFeedSubscription}!addEventListener@{addEventListener}}
+\index{addEventListener@{addEventListener}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addEventListener()}{addEventListener()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a298f960e5354be4470194fc5ee5eb355} 
+template$<$typename EventT $>$ \\
+std\+::size\+\_\+t DXFeed\+Subscription\+::add\+Event\+Listener (\begin{DoxyParamCaption}\item[{std\+::function$<$ void(const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ EventT $>$ $>$ \&)$>$ \&\&}]{listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds typed listener for events. 
+
+Event lister can be added only when subscription is not producing any events. The subscription must be either empty (its set of \doxylink{class_d_x_feed_subscription_ab06ac7dade4243205f545807aa908c9e}{symbols} is empty or not \doxylink{class_d_x_feed_subscription_ab3f47d037c4beb66826df634088b5eb8}{attached} to any feed (its set of change listeners is empty).
+
+This method does nothing if this subscription is closed.
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addEventListener(std::function([](\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<dxfcpp::Quotes>>\ \&quotes)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&q\ :\ quotes)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Q\ \ \ \ :\ "{}}\ +\ q-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\}));}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addEventListener<dxfcpp::TimeAndSale>([](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&timeAndSales)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&tns\ :\ timeAndSales)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}TnS\ :\ "{}}\ +\ tns-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addEventListener<dxfcpp::MarketEvent>([](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&marketEvents)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&me\ :\ marketEvents)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Market\ Event's\ symbol:\ "{}}\ +\ me-\/>getEventSymbol()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addSymbols(\{\textcolor{stringliteral}{"{}\$TOP10L/Q"{}},\ \textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}\$TICK"{}},\ \textcolor{stringliteral}{"{}SPX"{}}\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em EventT} & The event type (\doxylink{struct_event_type}{Event\+Type}\textquotesingle{}s child with field TYPE, convertible to \doxylink{class_event_type_enum}{Event\+Type\+Enum} or \doxylink{struct_market_event}{Market\+Event} or \doxylink{struct_lasting_event}{Lasting\+Event} or \doxylink{struct_time_series_event}{Time\+Series\+Event} or \doxylink{struct_indexed_event}{Indexed\+Event}) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener. Listener can be callable with signature\+: {\ttfamily void(const std\+::vector\texorpdfstring{$<$}{<}std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}EventT\texorpdfstring{$>$}{>}\&)} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The listener id 
+\end{DoxyReturn}
+\Hypertarget{class_d_x_feed_subscription_a8719b461ec8b0b66d3e960253086c055}\index{DXFeedSubscription@{DXFeedSubscription}!addSymbols@{addSymbols}}
+\index{addSymbols@{addSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addSymbols()}{addSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a8719b461ec8b0b66d3e960253086c055} 
+template$<$\mbox{\hyperlink{concept_convertible_to_symbol_wrapper_collection}{Convertible\+To\+Symbol\+Wrapper\+Collection}} Symbols\+Collection$>$ \\
+void DXFeed\+Subscription\+::add\+Symbols (\begin{DoxyParamCaption}\item[{const Symbols\+Collection \&}]{collection}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds the specified collection of symbols to the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}s,\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addSymbols(std::vector\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\});}
+\DoxyCodeLine{sub-\/>addSymbols(v);}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbols\+Collection} & The symbols collection\textquotesingle{}s type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_a43713365d3db41d8cf9e3a9e894611a4}\index{DXFeedSubscription@{DXFeedSubscription}!addSymbols@{addSymbols}}
+\index{addSymbols@{addSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addSymbols()}{addSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a43713365d3db41d8cf9e3a9e894611a4} 
+void DXFeed\+Subscription\+::add\+Symbols (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} \&}]{symbol\+Wrapper}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds the specified symbol to the set of subscribed symbols. 
+
+This is a convenience method to subscribe to one symbol at a time that has a return fast-\/path for a case when the symbol is already in the set. When subscribing to multiple symbols at once it is preferable to use add\+Symbols(symbols) method.
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sub-\/>addSymbols(\textcolor{stringliteral}{"{}TSLA"{}});}
+\DoxyCodeLine{sub-\/>addSymbols(\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}s);}
+\DoxyCodeLine{sub-\/>addSymbols(\textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}sv);}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol\+Wrapper} & The symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References \mbox{\hyperlink{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1}{to\+String()}}.
+
+\Hypertarget{class_d_x_feed_subscription_ab82037cfcd057d0db055ba3758d93694}\index{DXFeedSubscription@{DXFeedSubscription}!addSymbols@{addSymbols}}
+\index{addSymbols@{addSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addSymbols()}{addSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_ab82037cfcd057d0db055ba3758d93694} 
+void DXFeed\+Subscription\+::add\+Symbols (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$}]{collection}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds the specified collection (initializer list) of symbols to the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sub-\/>addSymbols(\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}}s,\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_a2a9fdf1593cce9f642b953025f84c43d}\index{DXFeedSubscription@{DXFeedSubscription}!addSymbols@{addSymbols}}
+\index{addSymbols@{addSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{addSymbols()}{addSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a2a9fdf1593cce9f642b953025f84c43d} 
+template$<$typename Symbol\+It $>$ \\
+void DXFeed\+Subscription\+::add\+Symbols (\begin{DoxyParamCaption}\item[{Symbol\+It}]{begin}{, }\item[{Symbol\+It}]{end}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds the specified collection (using iterators) of symbols to the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}s,\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addSymbols(v.begin(),\ v.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of symbols. \\
+\hline
+{\em end} & The end of symbol collection. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_ab3f47d037c4beb66826df634088b5eb8}\index{DXFeedSubscription@{DXFeedSubscription}!attach@{attach}}
+\index{attach@{attach}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{attach()}{attach()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_ab3f47d037c4beb66826df634088b5eb8} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE void DXFeed\+Subscription\+::attach (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_feed}{DXFeed}} $>$}]{feed}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Attaches subscription to the specified feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em feed} & The feed to attach to. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_a5643eabb939f2c293f6dbd1936f136c1}\index{DXFeedSubscription@{DXFeedSubscription}!close@{close}}
+\index{close@{close}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a5643eabb939f2c293f6dbd1936f136c1} 
+void DXFeed\+Subscription\+::close (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Closes this subscription and makes it {\itshape permanently detached}. 
+
+This method notifies all installed instances of subscription change listeners by invoking {\ttfamily subscription\+Closed} while holding the lock for this subscription. This method clears lists of all installed event listeners and subscription change listeners and makes sure that no more listeners can be added. 
+
+References \mbox{\hyperlink{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1}{to\+String()}}.
+
+\Hypertarget{class_d_x_feed_subscription_ada7a6592d8beb6860ec24ba910d34912}\index{DXFeedSubscription@{DXFeedSubscription}!containsEventType@{containsEventType}}
+\index{containsEventType@{containsEventType}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{containsEventType()}{containsEventType()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_ada7a6592d8beb6860ec24ba910d34912} 
+bool DXFeed\+Subscription\+::contains\+Event\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \&}]{event\+Type}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this subscription contains the corresponding event type. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type} & The type of event that is checked. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this subscription contains the corresponding event type.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_feed_subscription_a66ebdb86699e9d4440a4bf3df417bdde}{DXFeed\+Subscription\+::get\+Event\+Types()} 
+\end{DoxySeeAlso}
+\Hypertarget{class_d_x_feed_subscription_af005352b49ba4869a7e47ea691b372f1}\index{DXFeedSubscription@{DXFeedSubscription}!create@{create}}
+\index{create@{create}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_af005352b49ba4869a7e47ea691b372f1} 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ DXFeed\+Subscription\+::create (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \&}]{event\+Type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Creates {\itshape detached} subscription for a single event type. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ dxfcpp::DXFeedSubscription::create(dxfcpp::Quote::TYPE);}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type} & the event type. \\
+\hline
+\end{DoxyParams}
+
+
+References \mbox{\hyperlink{class_event_type_enum_af8347e4618ca961be98ee07627f4cd5c}{Event\+Type\+Enum\+::get\+Name()}}.
+
+\Hypertarget{class_d_x_feed_subscription_a775137328b7dad6dc7198004694bd084}\index{DXFeedSubscription@{DXFeedSubscription}!create@{create}}
+\index{create@{create}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a775137328b7dad6dc7198004694bd084} 
+template$<$typename Event\+Type\+It $>$ \\
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ DXFeed\+Subscription\+::create (\begin{DoxyParamCaption}\item[{Event\+Type\+It}]{begin}{, }\item[{Event\+Type\+It}]{end}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Creates {\itshape detached} subscription for the given collection of event types. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ eventTypes\ =\ \{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ dxfcpp::DXFeedSubscription::create(eventTypes.begin(),\ eventTypes.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{std::vector\ types\{dxfcpp::Quote::TYPE,\ dxfcpp::Trade::TYPE,\ dxfcpp::Summary::TYPE\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ dxfcpp::DXFeedSubscription::create(types.begin(),\ types.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Type\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of event types. \\
+\hline
+{\em end} & The end of event type collection. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new {\itshape detached} subscription for the given collection of event types. 
+\end{DoxyReturn}
+\Hypertarget{class_d_x_feed_subscription_ab0d1014b24a1545dd9d31895c1807f10}\index{DXFeedSubscription@{DXFeedSubscription}!create@{create}}
+\index{create@{create}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_ab0d1014b24a1545dd9d31895c1807f10} 
+template$<$typename Event\+Types\+Collection $>$ \\
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ DXFeed\+Subscription\+::create (\begin{DoxyParamCaption}\item[{Event\+Types\+Collection \&\&}]{event\+Types}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Creates {\itshape detached} subscription for the given collection of event types. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ dxfcpp::DXFeedSubscription::create(std::unordered\_set\{dxfcpp::Quote::TYPE,}
+\DoxyCodeLine{dxfcpp::TimeAndSale::TYPE\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{std::vector\ types\ =\ \{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\};}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ dxfcpp::DXFeedSubscription::create(types);}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Types\+Collection} & The type of the collection of event types \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Types} & The event type collection. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new {\itshape detached} subscription for the given collection of event types. 
+\end{DoxyReturn}
+\Hypertarget{class_d_x_feed_subscription_ad55a139d48d9e8a560b9d1a2f0ceccb4}\index{DXFeedSubscription@{DXFeedSubscription}!create@{create}}
+\index{create@{create}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_ad55a139d48d9e8a560b9d1a2f0ceccb4} 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ DXFeed\+Subscription\+::create (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} $>$}]{event\+Types}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Creates {\itshape detached} subscription for the given collection of event types. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ dxfcpp::DXFeedSubscription::create(\{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Types} & The event type collection. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new {\itshape detached} subscription for the given collection of event types. 
+\end{DoxyReturn}
+\Hypertarget{class_d_x_feed_subscription_abe5fa8fdc03fe385d685195a938e11a2}\index{DXFeedSubscription@{DXFeedSubscription}!detach@{detach}}
+\index{detach@{detach}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{detach()}{detach()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_abe5fa8fdc03fe385d685195a938e11a2} 
+void DXFeed\+Subscription\+::detach (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_feed}{DXFeed}} $>$}]{feed}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Detaches subscription from the specified feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em feed} & The feed to detach from. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_afd1212c8e9515798e8764883bad337b4}\index{DXFeedSubscription@{DXFeedSubscription}!getDecoratedSymbols@{getDecoratedSymbols}}
+\index{getDecoratedSymbols@{getDecoratedSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{getDecoratedSymbols()}{getDecoratedSymbols()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_afd1212c8e9515798e8764883bad337b4} 
+std\+::vector$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ DXFeed\+Subscription\+::get\+Decorated\+Symbols (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a set of decorated symbols (depending on the actual implementation of subscription). 
+
+The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a weakly consistent view of the set.
+
+\begin{DoxyReturn}{Returns}
+A set of decorated subscribed symbols. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1}{to\+String()}}.
+
+\Hypertarget{class_d_x_feed_subscription_a66ebdb86699e9d4440a4bf3df417bdde}\index{DXFeedSubscription@{DXFeedSubscription}!getEventTypes@{getEventTypes}}
+\index{getEventTypes@{getEventTypes}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{getEventTypes()}{getEventTypes()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a66ebdb86699e9d4440a4bf3df417bdde} 
+const std\+::unordered\+\_\+set$<$ \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} $>$ \& DXFeed\+Subscription\+::get\+Event\+Types (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a set of subscribed event types. 
+
+\begin{DoxyReturn}{Returns}
+A set of subscribed event types. 
+\end{DoxyReturn}
+\Hypertarget{class_d_x_feed_subscription_ab06ac7dade4243205f545807aa908c9e}\index{DXFeedSubscription@{DXFeedSubscription}!getSymbols@{getSymbols}}
+\index{getSymbols@{getSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{getSymbols()}{getSymbols()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_ab06ac7dade4243205f545807aa908c9e} 
+std\+::vector$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ DXFeed\+Subscription\+::get\+Symbols (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a set of subscribed symbols (depending on the actual implementation of subscription). 
+
+The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a weakly consistent view of the set.
+
+\begin{DoxyReturn}{Returns}
+A set of subscribed symbols. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1}{to\+String()}}.
+
+\Hypertarget{class_d_x_feed_subscription_a4e4de3f593ae3f88eb798462aef52fe5}\index{DXFeedSubscription@{DXFeedSubscription}!isClosed@{isClosed}}
+\index{isClosed@{isClosed}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{isClosed()}{isClosed()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a4e4de3f593ae3f88eb798462aef52fe5} 
+bool DXFeed\+Subscription\+::is\+Closed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this subscription is closed. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this subscription is closed.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_feed_subscription_a5643eabb939f2c293f6dbd1936f136c1}{DXFeed\+Subscription\+::close()} 
+\end{DoxySeeAlso}
+
+
+References \mbox{\hyperlink{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1}{to\+String()}}.
+
+\Hypertarget{class_d_x_feed_subscription_ad868a6f48bee30e9f7a5d3aac5ecc703}\index{DXFeedSubscription@{DXFeedSubscription}!onEvent@{onEvent}}
+\index{onEvent@{onEvent}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{onEvent()}{onEvent()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_ad868a6f48bee30e9f7a5d3aac5ecc703} 
+auto \& DXFeed\+Subscription\+::on\+Event (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a reference to an incoming events\textquotesingle{} handler (delegate), to which listeners can be added and removed. 
+
+Listener can be callable with signature\+: {\ttfamily void(const std\+::vector\texorpdfstring{$<$}{<}std\+::shared\+\_\+ptr\texorpdfstring{$<$}{<}\doxylink{struct_event_type}{Event\+Type}\texorpdfstring{$>$}{>}\&)}
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ sub\ =\ endpoint-\/>getFeed()-\/>createSubscription(\{dxfcpp::Quote::TYPE,\ dxfcpp::TimeAndSale::TYPE\});}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \textcolor{keywordtype}{id}\ =\ sub-\/>onEvent()\ +=\ [](\textcolor{keyword}{auto}\ \&\&events)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&e\ :\ events)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ quote\ =\ e-\/>template\ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{sharedAs<dxfcpp::Quote>}}();\ quote)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Q\ \ \ :\ "{}}\ +\ quote-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ tns\ =\ e-\/>template\ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{sharedAs<dxfcpp::TimeAndSale>}}();\ tns)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}TnS\ :\ "{}}\ +\ tns-\/>toString()\ <<\ std::endl;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addSymbols(\{\textcolor{stringliteral}{"{}\$TOP10L/Q"{}},\ \textcolor{stringliteral}{"{}\$SP500\#45"{}},\ \textcolor{stringliteral}{"{}\$TICK"{}},\ \textcolor{stringliteral}{"{}SPX"{}}\});}
+\DoxyCodeLine{sub-\/>onEvent()\ -\/=\ id;}
+
+\end{DoxyCode}
+
+
+\begin{DoxyReturn}{Returns}
+The incoming events\textquotesingle{} handler (delegate) 
+\end{DoxyReturn}
+\Hypertarget{class_d_x_feed_subscription_a2d6ef57f0b8086b38cadb2a2cc0b36cd}\index{DXFeedSubscription@{DXFeedSubscription}!removeEventListener@{removeEventListener}}
+\index{removeEventListener@{removeEventListener}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeEventListener()}{removeEventListener()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a2d6ef57f0b8086b38cadb2a2cc0b36cd} 
+void DXFeed\+Subscription\+::remove\+Event\+Listener (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{listener\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes listener for events. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ \textcolor{keywordtype}{id}\ =\ sub-\/>addEventListener([](\textcolor{keyword}{auto})\{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>removeEventListener(\textcolor{keywordtype}{id});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener\+Id} & The listener id \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_af29bdc6a01648d0148f7776115843912}\index{DXFeedSubscription@{DXFeedSubscription}!removeSymbols@{removeSymbols}}
+\index{removeSymbols@{removeSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeSymbols()}{removeSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_af29bdc6a01648d0148f7776115843912} 
+void DXFeed\+Subscription\+::remove\+Symbols (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} \&}]{symbol\+Wrapper}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes the specified symbol from the set of subscribed symbols. 
+
+To conveniently remove one or few symbols you can use remove\+Symbols(symbols) method.
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sub-\/>removeSymbols(\textcolor{stringliteral}{"{}TSLA"{}});}
+\DoxyCodeLine{sub-\/>removeSymbols(\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}s);}
+\DoxyCodeLine{sub-\/>removeSymbols(\textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}sv);}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol\+Wrapper} & The symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References \mbox{\hyperlink{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1}{to\+String()}}.
+
+\Hypertarget{class_d_x_feed_subscription_a3b8aef4012950c25bca5cedd4a73c845}\index{DXFeedSubscription@{DXFeedSubscription}!removeSymbols@{removeSymbols}}
+\index{removeSymbols@{removeSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeSymbols()}{removeSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a3b8aef4012950c25bca5cedd4a73c845} 
+void DXFeed\+Subscription\+::remove\+Symbols (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$}]{collection}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes the specified collection (initializer list) of symbols from the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sub-\/>removeSymbols(\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}}s,\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_a542a164bf6ebb60daaf69fd1859887fa}\index{DXFeedSubscription@{DXFeedSubscription}!removeSymbols@{removeSymbols}}
+\index{removeSymbols@{removeSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeSymbols()}{removeSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a542a164bf6ebb60daaf69fd1859887fa} 
+template$<$typename Symbol\+It $>$ \\
+void DXFeed\+Subscription\+::remove\+Symbols (\begin{DoxyParamCaption}\item[{Symbol\+It}]{begin}{, }\item[{Symbol\+It}]{end}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Removes the specified collection (using iterators) of symbols from the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}s,\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>removeSymbols(v.begin(),\ v.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of symbols. \\
+\hline
+{\em end} & The end of symbol collection. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_a5cc7f10fb829083167a8d01dfb112e3e}\index{DXFeedSubscription@{DXFeedSubscription}!removeSymbols@{removeSymbols}}
+\index{removeSymbols@{removeSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{removeSymbols()}{removeSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a5cc7f10fb829083167a8d01dfb112e3e} 
+template$<$\mbox{\hyperlink{concept_convertible_to_symbol_wrapper_collection}{Convertible\+To\+Symbol\+Wrapper\+Collection}} Symbols\+Collection$>$ \\
+void DXFeed\+Subscription\+::remove\+Symbols (\begin{DoxyParamCaption}\item[{Symbols\+Collection \&\&}]{collection}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes the specified collection of symbols from the set of subscribed symbols. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}s,\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>removeSymbols(std::vector\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\});}
+\DoxyCodeLine{sub-\/>removeSymbols(v);}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbols\+Collection} & The symbols collection\textquotesingle{}s type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_a5ab23255e26a9c942fbd03690e7a5d2f}\index{DXFeedSubscription@{DXFeedSubscription}!setSymbols@{setSymbols}}
+\index{setSymbols@{setSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{setSymbols()}{setSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a5ab23255e26a9c942fbd03690e7a5d2f} 
+void DXFeed\+Subscription\+::set\+Symbols (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$}]{collection}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (initializer list). 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sub-\/>setSymbols(\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}}s,\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_acc00804915e18fcf303837490b04d485}\index{DXFeedSubscription@{DXFeedSubscription}!setSymbols@{setSymbols}}
+\index{setSymbols@{setSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{setSymbols()}{setSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_acc00804915e18fcf303837490b04d485} 
+template$<$typename Symbol\+It $>$ \\
+void DXFeed\+Subscription\+::set\+Symbols (\begin{DoxyParamCaption}\item[{Symbol\+It}]{begin}{, }\item[{Symbol\+It}]{end}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using iterators). 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}s,\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>setSymbols(v.begin(),\ v.end());}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of symbols. \\
+\hline
+{\em end} & The end of symbol collection. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_a9ad2f34ec69be21ebedac7077b4c713c}\index{DXFeedSubscription@{DXFeedSubscription}!setSymbols@{setSymbols}}
+\index{setSymbols@{setSymbols}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{setSymbols()}{setSymbols()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a9ad2f34ec69be21ebedac7077b4c713c} 
+template$<$\mbox{\hyperlink{concept_convertible_to_symbol_wrapper_collection}{Convertible\+To\+Symbol\+Wrapper\+Collection}} Symbols\+Collection$>$ \\
+void DXFeed\+Subscription\+::set\+Symbols (\begin{DoxyParamCaption}\item[{Symbols\+Collection \&\&}]{collection}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the set of subscribed symbols so that it contains just the symbols from the specified collection. 
+
+Example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ v\ =\ std::vector<dxfcpp::SymbolWrapper>\{\textcolor{stringliteral}{"{}XBT/USD:GDAX"{}}s,\ \textcolor{stringliteral}{"{}BTC/EUR:CXBITF"{}}sv,\ \textcolor{stringliteral}{"{}TSLA"{}},\ \textcolor{stringliteral}{"{}GOOG"{}}\_s\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>setSymbols(std::vector\{\textcolor{stringliteral}{"{}AAPL"{}},\ \textcolor{stringliteral}{"{}IBM"{}}\});}
+\DoxyCodeLine{sub-\/>setSymbols(v);}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbols\+Collection} & The symbols collection\textquotesingle{}s type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em collection} & The symbols collection \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1}\index{DXFeedSubscription@{DXFeedSubscription}!toString@{toString}}
+\index{toString@{toString}!DXFeedSubscription@{DXFeedSubscription}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{class_d_x_feed_subscription_a05b9969b304a7df67c369cbc7f3dfae1} 
+std\+::string DXFeed\+Subscription\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{struct_shared_entity_a84179ef824d835d61488dab36f4f0325}{Shared\+Entity}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_d_x_feed_subscription_a43713365d3db41d8cf9e3a9e894611a4}{add\+Symbols()}}, \mbox{\hyperlink{class_d_x_feed_subscription_a974eb22993bde1be71c4b5a5929a3a3c}{clear()}}, \mbox{\hyperlink{class_d_x_feed_subscription_a5643eabb939f2c293f6dbd1936f136c1}{close()}}, \mbox{\hyperlink{class_d_x_feed_subscription_afd1212c8e9515798e8764883bad337b4}{get\+Decorated\+Symbols()}}, \mbox{\hyperlink{class_d_x_feed_subscription_ab06ac7dade4243205f545807aa908c9e}{get\+Symbols()}}, \mbox{\hyperlink{class_d_x_feed_subscription_a4e4de3f593ae3f88eb798462aef52fe5}{is\+Closed()}}, and \mbox{\hyperlink{class_d_x_feed_subscription_af29bdc6a01648d0148f7776115843912}{remove\+Symbols()}}.
+

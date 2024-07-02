@@ -1,0 +1,190 @@
+\doxysubsection{Event\+Flags\+Mask Class Reference}
+\hypertarget{class_event_flags_mask}{}\label{class_event_flags_mask}\index{EventFlagsMask@{EventFlagsMask}}
+
+
+The event flags\textquotesingle{} mask (a set of bit flags)  
+
+
+
+
+{\ttfamily \#include $<$Event\+Flag.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_event_flags_mask_a7267d9655045fa1a4260d0e9e7269433}\label{class_event_flags_mask_a7267d9655045fa1a4260d0e9e7269433} 
+{\bfseries Event\+Flags\+Mask} () noexcept
+\begin{DoxyCompactList}\small\item\em Creates an empty event flags mask. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Integral Mask\+Type$>$ }\\\mbox{\hyperlink{class_event_flags_mask_ab0d6039017c2db7b81166e54d929fbcc}{Event\+Flags\+Mask}} (Mask\+Type mask) noexcept
+\begin{DoxyCompactList}\small\item\em Create event flags mask by integer value. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Flag\+It $>$ }\\\mbox{\hyperlink{class_event_flags_mask_ab3be5a9c8678ffcc81531d55b4b3b7a3}{Event\+Flags\+Mask}} (Event\+Flag\+It begin, Event\+Flag\+It end) noexcept
+\begin{DoxyCompactList}\small\item\em Creates event flags mask by iterators of container with flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{Event\+Flags\+Mask}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{class_event_flag}{Event\+Flag}} $>$ event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Creates event flags mask by initializer list with flags. \end{DoxyCompactList}\item 
+constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{get\+Mask}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns an integer representation of event mask. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{class_event_flags_mask_a6f4e131b6f4b547d98ca52c3f6d1b9e1}{operator\texorpdfstring{$\vert$}{|}}} (const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags\+Mask, const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \&event\+Flag) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily or} operation with an event flags\textquotesingle{} mask and an event flag. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{class_event_flags_mask_ae683f6c55ced9dd5a338d3e00a2fa93a}{operator\&}} (const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags\+Mask, const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \&event\+Flag) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily and} operation with an event flags\textquotesingle{} mask and an event flag. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{class_event_flags_mask_abf6d59fc04b8ae48fd8ffe9d171433a2}{operator\texorpdfstring{$\vert$}{|}}} (const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \&event\+Flag1, const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \&event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily or} operation with two event flags. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+The event flags\textquotesingle{} mask (a set of bit flags) 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_event_flags_mask_ab0d6039017c2db7b81166e54d929fbcc}\index{EventFlagsMask@{EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\index{EventFlagsMask@{EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{EventFlagsMask()}{EventFlagsMask()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{class_event_flags_mask_ab0d6039017c2db7b81166e54d929fbcc} 
+template$<$Integral Mask\+Type$>$ \\
+Event\+Flags\+Mask\+::\+Event\+Flags\+Mask (\begin{DoxyParamCaption}\item[{Mask\+Type}]{mask}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Create event flags mask by integer value. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Mask\+Type} & The type of integer mask \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em mask} & The integer mask value \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_event_flags_mask_ab3be5a9c8678ffcc81531d55b4b3b7a3}\index{EventFlagsMask@{EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\index{EventFlagsMask@{EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{EventFlagsMask()}{EventFlagsMask()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{class_event_flags_mask_ab3be5a9c8678ffcc81531d55b4b3b7a3} 
+template$<$typename Event\+Flag\+It $>$ \\
+Event\+Flags\+Mask\+::\+Event\+Flags\+Mask (\begin{DoxyParamCaption}\item[{Event\+Flag\+It}]{begin}{, }\item[{Event\+Flag\+It}]{end}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Creates event flags mask by iterators of container with flags. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+Flag\+It} & The iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The start position \\
+\hline
+{\em end} & The end position \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}\index{EventFlagsMask@{EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\index{EventFlagsMask@{EventFlagsMask}!EventFlagsMask@{EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{EventFlagsMask()}{EventFlagsMask()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c} 
+Event\+Flags\+Mask\+::\+Event\+Flags\+Mask (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{class_event_flag}{Event\+Flag}} $>$}]{event\+Flags}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Creates event flags mask by initializer list with flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Types} & The list with flags \\
+\hline
+\end{DoxyParams}
+
+
+References \mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{Event\+Flags\+Mask()}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{Event\+Flags\+Mask()}}.
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}\index{EventFlagsMask@{EventFlagsMask}!getMask@{getMask}}
+\index{getMask@{getMask}!EventFlagsMask@{EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{getMask()}{getMask()}}
+{\footnotesize\ttfamily \label{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f} 
+std\+::uint32\+\_\+t Event\+Flags\+Mask\+::get\+Mask (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}, {\ttfamily [noexcept]}}
+
+
+
+Returns an integer representation of event mask. 
+
+\begin{DoxyReturn}{Returns}
+an integer representation 
+\end{DoxyReturn}
+
+
+Referenced by \mbox{\hyperlink{class_candle_abcc697094b7d051dd8bca33bb9a426d2}{Candle\+::set\+Event\+Flags()}}, \mbox{\hyperlink{class_greeks_ab4562f8998b0fea4c12ad845936a38ad}{Greeks\+::set\+Event\+Flags()}}, \mbox{\hyperlink{class_order_base_a72c2f912318a9ae608476508ba249b55}{Order\+Base\+::set\+Event\+Flags()}}, \mbox{\hyperlink{class_series_aa2ee5498ab7b306c0da28894de3af9d8}{Series\+::set\+Event\+Flags()}}, \mbox{\hyperlink{class_theo_price_aad35985dcbce875f06e06e1135e0d91b}{Theo\+Price\+::set\+Event\+Flags()}}, and \mbox{\hyperlink{class_underlying_aefb853c9878a82bcc6c77786cdfa8b5d}{Underlying\+::set\+Event\+Flags()}}.
+
+
+
+\doxysubsubsection{Friends And Related Symbol Documentation}
+\Hypertarget{class_event_flags_mask_ae683f6c55ced9dd5a338d3e00a2fa93a}\index{EventFlagsMask@{EventFlagsMask}!operator\&@{operator\&}}
+\index{operator\&@{operator\&}!EventFlagsMask@{EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{operator\&}{operator\&}}
+{\footnotesize\ttfamily \label{class_event_flags_mask_ae683f6c55ced9dd5a338d3e00a2fa93a} 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} operator\& (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags\+Mask}{, }\item[{const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \&}]{event\+Flag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily and} operation with an event flags\textquotesingle{} mask and an event flag. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags\+Mask} & The event flags\textquotesingle{} mask \\
+\hline
+{\em event\+Flag} & The event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (event flags\textquotesingle{} mask) 
+\end{DoxyReturn}
+\Hypertarget{class_event_flags_mask_abf6d59fc04b8ae48fd8ffe9d171433a2}\index{EventFlagsMask@{EventFlagsMask}!operator\texttt{"|}@{operator\texttt{"|}}}
+\index{operator\texttt{"|}@{operator\texttt{"|}}!EventFlagsMask@{EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{operator\texttt{"|}}{operator|}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_event_flags_mask_abf6d59fc04b8ae48fd8ffe9d171433a2} 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} operator\texorpdfstring{$\vert$}{|} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \&}]{event\+Flag1}{, }\item[{const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \&}]{event\+Flag2}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily or} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag \\
+\hline
+{\em event\+Type2} & The second event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (event flags\textquotesingle{} mask ) 
+\end{DoxyReturn}
+\Hypertarget{class_event_flags_mask_a6f4e131b6f4b547d98ca52c3f6d1b9e1}\index{EventFlagsMask@{EventFlagsMask}!operator\texttt{"|}@{operator\texttt{"|}}}
+\index{operator\texttt{"|}@{operator\texttt{"|}}!EventFlagsMask@{EventFlagsMask}}
+\doxyparagraph{\texorpdfstring{operator\texttt{"|}}{operator|}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_event_flags_mask_a6f4e131b6f4b547d98ca52c3f6d1b9e1} 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} operator\texorpdfstring{$\vert$}{|} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags\+Mask}{, }\item[{const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \&}]{event\+Flag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily or} operation with an event flags\textquotesingle{} mask and an event flag. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags\+Mask} & The event flags\textquotesingle{} mask \\
+\hline
+{\em event\+Flag} & The event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (event flags\textquotesingle{} mask) 
+\end{DoxyReturn}

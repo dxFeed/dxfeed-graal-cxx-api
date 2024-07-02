@@ -9,374 +9,385 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{concepts}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../api/osub/IndexedEventSubscriptionSymbol.hpp"{}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../api/osub/TimeSeriesSubscriptionSymbol.hpp"{}}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../api/osub/WildcardSymbol.hpp"{}}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../event/candle/CandleSymbol.hpp"{}}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_string_symbol_8hpp}{"{}StringSymbol.hpp"{}}}}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{concepts}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../api/osub/IndexedEventSubscriptionSymbol.hpp"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../api/osub/TimeSeriesSubscriptionSymbol.hpp"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../api/osub/WildcardSymbol.hpp"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../event/candle/CandleSymbol.hpp"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_string_symbol_8hpp}{"{}StringSymbol.hpp"{}}}}
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ A\ concept\ describing\ a\ symbol\ that\ can\ be\ wrapped.}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ @tparam\ T\ Probable\ symbol\ type}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00029\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
-\DoxyCodeLine{00030\ concept\ ConvertibleToSymbolWrapper\ =}
-\DoxyCodeLine{00031\ \ \ \ \ ConvertibleToStringSymbol<std::decay\_t<T>>\ ||\ std::is\_same\_v<std::decay\_t<T>,\ WildcardSymbol>\ ||}
-\DoxyCodeLine{00032\ \ \ \ \ std::is\_same\_v<std::decay\_t<T>,\ IndexedEventSubscriptionSymbol>\ ||}
-\DoxyCodeLine{00033\ \ \ \ \ std::is\_same\_v<std::decay\_t<T>,\ TimeSeriesSubscriptionSymbol>\ ||\ std::is\_same\_v<std::decay\_t<T>,\ CandleSymbol>;}
-\DoxyCodeLine{00034\ }
-\DoxyCodeLine{00035\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ A\ concept\ that\ defines\ a\ collection\ of\ wrapped\ or\ wrapping\ symbols.}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ @tparam\ Collection\ The\ collection\ type}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00040\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Collection>}
-\DoxyCodeLine{00041\ concept\ ConvertibleToSymbolWrapperCollection\ =}
-\DoxyCodeLine{00042\ \ \ \ \ requires(Collection\ c)\ \{}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ std::begin(c);}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ std::end(c);}
-\DoxyCodeLine{00045\ \ \ \ \ \}\ \&\&}
-\DoxyCodeLine{00046\ \ \ \ \ (}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ requires(Collection\ c)\ \{}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ *std::begin(c)\ \}\ -\/>\ dxfcpp::ConvertibleTo<SymbolWrapper>;}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \}\ ||}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ requires(Collection\ c)\ \{}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ *std::begin(c)\ \}\ -\/>\ ConvertibleToSymbolWrapper;}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ A\ helper\ wrapper\ class\ needed\ to\ pass\ heterogeneous\ symbols\ using\ a\ container\ and\ convert\ them\ to\ internal\ Graal}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ representation.}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00058\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ SymbolWrapper\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{using}\ DataType\ =\ \textcolor{keyword}{typename}\ std::variant<WildcardSymbol,\ StringSymbol,\ IndexedEventSubscriptionSymbol,}
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TimeSeriesSubscriptionSymbol,\ CandleSymbol>;}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ SymbolListUtils\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::ptrdiff\_t\ calculateGraalListSize(std::ptrdiff\_t\ initSize)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *newGraalList(std::ptrdiff\_t\ size)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ setGraalListElement(\textcolor{keywordtype}{void}\ *graalList,\ std::ptrdiff\_t\ elementIdx,\ \textcolor{keywordtype}{void}\ *element)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ freeGraalListElements(\textcolor{keywordtype}{void}\ *graalList,\ std::ptrdiff\_t\ count)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ SymbolIt>\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *toGraalList(SymbolIt\ begin,\ SymbolIt\ end)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper::toGraalList(symbols\ =\ "{}}\ +\ elementsToString(begin,\ end)\ +\ \textcolor{stringliteral}{"{})"{}});}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00073\ }
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ size\ =\ calculateGraalListSize(std::distance(begin,\ end));}
+\DoxyCodeLine{00024\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ A\ concept\ describing\ a\ symbol\ that\ can\ be\ wrapped.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @tparam\ T\ Probable\ symbol\ type}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00032\ concept\ ConvertibleToSymbolWrapper\ =}
+\DoxyCodeLine{00033\ \ \ \ \ ConvertibleToStringSymbol<std::decay\_t<T>>\ ||\ std::is\_same\_v<std::decay\_t<T>,\ WildcardSymbol>\ ||}
+\DoxyCodeLine{00034\ \ \ \ \ std::is\_same\_v<std::decay\_t<T>,\ IndexedEventSubscriptionSymbol>\ ||}
+\DoxyCodeLine{00035\ \ \ \ \ std::is\_same\_v<std::decay\_t<T>,\ TimeSeriesSubscriptionSymbol>\ ||\ std::is\_same\_v<std::decay\_t<T>,\ CandleSymbol>;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ A\ concept\ that\ defines\ a\ collection\ of\ wrapped\ or\ wrapping\ symbols.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ @tparam\ Collection\ The\ collection\ type}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00042\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Collection>}
+\DoxyCodeLine{00043\ concept\ ConvertibleToSymbolWrapperCollection\ =}
+\DoxyCodeLine{00044\ \ \ \ \ requires(Collection\ c)\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ std::begin(c);}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ std::end(c);}
+\DoxyCodeLine{00047\ \ \ \ \ \}\ \&\&}
+\DoxyCodeLine{00048\ \ \ \ \ (}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ requires(Collection\ c)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ *std::begin(c)\ \}\ -\/>\ dxfcpp::ConvertibleTo<SymbolWrapper>;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \}\ ||}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ requires(Collection\ c)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ *std::begin(c)\ \}\ -\/>\ ConvertibleToSymbolWrapper;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ A\ helper\ wrapper\ class\ needed\ to\ pass\ heterogeneous\ symbols\ using\ a\ container\ and\ convert\ them\ to\ internal\ Graal}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ representation.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00060\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ SymbolWrapper\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{using}\ DataType\ =\ \textcolor{keyword}{typename}\ std::variant<WildcardSymbol,\ StringSymbol,\ IndexedEventSubscriptionSymbol,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TimeSeriesSubscriptionSymbol,\ CandleSymbol>;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ SymbolListUtils\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::ptrdiff\_t\ calculateGraalListSize(std::ptrdiff\_t\ initSize)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *newGraalList(std::ptrdiff\_t\ size);}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ setGraalListElement(\textcolor{keywordtype}{void}\ *graalList,\ std::ptrdiff\_t\ elementIdx,\ \textcolor{keywordtype}{void}\ *element)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ freeGraalListElements(\textcolor{keywordtype}{void}\ *graalList,\ std::ptrdiff\_t\ count);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ SymbolIt>\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *toGraalList(SymbolIt\ begin,\ SymbolIt\ end)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper::toGraalList(symbols\ =\ "{}}\ +\ elementsToString(begin,\ end)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ size\ is\ needed,\ for\ example,\ to\ clear\ the\ list\ of\ symbols.}}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *list\ =\ newGraalList(size);}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!list\ ||\ size\ ==\ 0)\ \{}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ list;}
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ std::ptrdiff\_t\ elementIdx\ =\ 0;}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ needToFree\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ begin;\ it\ !=\ end\ \&\&\ elementIdx\ <\ size;\ it++,\ elementIdx++)\ \{}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ it-\/>toGraal();\ \})\ \{}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ needToFree\ =\ setGraalListElement(list,\ elementIdx,\ it-\/>toGraal())\ ==\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_convertible\_v<\textcolor{keyword}{decltype}(*it),\ SymbolWrapper>\ ||}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dxfcpp::ConvertibleToSymbolWrapper<\textcolor{keyword}{decltype}(*it)>)\ \{}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ needToFree\ =\ setGraalListElement(list,\ elementIdx,\ SymbolWrapper(*it).toGraal())\ ==\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (needToFree)\ \{}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00098\ }
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (needToFree)\ \{}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ freeGraalListElements(list,\ elementIdx);}
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{nullptr};}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ list;}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <ConvertibleToSymbolWrapperCollection\ SymbolsCollection>}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *toGraalList(\textcolor{keyword}{const}\ SymbolsCollection\ \&collection)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ SymbolListUtils::toGraalList(std::begin(collection),\ std::end(collection));}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00112\ }
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *toGraalList(std::initializer\_list<SymbolWrapper>\ collection)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ SymbolListUtils::toGraalList(collection.begin(),\ collection.end());}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalList(\textcolor{keywordtype}{void}\ *graalList)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ size\ =\ calculateGraalListSize(std::distance(begin,\ end));}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ size\ is\ needed,\ for\ example,\ to\ clear\ the\ list\ of\ symbols.}}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *list\ =\ newGraalList(size);}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!list\ ||\ size\ ==\ 0)\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ list;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ std::ptrdiff\_t\ elementIdx\ =\ 0;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ needToFree\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ begin;\ it\ !=\ end\ \&\&\ elementIdx\ <\ size;\ it++,\ elementIdx++)\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ it-\/>toGraal();\ \})\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ needToFree\ =\ setGraalListElement(list,\ elementIdx,\ it-\/>toGraal())\ ==\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_convertible\_v<\textcolor{keyword}{decltype}(*it),\ SymbolWrapper>\ ||}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dxfcpp::ConvertibleToSymbolWrapper<\textcolor{keyword}{decltype}(*it)>)\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ needToFree\ =\ setGraalListElement(list,\ elementIdx,\ SymbolWrapper(*it).toGraal())\ ==\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (needToFree)\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (needToFree)\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ freeGraalListElements(list,\ elementIdx);}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{nullptr};}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ list;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <ConvertibleToSymbolWrapperCollection\ SymbolsCollection>}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *toGraalList(\textcolor{keyword}{const}\ SymbolsCollection\ \&collection)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ SymbolListUtils::toGraalList(std::begin(collection),\ std::end(collection));}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ *toGraalList(std::initializer\_list<SymbolWrapper>\ collection)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ SymbolListUtils::toGraalList(collection.begin(),\ collection.end());}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00118\ }
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::vector<SymbolWrapper>\ fromGraalList(\textcolor{keywordtype}{void}\ *graalList)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00120\ \ \ \ \ \};}
-\DoxyCodeLine{00121\ }
-\DoxyCodeLine{00122\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00123\ \ \ \ \ DataType\ data\_;}
-\DoxyCodeLine{00124\ }
-\DoxyCodeLine{00125\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00126\ \ \ \ \ SymbolWrapper(\textcolor{keyword}{const}\ SymbolWrapper\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00127\ \ \ \ \ SymbolWrapper(SymbolWrapper\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00128\ \ \ \ \ SymbolWrapper\ \&operator=(\textcolor{keyword}{const}\ SymbolWrapper\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00129\ \ \ \ \ SymbolWrapper\ \&operator=(SymbolWrapper\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00130\ \ \ \ \ SymbolWrapper()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~SymbolWrapper()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00132\ }
-\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ symbol.}}
-\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ Must\ be\ implicit\ to\ wrap\ symbols\ passed\ to\ collection\ or\ container}}
-\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ Symbol\ The\ symbol\ type}}
-\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ symbol}}
-\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{template}\ <ConvertibleToStringSymbol\ Symbol>}
-\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_aa0c460f7b372d483d640ee6185151bb5}{SymbolWrapper}}(Symbol\ \&\&symbol)\ \textcolor{keyword}{noexcept}\ :\ SymbolWrapper(StringSymbol(std::forward<Symbol>(symbol)))\ \{}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Could\ be\ "{}perfectly"{}\ moved,\ so\ it\ won't\ show\ up\ in\ the\ logs}}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(symbol\ =\ "{}}\ +\ toStringAny(symbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00146\ \ \ \ \ \}}
-\DoxyCodeLine{00147\ }
-\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ string\ symbol.}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ Must\ be\ implicit\ to\ wrap\ symbols\ passed\ to\ collection\ or\ container}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ @param\ stringSymbol\ The\ wrapped\ string\ (std::string,\ std::string\_view,\ const\ char*)\ symbol}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00154\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ae375f48ae03c0ca8ecefd74b3a453550}{SymbolWrapper}}(\textcolor{keyword}{const}\ StringSymbol\ \&stringSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(stringSymbol\ =\ "{}}\ +\ toStringAny(stringSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00158\ }
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ data\_\ =\ stringSymbol;}
-\DoxyCodeLine{00160\ \ \ \ \ \}}
-\DoxyCodeLine{00161\ }
-\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ wildcard\ (*)\ symbol.}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @param\ wildcardSymbol\ The\ wrapped\ wildcard\ symbol}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a4cfd220f2179f060b049c7d827c3ba75}{SymbolWrapper}}(\textcolor{keyword}{const}\ WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(wildcardSymbol\ =\ "{}}\ +\ toStringAny(wildcardSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ data\_\ =\ wildcardSymbol;}
-\DoxyCodeLine{00173\ \ \ \ \ \}}
-\DoxyCodeLine{00174\ }
-\DoxyCodeLine{00175\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ IndexedEventSubscriptionSymbol.}}
-\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @param\ indexedEventSubscriptionSymbol\ The\ IndexedEventSubscriptionSymbol}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00180\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a552e5f88fb5b70de20d22db53b411a8c}{SymbolWrapper}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}SymbolWrapper(indexedEventSubscriptionSymbol\ =\ "{}}\ +\ toStringAny(indexedEventSubscriptionSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00185\ }
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ data\_\ =\ indexedEventSubscriptionSymbol;}
-\DoxyCodeLine{00187\ \ \ \ \ \}}
-\DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ TimeSeriesSubscriptionSymbol.}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeSeriesSubscriptionSymbol\ The\ TimeSeriesSubscriptionSymbol}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00194\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ab84480a33ed72862da9954d99157051d}{SymbolWrapper}}(\textcolor{keyword}{const}\ TimeSeriesSubscriptionSymbol\ \&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}SymbolWrapper(timeSeriesSubscriptionSymbol\ =\ "{}}\ +\ toStringAny(timeSeriesSubscriptionSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00199\ }
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ data\_\ =\ timeSeriesSubscriptionSymbol;}
-\DoxyCodeLine{00201\ \ \ \ \ \}}
-\DoxyCodeLine{00202\ }
-\DoxyCodeLine{00203\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ CandleSymbol.}}
-\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @param\ candleSymbol\ The\ CandleSymbol}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00208\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a091b83b8c4be49ca4286a92d88cd9dfc}{SymbolWrapper}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{CandleSymbol}}\ \&candleSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(candleSymbol\ =\ "{}}\ +\ toStringAny(candleSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00212\ }
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ data\_\ =\ candleSymbol;}
-\DoxyCodeLine{00214\ \ \ \ \ \}}
-\DoxyCodeLine{00215\ }
-\DoxyCodeLine{00216\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a677727f5ece51214d768b2447aa5736a}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00222\ }
-\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keyword}{static}\ SymbolWrapper\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalList(\textcolor{keywordtype}{void}\ *graalList);}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::vector<SymbolWrapper>\ fromGraalList(\textcolor{keywordtype}{void}\ *graalList);}
+\DoxyCodeLine{00122\ \ \ \ \ \};}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00125\ \ \ \ \ DataType\ data\_;}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00128\ \ \ \ \ SymbolWrapper(\textcolor{keyword}{const}\ SymbolWrapper\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00129\ \ \ \ \ SymbolWrapper(SymbolWrapper\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00130\ \ \ \ \ SymbolWrapper\ \&operator=(\textcolor{keyword}{const}\ SymbolWrapper\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00131\ \ \ \ \ SymbolWrapper\ \&operator=(SymbolWrapper\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00132\ \ \ \ \ SymbolWrapper()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00133\ \ \ \ \ \string~SymbolWrapper()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ symbol.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ Must\ be\ implicit\ to\ wrap\ symbols\ passed\ to\ collection\ or\ container}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ Symbol\ The\ symbol\ type}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ symbol}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{template}\ <ConvertibleToStringSymbol\ Symbol>}
+\DoxyCodeLine{00143\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_a125a5e0d0de30705d31b37144db35d9d}{SymbolWrapper}}(Symbol\ \&\&symbol)\ \textcolor{keyword}{noexcept}\ :\ SymbolWrapper(StringSymbol(std::forward<Symbol>(symbol)))\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Could\ be\ "{}perfectly"{}\ moved,\ so\ it\ won't\ show\ up\ in\ the\ logs}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(symbol\ =\ "{}}\ +\ toStringAny(symbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ \ \ \ \ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ string\ symbol.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ Must\ be\ implicit\ to\ wrap\ symbols\ passed\ to\ collection\ or\ container}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ @param\ stringSymbol\ The\ wrapped\ string\ (std::string,\ std::string\_view,\ const\ char*)\ symbol}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00156\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_a76d3781481371cc78f7f9f4a70613840}{SymbolWrapper}}(\textcolor{keyword}{const}\ StringSymbol\ \&stringSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(stringSymbol\ =\ "{}}\ +\ toStringAny(stringSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ data\_\ =\ stringSymbol;}
+\DoxyCodeLine{00162\ \ \ \ \ \}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ any\ wrapped\ wildcard\ (*)\ symbol.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ @param\ wildcardSymbol\ The\ wrapped\ wildcard\ symbol}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00169\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_a89f663c417ca06f8e92c4b514404ef8c}{SymbolWrapper}}(\textcolor{keyword}{const}\ WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(wildcardSymbol\ =\ "{}}\ +\ toStringAny(wildcardSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ data\_\ =\ wildcardSymbol;}
+\DoxyCodeLine{00175\ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ IndexedEventSubscriptionSymbol.}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ @param\ indexedEventSubscriptionSymbol\ The\ IndexedEventSubscriptionSymbol}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00182\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_a59c5352d12af552fde56f02045d34aa2}{SymbolWrapper}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}SymbolWrapper(indexedEventSubscriptionSymbol\ =\ "{}}\ +\ toStringAny(indexedEventSubscriptionSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ data\_\ =\ indexedEventSubscriptionSymbol;}
+\DoxyCodeLine{00189\ \ \ \ \ \}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ TimeSeriesSubscriptionSymbol.}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeSeriesSubscriptionSymbol\ The\ TimeSeriesSubscriptionSymbol}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00196\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_aa3aef21c224de21cac9a749b5b8962bd}{SymbolWrapper}}(\textcolor{keyword}{const}\ TimeSeriesSubscriptionSymbol\ \&timeSeriesSubscriptionSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}SymbolWrapper(timeSeriesSubscriptionSymbol\ =\ "{}}\ +\ toStringAny(timeSeriesSubscriptionSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ data\_\ =\ timeSeriesSubscriptionSymbol;}
+\DoxyCodeLine{00203\ \ \ \ \ \}}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ Constructor\ for\ CandleSymbol.}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ @param\ candleSymbol\ The\ CandleSymbol}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00210\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_a81ce02a9f6f42f7ed24cac9d1115ac36}{SymbolWrapper}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_symbol}{CandleSymbol}}\ \&candleSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper(candleSymbol\ =\ "{}}\ +\ toStringAny(candleSymbol)\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ data\_\ =\ candleSymbol;}
+\DoxyCodeLine{00216\ \ \ \ \ \}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_symbol_wrapper_ac9b57f8528d3c52d9664a8561b858594}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
 \DoxyCodeLine{00224\ }
 \DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
 \DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ad03d863399bab0ae75b25b326c03f096}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper::toGraal()"{}});}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00236\ }
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::visit(}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&symbol)\ \{}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol.toGraal();}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ data\_);}
-\DoxyCodeLine{00242\ \ \ \ \ \}}
-\DoxyCodeLine{00243\ }
-\DoxyCodeLine{00244\ \ \ \ \ std::unique\_ptr<\textcolor{keywordtype}{void},\ \textcolor{keyword}{decltype}(\&SymbolWrapper\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a677727f5ece51214d768b2447aa5736a}{::}}\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a677727f5ece51214d768b2447aa5736a}{freeGraal}})>\ toGraalUnique()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{toGraal(),\ SymbolWrapper::freeGraal\};}
-\DoxyCodeLine{00246\ \ \ \ \ \}}
-\DoxyCodeLine{00247\ }
-\DoxyCodeLine{00248\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
-\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
-\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00253\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a628e57fb22575fe2b3f6cf06c7d40f0d}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}SymbolWrapper\{"{}}\ +}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::visit(}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&symbol)\ \{}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ toStringAny(symbol);}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \},}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data\_)\ +}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\}"{}};}
-\DoxyCodeLine{00261\ \ \ \ \ \}}
-\DoxyCodeLine{00262\ }
-\DoxyCodeLine{00263\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ StringSymbol}}
-\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a0f66038aa88942094d6a34838e3bafa4}{isStringSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<StringSymbol>(data\_);}
-\DoxyCodeLine{00268\ \ \ \ \ \}}
-\DoxyCodeLine{00269\ }
-\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ *\ @return\ String\ representation\ of\ StringSymbol\ or\ an\ empty\ string}}
-\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00273\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a9ed87465e80386fc45dcd1ffc3c5b6a6}{asStringSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isStringSymbol()\ ?\ std::get<StringSymbol>(data\_).getData()\ :\ String::EMPTY;}
-\DoxyCodeLine{00275\ \ \ \ \ \}}
-\DoxyCodeLine{00276\ }
-\DoxyCodeLine{00277\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ WildcardSymbol}}
-\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8f39830e71468fb50a80b5a56750db42}{isWildcardSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<WildcardSymbol>(data\_);}
-\DoxyCodeLine{00282\ \ \ \ \ \}}
-\DoxyCodeLine{00283\ }
-\DoxyCodeLine{00284\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ *\ @return\ WildcardSymbol\ (optional)\ or\ std::nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold\ WildcardSymbol}}
-\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00287\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{WildcardSymbol}}>\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8fc8e32454a3c5b4a27271ab719ed571}{asWildcardSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isWildcardSymbol()\ ?\ std::make\_optional(WildcardSymbol::ALL)\ :\ std::nullopt;}
-\DoxyCodeLine{00289\ \ \ \ \ \}}
-\DoxyCodeLine{00290\ }
-\DoxyCodeLine{00291\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ IndexedEventSubscriptionSymbol}}
-\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a3e77002d8946d22008ca2a0772d7bd7b}{isIndexedEventSubscriptionSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<IndexedEventSubscriptionSymbol>(data\_);}
-\DoxyCodeLine{00296\ \ \ \ \ \}}
-\DoxyCodeLine{00297\ }
-\DoxyCodeLine{00298\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ @return\ IndexedEventSubscriptionSymbol\ (optional)\ or\ std::nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold}}
-\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ *\ IndexedEventSubscriptionSymbol}}
-\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00302\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac8464ee4c91839bc4544d0c447752c78}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac8464ee4c91839bc4544d0c447752c78}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac8464ee4c91839bc4544d0c447752c78}{IndexedEventSubscriptionSymbol}}>\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac8464ee4c91839bc4544d0c447752c78}{asIndexedEventSubscriptionSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isIndexedEventSubscriptionSymbol()}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ std::make\_optional<IndexedEventSubscriptionSymbol>(std::get<IndexedEventSubscriptionSymbol>(data\_))}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ std::nullopt;}
-\DoxyCodeLine{00306\ \ \ \ \ \}}
-\DoxyCodeLine{00307\ }
-\DoxyCodeLine{00308\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ TimeSeriesSubscriptionSymbol}}
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keyword}{static}\ SymbolWrapper\ \mbox{\hyperlink{struct_symbol_wrapper_a2a2045e8abcc80df07832870dec412c7}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{struct_symbol_wrapper_a57eb7a3e84a39a2e9383f5c62bc3d3ac}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}SymbolWrapper::toGraal()"{}});}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::visit(}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&symbol)\ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol.toGraal();}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ data\_);}
+\DoxyCodeLine{00251\ \ \ \ \ \}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ std::unique\_ptr<\textcolor{keywordtype}{void},\ \textcolor{keyword}{decltype}(\&SymbolWrapper\mbox{\hyperlink{struct_symbol_wrapper_ac9b57f8528d3c52d9664a8561b858594}{::}}\mbox{\hyperlink{struct_symbol_wrapper_ac9b57f8528d3c52d9664a8561b858594}{freeGraal}})>\ toGraalUnique()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{toGraal(),\ SymbolWrapper::freeGraal\};}
+\DoxyCodeLine{00255\ \ \ \ \ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00262\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_symbol_wrapper_a381c43e0b9088ad4a011beb62f09d439}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}SymbolWrapper\{"{}}\ +}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::visit(}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&symbol)\ \{}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ toStringAny(symbol);}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data\_)\ +}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\}"{}};}
+\DoxyCodeLine{00270\ \ \ \ \ \}}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ StringSymbol}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_symbol_wrapper_a41d1a6b653b546dae9da14c836075dcc}{isStringSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<StringSymbol>(data\_);}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ @return\ String\ representation\ of\ StringSymbol\ or\ an\ empty\ string}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00282\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_symbol_wrapper_a6f8b0e47c71716a1c23e25d0eacc8a8d}{asStringSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isStringSymbol()\ ?\ std::get<StringSymbol>(data\_).getData()\ :\ String::EMPTY;}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ WildcardSymbol}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_symbol_wrapper_a487797c0d1536652d507699e97fb076e}{isWildcardSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<WildcardSymbol>(data\_);}
+\DoxyCodeLine{00291\ \ \ \ \ \}}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ *\ @return\ WildcardSymbol\ (optional)\ or\ std::nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold\ WildcardSymbol}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00296\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_a7c87ee22a491ec4483cf9ed916e16682}{std}}::\mbox{\hyperlink{struct_symbol_wrapper_a7c87ee22a491ec4483cf9ed916e16682}{optional}}<\mbox{\hyperlink{struct_symbol_wrapper_a7c87ee22a491ec4483cf9ed916e16682}{WildcardSymbol}}>\ \mbox{\hyperlink{struct_symbol_wrapper_a7c87ee22a491ec4483cf9ed916e16682}{asWildcardSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isWildcardSymbol()\ ?\ std::make\_optional(WildcardSymbol::ALL)\ :\ std::nullopt;}
+\DoxyCodeLine{00298\ \ \ \ \ \}}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ IndexedEventSubscriptionSymbol}}
+\DoxyCodeLine{00302\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_symbol_wrapper_a17143b85508f75e9ef1605417bee0303}{isIndexedEventSubscriptionSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<IndexedEventSubscriptionSymbol>(data\_);}
+\DoxyCodeLine{00305\ \ \ \ \ \}}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ @return\ IndexedEventSubscriptionSymbol\ (optional)\ or\ std::nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ IndexedEventSubscriptionSymbol}}
 \DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a8e6657db1f3a1d24ca921829b08561a6}{isTimeSeriesSubscriptionSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<TimeSeriesSubscriptionSymbol>(data\_);}
-\DoxyCodeLine{00313\ \ \ \ \ \}}
-\DoxyCodeLine{00314\ }
-\DoxyCodeLine{00315\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ *\ @return\ TimeSeriesSubscriptionSymbol\ (optional)\ or\ std::nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold}}
-\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *\ TimeSeriesSubscriptionSymbol}}
-\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00319\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a1380ed23b11c5153f35bda91b4891c85}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a1380ed23b11c5153f35bda91b4891c85}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a1380ed23b11c5153f35bda91b4891c85}{TimeSeriesSubscriptionSymbol}}>\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a1380ed23b11c5153f35bda91b4891c85}{asTimeSeriesSubscriptionSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isTimeSeriesSubscriptionSymbol()}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ std::make\_optional<TimeSeriesSubscriptionSymbol>(std::get<TimeSeriesSubscriptionSymbol>(data\_))}
-\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ std::nullopt;}
-\DoxyCodeLine{00323\ \ \ \ \ \}}
-\DoxyCodeLine{00324\ }
-\DoxyCodeLine{00325\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ CandleSymbol}}
+\DoxyCodeLine{00311\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_a427516b4561a91cfd87e41df55374f10}{std}}::\mbox{\hyperlink{struct_symbol_wrapper_a427516b4561a91cfd87e41df55374f10}{optional}}<\mbox{\hyperlink{struct_symbol_wrapper_a427516b4561a91cfd87e41df55374f10}{IndexedEventSubscriptionSymbol}}>\ \mbox{\hyperlink{struct_symbol_wrapper_a427516b4561a91cfd87e41df55374f10}{asIndexedEventSubscriptionSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isIndexedEventSubscriptionSymbol()}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ std::make\_optional<IndexedEventSubscriptionSymbol>(std::get<IndexedEventSubscriptionSymbol>(data\_))}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ std::nullopt;}
+\DoxyCodeLine{00315\ \ \ \ \ \}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ TimeSeriesSubscriptionSymbol}}
+\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00320\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_symbol_wrapper_aa0e37838f86b3ff7e08e23b1fc2fc537}{isTimeSeriesSubscriptionSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<TimeSeriesSubscriptionSymbol>(data\_);}
+\DoxyCodeLine{00322\ \ \ \ \ \}}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *\ @return\ TimeSeriesSubscriptionSymbol\ (optional)\ or\ std::nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ TimeSeriesSubscriptionSymbol}}
 \DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a4fb50df341ceb4ce7614852099c719d8}{isCandleSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<CandleSymbol>(data\_);}
-\DoxyCodeLine{00330\ \ \ \ \ \}}
-\DoxyCodeLine{00331\ }
-\DoxyCodeLine{00332\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ @return\ CandleSymbol\ (optional)\ or\ std::nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold}}
-\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *\ CandleSymbol}}
-\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00336\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac795898b422401c5f464014eaa43e5fd}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac795898b422401c5f464014eaa43e5fd}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac795898b422401c5f464014eaa43e5fd}{CandleSymbol}}>\ \mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_ac795898b422401c5f464014eaa43e5fd}{asCandleSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isCandleSymbol()\ ?\ std::make\_optional<CandleSymbol>(std::get<CandleSymbol>(data\_))\ :\ std::nullopt;}
-\DoxyCodeLine{00338\ \ \ \ \ \}}
-\DoxyCodeLine{00339\ }
-\DoxyCodeLine{00340\ \ \ \ \ \textcolor{keyword}{const}\ DataType\ \&getData()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_;}
-\DoxyCodeLine{00342\ \ \ \ \ \}}
-\DoxyCodeLine{00343\ }
-\DoxyCodeLine{00344\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \{}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getData()\ ==\ symbolWrapper.getData();}
-\DoxyCodeLine{00346\ \ \ \ \ \}}
-\DoxyCodeLine{00347\ }
-\DoxyCodeLine{00348\ \ \ \ \ \textcolor{keyword}{auto}\ operator<(\textcolor{keyword}{const}\ SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \{}
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getData()\ <\ symbolWrapper.getData();}
-\DoxyCodeLine{00350\ \ \ \ \ \}}
-\DoxyCodeLine{00351\ }
-\DoxyCodeLine{00352\ \ \ \ \ \textcolor{keyword}{using}\ GraalPtr\ =\ std::unique\_ptr<\textcolor{keywordtype}{void},\ \textcolor{keyword}{decltype}(\&SymbolWrapper\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a677727f5ece51214d768b2447aa5736a}{::}}\mbox{\hyperlink{structdxfcpp_1_1_symbol_wrapper_a677727f5ece51214d768b2447aa5736a}{freeGraal}})>;}
-\DoxyCodeLine{00353\ \};}
-\DoxyCodeLine{00354\ }
-\DoxyCodeLine{00355\ \textcolor{keyword}{inline}\ \textcolor{keyword}{namespace}\ literals\ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_ab74479c3153ded5d9608c3f8c3b6649b}{std}}::\mbox{\hyperlink{struct_symbol_wrapper_ab74479c3153ded5d9608c3f8c3b6649b}{optional}}<\mbox{\hyperlink{struct_symbol_wrapper_ab74479c3153ded5d9608c3f8c3b6649b}{TimeSeriesSubscriptionSymbol}}>\ \mbox{\hyperlink{struct_symbol_wrapper_ab74479c3153ded5d9608c3f8c3b6649b}{asTimeSeriesSubscriptionSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isTimeSeriesSubscriptionSymbol()}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ std::make\_optional<TimeSeriesSubscriptionSymbol>(std::get<TimeSeriesSubscriptionSymbol>(data\_))}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ std::nullopt;}
+\DoxyCodeLine{00332\ \ \ \ \ \}}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ current\ SymbolWrapper\ holds\ a\ CandleSymbol}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_symbol_wrapper_aa85e5465f6b4ed9a5f58f07d060e3dae}{isCandleSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::holds\_alternative<CandleSymbol>(data\_);}
+\DoxyCodeLine{00339\ \ \ \ \ \}}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ @return\ CandleSymbol\ (optional)\ or\ std::nullopt\ if\ current\ SymbolWrapper\ doesn't\ hold}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *\ CandleSymbol}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00345\ \ \ \ \ \mbox{\hyperlink{struct_symbol_wrapper_a0e39a7d1ef6ba5fa1ee88ab1a5b4afd7}{std}}::\mbox{\hyperlink{struct_symbol_wrapper_a0e39a7d1ef6ba5fa1ee88ab1a5b4afd7}{optional}}<\mbox{\hyperlink{struct_symbol_wrapper_a0e39a7d1ef6ba5fa1ee88ab1a5b4afd7}{CandleSymbol}}>\ \mbox{\hyperlink{struct_symbol_wrapper_a0e39a7d1ef6ba5fa1ee88ab1a5b4afd7}{asCandleSymbol}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isCandleSymbol()\ ?\ std::make\_optional<CandleSymbol>(std::get<CandleSymbol>(data\_))\ :\ std::nullopt;}
+\DoxyCodeLine{00347\ \ \ \ \ \}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keyword}{const}\ DataType\ \&getData()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_;}
+\DoxyCodeLine{00351\ \ \ \ \ \}}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getData()\ ==\ symbolWrapper.getData();}
+\DoxyCodeLine{00355\ \ \ \ \ \}}
 \DoxyCodeLine{00356\ }
-\DoxyCodeLine{00357\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00358\ \textcolor{comment}{\ *\ String\ literal\ that\ helps\ to\ construct\ SymbolWrapper\ from\ a\ char\ array.}}
-\DoxyCodeLine{00359\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00360\ \textcolor{comment}{\ *\ @param\ string\ The\ char\ array}}
-\DoxyCodeLine{00361\ \textcolor{comment}{\ *\ @param\ length\ Tha\ char\ array's\ length}}
-\DoxyCodeLine{00362\ \textcolor{comment}{\ *\ @return\ Wrapped\ string\ view\ built\ on\ char\ array}}
-\DoxyCodeLine{00363\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00364\ \textcolor{keyword}{inline}\ SymbolWrapper\ operator\textcolor{stringliteral}{"{}"{}\_sw}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *string,\ size\_t\ length)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00365\ \ \ \ \ \textcolor{keywordflow}{return}\ \{std::string\_view\{string,\ length\}\};}
-\DoxyCodeLine{00366\ \}}
-\DoxyCodeLine{00367\ }
-\DoxyCodeLine{00368\ \}\ \textcolor{comment}{//\ namespace\ literals}}
-\DoxyCodeLine{00369\ }
-\DoxyCodeLine{00370\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
-\DoxyCodeLine{00371\ }
-\DoxyCodeLine{00372\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::SymbolWrapper>\ \{}
-\DoxyCodeLine{00373\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<dxfcpp::SymbolWrapper::DataType>\{\}(symbolWrapper.getData());}
-\DoxyCodeLine{00375\ \ \ \ \ \}}
-\DoxyCodeLine{00376\ \};}
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{keyword}{auto}\ operator<(\textcolor{keyword}{const}\ SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getData()\ <\ symbolWrapper.getData();}
+\DoxyCodeLine{00359\ \ \ \ \ \}}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keyword}{using}\ GraalPtr\ =\ std::unique\_ptr<\textcolor{keywordtype}{void},\ \textcolor{keyword}{decltype}(\&SymbolWrapper\mbox{\hyperlink{struct_symbol_wrapper_ac9b57f8528d3c52d9664a8561b858594}{::}}\mbox{\hyperlink{struct_symbol_wrapper_ac9b57f8528d3c52d9664a8561b858594}{freeGraal}})>;}
+\DoxyCodeLine{00362\ \};}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \textcolor{keyword}{inline}\ \textcolor{keyword}{namespace}\ literals\ \{}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00367\ \textcolor{comment}{\ *\ String\ literal\ that\ helps\ to\ construct\ SymbolWrapper\ from\ a\ char\ array.}}
+\DoxyCodeLine{00368\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ *\ @param\ string\ The\ char\ array}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ *\ @param\ length\ Tha\ char\ array's\ length}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ *\ @return\ Wrapped\ string\ view\ built\ on\ char\ array}}
+\DoxyCodeLine{00372\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00373\ \textcolor{keyword}{inline}\ SymbolWrapper\ operator\textcolor{stringliteral}{"{}"{}\_sw}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *string,\ size\_t\ length)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00374\ \ \ \ \ \textcolor{keywordflow}{return}\ \{std::string\_view\{string,\ length\}\};}
+\DoxyCodeLine{00375\ \}}
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00377\ \}\ \textcolor{comment}{//\ namespace\ literals}}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00380\ }
+\DoxyCodeLine{00381\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::SymbolWrapper>\ \{}
+\DoxyCodeLine{00382\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::SymbolWrapper\ \&symbolWrapper)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<dxfcpp::SymbolWrapper::DataType>\{\}(symbolWrapper.getData());}
+\DoxyCodeLine{00384\ \ \ \ \ \}}
+\DoxyCodeLine{00385\ \};}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00387\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

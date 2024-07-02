@@ -9,98 +9,110 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ }
-\DoxyCodeLine{00011\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ Source\ identifier\ for\ IndexedEvent.}}
-\DoxyCodeLine{00015\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ See\ IndexedEvent::getSource().}}
-\DoxyCodeLine{00017\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \{}
-\DoxyCodeLine{00019\ \ \ \ \ std::int32\_t\ id\_\{\};}
-\DoxyCodeLine{00020\ \ \ \ \ std::string\ name\_\{\};}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ *\ The\ default\ source\ with\ zero\ @ref\ ::id()\ "{}identifier"{}\ for\ all\ events\ that\ do\ not\ support\ multiple\ sources.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT}};}
-\DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ \ \ \ \ IndexedEventSource()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~IndexedEventSource()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00013\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ Source\ identifier\ for\ IndexedEvent.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ See\ IndexedEvent::getSource().}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ std::int32\_t\ id\_\{\};}
+\DoxyCodeLine{00022\ \ \ \ \ std::string\ name\_\{\};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *\ The\ default\ source\ with\ zero\ @ref\ ::id()\ "{}identifier"{}\ for\ all\ events\ that\ do\ not\ support\ multiple\ sources.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \mbox{\hyperlink{class_indexed_event_source_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}};}
+\DoxyCodeLine{00029\ }
 \DoxyCodeLine{00030\ }
 \DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ IndexedEvent's\ source\ by\ id\ and\ name.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ source\ id}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ @param\ name\ The\ source\ name}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a36c6e14bc7e4127c9c5e9107fefeb0a6}{IndexedEventSource}}(std::int32\_t\ id,\ std::string\ name)\ \textcolor{keyword}{noexcept}\ :\ id\_\{id\},\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a36c6e14bc7e4127c9c5e9107fefeb0a6}{name\_}}\{\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a36c6e14bc7e4127c9c5e9107fefeb0a6}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a36c6e14bc7e4127c9c5e9107fefeb0a6}{move}}(\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a36c6e14bc7e4127c9c5e9107fefeb0a6}{name}})\}\ \{}
-\DoxyCodeLine{00038\ \ \ \ \ \}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{class_indexed_event_source_aed8d7c6e76fbf211367c9e31a37f437a}{toGraal}}()\ \textcolor{keyword}{const};}
 \DoxyCodeLine{00039\ }
 \DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ source\ identifier.\ Source\ identifier\ is\ non-\/negative.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
 \DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ source\ identifier.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
 \DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00045\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{id}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_;}
-\DoxyCodeLine{00047\ \ \ \ \ \}}
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ string\ representation\ of\ the\ object.}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ string\ representation\ of\ the\ object.}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_indexed_event_source_a04c744156c520020e973aae3d08ff342}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
 \DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a60876eb77d249937307e31a13d6d8bf2}{name}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00056\ \ \ \ \ \}}
-\DoxyCodeLine{00057\ }
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ string\ representation\ of\ the\ object.}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ string\ representation\ of\ the\ object.}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00063\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a9f85ac6b75cd3898d328b8bf819e5b2b}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00065\ \ \ \ \ \}}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&indexedEventSource)\ \textcolor{keyword}{const}\ \{}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ ==\ indexedEventSource.id\_;}
-\DoxyCodeLine{00069\ \ \ \ \ \}}
-\DoxyCodeLine{00070\ }
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{auto}\ operator<(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&indexedEventSource)\ \textcolor{keyword}{const}\ \{}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ <\ indexedEventSource.id\_;}
-\DoxyCodeLine{00073\ \ \ \ \ \}}
-\DoxyCodeLine{00074\ }
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \mbox{\hyperlink{class_indexed_event_source_ab2cd529df185b88c3a040e80b742fde2}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ IndexedEventSource()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~IndexedEventSource()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ IndexedEvent's\ source\ by\ id\ and\ name.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ source\ id}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ @param\ name\ The\ source\ name}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{class_indexed_event_source_af79da2a0efb825e9350ff59b6a08bd96}{IndexedEventSource}}(std::int32\_t\ id,\ std::string\ name)\ \textcolor{keyword}{noexcept}\ :\ id\_\{id\},\ \mbox{\hyperlink{class_indexed_event_source_af79da2a0efb825e9350ff59b6a08bd96}{name\_}}\{\mbox{\hyperlink{class_indexed_event_source_af79da2a0efb825e9350ff59b6a08bd96}{std}}::\mbox{\hyperlink{class_indexed_event_source_af79da2a0efb825e9350ff59b6a08bd96}{move}}(\mbox{\hyperlink{class_indexed_event_source_af79da2a0efb825e9350ff59b6a08bd96}{name}})\}\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ source\ identifier.\ Source\ identifier\ is\ non-\/negative.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ source\ identifier.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00073\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{id}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_;}
+\DoxyCodeLine{00075\ \ \ \ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ string\ representation\ of\ the\ object.}}
 \DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ string\ representation\ of\ the\ object.}}
 \DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a44b6e026dd50b88abbd75398d89c62b5}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00083\ }
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_abe173d77031f9da60e23db7b84e635be}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00092\ \};}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
-\DoxyCodeLine{00095\ }
-\DoxyCodeLine{00096\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}>\ \{}
-\DoxyCodeLine{00097\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&indexedEventSource)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::size\_t>(indexedEventSource\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{.}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{id}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{(}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_a251e43b2d80bda9d117e8dd1c3aa5413}{)}});}
-\DoxyCodeLine{00099\ \ \ \ \ \}}
-\DoxyCodeLine{00100\ \};}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{class_indexed_event_source_a855e23852633b4df47d38308a42e6079}{name}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00084\ \ \ \ \ \}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ string\ representation\ of\ the\ object.}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ string\ representation\ of\ the\ object.}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00091\ \ \ \ \ std::string\ \mbox{\hyperlink{class_indexed_event_source_ab1eadabd0ef1358e3912fc19e3b94819}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \&indexedEventSource)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ ==\ indexedEventSource.id\_;}
+\DoxyCodeLine{00097\ \ \ \ \ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{auto}\ operator<(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \&indexedEventSource)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ <\ indexedEventSource.id\_;}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ \};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}>\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \&indexedEventSource)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::size\_t>(indexedEventSource\mbox{\hyperlink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{.}}\mbox{\hyperlink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{id}}\mbox{\hyperlink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{(}}\mbox{\hyperlink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{)}});}
+\DoxyCodeLine{00109\ \ \ \ \ \}}
+\DoxyCodeLine{00110\ \};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

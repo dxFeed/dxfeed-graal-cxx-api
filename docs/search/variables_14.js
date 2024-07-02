@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['wednesday_0',['WEDNESDAY',['../db/d02/structdxfcpp_1_1_day_filter.html#a8cbe8eebee3d1865b77cad6ff5995825',1,'dxfcpp::DayFilter']]],
-  ['week_1',['WEEK',['../da/d01/structdxfcpp_1_1_candle_type.html#a38a962983a42004f94dd20fe3e94a45d',1,'dxfcpp::CandleType']]],
-  ['week_5fday_2',['WEEK_DAY',['../db/d02/structdxfcpp_1_1_day_filter.html#a383f96448716bbd975079b030b472397',1,'dxfcpp::DayFilter']]],
-  ['week_5fend_3',['WEEK_END',['../db/d02/structdxfcpp_1_1_day_filter.html#abf75b072d4d65629f13aa23d5e1c8b84',1,'dxfcpp::DayFilter']]]
+  ['wanted_0',['WANTED',['../df/d02/struct_otc_markets_price_type.html#a1d9d1a5a869437cc122040429b564753',1,'OtcMarketsPriceType']]],
+  ['wednesday_1',['WEDNESDAY',['../d1/d01/struct_day_filter.html#a4b1b495a3bf1ba402b9b1fd3f7027828',1,'DayFilter']]],
+  ['week_2',['WEEK',['../d2/d02/struct_candle_type.html#a2968630470b0cf7abf195ac5f07884e1',1,'CandleType']]],
+  ['week_5fday_3',['WEEK_DAY',['../d1/d01/struct_day_filter.html#ace315bfd8520f617c17b851ac9eff378',1,'DayFilter']]],
+  ['week_5fend_4',['WEEK_END',['../d1/d01/struct_day_filter.html#a62533e246d80b6b37cd7b642cd41a1fc',1,'DayFilter']]]
 ];

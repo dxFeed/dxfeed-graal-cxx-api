@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['local_5fhub_0',['LOCAL_HUB',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da16722a7e83ac68f9bc32cae5242046f5',1,'dxfcpp::DXEndpoint']]]
+  ['local_5fhub_0',['LOCAL_HUB',['../d9/d00/struct_d_x_endpoint.html#a4257e04caaa1ff898a60ece339e02810a16722a7e83ac68f9bc32cae5242046f5',1,'DXEndpoint']]]
 ];

@@ -56,12 +56,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d3/d00/_option_sale_8hpp_source.html",
-"d7/d02/structdxfcpp_1_1_event_type_with_symbol.html#a5ac37797f3b17ec18876ccc381638044",
-"da/d01/classdxfcpp_1_1_spread_order.html#a2ba94e1ad2a8b5f5622612a1054a926d",
-"dc/d01/api_8h.html#a3a7f931ee286a227711ec5dd530323c1a3b1cde06ba459c4718cb9ec8b72531fb",
-"de/d02/classdxfcpp_1_1_option_sale.html#ac1a206cebf9bb752f7e4c46cda96fcfc",
-"functions_func_~.html"
+"d3/d03/_market_module_8hpp_source.html",
+"d5/d03/class_candle.html#a1e53573765534cea0e105462317ce5f5",
+"d8/d00/_time_format_8hpp_source.html",
+"dc/d00/class_d_x_feed_subscription.html#acc00804915e18fcf303837490b04d485",
+"dd/d01/struct_candle_price_level.html#a06e82b25463992714578bb56fe5fb0ac",
+"functions_func_h.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

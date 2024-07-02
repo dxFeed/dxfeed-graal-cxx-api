@@ -9,88 +9,92 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventType.hpp"{}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventType.hpp"{}}}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ Base\ class\ for\ all\ market\ events.\ All\ market\ events\ are\ POCO\ that}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ extend\ this\ class.\ Market\ event\ classes\ are\ simple\ beans\ with\ setter\ and\ getter\ methods\ for\ their}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ properties\ and\ minimal\ business\ logic.\ All\ market\ events\ have\ \`{}eventSymbol`\ property\ that\ is}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ defined\ by\ this\ class.}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00023\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{EventTypeWithSymbol}}<\mbox{\hyperlink{structdxfcpp_1_1_market_event}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_market_event}{string}}>\ \{}
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ MarketEvent\ object}}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}>;}
-\DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00028\ \ \ \ \ std::optional<std::string>\ eventSymbol\_\{\};}
-\DoxyCodeLine{00029\ \ \ \ \ std::int64\_t\ eventTime\_\{\};}
-\DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00032\ \ \ \ \ MarketEvent()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00033\ }
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ Protected\ constructor\ for\ concrete\ implementation\ classes\ that\ initializes\ \`{}eventSymbol`\ property.}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{MarketEvent}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{eventSymbol\_}}\{\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{move}}(\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{eventSymbol}})\}\ \{}
-\DoxyCodeLine{00040\ \ \ \ \ \}}
-\DoxyCodeLine{00041\ }
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ dxfcpp::String::NUL\ (`std::string\{"{}<null>"{}\}`)}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structdxfcpp_1_1_market_event_a3b8882d7a6be94bf84a28e94abdfc8ca}{getEventSymbol}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_a3b8882d7a6be94bf84a28e94abdfc8ca}{override}}\ \{}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!eventSymbol\_)\ \{}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::String::NUL;}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_.value();}
-\DoxyCodeLine{00058\ \ \ \ \ \}}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ \`{}std::nullopt`.}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_aa74744271c735f27fc3a0094b24a43ff}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_market_event_aa74744271c735f27fc3a0094b24a43ff}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_market_event_aa74744271c735f27fc3a0094b24a43ff}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_market_event_aa74744271c735f27fc3a0094b24a43ff}{string}}>\ \&\mbox{\hyperlink{structdxfcpp_1_1_market_event_aa74744271c735f27fc3a0094b24a43ff}{getEventSymbolOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_;}
-\DoxyCodeLine{00067\ \ \ \ \ \}}
-\DoxyCodeLine{00068\ }
-\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{setEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_a371a67895ed8276685d29e0657b53899}{override}}\ \{}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ check\ invalid\ utf-\/8\ [EN-\/8233]}}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ eventSymbol\_\ =\ eventSymbol;}
-\DoxyCodeLine{00077\ \ \ \ \ \}}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00080\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_a4dde8cfbc3163d9ea5c4b1346b8b861d}{getEventTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_a4dde8cfbc3163d9ea5c4b1346b8b861d}{override}}\ \{}
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTime\_;}
-\DoxyCodeLine{00082\ \ \ \ \ \}}
-\DoxyCodeLine{00083\ }
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{setEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event_a80b9add6fad6c1121ddd0497d423f7ce}{override}}\ \{}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ eventTime\_\ =\ eventTime;}
-\DoxyCodeLine{00087\ \ \ \ \ \}}
-\DoxyCodeLine{00088\ \};}
-\DoxyCodeLine{00089\ }
-\DoxyCodeLine{00090\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00017\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Base\ class\ for\ all\ market\ events.\ All\ market\ events\ are\ POCO\ that}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ extend\ this\ class.\ Market\ event\ classes\ are\ simple\ beans\ with\ setter\ and\ getter\ methods\ for\ their}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ properties\ and\ minimal\ business\ logic.\ All\ market\ events\ have\ \`{}eventSymbol`\ property\ that\ is}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ defined\ by\ this\ class.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00025\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_market_event}{MarketEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_market_event}{EventTypeWithSymbol}}<\mbox{\hyperlink{struct_market_event}{std}}::\mbox{\hyperlink{struct_market_event}{string}}>\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ MarketEvent\ object}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{struct_market_event}{MarketEvent}}>;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00030\ \ \ \ \ std::optional<std::string>\ eventSymbol\_\{\};}
+\DoxyCodeLine{00031\ \ \ \ \ std::int64\_t\ eventTime\_\{\};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00034\ \ \ \ \ MarketEvent()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ Protected\ constructor\ for\ concrete\ implementation\ classes\ that\ initializes\ \`{}eventSymbol`\ property.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{struct_market_event_afb6b53469aa08abc5f7d46f420a978d2}{MarketEvent}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{struct_market_event_afb6b53469aa08abc5f7d46f420a978d2}{eventSymbol\_}}\{\mbox{\hyperlink{struct_market_event_afb6b53469aa08abc5f7d46f420a978d2}{std}}::\mbox{\hyperlink{struct_market_event_afb6b53469aa08abc5f7d46f420a978d2}{move}}(\mbox{\hyperlink{struct_market_event_afb6b53469aa08abc5f7d46f420a978d2}{eventSymbol}})\}\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ dxfcpp::String::NUL\ (`std::string\{"{}<null>"{}\}`)}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{struct_market_event_a6f4f9f4bdb7ef23cda9d5a57640a8db3}{getEventSymbol}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{struct_market_event_a6f4f9f4bdb7ef23cda9d5a57640a8db3}{override}}\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!eventSymbol\_)\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::String::NUL;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_.value();}
+\DoxyCodeLine{00060\ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ \`{}std::nullopt`.}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_market_event_aae8ffbf25a247a64eec19eff14095524}{std}}::\mbox{\hyperlink{struct_market_event_aae8ffbf25a247a64eec19eff14095524}{optional}}<\mbox{\hyperlink{struct_market_event_aae8ffbf25a247a64eec19eff14095524}{std}}::\mbox{\hyperlink{struct_market_event_aae8ffbf25a247a64eec19eff14095524}{string}}>\ \&\mbox{\hyperlink{struct_market_event_aae8ffbf25a247a64eec19eff14095524}{getEventSymbolOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_;}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_market_event_ae3358224a62a18b5e4ad9bad053dc8ed}{setEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{struct_market_event_ae3358224a62a18b5e4ad9bad053dc8ed}{override}}\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ check\ invalid\ utf-\/8\ [EN-\/8233]}}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ eventSymbol\_\ =\ eventSymbol;}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00082\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{struct_market_event_a9c8e8dd0fe8c615d776d6e1dc781be8d}{getEventTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{struct_market_event_a9c8e8dd0fe8c615d776d6e1dc781be8d}{override}}\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTime\_;}
+\DoxyCodeLine{00084\ \ \ \ \ \}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_market_event_a084532c668491c224eeb498bb29e2cbd}{setEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{struct_market_event_a084532c668491c224eeb498bb29e2cbd}{override}}\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ eventTime\_\ =\ eventTime;}
+\DoxyCodeLine{00089\ \ \ \ \ \}}
+\DoxyCodeLine{00090\ \};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

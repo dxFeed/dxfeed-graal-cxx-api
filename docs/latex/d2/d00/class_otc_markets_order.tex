@@ -1,0 +1,1575 @@
+\doxysubsection{Otc\+Markets\+Order Class Reference}
+\hypertarget{class_otc_markets_order}{}\label{class_otc_markets_order}\index{OtcMarketsOrder@{OtcMarketsOrder}}
+
+
+Represents an extension of \doxylink{class_order}{Order} for the symbols traded on the OTC Markets.  
+
+
+
+
+{\ttfamily \#include $<$Otc\+Markets\+Order.\+hpp$>$}
+
+Inheritance diagram for Otc\+Markets\+Order\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=8.000000cm]{d2/d00/class_otc_markets_order}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_otc_markets_order_a537ab1de97e2c657444d88145f2bc500}\label{class_otc_markets_order_a537ab1de97e2c657444d88145f2bc500} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{class_otc_markets_order}{Otc\+Markets\+Order} object. \end{DoxyCompactList}\item 
+\Hypertarget{class_otc_markets_order_af0674a5b1fb1536e561290b57c6dcac8}\label{class_otc_markets_order_af0674a5b1fb1536e561290b57c6dcac8} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{class_otc_markets_order}{Otc\+Markets\+Order} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{class_order}{Order}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_order}{Order}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{class_order}{Order} object. \end{DoxyCompactList}\item 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{class_order}{Order}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{class_order}{Order} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_market_event}{Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_market_event}{Market\+Event}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_market_event}{Market\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol$<$ std\+::string $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr}
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_event_type}{Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_event_type}{Event\+Type}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_indexed_event}{Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_indexed_event}{Indexed\+Event}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_indexed_event}{Indexed\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_otc_markets_order_ad036bcb2b2a072937a5f9bfc38d6347f}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\Hypertarget{class_otc_markets_order_a3061eb3f83af3498d9ee454f8ba4736d}\label{class_otc_markets_order_a3061eb3f83af3498d9ee454f8ba4736d} 
+{\bfseries Otc\+Markets\+Order} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new OTC Markets order event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order_aefd3355107f8b190af78a3c5d2c5a1de}{Otc\+Markets\+Order}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new OTC Markets order event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a9f9c8bdc3dd0d9a1907a1b4cafb56dcb}{with\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_abecfb5fb56cb95ea6a8c43496584afea}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a3c2be1402bac4a7104ae2d188fa50d4d}{with\+Source}} (const \mbox{\hyperlink{class_order_source}{Order\+Source}} \&source) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s source and returns the current OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_ae8bcf16db0943a21bcbdb4c04e420fbf}{with\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a58d4b0fcde0dad1be33556b8a4d6e25b}{with\+Event\+Flags}} (const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_ad699e8e080ddb8e1577e9cac57eb89a7}{with\+Index}} (std\+::int64\+\_\+t index) noexcept
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this OTC Markets order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_afd7495819694d0757916bc0f234f60d7}{with\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this OTC Markets order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_ac59afe20d3db42f4216478f2e0401478}{with\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_ad460cc165a9b29ecc3ae6513abf6a82b}{with\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{class_order_base_aa1eda2dddd2b512e54941f49d9754003}{sequence number} of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_abff7154638734a7698e8964ca6949b9e}{with\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this OTC Markets order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a3172fbb4a37dcd81c6c33c86d1f08512}{with\+Action}} (const \mbox{\hyperlink{struct_order_action}{Order\+Action}} \&action) noexcept
+\begin{DoxyCompactList}\small\item\em Changes action of this OTC Markets order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_ab51f5941f9b892587828acd20abfcff8}{with\+Action\+Time}} (std\+::int64\+\_\+t action\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last action and returns current OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a7f1b72235f6810e830b103212f75c878}{with\+Order\+Id}} (std\+::int64\+\_\+t order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a05427f06fcdd36b100abd77f200d5321}{with\+Aux\+Order\+Id}} (std\+::int64\+\_\+t aux\+Order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes auxiliary order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a001604529ff53f7660cbd973da33306b}{with\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a6dca6dbcaebcd43e62a031633df7c709}{with\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a108fe33b6f5e4d6da3cab72b3078c778}{with\+Executed\+Size}} (double executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes executed size of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a3d944c7910c5cab6ab429fadf76ab4c9}{with\+Count}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_affd215f097f8eba4552f3dbaf8050c39}{with\+Trade\+Id}} (std\+::int64\+\_\+t trade\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_aafa20509660968fbb625700b4f97695a}{with\+Trade\+Price}} (double trade\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a7852a897ad787c58a109a9e0eb29f855}{with\+Trade\+Size}} (double trade\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a8fc47b5e26ea3b8349a7e70689996cf0}{with\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_ab8abfde0846b7896456b42fa952d18c9}{with\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a98be98d76c5ae6c2119680b1cb4f272e}{with\+Order\+Side}} (const \mbox{\hyperlink{struct_side}{Side}} \&side) noexcept
+\begin{DoxyCompactList}\small\item\em Changes side of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a73c6a9b6206bae3f17af4bb454cbe4a0}{with\+Scope}} (const \mbox{\hyperlink{struct_scope}{Scope}} \&scope) noexcept
+\begin{DoxyCompactList}\small\item\em Changes scope of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a500ebc768d9c60c427f2a19243f41c25}{with\+Market\+Maker}} (std\+::string market\+Maker) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market maker or other aggregate identifier of this OTC Markets order. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_otc_markets_order_a85155c31cda80ccd911f84389efcd666}{get\+Quote\+Access\+Payment}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns \doxylink{class_quote}{Quote} Access Payment (QAP) of this OTC Markets order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_otc_markets_order_a440f4b10b968f074160659bd7873270b}{set\+Quote\+Access\+Payment}} (std\+::int32\+\_\+t quote\+Access\+Payment) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{class_quote}{Quote} Access Payment (QAP) of this OTC Markets order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a7a8be780453a07ae0bdc6c867befd3d8}{with\+Quote\+Access\+Payment}} (std\+::int32\+\_\+t quote\+Access\+Payment) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{class_quote}{Quote} Access Payment (QAP) and returns the current OTC Markets order. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_otc_markets_order_ac37e7a0ebb4051f965125e608640165d}{is\+Open}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this event is available for business within the operating hours of the OTC Link system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_otc_markets_order_a99020161803fdfecde767e4da68439eb}{set\+Open}} (bool open) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event is available for business within the operating hours of the OTC Link system. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_aecf7fb9e69c5f83250d5ce97115db812}{with\+Open}} (bool open) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event is available for business within the operating hours of the OTC Link system. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_otc_markets_order_abdc79206ae54aaa371a6ee46593cabc9}{is\+Unsolicited}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this event is unsolicited. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_otc_markets_order_a3489691f45f5c5ffa9032d3bab2d3d00}{set\+Unsolicited}} (bool unsolicited) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event is unsolicited. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a89474840460dab3c3ef97f723f67ddeb}{with\+Unsolicited}} (bool unsolicited) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event is unsolicited. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} \& \mbox{\hyperlink{class_otc_markets_order_a1e69108a5349e0b819f4a5e0026d1e6e}{get\+Otc\+Markets\+Price\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns OTC Markets price type of this OTC Markets order events. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_otc_markets_order_a6beaf18a0e6b6f6c58732c968fc6a116}{set\+Otc\+Markets\+Price\+Type}} (const \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} \&otc\+Price\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes OTC Markets price type of this OTC Markets order events. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_aa79325aa7a532ce9da001608452c4e57}{with\+Otc\+Markets\+Price\+Type}} (const \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} \&otc\+Price\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes OTC Markets price type of this OTC Markets order events. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_otc_markets_order_a0162e5a587263734836f481610752d0c}{is\+Saturated}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this event should NOT be considered for the inside price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_otc_markets_order_a698cadccb12436a404603faba5fe84eb}{set\+Saturated}} (bool saturated) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event should NOT be considered for the inside price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_aad0bf865259db2c6328360f29feac326}{with\+Saturated}} (bool saturated) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event should NOT be considered for the inside price. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_otc_markets_order_a9b2046f6345aa6504004fd4efc6f6500}{is\+Auto\+Execution}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_otc_markets_order_abda9890e4acfe2687d77b37cf930b9cd}{set\+Auto\+Execution}} (bool auto\+Execution) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_a08422c6878fbdb4b8060fed861f9812b}{with\+Auto\+Execution}} (bool auto\+Execution) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_otc_markets_order_a22ccc3f9250acd20872901d013148eaa}{is\+Nms\+Conditional}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this event represents a NMS conditional. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_otc_markets_order_a121493856024dba5395265eb4cabfcd1}{set\+Nms\+Conditional}} (bool nms\+Conditional) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event represents a NMS conditional. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& \mbox{\hyperlink{class_otc_markets_order_ad547d9d04d92fdedf391a4161552bdd3}{with\+Nms\+Conditional}} (bool nms\+Conditional) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event represents a NMS conditional. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_otc_markets_order_a0d96397e3824a369fa980a1de892a734}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{class_order}{Order}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Order} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new order event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order_a80dfb0ca410fca262a7c2d0c71a8f1cc}{Order}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new order event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_adf29e654e61376f10154103c93d1c07b}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a73dc0a3a3bd62228e63edf63abdacdad}{with\+Source}} (const \mbox{\hyperlink{class_order_source}{Order\+Source}} \&source) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s source and returns the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a8099cc6a5299a192d669bd0324b4367e}{with\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a88021eba92bfb9eef71650616a207318}{with\+Event\+Flags}} (const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_aca5ab76798f620876dca5eed0024579f}{with\+Index}} (std\+::int64\+\_\+t index) noexcept
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a4f884aaa2226efb1e52594810f61d8af}{with\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a8c5c42e06b0cae2927fd0ec41a28af37}{with\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a5ba3188b11faea41016205c29dc3b081}{with\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{class_order_base_aa1eda2dddd2b512e54941f49d9754003}{sequence number} of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a3730940bc56759751a5d69063e2c586a}{with\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a88a0e6667c362e5efb3fed9601070d90}{with\+Action}} (const \mbox{\hyperlink{struct_order_action}{Order\+Action}} \&action) noexcept
+\begin{DoxyCompactList}\small\item\em Changes action of this order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_afe61808d5165016004a1af32cfc9d181}{with\+Action\+Time}} (std\+::int64\+\_\+t action\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last action and returns current order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a6bf63555a00a8f4f96858c64076bb3ed}{with\+Order\+Id}} (std\+::int64\+\_\+t order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_aad85cb3b961d9986fa4cd6bc993b6442}{with\+Aux\+Order\+Id}} (std\+::int64\+\_\+t aux\+Order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes auxiliary order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_aa59f7353d7767e31034aa636a6c8888d}{with\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_aa15d099f66d84fa17e30b23a0c325049}{with\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a87385cdfee42aa37934bcbdb590d8eaf}{with\+Executed\+Size}} (double executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes executed size of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_aed07762c4cbbc291bde65c00674b4415}{with\+Count}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_af0159ae12cd3a7b4e10fcab259c4fcaf}{with\+Trade\+Id}} (std\+::int64\+\_\+t trade\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_af596aded06e1e1e989ae5cacfcae2955}{with\+Trade\+Price}} (double trade\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a125255e9f72a68f20a46f0dba05afc45}{with\+Trade\+Size}} (double trade\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a776e04562d68357b5361765aa45d8fb1}{with\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_ae8c32afe32d2983f34822a2cc8d84bd8}{with\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_ad4f58dd40bbc4384a108851724a45492}{with\+Order\+Side}} (const \mbox{\hyperlink{struct_side}{Side}} \&side) noexcept
+\begin{DoxyCompactList}\small\item\em Changes side of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a83b426b1f5c4a3b1d1e839d7edb3116e}{with\+Scope}} (const \mbox{\hyperlink{struct_scope}{Scope}} \&scope) noexcept
+\begin{DoxyCompactList}\small\item\em Changes scope of this order. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_order_a7b9bbf629fd22ca9344fafb07e16dab6}{get\+Market\+Maker}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns market maker or other aggregate identifier of this order. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{class_order_affe51b7fe46359ce06f4b594408ea8f3}{get\+Market\+Maker\+Opt}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns market maker or other aggregate identifier of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_a7b4a9731c86dce031208380d7eee8367}{set\+Market\+Maker}} (std\+::string market\+Maker) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market maker or other aggregate identifier of this order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order}{Order}} \& \mbox{\hyperlink{class_order_a6dcf9bcdfa932bdf63d576229eff8887}{with\+Market\+Maker}} (std\+::string market\+Maker) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market maker or other aggregate identifier of this order. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{class_order_base}{Order\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Order\+Base} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new order event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_order_base_a4fe7633c925eb59d9ab5084711f57d36}{Order\+Base}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new order event with the specified event symbol. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} \& \mbox{\hyperlink{class_order_base_a03b77983ab4b799f1c7f27aecc943e57}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns source of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a3451d2eb5655cd3c902c78e3368ecfe3}{set\+Source}} (const \mbox{\hyperlink{class_order_source}{Order\+Source}} \&source) noexcept
+\begin{DoxyCompactList}\small\item\em Changes source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_order_base_af5e6a4420f059a8e46e664dafebb6ea4}{get\+Event\+Flags}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{class_order_base_ad097fa14e4561654bbceaa534b57e86d}{get\+Event\+Flags\+Mask}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_ad57d8a37c00fbf2ad31b818e459b3359}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a72c2f912318a9ae608476508ba249b55}{set\+Event\+Flags}} (const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a1a7ce2fb19329a2f8450110cb58b9ac0}{set\+Index}} (std\+::int64\+\_\+t index) override
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_a21bc36fb881577927015977bc5f71ec6}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_afd8e0a5b580f4ed0e8fedca8a63582db}{get\+Time\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time and sequence of this order packaged into single long value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a623776d3d4e5e768612e9b3acdb72c14}{set\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time and sequence of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_a1c237e2474a835ff3bea46e5f32250e1}{get\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a5b847a52e87e8f22bf4b6043dda0d041}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a052374a7e42be9fd8db408072902a705}{set\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of this order. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_order_base_ab149c7db23c39c47c0f4517e69a54b92}{get\+Time\+Nano\+Part}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns microseconds and nanoseconds time part of this order. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_order_base_aa1eda2dddd2b512e54941f49d9754003}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns sequence number of this order to distinguish orders that have the same \doxylink{class_order_base_a1c237e2474a835ff3bea46e5f32250e1}{time}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a4e067125e15153f4570e0730b4537aca}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{class_order_base_aa1eda2dddd2b512e54941f49d9754003}{sequence number} of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_a4173f81f5518de39340f1747d745afa7}{get\+Time\+Nanos}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of this order in nanoseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a7abdb82733946b0b4d70d93cf721ad7e}{set\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this order. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_order_action}{Order\+Action}} \& \mbox{\hyperlink{class_order_base_ab4ce8591b90e6d8f8e67ebb562204ad1}{get\+Action}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns order action if available, otherwise -\/ \doxylink{struct_order_action_ac7faf8e63dee936021d84b08cdeddce6}{Order\+Action\+::\+UNDEFINED}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_add23868ead9f263808e2e13491a4a724}{set\+Action}} (const \mbox{\hyperlink{struct_order_action}{Order\+Action}} \&action) noexcept
+\begin{DoxyCompactList}\small\item\em Changes action of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_af885b39d4cc4628cfc4dcffb9eadf3c3}{get\+Action\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last \doxylink{class_order_base_ab4ce8591b90e6d8f8e67ebb562204ad1}{action}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_ab3f6a1da6daf6d53d0a14fe11f0ad473}{set\+Action\+Time}} (std\+::int64\+\_\+t action\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last action. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_aaa261f02ab35ec9bd249be19e5a86845}{get\+Order\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns order ID if available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a53729624a5da94e146d10d83b8cdd466}{set\+Order\+Id}} (std\+::int64\+\_\+t order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes order ID. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_a2770d970f2c61e40475e1031f6a0ed2f}{get\+Aux\+Order\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns auxiliary order ID if available\+: \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_ad69d77b6322b028196ce61cadb2987d7}{set\+Aux\+Order\+Id}} (std\+::int64\+\_\+t aux\+Order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes auxiliary order ID. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_order_base_ad31050b673716b98a08826c1c06c44bf}{get\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns price of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a03734665f72df07452659176b578d445}{set\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this order. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_order_base_a1a128e82af72d3fcd44a7f3eb8bcfd44}{get\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns size of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a0d07bc027d04356dd8ce5ef04e394a7a}{set\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of this order. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_order_base_afb5bea9f67fcdd11410562ab462b901d}{has\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this order has some size (size\+As\+Double is neither {\ttfamily 0} nor {\ttfamily NaN}). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_order_base_a534810ef472fb1bac8e6889aab5f42bb}{get\+Executed\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns executed size of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a7a49a872fb252ab1d5df0dc7933b2b60}{set\+Executed\+Size}} (double executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes executed size of this order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_a8251705557f6e2f9e76c2a0f5660b65d}{get\+Count}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_af7864b8777f4370b204a4ba7e0172aa5}{set\+Count}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_order_base_afcb177faae74576dbd47dd96b10989d3}{get\+Trade\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns trade (order execution) ID for events containing trade-\/related action. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a580fe3c5a9ff6d344c6daa2ea610ae73}{set\+Trade\+Id}} (std\+::int64\+\_\+t trade\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade ID. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_order_base_a11170b380d9cf0d2f16bbf11c32424a8}{get\+Trade\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns trade price for events containing trade-\/related action. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_afeee282ce883e77252d735a5662c9fd6}{set\+Trade\+Price}} (double trade\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade price. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_order_base_a8db15a6d8dfae74414f85e2477fecab1}{get\+Trade\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns trade size for events containing trade-\/related action. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_acc5c1c0726aaf5ba1e54cee9cfc741fe}{set\+Trade\+Size}} (double trade\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade size. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{class_order_base_a83a21df2c55a63a51c6e52cbe542bbde}{get\+Exchange\+Code}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of this order. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_order_base_a8a2f1e48c796fd47460b421064607e12}{get\+Exchange\+Code\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of this order as UTF8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a2bf2128220a18df7c16684a2aa1651e8}{set\+Exchange\+Code}} (char exchange\+Code)
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_aa23fab8aeec96cbebf99b7350896dec9}{set\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this order. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_side}{Side}} \& \mbox{\hyperlink{class_order_base_a63a307e8ac31f37f71243252d74570f8}{get\+Order\+Side}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns side of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a4196880450337f287371e4b4853a8428}{set\+Order\+Side}} (const \mbox{\hyperlink{struct_side}{Side}} \&side) noexcept
+\begin{DoxyCompactList}\small\item\em Changes side of this order. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_scope}{Scope}} \& \mbox{\hyperlink{class_order_base_ad8c08003e962e365a5b3266d3b5db801}{get\+Scope}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns scope of this order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_order_base_a68865507f7a8a7bf4feebbc66739fbaf}{set\+Scope}} (const \mbox{\hyperlink{struct_scope}{Scope}} \&scope) noexcept
+\begin{DoxyCompactList}\small\item\em Changes scope of this order. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_order_base_a97118268ae013762b34b77e3769b5b25}{base\+Fields\+To\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this order event\textquotesingle{}s fields. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_market_event}{Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{struct_market_event_a6f4f9f4bdb7ef23cda9d5a57640a8db3}{get\+Event\+Symbol}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{struct_market_event_aae8ffbf25a247a64eec19eff14095524}{get\+Event\+Symbol\+Opt}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_market_event_ae3358224a62a18b5e4ad9bad053dc8ed}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes symbol of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{struct_market_event_a9c8e8dd0fe8c615d776d6e1dc781be8d}{get\+Event\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_market_event_a084532c668491c224eeb498bb29e2cbd}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{struct_shared_entity_ae774e293e95fbf8ebb4d22f714e80272}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a348c971deaca898a477262e5bd190d03}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_otc_markets_order_a537ab1de97e2c657444d88145f2bc500}{Ptr}} \mbox{\hyperlink{class_otc_markets_order_a57c71f02ac144f5cacbdfcf684a81e77}{from\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_otc_markets_order_a0a03e93bcbc51bdbe0fe41077c34de54}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Member Functions inherited from \mbox{\hyperlink{class_order}{Order}}}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_order_a08c5dadc07618e9cf87771182a42f608}{Ptr}} \mbox{\hyperlink{class_order_ac263fb6dbf12793fca5c58e9cad0edce}{from\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_order_a9ad32d4fb0c4128ebd4179c18145f746}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_otc_markets_order_a35a14b58434eff9ef4848748e84bea38}\label{class_otc_markets_order_a35a14b58434eff9ef4848748e84bea38} 
+static const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+OTC\+\_\+\+MARKETS\+\_\+\+ORDER
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{class_order}{Order}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+ORDER
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{class_order_base}{Order\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{class_order_base_ad378efa38582359167b318baa8c08da1}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{struct_indexed_event}{Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a11615cb90f791068cfa9edaa8b0056ae}{TX\+\_\+\+PENDING}} = Event\+Flag\+::\+TX\+\_\+\+PENDING
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a98e078c04445c983d19db700df469b58}{REMOVE\+\_\+\+EVENT}} = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_ac87eb588da470259ee75b490dbcaabf7}{SNAPSHOT\+\_\+\+BEGIN}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a4604235ec9a455bea7c80d1b71546bf9}{SNAPSHOT\+\_\+\+END}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a8824670805f7487194b7070fe06afe47}{SNAPSHOT\+\_\+\+SNIP}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a6ae2747bf52c574da7aa47fbcd7bf32f}{SNAPSHOT\+\_\+\+MODE}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of \doxylink{struct_indexed_event_aefd0ab36275fc9adf6f7d57c2833c200}{event\+Flags} property.    \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{struct_market_event}{Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_market_event_afb6b53469aa08abc5f7d46f420a978d2}{Market\+Event}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents an extension of \doxylink{class_order}{Order} for the symbols traded on the OTC Markets. 
+
+It includes the OTC Markets specific quote data, such as \doxylink{class_otc_markets_order_a85155c31cda80ccd911f84389efcd666}{Quote Access Payment (QAP) value}, \doxylink{class_otc_markets_order_a1e69108a5349e0b819f4a5e0026d1e6e}{Quote Price Type}, \doxylink{class_otc_markets_order_ac37e7a0ebb4051f965125e608640165d}{Open/\+Closed status}, and \doxylink{class_otc_markets_order_abdc79206ae54aaa371a6ee46593cabc9}{Unsolicited quote indicator}. The original event (OTC \doxylink{class_quote}{Quote}) published by the exchange is presented in the form of two separate OTCMarkets\+Order events (bid and ask side). Note that the description of the fields (e.\+g. QAP) uses the original "{}quote"{} term. 
+
+For more information about original fields, QAP, \doxylink{class_quote}{Quote} Flags and Extended \doxylink{class_quote}{Quote} Flags, see \href{https://downloads.dxfeed.com/specifications/OTC_Markets_Multicast_Data_Feeds.pdf}{\texttt{ OTC Markets Multicast Data Feed}}. 
+
+For more information about display requirements, see \href{https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf}{\texttt{ OTC Markets Display Requirements}}.
+
+Like regular orders, OTC Markets order events arrive from multiple sources for the same market symbol and are distinguished by their \doxylink{class_order_base_a21bc36fb881577927015977bc5f71ec6}{index}. It is unique across all the sources of depth information for the symbol. The event with \doxylink{class_order_base_a1a128e82af72d3fcd44a7f3eb8bcfd44}{size} either {\ttfamily 0} or {\ttfamily NaN} is a signal to remove previously received order for the corresponding index. The method \doxylink{class_order_base_afb5bea9f67fcdd11410562ab462b901d}{has\+Size()} is a convenient method to test for size presence.
+
+\doxysubsubsubsubsection*{\doxylink{class_quote}{Quote} Flags}
+
+\doxylink{class_quote}{Quote} Flags from OTC Markets are mapped to the access methods of this class as follows\+: 
+\begin{DoxyItemize}
+\item Update \doxylink{struct_side}{Side} -\/ \doxylink{class_order_base_a63a307e8ac31f37f71243252d74570f8}{order\+Side} 
+\item State -\/ \doxylink{class_otc_markets_order_ac37e7a0ebb4051f965125e608640165d}{open} 
+\item Ask/\+Bid Unsolicited -\/ \doxylink{class_otc_markets_order_abdc79206ae54aaa371a6ee46593cabc9}{unsolicited} 
+\item Ask/\+Bid Priced, Aks/\+Bid OW/\+BW -\/ \doxylink{class_otc_markets_order_a1e69108a5349e0b819f4a5e0026d1e6e}{otc\+Markets\+Price\+Type} 
+\end{DoxyItemize}
+
+\doxysubsubsubsubsection*{Extended \doxylink{class_quote}{Quote} Flags}
+
+Extended \doxylink{class_quote}{Quote} Flags from OTC Markets are mapped to the access methods of this class as follows\+: 
+\begin{DoxyItemize}
+\item Quote\+Saturated\+Flag -\/ \doxylink{class_otc_markets_order_a0162e5a587263734836f481610752d0c}{saturated} 
+\item Bid/\+Offer Auto\+Ex\+Flag -\/ \doxylink{class_otc_markets_order_a9b2046f6345aa6504004fd4efc6f6500}{auto\+Execution} 
+\item NMSConditional\+Quote\+Flag -\/ \doxylink{class_otc_markets_order_a22ccc3f9250acd20872901d013148eaa}{nms\+Conditional} 
+\end{DoxyItemize}
+
+\doxysubsubsubsubsection*{\label{class_underlying_eventFlagsSection}%
+\Hypertarget{class_underlying_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+OTC Markets order event sources provide a consistent view of the order book. Their updates may incorporate multiple changes to individual orders that have to be processed at the same time. The corresponding information is carried in \doxylink{class_order_base_af5e6a4420f059a8e46e664dafebb6ea4}{event\+Flags} property.
+
+See the "{}\+Event Flags"{} section of \doxylink{class_order_base}{Order\+Base} class documentation for details.
+
+\doxysubsubsubsubsection*{Publishing order books}
+
+When publishing an order event with \doxylink{struct_d_x_publisher_ae6e8cb6b370ea60f1ad5cb80cea2df30}{DXPublisher\+::publish\+Events()} method, least significant 32 bits of order \doxylink{class_order_base_a21bc36fb881577927015977bc5f71ec6}{index} must be in a range of from 0 to {\ttfamily std\+::numeric\+\_\+limits\texorpdfstring{$<$}{<}std\+::int32\+\_\+t\texorpdfstring{$>$}{>}::max()} inclusive. Use \doxylink{class_order_base_a3451d2eb5655cd3c902c78e3368ecfe3}{set\+Source()} method after \doxylink{class_order_base_a1a7ce2fb19329a2f8450110cb58b9ac0}{set\+Index()} to properly include source identifier into the index.
+
+A snapshot has to be published in the {\itshape descending} order of \doxylink{class_order_base_a21bc36fb881577927015977bc5f71ec6}{index}, starting with an event with the largest index and marking it with \doxylink{class_event_flag_ab1246c3963485123672b05d5b9dbdfec}{Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN} bit in \doxylink{class_order_base_af5e6a4420f059a8e46e664dafebb6ea4}{event\+Flags}, and finishing the snapshot with an event that has zero 32 least significant bits of index. \doxylink{class_event_flag_adc2ec8ed07a2a2efaf2389fe4f7459c6}{Event\+Flag\+::\+SNAPSHOT\+\_\+\+END} bit in \doxylink{class_order_base_af5e6a4420f059a8e46e664dafebb6ea4}{event\+Flags} is optional during publishing. It will be properly set on receiving end anyway.
+
+\doxysubsubsubsubsection*{Limitations}
+
+This event type cannot be used with DXFeed\+::get\+Last\+Event() method.
+
+\doxysubsubsubsubsection*{\label{class_spread_order_fobSection}%
+\Hypertarget{class_spread_order_fobSection}%
+Full \doxylink{class_order}{Order} Book Support}
+
+Some feeds provide support for "{}\+Full Order Book"{} (FOB) where additional fields will be available\+: 
+\begin{DoxyItemize}
+\item \doxylink{class_order_base_ab4ce8591b90e6d8f8e67ebb562204ad1}{action} -\/ event business meaning (see \doxylink{struct_order_action}{Order\+Action} for more details) 
+\item \doxylink{class_order_base_af885b39d4cc4628cfc4dcffb9eadf3c3}{action\+Time} -\/ time of the last action 
+\item \doxylink{class_order_base_aaa261f02ab35ec9bd249be19e5a86845}{order\+Id} -\/ ID of this OTC Markets order 
+\item \doxylink{class_order_base_a2770d970f2c61e40475e1031f6a0ed2f}{aux\+Order\+Id} -\/ additional ID for this OTC Markets order 
+\item \doxylink{class_order_base_afcb177faae74576dbd47dd96b10989d3}{trade\+Id} -\/ trade (order execution) ID 
+\item \doxylink{class_order_base_a11170b380d9cf0d2f16bbf11c32424a8}{trade\+Price} -\/ price of the trade 
+\item \doxylink{class_order_base_a8db15a6d8dfae74414f85e2477fecab1}{trade\+Size} -\/ size of the trade 
+\end{DoxyItemize}
+
+\doxysubsubsubsubsection*{Implementation details}
+
+This event is implemented on top of QDS records {\ttfamily \doxylink{class_otc_markets_order}{Otc\+Markets\+Order}\#\texorpdfstring{$<$}{<}source-\/id\texorpdfstring{$>$}{>}}, where {\ttfamily \texorpdfstring{$<$}{<}source-\/id\texorpdfstring{$>$}{>}} is up to 4 ASCII characters with a mnemonic for the source like "{}pink"{}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_otc_markets_order_aefd3355107f8b190af78a3c5d2c5a1de}\index{OtcMarketsOrder@{OtcMarketsOrder}!OtcMarketsOrder@{OtcMarketsOrder}}
+\index{OtcMarketsOrder@{OtcMarketsOrder}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{OtcMarketsOrder()}{OtcMarketsOrder()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_aefd3355107f8b190af78a3c5d2c5a1de} 
+Otc\+Markets\+Order\+::\+Otc\+Markets\+Order (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new OTC Markets order event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_otc_markets_order_a0a03e93bcbc51bdbe0fe41077c34de54}\index{OtcMarketsOrder@{OtcMarketsOrder}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a0a03e93bcbc51bdbe0fe41077c34de54} 
+void Otc\+Markets\+Order\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_otc_markets_order_a57c71f02ac144f5cacbdfcf684a81e77}\index{OtcMarketsOrder@{OtcMarketsOrder}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a57c71f02ac144f5cacbdfcf684a81e77} 
+\mbox{\hyperlink{class_otc_markets_order_a537ab1de97e2c657444d88145f2bc500}{Otc\+Markets\+Order\+::\+Ptr}} Otc\+Markets\+Order\+::from\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_otc_markets_order_a1e69108a5349e0b819f4a5e0026d1e6e}\index{OtcMarketsOrder@{OtcMarketsOrder}!getOtcMarketsPriceType@{getOtcMarketsPriceType}}
+\index{getOtcMarketsPriceType@{getOtcMarketsPriceType}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{getOtcMarketsPriceType()}{getOtcMarketsPriceType()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a1e69108a5349e0b819f4a5e0026d1e6e} 
+const \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} \& Otc\+Markets\+Order\+::get\+Otc\+Markets\+Price\+Type (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns OTC Markets price type of this OTC Markets order events. 
+
+\begin{DoxyReturn}{Returns}
+OTC Markets price type of this OTC Markets order events. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_a85155c31cda80ccd911f84389efcd666}\index{OtcMarketsOrder@{OtcMarketsOrder}!getQuoteAccessPayment@{getQuoteAccessPayment}}
+\index{getQuoteAccessPayment@{getQuoteAccessPayment}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{getQuoteAccessPayment()}{getQuoteAccessPayment()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a85155c31cda80ccd911f84389efcd666} 
+std\+::int32\+\_\+t Otc\+Markets\+Order\+::get\+Quote\+Access\+Payment (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns \doxylink{class_quote}{Quote} Access Payment (QAP) of this OTC Markets order. 
+
+QAP functionality allows participants to dynamically set access fees or rebates, in real-\/time and on a per-\/security basis through OTC Dealer or OTC FIX connections. Positive integers (1 to 30) indicate a rebate, and negative integers (-\/1 to -\/30) indicate an access fee. 0 indicates no rebate or access fee.
+
+\begin{DoxyReturn}{Returns}
+QAP of this OTC Markets order. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_a9b2046f6345aa6504004fd4efc6f6500}\index{OtcMarketsOrder@{OtcMarketsOrder}!isAutoExecution@{isAutoExecution}}
+\index{isAutoExecution@{isAutoExecution}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{isAutoExecution()}{isAutoExecution()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a9b2046f6345aa6504004fd4efc6f6500} 
+bool Otc\+Markets\+Order\+::is\+Auto\+Execution (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. 
+
+If this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode then a response to an OTC Link trade message will be immediate.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_a22ccc3f9250acd20872901d013148eaa}\index{OtcMarketsOrder@{OtcMarketsOrder}!isNmsConditional@{isNmsConditional}}
+\index{isNmsConditional@{isNmsConditional}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{isNmsConditional()}{isNmsConditional()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a22ccc3f9250acd20872901d013148eaa} 
+bool Otc\+Markets\+Order\+::is\+Nms\+Conditional (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this event represents a NMS conditional. 
+
+This flag indicates the displayed \doxylink{class_order_base_a1a128e82af72d3fcd44a7f3eb8bcfd44}{size} is a round lot at least two times greater than the minimum round lot size in the security and a trade message relating to the event cannot be sent or filled for less than the displayed size.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event represents a NMS conditional. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_ac37e7a0ebb4051f965125e608640165d}\index{OtcMarketsOrder@{OtcMarketsOrder}!isOpen@{isOpen}}
+\index{isOpen@{isOpen}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{isOpen()}{isOpen()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ac37e7a0ebb4051f965125e608640165d} 
+bool Otc\+Markets\+Order\+::is\+Open (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this event is available for business within the operating hours of the OTC Link system. 
+
+All quotes will be closed at the start of the trading day and will remain closed until the traders open theirs.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event is available for business within the operating hours of the OTC Link system. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_a0162e5a587263734836f481610752d0c}\index{OtcMarketsOrder@{OtcMarketsOrder}!isSaturated@{isSaturated}}
+\index{isSaturated@{isSaturated}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{isSaturated()}{isSaturated()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a0162e5a587263734836f481610752d0c} 
+bool Otc\+Markets\+Order\+::is\+Saturated (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this event should NOT be considered for the inside price. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event should NOT be considered for the inside price. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_abdc79206ae54aaa371a6ee46593cabc9}\index{OtcMarketsOrder@{OtcMarketsOrder}!isUnsolicited@{isUnsolicited}}
+\index{isUnsolicited@{isUnsolicited}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{isUnsolicited()}{isUnsolicited()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_abdc79206ae54aaa371a6ee46593cabc9} 
+bool Otc\+Markets\+Order\+::is\+Unsolicited (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this event is unsolicited. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event is unsolicited. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_abda9890e4acfe2687d77b37cf930b9cd}\index{OtcMarketsOrder@{OtcMarketsOrder}!setAutoExecution@{setAutoExecution}}
+\index{setAutoExecution@{setAutoExecution}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{setAutoExecution()}{setAutoExecution()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_abda9890e4acfe2687d77b37cf930b9cd} 
+void Otc\+Markets\+Order\+::set\+Auto\+Execution (\begin{DoxyParamCaption}\item[{bool}]{auto\+Execution}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em auto\+Execution} & {\ttfamily true} if this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_otc_markets_order_a08422c6878fbdb4b8060fed861f9812b}{with\+Auto\+Execution()}}.
+
+\Hypertarget{class_otc_markets_order_a121493856024dba5395265eb4cabfcd1}\index{OtcMarketsOrder@{OtcMarketsOrder}!setNmsConditional@{setNmsConditional}}
+\index{setNmsConditional@{setNmsConditional}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{setNmsConditional()}{setNmsConditional()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a121493856024dba5395265eb4cabfcd1} 
+void Otc\+Markets\+Order\+::set\+Nms\+Conditional (\begin{DoxyParamCaption}\item[{bool}]{nms\+Conditional}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event represents a NMS conditional. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nms\+Conditional} & {\ttfamily true} if this event represents a NMS conditional. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_otc_markets_order_ad547d9d04d92fdedf391a4161552bdd3}{with\+Nms\+Conditional()}}.
+
+\Hypertarget{class_otc_markets_order_a99020161803fdfecde767e4da68439eb}\index{OtcMarketsOrder@{OtcMarketsOrder}!setOpen@{setOpen}}
+\index{setOpen@{setOpen}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{setOpen()}{setOpen()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a99020161803fdfecde767e4da68439eb} 
+void Otc\+Markets\+Order\+::set\+Open (\begin{DoxyParamCaption}\item[{bool}]{open}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event is available for business within the operating hours of the OTC Link system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em open} & {\ttfamily true} if this event is available for business within the operating hours of the OTC Link system. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_otc_markets_order_aecf7fb9e69c5f83250d5ce97115db812}{with\+Open()}}.
+
+\Hypertarget{class_otc_markets_order_a6beaf18a0e6b6f6c58732c968fc6a116}\index{OtcMarketsOrder@{OtcMarketsOrder}!setOtcMarketsPriceType@{setOtcMarketsPriceType}}
+\index{setOtcMarketsPriceType@{setOtcMarketsPriceType}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{setOtcMarketsPriceType()}{setOtcMarketsPriceType()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a6beaf18a0e6b6f6c58732c968fc6a116} 
+void Otc\+Markets\+Order\+::set\+Otc\+Markets\+Price\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} \&}]{otc\+Price\+Type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes OTC Markets price type of this OTC Markets order events. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em otc\+Price\+Type} & OTC Markets price type of this OTC Markets order events. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_otc_markets_order_aa79325aa7a532ce9da001608452c4e57}{with\+Otc\+Markets\+Price\+Type()}}.
+
+\Hypertarget{class_otc_markets_order_a440f4b10b968f074160659bd7873270b}\index{OtcMarketsOrder@{OtcMarketsOrder}!setQuoteAccessPayment@{setQuoteAccessPayment}}
+\index{setQuoteAccessPayment@{setQuoteAccessPayment}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{setQuoteAccessPayment()}{setQuoteAccessPayment()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a440f4b10b968f074160659bd7873270b} 
+void Otc\+Markets\+Order\+::set\+Quote\+Access\+Payment (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{quote\+Access\+Payment}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{class_quote}{Quote} Access Payment (QAP) of this OTC Markets order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em quote\+Access\+Payment} & QAP of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_otc_markets_order_a7a8be780453a07ae0bdc6c867befd3d8}{with\+Quote\+Access\+Payment()}}.
+
+\Hypertarget{class_otc_markets_order_a698cadccb12436a404603faba5fe84eb}\index{OtcMarketsOrder@{OtcMarketsOrder}!setSaturated@{setSaturated}}
+\index{setSaturated@{setSaturated}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{setSaturated()}{setSaturated()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a698cadccb12436a404603faba5fe84eb} 
+void Otc\+Markets\+Order\+::set\+Saturated (\begin{DoxyParamCaption}\item[{bool}]{saturated}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event should NOT be considered for the inside price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em saturated} & {\ttfamily true} if this event should NOT be considered for the inside price. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_otc_markets_order_aad0bf865259db2c6328360f29feac326}{with\+Saturated()}}.
+
+\Hypertarget{class_otc_markets_order_a3489691f45f5c5ffa9032d3bab2d3d00}\index{OtcMarketsOrder@{OtcMarketsOrder}!setUnsolicited@{setUnsolicited}}
+\index{setUnsolicited@{setUnsolicited}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{setUnsolicited()}{setUnsolicited()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a3489691f45f5c5ffa9032d3bab2d3d00} 
+void Otc\+Markets\+Order\+::set\+Unsolicited (\begin{DoxyParamCaption}\item[{bool}]{unsolicited}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event is unsolicited. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em unsolicited} & {\ttfamily true} if this event is unsolicited. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_otc_markets_order_a89474840460dab3c3ef97f723f67ddeb}{with\+Unsolicited()}}.
+
+\Hypertarget{class_otc_markets_order_ad036bcb2b2a072937a5f9bfc38d6347f}\index{OtcMarketsOrder@{OtcMarketsOrder}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ad036bcb2b2a072937a5f9bfc38d6347f} 
+void \texorpdfstring{$\ast$}{*} Otc\+Markets\+Order\+::to\+Graal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_order_a92a68ce77b46e3a0987abfe82ede3161}{Order}}.
+
+\Hypertarget{class_otc_markets_order_a0d96397e3824a369fa980a1de892a734}\index{OtcMarketsOrder@{OtcMarketsOrder}!toString@{toString}}
+\index{toString@{toString}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a0d96397e3824a369fa980a1de892a734} 
+std\+::string Otc\+Markets\+Order\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_order_ad34c32a4f0b8d43cd78cb61d17f75578}{Order}}.
+
+\Hypertarget{class_otc_markets_order_a3172fbb4a37dcd81c6c33c86d1f08512}\index{OtcMarketsOrder@{OtcMarketsOrder}!withAction@{withAction}}
+\index{withAction@{withAction}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withAction()}{withAction()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a3172fbb4a37dcd81c6c33c86d1f08512} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Action (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_order_action}{Order\+Action}} \&}]{action}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes action of this OTC Markets order and returns it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em action} & The side of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a88a0e6667c362e5efb3fed9601070d90}{Order\+::with\+Action()}}.
+
+\Hypertarget{class_otc_markets_order_ab51f5941f9b892587828acd20abfcff8}\index{OtcMarketsOrder@{OtcMarketsOrder}!withActionTime@{withActionTime}}
+\index{withActionTime@{withActionTime}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withActionTime()}{withActionTime()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ab51f5941f9b892587828acd20abfcff8} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Action\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{action\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last action and returns current OTC Markets order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em action\+Time} & The last order action time. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_afe61808d5165016004a1af32cfc9d181}{Order\+::with\+Action\+Time()}}.
+
+\Hypertarget{class_otc_markets_order_a08422c6878fbdb4b8060fed861f9812b}\index{OtcMarketsOrder@{OtcMarketsOrder}!withAutoExecution@{withAutoExecution}}
+\index{withAutoExecution@{withAutoExecution}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withAutoExecution()}{withAutoExecution()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a08422c6878fbdb4b8060fed861f9812b} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Auto\+Execution (\begin{DoxyParamCaption}\item[{bool}]{auto\+Execution}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em auto\+Execution} & {\ttfamily true} if this event is in \textquotesingle{}Auto\+Ex\textquotesingle{} mode. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_otc_markets_order_abda9890e4acfe2687d77b37cf930b9cd}{set\+Auto\+Execution()}}.
+
+\Hypertarget{class_otc_markets_order_a05427f06fcdd36b100abd77f200d5321}\index{OtcMarketsOrder@{OtcMarketsOrder}!withAuxOrderId@{withAuxOrderId}}
+\index{withAuxOrderId@{withAuxOrderId}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withAuxOrderId()}{withAuxOrderId()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a05427f06fcdd36b100abd77f200d5321} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Aux\+Order\+Id (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{aux\+Order\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes auxiliary order ID. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em aux\+Order\+Id} & The auxiliary order ID. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_aad85cb3b961d9986fa4cd6bc993b6442}{Order\+::with\+Aux\+Order\+Id()}}.
+
+\Hypertarget{class_otc_markets_order_a3d944c7910c5cab6ab429fadf76ab4c9}\index{OtcMarketsOrder@{OtcMarketsOrder}!withCount@{withCount}}
+\index{withCount@{withCount}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withCount()}{withCount()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a3d944c7910c5cab6ab429fadf76ab4c9} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Count (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{count}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes number of individual orders in this aggregate order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em count} & The number of individual orders in this aggregate order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_aed07762c4cbbc291bde65c00674b4415}{Order\+::with\+Count()}}.
+
+\Hypertarget{class_otc_markets_order_a58d4b0fcde0dad1be33556b8a4d6e25b}\index{OtcMarketsOrder@{OtcMarketsOrder}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a58d4b0fcde0dad1be33556b8a4d6e25b} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current OTC Markets order. 
+
+See \doxylink{class_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_ae8bcf16db0943a21bcbdb4c04e420fbf}\index{OtcMarketsOrder@{OtcMarketsOrder}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ae8bcf16db0943a21bcbdb4c04e420fbf} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current OTC Markets order. 
+
+See \doxylink{class_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_a9f9c8bdc3dd0d9a1907a1b4cafb56dcb}\index{OtcMarketsOrder@{OtcMarketsOrder}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a9f9c8bdc3dd0d9a1907a1b4cafb56dcb} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current OTC Markets order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_order_ac784eafd0a5d44621e06d16010a80968}{Order}}.
+
+
+
+References \mbox{\hyperlink{class_order_ac784eafd0a5d44621e06d16010a80968}{Order\+::with\+Event\+Symbol()}}.
+
+\Hypertarget{class_otc_markets_order_abecfb5fb56cb95ea6a8c43496584afea}\index{OtcMarketsOrder@{OtcMarketsOrder}!withEventTime@{withEventTime}}
+\index{withEventTime@{withEventTime}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withEventTime()}{withEventTime()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_abecfb5fb56cb95ea6a8c43496584afea} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns the current OTC Markets order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_adf29e654e61376f10154103c93d1c07b}{Order\+::with\+Event\+Time()}}.
+
+\Hypertarget{class_otc_markets_order_a8fc47b5e26ea3b8349a7e70689996cf0}\index{OtcMarketsOrder@{OtcMarketsOrder}!withExchangeCode@{withExchangeCode}}
+\index{withExchangeCode@{withExchangeCode}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withExchangeCode()}{withExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a8fc47b5e26ea3b8349a7e70689996cf0} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{exchange\+Code}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & The exchange code of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_ab8abfde0846b7896456b42fa952d18c9}\index{OtcMarketsOrder@{OtcMarketsOrder}!withExchangeCode@{withExchangeCode}}
+\index{withExchangeCode@{withExchangeCode}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withExchangeCode()}{withExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ab8abfde0846b7896456b42fa952d18c9} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{exchange\+Code}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & The exchange code of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_a108fe33b6f5e4d6da3cab72b3078c778}\index{OtcMarketsOrder@{OtcMarketsOrder}!withExecutedSize@{withExecutedSize}}
+\index{withExecutedSize@{withExecutedSize}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withExecutedSize()}{withExecutedSize()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a108fe33b6f5e4d6da3cab72b3078c778} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Executed\+Size (\begin{DoxyParamCaption}\item[{double}]{executed\+Size}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes executed size of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em executed\+Size} & The executed size of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a87385cdfee42aa37934bcbdb590d8eaf}{Order\+::with\+Executed\+Size()}}.
+
+\Hypertarget{class_otc_markets_order_ad699e8e080ddb8e1577e9cac57eb89a7}\index{OtcMarketsOrder@{OtcMarketsOrder}!withIndex@{withIndex}}
+\index{withIndex@{withIndex}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withIndex()}{withIndex()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ad699e8e080ddb8e1577e9cac57eb89a7} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes unique per-\/symbol index of this OTC Markets order and returns it. 
+
+Note, that this method also changes \doxylink{class_order_base_a03b77983ab4b799f1c7f27aecc943e57}{source}, whose id occupies highest bits of index. Use \doxylink{class_order_base_a3451d2eb5655cd3c902c78e3368ecfe3}{Order\+Base\+::set\+Source()} after invocation of this method to set the desired value of source.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & unique per-\/symbol index of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_aca5ab76798f620876dca5eed0024579f}{Order\+::with\+Index()}}.
+
+\Hypertarget{class_otc_markets_order_a500ebc768d9c60c427f2a19243f41c25}\index{OtcMarketsOrder@{OtcMarketsOrder}!withMarketMaker@{withMarketMaker}}
+\index{withMarketMaker@{withMarketMaker}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withMarketMaker()}{withMarketMaker()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a500ebc768d9c60c427f2a19243f41c25} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Market\+Maker (\begin{DoxyParamCaption}\item[{std\+::string}]{market\+Maker}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes market maker or other aggregate identifier of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em market\+Maker} & The market maker or other aggregate identifier of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+\Hypertarget{class_otc_markets_order_ad547d9d04d92fdedf391a4161552bdd3}\index{OtcMarketsOrder@{OtcMarketsOrder}!withNmsConditional@{withNmsConditional}}
+\index{withNmsConditional@{withNmsConditional}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withNmsConditional()}{withNmsConditional()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ad547d9d04d92fdedf391a4161552bdd3} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Nms\+Conditional (\begin{DoxyParamCaption}\item[{bool}]{nms\+Conditional}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event represents a NMS conditional. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em nms\+Conditional} & {\ttfamily true} if this event represents a NMS conditional. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_otc_markets_order_a121493856024dba5395265eb4cabfcd1}{set\+Nms\+Conditional()}}.
+
+\Hypertarget{class_otc_markets_order_aecf7fb9e69c5f83250d5ce97115db812}\index{OtcMarketsOrder@{OtcMarketsOrder}!withOpen@{withOpen}}
+\index{withOpen@{withOpen}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withOpen()}{withOpen()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_aecf7fb9e69c5f83250d5ce97115db812} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Open (\begin{DoxyParamCaption}\item[{bool}]{open}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event is available for business within the operating hours of the OTC Link system. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em open} & {\ttfamily true} if this event is available for business within the operating hours of the OTC Link system. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_otc_markets_order_a99020161803fdfecde767e4da68439eb}{set\+Open()}}.
+
+\Hypertarget{class_otc_markets_order_a7f1b72235f6810e830b103212f75c878}\index{OtcMarketsOrder@{OtcMarketsOrder}!withOrderId@{withOrderId}}
+\index{withOrderId@{withOrderId}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withOrderId()}{withOrderId()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a7f1b72235f6810e830b103212f75c878} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Order\+Id (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{order\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes order ID. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em order\+Id} & The order ID. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a6bf63555a00a8f4f96858c64076bb3ed}{Order\+::with\+Order\+Id()}}.
+
+\Hypertarget{class_otc_markets_order_a98be98d76c5ae6c2119680b1cb4f272e}\index{OtcMarketsOrder@{OtcMarketsOrder}!withOrderSide@{withOrderSide}}
+\index{withOrderSide@{withOrderSide}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withOrderSide()}{withOrderSide()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a98be98d76c5ae6c2119680b1cb4f272e} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Order\+Side (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_side}{Side}} \&}]{side}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes side of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em side} & The side of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_ad4f58dd40bbc4384a108851724a45492}{Order\+::with\+Order\+Side()}}.
+
+\Hypertarget{class_otc_markets_order_aa79325aa7a532ce9da001608452c4e57}\index{OtcMarketsOrder@{OtcMarketsOrder}!withOtcMarketsPriceType@{withOtcMarketsPriceType}}
+\index{withOtcMarketsPriceType@{withOtcMarketsPriceType}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withOtcMarketsPriceType()}{withOtcMarketsPriceType()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_aa79325aa7a532ce9da001608452c4e57} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Otc\+Markets\+Price\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} \&}]{otc\+Price\+Type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes OTC Markets price type of this OTC Markets order events. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em otc\+Price\+Type} & OTC Markets price type of this OTC Markets order events. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_otc_markets_order_a6beaf18a0e6b6f6c58732c968fc6a116}{set\+Otc\+Markets\+Price\+Type()}}.
+
+\Hypertarget{class_otc_markets_order_a001604529ff53f7660cbd973da33306b}\index{OtcMarketsOrder@{OtcMarketsOrder}!withPrice@{withPrice}}
+\index{withPrice@{withPrice}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withPrice()}{withPrice()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a001604529ff53f7660cbd973da33306b} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Price (\begin{DoxyParamCaption}\item[{double}]{price}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes price of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & The price of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_aa59f7353d7767e31034aa636a6c8888d}{Order\+::with\+Price()}}.
+
+\Hypertarget{class_otc_markets_order_a7a8be780453a07ae0bdc6c867befd3d8}\index{OtcMarketsOrder@{OtcMarketsOrder}!withQuoteAccessPayment@{withQuoteAccessPayment}}
+\index{withQuoteAccessPayment@{withQuoteAccessPayment}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withQuoteAccessPayment()}{withQuoteAccessPayment()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a7a8be780453a07ae0bdc6c867befd3d8} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Quote\+Access\+Payment (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{quote\+Access\+Payment}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{class_quote}{Quote} Access Payment (QAP) and returns the current OTC Markets order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em quote\+Access\+Payment} & QAP of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_otc_markets_order_a440f4b10b968f074160659bd7873270b}{set\+Quote\+Access\+Payment()}}.
+
+\Hypertarget{class_otc_markets_order_aad0bf865259db2c6328360f29feac326}\index{OtcMarketsOrder@{OtcMarketsOrder}!withSaturated@{withSaturated}}
+\index{withSaturated@{withSaturated}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withSaturated()}{withSaturated()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_aad0bf865259db2c6328360f29feac326} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Saturated (\begin{DoxyParamCaption}\item[{bool}]{saturated}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event should NOT be considered for the inside price. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em saturated} & {\ttfamily true} if this event should NOT be considered for the inside price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_otc_markets_order_a698cadccb12436a404603faba5fe84eb}{set\+Saturated()}}.
+
+\Hypertarget{class_otc_markets_order_a73c6a9b6206bae3f17af4bb454cbe4a0}\index{OtcMarketsOrder@{OtcMarketsOrder}!withScope@{withScope}}
+\index{withScope@{withScope}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withScope()}{withScope()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a73c6a9b6206bae3f17af4bb454cbe4a0} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Scope (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_scope}{Scope}} \&}]{scope}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes scope of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scope} & The scope of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a83b426b1f5c4a3b1d1e839d7edb3116e}{Order\+::with\+Scope()}}.
+
+\Hypertarget{class_otc_markets_order_ad460cc165a9b29ecc3ae6513abf6a82b}\index{OtcMarketsOrder@{OtcMarketsOrder}!withSequence@{withSequence}}
+\index{withSequence@{withSequence}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withSequence()}{withSequence()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ad460cc165a9b29ecc3ae6513abf6a82b} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{class_order_base_aa1eda2dddd2b512e54941f49d9754003}{sequence number} of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_order_base_aa1eda2dddd2b512e54941f49d9754003}{Order\+Base\+::get\+Sequence()} 
+\end{DoxySeeAlso}
+
+
+References \mbox{\hyperlink{class_order_a5ba3188b11faea41016205c29dc3b081}{Order\+::with\+Sequence()}}.
+
+\Hypertarget{class_otc_markets_order_a6dca6dbcaebcd43e62a031633df7c709}\index{OtcMarketsOrder@{OtcMarketsOrder}!withSize@{withSize}}
+\index{withSize@{withSize}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withSize()}{withSize()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a6dca6dbcaebcd43e62a031633df7c709} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Size (\begin{DoxyParamCaption}\item[{double}]{size}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes size of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_aa15d099f66d84fa17e30b23a0c325049}{Order\+::with\+Size()}}.
+
+\Hypertarget{class_otc_markets_order_a3c2be1402bac4a7104ae2d188fa50d4d}\index{OtcMarketsOrder@{OtcMarketsOrder}!withSource@{withSource}}
+\index{withSource@{withSource}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withSource()}{withSource()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a3c2be1402bac4a7104ae2d188fa50d4d} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Source (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_order_source}{Order\+Source}} \&}]{source}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s source and returns the current OTC Markets order. 
+
+This method changes highest bits of the \doxylink{class_order_base_a21bc36fb881577927015977bc5f71ec6}{index} of this event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & source of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a73dc0a3a3bd62228e63edf63abdacdad}{Order\+::with\+Source()}}.
+
+\Hypertarget{class_otc_markets_order_afd7495819694d0757916bc0f234f60d7}\index{OtcMarketsOrder@{OtcMarketsOrder}!withTime@{withTime}}
+\index{withTime@{withTime}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withTime()}{withTime()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_afd7495819694d0757916bc0f234f60d7} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this OTC Markets order and returns it. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a4f884aaa2226efb1e52594810f61d8af}{Order\+::with\+Time()}}.
+
+\Hypertarget{class_otc_markets_order_ac59afe20d3db42f4216478f2e0401478}\index{OtcMarketsOrder@{OtcMarketsOrder}!withTimeNanoPart@{withTimeNanoPart}}
+\index{withTimeNanoPart@{withTimeNanoPart}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withTimeNanoPart()}{withTimeNanoPart()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_ac59afe20d3db42f4216478f2e0401478} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds time part of this OTC Markets order. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & microseconds and nanoseconds time part of this OTC Markets order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a8c5c42e06b0cae2927fd0ec41a28af37}{Order\+::with\+Time\+Nano\+Part()}}.
+
+\Hypertarget{class_otc_markets_order_abff7154638734a7698e8964ca6949b9e}\index{OtcMarketsOrder@{OtcMarketsOrder}!withTimeNanos@{withTimeNanos}}
+\index{withTimeNanos@{withTimeNanos}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withTimeNanos()}{withTimeNanos()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_abff7154638734a7698e8964ca6949b9e} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Time\+Nanos (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Nanos}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this OTC Markets order and returns it. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nanos} & The time of this OTC Markets order in nanoseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a3730940bc56759751a5d69063e2c586a}{Order\+::with\+Time\+Nanos()}}.
+
+\Hypertarget{class_otc_markets_order_affd215f097f8eba4552f3dbaf8050c39}\index{OtcMarketsOrder@{OtcMarketsOrder}!withTradeId@{withTradeId}}
+\index{withTradeId@{withTradeId}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withTradeId()}{withTradeId()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_affd215f097f8eba4552f3dbaf8050c39} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Trade\+Id (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{trade\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trade ID. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trade\+Id} & The trade ID. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_af0159ae12cd3a7b4e10fcab259c4fcaf}{Order\+::with\+Trade\+Id()}}.
+
+\Hypertarget{class_otc_markets_order_aafa20509660968fbb625700b4f97695a}\index{OtcMarketsOrder@{OtcMarketsOrder}!withTradePrice@{withTradePrice}}
+\index{withTradePrice@{withTradePrice}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withTradePrice()}{withTradePrice()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_aafa20509660968fbb625700b4f97695a} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Trade\+Price (\begin{DoxyParamCaption}\item[{double}]{trade\+Price}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trade price. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trade\+Price} & The trade price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_af596aded06e1e1e989ae5cacfcae2955}{Order\+::with\+Trade\+Price()}}.
+
+\Hypertarget{class_otc_markets_order_a7852a897ad787c58a109a9e0eb29f855}\index{OtcMarketsOrder@{OtcMarketsOrder}!withTradeSize@{withTradeSize}}
+\index{withTradeSize@{withTradeSize}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withTradeSize()}{withTradeSize()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a7852a897ad787c58a109a9e0eb29f855} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Trade\+Size (\begin{DoxyParamCaption}\item[{double}]{trade\+Size}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trade size. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trade\+Size} & The trade size. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_a125255e9f72a68f20a46f0dba05afc45}{Order\+::with\+Trade\+Size()}}.
+
+\Hypertarget{class_otc_markets_order_a89474840460dab3c3ef97f723f67ddeb}\index{OtcMarketsOrder@{OtcMarketsOrder}!withUnsolicited@{withUnsolicited}}
+\index{withUnsolicited@{withUnsolicited}!OtcMarketsOrder@{OtcMarketsOrder}}
+\doxyparagraph{\texorpdfstring{withUnsolicited()}{withUnsolicited()}}
+{\footnotesize\ttfamily \label{class_otc_markets_order_a89474840460dab3c3ef97f723f67ddeb} 
+\mbox{\hyperlink{class_otc_markets_order}{Otc\+Markets\+Order}} \& Otc\+Markets\+Order\+::with\+Unsolicited (\begin{DoxyParamCaption}\item[{bool}]{unsolicited}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event is unsolicited. 
+
+Returns the current OTC Markets order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em unsolicited} & {\ttfamily true} if this event is unsolicited. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current OTC Markets order. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_otc_markets_order_a3489691f45f5c5ffa9032d3bab2d3d00}{set\+Unsolicited()}}.
+

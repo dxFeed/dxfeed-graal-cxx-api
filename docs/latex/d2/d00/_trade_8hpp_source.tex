@@ -9,124 +9,134 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_trade_base_8hpp}{"{}TradeBase.hpp"{}}}}
-\DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_trade_base_8hpp}{"{}TradeBase.hpp"{}}}}
 \DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00021\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
 \DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Trade\ event\ is\ a\ snapshot\ of\ the\ price\ and\ size\ of\ the\ last\ trade\ during\ regular\ trading\ hours}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ and\ an\ overall\ day\ volume\ and\ day\ turnover.}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ regular\ last\ trade\ on\ the\ market}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ at\ any\ given\ moment\ of\ time.}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ <h3>Trading\ sessions</h3>}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ Trade\ event\ is\ a\ snapshot\ of\ the\ price\ and\ size\ of\ the\ last\ trade\ during\ regular\ trading\ hours}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ and\ an\ overall\ day\ volume\ and\ day\ turnover.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ regular\ last\ trade\ on\ the\ market}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ at\ any\ given\ moment\ of\ time.}}
 \DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ The\ Trade\ event\ defines\ last\ trade\ @ref\ Trade::getPrice()\ "{}price"{}\ as\ officially\ defined}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ by\ the\ corresponding\ exchange\ for\ its\ <b>regular\ trading\ hours</b>\ (RTH).}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ It\ also\ include\ an\ official\ exchange\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ Trade::getDayTurnover()}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ "{}dayTurnover"{}\ <b>for\ the\ whole\ trading\ day</b>\ identified\ by\ @ref\ Trade::getDayId()\ "{}dayId"{}.\ So,\ Trade\ event\ captures}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ all\ the\ official\ numbers\ that\ are\ typically\ reported\ by\ exchange.}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ <p>Trades\ that\ happen\ in\ <b>extended\ trading\ hours</b>\ (ETH,\ pre-\/market\ and\ post-\/market\ trading\ sessions),}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ which\ are\ typically\ defined\ for\ stocks\ and\ ETFs,\ do\ not\ update\ last\ trade\ @ref\ Trade::getTime()\ "{}time"{},}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ @ref\ Trade::getExchangeCode()\ "{}exchangeCode"{},\ @ref\ Trade::getPrice()\ "{}price"{},\ @ref\ Trade::getChange()\ "{}change"{},}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ @ref\ Trade::getSize()\ "{}size"{},\ and\ @ref\ Trade::getTickDirection()\ "{}tickDirection"{}\ in\ the\ Trade\ event,\ but\ they\ do}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ update}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ Trade::getDayTurnover()\ "{}dayTurnover"{}.}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ <p>During\ extended\ trading\ hours\ a\ TradeETH\ event\ is\ generated\ on\ each\ trade\ with\ its}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ @ref\ TradeETH::isExtendedTradingHours()\ "{}extendedTradingHours"{}\ property\ set\ to\ \`{}true`.</p>}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ <h3>Volume\ and\ Turnover</h3>}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <h3>Trading\ sessions</h3>}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ The\ Trade\ event\ defines\ last\ trade\ @ref\ Trade::getPrice()\ "{}price"{}\ as\ officially\ defined}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ by\ the\ corresponding\ exchange\ for\ its\ <b>regular\ trading\ hours</b>\ (RTH).}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ It\ also\ include\ an\ official\ exchange\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ Trade::getDayTurnover()}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ "{}dayTurnover"{}\ <b>for\ the\ whole\ trading\ day</b>\ identified\ by\ @ref\ Trade::getDayId()\ "{}dayId"{}.\ So,\ Trade\ event\ captures}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ all\ the\ official\ numbers\ that\ are\ typically\ reported\ by\ exchange.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ <p>Trades\ that\ happen\ in\ <b>extended\ trading\ hours</b>\ (ETH,\ pre-\/market\ and\ post-\/market\ trading\ sessions),}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ which\ are\ typically\ defined\ for\ stocks\ and\ ETFs,\ do\ not\ update\ last\ trade\ @ref\ Trade::getTime()\ "{}time"{},}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ @ref\ Trade::getExchangeCode()\ "{}exchangeCode"{},\ @ref\ Trade::getPrice()\ "{}price"{},\ @ref\ Trade::getChange()\ "{}change"{},}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ @ref\ Trade::getSize()\ "{}size"{},\ and\ @ref\ Trade::getTickDirection()\ "{}tickDirection"{}\ in\ the\ Trade\ event,\ but\ they\ do}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ update}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ Trade::getDayTurnover()\ "{}dayTurnover"{}.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ <p>During\ extended\ trading\ hours\ a\ TradeETH\ event\ is\ generated\ on\ each\ trade\ with\ its}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ @ref\ TradeETH::isExtendedTradingHours()\ "{}extendedTradingHours"{}\ property\ set\ to\ \`{}true`.</p>}}
 \DoxyCodeLine{00048\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ <p>The\ volume\ and\ turnover\ are\ included\ into\ the\ Trade\ event\ instead}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ of\ Summary\ event,\ because\ both\ volume\ and\ turnover\ typically\ update\ with\ each\ trade.}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ The\ @ref\ Trade::getDayId()\ "{}dayId"{}\ field\ identifies\ current\ trading\ day\ for\ which\ volume\ and\ turnover\ statistics\ are}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ computed.\ This\ solution\ avoids\ generation\ of\ multiple\ events\ on\ each\ trade\ during\ regular\ trading\ hours.\ Summary}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ event\ is\ generated\ during\ the\ trading\ day\ only\ when\ new\ highs\ or\ lows\ are\ reached\ or\ other\ properties\ change.}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ <p>Note\ that\ one\ can\ compute\ volume-\/weighted\ average\ price\ (VWAP)\ for\ a\ day\ by\ this\ formula:}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ <br><code>vwap\ =\ @ref\ Trade::getDayTurnover()\ "{}dayTurnover"{}\ /\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{};</code>}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ <h3>Daily\ reset</h3>}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ <h3>Volume\ and\ Turnover</h3>}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ <p>The\ volume\ and\ turnover\ are\ included\ into\ the\ Trade\ event\ instead}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ of\ Summary\ event,\ because\ both\ volume\ and\ turnover\ typically\ update\ with\ each\ trade.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ The\ @ref\ Trade::getDayId()\ "{}dayId"{}\ field\ identifies\ current\ trading\ day\ for\ which\ volume\ and\ turnover\ statistics\ are}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ computed.\ This\ solution\ avoids\ generation\ of\ multiple\ events\ on\ each\ trade\ during\ regular\ trading\ hours.\ Summary}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ event\ is\ generated\ during\ the\ trading\ day\ only\ when\ new\ highs\ or\ lows\ are\ reached\ or\ other\ properties\ change.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ <p>Note\ that\ one\ can\ compute\ volume-\/weighted\ average\ price\ (VWAP)\ for\ a\ day\ by\ this\ formula:}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ <br><code>vwap\ =\ @ref\ Trade::getDayTurnover()\ "{}dayTurnover"{}\ /\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{};</code>}}
 \DoxyCodeLine{00059\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ Daily\ reset\ procedure\ that\ happens\ on\ a\ schedule\ during\ non-\/trading\ hours\ resets\ Trade}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ Trade::getDayTurnover()\ "{}dayTurnover"{}\ to\ math::NaN}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ and\ sets\ @ref\ Trade::getDayId()\ "{}dayId"{}\ to\ the\ next\ trading\ day\ in\ preparation\ to\ the\ next\ day's\ pre-\/market\ trading}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ session\ (or\ for\ regular\ trading\ if\ there\ is\ no\ pre-\/market)\ while\ leaving\ all\ other\ properties\ intact.\ They\ reflect}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ information\ about\ the\ last\ known\ RTH\ trade\ until\ the\ next\ RTH\ trade\ happens.}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ <h3>Daily\ reset</h3>}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ Daily\ reset\ procedure\ that\ happens\ on\ a\ schedule\ during\ non-\/trading\ hours\ resets\ Trade}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ @ref\ Trade::getDayVolume()\ "{}dayVolume"{}\ and\ @ref\ Trade::getDayTurnover()\ "{}dayTurnover"{}\ to\ math::NaN}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ and\ sets\ @ref\ Trade::getDayId()\ "{}dayId"{}\ to\ the\ next\ trading\ day\ in\ preparation\ to\ the\ next\ day's\ pre-\/market\ trading}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ session\ (or\ for\ regular\ trading\ if\ there\ is\ no\ pre-\/market)\ while\ leaving\ all\ other\ properties\ intact.\ They\ reflect}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ information\ about\ the\ last\ known\ RTH\ trade\ until\ the\ next\ RTH\ trade\ happens.}}
 \DoxyCodeLine{00067\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ records\ \`{}Trade`\ and\ \`{}Trade\&X`}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ for\ regional\ exchange\ trades.}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ Regional\ records\ do\ not\ explicitly\ store\ a\ field\ for\ @ref\ Trade::getExchangeCode()\ "{}exchangeCode"{}\ property.}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00072\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Trade\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base}{TradeBase}}\ \{}
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00074\ }
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00078\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Trade>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00080\ }
-\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_trade_abb4cbedaa26ff0cf4755fdab0bc2a411}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_abb4cbedaa26ff0cf4755fdab0bc2a411}{override}};}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ records\ \`{}Trade`\ and\ \`{}Trade\&X`}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *\ for\ regional\ exchange\ trades.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ *\ Regional\ records\ do\ not\ explicitly\ store\ a\ field\ for\ @ref\ Trade::getExchangeCode()\ "{}exchangeCode"{}\ property.}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00074\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Trade\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_trade_base}{TradeBase}}\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Trade\ object}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<Trade>;}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Trade\ object}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<Trade>;}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{class_trade_a2ac80fbec5eff5162e191e7bfc528fc3}{TYPE}};}
 \DoxyCodeLine{00089\ }
 \DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
 \DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *}}
 \DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_aab4234b4f437149d81066c409899bde7}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00096\ }
-\DoxyCodeLine{00097\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Trade\ object}}
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<Trade>;}
-\DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Trade\ object}}
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<Trade>;}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_trade_a9fcaf1ac1ea410b336be7ae55a97609c}{TYPE}};}
-\DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ trade\ event\ with\ default\ values.}}
-\DoxyCodeLine{00108\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_trade_a01247f0dbddc302890382a6c1ef579ea}{Trade}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ trade\ event\ with\ the\ specified\ event\ symbol.}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_acd22a0117f9b19fc2869f8b6bd0ff222}{Trade}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_trade_base}{TradeBase}}\mbox{\hyperlink{classdxfcpp_1_1_trade_base_aa2c14ca3644e13d88c7a8d861c91ab11}{(}}std::move(eventSymbol)\mbox{\hyperlink{classdxfcpp_1_1_trade_base_aa2c14ca3644e13d88c7a8d861c91ab11}{)}}\ \{}
-\DoxyCodeLine{00116\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{class_trade_a983d7d88f194839911bead29ac1fce1d}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{class_trade_ae45660706d7e48ee71e3c1856f26b510}{toGraal}}()\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_trade_ae45660706d7e48ee71e3c1856f26b510}{override}};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_trade_a6e91d41bee91da1f3d22e27f4f4460da}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ trade\ event\ with\ default\ values.}}
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{class_trade_a5a121872ecb6b9b0a73ad1bec4f6985d}{Trade}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
 \DoxyCodeLine{00117\ }
 \DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ trade\ event\ with\ the\ specified\ event\ symbol.}}
 \DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
 \DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00123\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_trade_acf5865291043641274a0738e96bff2d0}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_trade_acf5865291043641274a0738e96bff2d0}{override}};}
-\DoxyCodeLine{00124\ \};}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_trade_a87688597a43b7abf3ebb7501dbb0cdc4}{Trade}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{class_trade_a87688597a43b7abf3ebb7501dbb0cdc4}{TradeBase}}(\mbox{\hyperlink{class_trade_a87688597a43b7abf3ebb7501dbb0cdc4}{std}}::\mbox{\hyperlink{class_trade_a87688597a43b7abf3ebb7501dbb0cdc4}{move}}(\mbox{\hyperlink{class_trade_a87688597a43b7abf3ebb7501dbb0cdc4}{eventSymbol}}))\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
 \DoxyCodeLine{00125\ }
-\DoxyCodeLine{00126\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00131\ \ \ \ \ std::string\ \mbox{\hyperlink{class_trade_a0b9594c3abcb062a0eb64238ab7f750b}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_trade_a0b9594c3abcb062a0eb64238ab7f750b}{override}};}
+\DoxyCodeLine{00132\ \};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

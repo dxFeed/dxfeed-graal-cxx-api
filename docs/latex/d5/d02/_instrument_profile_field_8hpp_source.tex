@@ -9,123 +9,133 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
 \DoxyCodeLine{00009\ }
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ InstrumentProfileFieldEnum\ \{}
-\DoxyCodeLine{00021\ \ \ \ \ TYPE,}
-\DoxyCodeLine{00022\ \ \ \ \ SYMBOL,}
-\DoxyCodeLine{00023\ \ \ \ \ DESCRIPTION,}
-\DoxyCodeLine{00024\ \ \ \ \ LOCAL\_SYMBOL,}
-\DoxyCodeLine{00025\ \ \ \ \ LOCAL\_DESCRIPTION,}
-\DoxyCodeLine{00026\ \ \ \ \ COUNTRY,}
-\DoxyCodeLine{00027\ \ \ \ \ OPOL,}
-\DoxyCodeLine{00028\ \ \ \ \ EXCHANGE\_DATA,}
-\DoxyCodeLine{00029\ \ \ \ \ EXCHANGES,}
-\DoxyCodeLine{00030\ \ \ \ \ CURRENCY,}
-\DoxyCodeLine{00031\ \ \ \ \ BASE\_CURRENCY,}
-\DoxyCodeLine{00032\ \ \ \ \ CFI,}
-\DoxyCodeLine{00033\ \ \ \ \ ISIN,}
-\DoxyCodeLine{00034\ \ \ \ \ SEDOL,}
-\DoxyCodeLine{00035\ \ \ \ \ CUSIP,}
-\DoxyCodeLine{00036\ \ \ \ \ ICB,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00037\ \ \ \ \ SIC,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00038\ \ \ \ \ MULTIPLIER,\ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00039\ \ \ \ \ PRODUCT,}
-\DoxyCodeLine{00040\ \ \ \ \ UNDERLYING,}
-\DoxyCodeLine{00041\ \ \ \ \ SPC,\ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00042\ \ \ \ \ ADDITIONAL\_UNDERLYINGS,}
-\DoxyCodeLine{00043\ \ \ \ \ MMY,}
-\DoxyCodeLine{00044\ \ \ \ \ EXPIRATION,\ \textcolor{comment}{//\ date}}
-\DoxyCodeLine{00045\ \ \ \ \ LAST\_TRADE,\ \textcolor{comment}{//\ date}}
-\DoxyCodeLine{00046\ \ \ \ \ STRIKE,\ \ \ \ \ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00047\ \ \ \ \ OPTION\_TYPE,}
-\DoxyCodeLine{00048\ \ \ \ \ EXPIRATION\_STYLE,}
-\DoxyCodeLine{00049\ \ \ \ \ SETTLEMENT\_STYLE,}
-\DoxyCodeLine{00050\ \ \ \ \ PRICE\_INCREMENTS,}
-\DoxyCodeLine{00051\ \ \ \ \ TRADING\_HOURS}
-\DoxyCodeLine{00052\ \};}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ InstrumentProfileFieldTypeEnum\ \{\ STRING,\ DOUBLE,\ DATE\ \};}
+\DoxyCodeLine{00020\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ InstrumentProfileFieldEnum\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ TYPE,}
+\DoxyCodeLine{00024\ \ \ \ \ SYMBOL,}
+\DoxyCodeLine{00025\ \ \ \ \ DESCRIPTION,}
+\DoxyCodeLine{00026\ \ \ \ \ LOCAL\_SYMBOL,}
+\DoxyCodeLine{00027\ \ \ \ \ LOCAL\_DESCRIPTION,}
+\DoxyCodeLine{00028\ \ \ \ \ COUNTRY,}
+\DoxyCodeLine{00029\ \ \ \ \ OPOL,}
+\DoxyCodeLine{00030\ \ \ \ \ EXCHANGE\_DATA,}
+\DoxyCodeLine{00031\ \ \ \ \ EXCHANGES,}
+\DoxyCodeLine{00032\ \ \ \ \ CURRENCY,}
+\DoxyCodeLine{00033\ \ \ \ \ BASE\_CURRENCY,}
+\DoxyCodeLine{00034\ \ \ \ \ CFI,}
+\DoxyCodeLine{00035\ \ \ \ \ ISIN,}
+\DoxyCodeLine{00036\ \ \ \ \ SEDOL,}
+\DoxyCodeLine{00037\ \ \ \ \ CUSIP,}
+\DoxyCodeLine{00038\ \ \ \ \ ICB,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00039\ \ \ \ \ SIC,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00040\ \ \ \ \ MULTIPLIER,\ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00041\ \ \ \ \ PRODUCT,}
+\DoxyCodeLine{00042\ \ \ \ \ UNDERLYING,}
+\DoxyCodeLine{00043\ \ \ \ \ SPC,\ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00044\ \ \ \ \ ADDITIONAL\_UNDERLYINGS,}
+\DoxyCodeLine{00045\ \ \ \ \ MMY,}
+\DoxyCodeLine{00046\ \ \ \ \ EXPIRATION,\ \textcolor{comment}{//\ date}}
+\DoxyCodeLine{00047\ \ \ \ \ LAST\_TRADE,\ \textcolor{comment}{//\ date}}
+\DoxyCodeLine{00048\ \ \ \ \ STRIKE,\ \ \ \ \ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00049\ \ \ \ \ OPTION\_TYPE,}
+\DoxyCodeLine{00050\ \ \ \ \ EXPIRATION\_STYLE,}
+\DoxyCodeLine{00051\ \ \ \ \ SETTLEMENT\_STYLE,}
+\DoxyCodeLine{00052\ \ \ \ \ PRICE\_INCREMENTS,}
+\DoxyCodeLine{00053\ \ \ \ \ TRADING\_HOURS}
+\DoxyCodeLine{00054\ \};}
 \DoxyCodeLine{00055\ }
-\DoxyCodeLine{00056\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ InstrumentProfileField\ \{}
-\DoxyCodeLine{00057\ \ \ \ \ InstrumentProfileFieldEnum\ fieldEnum\_;}
-\DoxyCodeLine{00058\ \ \ \ \ std::string\ name\_;}
-\DoxyCodeLine{00059\ \ \ \ \ InstrumentProfileFieldTypeEnum\ typeEnum\_;}
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{bool}\ numericField\_;}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \ \ \ \ InstrumentProfileField(InstrumentProfileFieldEnum\ fieldEnum,\ std::string\ name,}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ InstrumentProfileFieldTypeEnum\ typeEnum)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ :\ fieldEnum\_\{fieldEnum\},\ name\_\{std::move(name)\},\ typeEnum\_\{typeEnum\},}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ numericField\_\{typeEnum\ !=\ InstrumentProfileFieldTypeEnum::STRING\}\ \{}
-\DoxyCodeLine{00066\ \ \ \ \ \}}
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{explicit}\ InstrumentProfileField(InstrumentProfileFieldEnum\ fieldEnum,\ \textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ :\ InstrumentProfileField(fieldEnum,\ name,\ InstrumentProfileFieldTypeEnum::STRING)\ \{}
-\DoxyCodeLine{00070\ \ \ \ \ \}}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ TYPE;}
-\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SYMBOL;}
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ DESCRIPTION;}
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ LOCAL\_SYMBOL;}
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ LOCAL\_DESCRIPTION;}
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ COUNTRY;}
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ OPOL;}
-\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ EXCHANGE\_DATA;}
-\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ EXCHANGES;}
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ CURRENCY;}
-\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ BASE\_CURRENCY;}
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ CFI;}
-\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ ISIN;}
-\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SEDOL;}
-\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ CUSIP;}
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ ICB;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SIC;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ MULTIPLIER;\ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ PRODUCT;}
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ UNDERLYING;}
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SPC;\ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ ADDITIONAL\_UNDERLYINGS;}
-\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ MMY;}
-\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ EXPIRATION;\ \textcolor{comment}{//\ date}}
-\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ LAST\_TRADE;\ \textcolor{comment}{//\ date}}
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ STRIKE;\ \ \ \ \ \textcolor{comment}{//\ double}}
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ OPTION\_TYPE;}
-\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ EXPIRATION\_STYLE;}
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SETTLEMENT\_STYLE;}
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ PRICE\_INCREMENTS;}
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ TRADING\_HOURS;}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ std::string\ \&getName()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00107\ \ \ \ \ \}}
-\DoxyCodeLine{00108\ }
-\DoxyCodeLine{00109\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ InstrumentProfileField>>\ MAP;}
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ cref\ to\ field\ for\ specified\ name\ or\ std::nullopt\ if\ field\ is\ not\ found.}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{static}\ std::optional<std::reference\_wrapper<\textcolor{keyword}{const}\ InstrumentProfileField>>\ find(\textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (MAP.contains(name))\ \{}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MAP.at(name);}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
-\DoxyCodeLine{00122\ \ \ \ \ \}}
-\DoxyCodeLine{00123\ \};}
-\DoxyCodeLine{00124\ }
-\DoxyCodeLine{00125\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00056\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ InstrumentProfileFieldTypeEnum\ \{\ STRING,\ DOUBLE,\ DATE\ \};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ InstrumentProfileField\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ InstrumentProfileFieldEnum\ fieldEnum\_;}
+\DoxyCodeLine{00060\ \ \ \ \ std::string\ name\_;}
+\DoxyCodeLine{00061\ \ \ \ \ InstrumentProfileFieldTypeEnum\ typeEnum\_;}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{bool}\ numericField\_;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ InstrumentProfileField(InstrumentProfileFieldEnum\ fieldEnum,\ std::string\ name,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ InstrumentProfileFieldTypeEnum\ typeEnum)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ :\ fieldEnum\_\{fieldEnum\},\ name\_\{std::move(name)\},\ typeEnum\_\{typeEnum\},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ numericField\_\{typeEnum\ !=\ InstrumentProfileFieldTypeEnum::STRING\}\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{explicit}\ InstrumentProfileField(InstrumentProfileFieldEnum\ fieldEnum,\ \textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ :\ InstrumentProfileField(fieldEnum,\ name,\ InstrumentProfileFieldTypeEnum::STRING)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ TYPE;}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SYMBOL;}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ DESCRIPTION;}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ LOCAL\_SYMBOL;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ LOCAL\_DESCRIPTION;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ COUNTRY;}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ OPOL;}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ EXCHANGE\_DATA;}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ EXCHANGES;}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ CURRENCY;}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ BASE\_CURRENCY;}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ CFI;}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ ISIN;}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SEDOL;}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ CUSIP;}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ ICB;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SIC;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ MULTIPLIER;\ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ PRODUCT;}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ UNDERLYING;}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SPC;\ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ ADDITIONAL\_UNDERLYINGS;}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ MMY;}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ EXPIRATION;\ \textcolor{comment}{//\ date}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ LAST\_TRADE;\ \textcolor{comment}{//\ date}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ STRIKE;\ \ \ \ \ \textcolor{comment}{//\ double}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ OPTION\_TYPE;}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ EXPIRATION\_STYLE;}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ SETTLEMENT\_STYLE;}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ PRICE\_INCREMENTS;}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ InstrumentProfileField\ TRADING\_HOURS;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ std::string\ \&getName()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00109\ \ \ \ \ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ InstrumentProfileField>>\ MAP;}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ cref\ to\ field\ for\ specified\ name\ or\ std::nullopt\ if\ field\ is\ not\ found.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{static}\ std::optional<std::reference\_wrapper<\textcolor{keyword}{const}\ InstrumentProfileField>>\ find(\textcolor{keyword}{const}\ std::string\ \&name)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (MAP.contains(name))\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MAP.at(name);}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ InstrumentProfileFieldEnum\ getFieldEnum()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ InstrumentProfileFieldTypeEnum\ getTypeEnum()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{bool}\ isNumericField()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00131\ \};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

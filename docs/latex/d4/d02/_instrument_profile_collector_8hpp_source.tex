@@ -9,205 +9,209 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Id.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/JavaObjectHandle.hpp"{}}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../entity/SharedEntity.hpp"{}}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../InstrumentProfile.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_iterable_instrument_profile_8hpp}{"{}IterableInstrumentProfile.hpp"{}}}}
-\DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Id.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/JavaObjectHandle.hpp"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../entity/SharedEntity.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../InstrumentProfile.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_iterable_instrument_profile_8hpp}{"{}IterableInstrumentProfile.hpp"{}}}}
 \DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{keyword}{class}\ InstrumentProfileConnection;}
+\DoxyCodeLine{00020\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
 \DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Collects\ instrument\ profile\ updates\ and\ provides\ the\ live\ list\ of\ instrument\ profiles.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ This\ class\ contains\ a\ map\ that\ keeps\ a\ unique\ instrument\ profile\ per\ symbol.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ This\ class\ is\ intended\ to\ be\ used\ with\ InstrumentProfileConnection\ as\ a\ repository\ that\ keeps}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ profiles\ of\ all\ known\ instruments.\ See\ InstrumentProfileConnection\ for\ a\ usage\ example.}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ <p>As\ set\ of\ instrument\ profiles\ stored\ in\ this\ collector\ can\ be\ accessed\ with\ @ref\ InstrumentProfileCollector::view()\ "{}view"{}\ method.}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ A\ snapshot\ plus\ a\ live\ stream\ of\ updates\ can\ be\ accessed\ with}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ @ref\ InstrumentProfileCollector::addUpdateListener()\ "{}addUpdateListener"{}\ method.}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ <p>Removal\ of\ instrument\ profile\ is\ represented\ by\ an\ InstrumentProfile\ instance\ with\ a}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ @ref\ InstrumentProfile::getType()\ "{}type"{}\ equal\ to}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <code>@ref\ InstrumentProfileType\ "{}InstrumentProfileType"{}::@ref\ InstrumentProfileType::REMOVED\ "{}REMOVED"{}.@ref\ InstrumentProfileType::getName()\ "{}getName()"{}</code>.}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ <p><b>This\ class\ is\ thread-\/safe.</b>}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00038\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ InstrumentProfileCollector\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{friend}\ InstrumentProfileConnection;}
-\DoxyCodeLine{00040\ }
-\DoxyCodeLine{00041\ \ \ \ \ Id<InstrumentProfileCollector>\ id\_;}
-\DoxyCodeLine{00042\ \ \ \ \ JavaObjectHandle<InstrumentProfileCollector>\ handle\_;}
-\DoxyCodeLine{00043\ }
-\DoxyCodeLine{00044\ \ \ \ \ std::mutex\ listenersMutex\_\{\};}
-\DoxyCodeLine{00045\ \ \ \ \ std::unordered\_map<std::size\_t,\ JavaObjectHandle<InstrumentProfileUpdateListener>>\ listenerHandles\_\{\};}
-\DoxyCodeLine{00046\ \ \ \ \ std::unordered\_map<std::size\_t,\ SimpleHandler<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<InstrumentProfile>>\ \&)>>}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ onInstrumentProfilesUpdateHandlers\_\{\};}
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \ \ \ \ InstrumentProfileCollector()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00022\ \textcolor{keyword}{class}\ InstrumentProfileConnection;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ Collects\ instrument\ profile\ updates\ and\ provides\ the\ live\ list\ of\ instrument\ profiles.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ class\ contains\ a\ map\ that\ keeps\ a\ unique\ instrument\ profile\ per\ symbol.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ This\ class\ is\ intended\ to\ be\ used\ with\ InstrumentProfileConnection\ as\ a\ repository\ that\ keeps}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ profiles\ of\ all\ known\ instruments.\ See\ InstrumentProfileConnection\ for\ a\ usage\ example.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ <p>As\ set\ of\ instrument\ profiles\ stored\ in\ this\ collector\ can\ be\ accessed\ with\ @ref\ InstrumentProfileCollector::view()\ "{}view"{}\ method.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ A\ snapshot\ plus\ a\ live\ stream\ of\ updates\ can\ be\ accessed\ with}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ @ref\ InstrumentProfileCollector::addUpdateListener()\ "{}addUpdateListener"{}\ method.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <p>Removal\ of\ instrument\ profile\ is\ represented\ by\ an\ InstrumentProfile\ instance\ with\ a}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ @ref\ InstrumentProfile::getType()\ "{}type"{}\ equal\ to}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ <code>@ref\ InstrumentProfileType\ "{}InstrumentProfileType"{}::@ref\ InstrumentProfileType::REMOVED\ "{}REMOVED"{}.@ref\ InstrumentProfileType::getName()\ "{}getName()"{}</code>.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ <p><b>This\ class\ is\ thread-\/safe.</b>}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00040\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ InstrumentProfileCollector\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_shared_entity}{SharedEntity}}\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{friend}\ InstrumentProfileConnection;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ Id<InstrumentProfileCollector>\ id\_;}
+\DoxyCodeLine{00044\ \ \ \ \ JavaObjectHandle<InstrumentProfileCollector>\ handle\_;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ std::mutex\ listenersMutex\_\{\};}
+\DoxyCodeLine{00047\ \ \ \ \ std::unordered\_map<std::size\_t,\ JavaObjectHandle<InstrumentProfileUpdateListener>>\ listenerHandles\_\{\};}
+\DoxyCodeLine{00048\ \ \ \ \ std::unordered\_map<std::size\_t,\ SimpleHandler<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<InstrumentProfile>>\ \&)>>}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ onInstrumentProfilesUpdateHandlers\_\{\};}
 \DoxyCodeLine{00050\ }
-\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{struct}\ Impl;}
+\DoxyCodeLine{00051\ \ \ \ \ InstrumentProfileCollector()\ \textcolor{keyword}{noexcept};}
 \DoxyCodeLine{00052\ }
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ addListenerHandle(std::size\_t\ id)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ removeListenerHandle(std::size\_t\ id)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00055\ }
-\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ removeUpdateListenerImpl(std::size\_t\ listenerId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ removeListenerHandle(listenerId);}
-\DoxyCodeLine{00058\ }
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ onInstrumentProfilesUpdateHandlers\_[listenerId].remove(listenerId);}
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ onInstrumentProfilesUpdateHandlers\_.erase(listenerId);}
-\DoxyCodeLine{00061\ \ \ \ \ \}}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ InstrumentProfileCollector\ object}}
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<InstrumentProfileCollector>;}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ InstrumentProfileCollector\ object}}
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<InstrumentProfileCollector>;}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \string~InstrumentProfileCollector()\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{struct}\ Impl;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ addListenerHandle(std::size\_t\ id)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ removeListenerHandle(std::size\_t\ id)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ removeUpdateListenerImpl(std::size\_t\ listenerId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ removeListenerHandle(listenerId);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ onInstrumentProfilesUpdateHandlers\_[listenerId].remove(listenerId);}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ onInstrumentProfilesUpdateHandlers\_.erase(listenerId);}
+\DoxyCodeLine{00063\ \ \ \ \ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ InstrumentProfileCollector\ object}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<InstrumentProfileCollector>;}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ InstrumentProfileCollector\ object}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<InstrumentProfileCollector>;}
 \DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ InstrumentProfileCollector}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ new\ InstrumentProfileCollector}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a9efaffdf89319cd9e2176f52f72bc381}{create}}()\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ last\ modification\ time\ (in\ milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ while\ the\ time\ is\ represented\ in\ milliseconds,\ the\ actual\ granularity\ of\ time\ here\ is\ a\ second.}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ last\ modification\ time\ (in\ milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00085\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a786c529e6055f8b71e3aeaef5c7bcbe3}{getLastUpdateTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00086\ }
-\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ last\ modification\ time\ (as\ std::chrono::milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ while\ the\ time\ is\ represented\ in\ milliseconds,\ the\ actual\ granularity\ of\ time\ here\ is\ a\ second.}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ last\ modification\ time\ (as\ std::chrono::milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ unknown.}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a0b8f73ab5e92c9875b8dad1250762aa2}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a0b8f73ab5e92c9875b8dad1250762aa2}{chrono}}::\mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a0b8f73ab5e92c9875b8dad1250762aa2}{milliseconds}}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a0b8f73ab5e92c9875b8dad1250762aa2}{getLastUpdateTimeAsDuration}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::chrono::milliseconds(getLastUpdateTime());}
-\DoxyCodeLine{00096\ \ \ \ \ \}}
-\DoxyCodeLine{00097\ }
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ Convenience\ method\ to\ update\ one\ instrument\ profile\ in\ this\ collector.\ This\ is\ a\ shortcut\ for:}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ @ref\ InstrumentProfileCollector::updateInstrumentProfiles()\ "{}updateInstrumentProfiles"{}(\{ip\},\ nullptr);}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ </tt></pre>}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ @param\ ip\ The\ instrument\ profile.}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a7c5fe2a804f91d1d198fa9ffdf711385}{updateInstrumentProfile}}(std::shared\_ptr<InstrumentProfile>\ ip)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ Convenience\ method\ to\ update\ one\ instrument\ profile\ in\ this\ collector.\ This\ is\ a\ shortcut\ for:}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ @ref\ InstrumentProfileCollector::updateInstrumentProfiles()\ "{}updateInstrumentProfiles"{}(\{ip\},\ nullptr);}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ </tt></pre>}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @param\ ip\ The\ instrument\ profile.}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a4333db3c6669dc452d1a036ec1350451}{updateInstrumentProfile}}(\textcolor{keyword}{const}\ InstrumentProfile\ \&ip)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ concurrent\ view\ of\ the\ set\ of\ instrument\ profiles.}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ removal\ of\ instrument\ profile\ is\ represented\ by\ an\ InstrumentProfile\ instance\ with\ a}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfile::getType()\ "{}type"{}\ equal\ to}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ <code>@ref\ InstrumentProfileType\ "{}InstrumentProfileType"{}::@ref\ InstrumentProfileType::REMOVED\ "{}REMOVED"{}.@ref}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ InstrumentProfileType::getName()\ "{}getName()"{}</code>.\ Normally,\ this\ view\ exposes\ only\ non-\/removed\ profiles.}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ However,\ if\ iteration\ is\ concurrent\ with\ removal,\ then\ a\ removed\ instrument\ profile\ (with\ a\ removed\ type)\ can\ be}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ exposed\ by\ this\ view.}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ concurrent\ view\ of\ the\ set\ of\ instrument\ profiles.}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00129\ \ \ \ \ std::shared\_ptr<IterableInstrumentProfile>\ \mbox{\hyperlink{classdxfcpp_1_1_instrument_profile_collector_a95a585ada099ef46ca766598149c4f2b}{view}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ listener\ that\ is\ notified\ about\ any\ updates\ in\ the\ set\ of\ instrument\ profiles.}}
-\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ If\ a\ set\ of\ instrument\ profiles\ is\ not\ empty,\ then\ this\ listener\ will\ be\ immediately\ notified.}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ The\ API\ will\ be\ changed\ in\ the\ future.\ Instead\ of\ a\ vector,\ a\ wrapped\ Java-\/like\ iterator\ will\ be\ passed.}}
+\DoxyCodeLine{00072\ \ \ \ \ \string~InstrumentProfileCollector()\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ InstrumentProfileCollector}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ new\ InstrumentProfileCollector}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{class_instrument_profile_collector_a535905b66eb7bbd98b36b80c7c2851a5}{create}}();}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ last\ modification\ time\ (in\ milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ while\ the\ time\ is\ represented\ in\ milliseconds,\ the\ actual\ granularity\ of\ time\ here\ is\ a\ second.}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ last\ modification\ time\ (in\ milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00087\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_instrument_profile_collector_a4204de9853c90fbffdd72c8519249f7c}{getLastUpdateTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ last\ modification\ time\ (as\ std::chrono::milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is\ unknown.}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ while\ the\ time\ is\ represented\ in\ milliseconds,\ the\ actual\ granularity\ of\ time\ here\ is\ a\ second.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ last\ modification\ time\ (as\ std::chrono::milliseconds)\ of\ instrument\ profiles\ or\ zero\ if\ it\ is}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ unknown.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00096\ \ \ \ \ std::chrono::milliseconds\ \mbox{\hyperlink{class_instrument_profile_collector_a058a7f34e8e0fcfa24baf55bea44557c}{getLastUpdateTimeAsDuration}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::chrono::milliseconds(getLastUpdateTime());}
+\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Convenience\ method\ to\ update\ one\ instrument\ profile\ in\ this\ collector.\ This\ is\ a\ shortcut\ for:}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ @ref\ InstrumentProfileCollector::updateInstrumentProfiles()\ "{}updateInstrumentProfiles"{}(\{ip\},\ nullptr);}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ </tt></pre>}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ @param\ ip\ The\ instrument\ profile.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_instrument_profile_collector_aac80b2de1a1d61c6aee8f17cca72613e}{updateInstrumentProfile}}(std::shared\_ptr<InstrumentProfile>\ ip)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Convenience\ method\ to\ update\ one\ instrument\ profile\ in\ this\ collector.\ This\ is\ a\ shortcut\ for:}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ @ref\ InstrumentProfileCollector::updateInstrumentProfiles()\ "{}updateInstrumentProfiles"{}(\{ip\},\ nullptr);}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ </tt></pre>}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ @param\ ip\ The\ instrument\ profile.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_instrument_profile_collector_a7a099f2838c9703acf038fbfeae1e54f}{updateInstrumentProfile}}(\textcolor{keyword}{const}\ InstrumentProfile\ \&ip)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ concurrent\ view\ of\ the\ set\ of\ instrument\ profiles.}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ removal\ of\ instrument\ profile\ is\ represented\ by\ an\ InstrumentProfile\ instance\ with\ a}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ InstrumentProfile::getType()\ "{}type"{}\ equal\ to}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ <code>@ref\ InstrumentProfileType\ "{}InstrumentProfileType"{}::@ref\ InstrumentProfileType::REMOVED\ "{}REMOVED"{}.@ref}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ InstrumentProfileType::getName()\ "{}getName()"{}</code>.\ Normally,\ this\ view\ exposes\ only\ non-\/removed\ profiles.}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ However,\ if\ iteration\ is\ concurrent\ with\ removal,\ then\ a\ removed\ instrument\ profile\ (with\ a\ removed\ type)\ can\ be}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ exposed\ by\ this\ view.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ concurrent\ view\ of\ the\ set\ of\ instrument\ profiles.}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00131\ \ \ \ \ std::shared\_ptr<IterableInstrumentProfile>\ \mbox{\hyperlink{class_instrument_profile_collector_a6768fa8f7aa9b16f8672f8a472ebe090}{view}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ listener\ that\ is\ notified\ about\ any\ updates\ in\ the\ set\ of\ instrument\ profiles.}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ If\ a\ set\ of\ instrument\ profiles\ is\ not\ empty,\ then\ this\ listener\ will\ be\ immediately\ notified.}}
 \DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
-\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ collector-\/>addUpdateListener([](const\ std::vector<std::shared\_ptr<dxfcpp::InstrumentProfile>>\ \&profiles)\ \{}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&p\ :\ profiles)\ \{}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ (InstrumentProfileType::REMOVED-\/>getName()\ ==\ p-\/>getType())\ \{}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ p-\/>getSymbol()\ +\ "{}:\ "{}\ +\ p-\/>getType()\ +\ "{}\(\backslash\)n"{};}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}\ else\ \{}}
-\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ p-\/>getSymbol()\ +\ "{}\ ("{}\ +\ p-\/>getDescription()\ +\ "{})\(\backslash\)n"{};}}
-\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}}}
-\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ collector-\/>addUpdateListener([](auto\ \&\&profiles)\ -\/>\ void\ \{}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&p\ :\ profiles)\ \{}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ (InstrumentProfileType::REMOVED-\/>getName()\ ==\ p-\/>getType())\ \{}}
-\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ p-\/>getSymbol()\ +\ "{}:\ "{}\ +\ p-\/>getType()\ +\ "{}\(\backslash\)n"{};}}
-\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}\ else\ \{}}
-\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ p-\/>getSymbol()\ +\ "{}\ ("{}\ +\ p-\/>getDescription()\ +\ "{})\(\backslash\)n"{};}}
-\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}}}
-\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ InstrumentProfileUpdateListener\ The\ listener\ type.\ Listener\ can\ be\ callable\ with\ signature:\ \`{}void(const}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ std::vector<std::shared\_ptr<InstrumentProfile>\&)`}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ profile\ update\ listener.\ The\ listener\ can\ be\ callable\ with\ signature:\ \`{}void(const}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ The\ API\ will\ be\ changed\ in\ the\ future.\ Instead\ of\ a\ vector,\ a\ wrapped\ Java-\/like\ iterator\ will\ be\ passed.}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ collector-\/>addUpdateListener([](const\ std::vector<std::shared\_ptr<dxfcpp::InstrumentProfile>>\ \&profiles)\ \{}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&p\ :\ profiles)\ \{}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ (InstrumentProfileType::REMOVED-\/>getName()\ ==\ p-\/>getType())\ \{}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ p-\/>getSymbol()\ +\ "{}:\ "{}\ +\ p-\/>getType()\ +\ "{}\(\backslash\)n"{};}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}\ else\ \{}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ p-\/>getSymbol()\ +\ "{}\ ("{}\ +\ p-\/>getDescription()\ +\ "{})\(\backslash\)n"{};}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ collector-\/>addUpdateListener([](auto\ \&\&profiles)\ -\/>\ void\ \{}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&p\ :\ profiles)\ \{}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ (InstrumentProfileType::REMOVED-\/>getName()\ ==\ p-\/>getType())\ \{}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ p-\/>getSymbol()\ +\ "{}:\ "{}\ +\ p-\/>getType()\ +\ "{}\(\backslash\)n"{};}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}\ else\ \{}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ p-\/>getSymbol()\ +\ "{}\ ("{}\ +\ p-\/>getDescription()\ +\ "{})\(\backslash\)n"{};}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ InstrumentProfileUpdateListener\ The\ listener\ type.\ Listener\ can\ be\ callable\ with\ signature:\ \`{}void(const}}
 \DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ std::vector<std::shared\_ptr<InstrumentProfile>\&)`}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ InstrumentProfileUpdateListener>}
-\DoxyCodeLine{00168\ \ \ \ \ std::size\_t\ addUpdateListener(InstrumentProfileUpdateListener\ listener)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00169\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ requires\ requires\ \{}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ listener(std::vector<std::shared\_ptr<InstrumentProfile>>\{\})\ \}\ -\/>\ std::same\_as<\textcolor{keywordtype}{void}>;}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00173\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
-\DoxyCodeLine{00174\ \ \ \ \ \{}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00176\ }
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ SimpleHandler<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<InstrumentProfile>>\ \&)>\ h\{\};}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ profile\ update\ listener.\ The\ listener\ can\ be\ callable\ with\ signature:\ \`{}void(const}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ std::vector<std::shared\_ptr<InstrumentProfile>\&)`}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ InstrumentProfileUpdateListener>}
+\DoxyCodeLine{00170\ \ \ \ \ std::size\_t\ addUpdateListener(InstrumentProfileUpdateListener\ listener)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00171\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ requires\ requires\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ listener(std::vector<std::shared\_ptr<InstrumentProfile>>\{\})\ \}\ -\/>\ std::same\_as<\textcolor{keywordtype}{void}>;}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00175\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00176\ \ \ \ \ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
 \DoxyCodeLine{00178\ }
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ std::size\_t\ id\ =\ h.add(listener);}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ onInstrumentProfilesUpdateHandlers\_.try\_emplace(id,\ std::move(h));}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ addListenerHandle(id);}
-\DoxyCodeLine{00182\ }
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
-\DoxyCodeLine{00184\ \ \ \ \ \}}
-\DoxyCodeLine{00185\ }
-\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ listener\ for\ instrument\ profile\ updates.}}
-\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
-\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ auto\ id\ =\ collector-\/>addUpdateListener([](auto)\{\});}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ collector-\/>removeEventListener(id);}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listenerId\ The\ listener\ id}}
-\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordtype}{void}\ removeUpdateListener(std::size\_t\ listenerId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00200\ }
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (onInstrumentProfilesUpdateHandlers\_.contains(listenerId))\ \{}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ removeUpdateListenerImpl(listenerId);}
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00204\ \ \ \ \ \}}
-\DoxyCodeLine{00205\ \};}
-\DoxyCodeLine{00206\ }
-\DoxyCodeLine{00207\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ SimpleHandler<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::vector<std::shared\_ptr<InstrumentProfile>>\ \&)>\ h\{\};}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ std::size\_t\ id\ =\ h.add(listener);}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ onInstrumentProfilesUpdateHandlers\_.try\_emplace(id,\ std::move(h));}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ addListenerHandle(id);}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00186\ \ \ \ \ \}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ listener\ for\ instrument\ profile\ updates.}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ auto\ id\ =\ collector-\/>addUpdateListener([](auto)\{\});}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ collector-\/>removeEventListener(id);}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listenerId\ The\ listener\ id}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ removeUpdateListener(std::size\_t\ listenerId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (onInstrumentProfilesUpdateHandlers\_.contains(listenerId))\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ removeUpdateListenerImpl(listenerId);}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ \};}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

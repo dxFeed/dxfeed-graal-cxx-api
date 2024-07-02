@@ -1,0 +1,218 @@
+\doxysubsection{Handler\texorpdfstring{$<$}{<} void(Arg\+Types...)\texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4}{}\label{struct_handler_3_01void_07_arg_types_8_8_8_08_4}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+
+
+A thread-\/safe class that allows to asynchronously notify listeners with a given signature.  
+
+
+
+
+{\ttfamily \#include $<$Handler.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}\label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e} 
+using {\bfseries Listener\+Type} = std\+::function$<$void(Arg\+Types...)$>$
+\begin{DoxyCompactList}\small\item\em The listener type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a8522c5d62be8f0818471af0321e3ebd1}{Handler}} (std\+::size\+\_\+t main\+Futures\+Size=MAIN\+\_\+\+FUTURES\+\_\+\+DEFAULT\+\_\+\+SIZE) noexcept
+\begin{DoxyCompactList}\small\item\em Creates the new handler by specified size of circular buffer of futures. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a094e3ac5032c33c1690ce1eb021d5f17}{handle}} (Arg\+Types... args)
+\begin{DoxyCompactList}\small\item\em Calls the listeners and pass the args to them. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5af8176a10f303392113e3dcef9ae8ab}{operator()}} (Arg\+Types... args)
+\begin{DoxyCompactList}\small\item\em Calls the listeners and pass the ars to them. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a0c96c15b9b0954f9bb82e4defaca1442}{add}} (\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}{Listener\+Type}} \&\&listener)
+\begin{DoxyCompactList}\small\item\em Adds the listener to "{}main"{} group. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_aaa4b9d5f0a93c3c0ec8aa56c56f95c09}{add\+Low\+Priority}} (\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}{Listener\+Type}} \&\&listener)
+\begin{DoxyCompactList}\small\item\em Adds the low priority listener (to the "{}low priority"{} group) It will be called after the "{}main"{} listeners. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a421fd83e00a713bed277e766789003ef}{operator+=}} (\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}{Listener\+Type}} \&\&listener)
+\begin{DoxyCompactList}\small\item\em Adds the listener to "{}main"{} group. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a2dd4358a28b85e1f35f2de85d5a240d2}{operator\%=}} (\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}{Listener\+Type}} \&\&listener)
+\begin{DoxyCompactList}\small\item\em Adds the low priority listener (to the "{}low priority"{} group). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_aea0e4f429d682d388424f6f31c884a0d}{remove}} (std\+::size\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em Removes a listener by the id. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a9a9274ece06eadc8feeb8a3b3c5b7bae}{operator-\/=}} (std\+::size\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em Removes a listener by the id. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\subsubsection*{template$<$typename... Arg\+Types$>$\newline
+struct Handler$<$ void(\+Arg\+Types...)$>$}
+A thread-\/safe class that allows to asynchronously notify listeners with a given signature. 
+
+Listeners can be any callable entities. Listeners are placed in a future. Within one batch, listeners will be called sequentially. Futures are placed in a circular buffer and executed asynchronously.
+
+If you need synchronous execution of listeners, but it was possible to execute them in another thread, then limit the buffer size to one.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Arg\+Types} & The arguments "{}signature"{} (example\+: {\ttfamily void(int, int)}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a8522c5d62be8f0818471af0321e3ebd1}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!Handler@{Handler}}
+\index{Handler@{Handler}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{Handler()}{Handler()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a8522c5d62be8f0818471af0321e3ebd1} 
+template$<$typename... Arg\+Types$>$ \\
+\mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\mbox{\hyperlink{struct_handler}{\+::\+Handler}} (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{main\+Futures\+Size}{ = {\ttfamily MAIN\+\_\+FUTURES\+\_\+DEFAULT\+\_\+SIZE}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates the new handler by specified size of circular buffer of futures. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em main\+Futures\+Size} & The size of the circular buffer of futures \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a0c96c15b9b0954f9bb82e4defaca1442}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!add@{add}}
+\index{add@{add}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a0c96c15b9b0954f9bb82e4defaca1442} 
+template$<$typename... Arg\+Types$>$ \\
+std\+::size\+\_\+t \mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\+::add (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}{Listener\+Type}} \&\&}]{listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds the listener to "{}main"{} group. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The listener id 
+\end{DoxyReturn}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_aaa4b9d5f0a93c3c0ec8aa56c56f95c09}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!addLowPriority@{addLowPriority}}
+\index{addLowPriority@{addLowPriority}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{addLowPriority()}{addLowPriority()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_aaa4b9d5f0a93c3c0ec8aa56c56f95c09} 
+template$<$typename... Arg\+Types$>$ \\
+std\+::size\+\_\+t \mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\+::add\+Low\+Priority (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}{Listener\+Type}} \&\&}]{listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds the low priority listener (to the "{}low priority"{} group) It will be called after the "{}main"{} listeners. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The listener id 
+\end{DoxyReturn}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a094e3ac5032c33c1690ce1eb021d5f17}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!handle@{handle}}
+\index{handle@{handle}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{handle()}{handle()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a094e3ac5032c33c1690ce1eb021d5f17} 
+template$<$typename... Arg\+Types$>$ \\
+void \mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\+::handle (\begin{DoxyParamCaption}\item[{Arg\+Types...}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Calls the listeners and pass the args to them. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & The listeners arguments \\
+\hline
+\end{DoxyParams}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a2dd4358a28b85e1f35f2de85d5a240d2}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!operator\%=@{operator\%=}}
+\index{operator\%=@{operator\%=}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{operator\%=()}{operator\%=()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a2dd4358a28b85e1f35f2de85d5a240d2} 
+template$<$typename... Arg\+Types$>$ \\
+std\+::size\+\_\+t \mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\+::operator\%= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}{Listener\+Type}} \&\&}]{listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds the low priority listener (to the "{}low priority"{} group). 
+
+It will be called after the "{}main"{} listeners
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The listener id 
+\end{DoxyReturn}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5af8176a10f303392113e3dcef9ae8ab}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!operator()@{operator()}}
+\index{operator()@{operator()}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5af8176a10f303392113e3dcef9ae8ab} 
+template$<$typename... Arg\+Types$>$ \\
+void \mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\+::operator() (\begin{DoxyParamCaption}\item[{Arg\+Types...}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Calls the listeners and pass the ars to them. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & The listeners arguments \\
+\hline
+\end{DoxyParams}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a421fd83e00a713bed277e766789003ef}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{operator+=()}{operator+=()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a421fd83e00a713bed277e766789003ef} 
+template$<$typename... Arg\+Types$>$ \\
+std\+::size\+\_\+t \mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\+::operator+= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5a75ce15e87654e0f8ac33737ca80f4e}{Listener\+Type}} \&\&}]{listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds the listener to "{}main"{} group. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The listener id 
+\end{DoxyReturn}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a9a9274ece06eadc8feeb8a3b3c5b7bae}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{operator-\/=()}{operator-=()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a9a9274ece06eadc8feeb8a3b3c5b7bae} 
+template$<$typename... Arg\+Types$>$ \\
+void \mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\+::operator-\/= (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Removes a listener by the id. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The listener id \\
+\hline
+\end{DoxyParams}
+\Hypertarget{struct_handler_3_01void_07_arg_types_8_8_8_08_4_aea0e4f429d682d388424f6f31c884a0d}\index{Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}!remove@{remove}}
+\index{remove@{remove}!Handler$<$ void(ArgTypes...)$>$@{Handler$<$ void(ArgTypes...)$>$}}
+\doxyparagraph{\texorpdfstring{remove()}{remove()}}
+{\footnotesize\ttfamily \label{struct_handler_3_01void_07_arg_types_8_8_8_08_4_aea0e4f429d682d388424f6f31c884a0d} 
+template$<$typename... Arg\+Types$>$ \\
+void \mbox{\hyperlink{struct_handler}{Handler}}$<$ void(Arg\+Types...)$>$\+::remove (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Removes a listener by the id. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The listener id \\
+\hline
+\end{DoxyParams}

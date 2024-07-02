@@ -1,0 +1,54 @@
+\doxysubsection{Otc\+Markets\+Price\+Type Struct Reference}
+\hypertarget{struct_otc_markets_price_type}{}\label{struct_otc_markets_price_type}\index{OtcMarketsPriceType@{OtcMarketsPriceType}}
+
+
+Type of prices on the OTC Markets.  
+
+
+
+
+{\ttfamily \#include $<$Otc\+Markets\+Price\+Type.\+hpp$>$}
+
+
+
+Inherits Enum$<$ Child, Code $>$.
+
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} \mbox{\hyperlink{struct_otc_markets_price_type_a543a2fc4455b8e0b6bc5f530972ffa51}{UNPRICED}} \{0, "{}UNPRICED"{}\}
+\begin{DoxyCompactList}\small\item\em Unpriced quotes are an indication of interest (IOI) in a security used when a trader does not wish to show a price or size. \end{DoxyCompactList}\item 
+\Hypertarget{struct_otc_markets_price_type_adb461157c7e452fd90a0f573cf4995e7}\label{struct_otc_markets_price_type_adb461157c7e452fd90a0f573cf4995e7} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} {\bfseries ACTUAL} \{1, "{}ACTUAL"{}\}
+\begin{DoxyCompactList}\small\item\em Actual (Priced) is the actual amount a trader is willing to buy or sell securities. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} \mbox{\hyperlink{struct_otc_markets_price_type_a1d9d1a5a869437cc122040429b564753}{WANTED}} \{2, "{}WANTED"{}\}
+\begin{DoxyCompactList}\small\item\em Offer Wanted/\+Bid Wanted (OW/\+BW) is used to solicit sellers/buyers, without displaying actual price or size. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Type of prices on the OTC Markets. 
+
+Please see \href{https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf}{\texttt{ OTC Markets Data Display Requirements}} section "{}4.\+2 Quote Price Types"{} for complete description. 
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{struct_otc_markets_price_type_a543a2fc4455b8e0b6bc5f530972ffa51}\index{OtcMarketsPriceType@{OtcMarketsPriceType}!UNPRICED@{UNPRICED}}
+\index{UNPRICED@{UNPRICED}!OtcMarketsPriceType@{OtcMarketsPriceType}}
+\doxyparagraph{\texorpdfstring{UNPRICED}{UNPRICED}}
+{\footnotesize\ttfamily \label{struct_otc_markets_price_type_a543a2fc4455b8e0b6bc5f530972ffa51} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE const \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} Otc\+Markets\+Price\+Type\+::\+UNPRICED \{0, "{}UNPRICED"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Unpriced quotes are an indication of interest (IOI) in a security used when a trader does not wish to show a price or size. 
+
+Unpriced, name-\/only quotes are also used as the other side of a one-\/sided, priced quote. Unpriced quotes may not have a \doxylink{class_quote}{Quote} Access Payment (QAP) value. \Hypertarget{struct_otc_markets_price_type_a1d9d1a5a869437cc122040429b564753}\index{OtcMarketsPriceType@{OtcMarketsPriceType}!WANTED@{WANTED}}
+\index{WANTED@{WANTED}!OtcMarketsPriceType@{OtcMarketsPriceType}}
+\doxyparagraph{\texorpdfstring{WANTED}{WANTED}}
+{\footnotesize\ttfamily \label{struct_otc_markets_price_type_a1d9d1a5a869437cc122040429b564753} 
+const \mbox{\hyperlink{struct_otc_markets_price_type}{Otc\+Markets\+Price\+Type}} Otc\+Markets\+Price\+Type\+::\+WANTED \{2, "{}WANTED"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Offer Wanted/\+Bid Wanted (OW/\+BW) is used to solicit sellers/buyers, without displaying actual price or size. 
+
+OW/\+BW quotes may not have a \doxylink{class_quote}{Quote} Access Payment (QAP) value. 

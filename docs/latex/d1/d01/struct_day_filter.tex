@@ -1,0 +1,70 @@
+\doxysubsection{Day\+Filter Struct Reference}
+\hypertarget{struct_day_filter}{}\label{struct_day_filter}\index{DayFilter@{DayFilter}}
+
+
+A filter for days used by various search methods.  
+
+
+
+
+{\ttfamily \#include $<$Day\+Filter.\+hpp$>$}
+
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_day_filter_a9826a50c14094ef2c3136a6ca7bfecbc}\label{struct_day_filter_a9826a50c14094ef2c3136a6ca7bfecbc} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries ANY}
+\begin{DoxyCompactList}\small\item\em Accepts any day -\/ useful for pure calendar navigation. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a0b989a7d3b9a4d3238c69cca2cbe7210}\label{struct_day_filter_a0b989a7d3b9a4d3238c69cca2cbe7210} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries TRADING}
+\begin{DoxyCompactList}\small\item\em Accepts trading days only -\/ those with {\ttfamily (\doxylink{struct_day_aac78ea8b473097c6c58ae0d1cbfd99ba}{Day\+::is\+Trading()} == true)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a6cbb4cc660d57f0abdfee59a343e27d3}\label{struct_day_filter_a6cbb4cc660d57f0abdfee59a343e27d3} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries NON\+\_\+\+TRADING}
+\begin{DoxyCompactList}\small\item\em Accepts non-\/trading days only -\/ those with {\ttfamily (\doxylink{struct_day_aac78ea8b473097c6c58ae0d1cbfd99ba}{Day\+::is\+Trading()} == false)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_acb5756e3da46a235f3cc665e09191a9c}\label{struct_day_filter_acb5756e3da46a235f3cc665e09191a9c} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries HOLIDAY}
+\begin{DoxyCompactList}\small\item\em Accepts holidays only -\/ those with {\ttfamily (\doxylink{struct_day_aa4d218e87860a923a2c320bf7fc990be}{Day\+::is\+Holiday()} == true)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a5fd88d20b05558160453f167f63d32e8}\label{struct_day_filter_a5fd88d20b05558160453f167f63d32e8} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries SHORT\+\_\+\+DAY}
+\begin{DoxyCompactList}\small\item\em Accepts short days only -\/ those with {\ttfamily (\doxylink{struct_day_a1281a6e962e6f69887f6c106d5602811}{Day\+::is\+Short\+Day()} == true)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_ab019c5ee878803d6fdc46acf54931379}\label{struct_day_filter_ab019c5ee878803d6fdc46acf54931379} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries MONDAY}
+\begin{DoxyCompactList}\small\item\em Accepts Mondays only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} == 1)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a39ed7ff09f15d3ee18663915b230c4a3}\label{struct_day_filter_a39ed7ff09f15d3ee18663915b230c4a3} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries TUESDAY}
+\begin{DoxyCompactList}\small\item\em Accepts Tuesdays only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} == 2)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a4b1b495a3bf1ba402b9b1fd3f7027828}\label{struct_day_filter_a4b1b495a3bf1ba402b9b1fd3f7027828} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries WEDNESDAY}
+\begin{DoxyCompactList}\small\item\em Accepts Wednesdays only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} == 3)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a6c7f1ace06c60f91fd8912141cba6a45}\label{struct_day_filter_a6c7f1ace06c60f91fd8912141cba6a45} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries THURSDAY}
+\begin{DoxyCompactList}\small\item\em Accepts Thursdays only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} == 4)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a4d1662be38ef5e9a69244d08c79f143d}\label{struct_day_filter_a4d1662be38ef5e9a69244d08c79f143d} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries FRIDAY}
+\begin{DoxyCompactList}\small\item\em Accepts Fridays only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} == 5)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_ab17b434ba9e8322507cf8ab77fdcd34f}\label{struct_day_filter_ab17b434ba9e8322507cf8ab77fdcd34f} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries SATURDAY}
+\begin{DoxyCompactList}\small\item\em Accepts Saturdays only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} == 6)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a2ee7703793fb7e9bba6aa63a0fc250df}\label{struct_day_filter_a2ee7703793fb7e9bba6aa63a0fc250df} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries SUNDAY}
+\begin{DoxyCompactList}\small\item\em Accepts Sundays only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} == 7)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_ace315bfd8520f617c17b851ac9eff378}\label{struct_day_filter_ace315bfd8520f617c17b851ac9eff378} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries WEEK\+\_\+\+DAY}
+\begin{DoxyCompactList}\small\item\em Accepts week-\/days only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} \texorpdfstring{$<$}{<}= 5)}. \end{DoxyCompactList}\item 
+\Hypertarget{struct_day_filter_a62533e246d80b6b37cd7b642cd41a1fc}\label{struct_day_filter_a62533e246d80b6b37cd7b642cd41a1fc} 
+static const \mbox{\hyperlink{struct_day_filter}{Day\+Filter}} {\bfseries WEEK\+\_\+\+END}
+\begin{DoxyCompactList}\small\item\em Accepts weekends only -\/ those with {\ttfamily (\doxylink{struct_day_a94710e25338834327912adbb8dc5802a}{Day\+::get\+Day\+Of\+Week()} \texorpdfstring{$>$}{>}= 6)}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_day_filter_a815a518a0b2fd8492d61196e3aafa201}\label{struct_day_filter_a815a518a0b2fd8492d61196e3aafa201} 
+struct {\bfseries Day}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A filter for days used by various search methods. 
+
+This class provides predefined filters for certain \doxylink{struct_day}{Day} attributes, although users can create their own filters to suit their needs. 
+
+Please note that days can be either trading or non-\/trading, and this distinction can be either based on rules (e.\+g. weekends) or dictated by special occasions (e.\+g. holidays). Different filters treat this distinction differently -\/ some accept only trading days, some only non-\/trading, and some ignore type of day altogether. 

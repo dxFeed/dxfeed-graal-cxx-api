@@ -1,0 +1,321 @@
+\doxysubsection{Trade\+ETH Class Reference}
+\hypertarget{class_trade_e_t_h}{}\label{class_trade_e_t_h}\index{TradeETH@{TradeETH}}
+
+
+\doxylink{class_trade_e_t_h}{Trade\+ETH} event is a snapshot of the price and size of the last trade during extended trading hours and the extended trading hours day volume and day turnover.  
+
+
+
+
+{\ttfamily \#include $<$Trade\+ETH.\+hpp$>$}
+
+Inheritance diagram for Trade\+ETH\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=7.000000cm]{dc/d00/class_trade_e_t_h}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_trade_e_t_h_ac134346114939ea08f8c4f07ef65fda4}\label{class_trade_e_t_h_ac134346114939ea08f8c4f07ef65fda4} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_trade_e_t_h}{Trade\+ETH}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{class_trade_e_t_h}{Trade\+ETH} object. \end{DoxyCompactList}\item 
+\Hypertarget{class_trade_e_t_h_ade7e12c7f050496acfddab7577900d7d}\label{class_trade_e_t_h_ade7e12c7f050496acfddab7577900d7d} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{class_trade_e_t_h}{Trade\+ETH}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{class_trade_e_t_h}{Trade\+ETH} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_market_event}{Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_market_event}{Market\+Event}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_market_event}{Market\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol$<$ std\+::string $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr}
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_event_type}{Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_event_type}{Event\+Type}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_lasting_event}{Lasting\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_lasting_event}{Lasting\+Event}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_lasting_event}{Lasting\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_trade_e_t_h_a53153439ab22a927b6df15e72f65f59d}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\Hypertarget{class_trade_e_t_h_ab0485ea7eb826fc2c31e8017052d7da7}\label{class_trade_e_t_h_ab0485ea7eb826fc2c31e8017052d7da7} 
+{\bfseries Trade\+ETH} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new trade event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_trade_e_t_h_a5e25dec319c2b38bb20e16ac791a556b}{Trade\+ETH}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new trade event with the specified event symbol. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_trade_e_t_h_a726a477ce9d765b6a91d1c5562c8a23a}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{class_trade_base}{Trade\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Trade\+Base} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new trade event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_trade_base_a5052029c1b8852fc10eb876e147b2c5b}{Trade\+Base}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new trade event with the specified event symbol. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_trade_base_a83f22afbe96cbdff9a5aa8d186047ac9}{get\+Time\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time and sequence of last trade packaged into single long value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a8ba3dd85e9c949f7f618a765dc3abb83}{set\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time and sequence of last trade. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_trade_base_a42691e5d2128fa83fbe6361975426953}{get\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_aa9db209fe26b0b8a4f0ab66e0699715b}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last trade. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_trade_base_ae57a3eb6498884d8623e4ddb1a62b7d0}{get\+Time\+Nanos}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last trade in nanoseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_ae1ff9d862d2c19259ce6935882f3f55a}{set\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a7d9a2256e7c2cb12d58fc57a3d59274f}{set\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of the last trade. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_trade_base_adcddb045b7648829029eeaefd5743685}{get\+Time\+Nano\+Part}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns microseconds and nanoseconds time part of the last trade. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_trade_base_a63df429d3976d99fe42e519cf7e9500b}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns sequence number of the last trade to distinguish trades that have the same \doxylink{class_trade_base_a42691e5d2128fa83fbe6361975426953}{time}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a10dc7ef96daee70432fd5a4f0b3b6e7e}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{class_trade_base_a63df429d3976d99fe42e519cf7e9500b}{sequence number} of the last trade. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{class_trade_base_a5044e7359f50ff34f59c7ab201b1847b}{get\+Exchange\+Code}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of the last trade. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_trade_base_acb8f122830156d2599fe2bb91fe63f95}{get\+Exchange\+Code\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of last trade as UTF8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_aa03964a1a1346a9c58502731316378b4}{set\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a0262dab69ee99d960d4d84f4c070e969}{set\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of the last trade. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_trade_base_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{get\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns price of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_ad543d90a0b565961cd573fa4c9299c5c}{set\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of the last trade. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_trade_base_a4dbbf63f2435bcb5eb44a16f20d44424}{get\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns size of the last trade as floating number with fractions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a7cbd2d6a08fc4aa7128a879577e7648e}{set\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of the last trade as floating number with fractions. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_trade_base_a49359e7e646d6916337477a298bef4ea}{get\+Day\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns identifier of the current trading day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a34a2813f8363994fbf84090a5148bd21}{set\+Day\+Id}} (std\+::int32\+\_\+t day\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of the current trading day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_trade_base_a9a956f99368a4bdd97047d3ce8e80790}{get\+Day\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns total volume traded for a day as floating number with fractions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_af8f227da778f63dd07141427953090e4}{set\+Day\+Volume}} (double day\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total volume traded for a day as floating number with fractions. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_trade_base_a6f9aff4fe560ba262c8bf524274a2408}{get\+Day\+Turnover}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns total turnover traded for a day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a7482626d0eba8526c9cd5b51abfdfdeb}{set\+Day\+Turnover}} (double day\+Turnover) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total turnover traded for a day. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_direction}{Direction}} \& \mbox{\hyperlink{class_trade_base_a95a99e75fc1594f819221b7f3217a316}{get\+Tick\+Direction}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns tick direction of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a67932fb75642ae2ea97e57fe3fd4ac2b}{set\+Tick\+Direction}} (const \mbox{\hyperlink{struct_direction}{Direction}} \&direction) noexcept
+\begin{DoxyCompactList}\small\item\em Changes tick direction of the last trade. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_trade_base_a8555f0cf2950d73e7b0f5bf2d1f70621}{is\+Extended\+Trading\+Hours}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether last trade was in extended trading hours. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_ae14e9deb4e3591695c4f3491cba68f25}{set\+Extended\+Trading\+Hours}} (bool extended\+Trading\+Hours) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether last trade was in extended trading hours. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_trade_base_a1ba68544e527dfd3b740e5798c706d8d}{get\+Change}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns change of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_trade_base_a303063b2780ed44db1178d8b28b9d7d8}{set\+Change}} (double change) noexcept
+\begin{DoxyCompactList}\small\item\em Changes change of the last trade. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_trade_base_a3573f576ea6b528c69831efdb9b07423}{base\+Fields\+To\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this trade event\textquotesingle{}s fields. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_market_event}{Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{struct_market_event_a6f4f9f4bdb7ef23cda9d5a57640a8db3}{get\+Event\+Symbol}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{struct_market_event_aae8ffbf25a247a64eec19eff14095524}{get\+Event\+Symbol\+Opt}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_market_event_ae3358224a62a18b5e4ad9bad053dc8ed}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes symbol of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{struct_market_event_a9c8e8dd0fe8c615d776d6e1dc781be8d}{get\+Event\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_market_event_a084532c668491c224eeb498bb29e2cbd}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{struct_shared_entity_ae774e293e95fbf8ebb4d22f714e80272}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a348c971deaca898a477262e5bd190d03}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_trade_e_t_h_ac134346114939ea08f8c4f07ef65fda4}{Ptr}} \mbox{\hyperlink{class_trade_e_t_h_aca894405419b1c9cb865eb7f5ce37a6b}{from\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_trade_e_t_h_a1123706a4a00c0c099983fbd6bc2dbee}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_trade_e_t_h_ad8179fb1bf35cd8b8c4059f82601d670}\label{class_trade_e_t_h_ad8179fb1bf35cd8b8c4059f82601d670} 
+static const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+TRADE\+\_\+\+ETH
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{class_trade_base}{Trade\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{class_trade_base_a698882fa4ee241b50a642a72f8adc799}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{struct_market_event}{Market\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_market_event_afb6b53469aa08abc5f7d46f420a978d2}{Market\+Event}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{class_trade_e_t_h}{Trade\+ETH} event is a snapshot of the price and size of the last trade during extended trading hours and the extended trading hours day volume and day turnover. 
+
+This event is defined only for symbols (typically stocks and ETFs) with a designated {\bfseries{extended trading hours}} (ETH, pre market and post market trading sessions). It represents the most recent information that is available about ETH last trade on the market at any given moment of time.
+
+\doxysubsubsubsubsection*{Trading sessions}
+
+The \doxylink{class_trade_e_t_h}{Trade\+ETH} event defines last trade \doxylink{class_trade_base_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{price} as officially defined by the corresponding exchange for its {\bfseries{extended trading hours}} (ETH). It also includes \doxylink{class_trade_base_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume} and \doxylink{class_trade_base_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover} {\bfseries{for the extended trading hours only}} of the trading day identified by \doxylink{class_trade_base_a49359e7e646d6916337477a298bef4ea}{day\+Id}. This event is not defined for symbols that has no concept of ETH.
+
+When the first trade of {\bfseries{regular trading hours}} (RTH) happens, then \doxylink{class_trade_e_t_h}{Trade\+ETH} event is generated with \doxylink{class_trade_base_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours} property set to {\ttfamily false}. Afterwards, during RTH, \doxylink{class_trade_e_t_h}{Trade\+ETH} event is not updated and retains information about the last trade, volume and turnover of the pre market trading session.
+
+When the first trade of {\bfseries{extended trading hours}} (ETH) happens, then \doxylink{class_trade_e_t_h}{Trade\+ETH} event is generated with \doxylink{class_trade_base_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours} property set to {\ttfamily true}. Afterwards, during ETH, \doxylink{class_trade_e_t_h}{Trade\+ETH} event is updated on each trade with the last trade information from post market trading session and total volume and turnover of the pre and post market trading session (excluding the volume and turnover of a regular trading session).
+
+Note, that during pre-\/ and post-\/market sessions, \doxylink{class_trade}{Trade} event also updates, but only its \doxylink{class_trade_base_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume} and \doxylink{class_trade_base_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover} properties change to reflect the overall official volume and turnover as reported by exchanges. During post market trading session, exchanges may correct their official RTH last trading price, which results in the update to \doxylink{class_trade}{Trade} event.
+
+\doxysubsubsubsubsection*{Volume and Turnover}
+
+Note that one can compute volume-\/weighted average price (VWAP) for extended trading hours by this formula\+: ~\newline
+{\ttfamily vwap = \doxylink{class_trade_base_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover} / \doxylink{class_trade_base_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume};}
+
+\doxysubsubsubsubsection*{Daily reset}
+
+Daily reset procedure that happens on a schedule during non-\/trading hours resets \doxylink{class_trade_e_t_h}{Trade\+ETH} \doxylink{class_trade_base_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume} and \doxylink{class_trade_base_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover} to math\+::\+NaN and sets \doxylink{class_trade_base_a49359e7e646d6916337477a298bef4ea}{day\+Id} to the next trading day in preparation to the next day\textquotesingle{}s pre-\/market trading session (or for regular trading if there is no pre-\/market) while leaving all other properties intact. They reflect information about the last known ETH trade until the next ETH trade happens.
+
+\doxysubsubsubsubsection*{The most recent last trade price}
+
+The most recent last trade price ("{}extended last price"{}) in the market can be found by combining information from both \doxylink{class_trade}{Trade} and \doxylink{class_trade_e_t_h}{Trade\+ETH} events using \doxylink{class_trade_base_a8555f0cf2950d73e7b0f5bf2d1f70621}{is\+Extended\+Trading\+Hours} method to figure out which trading session had the most recent trade. The following piece of code finds the most recent last trade price from the given \doxylink{struct_d_x_feed}{feed} for a given {\ttfamily symbol}, assuming there is a \doxylink{class_d_x_feed_subscription}{subscription} for both \doxylink{class_trade}{Trade} and \doxylink{class_trade_e_t_h}{Trade\+ETH} events for the given {\ttfamily symbol}\+:
+
+
+\begin{DoxyPre}{\ttfamily 
+    auto \doxylink{class_trade}{trade} = feed-\/>getLastEvent(Trade::create(symbol));
+    auto \doxylink{class_trade_e_t_h}{tradeEth} = feed-\/>getLastEvent(TradeETH::create(symbol));
+    {\bfseries{double}} extLast = tradeEth-\/>\doxylink{class_trade_base_a8555f0cf2950d73e7b0f5bf2d1f70621}{isExtendedTradingHours}() ?
+tradeEth-\/>\doxylink{class_trade_base_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{getPrice}() : trade-\/>\doxylink{class_trade_base_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{getPrice}();
+}\end{DoxyPre}
+
+
+Note, that the above code works correctly for symbols that has no concept of ETH, too, because in this case the DXFeed\+::get\+Last\+Event() leaves default values in \doxylink{class_trade_e_t_h}{Trade\+ETH} event properties, which means that \doxylink{class_trade_base_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours} flag is {\ttfamily false} and a regular \doxylink{class_trade_base_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{Trade\+::get\+Price()} is used.
+
+\doxysubsubsubsubsection*{Implementation details}
+
+This event is implemented on top of QDS record {\ttfamily \doxylink{class_trade_e_t_h}{Trade\+ETH}} and {\ttfamily \doxylink{class_trade_e_t_h}{Trade\+ETH}\&X} for regional exchange extended trade hours. \doxylink{class_trade_base_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours} property is internally represented as a last bit of the "{}\+Flags"{} field of the record. Regional records do not explicitly store a field for \doxylink{class_trade_base_a5044e7359f50ff34f59c7ab201b1847b}{exchange\+Code} property. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_trade_e_t_h_a5e25dec319c2b38bb20e16ac791a556b}\index{TradeETH@{TradeETH}!TradeETH@{TradeETH}}
+\index{TradeETH@{TradeETH}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{TradeETH()}{TradeETH()}}
+{\footnotesize\ttfamily \label{class_trade_e_t_h_a5e25dec319c2b38bb20e16ac791a556b} 
+Trade\+ETH\+::\+Trade\+ETH (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new trade event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_trade_e_t_h_a1123706a4a00c0c099983fbd6bc2dbee}\index{TradeETH@{TradeETH}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \label{class_trade_e_t_h_a1123706a4a00c0c099983fbd6bc2dbee} 
+void Trade\+ETH\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_trade_e_t_h_aca894405419b1c9cb865eb7f5ce37a6b}\index{TradeETH@{TradeETH}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily \label{class_trade_e_t_h_aca894405419b1c9cb865eb7f5ce37a6b} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_trade_e_t_h}{Trade\+ETH}} $>$ Trade\+ETH\+::from\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_trade_e_t_h_a53153439ab22a927b6df15e72f65f59d}\index{TradeETH@{TradeETH}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \label{class_trade_e_t_h_a53153439ab22a927b6df15e72f65f59d} 
+void \texorpdfstring{$\ast$}{*} Trade\+ETH\+::to\+Graal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_event_type_a799e0cd6b15e38e217ae15b5ab9963aa}{Event\+Type}}.
+
+\Hypertarget{class_trade_e_t_h_a726a477ce9d765b6a91d1c5562c8a23a}\index{TradeETH@{TradeETH}!toString@{toString}}
+\index{toString@{toString}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{class_trade_e_t_h_a726a477ce9d765b6a91d1c5562c8a23a} 
+std\+::string Trade\+ETH\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{struct_event_type_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+

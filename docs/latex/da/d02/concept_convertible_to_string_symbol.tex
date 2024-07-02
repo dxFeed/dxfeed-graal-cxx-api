@@ -1,0 +1,29 @@
+\doxysubsection{Convertible\+To\+String\+Symbol Concept Reference}
+\hypertarget{concept_convertible_to_string_symbol}{}\label{concept_convertible_to_string_symbol}\index{ConvertibleToStringSymbol@{ConvertibleToStringSymbol}}
+
+
+A concept describing a string that can be wrapped.  
+
+
+
+
+{\ttfamily \#include $<$String\+Symbol.\+hpp$>$}
+
+\doxysubsubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{concept_convertible_to_string_symbol}{ConvertibleToStringSymbol}}\ =\ }
+\DoxyCodeLine{\ \ \ \ std::is\_convertible\_v<std::decay\_t<T>,\ std::string>\ ||\ std::is\_convertible\_v<std::decay\_t<T>,\ std::string\_view>}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Detailed Description}
+A concept describing a string that can be wrapped. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Probable string symbol type \\
+\hline
+\end{DoxyTemplParams}

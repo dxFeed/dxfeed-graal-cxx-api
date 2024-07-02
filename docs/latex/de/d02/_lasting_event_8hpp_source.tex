@@ -9,29 +9,33 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
 \DoxyCodeLine{00009\ }
-\DoxyCodeLine{00010\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ Represents\ up-\/to-\/date\ information\ about\ some\ condition\ or\ state\ of\ an\ external\ entity\ that\ updates\ in\ real-\/time.}}
-\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ For\ example,\ a\ Quote\ is\ an\ up-\/to-\/date\ information\ about\ best\ bid\ and\ best\ offer\ for\ a\ specific\ symbol.}}
-\DoxyCodeLine{00015\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ Lasting\ events\ are\ conflated\ for\ each\ symbol.\ Last\ event\ for\ each\ symbol\ is\ always\ delivered\ to\ event\ listeners\ on}}
-\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ subscription,\ but\ intermediate\ (next-\/to-\/last)\ events\ are\ not\ queued\ anywhere,\ they\ are\ simply\ discarded\ as\ stale}}
-\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ events.\ More\ recent\ events\ represent\ an\ up-\/to-\/date\ information\ about\ some\ external\ entity.}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Lasting\ events\ can\ be\ used\ with\ DXFeed::getLastEvent()\ and\ DXFeed::getLastEvents\ methods\ to\ retrieve\ last\ events}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ for\ each\ symbol.}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Note,\ that\ subscription\ to\ all\ lasting\ events\ of\ a\ specific\ type\ via\ WildcardSymbol::ALL\ symbol\ object\ does\ not}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ benefit\ from\ the\ above\ advantages\ of\ lasting\ events.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}\ \{}
-\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ LastingEvent\ object}}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}>;}
-\DoxyCodeLine{00029\ \};}
-\DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00012\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ Represents\ up-\/to-\/date\ information\ about\ some\ condition\ or\ state\ of\ an\ external\ entity\ that\ updates\ in\ real-\/time.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ For\ example,\ a\ Quote\ is\ an\ up-\/to-\/date\ information\ about\ best\ bid\ and\ best\ offer\ for\ a\ specific\ symbol.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ Lasting\ events\ are\ conflated\ for\ each\ symbol.\ Last\ event\ for\ each\ symbol\ is\ always\ delivered\ to\ event\ listeners\ on}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ subscription,\ but\ intermediate\ (next-\/to-\/last)\ events\ are\ not\ queued\ anywhere,\ they\ are\ simply\ discarded\ as\ stale}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ events.\ More\ recent\ events\ represent\ an\ up-\/to-\/date\ information\ about\ some\ external\ entity.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ Lasting\ events\ can\ be\ used\ with\ DXFeed::getLastEvent()\ and\ DXFeed::getLastEvents\ methods\ to\ retrieve\ last\ events}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ for\ each\ symbol.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ Note,\ that\ subscription\ to\ all\ lasting\ events\ of\ a\ specific\ type\ via\ WildcardSymbol::ALL\ symbol\ object\ does\ not}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ benefit\ from\ the\ above\ advantages\ of\ lasting\ events.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_lasting_event}{LastingEvent}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ LastingEvent\ object}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{struct_lasting_event}{LastingEvent}}>;}
+\DoxyCodeLine{00031\ \};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

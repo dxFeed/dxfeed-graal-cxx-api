@@ -1,6 +1,7 @@
 var dir_23e95df6d7ade936cce7f265cfa1591c =
 [
     [ "context", "dir_f53ebfea0abfabe8e2e26efef2403985.html", "dir_f53ebfea0abfabe8e2e26efef2403985" ],
+    [ "detail", "dir_18578b910d4f356d35d5bbf0105afbd2.html", "dir_18578b910d4f356d35d5bbf0105afbd2" ],
     [ "managers", "dir_33550b6830f87db1f10931848f08946d.html", "dir_33550b6830f87db1f10931848f08946d" ],
     [ "utils", "dir_2729cc90a8b44deddc1f3ad405a32426.html", "dir_2729cc90a8b44deddc1f3ad405a32426" ],
     [ "CEntryPointErrors.hpp", "df/d03/_c_entry_point_errors_8hpp_source.html", null ],

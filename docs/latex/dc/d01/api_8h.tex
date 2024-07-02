@@ -89,7 +89,7 @@ enum \mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendp
 \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} \mbox{\hyperlink{api_8h_ae48df9f2ba7a207bfe6e9a347830aac7}{dxfc\+\_\+dxendpoint\+\_\+get\+\_\+instance}} (void \texorpdfstring{$\ast$}{*}user\+\_\+data, DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}endpoint)
 \begin{DoxyCompactList}\small\item\em Returns a default application-\/wide singleton instance of dx\+Feed endpoint with a \doxylink{api_8h_abe1b604f492f7466688dfeb93c7a4c38a65d674b01bb72aa7126a2aa83518a721}{FEED} role. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} \mbox{\hyperlink{api_8h_a3a3583465ec73474d2231e4cd5d51ef4}{dxfc\+\_\+dxendpoint\+\_\+get\+\_\+instance2}} (\mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}} role, void \texorpdfstring{$\ast$}{*}user\+\_\+data, DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}endpoint)
-\begin{DoxyCompactList}\small\item\em Returns a default application-\/wide singleton instance of DXEndpoint for a specific role. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Returns a default application-\/wide singleton instance of \doxylink{struct_d_x_endpoint}{DXEndpoint} for a specific role. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} \mbox{\hyperlink{api_8h_a4769a11b82a840ae9cc7bd0c1b6d9840}{dxfc\+\_\+dxendpoint\+\_\+create}} (void \texorpdfstring{$\ast$}{*}user\+\_\+data, DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}endpoint)
 \begin{DoxyCompactList}\small\item\em Creates an endpoint with \doxylink{api_8h_abe1b604f492f7466688dfeb93c7a4c38a65d674b01bb72aa7126a2aa83518a721}{FEED} role. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} \mbox{\hyperlink{api_8h_a104d876f882d0e98c02a7622de1d873f}{dxfc\+\_\+dxendpoint\+\_\+create2}} (\mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}} role, void \texorpdfstring{$\ast$}{*}user\+\_\+data, DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}endpoint)
@@ -136,11 +136,11 @@ dx\+Feed Native C API enums, structs and functions declarations
 
 
 \doxysubsubsection{Typedef Documentation}
-\Hypertarget{api_8h_a25663325acfd720618b3351c9dac6c2a}\label{api_8h_a25663325acfd720618b3351c9dac6c2a} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_t@{dxfc\_dxendpoint\_builder\_t}}
+\Hypertarget{api_8h_a25663325acfd720618b3351c9dac6c2a}\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_t@{dxfc\_dxendpoint\_builder\_t}}
 \index{dxfc\_dxendpoint\_builder\_t@{dxfc\_dxendpoint\_builder\_t}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_builder\_t}{dxfc\_dxendpoint\_builder\_t}}
-{\footnotesize\ttfamily typedef void\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}
+{\footnotesize\ttfamily \label{api_8h_a25663325acfd720618b3351c9dac6c2a} 
+typedef void\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}
 
 
 
@@ -148,11 +148,11 @@ The dx\+Feed endpoint\textquotesingle{}s builder handle.
 
 It is used for searching, adding builders to the "{}registry"{}, deleting builders from the "{}registry"{} and calling functions associated with a particular builder.
 
-The "{}registry"{} is responsible for neatly closing resources, shutting down work, and freeing up memory on shutdown. This can be forced by calling the \doxylink{api_8h_aa8ad96edc6afe4bbb3db497abe9dabd1}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+free()} function. \Hypertarget{api_8h_a972bc5d6b86a836c9119f6a00ed06f62}\label{api_8h_a972bc5d6b86a836c9119f6a00ed06f62} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_state\_change\_listener@{dxfc\_dxendpoint\_state\_change\_listener}}
+The "{}registry"{} is responsible for neatly closing resources, shutting down work, and freeing up memory on shutdown. This can be forced by calling the \doxylink{api_8h_aa8ad96edc6afe4bbb3db497abe9dabd1}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+free()} function. \Hypertarget{api_8h_a972bc5d6b86a836c9119f6a00ed06f62}\index{api.h@{api.h}!dxfc\_dxendpoint\_state\_change\_listener@{dxfc\_dxendpoint\_state\_change\_listener}}
 \index{dxfc\_dxendpoint\_state\_change\_listener@{dxfc\_dxendpoint\_state\_change\_listener}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_state\_change\_listener}{dxfc\_dxendpoint\_state\_change\_listener}}
-{\footnotesize\ttfamily typedef void(\texorpdfstring{$\ast$}{*} dxfc\+\_\+dxendpoint\+\_\+state\+\_\+change\+\_\+listener) (\mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+t}} old\+\_\+state, \mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+t}} new\+\_\+state, void \texorpdfstring{$\ast$}{*}user\+\_\+data)}
+{\footnotesize\ttfamily \label{api_8h_a972bc5d6b86a836c9119f6a00ed06f62} 
+typedef void(\texorpdfstring{$\ast$}{*} dxfc\+\_\+dxendpoint\+\_\+state\+\_\+change\+\_\+listener) (\mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+t}} old\+\_\+state, \mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+t}} new\+\_\+state, void \texorpdfstring{$\ast$}{*}user\+\_\+data)}
 
 
 
@@ -163,11 +163,11 @@ The endpoint current state change listener.
 
 \doxylink{api_8h_a8202d2038f3680a793ac433fd6e48988}{dxfc\+\_\+dxendpoint\+\_\+remove\+\_\+state\+\_\+change\+\_\+listener()} 
 \end{DoxySeeAlso}
-\Hypertarget{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}\label{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_t@{dxfc\_dxendpoint\_t}}
+\Hypertarget{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}\index{api.h@{api.h}!dxfc\_dxendpoint\_t@{dxfc\_dxendpoint\_t}}
 \index{dxfc\_dxendpoint\_t@{dxfc\_dxendpoint\_t}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_t}{dxfc\_dxendpoint\_t}}
-{\footnotesize\ttfamily typedef void\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}
+{\footnotesize\ttfamily \label{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5} 
+typedef void\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}
 
 
 
@@ -178,94 +178,94 @@ It is used for searching, adding endpoints to the "{}registry"{}, deleting endpo
 The "{}registry"{} is responsible for neatly closing resources, shutting down work, and freeing up memory on shutdown. This can be forced by calling the \doxylink{api_8h_af9e2d5345fa2fca816c70bcbeb6cca52}{dxfc\+\_\+dxendpoint\+\_\+free()} function. 
 
 \doxysubsubsection{Enumeration Type Documentation}
-\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_role\_t@{dxfc\_dxendpoint\_role\_t}}
+\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38}\index{api.h@{api.h}!dxfc\_dxendpoint\_role\_t@{dxfc\_dxendpoint\_role\_t}}
 \index{dxfc\_dxendpoint\_role\_t@{dxfc\_dxendpoint\_role\_t}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_role\_t}{dxfc\_dxendpoint\_role\_t}}
-{\footnotesize\ttfamily enum \mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}}}
+{\footnotesize\ttfamily \label{api_8h_abe1b604f492f7466688dfeb93c7a4c38} 
+enum \mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}}}
 
 
 
 Represents the role of endpoint that was specified during its \doxylink{api_8h_a4769a11b82a840ae9cc7bd0c1b6d9840}{creation}. 
 
 \begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_FEED@{DXFC\_DXENDPOINT\_ROLE\_FEED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_FEED@{DXFC\_DXENDPOINT\_ROLE\_FEED}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a65d674b01bb72aa7126a2aa83518a721}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38a65d674b01bb72aa7126a2aa83518a721} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_FEED@{DXFC\_DXENDPOINT\_ROLE\_FEED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_FEED@{DXFC\_DXENDPOINT\_ROLE\_FEED}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a65d674b01bb72aa7126a2aa83518a721}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+FEED&{\ttfamily FEED} endpoint connects to the remote data feed provider and is optimized for real-\/time or delayed data processing ({\bfseries{this is a default role}}). \doxylink{api_8h_a1c59065be04673611642483a4f43dd2f}{dxfc\+\_\+dxendpoint\+\_\+get\+\_\+feed()} function returns feed object that subscribes to the remote data feed provider and receives events from it. When event processing threads cannot keep up (don\textquotesingle{}t have enough CPU time), data is dynamically conflated to minimize latency between received events and their processing time.
 
 This endpoint is automatically connected to the configured data feed. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_ON\_DEMAND\_FEED@{DXFC\_DXENDPOINT\_ROLE\_ON\_DEMAND\_FEED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_ON\_DEMAND\_FEED@{DXFC\_DXENDPOINT\_ROLE\_ON\_DEMAND\_FEED}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38abdd31f35c6cec00afdb3828031386ba7}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38abdd31f35c6cec00afdb3828031386ba7} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_ON\_DEMAND\_FEED@{DXFC\_DXENDPOINT\_ROLE\_ON\_DEMAND\_FEED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_ON\_DEMAND\_FEED@{DXFC\_DXENDPOINT\_ROLE\_ON\_DEMAND\_FEED}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38abdd31f35c6cec00afdb3828031386ba7}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+ON\+\_\+\+DEMAND\+\_\+\+FEED&{\ttfamily ON\+\_\+\+DEMAND\+\_\+\+FEED} endpoint is similar to \doxylink{api_8h_abe1b604f492f7466688dfeb93c7a4c38a65d674b01bb72aa7126a2aa83518a721}{DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+FEED}, but it is designed to be used with dxfc\+\_\+on\+\_\+demand\+\_\+service\+\_\+t for historical data replay only. {\ttfamily ON\+\_\+\+DEMAND\+\_\+\+FEED} endpoint cannot be connected to an ordinary data feed at all. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_STREAM\_FEED@{DXFC\_DXENDPOINT\_ROLE\_STREAM\_FEED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_STREAM\_FEED@{DXFC\_DXENDPOINT\_ROLE\_STREAM\_FEED}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a4978efb9727556636f1af6eb8fb5edd6}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38a4978efb9727556636f1af6eb8fb5edd6} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_STREAM\_FEED@{DXFC\_DXENDPOINT\_ROLE\_STREAM\_FEED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_STREAM\_FEED@{DXFC\_DXENDPOINT\_ROLE\_STREAM\_FEED}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a4978efb9727556636f1af6eb8fb5edd6}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+STREAM\+\_\+\+FEED&{\ttfamily STREAM\+\_\+\+FEED} endpoint is similar to \doxylink{api_8h_abe1b604f492f7466688dfeb93c7a4c38a65d674b01bb72aa7126a2aa83518a721}{DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+FEED} and also connects to the remote data feed provider, but is designed for bulk parsing of data from files. \doxylink{api_8h_a1c59065be04673611642483a4f43dd2f}{dxfc\+\_\+dxendpoint\+\_\+get\+\_\+feed()} function returns feed object that subscribes to the data from the opened files and receives events from them. Events from the files are not conflated, are not skipped, and are processed as fast as possible. Note, that in this role, dxfc\+\_\+dxfeed\+\_\+get\+\_\+last\+\_\+event() function does not work. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_PUBLISHER@{DXFC\_DXENDPOINT\_ROLE\_PUBLISHER}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_PUBLISHER@{DXFC\_DXENDPOINT\_ROLE\_PUBLISHER}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a1f2446b6d147c84356a9b27f4bec9eff}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38a1f2446b6d147c84356a9b27f4bec9eff} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_PUBLISHER@{DXFC\_DXENDPOINT\_ROLE\_PUBLISHER}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_PUBLISHER@{DXFC\_DXENDPOINT\_ROLE\_PUBLISHER}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a1f2446b6d147c84356a9b27f4bec9eff}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+PUBLISHER&{\ttfamily PUBLISHER} endpoint connects to the remote publisher hub (also known as multiplexor) or creates a publisher on the local host. \doxylink{api_8h_aa0f25e2ecc1fc6acf72f15672bdab50e}{dxfc\+\_\+dxendpoint\+\_\+get\+\_\+publisher()} function returns a publisher object that publishes events to all connected feeds. Note, that in this role, dxfc\+\_\+dxfeed\+\_\+get\+\_\+last\+\_\+event() function does not work and time-\/series subscription is not supported.
 
 This endpoint is automatically connected to the configured data feed. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_STREAM\_PUBLISHER@{DXFC\_DXENDPOINT\_ROLE\_STREAM\_PUBLISHER}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_STREAM\_PUBLISHER@{DXFC\_DXENDPOINT\_ROLE\_STREAM\_PUBLISHER}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a7e4eb3b0e4e1a184874d931f1d084ce4}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38a7e4eb3b0e4e1a184874d931f1d084ce4} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_STREAM\_PUBLISHER@{DXFC\_DXENDPOINT\_ROLE\_STREAM\_PUBLISHER}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_STREAM\_PUBLISHER@{DXFC\_DXENDPOINT\_ROLE\_STREAM\_PUBLISHER}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a7e4eb3b0e4e1a184874d931f1d084ce4}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+STREAM\+\_\+\+PUBLISHER&{\ttfamily STREAM\+\_\+\+PUBLISHER} endpoint is similar to \doxylink{api_8h_abe1b604f492f7466688dfeb93c7a4c38a1f2446b6d147c84356a9b27f4bec9eff}{DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+PUBLISHER} and also connects to the remote publisher hub, but is designed for bulk publishing of data. \doxylink{api_8h_aa0f25e2ecc1fc6acf72f15672bdab50e}{dxfc\+\_\+dxendpoint\+\_\+get\+\_\+publisher()} function returns a publisher object that publishes events to all connected feeds. Published events are not conflated, are not skipped, and are processed as fast as possible. Note, that in this role, dxfc\+\_\+dxfeed\+\_\+get\+\_\+last\+\_\+event() function does not work and time-\/series subscription is not supported. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_LOCAL\_HUB@{DXFC\_DXENDPOINT\_ROLE\_LOCAL\_HUB}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_LOCAL\_HUB@{DXFC\_DXENDPOINT\_ROLE\_LOCAL\_HUB}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a843d3387932748d374b6c28f0784e8c1}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38a843d3387932748d374b6c28f0784e8c1} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_ROLE\_LOCAL\_HUB@{DXFC\_DXENDPOINT\_ROLE\_LOCAL\_HUB}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_ROLE\_LOCAL\_HUB@{DXFC\_DXENDPOINT\_ROLE\_LOCAL\_HUB}}}\Hypertarget{api_8h_abe1b604f492f7466688dfeb93c7a4c38a843d3387932748d374b6c28f0784e8c1}\label{api_8h_abe1b604f492f7466688dfeb93c7a4c38} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+ROLE\+\_\+\+LOCAL\+\_\+\+HUB&{\ttfamily LOCAL\+\_\+\+HUB} endpoint is a local hub without ability to establish network connections. Events that are published via \doxylink{api_8h_aa0f25e2ecc1fc6acf72f15672bdab50e}{publisher} are delivered to local \doxylink{api_8h_a1c59065be04673611642483a4f43dd2f}{feed} only. \\
 \hline
 
 \end{DoxyEnumFields}
-\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_state\_t@{dxfc\_dxendpoint\_state\_t}}
+\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1}\index{api.h@{api.h}!dxfc\_dxendpoint\_state\_t@{dxfc\_dxendpoint\_state\_t}}
 \index{dxfc\_dxendpoint\_state\_t@{dxfc\_dxendpoint\_state\_t}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_state\_t}{dxfc\_dxendpoint\_state\_t}}
-{\footnotesize\ttfamily enum \mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+t}}}
+{\footnotesize\ttfamily \label{api_8h_a3a7f931ee286a227711ec5dd530323c1} 
+enum \mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+t}}}
 
 
 
 Represents the current state of endpoint. 
 
 \begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_STATE\_NOT\_CONNECTED@{DXFC\_DXENDPOINT\_STATE\_NOT\_CONNECTED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_STATE\_NOT\_CONNECTED@{DXFC\_DXENDPOINT\_STATE\_NOT\_CONNECTED}}}\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1a52030993f486cf3c6610c51375383f96}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1a52030993f486cf3c6610c51375383f96} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_STATE\_NOT\_CONNECTED@{DXFC\_DXENDPOINT\_STATE\_NOT\_CONNECTED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_STATE\_NOT\_CONNECTED@{DXFC\_DXENDPOINT\_STATE\_NOT\_CONNECTED}}}\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1a52030993f486cf3c6610c51375383f96}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+STATE\+\_\+\+NOT\+\_\+\+CONNECTED&Endpoint was created by is not connected to remote endpoints. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_STATE\_CONNECTING@{DXFC\_DXENDPOINT\_STATE\_CONNECTING}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_STATE\_CONNECTING@{DXFC\_DXENDPOINT\_STATE\_CONNECTING}}}\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1a7be9a33e9adb20ef55995ef0540bd251}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1a7be9a33e9adb20ef55995ef0540bd251} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_STATE\_CONNECTING@{DXFC\_DXENDPOINT\_STATE\_CONNECTING}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_STATE\_CONNECTING@{DXFC\_DXENDPOINT\_STATE\_CONNECTING}}}\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1a7be9a33e9adb20ef55995ef0540bd251}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+STATE\+\_\+\+CONNECTING&The \doxylink{api_8h_ace008e47023b5b461ae1e342dc029371}{connect} function was called to establish connection to remove endpoint, but connection is not actually established yet or was lost. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_STATE\_CONNECTED@{DXFC\_DXENDPOINT\_STATE\_CONNECTED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_STATE\_CONNECTED@{DXFC\_DXENDPOINT\_STATE\_CONNECTED}}}\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1af97d2a4b9a6c3ecfde7ef46735a92f74}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1af97d2a4b9a6c3ecfde7ef46735a92f74} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_STATE\_CONNECTED@{DXFC\_DXENDPOINT\_STATE\_CONNECTED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_STATE\_CONNECTED@{DXFC\_DXENDPOINT\_STATE\_CONNECTED}}}\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1af97d2a4b9a6c3ecfde7ef46735a92f74}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+STATE\+\_\+\+CONNECTED&The connection to remote endpoint is established. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_STATE\_CLOSED@{DXFC\_DXENDPOINT\_STATE\_CLOSED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_STATE\_CLOSED@{DXFC\_DXENDPOINT\_STATE\_CLOSED}}}\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1a3b1cde06ba459c4718cb9ec8b72531fb}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1a3b1cde06ba459c4718cb9ec8b72531fb} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_DXENDPOINT\_STATE\_CLOSED@{DXFC\_DXENDPOINT\_STATE\_CLOSED}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_DXENDPOINT\_STATE\_CLOSED@{DXFC\_DXENDPOINT\_STATE\_CLOSED}}}\Hypertarget{api_8h_a3a7f931ee286a227711ec5dd530323c1a3b1cde06ba459c4718cb9ec8b72531fb}\label{api_8h_a3a7f931ee286a227711ec5dd530323c1} 
 DXFC\+\_\+\+DXENDPOINT\+\_\+\+STATE\+\_\+\+CLOSED&Endpoint was \doxylink{api_8h_a7d5c5ac08f16871ba6c9eee87de67b31}{closed}. \\
 \hline
 
 \end{DoxyEnumFields}
-\Hypertarget{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}\label{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2} 
-\index{api.h@{api.h}!dxfc\_error\_code\_t@{dxfc\_error\_code\_t}}
+\Hypertarget{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}\index{api.h@{api.h}!dxfc\_error\_code\_t@{dxfc\_error\_code\_t}}
 \index{dxfc\_error\_code\_t@{dxfc\_error\_code\_t}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_error\_code\_t}{dxfc\_error\_code\_t}}
-{\footnotesize\ttfamily enum \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}}}
+{\footnotesize\ttfamily \label{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2} 
+enum \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}}}
 
 
 
 List of error codes. 
 
 \begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_EC\_SUCCESS@{DXFC\_EC\_SUCCESS}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_EC\_SUCCESS@{DXFC\_EC\_SUCCESS}}}\Hypertarget{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}\label{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_EC\_SUCCESS@{DXFC\_EC\_SUCCESS}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_EC\_SUCCESS@{DXFC\_EC\_SUCCESS}}}\Hypertarget{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}\label{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2} 
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS&OK. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_EC\_G\_ERR@{DXFC\_EC\_G\_ERR}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_EC\_G\_ERR@{DXFC\_EC\_G\_ERR}}}\Hypertarget{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a9958980fc36fadb79d45a30c13a4a65a}\label{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a9958980fc36fadb79d45a30c13a4a65a} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_EC\_G\_ERR@{DXFC\_EC\_G\_ERR}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_EC\_G\_ERR@{DXFC\_EC\_G\_ERR}}}\Hypertarget{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a9958980fc36fadb79d45a30c13a4a65a}\label{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2} 
 DXFC\+\_\+\+EC\+\_\+\+G\+\_\+\+ERR&dx\+Feed Graal Native API error. \\
 \hline
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_EC\_ERROR@{DXFC\_EC\_ERROR}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_EC\_ERROR@{DXFC\_EC\_ERROR}}}\Hypertarget{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}\label{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1} 
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DXFC\_EC\_ERROR@{DXFC\_EC\_ERROR}!api.h@{api.h}}\index{api.h@{api.h}!DXFC\_EC\_ERROR@{DXFC\_EC\_ERROR}}}\Hypertarget{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}\label{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2} 
 DXFC\+\_\+\+EC\+\_\+\+ERROR&The error returned if the current operation cannot be completed. \\
 \hline
 
@@ -273,11 +273,11 @@ DXFC\+\_\+\+EC\+\_\+\+ERROR&The error returned if the current operation cannot b
 
 
 \doxysubsubsection{Function Documentation}
-\Hypertarget{api_8h_af2f5c570bbf2897082c2ff8c3dc8d784}\label{api_8h_af2f5c570bbf2897082c2ff8c3dc8d784} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_add\_state\_change\_listener@{dxfc\_dxendpoint\_add\_state\_change\_listener}}
+\Hypertarget{api_8h_af2f5c570bbf2897082c2ff8c3dc8d784}\index{api.h@{api.h}!dxfc\_dxendpoint\_add\_state\_change\_listener@{dxfc\_dxendpoint\_add\_state\_change\_listener}}
 \index{dxfc\_dxendpoint\_add\_state\_change\_listener@{dxfc\_dxendpoint\_add\_state\_change\_listener}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_add\_state\_change\_listener()}{dxfc\_dxendpoint\_add\_state\_change\_listener()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+add\+\_\+state\+\_\+change\+\_\+listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{\mbox{\hyperlink{api_8h_a972bc5d6b86a836c9119f6a00ed06f62}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+change\+\_\+listener}}}]{listener }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_af2f5c570bbf2897082c2ff8c3dc8d784} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+add\+\_\+state\+\_\+change\+\_\+listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{\mbox{\hyperlink{api_8h_a972bc5d6b86a836c9119f6a00ed06f62}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+change\+\_\+listener}}}]{listener}{}\end{DoxyParamCaption})}
 
 
 
@@ -295,11 +295,15 @@ Installed listener can be removed by \doxylink{api_8h_a8202d2038f3680a793ac433fd
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a1efb70ae4cc208bcfe65150b5c345612}\label{api_8h_a1efb70ae4cc208bcfe65150b5c345612} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_await\_not\_connected@{dxfc\_dxendpoint\_await\_not\_connected}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a1efb70ae4cc208bcfe65150b5c345612}\index{api.h@{api.h}!dxfc\_dxendpoint\_await\_not\_connected@{dxfc\_dxendpoint\_await\_not\_connected}}
 \index{dxfc\_dxendpoint\_await\_not\_connected@{dxfc\_dxendpoint\_await\_not\_connected}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_await\_not\_connected()}{dxfc\_dxendpoint\_await\_not\_connected()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+await\+\_\+not\+\_\+connected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a1efb70ae4cc208bcfe65150b5c345612} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+await\+\_\+not\+\_\+connected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -317,11 +321,15 @@ It is a signal that any files that were opened with \doxylink{api_8h_ace008e4702
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_afcd8a7bdbfd180aaed93a75ea844a88c}\label{api_8h_afcd8a7bdbfd180aaed93a75ea844a88c} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_await\_processed@{dxfc\_dxendpoint\_await\_processed}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_afcd8a7bdbfd180aaed93a75ea844a88c}\index{api.h@{api.h}!dxfc\_dxendpoint\_await\_processed@{dxfc\_dxendpoint\_await\_processed}}
 \index{dxfc\_dxendpoint\_await\_processed@{dxfc\_dxendpoint\_await\_processed}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_await\_processed()}{dxfc\_dxendpoint\_await\_processed()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+await\+\_\+processed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_afcd8a7bdbfd180aaed93a75ea844a88c} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+await\+\_\+processed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -337,11 +345,15 @@ This is important when writing data to file via "{}tape\+:..."{} connector to ma
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a6903c8b4990c1fdff8ce7ecf57fb621b}\label{api_8h_a6903c8b4990c1fdff8ce7ecf57fb621b} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_build@{dxfc\_dxendpoint\_builder\_build}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a6903c8b4990c1fdff8ce7ecf57fb621b}\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_build@{dxfc\_dxendpoint\_builder\_build}}
 \index{dxfc\_dxendpoint\_builder\_build@{dxfc\_dxendpoint\_builder\_build}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_builder\_build()}{dxfc\_dxendpoint\_builder\_build()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+build (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder,  }\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a6903c8b4990c1fdff8ce7ecf57fb621b} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+build (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -359,11 +371,15 @@ Builds the new dx\+Feed endpoint instance.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_aa8ad96edc6afe4bbb3db497abe9dabd1}\label{api_8h_aa8ad96edc6afe4bbb3db497abe9dabd1} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_free@{dxfc\_dxendpoint\_builder\_free}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_aa8ad96edc6afe4bbb3db497abe9dabd1}\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_free@{dxfc\_dxendpoint\_builder\_free}}
 \index{dxfc\_dxendpoint\_builder\_free@{dxfc\_dxendpoint\_builder\_free}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_builder\_free()}{dxfc\_dxendpoint\_builder\_free()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_aa8ad96edc6afe4bbb3db497abe9dabd1} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder}{}\end{DoxyParamCaption})}
 
 
 
@@ -377,11 +393,15 @@ Removes a builder from the registry.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a759d64f797776f44ad0892fcc9f06b59}\label{api_8h_a759d64f797776f44ad0892fcc9f06b59} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_supports\_property@{dxfc\_dxendpoint\_builder\_supports\_property}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a759d64f797776f44ad0892fcc9f06b59}\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_supports\_property@{dxfc\_dxendpoint\_builder\_supports\_property}}
 \index{dxfc\_dxendpoint\_builder\_supports\_property@{dxfc\_dxendpoint\_builder\_supports\_property}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_builder\_supports\_property()}{dxfc\_dxendpoint\_builder\_supports\_property()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+supports\+\_\+property (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{key,  }\item[{DXFC\+\_\+\+OUT int \texorpdfstring{$\ast$}{*}}]{supports }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a759d64f797776f44ad0892fcc9f06b59} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+supports\+\_\+property (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{key}{, }\item[{DXFC\+\_\+\+OUT int \texorpdfstring{$\ast$}{*}}]{supports}{}\end{DoxyParamCaption})}
 
 
 
@@ -399,11 +419,15 @@ Checks if a property is supported.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a50618c293b5a95435af3cbe52bc535e5}\label{api_8h_a50618c293b5a95435af3cbe52bc535e5} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_with\_name@{dxfc\_dxendpoint\_builder\_with\_name}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a50618c293b5a95435af3cbe52bc535e5}\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_with\_name@{dxfc\_dxendpoint\_builder\_with\_name}}
 \index{dxfc\_dxendpoint\_builder\_with\_name@{dxfc\_dxendpoint\_builder\_with\_name}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_builder\_with\_name()}{dxfc\_dxendpoint\_builder\_with\_name()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+with\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a50618c293b5a95435af3cbe52bc535e5} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+with\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{name}{}\end{DoxyParamCaption})}
 
 
 
@@ -419,11 +443,15 @@ Changes name that is used to distinguish multiple endpoints in the same process 
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_acbbe764c1365a5265d8008680484516d}\label{api_8h_acbbe764c1365a5265d8008680484516d} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_with\_properties@{dxfc\_dxendpoint\_builder\_with\_properties}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_acbbe764c1365a5265d8008680484516d}\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_with\_properties@{dxfc\_dxendpoint\_builder\_with\_properties}}
 \index{dxfc\_dxendpoint\_builder\_with\_properties@{dxfc\_dxendpoint\_builder\_with\_properties}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_builder\_with\_properties()}{dxfc\_dxendpoint\_builder\_with\_properties()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+with\+\_\+properties (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder,  }\item[{const \mbox{\hyperlink{structdxfc__dxendpoint__property__t}{dxfc\+\_\+dxendpoint\+\_\+property\+\_\+t}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{properties,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_acbbe764c1365a5265d8008680484516d} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+with\+\_\+properties (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder}{, }\item[{const \mbox{\hyperlink{structdxfc__dxendpoint__property__t}{dxfc\+\_\+dxendpoint\+\_\+property\+\_\+t}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{properties}{, }\item[{size\+\_\+t}]{size}{}\end{DoxyParamCaption})}
 
 
 
@@ -441,11 +469,15 @@ Sets all supported properties from the provided properties object.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_afd31b67e27972b1f279b601188958454}\label{api_8h_afd31b67e27972b1f279b601188958454} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_with\_property@{dxfc\_dxendpoint\_builder\_with\_property}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}, \mbox{\hyperlink{structdxfc__dxendpoint__property__t_a6ea1c0f8ff02373d2d2a44c4a105f8ef}{dxfc\+\_\+dxendpoint\+\_\+property\+\_\+t\+::key}}, and \mbox{\hyperlink{structdxfc__dxendpoint__property__t_ad6d94a30432be31e34c572d0a1626138}{dxfc\+\_\+dxendpoint\+\_\+property\+\_\+t\+::value}}.
+
+\Hypertarget{api_8h_afd31b67e27972b1f279b601188958454}\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_with\_property@{dxfc\_dxendpoint\_builder\_with\_property}}
 \index{dxfc\_dxendpoint\_builder\_with\_property@{dxfc\_dxendpoint\_builder\_with\_property}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_builder\_with\_property()}{dxfc\_dxendpoint\_builder\_with\_property()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+with\+\_\+property (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{key,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{value }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_afd31b67e27972b1f279b601188958454} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+with\+\_\+property (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{key}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{value}{}\end{DoxyParamCaption})}
 
 
 
@@ -465,11 +497,15 @@ Unsupported properties are ignored.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a1c6505edb58bce60bc04eb7de6812f65}\label{api_8h_a1c6505edb58bce60bc04eb7de6812f65} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_with\_role@{dxfc\_dxendpoint\_builder\_with\_role}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a1c6505edb58bce60bc04eb7de6812f65}\index{api.h@{api.h}!dxfc\_dxendpoint\_builder\_with\_role@{dxfc\_dxendpoint\_builder\_with\_role}}
 \index{dxfc\_dxendpoint\_builder\_with\_role@{dxfc\_dxendpoint\_builder\_with\_role}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_builder\_with\_role()}{dxfc\_dxendpoint\_builder\_with\_role()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+with\+\_\+role (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder,  }\item[{\mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}}}]{role }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a1c6505edb58bce60bc04eb7de6812f65} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+with\+\_\+role (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}}}]{builder}{, }\item[{\mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}}}]{role}{}\end{DoxyParamCaption})}
 
 
 
@@ -487,11 +523,15 @@ Default role is \doxylink{api_8h_abe1b604f492f7466688dfeb93c7a4c38a65d674b01bb72
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a7d5c5ac08f16871ba6c9eee87de67b31}\label{api_8h_a7d5c5ac08f16871ba6c9eee87de67b31} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_close@{dxfc\_dxendpoint\_close}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a7d5c5ac08f16871ba6c9eee87de67b31}\index{api.h@{api.h}!dxfc\_dxendpoint\_close@{dxfc\_dxendpoint\_close}}
 \index{dxfc\_dxendpoint\_close@{dxfc\_dxendpoint\_close}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_close()}{dxfc\_dxendpoint\_close()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+close (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a7d5c5ac08f16871ba6c9eee87de67b31} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+close (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -509,11 +549,15 @@ The endpoint \doxylink{api_8h_aa559abe7ad87a7718d7e8ba8bdc7ca12}{state} immediat
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_adadb2ab86d35e0ab37da84d4c4a4027a}\label{api_8h_adadb2ab86d35e0ab37da84d4c4a4027a} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_close\_and\_await\_termination@{dxfc\_dxendpoint\_close\_and\_await\_termination}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_adadb2ab86d35e0ab37da84d4c4a4027a}\index{api.h@{api.h}!dxfc\_dxendpoint\_close\_and\_await\_termination@{dxfc\_dxendpoint\_close\_and\_await\_termination}}
 \index{dxfc\_dxendpoint\_close\_and\_await\_termination@{dxfc\_dxendpoint\_close\_and\_await\_termination}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_close\_and\_await\_termination()}{dxfc\_dxendpoint\_close\_and\_await\_termination()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+close\+\_\+and\+\_\+await\+\_\+termination (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_adadb2ab86d35e0ab37da84d4c4a4027a} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+close\+\_\+and\+\_\+await\+\_\+termination (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -531,11 +575,15 @@ This function performs the same actions as \doxylink{api_8h_a7d5c5ac08f16871ba6c
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_ace008e47023b5b461ae1e342dc029371}\label{api_8h_ace008e47023b5b461ae1e342dc029371} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_connect@{dxfc\_dxendpoint\_connect}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_ace008e47023b5b461ae1e342dc029371}\index{api.h@{api.h}!dxfc\_dxendpoint\_connect@{dxfc\_dxendpoint\_connect}}
 \index{dxfc\_dxendpoint\_connect@{dxfc\_dxendpoint\_connect}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_connect()}{dxfc\_dxendpoint\_connect()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{address }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_ace008e47023b5b461ae1e342dc029371} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+connect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{address}{}\end{DoxyParamCaption})}
 
 
 
@@ -567,11 +615,15 @@ For premium services access credentials must be configured before invocation of 
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a4769a11b82a840ae9cc7bd0c1b6d9840}\label{api_8h_a4769a11b82a840ae9cc7bd0c1b6d9840} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_create@{dxfc\_dxendpoint\_create}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a4769a11b82a840ae9cc7bd0c1b6d9840}\index{api.h@{api.h}!dxfc\_dxendpoint\_create@{dxfc\_dxendpoint\_create}}
 \index{dxfc\_dxendpoint\_create@{dxfc\_dxendpoint\_create}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_create()}{dxfc\_dxendpoint\_create()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+create (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a4769a11b82a840ae9cc7bd0c1b6d9840} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+create (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -598,11 +650,15 @@ The result of this function is the same as {\bfseries{{\ttfamily dxfc\+\_\+dxend
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a104d876f882d0e98c02a7622de1d873f}\label{api_8h_a104d876f882d0e98c02a7622de1d873f} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_create2@{dxfc\_dxendpoint\_create2}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a104d876f882d0e98c02a7622de1d873f}\index{api.h@{api.h}!dxfc\_dxendpoint\_create2@{dxfc\_dxendpoint\_create2}}
 \index{dxfc\_dxendpoint\_create2@{dxfc\_dxendpoint\_create2}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_create2()}{dxfc\_dxendpoint\_create2()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+create2 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}}}]{role,  }\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a104d876f882d0e98c02a7622de1d873f} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+create2 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}}}]{role}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -632,11 +688,15 @@ This is a shortcut to
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_ae8f8de9acc4ae21717783edf5edf1b54}\label{api_8h_ae8f8de9acc4ae21717783edf5edf1b54} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_disconnect@{dxfc\_dxendpoint\_disconnect}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_ae8f8de9acc4ae21717783edf5edf1b54}\index{api.h@{api.h}!dxfc\_dxendpoint\_disconnect@{dxfc\_dxendpoint\_disconnect}}
 \index{dxfc\_dxendpoint\_disconnect@{dxfc\_dxendpoint\_disconnect}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_disconnect()}{dxfc\_dxendpoint\_disconnect()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+disconnect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_ae8f8de9acc4ae21717783edf5edf1b54} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+disconnect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -654,11 +714,15 @@ This function does not release all resources that are associated with this endpo
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a4566e396ed1ca8959fac11294297be2b}\label{api_8h_a4566e396ed1ca8959fac11294297be2b} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_disconnect\_and\_clear@{dxfc\_dxendpoint\_disconnect\_and\_clear}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a4566e396ed1ca8959fac11294297be2b}\index{api.h@{api.h}!dxfc\_dxendpoint\_disconnect\_and\_clear@{dxfc\_dxendpoint\_disconnect\_and\_clear}}
 \index{dxfc\_dxendpoint\_disconnect\_and\_clear@{dxfc\_dxendpoint\_disconnect\_and\_clear}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_disconnect\_and\_clear()}{dxfc\_dxendpoint\_disconnect\_and\_clear()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+disconnect\+\_\+and\+\_\+clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a4566e396ed1ca8959fac11294297be2b} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+disconnect\+\_\+and\+\_\+clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -676,11 +740,15 @@ This function does not release all resources that are associated with this endpo
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_af9e2d5345fa2fca816c70bcbeb6cca52}\label{api_8h_af9e2d5345fa2fca816c70bcbeb6cca52} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_free@{dxfc\_dxendpoint\_free}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_af9e2d5345fa2fca816c70bcbeb6cca52}\index{api.h@{api.h}!dxfc\_dxendpoint\_free@{dxfc\_dxendpoint\_free}}
 \index{dxfc\_dxendpoint\_free@{dxfc\_dxendpoint\_free}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_free()}{dxfc\_dxendpoint\_free()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_af9e2d5345fa2fca816c70bcbeb6cca52} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -694,11 +762,15 @@ Removes the dx\+Feed endpoint from the registry.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a1c59065be04673611642483a4f43dd2f}\label{api_8h_a1c59065be04673611642483a4f43dd2f} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_feed@{dxfc\_dxendpoint\_get\_feed}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a1c59065be04673611642483a4f43dd2f}\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_feed@{dxfc\_dxendpoint\_get\_feed}}
 \index{dxfc\_dxendpoint\_get\_feed@{dxfc\_dxendpoint\_get\_feed}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_get\_feed()}{dxfc\_dxendpoint\_get\_feed()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+feed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_ad5282a530c4390f30a030d31fc52fd30}{dxfc\+\_\+dxfeed\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{feed }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a1c59065be04673611642483a4f43dd2f} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+feed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_ad5282a530c4390f30a030d31fc52fd30}{dxfc\+\_\+dxfeed\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{feed}{}\end{DoxyParamCaption})}
 
 
 \begin{DoxyParams}[1]{Parameters}
@@ -710,11 +782,15 @@ DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_ae48df9f2ba7a207bfe6e9a347830aac7}\label{api_8h_ae48df9f2ba7a207bfe6e9a347830aac7} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_instance@{dxfc\_dxendpoint\_get\_instance}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_ae48df9f2ba7a207bfe6e9a347830aac7}\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_instance@{dxfc\_dxendpoint\_get\_instance}}
 \index{dxfc\_dxendpoint\_get\_instance@{dxfc\_dxendpoint\_get\_instance}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_get\_instance()}{dxfc\_dxendpoint\_get\_instance()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+instance (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_ae48df9f2ba7a207bfe6e9a347830aac7} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+instance (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -741,15 +817,19 @@ This is a shortcut to
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a3a3583465ec73474d2231e4cd5d51ef4}\label{api_8h_a3a3583465ec73474d2231e4cd5d51ef4} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_instance2@{dxfc\_dxendpoint\_get\_instance2}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a3a3583465ec73474d2231e4cd5d51ef4}\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_instance2@{dxfc\_dxendpoint\_get\_instance2}}
 \index{dxfc\_dxendpoint\_get\_instance2@{dxfc\_dxendpoint\_get\_instance2}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_get\_instance2()}{dxfc\_dxendpoint\_get\_instance2()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+instance2 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}}}]{role,  }\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a3a3583465ec73474d2231e4cd5d51ef4} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+instance2 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}}}]{role}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{user\+\_\+data}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
-Returns a default application-\/wide singleton instance of DXEndpoint for a specific role. 
+Returns a default application-\/wide singleton instance of \doxylink{struct_d_x_endpoint}{DXEndpoint} for a specific role. 
 
 Most applications use only a single data-\/source and should rely on this function to get one. This function creates an endpoint with the corresponding role on the first use with a default configuration. You can provide configuration via system properties.
 
@@ -769,11 +849,15 @@ If you need a fully programmatic configuration and/or multiple endpoints of the 
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_aa0f25e2ecc1fc6acf72f15672bdab50e}\label{api_8h_aa0f25e2ecc1fc6acf72f15672bdab50e} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_publisher@{dxfc\_dxendpoint\_get\_publisher}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_aa0f25e2ecc1fc6acf72f15672bdab50e}\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_publisher@{dxfc\_dxendpoint\_get\_publisher}}
 \index{dxfc\_dxendpoint\_get\_publisher@{dxfc\_dxendpoint\_get\_publisher}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_get\_publisher()}{dxfc\_dxendpoint\_get\_publisher()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+publisher (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_abedee1ed118a6e58d4266865a538004d}{dxfc\+\_\+dxpublisher\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{publisher }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_aa0f25e2ecc1fc6acf72f15672bdab50e} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+publisher (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_abedee1ed118a6e58d4266865a538004d}{dxfc\+\_\+dxpublisher\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{publisher}{}\end{DoxyParamCaption})}
 
 
 \begin{DoxyParams}[1]{Parameters}
@@ -785,11 +869,15 @@ DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_afb7b2496ba889fe8c6a0ae49238c6860}\label{api_8h_afb7b2496ba889fe8c6a0ae49238c6860} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_role@{dxfc\_dxendpoint\_get\_role}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_afb7b2496ba889fe8c6a0ae49238c6860}\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_role@{dxfc\_dxendpoint\_get\_role}}
 \index{dxfc\_dxendpoint\_get\_role@{dxfc\_dxendpoint\_get\_role}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_get\_role()}{dxfc\_dxendpoint\_get\_role()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+role (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{role }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_afb7b2496ba889fe8c6a0ae49238c6860} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+role (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_abe1b604f492f7466688dfeb93c7a4c38}{dxfc\+\_\+dxendpoint\+\_\+role\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{role}{}\end{DoxyParamCaption})}
 
 
 
@@ -805,11 +893,15 @@ Returns the role of this endpoint.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_aa559abe7ad87a7718d7e8ba8bdc7ca12}\label{api_8h_aa559abe7ad87a7718d7e8ba8bdc7ca12} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_state@{dxfc\_dxendpoint\_get\_state}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_aa559abe7ad87a7718d7e8ba8bdc7ca12}\index{api.h@{api.h}!dxfc\_dxendpoint\_get\_state@{dxfc\_dxendpoint\_get\_state}}
 \index{dxfc\_dxendpoint\_get\_state@{dxfc\_dxendpoint\_get\_state}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_get\_state()}{dxfc\_dxendpoint\_get\_state()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+state (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{state }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_aa559abe7ad87a7718d7e8ba8bdc7ca12} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+get\+\_\+state (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a3a7f931ee286a227711ec5dd530323c1}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{state}{}\end{DoxyParamCaption})}
 
 
 
@@ -825,11 +917,15 @@ Returns the state of this endpoint.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_ad00796bca816df26db2c0f87ae577181}\label{api_8h_ad00796bca816df26db2c0f87ae577181} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_new\_builder@{dxfc\_dxendpoint\_new\_builder}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_ad00796bca816df26db2c0f87ae577181}\index{api.h@{api.h}!dxfc\_dxendpoint\_new\_builder@{dxfc\_dxendpoint\_new\_builder}}
 \index{dxfc\_dxendpoint\_new\_builder@{dxfc\_dxendpoint\_new\_builder}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_new\_builder()}{dxfc\_dxendpoint\_new\_builder()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+new\+\_\+builder (\begin{DoxyParamCaption}\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{builder }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_ad00796bca816df26db2c0f87ae577181} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+new\+\_\+builder (\begin{DoxyParamCaption}\item[{DXFC\+\_\+\+OUT \mbox{\hyperlink{api_8h_a25663325acfd720618b3351c9dac6c2a}{dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{builder}{}\end{DoxyParamCaption})}
 
 
 
@@ -845,11 +941,15 @@ Use dxfc\+\_\+dxendpoint\+\_\+builder\+\_\+build to build an instance of dx\+Fee
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a24e7f112e59ede83649ed59571ce3f35}\label{api_8h_a24e7f112e59ede83649ed59571ce3f35} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_password@{dxfc\_dxendpoint\_password}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a24e7f112e59ede83649ed59571ce3f35}\index{api.h@{api.h}!dxfc\_dxendpoint\_password@{dxfc\_dxendpoint\_password}}
 \index{dxfc\_dxendpoint\_password@{dxfc\_dxendpoint\_password}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_password()}{dxfc\_dxendpoint\_password()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+password (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{password }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a24e7f112e59ede83649ed59571ce3f35} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+password (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{password}{}\end{DoxyParamCaption})}
 
 
 
@@ -867,11 +967,15 @@ This function shall be called before \doxylink{api_8h_ace008e47023b5b461ae1e342d
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a6333bde9cba38623433cb8c10b00e900}\label{api_8h_a6333bde9cba38623433cb8c10b00e900} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_reconnect@{dxfc\_dxendpoint\_reconnect}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a6333bde9cba38623433cb8c10b00e900}\index{api.h@{api.h}!dxfc\_dxendpoint\_reconnect@{dxfc\_dxendpoint\_reconnect}}
 \index{dxfc\_dxendpoint\_reconnect@{dxfc\_dxendpoint\_reconnect}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_reconnect()}{dxfc\_dxendpoint\_reconnect()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+reconnect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a6333bde9cba38623433cb8c10b00e900} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+reconnect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{}\end{DoxyParamCaption})}
 
 
 
@@ -891,11 +995,15 @@ The function initiates a short-\/path way for reconnecting, so whether observers
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a8202d2038f3680a793ac433fd6e48988}\label{api_8h_a8202d2038f3680a793ac433fd6e48988} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_remove\_state\_change\_listener@{dxfc\_dxendpoint\_remove\_state\_change\_listener}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a8202d2038f3680a793ac433fd6e48988}\index{api.h@{api.h}!dxfc\_dxendpoint\_remove\_state\_change\_listener@{dxfc\_dxendpoint\_remove\_state\_change\_listener}}
 \index{dxfc\_dxendpoint\_remove\_state\_change\_listener@{dxfc\_dxendpoint\_remove\_state\_change\_listener}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_remove\_state\_change\_listener()}{dxfc\_dxendpoint\_remove\_state\_change\_listener()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+remove\+\_\+state\+\_\+change\+\_\+listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{\mbox{\hyperlink{api_8h_a972bc5d6b86a836c9119f6a00ed06f62}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+change\+\_\+listener}}}]{listener }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a8202d2038f3680a793ac433fd6e48988} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+remove\+\_\+state\+\_\+change\+\_\+listener (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{\mbox{\hyperlink{api_8h_a972bc5d6b86a836c9119f6a00ed06f62}{dxfc\+\_\+dxendpoint\+\_\+state\+\_\+change\+\_\+listener}}}]{listener}{}\end{DoxyParamCaption})}
 
 
 
@@ -913,11 +1021,15 @@ It removes the listener that was previously installed with \doxylink{api_8h_af2f
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a7e558df9424a2008d54a15f74b8fe165}\label{api_8h_a7e558df9424a2008d54a15f74b8fe165} 
-\index{api.h@{api.h}!dxfc\_dxendpoint\_user@{dxfc\_dxendpoint\_user}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a7e558df9424a2008d54a15f74b8fe165}\index{api.h@{api.h}!dxfc\_dxendpoint\_user@{dxfc\_dxendpoint\_user}}
 \index{dxfc\_dxendpoint\_user@{dxfc\_dxendpoint\_user}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_dxendpoint\_user()}{dxfc\_dxendpoint\_user()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+user (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{user }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a7e558df9424a2008d54a15f74b8fe165} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+dxendpoint\+\_\+user (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{api_8h_a53013d2e86fe0b5a0877e4d56dd946e5}{dxfc\+\_\+dxendpoint\+\_\+t}}}]{endpoint}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{user}{}\end{DoxyParamCaption})}
 
 
 
@@ -935,11 +1047,15 @@ This function shall be called before \doxylink{api_8h_ace008e47023b5b461ae1e342d
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a734bee736738ae692dfa9dde3e6f1da6}\label{api_8h_a734bee736738ae692dfa9dde3e6f1da6} 
-\index{api.h@{api.h}!dxfc\_system\_get\_property@{dxfc\_system\_get\_property}}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, and \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}.
+
+\Hypertarget{api_8h_a734bee736738ae692dfa9dde3e6f1da6}\index{api.h@{api.h}!dxfc\_system\_get\_property@{dxfc\_system\_get\_property}}
 \index{dxfc\_system\_get\_property@{dxfc\_system\_get\_property}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_system\_get\_property()}{dxfc\_system\_get\_property()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+system\+\_\+get\+\_\+property (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{key,  }\item[{DXFC\+\_\+\+OUT char \texorpdfstring{$\ast$}{*}}]{buffer,  }\item[{size\+\_\+t}]{buffer\+\_\+size }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a734bee736738ae692dfa9dde3e6f1da6} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+system\+\_\+get\+\_\+property (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{key}{, }\item[{DXFC\+\_\+\+OUT char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{size\+\_\+t}]{buffer\+\_\+size}{}\end{DoxyParamCaption})}
 
 
 
@@ -959,11 +1075,11 @@ The buffer must be allocated in advance. If the system property value does not f
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
-\Hypertarget{api_8h_a722e328b10a5bab3efd3e9c8aee5e976}\label{api_8h_a722e328b10a5bab3efd3e9c8aee5e976} 
-\index{api.h@{api.h}!dxfc\_system\_set\_property@{dxfc\_system\_set\_property}}
+\Hypertarget{api_8h_a722e328b10a5bab3efd3e9c8aee5e976}\index{api.h@{api.h}!dxfc\_system\_set\_property@{dxfc\_system\_set\_property}}
 \index{dxfc\_system\_set\_property@{dxfc\_system\_set\_property}!api.h@{api.h}}
 \doxyparagraph{\texorpdfstring{dxfc\_system\_set\_property()}{dxfc\_system\_set\_property()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+system\+\_\+set\+\_\+property (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{key,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{value }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{api_8h_a722e328b10a5bab3efd3e9c8aee5e976} 
+\mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2}{dxfc\+\_\+error\+\_\+code\+\_\+t}} dxfc\+\_\+system\+\_\+set\+\_\+property (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{key}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{value}{}\end{DoxyParamCaption})}
 
 
 
@@ -979,3 +1095,7 @@ Sets the system property indicated by the specified key.
 \begin{DoxyReturn}{Returns}
 DXFC\+\_\+\+EC\+\_\+\+SUCCESS -\/ if the operation was successful; otherwise -\/ DXFC\+\_\+\+EC\+\_\+\+ERROR. 
 \end{DoxyReturn}
+
+
+References \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a1cc1fc1901c33f4ee3e652d045e3b2f1}{DXFC\+\_\+\+EC\+\_\+\+ERROR}}, \mbox{\hyperlink{api_8h_a6d50a9a293bc5378bd8f9fea7d8db4b2a543e126f7c83a9482f5736b16cc675c8}{DXFC\+\_\+\+EC\+\_\+\+SUCCESS}}, and \mbox{\hyperlink{struct_system_aa186bb9091ffb41fe84d616b29f4a189}{System\+::set\+Property()}}.
+

@@ -9,117 +9,128 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ Represents\ [wildcard]\ subscription\ to\ all\ events\ of\ the\ specific\ event\ type.}}
-\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ The\ @ref\ WildcardSymbol::ALL\ constant\ can\ be\ added\ to\ any\ DXFeedSubscription\ instance\ with}}
-\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ @ref\ DXFeedSubscription::addSymbols()\ "{}addSymbols"{}\ method\ to\ the\ effect\ of\ subscribing\ to\ all\ possible\ event\ symbols.}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ The\ corresponding\ subscription\ will\ start\ receiving\ all\ published\ events\ of\ the\ corresponding\ types.}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ WildcardSymbol\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ *\ Symbol\ prefix\ that\ is\ reserved\ for\ wildcard\ subscriptions.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ *\ Any\ subscription\ starting\ with\ "{}*"{}\ is\ ignored\ with\ the\ exception\ of\ WildcardSymbol\ subscription.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7f505307b422fd8eb15c2acf79b724ad}{RESERVED\_PREFIX}};}
-\DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ [wildcard]\ subscription\ to\ all\ events\ of\ the\ specific\ event\ type.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ *\ <p><b>NOTE:</b>\ Wildcard\ subscription\ can\ create\ extremely\ high\ network\ and\ CPU\ load\ for\ certain\ kinds\ of}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ high-\/frequency\ events\ like\ quotes.\ It\ requires\ a\ special\ arrangement\ on\ the\ side\ of\ upstream\ data\ provider\ and}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ is\ disabled\ by\ default\ in\ upstream\ feed\ configuration.\ Make\ that\ sure\ you\ have\ adequate\ resources\ and\ understand}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ the\ impact\ before\ using\ it.\ It\ can\ be\ used\ for\ low-\/frequency\ events\ only\ (like\ Forex\ quotes),\ because\ each}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ instance\ of\ DXFeedSubscription\ processes\ events\ in\ a\ single\ thread\ and\ there\ is\ no\ provision\ to\ load-\/balance}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ wildcard\ subscription\ amongst\ multiple\ threads.\ Contact\ your\ data\ provider\ for\ the\ corresponding\ configuration}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ arrangement\ if\ needed.}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ @see\ WildcardSymbol}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ WildcardSymbol\ \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{ALL}};}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00044\ \ \ \ \ std::string\ symbol\_;}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \ \ WildcardSymbol(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ :\ symbol\_\{symbol\}\ \{}
-\DoxyCodeLine{00047\ \ \ \ \ \}}
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00050\ \ \ \ \ WildcardSymbol(\textcolor{keyword}{const}\ WildcardSymbol\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00051\ \ \ \ \ WildcardSymbol(WildcardSymbol\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00052\ \ \ \ \ WildcardSymbol\ \&operator=(\textcolor{keyword}{const}\ WildcardSymbol\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00053\ \ \ \ \ WildcardSymbol\ \&operator=(WildcardSymbol\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00054\ \ \ \ \ WildcardSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~WildcardSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&getSymbol()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\_;}
-\DoxyCodeLine{00059\ \ \ \ \ \}}
-\DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_af4f788ef0081564f7dd43a3f31dc6356}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7b77516d5f7cebc3081a703ead663b51}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00076\ }
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ WildcardSymbol\ \&fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00015\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ Represents\ [wildcard]\ subscription\ to\ all\ events\ of\ the\ specific\ event\ type.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ The\ @ref\ WildcardSymbol::ALL\ constant\ can\ be\ added\ to\ any\ DXFeedSubscription\ instance\ with}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ @ref\ DXFeedSubscription::addSymbols()\ "{}addSymbols"{}\ method\ to\ the\ effect\ of\ subscribing\ to\ all\ possible\ event\ symbols.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ The\ corresponding\ subscription\ will\ start\ receiving\ all\ published\ events\ of\ the\ corresponding\ types.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ WildcardSymbol\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ Symbol\ prefix\ that\ is\ reserved\ for\ wildcard\ subscriptions.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *\ Any\ subscription\ starting\ with\ "{}*"{}\ is\ ignored\ with\ the\ exception\ of\ WildcardSymbol\ subscription.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{struct_wildcard_symbol_affd42aad48cb63eb5bfbadb1b42f7cb8}{RESERVED\_PREFIX}};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ [wildcard]\ subscription\ to\ all\ events\ of\ the\ specific\ event\ type.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ <p><b>NOTE:</b>\ Wildcard\ subscription\ can\ create\ extremely\ high\ network\ and\ CPU\ load\ for\ certain\ kinds\ of}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ high-\/frequency\ events\ like\ quotes.\ It\ requires\ a\ special\ arrangement\ on\ the\ side\ of\ upstream\ data\ provider\ and}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ is\ disabled\ by\ default\ in\ upstream\ feed\ configuration.\ Make\ that\ sure\ you\ have\ adequate\ resources\ and\ understand}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ the\ impact\ before\ using\ it.\ It\ can\ be\ used\ for\ low-\/frequency\ events\ only\ (like\ Forex\ quotes),\ because\ each}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ instance\ of\ DXFeedSubscription\ processes\ events\ in\ a\ single\ thread\ and\ there\ is\ no\ provision\ to\ load-\/balance}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ wildcard\ subscription\ amongst\ multiple\ threads.\ Contact\ your\ data\ provider\ for\ the\ corresponding\ configuration}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ arrangement\ if\ needed.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ @see\ WildcardSymbol}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ WildcardSymbol\ \mbox{\hyperlink{struct_wildcard_symbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{ALL}};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00046\ \ \ \ \ std::string\ symbol\_;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ WildcardSymbol(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ :\ symbol\_\{symbol\}\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00052\ \ \ \ \ WildcardSymbol(\textcolor{keyword}{const}\ WildcardSymbol\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00053\ \ \ \ \ WildcardSymbol(WildcardSymbol\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00054\ \ \ \ \ WildcardSymbol\ \&operator=(\textcolor{keyword}{const}\ WildcardSymbol\ \&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00055\ \ \ \ \ WildcardSymbol\ \&operator=(WildcardSymbol\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00056\ \ \ \ \ WildcardSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00057\ \ \ \ \ \string~WildcardSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&getSymbol()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\_;}
+\DoxyCodeLine{00061\ \ \ \ \ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{struct_wildcard_symbol_ac95a378b0826cad79317d4398afc1810}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_wildcard_symbol_a5975db96e4f01c88d732f8ca104037bf}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
 \DoxyCodeLine{00078\ }
 \DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ wildcard\ subscription\ symbol.}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
 \DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ wildcard\ subscription\ symbol.}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00084\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_abf66f8219e5531a935b6ca6cef55b5e7}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}WildcardSymbol\{"{}}\ +\ symbol\_\ +\ \textcolor{stringliteral}{"{}\}"{}};}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\_;}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00090\ \ \ \ \ \}}
-\DoxyCodeLine{00091\ }
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{const}\ \{}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\_\ ==\ wildcardSymbol.symbol\_;}
-\DoxyCodeLine{00094\ \ \ \ \ \}}
-\DoxyCodeLine{00095\ }
-\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{const}\ \{}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\_\ <\ wildcardSymbol.symbol\_;}
-\DoxyCodeLine{00098\ \ \ \ \ \}}
-\DoxyCodeLine{00099\ \};}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ WildcardSymbol\ \&\mbox{\hyperlink{struct_wildcard_symbol_aae2b0c44923c2081b691d2acb06d1ac6}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ wildcard\ subscription\ symbol.}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ wildcard\ subscription\ symbol.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00093\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_wildcard_symbol_a574a599f4ba3ce59927d21676fa80f27}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}WildcardSymbol\{"{}}\ +\ symbol\_\ +\ \textcolor{stringliteral}{"{}\}"{}};}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\_;}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00099\ \ \ \ \ \}}
 \DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ \textcolor{keyword}{inline}\ \textcolor{keyword}{namespace}\ literals\ \{}
-\DoxyCodeLine{00102\ }
-\DoxyCodeLine{00103\ \textcolor{keyword}{inline}\ WildcardSymbol\ operator\textcolor{stringliteral}{"{}"{}\_ws}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ size\_t)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{return}\ WildcardSymbol\mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{::}}\mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{ALL}};}
-\DoxyCodeLine{00105\ \}}
-\DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \textcolor{keyword}{inline}\ WildcardSymbol\ operator\textcolor{stringliteral}{"{}"{}\_wcs}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ size\_t)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordflow}{return}\ WildcardSymbol\mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{::}}\mbox{\hyperlink{structdxfcpp_1_1_wildcard_symbol_a7c4084f144af571c8ac73b68c49dbc5c}{ALL}};}
-\DoxyCodeLine{00109\ \}}
-\DoxyCodeLine{00110\ }
-\DoxyCodeLine{00111\ \}\ \textcolor{comment}{//\ namespace\ literals}}
-\DoxyCodeLine{00112\ }
-\DoxyCodeLine{00113\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
-\DoxyCodeLine{00114\ }
-\DoxyCodeLine{00115\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<dxfcpp::WildcardSymbol>\ \{}
-\DoxyCodeLine{00116\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(wildcardSymbol.getSymbol());}
-\DoxyCodeLine{00118\ \ \ \ \ \}}
-\DoxyCodeLine{00119\ \};}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\_\ ==\ wildcardSymbol.symbol\_;}
+\DoxyCodeLine{00103\ \ \ \ \ \}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol\_\ <\ wildcardSymbol.symbol\_;}
+\DoxyCodeLine{00107\ \ \ \ \ \}}
+\DoxyCodeLine{00108\ \};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{keyword}{inline}\ \textcolor{keyword}{namespace}\ literals\ \{}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \textcolor{keyword}{inline}\ WildcardSymbol\ operator\textcolor{stringliteral}{"{}"{}\_ws}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ size\_t)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordflow}{return}\ WildcardSymbol\mbox{\hyperlink{struct_wildcard_symbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{::}}\mbox{\hyperlink{struct_wildcard_symbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{ALL}};}
+\DoxyCodeLine{00114\ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{keyword}{inline}\ WildcardSymbol\ operator\textcolor{stringliteral}{"{}"{}\_wcs}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ size\_t)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordflow}{return}\ WildcardSymbol\mbox{\hyperlink{struct_wildcard_symbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{::}}\mbox{\hyperlink{struct_wildcard_symbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{ALL}};}
+\DoxyCodeLine{00118\ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \}\ \textcolor{comment}{//\ namespace\ literals}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<dxfcpp::WildcardSymbol>\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::WildcardSymbol\ \&wildcardSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(wildcardSymbol.getSymbol());}
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ \};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

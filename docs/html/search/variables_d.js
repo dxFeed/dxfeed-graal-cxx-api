@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['open_5faux_5fimage_5ffailed_0',['OPEN_AUX_IMAGE_FAILED',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#a4115a25d9683dc92224a6cc63a33e4b8',1,'dxfcpp::CEntryPointErrors']]],
-  ['open_5fimage_5ffailed_1',['OPEN_IMAGE_FAILED',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#ae227a97e9315f8a1f4bf66b85ef94da8',1,'dxfcpp::CEntryPointErrors']]],
-  ['optexp_2',['OPTEXP',['../da/d01/structdxfcpp_1_1_candle_type.html#a93551c4f29d5c3a6df6afa12314ace0f',1,'dxfcpp::CandleType']]],
-  ['order_3',['ORDER',['../d8/d00/structdxfcpp_1_1_scope.html#a8444bf51a0feff3272d5ce02c46393dd',1,'dxfcpp::Scope']]]
+  ['ocea_0',['OCEA',['../d2/d02/class_order_source.html#a513487b9873b3c7c26bb492494bf41b6',1,'OrderSource']]],
+  ['optexp_1',['OPTEXP',['../d2/d02/struct_candle_type.html#aa39b745f4e42a37ef2a09caff9a9ebe1',1,'CandleType']]],
+  ['order_2',['ORDER',['../d7/d00/struct_scope.html#a9d2f3400ab0b7c487262f11d31b8cc3e',1,'Scope']]]
 ];

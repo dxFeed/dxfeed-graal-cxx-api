@@ -9,122 +9,125 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstddef}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{locale}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_java_object_handle_8hpp}{"{}JavaObjectHandle.hpp"{}}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{thread}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{concepts}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Utility\ class\ for\ parsing\ and\ formatting\ dates\ and\ times\ in\ ISO-\/compatible\ format.}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ Utility\ class\ for\ parsing\ and\ formatting\ dates\ and\ times\ in\ ISO-\/compatible\ format.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Some\ methods\ that\ are\ not\ marked\ \`{}noexcept`\ may\ throw\ exceptions:}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ @throws\ std::invalid\_argument\ if\ handle\ is\ invalid.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ @throws\ JavaException\ if\ something\ happened\ with\ the\ dxFeed\ API\ backend}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ @throws\ GraalException\ if\ something\ happened\ with\ the\ GraalVM}}
 \DoxyCodeLine{00025\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \{}
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \{}
 \DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{/**}}
 \DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ *\ An\ instance\ of\ TimeFormat\ that\ corresponds\ to\ default\ timezone\ as\ returned\ by\ TimeZone::getDefault()\ method.}}
 \DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format_a039cc4d04e483310d261812bbf266e0e}{DEFAULT}};}
-\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ DEFAULT\_WITH\_MILLIS;}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ DEFAULT\_WITH\_MILLIS\_WITH\_TIMEZONE;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \mbox{\hyperlink{struct_time_format_ab353972c833e6906274c841102370630}{DEFAULT}};}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ DEFAULT\_WITH\_MILLIS;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ DEFAULT\_WITH\_MILLIS\_WITH\_TIMEZONE;}
 \DoxyCodeLine{00033\ }
 \DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{/**}}
 \DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ An\ instance\ of\ TimeFormat\ that\ corresponds\ to\ GMT\ timezone\ as\ returned\ by}}
 \DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ TimeZone::getTimeZone()\ "{}TimeZone::getTimeZone(\(\backslash\)"{}GMT\(\backslash\)"{})"{}.}}
 \DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format_a617ef387577f889512499fc92967a386}{GMT}};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \mbox{\hyperlink{struct_time_format_a23b64f8b0b4110b4a107cca243daa830}{GMT}};}
 \DoxyCodeLine{00039\ }
 \DoxyCodeLine{00040\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00041\ \ \ \ \ JavaObjectHandle<\mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}>\ handle\_;}
+\DoxyCodeLine{00041\ \ \ \ \ JavaObjectHandle<\mbox{\hyperlink{struct_time_format}{TimeFormat}}>\ handle\_;}
 \DoxyCodeLine{00042\ }
 \DoxyCodeLine{00043\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{explicit}\ TimeFormat(\textcolor{keywordtype}{void}*\ handle\ =\ \textcolor{keywordtype}{nullptr})\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~TimeFormat()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00046\ }
-\DoxyCodeLine{00047\ \ \ \ \ TimeFormat(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00048\ \ \ \ \ TimeFormat(\mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \&operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \&operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_time_format}{TimeFormat}}\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00051\ }
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ Reads\ Date\ from\ String\ and\ returns\ timestamp.}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ is\ designed\ to\ understand}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ <a\ href="{}http://en.wikipedia.org/wiki/ISO\_8601"{}>ISO\ 8601</a>\ formatted\ date\ and\ time.}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ It\ accepts\ the\ following\ formats:}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>0</tt></b>\ is\ parsed\ as\ zero\ time.}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>'-\/'\&lt;time-\/period\&gt;</tt></b>\ it\ is\ parsed\ as\ \&lt;current\ time\&gt;\ -\/\ \&lt;time-\/period\&gt;.}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;long-\/value-\/in-\/milliseconds\&gt;</tt></b>\ It\ should\ be\ positive\ and\ have\ at\ least\ 9\ digits}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ (otherwise\ it\ could\ not\ be\ distinguished\ from\ date\ in\ format\ <tt>'yyyymmdd'</tt>).}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Each\ date\ since\ 1970-\/01-\/03\ can\ be\ represented\ in\ this\ form.}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;date\&gt;[('T'|'t'|'-\/'|'\ ')\&lt;time\&gt;][\&lt;timezone\&gt;]</tt></b>}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ If\ time\ is\ missing\ it\ is\ supposed\ to\ be\ <tt>'00:00:00'</tt>.}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>['T'|'t']\&lt;time\&gt;[\&lt;timezone\&gt;]</tt></b>}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ In\ this\ case\ current\ date\ is\ used.}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ Here}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;date\&gt;</tt></b>\ is\ one\ of}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <ul>}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>yyyy-\/MM-\/dd</tt></b>}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>yyyyMMdd</tt></b>}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ </ul>}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;time\&gt;</tt></b>\ is\ one\ of}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <ul>}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HH:mm:ss[.sss]</tt></b>}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HHmmss[.sss]</tt></b>}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HH:mm</tt></b>}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HHmm</tt></b>}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HH</tt></b>}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ </ul>}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;timezone\&gt;</tt></b>\ is\ one\ of}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <ul>}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>[+-\/]HH:mm</tt></b>}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>[+-\/]HHmm</tt></b>}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>[+-\/]HH</tt></b>}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>Z</tt></b>\ for\ UTC.}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>or\ any\ timezone\ that\ can\ be\ parsed\ by\ Java\ SimpleDateFormat.}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ </ul>}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ @param\ value\ String\ value\ to\ parse.}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Date's\ timestamp\ parsed\ from\ <tt>value</tt>\ or\ \`{}0`\ if\ <tt>value</tt>\ has\ wrong\ format.}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00113\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{structdxfcpp_1_1_time_format_a6c266c4d2ec4b146cc73ea9466ce38ef}{parse}}(\textcolor{keyword}{const}\ std::string\&\ value)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00114\ }
-\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ Converts\ timestamp\ into\ string\ according\ to\ the\ format}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timestamp\ The\ date\ and\ time\ timestamp.}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ data\ and\ time\ or\ empty\ string\ on\ error}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00121\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_time_format_a6fc334ded299efdac568d814a2eede46}{format}}(std::int64\_t\ timestamp)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00122\ \};}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{explicit}\ TimeFormat(\textcolor{keywordtype}{void}*\ handle\ =\ \textcolor{keywordtype}{nullptr});}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{explicit}\ TimeFormat(JavaObjectHandle<\mbox{\hyperlink{struct_time_format}{TimeFormat}}>\&\&\ handle);}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~TimeFormat()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ TimeFormat(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00049\ \ \ \ \ TimeFormat(\mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \&operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \&operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_time_format}{TimeFormat}}\ \&\&)\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ Reads\ Date\ from\ String\ and\ returns\ timestamp.}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ is\ designed\ to\ understand}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ <a\ href="{}http://en.wikipedia.org/wiki/ISO\_8601"{}>ISO\ 8601</a>\ formatted\ date\ and\ time.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ It\ accepts\ the\ following\ formats:}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>0</tt></b>\ is\ parsed\ as\ zero\ time.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>'-\/'\&lt;time-\/period\&gt;</tt></b>\ it\ is\ parsed\ as\ \&lt;current\ time\&gt;\ -\/\ \&lt;time-\/period\&gt;.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;long-\/value-\/in-\/milliseconds\&gt;</tt></b>\ It\ should\ be\ positive\ and\ have\ at\ least\ 9\ digits}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ (otherwise\ it\ could\ not\ be\ distinguished\ from\ date\ in\ format\ <tt>'yyyymmdd'</tt>).}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Each\ date\ since\ 1970-\/01-\/03\ can\ be\ represented\ in\ this\ form.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;date\&gt;[('T'|'t'|'-\/'|'\ ')\&lt;time\&gt;][\&lt;timezone\&gt;]</tt></b>}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ If\ time\ is\ missing\ it\ is\ supposed\ to\ be\ <tt>'00:00:00'</tt>.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>['T'|'t']\&lt;time\&gt;[\&lt;timezone\&gt;]</tt></b>}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ In\ this\ case\ current\ date\ is\ used.}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Here}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;date\&gt;</tt></b>\ is\ one\ of}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <ul>}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>yyyy-\/MM-\/dd</tt></b>}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>yyyyMMdd</tt></b>}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ </ul>}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;time\&gt;</tt></b>\ is\ one\ of}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <ul>}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HH:mm:ss[.sss]</tt></b>}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HHmmss[.sss]</tt></b>}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HH:mm</tt></b>}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HHmm</tt></b>}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>HH</tt></b>}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ </ul>}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ <li>}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ <b><tt>\&lt;timezone\&gt;</tt></b>\ is\ one\ of}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <ul>}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>[+-\/]HH:mm</tt></b>}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>[+-\/]HHmm</tt></b>}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>[+-\/]HH</tt></b>}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li><b><tt>Z</tt></b>\ for\ UTC.}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>or\ any\ timezone\ that\ can\ be\ parsed\ by\ Java\ SimpleDateFormat.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ </ul>}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ </li>}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ @param\ value\ String\ value\ to\ parse.}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Date's\ timestamp\ parsed\ from\ <tt>value</tt>\ or\ \`{}0`\ if\ <tt>value</tt>\ has\ wrong\ format.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00114\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{struct_time_format_ab394080ae0adbe9959873dbeba511579}{parse}}(\textcolor{keyword}{const}\ std::string\&\ value)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ Converts\ timestamp\ into\ string\ according\ to\ the\ format}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timestamp\ The\ date\ and\ time\ timestamp.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ data\ and\ time\ or\ empty\ string\ on\ error}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00122\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_time_format_a0328a4e7070049bddfa67d05c5d2f394}{format}}(std::int64\_t\ timestamp)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00123\ \};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

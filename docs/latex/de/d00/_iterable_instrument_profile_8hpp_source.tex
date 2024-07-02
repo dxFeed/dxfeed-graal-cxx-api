@@ -9,46 +9,50 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Id.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/JavaObjectHandle.hpp"{}}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../entity/SharedEntity.hpp"{}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Id.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/JavaObjectHandle.hpp"{}}}
 \DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../entity/SharedEntity.hpp"{}}}
 \DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{keyword}{class}\ InstrumentProfileCollector;}
+\DoxyCodeLine{00016\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
 \DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ A\ wrapper\ around\ Java\ Iterator\ for\ InstrumentProfile}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ IterableInstrumentProfile\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{friend}\ InstrumentProfileCollector;}
-\DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \ \ \ \ JavaObjectHandle<IterableInstrumentProfile>\ handle\_;}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//dxfg\_iterable\_ip\_t\ *iterable;}}
-\DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{explicit}\ IterableInstrumentProfile(\textcolor{keywordtype}{void}*\ handle\ =\ \textcolor{keywordtype}{nullptr})\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class}\ InstrumentProfileCollector;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ A\ wrapper\ around\ Java\ Iterator\ for\ InstrumentProfile}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ IterableInstrumentProfile\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{friend}\ InstrumentProfileCollector;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ JavaObjectHandle<IterableInstrumentProfile>\ handle\_;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//dxfg\_iterable\_ip\_t\ *iterable;}}
 \DoxyCodeLine{00028\ }
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<IterableInstrumentProfile>\ create(\textcolor{keywordtype}{void}*\ handle\ =\ \textcolor{keywordtype}{nullptr})\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{explicit}\ IterableInstrumentProfile(\textcolor{keywordtype}{void}*\ handle\ =\ \textcolor{keywordtype}{nullptr})\ \textcolor{keyword}{noexcept};}
 \DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<IterableInstrumentProfile>\ create(\textcolor{keywordtype}{void}*\ handle\ =\ \textcolor{keywordtype}{nullptr})\ \textcolor{keyword}{noexcept};}
 \DoxyCodeLine{00032\ }
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ if\ the\ iterable\ has\ more\ elements.}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ iteration\ has\ more\ elements}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00038\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_iterable_instrument_profile_ab58ac64c880fa1e33ca36b62b6cf9680}{hasNext}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ next\ element\ in\ the\ iteration.}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ next\ element\ in\ the\ iteration\ or\ std::shared\_ptr<InstrumentProfile>\{nullptr\}}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00045\ \ \ \ \ [[nodiscard]]\ std::shared\_ptr<InstrumentProfile>\ \mbox{\hyperlink{classdxfcpp_1_1_iterable_instrument_profile_ab7deb6a386f9f9594759b57b22950009}{next}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00046\ \};}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \}}
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ if\ the\ iterable\ has\ more\ elements.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ iteration\ has\ more\ elements}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00040\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_iterable_instrument_profile_a5d7112c414ba9b7ffcdd33700845bba8}{hasNext}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ next\ element\ in\ the\ iteration.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ next\ element\ in\ the\ iteration\ or\ std::shared\_ptr<InstrumentProfile>\{nullptr\}}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00047\ \ \ \ \ [[nodiscard]]\ std::shared\_ptr<InstrumentProfile>\ \mbox{\hyperlink{class_iterable_instrument_profile_a3804898ab2ed933bce6828ca3f65354c}{next}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

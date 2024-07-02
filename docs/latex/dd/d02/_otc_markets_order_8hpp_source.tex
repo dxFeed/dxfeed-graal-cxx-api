@@ -1,0 +1,735 @@
+\doxysubsection{Otc\+Markets\+Order.\+hpp}
+\hypertarget{_otc_markets_order_8hpp_source}{}\label{_otc_markets_order_8hpp_source}\index{OtcMarketsOrder.hpp@{OtcMarketsOrder.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_order_8hpp}{"{}Order.hpp"{}}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_otc_markets_price_type_8hpp}{"{}OtcMarketsPriceType.hpp"{}}}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Represents\ an\ extension\ of\ Order\ for\ the\ symbols\ traded\ on\ the\ OTC\ Markets.\ It\ includes\ the\ OTC\ Markets\ specific}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ quote\ data,\ such\ as\ @ref\ OtcMarketsOrder::getQuoteAccessPayment()\ "{}Quote\ Access\ Payment\ (QAP)\ value"{},}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @ref\ OtcMarketsOrder::getOtcMarketsPriceType()\ "{}Quote\ Price\ Type"{},}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ @ref\ OtcMarketsOrder::isOpen()\ "{}Open/Closed\ status"{},}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ and\ @ref\ OtcMarketsOrder::isUnsolicited()\ "{}Unsolicited\ quote\ indicator"{}.\ The\ original\ event\ (OTC\ Quote)\ published\ by}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ the\ exchange\ is\ presented\ in\ the\ form\ of\ two\ separate\ OTCMarketsOrder\ events\ (bid\ and\ ask\ side).}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Note\ that\ the\ description\ of\ the\ fields\ (e.g.\ QAP)\ uses\ the\ original\ "{}quote"{}\ term.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <p>}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ For\ more\ information\ about\ original\ fields,\ QAP,\ Quote\ Flags\ and\ Extended\ Quote\ Flags,}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ see\ <a\ href="{}https://downloads.dxfeed.com/specifications/OTC\_Markets\_Multicast\_Data\_Feeds.pdf"{}>OTC\ Markets\ Multicast}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ Data\ Feed</a>.\ <p>\ For\ more\ information\ about\ display\ requirements,\ see\ <a}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ href="{}https://downloads.dxfeed.com/specifications/OTC\_Markets\_Data\_Display\_Requirements.pdf"{}>OTC\ Markets\ Display}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ Requirements</a>.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ <p>\ Like\ regular\ orders,\ OTC\ Markets\ order\ events\ arrive\ from\ multiple\ sources\ for\ the\ same\ market\ symbol\ and\ are}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ distinguished\ by\ their\ @ref\ ::getIndex\ "{}index"{}.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ It\ is\ unique\ across\ all\ the\ sources\ of\ depth\ information\ for\ the\ symbol.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ The\ event\ with\ @ref\ ::getSize()\ "{}size"{}\ either\ \`{}0`\ or\ \`{}NaN`\ is\ a\ signal\ to\ remove\ previously\ received\ order\ for\ the}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ corresponding\ index.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ The\ method\ ::hasSize()\ is\ a\ convenient\ method\ to\ test\ for\ size\ presence.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ <h3>Quote\ Flags</h3>}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ Quote\ Flags\ from\ OTC\ Markets\ are\ mapped\ to\ the\ access\ methods\ of\ this\ class\ as\ follows:}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ \ \ \ \ <li>Update\ Side\ -\/\ @ref\ OtcMarketsOrder::getOrderSide()\ "{}orderSide"{}}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ \ \ \ \ <li>State\ -\/\ @ref\ OtcMarketsOrder::isOpen()\ "{}open"{}}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ \ \ \ \ <li>Ask/Bid\ Unsolicited\ -\/\ @ref\ OtcMarketsOrder::isUnsolicited()\ "{}unsolicited"{}}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ \ \ \ \ <li>Ask/Bid\ Priced,\ Aks/Bid\ OW/BW\ -\/\ @ref\ OtcMarketsOrder::getOtcMarketsPriceType()\ "{}otcMarketsPriceType"{}}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ <h3>Extended\ Quote\ Flags</h3>}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ Extended\ Quote\ Flags\ from\ OTC\ Markets\ are\ mapped\ to\ the\ access\ methods\ of\ this\ class\ as\ follows:}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ \ \ \ \ <li>QuoteSaturatedFlag\ -\/\ @ref\ OtcMarketsOrder::isSaturated()\ "{}saturated"{}}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ \ \ \ \ <li>Bid/Offer\ AutoExFlag\ -\/\ @ref\ OtcMarketsOrder::isAutoExecution()\ "{}autoExecution"{}}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ \ \ \ \ <li>NMSConditionalQuoteFlag\ -\/\ @ref\ OtcMarketsOrder::isNmsConditional()\ "{}nmsConditional"{}}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ OTC\ Markets\ order\ event\ sources\ provide\ a\ consistent\ view\ of\ the\ order\ book.\ Their\ updates}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ may\ incorporate\ multiple\ changes\ to\ individual\ orders\ that\ have\ to\ be\ processed\ at\ the\ same\ time.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ *\ <p>\ See\ the\ "{}Event\ Flags"{}\ section\ of\ OrderBase\ class\ documentation\ for\ details.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ *\ <h3>Publishing\ order\ books</h3>}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ When\ publishing\ an\ order\ event\ with\ DXPublisher::publishEvents()\ method,\ least\ significant\ 32\ bits\ of}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ order\ @ref\ ::getIndex()\ "{}index"{}\ must\ be\ in\ a\ range\ of\ from\ 0\ to\ \`{}std::numeric\_limits<std::int32\_t>::max()`}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ inclusive.\ Use\ ::setSource()\ method\ after\ ::setIndex()\ to\ properly\ include\ source\ identifier\ into\ the}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ index.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ *\ A\ snapshot\ has\ to\ be\ published\ in\ the\ <em>descending</em>\ order\ of\ @ref\ ::getIndex()\ "{}index"{},\ starting\ with}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ *\ an\ event\ with\ the\ largest\ index\ and\ marking\ it\ with\ EventFlag::SNAPSHOT\_BEGIN\ bit\ in\ @ref\ ::getEventFlags()}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ *\ "{}eventFlags"{},\ and\ finishing\ the\ snapshot\ with\ an\ event\ that\ has\ zero\ 32\ least\ significant\ bits\ of\ index.}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ *\ EventFlag::SNAPSHOT\_END\ bit\ in\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ is\ optional\ during\ publishing.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ It\ will\ be\ properly\ set\ on\ receiving\ end\ anyway.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ *\ <h3>Limitations</h3>}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ *\ This\ event\ type\ cannot\ be\ used\ with\ DXFeed::getLastEvent()\ method.}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ *\ <h3><a\ name="{}fobSection"{}>Full\ Order\ Book\ Support</a></h3>}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ *\ Some\ feeds\ provide\ support\ for\ "{}Full\ Order\ Book"{}\ (FOB)\ where\ additional\ fields\ will\ be\ available:}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ *\ <li>@ref\ ::getAction()\ "{}action"{}\ -\/\ event\ business\ meaning\ (see\ OrderAction\ for\ more\ details)</li>}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ *\ <li>@ref\ ::getActionTime()\ "{}actionTime"{}\ -\/\ time\ of\ the\ last\ action</li>}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ *\ <li>@ref\ ::getOrderId()\ "{}orderId"{}\ -\/\ ID\ of\ this\ OTC\ Markets\ order</li>}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ *\ <li>@ref\ ::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ additional\ ID\ for\ this\ OTC\ Markets\ order</li>}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ *\ <li>@ref\ ::getTradeId()\ "{}tradeId"{}\ -\/\ trade\ (order\ execution)\ ID</li>}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ *\ <li>@ref\ ::getTradePrice()\ "{}tradePrice"{}\ -\/\ price\ of\ the\ trade</li>}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ *\ <li>@ref\ ::getTradeSize()\ "{}tradeSize"{}\ -\/\ size\ of\ the\ trade</li>}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ records\ \`{}OtcMarketsOrder\#<source-\/id>`,}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ *\ where\ \`{}<source-\/id>`\ is\ up\ to\ 4\ ASCII\ characters\ with\ a\ mnemonic\ for\ the\ source\ like\ "{}pink"{}.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00110\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ OtcMarketsOrder\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_order}{Order}}\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ OTC\ Markets\ flags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ \ \ 31..7\ \ \ \ \ \ \ \ \ \ 6\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 5\ \ \ \ \ \ \ \ \ \ \ \ \ 4\ \ \ \ \ \ \ \ \ \ 3\ \ \ \ \ \ \ 2\ \ \ \ \ \ \ \ \ \ 1\ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/+}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ |\ NMS\ Conditional\ |\ AutoExecution\ |\ Saturated\ |\ OTC\ Price\ Type\ |\ Unsolicited\ |\ Open\ |}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/+}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Extended\ Quote\ Flags\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ Quote\ Flags\ \ \ \ \ \ \ \ \ \ \ \ \ |}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/+}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ NMS\_CONDITIONAL\ =\ 1\ <<\ 6;}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ AUTO\_EXECUTION\ =\ 1\ <<\ 5;}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ SATURATED\ =\ 1\ <<\ 4;}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{//\ OTC\_PRICE\_TYPE\ values\ are\ taken\ from\ OtcMarketsPriceType\ enum.}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ OTC\_PRICE\_TYPE\_MASK\ =\ 3;}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ OTC\_PRICE\_TYPE\_SHIFT\ =\ 2;}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ UNSOLICITED\ =\ 1\ <<\ 1;}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ OPEN\ =\ 1;}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{struct}\ OtcMarketsOrderData\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ std::int32\_t\ quoteAccessPayment\{\};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ std::int32\_t\ otcMarketsFlags\{\};}
+\DoxyCodeLine{00137\ \ \ \ \ \};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ OtcMarketsOrderData\ otcMarketsOrderData\_\{\};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ OtcMarketsOrder\ object}}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<OtcMarketsOrder>;}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ OtcMarketsOrder\ object}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<OtcMarketsOrder>;}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{class_otc_markets_order_a35a14b58434eff9ef4848748e84bea38}{TYPE}};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{class_otc_markets_order_a57c71f02ac144f5cacbdfcf684a81e77}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{class_otc_markets_order_ad036bcb2b2a072937a5f9bfc38d6347f}{toGraal}}()\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_otc_markets_order_ad036bcb2b2a072937a5f9bfc38d6347f}{override}};}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_otc_markets_order_a0a03e93bcbc51bdbe0fe41077c34de54}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ OTC\ Markets\ order\ event\ with\ default\ values.}}
+\DoxyCodeLine{00180\ \ \ \ \ \mbox{\hyperlink{class_otc_markets_order_a3061eb3f83af3498d9ee454f8ba4736d}{OtcMarketsOrder}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ OTC\ Markets\ order\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_otc_markets_order_aefd3355107f8b190af78a3c5d2c5a1de}{OtcMarketsOrder}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{class_otc_markets_order_aefd3355107f8b190af78a3c5d2c5a1de}{Order}}(\mbox{\hyperlink{class_otc_markets_order_aefd3355107f8b190af78a3c5d2c5a1de}{std}}::\mbox{\hyperlink{class_otc_markets_order_aefd3355107f8b190af78a3c5d2c5a1de}{move}}(\mbox{\hyperlink{class_otc_markets_order_aefd3355107f8b190af78a3c5d2c5a1de}{eventSymbol}}))\ \{}
+\DoxyCodeLine{00188\ \ \ \ \ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{//\ MarketEvent\ methods}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00198\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a9f9c8bdc3dd0d9a1907a1b4cafb56dcb}{withEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_ac784eafd0a5d44621e06d16010a80968}{::}}\mbox{\hyperlink{class_order_ac784eafd0a5d44621e06d16010a80968}{withEventSymbol}}(eventSymbol));}
+\DoxyCodeLine{00200\ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00209\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_abecfb5fb56cb95ea6a8c43496584afea}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_adf29e654e61376f10154103c93d1c07b}{::}}\mbox{\hyperlink{class_order_adf29e654e61376f10154103c93d1c07b}{withEventTime}}(eventTime));}
+\DoxyCodeLine{00211\ \ \ \ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{comment}{//\ OrderBase\ methods}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ source\ and\ returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ changes\ highest\ bits\ of\ the\ @ref\ OrderBase::getIndex()\ "{}index"{}\ of\ this\ event.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ source\ of\ this\ event.}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00222\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a3c2be1402bac4a7104ae2d188fa50d4d}{withSource}}(\textcolor{keyword}{const}\ OrderSource\ \&source)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a73dc0a3a3bd62228e63edf63abdacdad}{::}}\mbox{\hyperlink{class_order_a73dc0a3a3bd62228e63edf63abdacdad}{withSource}}(source));}
+\DoxyCodeLine{00224\ \ \ \ \ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00233\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_ae8bcf16db0943a21bcbdb4c04e420fbf}{withEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}::withEventFlags(eventFlags));}
+\DoxyCodeLine{00235\ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00244\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a58d4b0fcde0dad1be33556b8a4d6e25b}{withEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}::withEventFlags(eventFlags));}
+\DoxyCodeLine{00246\ \ \ \ \ \}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ OTC\ Markets\ order\ and\ returns\ it.\ Note,\ that\ this\ method\ also\ changes}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ OrderBase::getSource()\ "{}source"{},\ whose\ id\ occupies\ highest\ bits\ of\ index.}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *\ Use\ OrderBase::setSource()\ after\ invocation\ of\ this\ method\ to\ set\ the\ desired\ value\ of\ source.}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00256\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_ad699e8e080ddb8e1577e9cac57eb89a7}{withIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_aca5ab76798f620876dca5eed0024579f}{::}}\mbox{\hyperlink{class_order_aca5ab76798f620876dca5eed0024579f}{withIndex}}(index));}
+\DoxyCodeLine{00258\ \ \ \ \ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ OTC\ Markets\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ milliseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ time\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00267\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_afd7495819694d0757916bc0f234f60d7}{withTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a4f884aaa2226efb1e52594810f61d8af}{::}}\mbox{\hyperlink{class_order_a4f884aaa2226efb1e52594810f61d8af}{withTime}}(time));}
+\DoxyCodeLine{00269\ \ \ \ \ \}}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanoPart\ microseconds\ and\ nanoseconds\ time\ part\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00278\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_ac59afe20d3db42f4216478f2e0401478}{withTimeNanoPart}}(std::int32\_t\ timeNanoPart)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a8c5c42e06b0cae2927fd0ec41a28af37}{::}}\mbox{\hyperlink{class_order_a8c5c42e06b0cae2927fd0ec41a28af37}{withTimeNanoPart}}(timeNanoPart));}
+\DoxyCodeLine{00280\ \ \ \ \ \}}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ OrderBase::getSequence()\ "{}sequence\ number"{}\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ @see\ OrderBase::getSequence()}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00290\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_ad460cc165a9b29ecc3ae6513abf6a82b}{withSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a5ba3188b11faea41016205c29dc3b081}{::}}\mbox{\hyperlink{class_order_a5ba3188b11faea41016205c29dc3b081}{withSequence}}(sequence));}
+\DoxyCodeLine{00292\ \ \ \ \ \}}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ this\ OTC\ Markets\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ *\ Time\ is\ measured\ in\ nanoseconds\ between\ the\ current\ time\ and\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timeNanos\ The\ time\ of\ this\ OTC\ Markets\ order\ in\ nanoseconds.}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00301\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_abff7154638734a7698e8964ca6949b9e}{withTimeNanos}}(std::int64\_t\ timeNanos)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a3730940bc56759751a5d69063e2c586a}{::}}\mbox{\hyperlink{class_order_a3730940bc56759751a5d69063e2c586a}{withTimeNanos}}(timeNanos));}
+\DoxyCodeLine{00303\ \ \ \ \ \}}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ action\ of\ this\ OTC\ Markets\ order\ and\ returns\ it.}}
+\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ @param\ action\ The\ side\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00311\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a3172fbb4a37dcd81c6c33c86d1f08512}{withAction}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \&action)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a88a0e6667c362e5efb3fed9601070d90}{::}}\mbox{\hyperlink{class_order_a88a0e6667c362e5efb3fed9601070d90}{withAction}}(action));}
+\DoxyCodeLine{00313\ \ \ \ \ \}}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ time\ of\ the\ last\ action\ and\ returns\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ *\ @param\ actionTime\ The\ last\ order\ action\ time.}}
+\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00320\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00321\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_ab51f5941f9b892587828acd20abfcff8}{withActionTime}}(std::int64\_t\ actionTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_afe61808d5165016004a1af32cfc9d181}{::}}\mbox{\hyperlink{class_order_afe61808d5165016004a1af32cfc9d181}{withActionTime}}(actionTime));}
+\DoxyCodeLine{00323\ \ \ \ \ \}}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ order\ ID.}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00328\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00329\ \textcolor{comment}{\ \ \ \ \ *\ @param\ orderId\ The\ order\ ID.}}
+\DoxyCodeLine{00330\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00331\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00332\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a7f1b72235f6810e830b103212f75c878}{withOrderId}}(std::int64\_t\ orderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a6bf63555a00a8f4f96858c64076bb3ed}{::}}\mbox{\hyperlink{class_order_a6bf63555a00a8f4f96858c64076bb3ed}{withOrderId}}(orderId));}
+\DoxyCodeLine{00334\ \ \ \ \ \}}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ auxiliary\ order\ ID.}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ *\ @param\ auxOrderId\ The\ auxiliary\ order\ ID.}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00343\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a05427f06fcdd36b100abd77f200d5321}{withAuxOrderId}}(std::int64\_t\ auxOrderId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_aad85cb3b961d9986fa4cd6bc993b6442}{::}}\mbox{\hyperlink{class_order_aad85cb3b961d9986fa4cd6bc993b6442}{withAuxOrderId}}(auxOrderId));}
+\DoxyCodeLine{00345\ \ \ \ \ \}}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00348\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ price\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00349\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00350\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ The\ price\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00354\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a001604529ff53f7660cbd973da33306b}{withPrice}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_aa59f7353d7767e31034aa636a6c8888d}{::}}\mbox{\hyperlink{class_order_aa59f7353d7767e31034aa636a6c8888d}{withPrice}}(price));}
+\DoxyCodeLine{00356\ \ \ \ \ \}}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00359\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ size\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00360\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00361\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00362\ \textcolor{comment}{\ \ \ \ \ *\ @param\ size\ The\ size\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00363\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00364\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00365\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a6dca6dbcaebcd43e62a031633df7c709}{withSize}}(\textcolor{keywordtype}{double}\ size)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_aa15d099f66d84fa17e30b23a0c325049}{::}}\mbox{\hyperlink{class_order_aa15d099f66d84fa17e30b23a0c325049}{withSize}}(size));}
+\DoxyCodeLine{00367\ \ \ \ \ \}}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ executed\ size\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ \ *\ @param\ executedSize\ The\ executed\ size\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00376\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a108fe33b6f5e4d6da3cab72b3078c778}{withExecutedSize}}(\textcolor{keywordtype}{double}\ executedSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a87385cdfee42aa37934bcbdb590d8eaf}{::}}\mbox{\hyperlink{class_order_a87385cdfee42aa37934bcbdb590d8eaf}{withExecutedSize}}(executedSize));}
+\DoxyCodeLine{00378\ \ \ \ \ \}}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
+\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ The\ number\ of\ individual\ orders\ in\ this\ aggregate\ order.}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00387\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a3d944c7910c5cab6ab429fadf76ab4c9}{withCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_aed07762c4cbbc291bde65c00674b4415}{::}}\mbox{\hyperlink{class_order_aed07762c4cbbc291bde65c00674b4415}{withCount}}(count));}
+\DoxyCodeLine{00389\ \ \ \ \ \}}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00392\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ ID.}}
+\DoxyCodeLine{00393\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeId\ The\ trade\ ID.}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00398\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_affd215f097f8eba4552f3dbaf8050c39}{withTradeId}}(std::int64\_t\ tradeId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_af0159ae12cd3a7b4e10fcab259c4fcaf}{::}}\mbox{\hyperlink{class_order_af0159ae12cd3a7b4e10fcab259c4fcaf}{withTradeId}}(tradeId));}
+\DoxyCodeLine{00400\ \ \ \ \ \}}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ price.}}
+\DoxyCodeLine{00404\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00405\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00406\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradePrice\ The\ trade\ price.}}
+\DoxyCodeLine{00407\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00409\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_aafa20509660968fbb625700b4f97695a}{withTradePrice}}(\textcolor{keywordtype}{double}\ tradePrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_af596aded06e1e1e989ae5cacfcae2955}{::}}\mbox{\hyperlink{class_order_af596aded06e1e1e989ae5cacfcae2955}{withTradePrice}}(tradePrice));}
+\DoxyCodeLine{00411\ \ \ \ \ \}}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00413\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ trade\ size.}}
+\DoxyCodeLine{00415\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00417\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tradeSize\ The\ trade\ size.}}
+\DoxyCodeLine{00418\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00419\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00420\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a7852a897ad787c58a109a9e0eb29f855}{withTradeSize}}(\textcolor{keywordtype}{double}\ tradeSize)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a125255e9f72a68f20a46f0dba05afc45}{::}}\mbox{\hyperlink{class_order_a125255e9f72a68f20a46f0dba05afc45}{withTradeSize}}(tradeSize));}
+\DoxyCodeLine{00422\ \ \ \ \ \}}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00425\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00426\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00429\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00430\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00431\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a8fc47b5e26ea3b8349a7e70689996cf0}{withExchangeCode}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}::withExchangeCode(exchangeCode));}
+\DoxyCodeLine{00433\ \ \ \ \ \}}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00435\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00436\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ exchange\ code\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00437\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00438\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00439\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00440\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00442\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_ab8abfde0846b7896456b42fa952d18c9}{withExchangeCode}}(std::int16\_t\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}::withExchangeCode(exchangeCode));}
+\DoxyCodeLine{00444\ \ \ \ \ \}}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00447\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ side\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00448\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00449\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00450\ \textcolor{comment}{\ \ \ \ \ *\ @param\ side\ The\ side\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00451\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00452\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00453\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a98be98d76c5ae6c2119680b1cb4f272e}{withOrderSide}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_side}{Side}}\ \&side)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_ad4f58dd40bbc4384a108851724a45492}{::}}\mbox{\hyperlink{class_order_ad4f58dd40bbc4384a108851724a45492}{withOrderSide}}(side));}
+\DoxyCodeLine{00455\ \ \ \ \ \}}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00457\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ scope\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00459\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00460\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00461\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scope\ The\ scope\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00462\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00463\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00464\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a73c6a9b6206bae3f17af4bb454cbe4a0}{withScope}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_scope}{Scope}}\ \&scope)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(\mbox{\hyperlink{class_order}{Order}}\mbox{\hyperlink{class_order_a83b426b1f5c4a3b1d1e839d7edb3116e}{::}}\mbox{\hyperlink{class_order_a83b426b1f5c4a3b1d1e839d7edb3116e}{withScope}}(scope));}
+\DoxyCodeLine{00466\ \ \ \ \ \}}
+\DoxyCodeLine{00467\ }
+\DoxyCodeLine{00468\ \ \ \ \ \textcolor{comment}{//\ Order\ methods}}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00473\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00474\ \textcolor{comment}{\ \ \ \ \ *\ @param\ marketMaker\ The\ market\ maker\ or\ other\ aggregate\ identifier\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00475\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00476\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00477\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a500ebc768d9c60c427f2a19243f41c25}{withMarketMaker}}(std::string\ marketMaker)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{dynamic\_cast}<OtcMarketsOrder\ \&>(Order::withMarketMaker(std::move(marketMaker)));}
+\DoxyCodeLine{00479\ \ \ \ \ \}}
+\DoxyCodeLine{00480\ }
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{comment}{//\ OtcMarketsOrder\ methods}}
+\DoxyCodeLine{00482\ }
+\DoxyCodeLine{00483\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00484\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ Quote\ Access\ Payment\ (QAP)\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00485\ \textcolor{comment}{\ \ \ \ \ *\ QAP\ functionality\ allows\ participants\ to\ dynamically\ set\ access\ fees\ or\ rebates,}}
+\DoxyCodeLine{00486\ \textcolor{comment}{\ \ \ \ \ *\ in\ real-\/time\ and\ on\ a\ per-\/security\ basis\ through\ OTC\ Dealer\ or\ OTC\ FIX\ connections.}}
+\DoxyCodeLine{00487\ \textcolor{comment}{\ \ \ \ \ *\ Positive\ integers\ (1\ to\ 30)\ indicate\ a\ rebate,\ and\ negative\ integers\ (-\/1\ to\ -\/30)\ indicate\ an\ access\ fee.}}
+\DoxyCodeLine{00488\ \textcolor{comment}{\ \ \ \ \ *\ 0\ indicates\ no\ rebate\ or\ access\ fee.}}
+\DoxyCodeLine{00489\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00490\ \textcolor{comment}{\ \ \ \ \ *\ @return\ QAP\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00491\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00492\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{class_otc_markets_order_a85155c31cda80ccd911f84389efcd666}{getQuoteAccessPayment}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ otcMarketsOrderData\_.quoteAccessPayment;}
+\DoxyCodeLine{00494\ \ \ \ \ \}}
+\DoxyCodeLine{00495\ }
+\DoxyCodeLine{00496\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00497\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ Quote\ Access\ Payment\ (QAP)\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00498\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00499\ \textcolor{comment}{\ \ \ \ \ *\ @param\ quoteAccessPayment\ QAP\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00501\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_otc_markets_order_a440f4b10b968f074160659bd7873270b}{setQuoteAccessPayment}}(std::int32\_t\ quoteAccessPayment)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ otcMarketsOrderData\_.quoteAccessPayment\ =\ quoteAccessPayment;}
+\DoxyCodeLine{00503\ \ \ \ \ \}}
+\DoxyCodeLine{00504\ }
+\DoxyCodeLine{00505\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00506\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ Quote\ Access\ Payment\ (QAP)\ and\ returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00507\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00508\ \textcolor{comment}{\ \ \ \ \ *\ @param\ quoteAccessPayment\ QAP\ of\ this\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00509\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00510\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00511\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a7a8be780453a07ae0bdc6c867befd3d8}{withQuoteAccessPayment}}(std::int32\_t\ quoteAccessPayment)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_otc_markets_order_a440f4b10b968f074160659bd7873270b}{setQuoteAccessPayment}}\mbox{\hyperlink{class_otc_markets_order_a440f4b10b968f074160659bd7873270b}{(}}quoteAccessPayment\mbox{\hyperlink{class_otc_markets_order_a440f4b10b968f074160659bd7873270b}{)}};}
+\DoxyCodeLine{00513\ }
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00515\ \ \ \ \ \}}
+\DoxyCodeLine{00516\ }
+\DoxyCodeLine{00517\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00518\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ whether\ this\ event\ is\ available\ for\ business\ within\ the\ operating\ hours\ of\ the\ OTC\ Link\ system.}}
+\DoxyCodeLine{00519\ \textcolor{comment}{\ \ \ \ \ *\ All\ quotes\ will\ be\ closed\ at\ the\ start\ of\ the\ trading\ day\ and\ will\ remain\ closed\ until\ the\ traders\ open\ theirs.}}
+\DoxyCodeLine{00520\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00521\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ this\ event\ is\ available\ for\ business\ within\ the\ operating\ hours\ of\ the\ OTC\ Link\ system.}}
+\DoxyCodeLine{00522\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00523\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_otc_markets_order_ac37e7a0ebb4051f965125e608640165d}{isOpen}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ OPEN)\ !=\ 0;}
+\DoxyCodeLine{00525\ \ \ \ \ \}}
+\DoxyCodeLine{00526\ }
+\DoxyCodeLine{00527\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ is\ available\ for\ business\ within\ the\ operating\ hours\ of\ the\ OTC\ Link\ system.}}
+\DoxyCodeLine{00529\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00530\ \textcolor{comment}{\ \ \ \ \ *\ @param\ open\ \`{}true`\ if\ this\ event\ is\ available\ for\ business\ within\ the\ operating\ hours\ of\ the\ OTC\ Link\ system.}}
+\DoxyCodeLine{00531\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00532\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_otc_markets_order_a99020161803fdfecde767e4da68439eb}{setOpen}}(\textcolor{keywordtype}{bool}\ open)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ otcMarketsOrderData\_.otcMarketsFlags\ =\ open\ ?\ dxfcpp::orOp(otcMarketsOrderData\_.otcMarketsFlags,\ OPEN)}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ \string~OPEN);}
+\DoxyCodeLine{00535\ \ \ \ \ \}}
+\DoxyCodeLine{00536\ }
+\DoxyCodeLine{00537\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00538\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ is\ available\ for\ business\ within\ the\ operating\ hours\ of\ the\ OTC\ Link\ system.}}
+\DoxyCodeLine{00539\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00540\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00541\ \textcolor{comment}{\ \ \ \ \ *\ @param\ open\ \`{}true`\ if\ this\ event\ is\ available\ for\ business\ within\ the\ operating\ hours\ of\ the\ OTC\ Link\ system.}}
+\DoxyCodeLine{00542\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00543\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00544\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_aecf7fb9e69c5f83250d5ce97115db812}{withOpen}}(\textcolor{keywordtype}{bool}\ open)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_otc_markets_order_a99020161803fdfecde767e4da68439eb}{setOpen}}\mbox{\hyperlink{class_otc_markets_order_a99020161803fdfecde767e4da68439eb}{(}}open\mbox{\hyperlink{class_otc_markets_order_a99020161803fdfecde767e4da68439eb}{)}};}
+\DoxyCodeLine{00546\ }
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00548\ \ \ \ \ \}}
+\DoxyCodeLine{00549\ }
+\DoxyCodeLine{00550\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00551\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ whether\ this\ event\ is\ unsolicited.}}
+\DoxyCodeLine{00552\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00553\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ this\ event\ is\ unsolicited.}}
+\DoxyCodeLine{00554\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00555\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_otc_markets_order_abdc79206ae54aaa371a6ee46593cabc9}{isUnsolicited}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ UNSOLICITED)\ !=\ 0;}
+\DoxyCodeLine{00557\ \ \ \ \ \}}
+\DoxyCodeLine{00558\ }
+\DoxyCodeLine{00559\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00560\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ is\ unsolicited.}}
+\DoxyCodeLine{00561\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00562\ \textcolor{comment}{\ \ \ \ \ *\ @param\ unsolicited\ \`{}true`\ if\ this\ event\ is\ unsolicited.}}
+\DoxyCodeLine{00563\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00564\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_otc_markets_order_a3489691f45f5c5ffa9032d3bab2d3d00}{setUnsolicited}}(\textcolor{keywordtype}{bool}\ unsolicited)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ otcMarketsOrderData\_.otcMarketsFlags\ =\ unsolicited}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ dxfcpp::orOp(otcMarketsOrderData\_.otcMarketsFlags,\ UNSOLICITED)}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ \string~UNSOLICITED);}
+\DoxyCodeLine{00568\ \ \ \ \ \}}
+\DoxyCodeLine{00569\ }
+\DoxyCodeLine{00570\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00571\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ is\ unsolicited.}}
+\DoxyCodeLine{00572\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00573\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00574\ \textcolor{comment}{\ \ \ \ \ *\ @param\ unsolicited\ \`{}true`\ if\ this\ event\ is\ unsolicited.}}
+\DoxyCodeLine{00575\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00576\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00577\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a89474840460dab3c3ef97f723f67ddeb}{withUnsolicited}}(\textcolor{keywordtype}{bool}\ unsolicited)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_otc_markets_order_a3489691f45f5c5ffa9032d3bab2d3d00}{setUnsolicited}}\mbox{\hyperlink{class_otc_markets_order_a3489691f45f5c5ffa9032d3bab2d3d00}{(}}unsolicited\mbox{\hyperlink{class_otc_markets_order_a3489691f45f5c5ffa9032d3bab2d3d00}{)}};}
+\DoxyCodeLine{00579\ }
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00581\ \ \ \ \ \}}
+\DoxyCodeLine{00582\ }
+\DoxyCodeLine{00583\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00584\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ OTC\ Markets\ price\ type\ of\ this\ OTC\ Markets\ order\ events.}}
+\DoxyCodeLine{00585\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00586\ \textcolor{comment}{\ \ \ \ \ *\ @return\ OTC\ Markets\ price\ type\ of\ this\ OTC\ Markets\ order\ events.}}
+\DoxyCodeLine{00587\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00588\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_otc_markets_price_type}{OtcMarketsPriceType}}\ \&\mbox{\hyperlink{class_otc_markets_order_a1e69108a5349e0b819f4a5e0026d1e6e}{getOtcMarketsPriceType}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ OtcMarketsPriceType::valueOf(}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ getBits(otcMarketsOrderData\_.otcMarketsFlags,\ OTC\_PRICE\_TYPE\_MASK,\ OTC\_PRICE\_TYPE\_SHIFT));}
+\DoxyCodeLine{00591\ \ \ \ \ \}}
+\DoxyCodeLine{00592\ }
+\DoxyCodeLine{00593\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00594\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ OTC\ Markets\ price\ type\ of\ this\ OTC\ Markets\ order\ events.}}
+\DoxyCodeLine{00595\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00596\ \textcolor{comment}{\ \ \ \ \ *\ @param\ otcPriceType\ OTC\ Markets\ price\ type\ of\ this\ OTC\ Markets\ order\ events.}}
+\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00598\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_otc_markets_order_a6beaf18a0e6b6f6c58732c968fc6a116}{setOtcMarketsPriceType}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_otc_markets_price_type}{OtcMarketsPriceType}}\ \&otcPriceType)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ otcMarketsOrderData\_.otcMarketsFlags\ =\ setBits(otcMarketsOrderData\_.otcMarketsFlags,\ OTC\_PRICE\_TYPE\_MASK,}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OTC\_PRICE\_TYPE\_SHIFT,\ otcPriceType.getCode());}
+\DoxyCodeLine{00601\ \ \ \ \ \}}
+\DoxyCodeLine{00602\ }
+\DoxyCodeLine{00603\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00604\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ OTC\ Markets\ price\ type\ of\ this\ OTC\ Markets\ order\ events.}}
+\DoxyCodeLine{00605\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00606\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00607\ \textcolor{comment}{\ \ \ \ \ *\ @param\ otcPriceType\ OTC\ Markets\ price\ type\ of\ this\ OTC\ Markets\ order\ events.}}
+\DoxyCodeLine{00608\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00609\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00610\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_aa79325aa7a532ce9da001608452c4e57}{withOtcMarketsPriceType}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_otc_markets_price_type}{OtcMarketsPriceType}}\ \&otcPriceType)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_otc_markets_order_a6beaf18a0e6b6f6c58732c968fc6a116}{setOtcMarketsPriceType}}\mbox{\hyperlink{class_otc_markets_order_a6beaf18a0e6b6f6c58732c968fc6a116}{(}}otcPriceType\mbox{\hyperlink{class_otc_markets_order_a6beaf18a0e6b6f6c58732c968fc6a116}{)}};}
+\DoxyCodeLine{00612\ }
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00614\ \ \ \ \ \}}
+\DoxyCodeLine{00615\ }
+\DoxyCodeLine{00616\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00617\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ whether\ this\ event\ should\ NOT\ be\ considered\ for\ the\ inside\ price.}}
+\DoxyCodeLine{00618\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00619\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ this\ event\ should\ NOT\ be\ considered\ for\ the\ inside\ price.}}
+\DoxyCodeLine{00620\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00621\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_otc_markets_order_a0162e5a587263734836f481610752d0c}{isSaturated}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ SATURATED)\ !=\ 0;}
+\DoxyCodeLine{00623\ \ \ \ \ \}}
+\DoxyCodeLine{00624\ }
+\DoxyCodeLine{00625\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00626\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ should\ NOT\ be\ considered\ for\ the\ inside\ price.}}
+\DoxyCodeLine{00627\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00628\ \textcolor{comment}{\ \ \ \ \ *\ @param\ saturated\ \`{}true`\ if\ this\ event\ should\ NOT\ be\ considered\ for\ the\ inside\ price.}}
+\DoxyCodeLine{00629\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00630\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_otc_markets_order_a698cadccb12436a404603faba5fe84eb}{setSaturated}}(\textcolor{keywordtype}{bool}\ saturated)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ otcMarketsOrderData\_.otcMarketsFlags\ =\ saturated}
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ dxfcpp::orOp(otcMarketsOrderData\_.otcMarketsFlags,\ SATURATED)}
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ \string~SATURATED);}
+\DoxyCodeLine{00634\ \ \ \ \ \}}
+\DoxyCodeLine{00635\ }
+\DoxyCodeLine{00636\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00637\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ should\ NOT\ be\ considered\ for\ the\ inside\ price.}}
+\DoxyCodeLine{00638\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00639\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00640\ \textcolor{comment}{\ \ \ \ \ *\ @param\ saturated\ \`{}true`\ if\ this\ event\ should\ NOT\ be\ considered\ for\ the\ inside\ price.}}
+\DoxyCodeLine{00641\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00642\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00643\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_aad0bf865259db2c6328360f29feac326}{withSaturated}}(\textcolor{keywordtype}{bool}\ saturated)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_otc_markets_order_a698cadccb12436a404603faba5fe84eb}{setSaturated}}\mbox{\hyperlink{class_otc_markets_order_a698cadccb12436a404603faba5fe84eb}{(}}saturated\mbox{\hyperlink{class_otc_markets_order_a698cadccb12436a404603faba5fe84eb}{)}};}
+\DoxyCodeLine{00645\ }
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00647\ \ \ \ \ \}}
+\DoxyCodeLine{00648\ }
+\DoxyCodeLine{00649\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00650\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ whether\ this\ event\ is\ in\ 'AutoEx'\ mode.}}
+\DoxyCodeLine{00651\ \textcolor{comment}{\ \ \ \ \ *\ If\ this\ event\ is\ in\ 'AutoEx'\ mode\ then\ a\ response\ to\ an\ OTC\ Link\ trade\ message\ will\ be\ immediate.}}
+\DoxyCodeLine{00652\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00653\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ this\ event\ is\ in\ 'AutoEx'\ mode.}}
+\DoxyCodeLine{00654\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00655\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_otc_markets_order_a9b2046f6345aa6504004fd4efc6f6500}{isAutoExecution}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ AUTO\_EXECUTION)\ !=\ 0;}
+\DoxyCodeLine{00657\ \ \ \ \ \}}
+\DoxyCodeLine{00658\ }
+\DoxyCodeLine{00659\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00660\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ is\ in\ 'AutoEx'\ mode.}}
+\DoxyCodeLine{00661\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00662\ \textcolor{comment}{\ \ \ \ \ *\ @param\ autoExecution\ \`{}true`\ if\ this\ event\ is\ in\ 'AutoEx'\ mode.}}
+\DoxyCodeLine{00663\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00664\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_otc_markets_order_abda9890e4acfe2687d77b37cf930b9cd}{setAutoExecution}}(\textcolor{keywordtype}{bool}\ autoExecution)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ otcMarketsOrderData\_.otcMarketsFlags\ =}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ autoExecution\ ?\ dxfcpp::orOp(otcMarketsOrderData\_.otcMarketsFlags,\ AUTO\_EXECUTION)}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ \string~AUTO\_EXECUTION);}
+\DoxyCodeLine{00668\ \ \ \ \ \}}
+\DoxyCodeLine{00669\ }
+\DoxyCodeLine{00670\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00671\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ is\ in\ 'AutoEx'\ mode.}}
+\DoxyCodeLine{00672\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00673\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00674\ \textcolor{comment}{\ \ \ \ \ *\ @param\ autoExecution\ \`{}true`\ if\ this\ event\ is\ in\ 'AutoEx'\ mode.}}
+\DoxyCodeLine{00675\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00676\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00677\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_a08422c6878fbdb4b8060fed861f9812b}{withAutoExecution}}(\textcolor{keywordtype}{bool}\ autoExecution)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_otc_markets_order_abda9890e4acfe2687d77b37cf930b9cd}{setAutoExecution}}\mbox{\hyperlink{class_otc_markets_order_abda9890e4acfe2687d77b37cf930b9cd}{(}}autoExecution\mbox{\hyperlink{class_otc_markets_order_abda9890e4acfe2687d77b37cf930b9cd}{)}};}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00680\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00681\ \ \ \ \ \}}
+\DoxyCodeLine{00682\ }
+\DoxyCodeLine{00683\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ whether\ this\ event\ represents\ a\ NMS\ conditional.}}
+\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *\ This\ flag\ indicates\ the\ displayed\ @ref\ \#getSize()\ "{}size"{}\ is\ a\ round\ lot\ at\ least\ two\ times\ greater\ than\ the}}
+\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ *\ minimum\ round\ lot\ size\ in\ the\ security\ and\ a\ trade\ message\ relating\ to\ the\ event\ cannot\ be\ sent\ or\ filled\ for}}
+\DoxyCodeLine{00687\ \textcolor{comment}{\ \ \ \ \ *\ less\ than\ the\ displayed\ size.}}
+\DoxyCodeLine{00688\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00689\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ this\ event\ represents\ a\ NMS\ conditional.}}
+\DoxyCodeLine{00690\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00691\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_otc_markets_order_a22ccc3f9250acd20872901d013148eaa}{isNmsConditional}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ NMS\_CONDITIONAL)\ !=\ 0;}
+\DoxyCodeLine{00693\ \ \ \ \ \}}
+\DoxyCodeLine{00694\ }
+\DoxyCodeLine{00695\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00696\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ represents\ a\ NMS\ conditional.}}
+\DoxyCodeLine{00697\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00698\ \textcolor{comment}{\ \ \ \ \ *\ @param\ nmsConditional\ \`{}true`\ if\ this\ event\ represents\ a\ NMS\ conditional.}}
+\DoxyCodeLine{00699\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00700\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_otc_markets_order_a121493856024dba5395265eb4cabfcd1}{setNmsConditional}}(\textcolor{keywordtype}{bool}\ nmsConditional)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00701\ \ \ \ \ \ \ \ \ otcMarketsOrderData\_.otcMarketsFlags\ =}
+\DoxyCodeLine{00702\ \ \ \ \ \ \ \ \ \ \ \ \ nmsConditional\ ?\ dxfcpp::orOp(otcMarketsOrderData\_.otcMarketsFlags,\ NMS\_CONDITIONAL)}
+\DoxyCodeLine{00703\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ dxfcpp::andOp(otcMarketsOrderData\_.otcMarketsFlags,\ \string~NMS\_CONDITIONAL);}
+\DoxyCodeLine{00704\ \ \ \ \ \}}
+\DoxyCodeLine{00705\ }
+\DoxyCodeLine{00706\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00707\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ whether\ this\ event\ represents\ a\ NMS\ conditional.}}
+\DoxyCodeLine{00708\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00709\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00710\ \textcolor{comment}{\ \ \ \ \ *\ @param\ nmsConditional\ \`{}true`\ if\ this\ event\ represents\ a\ NMS\ conditional.}}
+\DoxyCodeLine{00711\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ OTC\ Markets\ order.}}
+\DoxyCodeLine{00712\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00713\ \ \ \ \ OtcMarketsOrder\ \&\mbox{\hyperlink{class_otc_markets_order_ad547d9d04d92fdedf391a4161552bdd3}{withNmsConditional}}(\textcolor{keywordtype}{bool}\ nmsConditional)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_otc_markets_order_a121493856024dba5395265eb4cabfcd1}{setNmsConditional}}\mbox{\hyperlink{class_otc_markets_order_a121493856024dba5395265eb4cabfcd1}{(}}nmsConditional\mbox{\hyperlink{class_otc_markets_order_a121493856024dba5395265eb4cabfcd1}{)}};}
+\DoxyCodeLine{00715\ }
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00717\ \ \ \ \ \}}
+\DoxyCodeLine{00718\ }
+\DoxyCodeLine{00719\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00720\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00721\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00722\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00723\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00724\ \ \ \ \ std::string\ \mbox{\hyperlink{class_otc_markets_order_a0d96397e3824a369fa980a1de892a734}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_otc_markets_order_a0d96397e3824a369fa980a1de892a734}{override}};}
+\DoxyCodeLine{00725\ \};}
+\DoxyCodeLine{00726\ }
+\DoxyCodeLine{00727\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00728\ }
+\DoxyCodeLine{00729\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
+
+\end{DoxyCode}

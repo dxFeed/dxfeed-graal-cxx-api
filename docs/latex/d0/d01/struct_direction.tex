@@ -1,0 +1,63 @@
+\doxysubsection{Direction Struct Reference}
+\hypertarget{struct_direction}{}\label{struct_direction}\index{Direction@{Direction}}
+
+
+\doxylink{struct_direction}{Direction} of the price movement.  
+
+
+
+
+{\ttfamily \#include $<$Direction.\+hpp$>$}
+
+
+
+Inherits Enum$<$ Child, Code $>$.
+
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_direction}{Direction}} \mbox{\hyperlink{struct_direction_a04c7cefe80029a7bd4a228e18cb21bc5}{UNDEFINED}} \{0, "{}UNDEFINED"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{struct_direction}{Direction} is undefined, unknown or inapplicable. \end{DoxyCompactList}\item 
+\Hypertarget{struct_direction_a06c0264c2f84a465618c2c65a8e90c8c}\label{struct_direction_a06c0264c2f84a465618c2c65a8e90c8c} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_direction}{Direction}} {\bfseries DOWN} \{1, "{}DOWN"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is lower than previous price. \end{DoxyCompactList}\item 
+\Hypertarget{struct_direction_a4b12560fe073808faea78a7f07dd2855}\label{struct_direction_a4b12560fe073808faea78a7f07dd2855} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_direction}{Direction}} {\bfseries ZERO\+\_\+\+DOWN} \{2, "{}ZERO\+\_\+\+DOWN"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is the same as previous price and is lower than the last known price of different value. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_direction}{Direction}} \mbox{\hyperlink{struct_direction_a239064573fb1e619078fc545f9bced58}{ZERO}} \{3, "{}ZERO"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is equal to the only known price value suitable for price direction computation. \end{DoxyCompactList}\item 
+\Hypertarget{struct_direction_aed226ae7fb889c633805f6239446b4e3}\label{struct_direction_aed226ae7fb889c633805f6239446b4e3} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_direction}{Direction}} {\bfseries ZERO\+\_\+\+UP} \{4, "{}ZERO\+\_\+\+UP"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is the same as previous price and is higher than the last known price of different value. \end{DoxyCompactList}\item 
+\Hypertarget{struct_direction_ae43281276568e135dc1e6c3b23bcb4b7}\label{struct_direction_ae43281276568e135dc1e6c3b23bcb4b7} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{struct_direction}{Direction}} {\bfseries UP} \{5, "{}UP"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is higher than previous price. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{struct_direction}{Direction} of the price movement. 
+
+For example tick direction for last trade price. 
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{struct_direction_a04c7cefe80029a7bd4a228e18cb21bc5}\index{Direction@{Direction}!UNDEFINED@{UNDEFINED}}
+\index{UNDEFINED@{UNDEFINED}!Direction@{Direction}}
+\doxyparagraph{\texorpdfstring{UNDEFINED}{UNDEFINED}}
+{\footnotesize\ttfamily \label{struct_direction_a04c7cefe80029a7bd4a228e18cb21bc5} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE const \mbox{\hyperlink{struct_direction}{Direction}} Direction\+::\+UNDEFINED \{0, "{}UNDEFINED"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\doxylink{struct_direction}{Direction} is undefined, unknown or inapplicable. 
+
+It includes cases with undefined price value or when direction computation was not performed. \Hypertarget{struct_direction_a239064573fb1e619078fc545f9bced58}\index{Direction@{Direction}!ZERO@{ZERO}}
+\index{ZERO@{ZERO}!Direction@{Direction}}
+\doxyparagraph{\texorpdfstring{ZERO}{ZERO}}
+{\footnotesize\ttfamily \label{struct_direction_a239064573fb1e619078fc545f9bced58} 
+const \mbox{\hyperlink{struct_direction}{Direction}} Direction\+::\+ZERO \{3, "{}ZERO"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Current price is equal to the only known price value suitable for price direction computation. 
+
+Unlike {\bfseries{UNDEFINED}} the {\bfseries{ZERO}} direction implies that current price is defined and direction computation was duly performed but has failed to detect any upward or downward price movement. It is also reported for cases when price sequence was broken and direction computation was restarted anew. 

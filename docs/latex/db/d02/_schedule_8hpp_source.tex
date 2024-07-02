@@ -9,203 +9,207 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
 \DoxyCodeLine{00009\ }
-\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ <b>Schedule</b>\ class\ provides\ API\ to\ retrieve\ and\ explore\ trading\ schedules\ of\ different\ exchanges}}
-\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ and\ different\ classes\ of\ financial\ instruments.\ Each\ instance\ of\ schedule\ covers\ separate\ trading\ schedule}}
-\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ of\ some\ class\ of\ instruments,\ i.e.\ NYSE\ stock\ trading\ schedule\ or\ CME\ corn\ futures\ trading\ schedule.}}
-\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ Each\ schedule\ splits\ entire\ time\ scale\ into\ separate\ @ref\ Day\ "{}days"{}\ that\ are\ aligned\ to\ the\ specific}}
-\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ trading\ hours\ of\ covered\ trading\ schedule.}}
-\DoxyCodeLine{00016\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00017\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule}{Schedule}}\ \{}
-\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_day}{Day}};}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Schedule\ object}}
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule}{Ptr}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_schedule}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule}{shared\_ptr}}<\mbox{\hyperlink{structdxfcpp_1_1_schedule}{Schedule}}>;}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Schedule\ object}}
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule}{Unique}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_schedule}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule}{unique\_ptr}}<\mbox{\hyperlink{structdxfcpp_1_1_schedule}{Schedule}}>;}
-\DoxyCodeLine{00025\ }
-\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00027\ \ \ \ \ JavaObjectHandle<Schedule>\ handle\_;}
-\DoxyCodeLine{00028\ }
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{explicit}\ Schedule(\textcolor{keywordtype}{void}\ *handle\ =\ \textcolor{keywordtype}{nullptr})\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00010\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ <b>Schedule</b>\ class\ provides\ API\ to\ retrieve\ and\ explore\ trading\ schedules\ of\ different\ exchanges}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ and\ different\ classes\ of\ financial\ instruments.\ Each\ instance\ of\ schedule\ covers\ separate\ trading\ schedule}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ of\ some\ class\ of\ instruments,\ i.e.\ NYSE\ stock\ trading\ schedule\ or\ CME\ corn\ futures\ trading\ schedule.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ Each\ schedule\ splits\ entire\ time\ scale\ into\ separate\ @ref\ Day\ "{}days"{}\ that\ are\ aligned\ to\ the\ specific}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ trading\ hours\ of\ covered\ trading\ schedule.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_schedule}{Schedule}}\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_schedule}{Day}};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Schedule\ object}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{struct_schedule}{Schedule}}>;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Schedule\ object}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{struct_schedule}{Unique}}\ =\ \mbox{\hyperlink{struct_schedule}{std}}::\mbox{\hyperlink{struct_schedule}{unique\_ptr}}<\mbox{\hyperlink{struct_schedule}{Schedule}}>;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ \ \ \ \ JavaObjectHandle<\mbox{\hyperlink{struct_schedule}{Schedule}}>\ handle\_;}
 \DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Checks\ the\ handle,\ attempts\ to\ allocate\ memory\ for\ the\ pointer\ and\ return\ Schedule::Ptr}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ @param\ handle\ The\ graal\ Schedule's\ handle}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ smart\ pointer\ for\ the\ Schedule\ object.}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ Schedule::Ptr\ create(\textcolor{keywordtype}{void}\ *handle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ default\ schedule\ instance\ for\ specified\ instrument\ profile.}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ @param\ profile\ The\ instrument\ profile\ those\ schedule\ is\ requested}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ default\ schedule\ instance\ for\ specified\ instrument\ profile}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a1b684a6d7cab2c9b53f711271d29d810}{Schedule}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a1b684a6d7cab2c9b53f711271d29d810}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a1b684a6d7cab2c9b53f711271d29d810}{getInstance}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_a1b684a6d7cab2c9b53f711271d29d810}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a1b684a6d7cab2c9b53f711271d29d810}{shared\_ptr}}<\mbox{\hyperlink{structdxfcpp_1_1_schedule_a1b684a6d7cab2c9b53f711271d29d810}{InstrumentProfile}}>\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a1b684a6d7cab2c9b53f711271d29d810}{profile}})\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ default\ schedule\ instance\ for\ specified\ schedule\ definition.}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scheduleDefinition\ The\ schedule\ definition\ of\ requested\ schedule}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ default\ schedule\ instance\ for\ specified\ schedule\ definition}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ac26864de124904fbd8085ecb2ed9aed8}{Schedule}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac26864de124904fbd8085ecb2ed9aed8}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ac26864de124904fbd8085ecb2ed9aed8}{getInstance}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ac26864de124904fbd8085ecb2ed9aed8}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac26864de124904fbd8085ecb2ed9aed8}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac26864de124904fbd8085ecb2ed9aed8}{scheduleDefinition}})\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00055\ }
-\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ schedule\ instance\ for\ specified\ instrument\ profile\ and\ trading\ venue.}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ @param\ profile\ The\ instrument\ profile\ those\ schedule\ is\ requested}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ @param\ venue\ The\ trading\ venue\ those\ schedule\ is\ requested}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ schedule\ instance\ for\ specified\ instrument\ profile\ and\ trading\ venue}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{Schedule}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{getInstance}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{shared\_ptr}}<\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{InstrumentProfile}}>\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{profile}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_schedule_ac6de95ef4c90e66d2fac8f2a534da55c}{venue}})\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00064\ }
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ trading\ venues\ for\ specified\ instrument\ profile.}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ @param\ profile\ The\ instrument\ profile\ those\ trading\ venues\ are\ requested}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ @return\ trading\ venues\ for\ specified\ instrument\ profile}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{vector}}<\mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{string}}>\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{getTradingVenues}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{shared\_ptr}}<\mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{InstrumentProfile}}>\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_abfac216a0672ffd964ab13dbc05e9ed7}{profile}})\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00072\ }
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ Downloads\ defaults\ using\ specified\ download\ config\ and\ optionally\ start\ periodic\ download.}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ The\ specified\ config\ can\ be\ one\ of\ the\ following:<ul>}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ <li>"{}"{}\ -\/\ stop\ periodic\ download}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ <li>URL\ \ \ -\/\ download\ once\ from\ specified\ URL\ and\ stop\ periodic\ download}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ <li>URL,period\ \ \ -\/\ start\ periodic\ download\ from\ specified\ URL}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ <li>"{}auto"{}\ \ \ -\/\ start\ periodic\ download\ from\ default\ location}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ @param\ downloadConfig\ download\ config}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a9c6541a2f047a8de3435b047dfdcbdb3}{downloadDefaults}}(\textcolor{keyword}{const}\ std::string\ \&downloadConfig)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ Sets\ shared\ defaults\ that\ are\ used\ by\ individual\ schedule\ instances.}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ @param\ data\ The\ content\ of\ default\ data}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ OK}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a1aaeee12a3464be3ef6544e2f914fce8}{setDefaults}}(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{char}>\ \&data)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ session\ that\ contains\ specified\ time.}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Session::Ptr\{nullptr\}`\ if\ specified\ time}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ the\ time\ to\ search\ for}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ @return\ session\ that\ contains\ specified\ time\ or\ \`{}Session::Ptr\{nullptr\}`\ if\ specified\ time}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a95b78c265d187a4536904c7f34f6172b}{Session}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a95b78c265d187a4536904c7f34f6172b}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a95b78c265d187a4536904c7f34f6172b}{getSessionByTime}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_a95b78c265d187a4536904c7f34f6172b}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a95b78c265d187a4536904c7f34f6172b}{int64\_t}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a95b78c265d187a4536904c7f34f6172b}{time}})\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ day\ that\ contains\ specified\ time.}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if\ specified\ time}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ to\ search\ for}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ day\ that\ contains\ specified\ time\ or\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ specified\ time\ falls\ outside\ of\ valid\ date\ range}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a1fd4fff038bbcc502afd661050d8afc7}{Day}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a1fd4fff038bbcc502afd661050d8afc7}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a1fd4fff038bbcc502afd661050d8afc7}{getDayByTime}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_a1fd4fff038bbcc502afd661050d8afc7}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a1fd4fff038bbcc502afd661050d8afc7}{int64\_t}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a1fd4fff038bbcc502afd661050d8afc7}{time}})\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00115\ }
-\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ day\ for\ specified\ day\ identifier.}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if\ specified\ day\ identifier}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayId\ The\ day\ identifier\ to\ search\ for}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ day\ for\ specified\ day\ identifier\ or\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ specified\ day\ identifier\ falls\ outside\ of\ valid\ date\ range}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Day::getDayId()}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00126\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_acf12d816f79667e36276003c09d7c801}{Day}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_acf12d816f79667e36276003c09d7c801}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_acf12d816f79667e36276003c09d7c801}{getDayById}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_acf12d816f79667e36276003c09d7c801}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_acf12d816f79667e36276003c09d7c801}{int32\_t}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_acf12d816f79667e36276003c09d7c801}{dayId}})\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00127\ }
-\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ day\ for\ specified\ year,\ month\ and\ day\ numbers.}}
-\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ Year,\ month,\ and\ day\ numbers\ shall\ be\ packed\ in\ the\ following\ way:}}
-\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ <pre>YearMonthDay\ =\ year\ *\ 10000\ +\ month\ *\ 100\ +\ day</pre>}}
-\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ For\ example,\ September\ 28,\ 1977\ has\ value\ 19770928.}}
-\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ <p>}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ If\ specified\ day\ does\ not\ exist\ then\ this\ method\ returns\ day\ with}}
-\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ the\ lowest\ valid\ YearMonthDay\ that\ is\ greater\ than\ specified\ one.}}
-\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if\ specified\ year,\ month\ and\ day}}
-\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ numbers\ fall\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
-\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ @param\ yearMonthDay\ The\ year,\ month\ and\ day\ numbers\ to\ search\ for}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ day\ for\ specified\ year,\ month\ and\ day\ numbers\ or\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ if\ specified\ year,\ month\ and\ day\ numbers\ fall\ outside\ of\ valid\ date\ range}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Day\#getYearMonthDay()}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00144\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a566ef6fbf48b0bff5e151e66ac4fc836}{Day}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a566ef6fbf48b0bff5e151e66ac4fc836}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a566ef6fbf48b0bff5e151e66ac4fc836}{getDayByYearMonthDay}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_a566ef6fbf48b0bff5e151e66ac4fc836}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a566ef6fbf48b0bff5e151e66ac4fc836}{int32\_t}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a566ef6fbf48b0bff5e151e66ac4fc836}{yearMonthDay}})\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ session\ that\ is\ nearest\ to\ the\ specified\ time\ and\ that\ is\ accepted\ by\ specified\ filter.}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\})\ if\ specified\ time\ falls}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30\ or\ if\ no\ sessions\ acceptable\ by\ specified\ filter\ are}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ found\ within\ one\ year\ this\ method}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ To\ find\ nearest\ trading\ session\ of\ any\ type\ use\ this\ code:}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ <pre>session\ =\ schedule-\/>getNearestSessionByTime(time,\ SessionFilter::TRADING);</pre>}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ To\ find\ nearest\ regular\ trading\ session\ use\ this\ code:}}
-\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ <pre>session\ =\ schedule-\/>getNearestSessionByTime(time,\ SessionFilter::REGULAR);</pre>}}
-\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ to\ search\ for}}
-\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ @param\ filter\ the\ filter\ to\ test\ sessions}}
-\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ @return\ session\ that\ is\ nearest\ to\ the\ specified\ time\ and\ that\ is\ accepted\ by\ specified\ filter\ or}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\})\ if\ specified\ time\ falls\ outside\ of\ valid\ date\ range}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ or\ if\ no\ such\ day\ was\ found\ within\ one\ year}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00162\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a57ea9aa76c5c4f10c0033feada5146ff}{Session}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a57ea9aa76c5c4f10c0033feada5146ff}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a57ea9aa76c5c4f10c0033feada5146ff}{getNearestSessionByTime}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_a57ea9aa76c5c4f10c0033feada5146ff}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a57ea9aa76c5c4f10c0033feada5146ff}{int64\_t}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a57ea9aa76c5c4f10c0033feada5146ff}{time}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a57ea9aa76c5c4f10c0033feada5146ff}{SessionFilter}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_schedule_a57ea9aa76c5c4f10c0033feada5146ff}{filter}})\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00163\ }
-\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ session\ that\ is\ nearest\ to\ the\ specified\ time\ and\ that\ is\ accepted\ by\ specified\ filter.}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\})\ if\ specified\ time}}
-\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
-\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ If\ no\ sessions\ acceptable\ by\ specified\ filter\ are\ found\ within\ one\ year\ this\ method\ will\ return}}
-\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\}).}}
-\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ <p>}}
-\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *\ To\ find\ nearest\ trading\ session\ of\ any\ type\ use\ this\ code:}}
-\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ <pre>session\ =\ schedule-\/>findNearestSessionByTime(time,\ SessionFilter::TRADING);</pre>}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ To\ find\ nearest\ regular\ trading\ session\ use\ this\ code:}}
-\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ <pre>session\ =\ schedule-\/>findNearestSessionByTime(time,\ SessionFilter::REGULAR);</pre>}}
-\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ to\ search\ for}}
-\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ @param\ filter\ The\ filter\ to\ test\ sessions}}
-\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ session\ that\ is\ nearest\ to\ the\ specified\ time\ and\ that\ is\ accepted\ by\ specified\ filter\ or}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\})\ if\ specified\ time\ falls\ outside\ of\ valid\ date\ range}}
-\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00181\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_afad8426ce59bd8398ad6733fe5a6f751}{Session}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_afad8426ce59bd8398ad6733fe5a6f751}{Ptr}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_afad8426ce59bd8398ad6733fe5a6f751}{findNearestSessionByTime}}(\mbox{\hyperlink{structdxfcpp_1_1_schedule_afad8426ce59bd8398ad6733fe5a6f751}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_afad8426ce59bd8398ad6733fe5a6f751}{int64\_t}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_afad8426ce59bd8398ad6733fe5a6f751}{time}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_afad8426ce59bd8398ad6733fe5a6f751}{SessionFilter}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_schedule_afad8426ce59bd8398ad6733fe5a6f751}{filter}})\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00182\ }
-\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ name\ of\ this\ schedule.}}
-\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ name\ of\ this\ schedule}}
-\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00188\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a8657d271bf875cfbbbb407555a5d9ed1}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a8657d271bf875cfbbbb407555a5d9ed1}{string}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a8657d271bf875cfbbbb407555a5d9ed1}{getName}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00189\ }
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ zone\ display\ name\ in\ which\ this\ schedule\ is\ defined.}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ zone\ display\ name\ in\ which\ this\ schedule\ is\ defined}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00195\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a7edc240183ed5d4330e875401ff99a6a}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_a7edc240183ed5d4330e875401ff99a6a}{string}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_a7edc240183ed5d4330e875401ff99a6a}{getTimeZoneDisplayName}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00196\ }
-\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ zone\ id\ in\ which\ this\ schedule\ is\ defined.}}
-\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ zone\ id\ in\ which\ this\ schedule\ is\ defined}}
-\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00202\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ae998e679956e467129643c48c6339c10}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_schedule_ae998e679956e467129643c48c6339c10}{string}}\ \mbox{\hyperlink{structdxfcpp_1_1_schedule_ae998e679956e467129643c48c6339c10}{getTimeZoneId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00203\ \};}
-\DoxyCodeLine{00204\ }
-\DoxyCodeLine{00205\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{explicit}\ Schedule(\textcolor{keywordtype}{void}\ *handle\ =\ \textcolor{keywordtype}{nullptr})\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ Checks\ the\ handle,\ attempts\ to\ allocate\ memory\ for\ the\ pointer\ and\ return\ Schedule::Ptr}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ @param\ handle\ The\ graal\ Schedule's\ handle}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ smart\ pointer\ for\ the\ Schedule\ object.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_schedule}{Schedule}}::Ptr\ create(\textcolor{keywordtype}{void}\ *handle);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ default\ schedule\ instance\ for\ specified\ instrument\ profile.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ @param\ profile\ The\ instrument\ profile\ those\ schedule\ is\ requested}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ default\ schedule\ instance\ for\ specified\ instrument\ profile}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_schedule}{Schedule}}::Ptr\ \mbox{\hyperlink{struct_schedule_ad6952457d94887d98fe974b57f0aabd0}{getInstance}}(std::shared\_ptr<InstrumentProfile>\ profile);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ default\ schedule\ instance\ for\ specified\ schedule\ definition.}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ @param\ scheduleDefinition\ The\ schedule\ definition\ of\ requested\ schedule}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ default\ schedule\ instance\ for\ specified\ schedule\ definition}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_schedule}{Schedule}}::Ptr\ \mbox{\hyperlink{struct_schedule_ac51924f028359ed7c1d60153ab7ac037}{getInstance}}(\textcolor{keyword}{const}\ std::string\ \&scheduleDefinition);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ schedule\ instance\ for\ specified\ instrument\ profile\ and\ trading\ venue.}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ @param\ profile\ The\ instrument\ profile\ those\ schedule\ is\ requested}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ @param\ venue\ The\ trading\ venue\ those\ schedule\ is\ requested}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ schedule\ instance\ for\ specified\ instrument\ profile\ and\ trading\ venue}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_schedule}{Schedule}}::Ptr\ \mbox{\hyperlink{struct_schedule_a21284386e83a8fa54e9d18eba848125b}{getInstance}}(std::shared\_ptr<InstrumentProfile>\ profile,\ \textcolor{keyword}{const}\ std::string\ \&venue);}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ trading\ venues\ for\ specified\ instrument\ profile.}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ @param\ profile\ The\ instrument\ profile\ those\ trading\ venues\ are\ requested}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ @return\ trading\ venues\ for\ specified\ instrument\ profile}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{std}}::\mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{vector}}<\mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{std}}::\mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{string}}>\ \mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{getTradingVenues}}(\mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{std}}::\mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{shared\_ptr}}<\mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{InstrumentProfile}}>\ \mbox{\hyperlink{struct_schedule_a031f23f634bff9e31e00ea0c72e4a217}{profile}});}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ Downloads\ defaults\ using\ specified\ download\ config\ and\ optionally\ start\ periodic\ download.}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ The\ specified\ config\ can\ be\ one\ of\ the\ following:<ul>}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ <li>"{}"{}\ -\/\ stop\ periodic\ download}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ <li>URL\ \ \ -\/\ download\ once\ from\ specified\ URL\ and\ stop\ periodic\ download}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ <li>URL,period\ \ \ -\/\ start\ periodic\ download\ from\ specified\ URL}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ <li>"{}auto"{}\ \ \ -\/\ start\ periodic\ download\ from\ default\ location}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ @param\ downloadConfig\ download\ config}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_schedule_a06d71538a7d9f8bcd568b5630810a7d9}{downloadDefaults}}(\textcolor{keyword}{const}\ std::string\ \&downloadConfig)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ Sets\ shared\ defaults\ that\ are\ used\ by\ individual\ schedule\ instances.}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ @param\ data\ The\ content\ of\ default\ data}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ OK}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_schedule_a3658101bb1fa1b22078fd0e9150bb839}{setDefaults}}(\textcolor{keyword}{const}\ std::vector<\textcolor{keywordtype}{char}>\ \&data)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ session\ that\ contains\ specified\ time.}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Session::Ptr\{nullptr\}`\ if\ specified\ time}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ the\ time\ to\ search\ for}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ @return\ session\ that\ contains\ specified\ time\ or\ \`{}Session::Ptr\{nullptr\}`\ if\ specified\ time}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{struct_session}{Session}}::Ptr\ \mbox{\hyperlink{struct_schedule_a7e193ebd83f9f1769ee10c85bdd5cee9}{getSessionByTime}}(std::int64\_t\ time)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ day\ that\ contains\ specified\ time.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if\ specified\ time}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ to\ search\ for}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ day\ that\ contains\ specified\ time\ or\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ specified\ time\ falls\ outside\ of\ valid\ date\ range}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{struct_day}{Day}}::Ptr\ \mbox{\hyperlink{struct_schedule_ae2191af5b57ac6995a8492fcbe931818}{getDayByTime}}(std::int64\_t\ time)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ day\ for\ specified\ day\ identifier.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if\ specified\ day\ identifier}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayId\ The\ day\ identifier\ to\ search\ for}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ day\ for\ specified\ day\ identifier\ or\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ specified\ day\ identifier\ falls\ outside\ of\ valid\ date\ range}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Day::getDayId()}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{struct_day}{Day}}::Ptr\ \mbox{\hyperlink{struct_schedule_abb1a991322bd4df722a8347c0aa6d7cf}{getDayById}}(std::int32\_t\ dayId)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ day\ for\ specified\ year,\ month\ and\ day\ numbers.}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ Year,\ month,\ and\ day\ numbers\ shall\ be\ packed\ in\ the\ following\ way:}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ <pre>YearMonthDay\ =\ year\ *\ 10000\ +\ month\ *\ 100\ +\ day</pre>}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ For\ example,\ September\ 28,\ 1977\ has\ value\ 19770928.}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ <p>}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ If\ specified\ day\ does\ not\ exist\ then\ this\ method\ returns\ day\ with}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ the\ lowest\ valid\ YearMonthDay\ that\ is\ greater\ than\ specified\ one.}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})\ if\ specified\ year,\ month\ and\ day}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ numbers\ fall\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ @param\ yearMonthDay\ The\ year,\ month\ and\ day\ numbers\ to\ search\ for}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ day\ for\ specified\ year,\ month\ and\ day\ numbers\ or\ \`{}Day::Ptr\{nullptr\}`\ (std::shared\_ptr<Day>\{nullptr\})}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ if\ specified\ year,\ month\ and\ day\ numbers\ fall\ outside\ of\ valid\ date\ range}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Day\#getYearMonthDay()}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{struct_day}{Day}}::Ptr\ \mbox{\hyperlink{struct_schedule_a9aa31d3292ae5901d5e50665f834cecb}{getDayByYearMonthDay}}(std::int32\_t\ yearMonthDay)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ session\ that\ is\ nearest\ to\ the\ specified\ time\ and\ that\ is\ accepted\ by\ specified\ filter.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\})\ if\ specified\ time\ falls}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30\ or\ if\ no\ sessions\ acceptable\ by\ specified\ filter\ are}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ found\ within\ one\ year\ this\ method}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ To\ find\ nearest\ trading\ session\ of\ any\ type\ use\ this\ code:}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ <pre>session\ =\ schedule-\/>getNearestSessionByTime(time,\ SessionFilter::TRADING);</pre>}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ To\ find\ nearest\ regular\ trading\ session\ use\ this\ code:}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ <pre>session\ =\ schedule-\/>getNearestSessionByTime(time,\ SessionFilter::REGULAR);</pre>}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ to\ search\ for}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ @param\ filter\ the\ filter\ to\ test\ sessions}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ @return\ session\ that\ is\ nearest\ to\ the\ specified\ time\ and\ that\ is\ accepted\ by\ specified\ filter\ or}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\})\ if\ specified\ time\ falls\ outside\ of\ valid\ date\ range}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ or\ if\ no\ such\ day\ was\ found\ within\ one\ year}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00164\ \ \ \ \ \mbox{\hyperlink{struct_session}{Session}}::Ptr\ \mbox{\hyperlink{struct_schedule_ad12692181478e6f0efbcb7e844c39601}{getNearestSessionByTime}}(std::int64\_t\ time,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_filter}{SessionFilter}}\ \&filter)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ session\ that\ is\ nearest\ to\ the\ specified\ time\ and\ that\ is\ accepted\ by\ specified\ filter.}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ will\ return\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\})\ if\ specified\ time}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ falls\ outside\ of\ valid\ date\ range\ from\ 0001-\/01-\/02\ to\ 9999-\/12-\/30.}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ If\ no\ sessions\ acceptable\ by\ specified\ filter\ are\ found\ within\ one\ year\ this\ method\ will\ return}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\}).}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ <p>}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ To\ find\ nearest\ trading\ session\ of\ any\ type\ use\ this\ code:}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ <pre>session\ =\ schedule-\/>findNearestSessionByTime(time,\ SessionFilter::TRADING);</pre>}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ To\ find\ nearest\ regular\ trading\ session\ use\ this\ code:}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ <pre>session\ =\ schedule-\/>findNearestSessionByTime(time,\ SessionFilter::REGULAR);</pre>}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ The\ time\ to\ search\ for}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ @param\ filter\ The\ filter\ to\ test\ sessions}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ session\ that\ is\ nearest\ to\ the\ specified\ time\ and\ that\ is\ accepted\ by\ specified\ filter\ or}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ \`{}Session::Ptr\{nullptr\}`\ (std::shared\_ptr<Session>\{nullptr\})\ if\ specified\ time\ falls\ outside\ of\ valid\ date\ range}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00183\ \ \ \ \ \mbox{\hyperlink{struct_session}{Session}}::Ptr\ \mbox{\hyperlink{struct_schedule_a0082d4a976a9e972d53574450b80c3e3}{findNearestSessionByTime}}(std::int64\_t\ time,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_filter}{SessionFilter}}\ \&filter)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ name\ of\ this\ schedule.}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ name\ of\ this\ schedule}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00190\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_schedule_ad626de7a68a12b5936718c95a5ede88a}{getName}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ zone\ display\ name\ in\ which\ this\ schedule\ is\ defined.}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ zone\ display\ name\ in\ which\ this\ schedule\ is\ defined}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00197\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_schedule_a9cb0eb32e4538e91337e15a5521557d8}{getTimeZoneDisplayName}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ zone\ id\ in\ which\ this\ schedule\ is\ defined.}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *\ @return\ time\ zone\ id\ in\ which\ this\ schedule\ is\ defined}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00204\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_schedule_aca4dc155234e51535e12ba3a556dcf3a}{getTimeZoneId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00205\ \};}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

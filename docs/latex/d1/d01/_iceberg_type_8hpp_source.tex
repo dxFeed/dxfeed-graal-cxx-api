@@ -9,38 +9,42 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Enum.hpp"{}}}
-\DoxyCodeLine{00010\ }
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Enum.hpp"{}}}
 \DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ Type\ of\ an\ iceberg\ order.}}
-\DoxyCodeLine{00017\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00018\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{IcebergType}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{Enum}}<\mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{IcebergType}},\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{uint32\_t}}>\ \{}
-\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{Enum}}::\mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{Enum}};}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ *\ Iceberg\ type\ is\ undefined,\ unknown\ or\ inapplicable.}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{IcebergType}}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type_a1748a6713bfd36d29a770fecae7a11c8}{UNDEFINED}};}
-\DoxyCodeLine{00025\ }
-\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ native\ (exchange-\/managed)\ iceberg\ type.}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{IcebergType}}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type_a43e10bc0b7316fda9133adac7764ec4e}{NATIVE}};}
-\DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ synthetic\ (managed\ outside\ of\ the\ exchange)\ iceberg\ type}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type}{IcebergType}}\ \mbox{\hyperlink{structdxfcpp_1_1_iceberg_type_a0182dd8f548bff25aba7b9b598b94ae4}{SYNTHETIC}};}
-\DoxyCodeLine{00035\ \};}
-\DoxyCodeLine{00036\ }
-\DoxyCodeLine{00037\ \textcolor{keyword}{template}\ <>}
-\DoxyCodeLine{00038\ \textcolor{keyword}{const}\ std::unordered\_map<IcebergType::CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ IcebergType>>\ IcebergType::ParentType::ALL;}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00015\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ Type\ of\ an\ iceberg\ order.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_iceberg_type}{IcebergType}}\ :\ \mbox{\hyperlink{struct_iceberg_type}{Enum}}<\mbox{\hyperlink{struct_iceberg_type}{IcebergType}},\ \mbox{\hyperlink{struct_iceberg_type}{std}}::\mbox{\hyperlink{struct_iceberg_type}{uint32\_t}}>\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{struct_iceberg_type}{Enum}}::\mbox{\hyperlink{struct_iceberg_type}{Enum}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ *\ Iceberg\ type\ is\ undefined,\ unknown\ or\ inapplicable.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_iceberg_type}{IcebergType}}\ \mbox{\hyperlink{struct_iceberg_type_ad09601b33fc4792b9d8cd15147ef1129}{UNDEFINED}};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ native\ (exchange-\/managed)\ iceberg\ type.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_iceberg_type}{IcebergType}}\ \mbox{\hyperlink{struct_iceberg_type_af423837f89ad52609fc848a9d06883b2}{NATIVE}};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ Represents\ synthetic\ (managed\ outside\ of\ the\ exchange)\ iceberg\ type}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_iceberg_type}{IcebergType}}\ \mbox{\hyperlink{struct_iceberg_type_a0e29a6c8573c0d6b6cf33b17dbc70902}{SYNTHETIC}};}
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00040\ \textcolor{keyword}{const}\ std::unordered\_map<IcebergType::CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ IcebergType>>\ IcebergType::ParentType::ALL;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

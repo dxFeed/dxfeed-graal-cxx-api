@@ -9,108 +9,112 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ Exchange\ attribute\ of\ CandleSymbol\ defines\ exchange\ identifier\ where\ data\ is}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ taken\ from\ to\ build\ the\ candles.}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00018\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ Exchange\ attribute\ of\ CandleSymbol\ defines\ exchange\ identifier\ where\ data\ is}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ taken\ from\ to\ build\ the\ candles.}}
 \DoxyCodeLine{00023\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ This\ attribute\ is\ encoded\ in\ a\ symbol\ string\ with}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::getExchangeCode()\ "{}MarketEventSymbols.getExchangeCode"{}\ and}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::changeExchangeCode()\ "{}changeExchangeCode"{}\ methods.}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00028\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol_attribute}{CandleSymbolAttribute}}\ \{}
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ *\ Composite\ exchange\ where\ data\ is\ taken\ from\ all\ exchanges.}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a72332d8d4d7b0de34b1163bffe8cee0c}{COMPOSITE}};}
-\DoxyCodeLine{00033\ }
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ Default\ exchange\ is\ CandleExchange::COMPOSITE.}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a48786dbb8df952519bc62ffac3f728b4}{DEFAULT}};}
-\DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ exchangeCode\_\{\};}
-\DoxyCodeLine{00041\ }
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{explicit}\ CandleExchange(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ :\ exchangeCode\_\{exchangeCode\}\ \{}
-\DoxyCodeLine{00043\ \ \ \ \ \}}
-\DoxyCodeLine{00044\ }
-\DoxyCodeLine{00045\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00046\ \ \ \ \ CandleExchange()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandleExchange()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ code.\ It\ is\ \`{}'\(\backslash\)0'`\ for\ CandleExchange::COMPOSITE\ exchange.}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ code.}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_acf30f33b07df147b14c743857c270f03}{getExchangeCode}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ exchangeCode\_;}
-\DoxyCodeLine{00055\ \ \ \ \ \}}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ event\ symbol\ string\ with\ this\ exchange\ set.}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ original\ candle\ event\ symbol.}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ event\ symbol\ string\ with\ this\ exchange\ set.}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00063\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a32012ba2908d5cd87eec3163148c8fe3}{changeAttributeForSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::changeExchangeCode(symbol,\ exchangeCode\_);}
-\DoxyCodeLine{00065\ \ \ \ \ \}}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ exchange.}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ the\ string\ \`{}"{}COMPOSITE"{}`\ for\ CandleExchange::COMPOSITE\ exchange\ or}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ exchange\ character\ otherwise.}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ exchange.}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00074\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a21ccb20b2fa4ae11393237b8d4727647}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ exchangeCode\_\ ==\ \textcolor{stringliteral}{'\(\backslash\)0'}\ ?\ \textcolor{stringliteral}{"{}COMPOSITE"{}}\ :\ std::string(1,\ exchangeCode\_);}
-\DoxyCodeLine{00076\ \ \ \ \ \}}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}\ \&candleExchange)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ exchangeCode\_\ ==\ candleExchange.exchangeCode\_;}
-\DoxyCodeLine{00080\ \ \ \ \ \}}
-\DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ attribute\ object\ that\ corresponds\ to\ the\ specified\ exchange\ code\ character.}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ character.}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ attribute\ object.}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a2cf28d6f038e4e7378a1b11282036b6c}{valueOf}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ exchangeCode\ ==\ \textcolor{stringliteral}{'\(\backslash\)0'}\ ?\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a72332d8d4d7b0de34b1163bffe8cee0c}{COMPOSITE}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}(exchangeCode);}
-\DoxyCodeLine{00090\ \ \ \ \ \}}
-\DoxyCodeLine{00091\ }
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ attribute\ object\ of\ the\ given\ candle\ symbol\ string.}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ CandleExchange::DEFAULT\ if\ the\ symbol\ does\ not\ have\ exchange\ attribute.}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ candle\ symbol\ string.}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ attribute\ object\ of\ the\ given\ candle\ symbol\ string.}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a040434e0c8d6ea47b93ae7b2eb768dca}{getAttributeForSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a2cf28d6f038e4e7378a1b11282036b6c}{valueOf}}\mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a2cf28d6f038e4e7378a1b11282036b6c}{(}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols}{MarketEventSymbols}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6}{::}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6}{getExchangeCode}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6}{(}}symbol\mbox{\hyperlink{structdxfcpp_1_1_market_event_symbols_ac9762e873080f6bacd048353d7dc22f6}{)}}\mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_a2cf28d6f038e4e7378a1b11282036b6c}{)}};}
-\DoxyCodeLine{00101\ \ \ \ \ \}}
-\DoxyCodeLine{00102\ \};}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ attribute\ is\ encoded\ in\ a\ symbol\ string\ with}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::getExchangeCode()\ "{}MarketEventSymbols.getExchangeCode"{}\ and}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::changeExchangeCode()\ "{}changeExchangeCode"{}\ methods.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00030\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_candle_symbol_attribute}{CandleSymbolAttribute}}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Composite\ exchange\ where\ data\ is\ taken\ from\ all\ exchanges.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}\ \mbox{\hyperlink{struct_candle_exchange_a0c24e91c700381a9ed42f8893a7733e4}{COMPOSITE}};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ Default\ exchange\ is\ CandleExchange::COMPOSITE.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}\ \mbox{\hyperlink{struct_candle_exchange_a4428fcdfb0780d039ccf46cfa4b4fda9}{DEFAULT}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ exchangeCode\_\{\};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{explicit}\ CandleExchange(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ :\ exchangeCode\_\{exchangeCode\}\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ CandleExchange()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandleExchange()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ code.\ It\ is\ \`{}'\(\backslash\)0'`\ for\ CandleExchange::COMPOSITE\ exchange.}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ code.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_candle_exchange_a160c11ea8965a9030699b7de944ea1a5}{getExchangeCode}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ exchangeCode\_;}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ event\ symbol\ string\ with\ this\ exchange\ set.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ original\ candle\ event\ symbol.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ event\ symbol\ string\ with\ this\ exchange\ set.}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00065\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_candle_exchange_a04052d899a85150da7d4b071a17a0c30}{changeAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::changeExchangeCode(symbol,\ exchangeCode\_);}
+\DoxyCodeLine{00067\ \ \ \ \ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ exchange.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ It\ is\ the\ string\ \`{}"{}COMPOSITE"{}`\ for\ CandleExchange::COMPOSITE\ exchange\ or}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ exchange\ character\ otherwise.}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ exchange.}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00076\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_candle_exchange_a2cdd126c852ac27abedef96bf4c7070e}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ exchangeCode\_\ ==\ \textcolor{stringliteral}{'\(\backslash\)0'}\ ?\ \textcolor{stringliteral}{"{}COMPOSITE"{}}\ :\ std::string(1,\ exchangeCode\_);}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}\ \&candleExchange)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ exchangeCode\_\ ==\ candleExchange.exchangeCode\_;}
+\DoxyCodeLine{00082\ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ attribute\ object\ that\ corresponds\ to\ the\ specified\ exchange\ code\ character.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ @param\ exchangeCode\ The\ exchange\ code\ character.}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ attribute\ object.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}\ \mbox{\hyperlink{struct_candle_exchange_a876a2c6d54224b5d853f45891a10360d}{valueOf}}(\textcolor{keywordtype}{char}\ exchangeCode)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ exchangeCode\ ==\ \textcolor{stringliteral}{'\(\backslash\)0'}\ ?\ \mbox{\hyperlink{struct_candle_exchange_a0c24e91c700381a9ed42f8893a7733e4}{COMPOSITE}}\ :\ \mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}(exchangeCode);}
+\DoxyCodeLine{00092\ \ \ \ \ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ exchange\ attribute\ object\ of\ the\ given\ candle\ symbol\ string.}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ CandleExchange::DEFAULT\ if\ the\ symbol\ does\ not\ have\ exchange\ attribute.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ candle\ symbol\ string.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @return\ exchange\ attribute\ object\ of\ the\ given\ candle\ symbol\ string.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}\ \mbox{\hyperlink{struct_candle_exchange_a33bfda611633a53d642b1822cefe1701}{getAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_candle_exchange_a876a2c6d54224b5d853f45891a10360d}{valueOf}}\mbox{\hyperlink{struct_candle_exchange_a876a2c6d54224b5d853f45891a10360d}{(}}\mbox{\hyperlink{struct_market_event_symbols}{MarketEventSymbols}}\mbox{\hyperlink{struct_market_event_symbols_ab9d56e9c456488b31f19916ae1b05671}{::}}\mbox{\hyperlink{struct_market_event_symbols_ab9d56e9c456488b31f19916ae1b05671}{getExchangeCode}}(symbol)\mbox{\hyperlink{struct_candle_exchange_a876a2c6d54224b5d853f45891a10360d}{)}};}
+\DoxyCodeLine{00103\ \ \ \ \ \}}
+\DoxyCodeLine{00104\ \};}
 \DoxyCodeLine{00105\ }
-\DoxyCodeLine{00106\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}>\ \{}
-\DoxyCodeLine{00107\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_exchange}{CandleExchange}}\ \&candleExchange)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::size\_t>(candleExchange\mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_acf30f33b07df147b14c743857c270f03}{.}}\mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_acf30f33b07df147b14c743857c270f03}{getExchangeCode}}\mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_acf30f33b07df147b14c743857c270f03}{(}}\mbox{\hyperlink{structdxfcpp_1_1_candle_exchange_acf30f33b07df147b14c743857c270f03}{)}});}
-\DoxyCodeLine{00109\ \ \ \ \ \}}
-\DoxyCodeLine{00110\ \};}
+\DoxyCodeLine{00106\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}>\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_candle_exchange}{CandleExchange}}\ \&candleExchange)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::size\_t>(candleExchange\mbox{\hyperlink{struct_candle_exchange_a160c11ea8965a9030699b7de944ea1a5}{.}}\mbox{\hyperlink{struct_candle_exchange_a160c11ea8965a9030699b7de944ea1a5}{getExchangeCode}}\mbox{\hyperlink{struct_candle_exchange_a160c11ea8965a9030699b7de944ea1a5}{(}}\mbox{\hyperlink{struct_candle_exchange_a160c11ea8965a9030699b7de944ea1a5}{)}});}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ \};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['basefieldstostring_0',['baseFieldsToString',['../d4/d00/classdxfcpp_1_1_order_base.html#ab23a7bb4ba4aba697e6c9d9dcaf61ba6',1,'dxfcpp::OrderBase::baseFieldsToString()'],['../dd/d02/classdxfcpp_1_1_trade_base.html#a52ae73ef41cf03060509cddecc2d48de',1,'dxfcpp::TradeBase::baseFieldsToString()']]],
-  ['build_1',['build',['../d9/d02/classdxfcpp_1_1_d_x_endpoint_1_1_builder.html#a963b99c59a3721dab1472e47789e434f',1,'dxfcpp::DXEndpoint::Builder']]]
+  ['basefieldstostring_0',['baseFieldsToString',['../df/d01/class_order_base.html#a97118268ae013762b34b77e3769b5b25',1,'OrderBase::baseFieldsToString()'],['../d1/d00/class_trade_base.html#a3573f576ea6b528c69831efdb9b07423',1,'TradeBase::baseFieldsToString()']]],
+  ['build_1',['build',['../d9/d02/class_d_x_endpoint_1_1_builder.html#a1d4fc6e3ac57d058cc012dba3ab205ff',1,'DXEndpoint::Builder']]]
 ];

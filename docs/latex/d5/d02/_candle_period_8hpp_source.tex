@@ -9,257 +9,255 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_type_8hpp}{"{}CandleType.hpp"{}}}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_type_8hpp}{"{}CandleType.hpp"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Period\ attribute\ of\ CandleSymbol\ defines\ aggregation\ period\ of\ the\ candles.}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ Aggregation\ period\ is\ defined\ as\ pair\ of\ a\ @ref\ CandlePeriod::getValue()\ "{}value"{}\ and\ @ref\ CandlePeriod::getType()}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ "{}type"{}.}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00019\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ Period\ attribute\ of\ CandleSymbol\ defines\ aggregation\ period\ of\ the\ candles.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Aggregation\ period\ is\ defined\ as\ pair\ of\ a\ @ref\ CandlePeriod::getValue()\ "{}value"{}\ and\ @ref\ CandlePeriod::getType()}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ "{}type"{}.}}
 \DoxyCodeLine{00025\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ attribute\ is\ encoded\ in\ a\ symbol\ string\ with}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::getAttributeStringByKey()\ "{}MarketEventSymbols.getAttributeStringByKey"{},}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::changeAttributeStringByKey()\ "{}changeAttributeStringByKey"{},\ and}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::removeAttributeStringByKey()\ "{}removeAttributeStringByKey"{}\ methods.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ The\ key\ to\ use\ with\ these\ methods\ is\ available\ via\ CandlePeriod::ATTRIBUTE\_KEY\ constant.}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandlePeriod::toString()}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ "{}CandlePeriod.toString()"{}}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00034\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period}{CandlePeriod}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol_attribute}{CandleSymbolAttribute}}\ \{}
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ Tick\ aggregation\ where\ each\ candle\ represents\ an\ individual\ tick.}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a7f4f822ea54c646b667db887c18e0768}{TICK}};}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ Day\ aggregation\ where\ each\ candle\ represents\ a\ day.}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_aaf033530a99e412c3b10b9fd232a5d36}{DAY}};}
-\DoxyCodeLine{00044\ }
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ Default\ period\ is\ CandlePeriod::TICK.}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a255b1cb5d766cca5e2410953dcd2ec28}{DEFAULT}};}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ The\ attribute\ key\ that\ is\ used\ to\ store\ the\ value\ of\ \`{}CandlePeriod`\ in\ a\ symbol\ string\ using\ methods\ of}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ MarketEventSymbols\ class.}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ of\ this\ constant\ is\ an\ empty\ string,\ because\ this\ is\ the\ main\ attribute\ that\ every\ CandleSymbol\ must}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ have.}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandlePeriod::toString()}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a0719bbfc3999fdead85dcbbc8dc17df0}{ATTRIBUTE\_KEY}};\ \textcolor{comment}{//\ empty\ string\ as\ attribute\ key\ is\ allowed!}}
-\DoxyCodeLine{00058\ }
-\DoxyCodeLine{00059\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::int64\_t\ DEFAULT\_PERIOD\_VALUE\ =\ 1LL;}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ value\_\{\};}
-\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ type\_\{\};}
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{mutable}\ std::string\ string\_\{\};}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ CandlePeriod(\textcolor{keywordtype}{double}\ value,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \&type)\ \textcolor{keyword}{noexcept}\ :\ value\_\{value\},\ type\_\{type\},\ string\_\{\}\ \{}
-\DoxyCodeLine{00067\ \ \ \ \ \}}
-\DoxyCodeLine{00068\ }
-\DoxyCodeLine{00069\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00070\ \ \ \ \ CandlePeriod()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandlePeriod()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00072\ }
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ aggregation\ period\ in\ milliseconds\ as\ closely\ as\ possible.}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ aggregation\ types\ like\ @ref\ CandleType::SECOND\ "{}SECOND"{}\ and}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ CandleType::DAY\ "{}DAY"{}\ span\ a\ specific\ number\ of\ milliseconds.}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ CandleType::MONTH,\ CandleType::OPTEXP\ and\ CandleType::YEAR\ are\ approximate.\ Candle\ period\ of}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ CandleType::TICK,\ CandleType::VOLUME,\ CandleType::PRICE,\ CandleType::PRICE\_MOMENTUM\ and\ CandleType::PRICE\_RENKO}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ is\ not\ defined\ and\ this\ method\ returns\ \`{}0`.}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ of\ this\ method\ is\ equal\ to}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ \`{}static\_cast<std::int64\_t>(this-\/>getType().getPeriodIntervalMillis()\ *\ this-\/>getValue())`}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ @see\ CandleType::getPeriodIntervalMillis()}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ @return\ aggregation\ period\ in\ milliseconds.}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00085\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a1f634a90697a6b7d87b1d3aa95246e47}{getPeriodIntervalMillis}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int64\_t>(\textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{double}>(type\_.getPeriodIntervalMillis())\ *\ value\_);}
-\DoxyCodeLine{00087\ \ \ \ \ \}}
-\DoxyCodeLine{00088\ }
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ event\ symbol\ string\ with\ this\ aggregation\ period\ set.}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ original\ candle\ event\ symbol.}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ event\ symbol\ string\ with\ this\ aggregation\ period\ set.}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00094\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_ab9cbcdea7a93d4277e8de3d02c858898}{changeAttributeForSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this}\ ==\ DEFAULT\ ?\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY)}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ toString());}
-\DoxyCodeLine{00097\ \ \ \ \ \}}
-\DoxyCodeLine{00098\ }
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ aggregation\ period\ value.\ For\ example,\ the\ value\ of\ \`{}5`\ with}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ the\ candle\ type\ of\ @ref\ CandleType::MINUTE\ "{}MINUTE"{}\ represents\ \`{}5`\ minute}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ aggregation\ period.}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ @return\ aggregation\ period\ value.}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a81e8e7abc6a7ebd418559ff00cb2d515}{getValue}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value\_;}
-\DoxyCodeLine{00108\ \ \ \ \ \}}
-\DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ aggregation\ period\ type.}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @return\ aggregation\ period\ type.}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a3aa05f7949e7f5337f6c9b02ccb57bd5}{getType}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ type\_;}
-\DoxyCodeLine{00116\ \ \ \ \ \}}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ aggregation\ period.}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ The\ string\ representation\ is\ composed\ of\ value\ and\ type\ string.}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ For\ example,\ 5\ minute\ aggregation\ is\ represented\ as\ \`{}"{}5m"{}`.}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ of\ \`{}1`\ is\ omitted\ in\ the\ string\ representation,\ so}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ CandlePeriod::DAY\ (one\ day)\ is\ represented\ as\ \`{}"{}d"{}`.}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ This\ string\ representation\ can\ be\ converted\ back\ into\ object\ with\ CandlePeriod::parse()\ method.}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ aggregation\ period.}}
-\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_period_aa56a1de2f20df3c94a5920a046bb285f}{toString}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (string\_.empty())\ \{}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ string\_\ =\ math::equals(value\_,\ DEFAULT\_PERIOD\_VALUE)\ ?\ type\_.toString()}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ math::equals(value\_,\ \textcolor{keyword}{static\_cast}<std::int64\_t>(value\_))}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ std::to\_string(\textcolor{keyword}{static\_cast}<std::int64\_t>(value\_))\ +\ \textcolor{stringliteral}{"{}"{}}\ +\ type\_.toString()}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ std::to\_string(value\_)\ +\ \textcolor{stringliteral}{"{}"{}}\ +\ type\_.toString();}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00135\ }
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_;}
-\DoxyCodeLine{00137\ \ \ \ \ \}}
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period}{CandlePeriod}}\ \&candlePeriod)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ math::equals(value\_,\ candlePeriod.getValue())\ \&\&\ type\_\ ==\ candlePeriod.getType();}
-\DoxyCodeLine{00141\ \ \ \ \ \}}
-\DoxyCodeLine{00142\ }
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ string\ representation\ of\ aggregation\ period\ into\ object.}}
-\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ Any\ string\ that\ was\ returned\ by\ CandlePeriod::toString()\ can\ be\ parsed.}}
-\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ is\ flexible\ in\ the\ way\ candle\ types\ can\ be\ specified.}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ See\ CandleType::parse()\ for\ details.}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ @param\ s\ The\ string\ representation\ of\ aggregation\ period.}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ aggregation\ period\ object\ or\ std::nullopt\ if\ parsing\ fails\ (if\ string\ representation\ is\ invalid)}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a712394a49b25e120eb1b79d60dd408ad}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a712394a49b25e120eb1b79d60dd408ad}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a712394a49b25e120eb1b79d60dd408ad}{CandlePeriod}}>\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a712394a49b25e120eb1b79d60dd408ad}{parse}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a712394a49b25e120eb1b79d60dd408ad}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a712394a49b25e120eb1b79d60dd408ad}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a712394a49b25e120eb1b79d60dd408ad}{s}})\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (s\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a93dd1684cf1f987fa18cab8f0df86e62}{::}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a93dd1684cf1f987fa18cab8f0df86e62}{DAY}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{.}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{toString}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{(}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{)}})\ \{}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ DAY;}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00156\ }
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (s\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae}{::}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae}{TICK}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{.}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{toString}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{(}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{)}})\ \{}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TICK;}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00160\ }
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ std::size\_t\ i\ =\ 0;}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ s.length();\ i++)\ \{}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ c\ =\ s[i];}
-\DoxyCodeLine{00164\ }
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((c\ <\ \textcolor{stringliteral}{'0'}\ ||\ c\ >\ \textcolor{stringliteral}{'9'})\ \&\&\ c\ !=\ \textcolor{stringliteral}{'.'}\ \&\&\ c\ !=\ \textcolor{stringliteral}{'-\/'}\ \&\&\ c\ !=\ \textcolor{stringliteral}{'+'}\ \&\&\ c\ !=\ \textcolor{stringliteral}{'e'}\ \&\&\ c\ !=\ \textcolor{stringliteral}{'E'})}
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00168\ }
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ valueStr\ =\ s.substr(0,\ i);}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ typeStr\ =\ s.substr(i);}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ This\ attribute\ is\ encoded\ in\ a\ symbol\ string\ with}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::getAttributeStringByKey()\ "{}MarketEventSymbols.getAttributeStringByKey"{},}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::changeAttributeStringByKey()\ "{}changeAttributeStringByKey"{},\ and}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::removeAttributeStringByKey()\ "{}removeAttributeStringByKey"{}\ methods.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ The\ key\ to\ use\ with\ these\ methods\ is\ available\ via\ CandlePeriod::ATTRIBUTE\_KEY\ constant.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandlePeriod::toString()}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ "{}CandlePeriod.toString()"{}}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00036\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_candle_symbol_attribute}{CandleSymbolAttribute}}\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ Tick\ aggregation\ where\ each\ candle\ represents\ an\ individual\ tick.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{struct_candle_period_a2934f6797a1c4aeb8ff49560370f0550}{TICK}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Day\ aggregation\ where\ each\ candle\ represents\ a\ day.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{struct_candle_period_a74fefa9d33ad566bcaaec6675b6825cf}{DAY}};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ Default\ period\ is\ CandlePeriod::TICK.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{struct_candle_period_a53114c636dd5fbd432648c0ff089dd8b}{DEFAULT}};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ The\ attribute\ key\ that\ is\ used\ to\ store\ the\ value\ of\ \`{}CandlePeriod`\ in\ a\ symbol\ string\ using\ methods\ of}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ MarketEventSymbols\ class.}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ of\ this\ constant\ is\ an\ empty\ string,\ because\ this\ is\ the\ main\ attribute\ that\ every\ CandleSymbol\ must}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ have.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandlePeriod::toString()}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{struct_candle_period_a2875205da52d8568bdbe57b6a59cf154}{ATTRIBUTE\_KEY}};\ \textcolor{comment}{//\ empty\ string\ as\ attribute\ key\ is\ allowed!}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::int64\_t\ DEFAULT\_PERIOD\_VALUE\ =\ 1LL;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{double}\ value\_\{\};}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ type\_\{\};}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{mutable}\ std::string\ string\_\{\};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ CandlePeriod(\textcolor{keywordtype}{double}\ value,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \&type)\ \textcolor{keyword}{noexcept}\ :\ value\_\{value\},\ type\_\{type\},\ string\_\{\}\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00072\ \ \ \ \ CandlePeriod()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandlePeriod()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ aggregation\ period\ in\ milliseconds\ as\ closely\ as\ possible.}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ aggregation\ types\ like\ @ref\ CandleType::SECOND\ "{}SECOND"{}\ and}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ CandleType::DAY\ "{}DAY"{}\ span\ a\ specific\ number\ of\ milliseconds.}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ CandleType::MONTH,\ CandleType::OPTEXP\ and\ CandleType::YEAR\ are\ approximate.\ Candle\ period\ of}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ CandleType::TICK,\ CandleType::VOLUME,\ CandleType::PRICE,\ CandleType::PRICE\_MOMENTUM\ and\ CandleType::PRICE\_RENKO}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ is\ not\ defined\ and\ this\ method\ returns\ \`{}0`.}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ of\ this\ method\ is\ equal\ to}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ \`{}static\_cast<std::int64\_t>(this-\/>getType().getPeriodIntervalMillis()\ *\ this-\/>getValue())`}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ @see\ CandleType::getPeriodIntervalMillis()}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ @return\ aggregation\ period\ in\ milliseconds.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00087\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{struct_candle_period_a53dbe11a74f3c615a78f4de4b5f7739b}{getPeriodIntervalMillis}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int64\_t>(\textcolor{keyword}{static\_cast}<\textcolor{keywordtype}{double}>(type\_.getPeriodIntervalMillis())\ *\ value\_);}
+\DoxyCodeLine{00089\ \ \ \ \ \}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ event\ symbol\ string\ with\ this\ aggregation\ period\ set.}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ original\ candle\ event\ symbol.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ event\ symbol\ string\ with\ this\ aggregation\ period\ set.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00096\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_candle_period_aa7b17bb53727e17da2d4ff3ccfb8ceb3}{changeAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this}\ ==\ DEFAULT\ ?\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY)}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ toString());}
+\DoxyCodeLine{00099\ \ \ \ \ \}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ aggregation\ period\ value.\ For\ example,\ the\ value\ of\ \`{}5`\ with}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ the\ candle\ type\ of\ @ref\ CandleType::MINUTE\ "{}MINUTE"{}\ represents\ \`{}5`\ minute}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ aggregation\ period.}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ @return\ aggregation\ period\ value.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_candle_period_a1e2e33ae5421ab04b022a50db2a4ad0a}{getValue}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value\_;}
+\DoxyCodeLine{00110\ \ \ \ \ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ aggregation\ period\ type.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @return\ aggregation\ period\ type.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \&\mbox{\hyperlink{struct_candle_period_a89aef310d793d619458f1afa53166402}{getType}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ type\_;}
+\DoxyCodeLine{00118\ \ \ \ \ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ aggregation\ period.}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ The\ string\ representation\ is\ composed\ of\ value\ and\ type\ string.}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ For\ example,\ 5\ minute\ aggregation\ is\ represented\ as\ \`{}"{}5m"{}`.}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ of\ \`{}1`\ is\ omitted\ in\ the\ string\ representation,\ so}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ CandlePeriod::DAY\ (one\ day)\ is\ represented\ as\ \`{}"{}d"{}`.}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ This\ string\ representation\ can\ be\ converted\ back\ into\ object\ with\ CandlePeriod::parse()\ method.}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ aggregation\ period.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{struct_candle_period_a9006fadf4e732459b6fcec7fe056fb4c}{toString}}()\ \textcolor{keyword}{const}\ \&\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (string\_.empty())\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ string\_\ =\ math::equals(value\_,\ DEFAULT\_PERIOD\_VALUE)\ ?\ type\_.toString()}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ math::equals(value\_,\ \textcolor{keyword}{static\_cast}<std::int64\_t>(value\_))}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ std::to\_string(\textcolor{keyword}{static\_cast}<std::int64\_t>(value\_))\ +\ \textcolor{stringliteral}{"{}"{}}\ +\ type\_.toString()}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ std::to\_string(value\_)\ +\ \textcolor{stringliteral}{"{}"{}}\ +\ type\_.toString();}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_;}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ \&candlePeriod)\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ math::equals(value\_,\ candlePeriod.getValue())\ \&\&\ type\_\ ==\ candlePeriod.getType();}
+\DoxyCodeLine{00143\ \ \ \ \ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ string\ representation\ of\ aggregation\ period\ into\ object.}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ Any\ string\ that\ was\ returned\ by\ CandlePeriod::toString()\ can\ be\ parsed.}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ is\ flexible\ in\ the\ way\ candle\ types\ can\ be\ specified.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ See\ CandleType::parse()\ for\ details.}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ @param\ s\ The\ string\ representation\ of\ aggregation\ period.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ aggregation\ period.}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{struct_candle_period_a0364876e4a53e6ae705f556ee893fb8b}{parse}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&s)\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (s\ ==\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\mbox{\hyperlink{struct_candle_type_a2691cc240091a23dd83aa1de4d1b802b}{::}}\mbox{\hyperlink{struct_candle_type_a2691cc240091a23dd83aa1de4d1b802b}{DAY}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{.}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{toString}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{(}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{)}})\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_candle_period_a74fefa9d33ad566bcaaec6675b6825cf}{DAY}};}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (s\ ==\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\mbox{\hyperlink{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48}{::}}\mbox{\hyperlink{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48}{TICK}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{.}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{toString}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{(}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{)}})\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_candle_period_a2934f6797a1c4aeb8ff49560370f0550}{TICK}};}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ sw\ =\ s.operator\ std::string\_view();}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ std::size\_t\ i\ =\ 0;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ sw.length();\ i++)\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ c\ =\ sw[i];}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((c\ <\ \textcolor{stringliteral}{'0'}\ ||\ c\ >\ \textcolor{stringliteral}{'9'})\ \&\&\ c\ !=\ \textcolor{stringliteral}{'.'}\ \&\&\ c\ !=\ \textcolor{stringliteral}{'-\/'}\ \&\&\ c\ !=\ \textcolor{stringliteral}{'+'}\ \&\&\ c\ !=\ \textcolor{stringliteral}{'e'}\ \&\&\ c\ !=\ \textcolor{stringliteral}{'E'})}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ value\ =\ valueStr.empty()\ ?\ 1.0\ :\ std::stod(valueStr);}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ typeOpt\ =\ CandleType::parse(typeStr);}
-\DoxyCodeLine{00175\ }
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!typeOpt)\ \{}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ valueStr\ =\ sw.substr(0,\ i);}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ typeStr\ =\ sw.substr(i);}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ value\ =\ valueStr.empty()\ ?\ 1.0\ :\ \textcolor{keywordtype}{double}(s);}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ type\ =\ CandleType::parse(typeStr);}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ valueOf(value,\ type.get());}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
 \DoxyCodeLine{00179\ }
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ valueOf(value,\ typeOpt.value());}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00184\ \ \ \ \ \}}
-\DoxyCodeLine{00185\ }
-\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ period\ with\ the\ given\ value\ and\ type.}}
-\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ @param\ value\ candle\ period\ value.}}
-\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ @param\ type\ candle\ period\ type.}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ period\ with\ the\ given\ value\ and\ type.}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_acc49dfdd3538de249418b53970b0938a}{valueOf}}(\textcolor{keywordtype}{double}\ value,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \&type)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ 1\ \&\&\ type\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a93dd1684cf1f987fa18cab8f0df86e62}{::}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a93dd1684cf1f987fa18cab8f0df86e62}{DAY}})\ \{}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_aaf033530a99e412c3b10b9fd232a5d36}{DAY}};}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00197\ }
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ 1\ \&\&\ type\ ==\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae}{::}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae}{TICK}})\ \{}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_a7f4f822ea54c646b667db887c18e0768}{TICK}};}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00201\ }
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{value,\ type\};}
-\DoxyCodeLine{00203\ \ \ \ \ \}}
-\DoxyCodeLine{00204\ }
-\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ period\ of\ the\ given\ candle\ symbol\ string.}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ CandlePeriod::DEFAULT\ if\ the\ symbol\ does\ not\ have\ candle\ period\ attribute.}}
-\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ candle\ symbol\ string.}}
-\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ period\ of\ the\ given\ candle\ symbol\ string\ or\ std::nullopt\ if\ parsing\ fails\ (if\ string}}
-\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ *\ representation\ is\ invalid)}}
-\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_af7c79f306e81689755b62d31b609ede6}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_period_af7c79f306e81689755b62d31b609ede6}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_candle_period_af7c79f306e81689755b62d31b609ede6}{CandlePeriod}}>\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_af7c79f306e81689755b62d31b609ede6}{getAttributeForSymbol}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_af7c79f306e81689755b62d31b609ede6}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_period_af7c79f306e81689755b62d31b609ede6}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_period_af7c79f306e81689755b62d31b609ede6}{symbol}})\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ string\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
-\DoxyCodeLine{00215\ }
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !string\ ?\ DEFAULT\ :\ parse(string.value());}
-\DoxyCodeLine{00217\ \ \ \ \ \}}
-\DoxyCodeLine{00218\ }
-\DoxyCodeLine{00219\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ candle\ period\ attribute.}}
-\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ candle\ symbol\ string.}}
-\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ the\ candle\ period\ attribute.}}
-\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_period_ad5da1f803cad78d1b7a80af727c97829}{normalizeAttributeForSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ a\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
-\DoxyCodeLine{00227\ }
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!a)\ \{}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00231\ }
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ other\ =\ parse(a.value());}
-\DoxyCodeLine{00233\ }
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other.has\_value())\ \{}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other.value()\ ==\ DEFAULT)\ \{}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00238\ }
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (a.value()\ !=\ other.value().toString())\ \{}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ other.value().toString());}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ period\ with\ the\ given\ value\ and\ type.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ @param\ value\ candle\ period\ value.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ @param\ type\ candle\ period\ type.}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ period\ with\ the\ given\ value\ and\ type.}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{struct_candle_period_a836135ef6c3d1046a0d312829731ba15}{valueOf}}(\textcolor{keywordtype}{double}\ value,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \&type)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ 1\ \&\&\ type\ ==\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\mbox{\hyperlink{struct_candle_type_a2691cc240091a23dd83aa1de4d1b802b}{::}}\mbox{\hyperlink{struct_candle_type_a2691cc240091a23dd83aa1de4d1b802b}{DAY}})\ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_candle_period_a74fefa9d33ad566bcaaec6675b6825cf}{DAY}};}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ 1\ \&\&\ type\ ==\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\mbox{\hyperlink{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48}{::}}\mbox{\hyperlink{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48}{TICK}})\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_candle_period_a2934f6797a1c4aeb8ff49560370f0550}{TICK}};}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{value,\ type\};}
+\DoxyCodeLine{00197\ \ \ \ \ \}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ period\ of\ the\ given\ candle\ symbol\ string.}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ CandlePeriod::DEFAULT\ if\ the\ symbol\ does\ not\ have\ candle\ period\ attribute.}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ candle\ symbol\ string.}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ period\ of\ the\ given\ candle\ symbol\ string}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ \mbox{\hyperlink{struct_candle_period_ad8f6706e2012684485aef1af01b33a77}{getAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ string\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !string\ ?\ DEFAULT\ :\ parse(string.value());}
+\DoxyCodeLine{00210\ \ \ \ \ \}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ candle\ period\ attribute.}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ candle\ symbol\ string.}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ the\ candle\ period\ attribute.}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keyword}{static}\ std::string}
+\DoxyCodeLine{00219\ \ \ \ \ \mbox{\hyperlink{struct_candle_period_ac70aabaecf28bbd08053163f707c8275}{normalizeAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ a\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!a)\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ other\ =\ parse(a.value());}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other\ ==\ DEFAULT)\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (a.value()\ !=\ other.toString())\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ other.toString());}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::invalid\_argument\ \&)\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00241\ \ \ \ \ \}}
+\DoxyCodeLine{00242\ \};}
 \DoxyCodeLine{00243\ }
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
-\DoxyCodeLine{00245\ \ \ \ \ \}}
-\DoxyCodeLine{00246\ \};}
-\DoxyCodeLine{00247\ }
-\DoxyCodeLine{00248\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00244\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{struct_candle_period}{CandlePeriod}}>\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_candle_period}{CandlePeriod}}\ \&candlePeriod)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ std::size\_t\ seed\ =\ 0;}
 \DoxyCodeLine{00249\ }
-\DoxyCodeLine{00250\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_period}{CandlePeriod}}>\ \{}
-\DoxyCodeLine{00251\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_period}{CandlePeriod}}\ \&candlePeriod)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ std::size\_t\ seed\ =\ 0;}
-\DoxyCodeLine{00253\ }
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ dxfcpp::hashCombine(seed,\ candlePeriod\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a81e8e7abc6a7ebd418559ff00cb2d515}{.}}\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a81e8e7abc6a7ebd418559ff00cb2d515}{getValue}}\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a81e8e7abc6a7ebd418559ff00cb2d515}{(}}\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a81e8e7abc6a7ebd418559ff00cb2d515}{)}});}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ dxfcpp::hashCombine(seed,\ candlePeriod\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a3aa05f7949e7f5337f6c9b02ccb57bd5}{.}}\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a3aa05f7949e7f5337f6c9b02ccb57bd5}{getType}}\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a3aa05f7949e7f5337f6c9b02ccb57bd5}{(}}\mbox{\hyperlink{structdxfcpp_1_1_candle_period_a3aa05f7949e7f5337f6c9b02ccb57bd5}{)}});}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ dxfcpp::hashCombine(seed,\ candlePeriod\mbox{\hyperlink{struct_candle_period_a1e2e33ae5421ab04b022a50db2a4ad0a}{.}}\mbox{\hyperlink{struct_candle_period_a1e2e33ae5421ab04b022a50db2a4ad0a}{getValue}}\mbox{\hyperlink{struct_candle_period_a1e2e33ae5421ab04b022a50db2a4ad0a}{(}}\mbox{\hyperlink{struct_candle_period_a1e2e33ae5421ab04b022a50db2a4ad0a}{)}});}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ dxfcpp::hashCombine(seed,\ candlePeriod\mbox{\hyperlink{struct_candle_period_a89aef310d793d619458f1afa53166402}{.}}\mbox{\hyperlink{struct_candle_period_a89aef310d793d619458f1afa53166402}{getType}}\mbox{\hyperlink{struct_candle_period_a89aef310d793d619458f1afa53166402}{(}}\mbox{\hyperlink{struct_candle_period_a89aef310d793d619458f1afa53166402}{)}});}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seed;}
+\DoxyCodeLine{00254\ \ \ \ \ \}}
+\DoxyCodeLine{00255\ \};}
 \DoxyCodeLine{00256\ }
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ seed;}
-\DoxyCodeLine{00258\ \ \ \ \ \}}
-\DoxyCodeLine{00259\ \};}
+\DoxyCodeLine{00257\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

@@ -9,127 +9,131 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../entity/EntityModule.hpp"{}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../entity/EntityModule.hpp"{}}}
 \DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ Marks\ all\ event\ types\ that\ can\ be\ received\ via\ dxFeed\ API.}}
-\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ Events\ are\ considered\ instantaneous,\ non-\/persistent,\ and\ unconflateable}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ (each\ event\ is\ individually\ delivered)\ unless\ they\ implement\ one\ of\ interfaces}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ defined\ in\ this\ package\ to\ further\ refine\ their\ meaning.}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ <p>Event\ types\ are\ POCO\ (plain\ old\ cpp\ objects,\ not\ POD)\ that\ follow\ bean\ naming\ convention\ with}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ getters\ and\ setters\ for\ their\ properties.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ All\ event\ types\ are\ serializable,\ because\ they\ are\ transferred\ over\ network\ from\ publishers\ to}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ data\ feed\ consumers.\ However,\ they\ are\ using\ custom\ serialization\ format\ for\ this\ purpose.}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ @see\ DXFeed}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00029\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{EventType}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ EventType\ object.}}
-\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_event_type}{EventType}}>;}
-\DoxyCodeLine{00032\ }
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ when\ event\ was\ created\ or\ zero\ when\ time\ is\ not\ available.}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ event\ time\ is\ available\ only\ when\ the\ corresponding\ DXEndpoint\ is\ created}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ with\ @ref\ DXEndpoint::DXENDPOINT\_EVENT\_TIME\_PROPERTY\ "{}DXENDPOINT\_EVENT\_TIME\_PROPERTY"{}\ and}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ the\ data\ source\ has\ embedded\ event\ times.\ This\ is\ typically\ true\ only\ for\ data\ events}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ that\ are\ read\ from\ historical\ tape\ files\ and\ from\ OnDemandService.}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ *\ Events\ that\ are\ coming\ from\ a\ network\ connections\ do\ not\ have\ an\ embedded\ event\ time\ information\ and}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ this\ method\ will\ return\ zero\ for\ them,\ meaning\ that\ event\ was\ received\ just\ now.}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Default\ implementation\ returns\ 0.}}
+\DoxyCodeLine{00016\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ Marks\ all\ event\ types\ that\ can\ be\ received\ via\ dxFeed\ API.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Events\ are\ considered\ instantaneous,\ non-\/persistent,\ and\ unconflateable}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ (each\ event\ is\ individually\ delivered)\ unless\ they\ implement\ one\ of\ interfaces}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ defined\ in\ this\ package\ to\ further\ refine\ their\ meaning.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ <p>Event\ types\ are\ POCO\ (plain\ old\ cpp\ objects,\ not\ POD)\ that\ follow\ bean\ naming\ convention\ with}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ getters\ and\ setters\ for\ their\ properties.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ All\ event\ types\ are\ serializable,\ because\ they\ are\ transferred\ over\ network\ from\ publishers\ to}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ data\ feed\ consumers.\ However,\ they\ are\ using\ custom\ serialization\ format\ for\ this\ purpose.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @see\ DXFeed}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_event_type}{EventType}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_shared_entity}{SharedEntity}}\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ EventType\ object.}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{struct_event_type}{EventType}}>;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ time\ when\ event\ was\ created\ or\ zero\ when\ time\ is\ not\ available.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ event\ time\ is\ available\ only\ when\ the\ corresponding\ DXEndpoint\ is\ created}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ with\ @ref\ DXEndpoint::DXENDPOINT\_EVENT\_TIME\_PROPERTY\ "{}DXENDPOINT\_EVENT\_TIME\_PROPERTY"{}\ and}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ *\ the\ data\ source\ has\ embedded\ event\ times.\ This\ is\ typically\ true\ only\ for\ data\ events}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ that\ are\ read\ from\ historical\ tape\ files\ and\ from\ OnDemandService.}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *\ Events\ that\ are\ coming\ from\ a\ network\ connections\ do\ not\ have\ an\ embedded\ event\ time\ information\ and}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ this\ method\ will\ return\ zero\ for\ them,\ meaning\ that\ event\ was\ received\ just\ now.}}
 \DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC\ or\ zero\ when\ time\ is\ not\ available.}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{virtual}\ std::int64\_t\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_a7490dfa82916838dfdbea88c65157d3d}{getEventTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{00050\ \ \ \ \ \}}
-\DoxyCodeLine{00051\ }
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event\ creation\ time.}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ Default\ implementation\ does\ nothing.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ Default\ implementation\ returns\ 0.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC\ or\ zero\ when\ time\ is\ not\ available.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{virtual}\ std::int64\_t\ \mbox{\hyperlink{struct_event_type_a1c9c34884f4fcce70579a059252bdf1a}{getEventTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event\ creation\ time.}}
 \DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_aaf60f4a5d93d4746ef27fb573c0a93c6}{setEventTime}}(std::int64\_t\ \textcolor{comment}{/*eventTime*/})\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ default\ implementation\ is\ empty}}
-\DoxyCodeLine{00062\ \ \ \ \ \};}
-\DoxyCodeLine{00063\ }
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{structdxfcpp_1_1_event_type_af1f3b585ac540d9bfe1d649ef1835811}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ =\ 0;}
-\DoxyCodeLine{00072\ }
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00074\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_a54c84141d4eff181553b9064db6500e9}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}EventType\{\}"{}};}
-\DoxyCodeLine{00076\ \ \ \ \ \}}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\ \&operator<<(std::ostream\ \&os,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{EventType}}\ \&e)\ \{}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os\ <<\ e.toString();}
-\DoxyCodeLine{00080\ \ \ \ \ \}}
-\DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\ \&operator<<(std::ostream\ \&os,\ \textcolor{keyword}{const}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_event_type}{EventType}}>\ \&e)\ \{}
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os\ <<\ e-\/>toString();}
-\DoxyCodeLine{00084\ \ \ \ \ \}}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EntityType>}
-\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\ \&operator<<(std::ostream\ \&os,\ \textcolor{keyword}{const}\ std::shared\_ptr<EntityType>\ \&e)}
-\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{requires}}(\mbox{\hyperlink{structdxfcpp_1_1_event_type}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_event_type}{is\_base\_of\_v}}<\mbox{\hyperlink{structdxfcpp_1_1_event_type}{EventType}},\ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{EntityType}}>)}
-\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
-\DoxyCodeLine{00091\ \ \ \ \ \{}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{os}}\ <<\ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{e}}-\/>\mbox{\hyperlink{structdxfcpp_1_1_event_type}{toString}}();}
-\DoxyCodeLine{00093\ \ \ \ \ \}}
-\DoxyCodeLine{00094\ \};}
-\DoxyCodeLine{00095\ }
-\DoxyCodeLine{00096\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ *\ Event\ type\ parametrized\ by\ a\ symbol}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ *\ @tparam\ Symbol\ The\ type\ od\ symbol}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00101\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Symbol>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{EventTypeWithSymbol}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type}{EventType}}\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ EventTypeWithSymbol's\ child\ object.}}
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol}{EventTypeWithSymbol}}<Symbol>>;}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{using}\ SymbolType\ =\ Symbol;}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ Default\ implementation\ does\ nothing.}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_event_type_ad5ae35b7dac44e2f0df5fa44c0830ad9}{setEventTime}}(std::int64\_t\ \textcolor{comment}{/*eventTime*/})\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ default\ implementation\ is\ empty}}
+\DoxyCodeLine{00064\ \ \ \ \ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{struct_event_type_a799e0cd6b15e38e217ae15b5ab9963aa}{toGraal}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00076\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_event_type_a6d1f37572f827b462dfb95857f19f4d2}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}EventType\{\}"{}};}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\ \&operator<<(std::ostream\ \&os,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_event_type}{EventType}}\ \&e)\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os\ <<\ e.toString();}
+\DoxyCodeLine{00082\ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\ \&operator<<(std::ostream\ \&os,\ \textcolor{keyword}{const}\ std::shared\_ptr<\mbox{\hyperlink{struct_event_type}{EventType}}>\ \&e)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os\ <<\ e-\/>toString();}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EntityType>}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\ \&operator<<(std::ostream\ \&os,\ \textcolor{keyword}{const}\ std::shared\_ptr<EntityType>\ \&e)}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_event_type}{requires}}(\mbox{\hyperlink{struct_event_type}{std}}::\mbox{\hyperlink{struct_event_type}{is\_base\_of\_v}}<\mbox{\hyperlink{struct_event_type}{EventType}},\ \mbox{\hyperlink{struct_event_type}{EntityType}}>)}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00093\ \ \ \ \ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_event_type}{os}}\ <<\ \mbox{\hyperlink{struct_event_type}{e}}-\/>\mbox{\hyperlink{struct_event_type}{toString}}();}
+\DoxyCodeLine{00095\ \ \ \ \ \}}
+\DoxyCodeLine{00096\ \};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ *\ Event\ type\ parametrized\ by\ a\ symbol}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ *\ @tparam\ Symbol\ The\ type\ od\ symbol}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00103\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Symbol>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_event_type_with_symbol}{EventTypeWithSymbol}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_event_type}{EventType}}\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ EventTypeWithSymbol's\ child\ object.}}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{struct_event_type_with_symbol}{EventTypeWithSymbol}}<Symbol>>;}
 \DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ event\ symbol.}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ Symbol\ \&\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_ac538c22b9db24c92494e600a97ea4f16}{getEventSymbol}}()\ \textcolor{keyword}{const}\&\ \textcolor{keyword}{noexcept}\ =\ 0;}
-\DoxyCodeLine{00113\ }
-\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
-\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ event\ symbol\ or\ std::nullopt.}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a5ac37797f3b17ec18876ccc381638044}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a5ac37797f3b17ec18876ccc381638044}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a5ac37797f3b17ec18876ccc381638044}{Symbol}}>\ \&\mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_a5ac37797f3b17ec18876ccc381638044}{getEventSymbolOpt}}()\ \textcolor{keyword}{const}\&\ \textcolor{keyword}{noexcept}\ =\ 0;}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ event\ symbol.}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_event_type_with_symbol_af4577800cd16018b9f85b36911fc79d9}{setEventSymbol}}(\textcolor{keyword}{const}\ Symbol\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ =\ 0;}
-\DoxyCodeLine{00127\ \};}
-\DoxyCodeLine{00128\ }
-\DoxyCodeLine{00129\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keyword}{using}\ SymbolType\ =\ Symbol;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ event\ symbol.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ Symbol\ \&\mbox{\hyperlink{struct_event_type_with_symbol_ab00a9edb649a6aa0f00b42420c5439ad}{getEventSymbol}}()\ \textcolor{keyword}{const}\&\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ event\ symbol\ or\ std::nullopt.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_event_type_with_symbol_a1170c3107d8ab9b924e9b6cd0e04369e}{std}}::\mbox{\hyperlink{struct_event_type_with_symbol_a1170c3107d8ab9b924e9b6cd0e04369e}{optional}}<\mbox{\hyperlink{struct_event_type_with_symbol_a1170c3107d8ab9b924e9b6cd0e04369e}{Symbol}}>\ \&\mbox{\hyperlink{struct_event_type_with_symbol_a1170c3107d8ab9b924e9b6cd0e04369e}{getEventSymbolOpt}}()\ \textcolor{keyword}{const}\&\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event\ symbol\ that\ identifies\ this\ event\ type\ in\ @ref\ DXFeedSubscription\ "{}subscription"{}.}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ event\ symbol.}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_event_type_with_symbol_a8ea9877b148603252021aad739c7e524}{setEventSymbol}}(\textcolor{keyword}{const}\ Symbol\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ =\ 0;}
+\DoxyCodeLine{00129\ \};}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

@@ -1,0 +1,31 @@
+\doxysubsection{Convertible\+To\+Symbol\+Wrapper Concept Reference}
+\hypertarget{concept_convertible_to_symbol_wrapper}{}\label{concept_convertible_to_symbol_wrapper}\index{ConvertibleToSymbolWrapper@{ConvertibleToSymbolWrapper}}
+
+
+A concept describing a symbol that can be wrapped.  
+
+
+
+
+{\ttfamily \#include $<$Symbol\+Wrapper.\+hpp$>$}
+
+\doxysubsubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{concept_convertible_to_symbol_wrapper}{ConvertibleToSymbolWrapper}}\ =\ }
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{concept_convertible_to_string_symbol}{ConvertibleToStringSymbol<std::decay\_t<T>}}>\ ||\ std::is\_same\_v<std::decay\_t<T>,\ \mbox{\hyperlink{struct_wildcard_symbol}{WildcardSymbol}}>\ ||}
+\DoxyCodeLine{\ \ \ \ std::is\_same\_v<std::decay\_t<T>,\ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}>\ ||}
+\DoxyCodeLine{\ \ \ \ std::is\_same\_v<std::decay\_t<T>,\ \mbox{\hyperlink{class_time_series_subscription_symbol}{TimeSeriesSubscriptionSymbol}}>\ ||\ std::is\_same\_v<std::decay\_t<T>,\ \mbox{\hyperlink{struct_candle_symbol}{CandleSymbol}}>}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Detailed Description}
+A concept describing a symbol that can be wrapped. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Probable symbol type \\
+\hline
+\end{DoxyTemplParams}

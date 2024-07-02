@@ -1,0 +1,96 @@
+\doxysubsection{Java\+Exception.\+hpp}
+\hypertarget{_java_exception_8hpp_source}{}\label{_java_exception_8hpp_source}\index{JavaException.hpp@{JavaException.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251\ 4275)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{limits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{stdexcept}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ A\ wrapper\ over\ the\ interceptable\ Java\ exceptions\ thrown\ by\ the\ dxFeed\ Native\ Graal\ SDK}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_java_exception}{JavaException}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_java_exception}{std}}::\mbox{\hyperlink{struct_java_exception}{runtime\_error}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ exception\ using\ Java\ message,\ className\ and\ stack\ trace.\ Also\ uses\ current\ stack\ trace.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ *\ @param\ message\ Java\ message.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ @param\ className\ Java\ class\ name.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *\ @param\ stackTrace\ Java\ stack\ trace.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{struct_java_exception_a09ad75bce356bbec83cb2951d9788a0d}{JavaException}}(\textcolor{keyword}{const}\ std::string\ \&message,\ \textcolor{keyword}{const}\ std::string\ \&className,\ std::string\ stackTrace);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{///\ Throws\ a\ JavaException\ if\ it\ exists\ (i.e.\ intercepted\ by\ Graal\ SDK)}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{throwIfJavaThreadExceptionExists}}();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ throwException();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ *throwIfNullptr(T\ *v)\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (v\ ==\ \textcolor{keywordtype}{nullptr})\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{throwIfJavaThreadExceptionExists}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{(}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{)}};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v;}
+\DoxyCodeLine{00041\ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ T\ *throwIfNullptr(\textcolor{keyword}{const}\ T\ *v)\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (v\ ==\ \textcolor{keywordtype}{nullptr})\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{throwIfJavaThreadExceptionExists}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{(}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{)}};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v;}
+\DoxyCodeLine{00049\ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ throwIfLessThanZero(T\ v)\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (v\ <\ T(0))\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{throwIfJavaThreadExceptionExists}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{(}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{)}};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v;}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ Legacy}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ *throwIfMinusOne(T\ *v)\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dxfcpp::bit\_cast<std::int64\_t>(v)\ ==\ -\/1LL\ ||}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ dxfcpp::bit\_cast<std::int64\_t>(v)\ ==\ 0x00000000FFFFFFFFLL)\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{throwIfJavaThreadExceptionExists}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{(}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{)}};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v;}
+\DoxyCodeLine{00067\ \ \ \ \ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//\ Legacy}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ T\ *throwIfMinusOne(\textcolor{keyword}{const}\ T\ *v)\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dxfcpp::bit\_cast<std::int64\_t>(v)\ ==\ -\/1LL\ ||}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ dxfcpp::bit\_cast<std::int64\_t>(v)\ ==\ 0x00000000FFFFFFFFLL)\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{throwIfJavaThreadExceptionExists}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{(}}\mbox{\hyperlink{struct_java_exception_a9f1802826420621d99da7f44f1ba85d3}{)}};}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v;}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ @return\ dxFeed\ Graal\ CXX\ API\ stack\ trace\ +\ Java\ (GraalVM)\ exception's\ stack\ trace.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{struct_java_exception_a7b5e651d47f7656e9ad747f73beaf5d8}{getStackTrace}}()\ \textcolor{keyword}{const}\ \&;}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00085\ \ \ \ \ std::string\ stackTrace\_;}
+\DoxyCodeLine{00086\ \};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
+
+\end{DoxyCode}

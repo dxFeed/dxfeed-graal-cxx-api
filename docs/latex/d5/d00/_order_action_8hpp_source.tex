@@ -9,138 +9,142 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Enum.hpp"{}}}
-\DoxyCodeLine{00010\ }
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Enum.hpp"{}}}
 \DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ Action\ enum\ for\ the\ Full\ Order\ Book\ (FOB)\ Orders.\ Action\ describes\ business\ meaning\ of\ the\ Order\ event:}}
-\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ whether\ order\ was\ added\ or\ replaced,\ partially\ or\ fully\ executed,\ etc.}}
-\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00019\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Enum}}<\mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}},\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_order_action}{uint32\_t}}>\ \{}
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{Enum}}::\mbox{\hyperlink{structdxfcpp_1_1_order_action}{Enum}};}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ *\ Default\ enum\ value\ for\ orders\ that\ do\ not\ support\ "{}Full\ Order\ Book"{}\ and\ for\ backward\ compatibility\ -\/}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ *\ action\ must\ be\ derived\ from\ other\ Order\ fields.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *\ <p>All\ Full\ Order\ Book\ related\ fields\ for\ this\ action\ will\ be\ empty.}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_aaef7a67cc76d76b2791d31d9edda5395}{UNDEFINED}};}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ *\ New\ Order\ is\ added\ to\ Order\ Book.}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ ID\ of\ the\ order\ replaced\ by\ this\ new\ order\ -\/\ if\ available.</li>}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ <li>Trade\ fields\ will\ be\ empty</li>}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_aac1fd0f48425534b713fc7eb98e1c5a6}{NEW}};}
-\DoxyCodeLine{00041\ }
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Order\ is\ modified\ and\ price-\/time-\/priority\ is\ not\ maintained\ (i.e.\ order\ has\ re-\/entered\ Order\ Book).}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *\ Order\ @ref\ Order::getEventSymbol()\ "{}symbol"{}\ and\ @ref\ Order::getOrderSide()\ "{}side"{}\ will\ remain\ the\ same.}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ <li>Trade\ fields\ will\ be\ empty</li>}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_a05e01f8ed0d08c332351ad9349b7ddd3}{REPLACE}};}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ Order\ is\ modified\ without\ changing\ its\ price-\/time-\/priority\ (usually\ due\ to\ partial\ cancel\ by\ user).}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ will\ contain\ new\ updated\ size.}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ <li>Trade\ fields\ will\ be\ empty</li>}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_aca2545ff580de3ff27a25a2cc5469e6f}{MODIFY}};}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ Order\ is\ fully\ canceled\ and\ removed\ from\ Order\ Book.}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ will\ be\ equal\ to\ 0.}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ ID\ of\ the\ new\ order\ replacing\ this\ order\ -\/\ if\ available.</li>}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ <li>Trade\ fields\ will\ be\ empty</li>}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_a71b595aae402059f8dd65b312079da4f}{DELETE}};}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Size\ is\ changed\ (usually\ reduced)\ due\ to\ partial\ order\ execution.}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ will\ be\ updated\ to\ show\ current\ outstanding\ size.}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ aggressor\ order\ ID,\ if\ available</li>}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ if\ available</li>}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ and\ @ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ contain\ size\ and\ price\ of\ this\ execution</li>}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_a85eadf4613bcb638bd2a39d2ac61b7ba}{PARTIAL}};}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ Order\ is\ fully\ executed\ and\ removed\ from\ Order\ Book.}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ \{@ref\ Order\#getSize()\ size\}\ will\ be\ equals\ to\ 0.}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ aggressor\ order\ ID,\ if\ available</li>}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ if\ available</li>}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ and\ @ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ contain\ size\ and\ price\ of\ this\ execution\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_ad904daf87e661dc4c63346a8528872da}{EXECUTE}};}
-\DoxyCodeLine{00108\ }
-\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ Non-\/Book\ Trade\ -\/\ this\ Trade\ not\ refers\ to\ any\ entry\ in\ Order\ Book.}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ and\ @ref\ Order::getPrice()\ "{}price"{}\ will\ be\ equals\ to\ 0.}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ empty</li>}}
-\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ if\ available</li>}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ and\ @ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ contain\ size\ and\ price\ of\ this\ trade\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_ab4c73a8c4dc7163cffed6866d5748c86}{TRADE}};}
-\DoxyCodeLine{00122\ }
-\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ Prior\ Trade/Order\ Execution\ bust.}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ and\ @ref\ Order::getPrice()\ "{}price"{}\ will\ be\ equals\ to\ 0.}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ empty</li>}}
-\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ always\ present</li>}}
-\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ and\ @ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/\ always\ empty</li>}}
-\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
-\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action}{OrderAction}}\ \mbox{\hyperlink{structdxfcpp_1_1_order_action_aeee341d0df903c0aaafe08ff4828e42f}{BUST}};}
-\DoxyCodeLine{00135\ \};}
-\DoxyCodeLine{00136\ }
-\DoxyCodeLine{00137\ \textcolor{keyword}{template}\ <>}
-\DoxyCodeLine{00138\ \textcolor{keyword}{const}\ std::unordered\_map<OrderAction::CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ OrderAction>>\ OrderAction::ParentType::ALL;}
-\DoxyCodeLine{00139\ }
-\DoxyCodeLine{00140\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00015\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ Action\ enum\ for\ the\ Full\ Order\ Book\ (FOB)\ Orders.\ Action\ describes\ business\ meaning\ of\ the\ Order\ event:}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ whether\ order\ was\ added\ or\ replaced,\ partially\ or\ fully\ executed,\ etc.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ :\ \mbox{\hyperlink{struct_order_action}{Enum}}<\mbox{\hyperlink{struct_order_action}{OrderAction}},\ \mbox{\hyperlink{struct_order_action}{std}}::\mbox{\hyperlink{struct_order_action}{uint32\_t}}>\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{struct_order_action}{Enum}}::\mbox{\hyperlink{struct_order_action}{Enum}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ Default\ enum\ value\ for\ orders\ that\ do\ not\ support\ "{}Full\ Order\ Book"{}\ and\ for\ backward\ compatibility\ -\/}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *\ action\ must\ be\ derived\ from\ other\ Order\ fields.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ *\ <p>All\ Full\ Order\ Book\ related\ fields\ for\ this\ action\ will\ be\ empty.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_ac7faf8e63dee936021d84b08cdeddce6}{UNDEFINED}};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ New\ Order\ is\ added\ to\ Order\ Book.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ ID\ of\ the\ order\ replaced\ by\ this\ new\ order\ -\/\ if\ available.</li>}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ <li>Trade\ fields\ will\ be\ empty</li>}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_ac3d6cff7b2e641ce0346bda373412eb6}{NEW}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ Order\ is\ modified\ and\ price-\/time-\/priority\ is\ not\ maintained\ (i.e.\ order\ has\ re-\/entered\ Order\ Book).}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ Order\ @ref\ Order::getEventSymbol()\ "{}symbol"{}\ and\ @ref\ Order::getOrderSide()\ "{}side"{}\ will\ remain\ the\ same.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ <li>Trade\ fields\ will\ be\ empty</li>}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_a6c9d082325e1f1ecad3d4256952d4415}{REPLACE}};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ Order\ is\ modified\ without\ changing\ its\ price-\/time-\/priority\ (usually\ due\ to\ partial\ cancel\ by\ user).}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ will\ contain\ new\ updated\ size.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ <li>Trade\ fields\ will\ be\ empty</li>}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_a712e008b5ba4f9c567006f8c0a0089cf}{MODIFY}};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Order\ is\ fully\ canceled\ and\ removed\ from\ Order\ Book.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ will\ be\ equal\ to\ 0.}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ ID\ of\ the\ new\ order\ replacing\ this\ order\ -\/\ if\ available.</li>}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ <li>Trade\ fields\ will\ be\ empty</li>}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_a77e8554731eb894e4179c4edd6227142}{DELETE}};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ Size\ is\ changed\ (usually\ reduced)\ due\ to\ partial\ order\ execution.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ will\ be\ updated\ to\ show\ current\ outstanding\ size.}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ aggressor\ order\ ID,\ if\ available</li>}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ if\ available</li>}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ and\ @ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ contain\ size\ and\ price\ of\ this\ execution</li>}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_a5d9178d197edc5fc2c9fe5c9aab3ad7d}{PARTIAL}};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ Order\ is\ fully\ executed\ and\ removed\ from\ Order\ Book.}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ \{@ref\ Order\#getSize()\ size\}\ will\ be\ equals\ to\ 0.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getAuxOrderId()\ "{}auxOrderId"{}\ -\/\ aggressor\ order\ ID,\ if\ available</li>}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ if\ available</li>}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ and\ @ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ contain\ size\ and\ price\ of\ this\ execution\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_a1b4e3016acf340f40f556fb0ccd0e344}{EXECUTE}};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ Non-\/Book\ Trade\ -\/\ this\ Trade\ not\ refers\ to\ any\ entry\ in\ Order\ Book.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ and\ @ref\ Order::getPrice()\ "{}price"{}\ will\ be\ equals\ to\ 0.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ empty</li>}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ if\ available</li>}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ and\ @ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ contain\ size\ and\ price\ of\ this\ trade\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_a188caf31978da105ad8418c28585669c}{TRADE}};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ Prior\ Trade/Order\ Execution\ bust.}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ Order's\ @ref\ Order::getSize()\ "{}size"{}\ and\ @ref\ Order::getPrice()\ "{}price"{}\ will\ be\ equals\ to\ 0.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ <p>Full\ Order\ Book\ fields:}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ <ul>}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getOrderId()\ "{}orderId"{}\ -\/\ always\ empty</li>}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeId()\ "{}tradeId"{}\ -\/\ always\ present</li>}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ <li>@ref\ Order::getTradeSize()\ "{}tradeSize"{}\ and\ @ref\ Order::getTradePrice()\ "{}tradePrice"{}\ -\/\ always\ empty</li>}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ </ul>}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_order_action}{OrderAction}}\ \mbox{\hyperlink{struct_order_action_a4dbcf6a2d59f1a7869d548ca86b0baf8}{BUST}};}
+\DoxyCodeLine{00137\ \};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00140\ \textcolor{keyword}{const}\ std::unordered\_map<OrderAction::CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ OrderAction>>\ OrderAction::ParentType::ALL;}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

@@ -1,0 +1,1497 @@
+\doxysubsection{Candle Class Reference}
+\hypertarget{class_candle}{}\label{class_candle}\index{Candle@{Candle}}
+
+
+\doxylink{class_candle}{Candle} event with open, high, low, close prices and other information for a specific period.  
+
+
+
+
+{\ttfamily \#include $<$Candle.\+hpp$>$}
+
+Inheritance diagram for Candle\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.733333cm]{d5/d03/class_candle}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_candle_a3e5fd4180d19aff52a52e003f4cbafe7}\label{class_candle_a3e5fd4180d19aff52a52e003f4cbafe7} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_candle}{Candle}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{class_candle}{Candle} object. \end{DoxyCompactList}\item 
+\Hypertarget{class_candle_a0f0d942f1c0cf9b02f46e8f29ba88ed9}\label{class_candle_a0f0d942f1c0cf9b02f46e8f29ba88ed9} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{class_candle}{Candle}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{class_candle}{Candle} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol$<$ Candle\+Symbol $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr}
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_event_type}{Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_event_type}{Event\+Type}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_time_series_event}{Time\+Series\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_time_series_event}{Time\+Series\+Event}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_time_series_event}{Time\+Series\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_indexed_event}{Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_indexed_event}{Indexed\+Event}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_indexed_event}{Indexed\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_lasting_event}{Lasting\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_lasting_event}{Lasting\+Event}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_lasting_event}{Lasting\+Event} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_candle_a9e2e74f855856be1427b763739a8d7aa}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\Hypertarget{class_candle_a5de5ae3a9a961935de54bfaa013439d9}\label{class_candle_a5de5ae3a9a961935de54bfaa013439d9} 
+{\bfseries Candle} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new candle with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle_a3b1381b3b7be7f27b1c0d81378c62c6e}{Candle}} (\mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new candle with the specified candle event symbol. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \& \mbox{\hyperlink{class_candle_a83aa759aa93bf8c2a83c51d12337a76b}{get\+Event\+Symbol}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} $>$ \& \mbox{\hyperlink{class_candle_a6d2da6d33dd41a2013a247650a841589}{get\+Event\+Symbol\+Opt}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{set\+Event\+Symbol}} (const \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event symbol that identifies this event type in \doxylink{class_d_x_feed_subscription}{subscription}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_aa277e94136b5e02ff9eae40d15d567d2}{with\+Event\+Symbol}} (const \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \&event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current candle. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_candle_ad497043cf7e1de9e0a285a835bb2dd05}{get\+Event\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_aea048a32fb1e63843aa89ea8ead57b7a}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current candle. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_candle_aec9692d1a464d7526280204185b6f5c5}{get\+Event\+Flags}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \mbox{\hyperlink{class_candle_aae006f4b6a7ad84dbc77196cb4c51df6}{get\+Event\+Flags\+Mask}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a0c785244a9705023e85a7b6ec7992764}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a98c634370ef869ca041c1f5b1a470197}{with\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_abcc697094b7d051dd8bca33bb9a426d2}{set\+Event\+Flags}} (const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a830a370a776289d785a12b4c6d34237e}{with\+Event\+Flags}} (const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd}{set\+Index}} (std\+::int64\+\_\+t index) override
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a9ebcfa6eafbf889d83a68dac63e9ed1c}{with\+Index}} (std\+::int64\+\_\+t index) noexcept
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_candle_ab33b73bda44691319d65a95b03113cea}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_candle_a2a229f6b56a57a9277bac05388466ebc}{get\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a0beb35aafb7331ac697efae16e067132}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_ad539e4a7557dbca53cea01c1aca40170}{with\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_candle_aec665a2630f059993d3108da27d13af6}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the sequence number of this event to distinguish events that have the same \doxylink{class_candle_a2a229f6b56a57a9277bac05388466ebc}{time}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a01d8327943ff021e138e273153e218b2}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{class_candle_aec665a2630f059993d3108da27d13af6}{sequence number} of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a0a2b76832d515cdc1e3b624a3c0818ce}{with\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \doxylink{class_candle_aec665a2630f059993d3108da27d13af6}{sequence number} of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{class_candle_a7c2b131adebafb027432b04cf51db2a8}{get\+Count}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns total number of original trade (or quote) events in this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_af1758819e858faf388878fb885737ec4}{set\+Count}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total number of original trade (or quote) events in this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a1e53573765534cea0e105462317ce5f5}{with\+Count}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total number of original trade (or quote) events in this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_a7a224fcc38a8a89aeec75af0872cb058}{get\+Open}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the first (open) price of this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe}{set\+Open}} (double open) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the first (open) price of this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a14629a4de043b21cf4c66202948285dd}{with\+Open}} (double open) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the first (open) price of this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_a892a243f64663efda25f3061a36e487b}{get\+High}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the maximal (high) price of this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146}{set\+High}} (double high) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the maximal (high) price of this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a16c7aa2a3411ced91272cd0aa915d5d9}{with\+High}} (double high) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the maximal (high) price of this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_a9eb29260eacf0af29eb74e0e081bcb21}{get\+Low}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the minimal (low) price of this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_ab9deb19d4662af654b9f5eade2ed7301}{set\+Low}} (double low) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the minimal (low) price of this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_aa24c939cd2e7026b87b0e049781469c9}{with\+Low}} (double low) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the minimal (low) price of this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_ae4559395abc3fcdb4d6fc8269ef2c075}{get\+Close}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the last (close) price of this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a09162f58dce3904b408d5dd089810176}{set\+Close}} (double close) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the last (close) price of this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a89929320198aa658463d87e602f041a1}{with\+Close}} (double close) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the last (close) price of this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_ab2370fc5b0359cce58ffbf72eeed47bb}{get\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns total volume in this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e}{set\+Volume}} (double volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total volume in this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a97d66c2648b03d71f62c1e661e08d8e5}{with\+Volume}} (double volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total volume in this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_a902c1c96e50d5c6d620f2ac499e93e08}{get\+VWAP}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns volume-\/weighted average price (VWAP) in this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_ae1187377845c789e8fb6fd8e33b1e562}{set\+VWAP}} (double vwap) noexcept
+\begin{DoxyCompactList}\small\item\em Changes volume-\/weighted average price (VWAP) in this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_adc35330fa2e64bae91ff365bf21536de}{with\+VWAP}} (double vwap) noexcept
+\begin{DoxyCompactList}\small\item\em Changes volume-\/weighted average price (VWAP) in this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_a80a9374f7209b75ffd5817791402bf0e}{get\+Bid\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns bid volume in this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f}{set\+Bid\+Volume}} (double bid\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid volume in this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a045e1b91b193c549165128b28b938fca}{with\+Bid\+Volume}} (double bid\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid volume in this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_a297a2f60a7ad0e261b7f7bb282cf5dcb}{get\+Ask\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns ask volume in this candle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83}{set\+Ask\+Volume}} (double ask\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ask volume in this candle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_a219f6e572cfb30c0c3eb0942539d2064}{with\+Ask\+Volume}} (double ask\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ask volume in this candle. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_a04d59291f30e584b8b2ad939bdc5c3fc}{get\+Imp\+Volatility}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the implied volatility. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_a103f748100c0b152707d23979c297a6b}{set\+Imp\+Volatility}} (double imp\+Volatility)
+\begin{DoxyCompactList}\small\item\em Changes the implied volatility. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_acb25c67738bb372cde041abe01310e21}{with\+Imp\+Volatility}} (double imp\+Volatility) noexcept
+\begin{DoxyCompactList}\small\item\em Changes implied volatility. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_candle_af9c9d31ac6950ef89cf67a219048755b}{get\+Open\+Interest}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the open interest. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_candle_ad190222645b01a23418b9ac48810b5ae}{set\+Open\+Interest}} (double open\+Interest) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the open interest. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_candle}{Candle}} \& \mbox{\hyperlink{class_candle_ad33f38ffb13013b4e28a96764bab7cbe}{with\+Open\+Interest}} (double open\+Interest) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the open interest. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_candle_a8e4362a595a51b7907b79bea57eadaaf}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_event_type}{Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{struct_event_type_a6d1f37572f827b462dfb95857f19f4d2}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{struct_shared_entity_ae774e293e95fbf8ebb4d22f714e80272}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a348c971deaca898a477262e5bd190d03}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_time_series_event}{Time\+Series\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{struct_time_series_event_a3c0a02028f2c42e8908f5bcdda02c0ff}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source identifier for this event, which is always \doxylink{class_indexed_event_source_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT} for time-\/series events. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{struct_time_series_event_a8a4b57e2b6726274743c2b76689b693d}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{struct_time_series_event_ad25d260c1c1ac819205e17971cda2f73}{get\+Event\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_candle_a3e5fd4180d19aff52a52e003f4cbafe7}{Ptr}} \mbox{\hyperlink{class_candle_a0db9deb31c7f27837ab222dcf480a149}{from\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_candle_ad257d0d6eb4904b373bb93034db307ac}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_candle_a69d6a0eed0322a5be1565e8554badb63}\label{class_candle_a69d6a0eed0322a5be1565e8554badb63} 
+static const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \& {\bfseries TYPE} = Event\+Type\+Enum\+::\+CANDLE
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{struct_indexed_event}{Indexed\+Event}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a11615cb90f791068cfa9edaa8b0056ae}{TX\+\_\+\+PENDING}} = Event\+Flag\+::\+TX\+\_\+\+PENDING
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a98e078c04445c983d19db700df469b58}{REMOVE\+\_\+\+EVENT}} = Event\+Flag\+::\+REMOVE\+\_\+\+EVENT
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_ac87eb588da470259ee75b490dbcaabf7}{SNAPSHOT\+\_\+\+BEGIN}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a4604235ec9a455bea7c80d1b71546bf9}{SNAPSHOT\+\_\+\+END}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+END
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a8824670805f7487194b7070fe06afe47}{SNAPSHOT\+\_\+\+SNIP}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of \doxylink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags} property.    \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_event_flag}{Event\+Flag}} \mbox{\hyperlink{struct_indexed_event_a6ae2747bf52c574da7aa47fbcd7bf32f}{SNAPSHOT\+\_\+\+MODE}} = Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of \doxylink{struct_indexed_event_aefd0ab36275fc9adf6f7d57c2833c200}{event\+Flags} property.    \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{class_candle}{Candle} event with open, high, low, close prices and other information for a specific period. 
+
+Candles are build with a specified \doxylink{struct_candle_period}{Candle\+Period} using a specified \doxylink{struct_candle_price}{Candle\+Price} type with a data taken from the specified \doxylink{struct_candle_exchange}{Candle\+Exchange} from the specified \doxylink{struct_candle_session}{Candle\+Session} with further details of aggregation provided by \doxylink{struct_candle_alignment}{Candle\+Alignment}.
+
+Event symbol of the candle is represented with \doxylink{struct_candle_symbol}{Candle\+Symbol} class. Since the \`{}\+Candle is a time-\/series event, it is typically subscribed to using DXFeed\+Time\+Series\+Subscription class that handles the necessarily wrapping of the symbol into \doxylink{class_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} to specify a subscription time range.
+
+\doxysubsubsubsubsection*{\label{class_underlying_eventFlagsSection}%
+\Hypertarget{class_underlying_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+Some candle sources provide a consistent view of the set of known candles. The corresponding information is carried in \doxylink{class_candle_aec9692d1a464d7526280204185b6f5c5}{event\+Flags} property. The logic behind this property is detailed in \doxylink{struct_indexed_event}{Indexed\+Event} class documentation. Multiple event sources for the same symbol are not supported for candles, thus \doxylink{struct_time_series_event_a3c0a02028f2c42e8908f5bcdda02c0ff}{source} property is always \doxylink{class_indexed_event_source_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}.
+
+Time\+Series\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list current of time-\/series events order by their \doxylink{class_candle_a2a229f6b56a57a9277bac05388466ebc}{time}. It relies on the code of Abstract\+Indexed\+Event\+Model to handle this logic. Use the source code of Abstract\+Indexed\+Event\+Model for clarification on transactions and snapshot logic.
+
+\doxysubsubsubsubsection*{Publishing Candles}
+
+Publishing of candle events follows the general rules explained in \doxylink{struct_time_series_event}{Time\+Series\+Event} class documentation.
+
+\doxysubsubsubsubsection*{Implementation details}
+
+This event is implemented on top of QDS record {\ttfamily Trade\+History} for tick candles with \doxylink{struct_candle_period_a2934f6797a1c4aeb8ff49560370f0550}{Candle\+Period\+::\+TICK}, records {\ttfamily \doxylink{class_trade}{Trade}.\texorpdfstring{$<$}{<}period\texorpdfstring{$>$}{>}} for a certain set of popular periods, and QDS record {\ttfamily \doxylink{class_candle}{Candle}} for arbitrary custom periods, with a set of {\ttfamily \doxylink{class_candle}{Candle}\{\texorpdfstring{$<$}{<}attributes\texorpdfstring{$>$}{>}\}} records for a popular combinations of custom candle symbol attributes like \doxylink{struct_candle_price}{Candle\+Price} for an efficient support of bid-\/ask charting. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_candle_a3b1381b3b7be7f27b1c0d81378c62c6e}\index{Candle@{Candle}!Candle@{Candle}}
+\index{Candle@{Candle}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{Candle()}{Candle()}}
+{\footnotesize\ttfamily \label{class_candle_a3b1381b3b7be7f27b1c0d81378c62c6e} 
+Candle\+::\+Candle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}}}]{event\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new candle with the specified candle event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & candle event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_candle_ad257d0d6eb4904b373bb93034db307ac}\index{Candle@{Candle}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \label{class_candle_ad257d0d6eb4904b373bb93034db307ac} 
+void Candle\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_candle_a0db9deb31c7f27837ab222dcf480a149}\index{Candle@{Candle}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily \label{class_candle_a0db9deb31c7f27837ab222dcf480a149} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_candle}{Candle}} $>$ Candle\+::from\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_candle_a297a2f60a7ad0e261b7f7bb282cf5dcb}\index{Candle@{Candle}!getAskVolume@{getAskVolume}}
+\index{getAskVolume@{getAskVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getAskVolume()}{getAskVolume()}}
+{\footnotesize\ttfamily \label{class_candle_a297a2f60a7ad0e261b7f7bb282cf5dcb} 
+double Candle\+::get\+Ask\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns ask volume in this candle. 
+
+\begin{DoxyReturn}{Returns}
+Ask volume in this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_a80a9374f7209b75ffd5817791402bf0e}\index{Candle@{Candle}!getBidVolume@{getBidVolume}}
+\index{getBidVolume@{getBidVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getBidVolume()}{getBidVolume()}}
+{\footnotesize\ttfamily \label{class_candle_a80a9374f7209b75ffd5817791402bf0e} 
+double Candle\+::get\+Bid\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns bid volume in this candle. 
+
+\begin{DoxyReturn}{Returns}
+Bid volume in this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_ae4559395abc3fcdb4d6fc8269ef2c075}\index{Candle@{Candle}!getClose@{getClose}}
+\index{getClose@{getClose}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getClose()}{getClose()}}
+{\footnotesize\ttfamily \label{class_candle_ae4559395abc3fcdb4d6fc8269ef2c075} 
+double Candle\+::get\+Close (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the last (close) price of this candle. 
+
+\begin{DoxyReturn}{Returns}
+The last (close) price of this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_a7c2b131adebafb027432b04cf51db2a8}\index{Candle@{Candle}!getCount@{getCount}}
+\index{getCount@{getCount}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getCount()}{getCount()}}
+{\footnotesize\ttfamily \label{class_candle_a7c2b131adebafb027432b04cf51db2a8} 
+std\+::int64\+\_\+t Candle\+::get\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns total number of original trade (or quote) events in this candle. 
+
+\begin{DoxyReturn}{Returns}
+Total number of original trade (or quote) events in this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_aec9692d1a464d7526280204185b6f5c5}\index{Candle@{Candle}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily \label{class_candle_aec9692d1a464d7526280204185b6f5c5} 
+std\+::int32\+\_\+t Candle\+::get\+Event\+Flags (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \doxylink{class_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_indexed_event_a5bf54899ccd5dd4bd162ae64fbcc695b}{Indexed\+Event}}.
+
+\Hypertarget{class_candle_aae006f4b6a7ad84dbc77196cb4c51df6}\index{Candle@{Candle}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily \label{class_candle_aae006f4b6a7ad84dbc77196cb4c51df6} 
+\mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} Candle\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \doxylink{class_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_indexed_event_a01ae5fda2a1ada2279c541f821a03ada}{Indexed\+Event}}.
+
+\Hypertarget{class_candle_a83aa759aa93bf8c2a83c51d12337a76b}\index{Candle@{Candle}!getEventSymbol@{getEventSymbol}}
+\index{getEventSymbol@{getEventSymbol}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getEventSymbol()}{getEventSymbol()}}
+{\footnotesize\ttfamily \label{class_candle_a83aa759aa93bf8c2a83c51d12337a76b} 
+const \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \& Candle\+::get\+Event\+Symbol (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns symbol of this event. 
+
+\begin{DoxyReturn}{Returns}
+symbol of this event or dxfcpp\+::\+Candle\+Symbol\+::\+NUL ({\ttfamily dxfcpp\+::\+Candle\+Symbol\{"{}$<$null$>$"{}\}}) 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_event_type_with_symbol_ab00a9edb649a6aa0f00b42420c5439ad}{Event\+Type\+With\+Symbol$<$ Candle\+Symbol $>$}}.
+
+\Hypertarget{class_candle_a6d2da6d33dd41a2013a247650a841589}\index{Candle@{Candle}!getEventSymbolOpt@{getEventSymbolOpt}}
+\index{getEventSymbolOpt@{getEventSymbolOpt}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getEventSymbolOpt()}{getEventSymbolOpt()}}
+{\footnotesize\ttfamily \label{class_candle_a6d2da6d33dd41a2013a247650a841589} 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} $>$ \& Candle\+::get\+Event\+Symbol\+Opt (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns symbol of this event. 
+
+\begin{DoxyReturn}{Returns}
+symbol of this event or {\ttfamily std\+::nullopt}. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_event_type_with_symbol_a1170c3107d8ab9b924e9b6cd0e04369e}{Event\+Type\+With\+Symbol$<$ Candle\+Symbol $>$}}.
+
+\Hypertarget{class_candle_ad497043cf7e1de9e0a285a835bb2dd05}\index{Candle@{Candle}!getEventTime@{getEventTime}}
+\index{getEventTime@{getEventTime}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getEventTime()}{getEventTime()}}
+{\footnotesize\ttfamily \label{class_candle_ad497043cf7e1de9e0a285a835bb2dd05} 
+std\+::int64\+\_\+t Candle\+::get\+Event\+Time (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time when event was created or zero when time is not available. 
+
+This event time is available only when the corresponding \doxylink{struct_d_x_endpoint}{DXEndpoint} is created with \doxylink{struct_d_x_endpoint_a59bc3053ef198595c2ed5a450ba5a2a4}{DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY} and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from \doxylink{struct_on_demand_service}{On\+Demand\+Service}. Events that are coming from a network connections do not have an embedded event time information and this method will return zero for them, meaning that event was received just now.
+
+Default implementation returns 0.
+
+\begin{DoxyReturn}{Returns}
+The difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC or zero when time is not available. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{struct_event_type_a1c9c34884f4fcce70579a059252bdf1a}{Event\+Type}}.
+
+\Hypertarget{class_candle_a892a243f64663efda25f3061a36e487b}\index{Candle@{Candle}!getHigh@{getHigh}}
+\index{getHigh@{getHigh}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getHigh()}{getHigh()}}
+{\footnotesize\ttfamily \label{class_candle_a892a243f64663efda25f3061a36e487b} 
+double Candle\+::get\+High (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the maximal (high) price of this candle. 
+
+\begin{DoxyReturn}{Returns}
+The maximal (high) price of this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_a04d59291f30e584b8b2ad939bdc5c3fc}\index{Candle@{Candle}!getImpVolatility@{getImpVolatility}}
+\index{getImpVolatility@{getImpVolatility}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getImpVolatility()}{getImpVolatility()}}
+{\footnotesize\ttfamily \label{class_candle_a04d59291f30e584b8b2ad939bdc5c3fc} 
+double Candle\+::get\+Imp\+Volatility (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the implied volatility. 
+
+\begin{DoxyReturn}{Returns}
+The implied volatility. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_ab33b73bda44691319d65a95b03113cea}\index{Candle@{Candle}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily \label{class_candle_ab33b73bda44691319d65a95b03113cea} 
+std\+::int64\+\_\+t Candle\+::get\+Index (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+\begin{DoxyReturn}{Returns}
+unique per-\/symbol index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_indexed_event_a4310a26785d5142efba9d7c0094125bc}{Indexed\+Event}}.
+
+\Hypertarget{class_candle_a9eb29260eacf0af29eb74e0e081bcb21}\index{Candle@{Candle}!getLow@{getLow}}
+\index{getLow@{getLow}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getLow()}{getLow()}}
+{\footnotesize\ttfamily \label{class_candle_a9eb29260eacf0af29eb74e0e081bcb21} 
+double Candle\+::get\+Low (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the minimal (low) price of this candle. 
+
+\begin{DoxyReturn}{Returns}
+The minimal (low) price of this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_a7a224fcc38a8a89aeec75af0872cb058}\index{Candle@{Candle}!getOpen@{getOpen}}
+\index{getOpen@{getOpen}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getOpen()}{getOpen()}}
+{\footnotesize\ttfamily \label{class_candle_a7a224fcc38a8a89aeec75af0872cb058} 
+double Candle\+::get\+Open (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the first (open) price of this candle. 
+
+\begin{DoxyReturn}{Returns}
+The first (open) price of this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_af9c9d31ac6950ef89cf67a219048755b}\index{Candle@{Candle}!getOpenInterest@{getOpenInterest}}
+\index{getOpenInterest@{getOpenInterest}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getOpenInterest()}{getOpenInterest()}}
+{\footnotesize\ttfamily \label{class_candle_af9c9d31ac6950ef89cf67a219048755b} 
+double Candle\+::get\+Open\+Interest (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the open interest. 
+
+\begin{DoxyReturn}{Returns}
+The open interest. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_aec665a2630f059993d3108da27d13af6}\index{Candle@{Candle}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily \label{class_candle_aec665a2630f059993d3108da27d13af6} 
+std\+::int32\+\_\+t Candle\+::get\+Sequence (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the sequence number of this event to distinguish events that have the same \doxylink{class_candle_a2a229f6b56a57a9277bac05388466ebc}{time}. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \doxylink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{Candle\+::\+MAX\+\_\+\+SEQUENCE}.
+
+\begin{DoxyReturn}{Returns}
+The sequence number of this event 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\+\_\+\+SEQUENCE}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_a0beb35aafb7331ac697efae16e067132}{set\+Time()}}.
+
+\Hypertarget{class_candle_a2a229f6b56a57a9277bac05388466ebc}\index{Candle@{Candle}!getTime@{getTime}}
+\index{getTime@{getTime}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily \label{class_candle_a2a229f6b56a57a9277bac05388466ebc} 
+std\+::int64\+\_\+t Candle\+::get\+Time (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns timestamp of the event in milliseconds. 
+
+\begin{DoxyReturn}{Returns}
+timestamp of the event in milliseconds 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_time_series_event_a9d2ae41520f33140a6e823ae650e216a}{Time\+Series\+Event}}.
+
+\Hypertarget{class_candle_ab2370fc5b0359cce58ffbf72eeed47bb}\index{Candle@{Candle}!getVolume@{getVolume}}
+\index{getVolume@{getVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getVolume()}{getVolume()}}
+{\footnotesize\ttfamily \label{class_candle_ab2370fc5b0359cce58ffbf72eeed47bb} 
+double Candle\+::get\+Volume (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns total volume in this candle. 
+
+\begin{DoxyReturn}{Returns}
+Total volume in this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_a902c1c96e50d5c6d620f2ac499e93e08}\index{Candle@{Candle}!getVWAP@{getVWAP}}
+\index{getVWAP@{getVWAP}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{getVWAP()}{getVWAP()}}
+{\footnotesize\ttfamily \label{class_candle_a902c1c96e50d5c6d620f2ac499e93e08} 
+double Candle\+::get\+VWAP (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns volume-\/weighted average price (VWAP) in this candle. 
+
+Total turnover in this candle can be computed with {\ttfamily \doxylink{class_candle_a902c1c96e50d5c6d620f2ac499e93e08}{get\+VWAP()} \texorpdfstring{$\ast$}{*} \doxylink{class_candle_ab2370fc5b0359cce58ffbf72eeed47bb}{get\+Volume}()}. \begin{DoxyReturn}{Returns}
+Volume-\/weighted average price (VWAP) in this candle. 
+\end{DoxyReturn}
+\Hypertarget{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83}\index{Candle@{Candle}!setAskVolume@{setAskVolume}}
+\index{setAskVolume@{setAskVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setAskVolume()}{setAskVolume()}}
+{\footnotesize\ttfamily \label{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83} 
+void Candle\+::set\+Ask\+Volume (\begin{DoxyParamCaption}\item[{double}]{ask\+Volume}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask volume in this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Volume} & Ask volume in this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_a219f6e572cfb30c0c3eb0942539d2064}{with\+Ask\+Volume()}}.
+
+\Hypertarget{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f}\index{Candle@{Candle}!setBidVolume@{setBidVolume}}
+\index{setBidVolume@{setBidVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setBidVolume()}{setBidVolume()}}
+{\footnotesize\ttfamily \label{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f} 
+void Candle\+::set\+Bid\+Volume (\begin{DoxyParamCaption}\item[{double}]{bid\+Volume}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid volume in this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Volume} & Bid volume in this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_a045e1b91b193c549165128b28b938fca}{with\+Bid\+Volume()}}.
+
+\Hypertarget{class_candle_a09162f58dce3904b408d5dd089810176}\index{Candle@{Candle}!setClose@{setClose}}
+\index{setClose@{setClose}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setClose()}{setClose()}}
+{\footnotesize\ttfamily \label{class_candle_a09162f58dce3904b408d5dd089810176} 
+void Candle\+::set\+Close (\begin{DoxyParamCaption}\item[{double}]{close}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the last (close) price of this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em close} & The last (close) price of this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_a89929320198aa658463d87e602f041a1}{with\+Close()}}.
+
+\Hypertarget{class_candle_af1758819e858faf388878fb885737ec4}\index{Candle@{Candle}!setCount@{setCount}}
+\index{setCount@{setCount}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setCount()}{setCount()}}
+{\footnotesize\ttfamily \label{class_candle_af1758819e858faf388878fb885737ec4} 
+void Candle\+::set\+Count (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{count}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes total number of original trade (or quote) events in this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em count} & Total number of original trade (or quote) events in this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_a1e53573765534cea0e105462317ce5f5}{with\+Count()}}.
+
+\Hypertarget{class_candle_abcc697094b7d051dd8bca33bb9a426d2}\index{Candle@{Candle}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_candle_abcc697094b7d051dd8bca33bb9a426d2} 
+void Candle\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \doxylink{class_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{struct_indexed_event_affbf8ba9b25153efb7201800d9c8b182}{Indexed\+Event}}.
+
+
+
+References \mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{Event\+Flags\+Mask\+::get\+Mask()}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_a830a370a776289d785a12b4c6d34237e}{with\+Event\+Flags()}}.
+
+\Hypertarget{class_candle_a0c785244a9705023e85a7b6ec7992764}\index{Candle@{Candle}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_candle_a0c785244a9705023e85a7b6ec7992764} 
+void Candle\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \doxylink{class_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{struct_indexed_event_aefd0ab36275fc9adf6f7d57c2833c200}{Indexed\+Event}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_a98c634370ef869ca041c1f5b1a470197}{with\+Event\+Flags()}}.
+
+\Hypertarget{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}\index{Candle@{Candle}!setEventSymbol@{setEventSymbol}}
+\index{setEventSymbol@{setEventSymbol}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setEventSymbol()}{setEventSymbol()}}
+{\footnotesize\ttfamily \label{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3} 
+void Candle\+::set\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \&}]{event\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event symbol that identifies this event type in \doxylink{class_d_x_feed_subscription}{subscription}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{struct_event_type_with_symbol_a8ea9877b148603252021aad739c7e524}{Event\+Type\+With\+Symbol$<$ Candle\+Symbol $>$}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_aa277e94136b5e02ff9eae40d15d567d2}{with\+Event\+Symbol()}}.
+
+\Hypertarget{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}\index{Candle@{Candle}!setEventTime@{setEventTime}}
+\index{setEventTime@{setEventTime}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setEventTime()}{setEventTime()}}
+{\footnotesize\ttfamily \label{class_candle_a7b899baf6e140e1b3d75a12c5d34340b} 
+void Candle\+::set\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event creation time. 
+
+Default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{struct_event_type_ad5ae35b7dac44e2f0df5fa44c0830ad9}{Event\+Type}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_aea048a32fb1e63843aa89ea8ead57b7a}{with\+Event\+Time()}}.
+
+\Hypertarget{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146}\index{Candle@{Candle}!setHigh@{setHigh}}
+\index{setHigh@{setHigh}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setHigh()}{setHigh()}}
+{\footnotesize\ttfamily \label{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146} 
+void Candle\+::set\+High (\begin{DoxyParamCaption}\item[{double}]{high}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the maximal (high) price of this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em high} & The maximal (high) price of this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_a16c7aa2a3411ced91272cd0aa915d5d9}{with\+High()}}.
+
+\Hypertarget{class_candle_a103f748100c0b152707d23979c297a6b}\index{Candle@{Candle}!setImpVolatility@{setImpVolatility}}
+\index{setImpVolatility@{setImpVolatility}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setImpVolatility()}{setImpVolatility()}}
+{\footnotesize\ttfamily \label{class_candle_a103f748100c0b152707d23979c297a6b} 
+void Candle\+::set\+Imp\+Volatility (\begin{DoxyParamCaption}\item[{double}]{imp\+Volatility}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes the implied volatility. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em imp\+Volatility} & The implied volatility. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_acb25c67738bb372cde041abe01310e21}{with\+Imp\+Volatility()}}.
+
+\Hypertarget{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd}\index{Candle@{Candle}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily \label{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd} 
+void Candle\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & unique per-\/symbol index of this event. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{struct_indexed_event_a9e8731cb11daf84a0eb17fb570af9684}{Indexed\+Event}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_a9ebcfa6eafbf889d83a68dac63e9ed1c}{with\+Index()}}.
+
+\Hypertarget{class_candle_ab9deb19d4662af654b9f5eade2ed7301}\index{Candle@{Candle}!setLow@{setLow}}
+\index{setLow@{setLow}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setLow()}{setLow()}}
+{\footnotesize\ttfamily \label{class_candle_ab9deb19d4662af654b9f5eade2ed7301} 
+void Candle\+::set\+Low (\begin{DoxyParamCaption}\item[{double}]{low}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the minimal (low) price of this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em low} & The minimal (low) price of this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_aa24c939cd2e7026b87b0e049781469c9}{with\+Low()}}.
+
+\Hypertarget{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe}\index{Candle@{Candle}!setOpen@{setOpen}}
+\index{setOpen@{setOpen}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setOpen()}{setOpen()}}
+{\footnotesize\ttfamily \label{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe} 
+void Candle\+::set\+Open (\begin{DoxyParamCaption}\item[{double}]{open}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the first (open) price of this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em open} & The first (open) price of this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_a14629a4de043b21cf4c66202948285dd}{with\+Open()}}.
+
+\Hypertarget{class_candle_ad190222645b01a23418b9ac48810b5ae}\index{Candle@{Candle}!setOpenInterest@{setOpenInterest}}
+\index{setOpenInterest@{setOpenInterest}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setOpenInterest()}{setOpenInterest()}}
+{\footnotesize\ttfamily \label{class_candle_ad190222645b01a23418b9ac48810b5ae} 
+void Candle\+::set\+Open\+Interest (\begin{DoxyParamCaption}\item[{double}]{open\+Interest}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the open interest. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em open\+Interest} & The open interest. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_ad33f38ffb13013b4e28a96764bab7cbe}{with\+Open\+Interest()}}.
+
+\Hypertarget{class_candle_a01d8327943ff021e138e273153e218b2}\index{Candle@{Candle}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily \label{class_candle_a01d8327943ff021e138e273153e218b2} 
+void Candle\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes \doxylink{class_candle_aec665a2630f059993d3108da27d13af6}{sequence number} of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_candle_aec665a2630f059993d3108da27d13af6}{Candle\+::get\+Sequence()} 
+\end{DoxySeeAlso}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if sequence is below zero or above \doxylink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\+\_\+\+SEQUENCE}. \\
+\hline
+\end{DoxyExceptions}
+
+
+References \mbox{\hyperlink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\+\_\+\+SEQUENCE}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_a0a2b76832d515cdc1e3b624a3c0818ce}{with\+Sequence()}}.
+
+\Hypertarget{class_candle_a0beb35aafb7331ac697efae16e067132}\index{Candle@{Candle}!setTime@{setTime}}
+\index{setTime@{setTime}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily \label{class_candle_a0beb35aafb7331ac697efae16e067132} 
+void Candle\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes timestamp of the event in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & timestamp of the event in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_candle_a2a229f6b56a57a9277bac05388466ebc}{Candle\+::get\+Time()} 
+\end{DoxySeeAlso}
+
+
+References \mbox{\hyperlink{class_candle_aec665a2630f059993d3108da27d13af6}{get\+Sequence()}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_ad539e4a7557dbca53cea01c1aca40170}{with\+Time()}}.
+
+\Hypertarget{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e}\index{Candle@{Candle}!setVolume@{setVolume}}
+\index{setVolume@{setVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setVolume()}{setVolume()}}
+{\footnotesize\ttfamily \label{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e} 
+void Candle\+::set\+Volume (\begin{DoxyParamCaption}\item[{double}]{volume}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes total volume in this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volume} & Total volume in this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_a97d66c2648b03d71f62c1e661e08d8e5}{with\+Volume()}}.
+
+\Hypertarget{class_candle_ae1187377845c789e8fb6fd8e33b1e562}\index{Candle@{Candle}!setVWAP@{setVWAP}}
+\index{setVWAP@{setVWAP}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{setVWAP()}{setVWAP()}}
+{\footnotesize\ttfamily \label{class_candle_ae1187377845c789e8fb6fd8e33b1e562} 
+void Candle\+::set\+VWAP (\begin{DoxyParamCaption}\item[{double}]{vwap}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes volume-\/weighted average price (VWAP) in this candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vwap} & Volume-\/weighted average price (VWAP) in this candle. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_candle_adc35330fa2e64bae91ff365bf21536de}{with\+VWAP()}}.
+
+\Hypertarget{class_candle_a9e2e74f855856be1427b763739a8d7aa}\index{Candle@{Candle}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \label{class_candle_a9e2e74f855856be1427b763739a8d7aa} 
+void \texorpdfstring{$\ast$}{*} Candle\+::to\+Graal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_event_type_a799e0cd6b15e38e217ae15b5ab9963aa}{Event\+Type}}.
+
+
+
+References \mbox{\hyperlink{class_candle_a8e4362a595a51b7907b79bea57eadaaf}{to\+String()}}.
+
+\Hypertarget{class_candle_a8e4362a595a51b7907b79bea57eadaaf}\index{Candle@{Candle}!toString@{toString}}
+\index{toString@{toString}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{class_candle_a8e4362a595a51b7907b79bea57eadaaf} 
+std\+::string Candle\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{struct_shared_entity_a84179ef824d835d61488dab36f4f0325}{Shared\+Entity}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_candle_a9e2e74f855856be1427b763739a8d7aa}{to\+Graal()}}.
+
+\Hypertarget{class_candle_a219f6e572cfb30c0c3eb0942539d2064}\index{Candle@{Candle}!withAskVolume@{withAskVolume}}
+\index{withAskVolume@{withAskVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withAskVolume()}{withAskVolume()}}
+{\footnotesize\ttfamily \label{class_candle_a219f6e572cfb30c0c3eb0942539d2064} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Ask\+Volume (\begin{DoxyParamCaption}\item[{double}]{ask\+Volume}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask volume in this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Volume} & Ask volume in this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83}{set\+Ask\+Volume()}}.
+
+\Hypertarget{class_candle_a045e1b91b193c549165128b28b938fca}\index{Candle@{Candle}!withBidVolume@{withBidVolume}}
+\index{withBidVolume@{withBidVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withBidVolume()}{withBidVolume()}}
+{\footnotesize\ttfamily \label{class_candle_a045e1b91b193c549165128b28b938fca} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Bid\+Volume (\begin{DoxyParamCaption}\item[{double}]{bid\+Volume}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid volume in this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Volume} & Bid volume in this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f}{set\+Bid\+Volume()}}.
+
+\Hypertarget{class_candle_a89929320198aa658463d87e602f041a1}\index{Candle@{Candle}!withClose@{withClose}}
+\index{withClose@{withClose}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withClose()}{withClose()}}
+{\footnotesize\ttfamily \label{class_candle_a89929320198aa658463d87e602f041a1} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Close (\begin{DoxyParamCaption}\item[{double}]{close}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the last (close) price of this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em close} & The last (close) price of this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a09162f58dce3904b408d5dd089810176}{set\+Close()}}.
+
+\Hypertarget{class_candle_a1e53573765534cea0e105462317ce5f5}\index{Candle@{Candle}!withCount@{withCount}}
+\index{withCount@{withCount}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withCount()}{withCount()}}
+{\footnotesize\ttfamily \label{class_candle_a1e53573765534cea0e105462317ce5f5} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Count (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{count}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes total number of original trade (or quote) events in this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em count} & Total number of original trade (or quote) events in this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_af1758819e858faf388878fb885737ec4}{set\+Count()}}.
+
+\Hypertarget{class_candle_a830a370a776289d785a12b4c6d34237e}\index{Candle@{Candle}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_candle_a830a370a776289d785a12b4c6d34237e} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_flags_mask}{Event\+Flags\+Mask}} \&}]{event\+Flags}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current candle. 
+
+See \doxylink{class_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_abcc697094b7d051dd8bca33bb9a426d2}{set\+Event\+Flags()}}.
+
+\Hypertarget{class_candle_a98c634370ef869ca041c1f5b1a470197}\index{Candle@{Candle}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_candle_a98c634370ef869ca041c1f5b1a470197} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current candle. 
+
+See \doxylink{class_event_flag}{Event\+Flag} "{}\+Event Flags"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a0c785244a9705023e85a7b6ec7992764}{set\+Event\+Flags()}}.
+
+\Hypertarget{class_candle_aa277e94136b5e02ff9eae40d15d567d2}\index{Candle@{Candle}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \label{class_candle_aa277e94136b5e02ff9eae40d15d567d2} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \&}]{event\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{set\+Event\+Symbol()}}.
+
+\Hypertarget{class_candle_aea048a32fb1e63843aa89ea8ead57b7a}\index{Candle@{Candle}!withEventTime@{withEventTime}}
+\index{withEventTime@{withEventTime}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withEventTime()}{withEventTime()}}
+{\footnotesize\ttfamily \label{class_candle_aea048a32fb1e63843aa89ea8ead57b7a} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns the current candle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}{set\+Event\+Time()}}.
+
+\Hypertarget{class_candle_a16c7aa2a3411ced91272cd0aa915d5d9}\index{Candle@{Candle}!withHigh@{withHigh}}
+\index{withHigh@{withHigh}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withHigh()}{withHigh()}}
+{\footnotesize\ttfamily \label{class_candle_a16c7aa2a3411ced91272cd0aa915d5d9} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+High (\begin{DoxyParamCaption}\item[{double}]{high}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the maximal (high) price of this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em high} & The maximal (high) price of this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146}{set\+High()}}.
+
+\Hypertarget{class_candle_acb25c67738bb372cde041abe01310e21}\index{Candle@{Candle}!withImpVolatility@{withImpVolatility}}
+\index{withImpVolatility@{withImpVolatility}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withImpVolatility()}{withImpVolatility()}}
+{\footnotesize\ttfamily \label{class_candle_acb25c67738bb372cde041abe01310e21} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Imp\+Volatility (\begin{DoxyParamCaption}\item[{double}]{imp\+Volatility}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied volatility. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em imp\+Volatility} & The implied volatility. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a103f748100c0b152707d23979c297a6b}{set\+Imp\+Volatility()}}.
+
+\Hypertarget{class_candle_a9ebcfa6eafbf889d83a68dac63e9ed1c}\index{Candle@{Candle}!withIndex@{withIndex}}
+\index{withIndex@{withIndex}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withIndex()}{withIndex()}}
+{\footnotesize\ttfamily \label{class_candle_a9ebcfa6eafbf889d83a68dac63e9ed1c} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & unique per-\/symbol index of this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd}{set\+Index()}}.
+
+\Hypertarget{class_candle_aa24c939cd2e7026b87b0e049781469c9}\index{Candle@{Candle}!withLow@{withLow}}
+\index{withLow@{withLow}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withLow()}{withLow()}}
+{\footnotesize\ttfamily \label{class_candle_aa24c939cd2e7026b87b0e049781469c9} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Low (\begin{DoxyParamCaption}\item[{double}]{low}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the minimal (low) price of this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em low} & The minimal (low) price of this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_ab9deb19d4662af654b9f5eade2ed7301}{set\+Low()}}.
+
+\Hypertarget{class_candle_a14629a4de043b21cf4c66202948285dd}\index{Candle@{Candle}!withOpen@{withOpen}}
+\index{withOpen@{withOpen}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withOpen()}{withOpen()}}
+{\footnotesize\ttfamily \label{class_candle_a14629a4de043b21cf4c66202948285dd} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Open (\begin{DoxyParamCaption}\item[{double}]{open}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the first (open) price of this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em open} & The first (open) price of this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe}{set\+Open()}}.
+
+\Hypertarget{class_candle_ad33f38ffb13013b4e28a96764bab7cbe}\index{Candle@{Candle}!withOpenInterest@{withOpenInterest}}
+\index{withOpenInterest@{withOpenInterest}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withOpenInterest()}{withOpenInterest()}}
+{\footnotesize\ttfamily \label{class_candle_ad33f38ffb13013b4e28a96764bab7cbe} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Open\+Interest (\begin{DoxyParamCaption}\item[{double}]{open\+Interest}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the open interest. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em open\+Interest} & The open interest. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_ad190222645b01a23418b9ac48810b5ae}{set\+Open\+Interest()}}.
+
+\Hypertarget{class_candle_a0a2b76832d515cdc1e3b624a3c0818ce}\index{Candle@{Candle}!withSequence@{withSequence}}
+\index{withSequence@{withSequence}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withSequence()}{withSequence()}}
+{\footnotesize\ttfamily \label{class_candle_a0a2b76832d515cdc1e3b624a3c0818ce} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \doxylink{class_candle_aec665a2630f059993d3108da27d13af6}{sequence number} of this event. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_candle_aec665a2630f059993d3108da27d13af6}{Candle\+::get\+Sequence()} 
+\end{DoxySeeAlso}
+
+
+References \mbox{\hyperlink{class_candle_a01d8327943ff021e138e273153e218b2}{set\+Sequence()}}.
+
+\Hypertarget{class_candle_ad539e4a7557dbca53cea01c1aca40170}\index{Candle@{Candle}!withTime@{withTime}}
+\index{withTime@{withTime}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withTime()}{withTime()}}
+{\footnotesize\ttfamily \label{class_candle_ad539e4a7557dbca53cea01c1aca40170} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes timestamp of the event in milliseconds. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & timestamp of the event in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_a0beb35aafb7331ac697efae16e067132}{set\+Time()}}.
+
+\Hypertarget{class_candle_a97d66c2648b03d71f62c1e661e08d8e5}\index{Candle@{Candle}!withVolume@{withVolume}}
+\index{withVolume@{withVolume}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withVolume()}{withVolume()}}
+{\footnotesize\ttfamily \label{class_candle_a97d66c2648b03d71f62c1e661e08d8e5} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+Volume (\begin{DoxyParamCaption}\item[{double}]{volume}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes total volume in this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em volume} & Total volume in this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e}{set\+Volume()}}.
+
+\Hypertarget{class_candle_adc35330fa2e64bae91ff365bf21536de}\index{Candle@{Candle}!withVWAP@{withVWAP}}
+\index{withVWAP@{withVWAP}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{withVWAP()}{withVWAP()}}
+{\footnotesize\ttfamily \label{class_candle_adc35330fa2e64bae91ff365bf21536de} 
+\mbox{\hyperlink{class_candle}{Candle}} \& Candle\+::with\+VWAP (\begin{DoxyParamCaption}\item[{double}]{vwap}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes volume-\/weighted average price (VWAP) in this candle. 
+
+Returns the current candle.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vwap} & Volume-\/weighted average price (VWAP) in this candle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current candle. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_candle_ae1187377845c789e8fb6fd8e33b1e562}{set\+VWAP()}}.
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}\index{Candle@{Candle}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!Candle@{Candle}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily \label{class_candle_add4a1c1310c2fbda3ca1fa89796014a2} 
+std\+::uint32\+\_\+t Candle\+::\+MAX\+\_\+\+SEQUENCE = (1U $<$$<$ 22U) -\/ 1U\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_candle_a01d8327943ff021e138e273153e218b2}{Candle\+::set\+Sequence()} 
+\end{DoxySeeAlso}
+
+
+Referenced by \mbox{\hyperlink{class_candle_aec665a2630f059993d3108da27d13af6}{get\+Sequence()}}, and \mbox{\hyperlink{class_candle_a01d8327943ff021e138e273153e218b2}{set\+Sequence()}}.
+

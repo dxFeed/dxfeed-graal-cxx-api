@@ -1,0 +1,193 @@
+\doxysubsection{Candle\+Type Struct Reference}
+\hypertarget{struct_candle_type}{}\label{struct_candle_type}\index{CandleType@{CandleType}}
+
+
+Type of the candle aggregation period constitutes \doxylink{struct_candle_period}{Candle\+Period} type together its actual \doxylink{struct_candle_period_a1e2e33ae5421ab04b022a50db2a4ad0a}{value}.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Type.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{struct_candle_type_a27fd5004e3830b14c56fcb81b4146e68}{get\+Period\+Interval\+Millis}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns candle type period in milliseconds as closely as possible. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{struct_candle_type_ad065d41271eb53eb3ecbb2c88e2e83b4}{get\+Name}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns a name of this candle type. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{to\+String}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this candle type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} $>$ \mbox{\hyperlink{struct_candle_type_a26397f582f7a7d52a97150516a0ba066}{parse}} (const dxfcpp\+::\+String\+Like\+Wrapper \&s)
+\begin{DoxyCompactList}\small\item\em Parses string representation of candle type into object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48}\label{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries TICK} \{"{}TICK"{}, "{}t"{}, 0\+LL\}
+\begin{DoxyCompactList}\small\item\em Certain number of ticks. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_ab8170e814aa322766ea077e7dcd7e781}\label{struct_candle_type_ab8170e814aa322766ea077e7dcd7e781} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries SECOND} \{"{}SECOND"{}, "{}s"{}, 1000\+LL\}
+\begin{DoxyCompactList}\small\item\em Certain number of seconds. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_ab974d4262142377679bf1fac841cb993}\label{struct_candle_type_ab974d4262142377679bf1fac841cb993} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries MINUTE} \{"{}MINUTE"{}, "{}m"{}, 60\+LL \texorpdfstring{$\ast$}{*} 1000\+LL\}
+\begin{DoxyCompactList}\small\item\em Certain number of minutes. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_a5c71b45c9381d6a2f56f2975b42033de}\label{struct_candle_type_a5c71b45c9381d6a2f56f2975b42033de} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries HOUR} \{"{}HOUR"{}, "{}h"{}, 60\+LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 1000L\}
+\begin{DoxyCompactList}\small\item\em Certain number of hours. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_a2691cc240091a23dd83aa1de4d1b802b}\label{struct_candle_type_a2691cc240091a23dd83aa1de4d1b802b} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries DAY} \{"{}DAY"{}, "{}d"{}, 24LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 1000L\}
+\begin{DoxyCompactList}\small\item\em Certain number of days. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_a2968630470b0cf7abf195ac5f07884e1}\label{struct_candle_type_a2968630470b0cf7abf195ac5f07884e1} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries WEEK} \{"{}WEEK"{}, "{}w"{}, 7LL \texorpdfstring{$\ast$}{*} 24LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 60\+LL \texorpdfstring{$\ast$}{*} 1000\+LL\}
+\begin{DoxyCompactList}\small\item\em Certain number of weeks. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_a11b9390c342db5b8d2d8c17847c85880}\label{struct_candle_type_a11b9390c342db5b8d2d8c17847c85880} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries MONTH}
+\begin{DoxyCompactList}\small\item\em Certain number of months. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_aa39b745f4e42a37ef2a09caff9a9ebe1}\label{struct_candle_type_aa39b745f4e42a37ef2a09caff9a9ebe1} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries OPTEXP}
+\begin{DoxyCompactList}\small\item\em Certain number of option expirations. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_afb593fcdd34322e4a858a1d4bf0f15e1}\label{struct_candle_type_afb593fcdd34322e4a858a1d4bf0f15e1} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries YEAR}
+\begin{DoxyCompactList}\small\item\em Certain number of years. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_type_a098d111740846b69e69c8fd5d9f1c909}\label{struct_candle_type_a098d111740846b69e69c8fd5d9f1c909} 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} {\bfseries VOLUME}
+\begin{DoxyCompactList}\small\item\em Certain volume of trades. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} \mbox{\hyperlink{struct_candle_type_a740fe9610a9f04c517e34ba0ebb6aca0}{PRICE}}
+\begin{DoxyCompactList}\small\item\em Certain price change, calculated according to the following rules\+: \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} \mbox{\hyperlink{struct_candle_type_af4e5c164a1cc5209d2ec521ac8979818}{PRICE\+\_\+\+MOMENTUM}}
+\begin{DoxyCompactList}\small\item\em Certain price change, calculated according to the following rules\+: \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} \mbox{\hyperlink{struct_candle_type_a1e8bb5d604e019c943c5af9cc2c6847f}{PRICE\+\_\+\+RENKO}}
+\begin{DoxyCompactList}\small\item\em Certain price change, calculated according to the following rules\+: \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Type of the candle aggregation period constitutes \doxylink{struct_candle_period}{Candle\+Period} type together its actual \doxylink{struct_candle_period_a1e2e33ae5421ab04b022a50db2a4ad0a}{value}. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_candle_type_ad065d41271eb53eb3ecbb2c88e2e83b4}\index{CandleType@{CandleType}!getName@{getName}}
+\index{getName@{getName}!CandleType@{CandleType}}
+\doxyparagraph{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily \label{struct_candle_type_ad065d41271eb53eb3ecbb2c88e2e83b4} 
+const std\+::string \& Candle\+Type\+::get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a name of this candle type. 
+
+\begin{DoxyReturn}{Returns}
+A name of this candle type 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_type_a27fd5004e3830b14c56fcb81b4146e68}\index{CandleType@{CandleType}!getPeriodIntervalMillis@{getPeriodIntervalMillis}}
+\index{getPeriodIntervalMillis@{getPeriodIntervalMillis}!CandleType@{CandleType}}
+\doxyparagraph{\texorpdfstring{getPeriodIntervalMillis()}{getPeriodIntervalMillis()}}
+{\footnotesize\ttfamily \label{struct_candle_type_a27fd5004e3830b14c56fcb81b4146e68} 
+std\+::int64\+\_\+t Candle\+Type\+::get\+Period\+Interval\+Millis (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle type period in milliseconds as closely as possible. 
+
+Certain types like \doxylink{struct_candle_type_ab8170e814aa322766ea077e7dcd7e781}{Candle\+Type\+::\+SECOND} and \doxylink{struct_candle_type_a2691cc240091a23dd83aa1de4d1b802b}{Candle\+Type\+::\+DAY} span a specific number of milliseconds. \doxylink{struct_candle_type_a11b9390c342db5b8d2d8c17847c85880}{Candle\+Type\+::\+MONTH}, \doxylink{struct_candle_type_aa39b745f4e42a37ef2a09caff9a9ebe1}{Candle\+Type\+::\+OPTEXP} and \doxylink{struct_candle_type_afb593fcdd34322e4a858a1d4bf0f15e1}{Candle\+Type\+::\+YEAR} are approximate. \doxylink{class_candle}{Candle} type period of \doxylink{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48}{Candle\+Type\+::\+TICK}, \doxylink{struct_candle_type_a098d111740846b69e69c8fd5d9f1c909}{Candle\+Type\+::\+VOLUME}, \doxylink{struct_candle_type_a740fe9610a9f04c517e34ba0ebb6aca0}{Candle\+Type\+::\+PRICE}, \doxylink{struct_candle_type_af4e5c164a1cc5209d2ec521ac8979818}{Candle\+Type\+::\+PRICE\+\_\+\+MOMENTUM} and \doxylink{struct_candle_type_a1e8bb5d604e019c943c5af9cc2c6847f}{Candle\+Type\+::\+PRICE\+\_\+\+RENKO} is not defined and this method returns {\ttfamily 0}.
+
+\begin{DoxyReturn}{Returns}
+aggregation period in milliseconds. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_type_a26397f582f7a7d52a97150516a0ba066}\index{CandleType@{CandleType}!parse@{parse}}
+\index{parse@{parse}!CandleType@{CandleType}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily \label{struct_candle_type_a26397f582f7a7d52a97150516a0ba066} 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} $>$ Candle\+Type\+::parse (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Parses string representation of candle type into object. 
+
+Any string that that is a prefix of candle type \doxylink{struct_candle_type_ad065d41271eb53eb3ecbb2c88e2e83b4}{Candle\+Type\+::get\+Name()} can be parsed (including the one that was returned by \doxylink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{Candle\+Type\+::to\+String()}) and case is ignored for parsing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string representation of candle type. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A candle type. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}\index{CandleType@{CandleType}!toString@{toString}}
+\index{toString@{toString}!CandleType@{CandleType}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5} 
+const std\+::string \& Candle\+Type\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this candle type. 
+
+The string representation of candle type is the shortest unique prefix of the lower case string that corresponds to its \doxylink{struct_candle_type_ad065d41271eb53eb3ecbb2c88e2e83b4}{name}. For example, \doxylink{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48}{Candle\+Type\+::\+TICK} is represented as {\ttfamily "{}t"{}}, while \doxylink{struct_candle_type_a11b9390c342db5b8d2d8c17847c85880}{Candle\+Type\+::\+MONTH} is represented as {\ttfamily "{}mo"{}} to distinguish it from \doxylink{struct_candle_type_ab974d4262142377679bf1fac841cb993}{Candle\+Type\+::\+MINUTE} that is represented as {\ttfamily "{}m"{}}.
+
+\begin{DoxyReturn}{Returns}
+string representation of this candle price type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if the string representation is invalid. \\
+\hline
+\end{DoxyExceptions}
+
+
+Referenced by \mbox{\hyperlink{struct_candle_period_a0364876e4a53e6ae705f556ee893fb8b}{Candle\+Period\+::parse()}}.
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{struct_candle_type_a740fe9610a9f04c517e34ba0ebb6aca0}\index{CandleType@{CandleType}!PRICE@{PRICE}}
+\index{PRICE@{PRICE}!CandleType@{CandleType}}
+\doxyparagraph{\texorpdfstring{PRICE}{PRICE}}
+{\footnotesize\ttfamily \label{struct_candle_type_a740fe9610a9f04c517e34ba0ebb6aca0} 
+const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} Candle\+Type\+::\+PRICE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Certain price change, calculated according to the following rules\+: 
+
+
+\begin{DoxyEnumerate}
+\item high(n) -\/ low(n) = price range 
+\item close(n) = high(n) or close(n) = low(n) 
+\item open(n+1) = close(n) 
+\end{DoxyEnumerate}where n is the number of the bar. \Hypertarget{struct_candle_type_af4e5c164a1cc5209d2ec521ac8979818}\index{CandleType@{CandleType}!PRICE\_MOMENTUM@{PRICE\_MOMENTUM}}
+\index{PRICE\_MOMENTUM@{PRICE\_MOMENTUM}!CandleType@{CandleType}}
+\doxyparagraph{\texorpdfstring{PRICE\_MOMENTUM}{PRICE\_MOMENTUM}}
+{\footnotesize\ttfamily \label{struct_candle_type_af4e5c164a1cc5209d2ec521ac8979818} 
+const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} Candle\+Type\+::\+PRICE\+\_\+\+MOMENTUM\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Certain price change, calculated according to the following rules\+: 
+
+
+\begin{DoxyEnumerate}
+\item high(n) -\/ low(n) = price range 
+\item close(n) = high(n) or close(n) = low(n) 
+\item open(n+1) = close(n) + tick size, if close(n) = high(n) 
+\item open(n+1) = close(n) -\/ tick size, if close(n) = low(n) 
+\end{DoxyEnumerate}where n is the number of the bar. \Hypertarget{struct_candle_type_a1e8bb5d604e019c943c5af9cc2c6847f}\index{CandleType@{CandleType}!PRICE\_RENKO@{PRICE\_RENKO}}
+\index{PRICE\_RENKO@{PRICE\_RENKO}!CandleType@{CandleType}}
+\doxyparagraph{\texorpdfstring{PRICE\_RENKO}{PRICE\_RENKO}}
+{\footnotesize\ttfamily \label{struct_candle_type_a1e8bb5d604e019c943c5af9cc2c6847f} 
+const \mbox{\hyperlink{struct_candle_type}{Candle\+Type}} Candle\+Type\+::\+PRICE\+\_\+\+RENKO\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Certain price change, calculated according to the following rules\+: 
+
+
+\begin{DoxyEnumerate}
+\item high(n+1) -\/ high(n) = price range or low(n) -\/ low(n+1) = price range 
+\item close(n) = high(n) or close(n) = low(n) 
+\item open(n+1) = high(n), if high(n+1) -\/ high(n) = price range 
+\item open(n+1) = low(n), if low(n) -\/ low(n+1) = price range 
+\end{DoxyEnumerate}where n is the number of the bar. 

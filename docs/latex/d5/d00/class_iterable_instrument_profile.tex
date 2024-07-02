@@ -1,0 +1,50 @@
+\doxysubsection{Iterable\+Instrument\+Profile Class Reference}
+\hypertarget{class_iterable_instrument_profile}{}\label{class_iterable_instrument_profile}\index{IterableInstrumentProfile@{IterableInstrumentProfile}}
+
+
+A wrapper around Java Iterator for \doxylink{class_instrument_profile}{Instrument\+Profile}.  
+
+
+
+
+{\ttfamily \#include $<$Iterable\+Instrument\+Profile.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_iterable_instrument_profile_a5d7112c414ba9b7ffcdd33700845bba8}{has\+Next}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if the iterable has more elements. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} $>$ \mbox{\hyperlink{class_iterable_instrument_profile_a3804898ab2ed933bce6828ca3f65354c}{next}} () const
+\begin{DoxyCompactList}\small\item\em Returns the next element in the iteration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A wrapper around Java Iterator for \doxylink{class_instrument_profile}{Instrument\+Profile}. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_iterable_instrument_profile_a5d7112c414ba9b7ffcdd33700845bba8}\index{IterableInstrumentProfile@{IterableInstrumentProfile}!hasNext@{hasNext}}
+\index{hasNext@{hasNext}!IterableInstrumentProfile@{IterableInstrumentProfile}}
+\doxyparagraph{\texorpdfstring{hasNext()}{hasNext()}}
+{\footnotesize\ttfamily \label{class_iterable_instrument_profile_a5d7112c414ba9b7ffcdd33700845bba8} 
+bool Iterable\+Instrument\+Profile\+::has\+Next (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if the iterable has more elements. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the iteration has more elements 
+\end{DoxyReturn}
+\Hypertarget{class_iterable_instrument_profile_a3804898ab2ed933bce6828ca3f65354c}\index{IterableInstrumentProfile@{IterableInstrumentProfile}!next@{next}}
+\index{next@{next}!IterableInstrumentProfile@{IterableInstrumentProfile}}
+\doxyparagraph{\texorpdfstring{next()}{next()}}
+{\footnotesize\ttfamily \label{class_iterable_instrument_profile_a3804898ab2ed933bce6828ca3f65354c} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} $>$ Iterable\+Instrument\+Profile\+::next (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}}
+
+
+
+Returns the next element in the iteration. 
+
+\begin{DoxyReturn}{Returns}
+the next element in the iteration or std\+::shared\+\_\+ptr$<$\+Instrument\+Profile$>$\{nullptr\} 
+\end{DoxyReturn}

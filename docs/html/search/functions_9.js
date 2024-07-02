@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['marketevent_0',['MarketEvent',['../de/d01/structdxfcpp_1_1_market_event.html#afeb8874ca4d6b603d5b941f19e0735cf',1,'dxfcpp::MarketEvent']]]
+  ['javaexception_0',['JavaException',['../dd/d01/struct_java_exception.html#a09ad75bce356bbec83cb2951d9788a0d',1,'JavaException']]]
 ];

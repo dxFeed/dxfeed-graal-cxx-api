@@ -9,221 +9,250 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/CEntryPointErrors.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Handler.hpp"{}}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Isolate.hpp"{}}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/JavaObjectHandle.hpp"{}}}
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_d_x_feed_subscription_8hpp}{"{}DXFeedSubscription.hpp"{}}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/CEntryPointErrors.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Handler.hpp"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Isolate.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/JavaObjectHandle.hpp"{}}}
 \DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../event/EventMapper.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_d_x_feed_subscription_8hpp}{"{}DXFeedSubscription.hpp"{}}}}
 \DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../event/EventMapper.hpp"{}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}};}
-\DoxyCodeLine{00025\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}};}
-\DoxyCodeLine{00026\ \textcolor{keyword}{class}\ ObservableSubscription;}
-\DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ Provides\ API\ for\ publishing\ of\ events\ to\ local\ or\ remote\ DXFeed.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <h3>Sample\ usage</h3>}}
+\DoxyCodeLine{00024\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{class}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}};}
+\DoxyCodeLine{00028\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_observable_subscription}{ObservableSubscription}};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ Provides\ API\ for\ publishing\ of\ events\ to\ local\ or\ remote\ DXFeed.}}
 \DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ This\ section\ gives\ sample\ usage\ scenarios.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ <h3>Sample\ usage</h3>}}
 \DoxyCodeLine{00034\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ <h4>Default\ singleton\ instance</h4>}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ This\ section\ gives\ sample\ usage\ scenarios.}}
 \DoxyCodeLine{00036\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ There\ is\ a\ singleton\ instance\ of\ the\ publisher\ that\ is\ returned\ by\ DXPublisher::getInstance()\ method.}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ It\ is\ created\ on\ the\ first\ use\ with\ default\ configuration\ properties\ that\ are\ explained\ in\ detail\ in}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ documentation\ for\ DXEndpoint\ class\ in\ the\ "{}Default\ properties"{}\ section.\ In\ particular,}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ you\ can\ provide\ a\ default\ address\ to\ connect\ using}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ '@ref\ DXEndpoint::DXPUBLISHER\_ADDRESS\_PROPERTY\ "{}dxpublisher.address"{}'}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ system\ property\ or\ by\ putting\ it\ into}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ '@ref\ DXEndpoint::DXPUBLISHER\_PROPERTIES\_PROPERTY\ "{}dxpublisher.properties"{}'}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ file\ in\ the\ current\ directory.}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ <h4>Publish\ a\ single\ event</h4>}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ <h4>Default\ singleton\ instance</h4>}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ There\ is\ a\ singleton\ instance\ of\ the\ publisher\ that\ is\ returned\ by\ DXPublisher::getInstance()\ method.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ It\ is\ created\ on\ the\ first\ use\ with\ default\ configuration\ properties\ that\ are\ explained\ in\ detail\ in}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ documentation\ for\ DXEndpoint\ class\ in\ the\ "{}Default\ properties"{}\ section.\ In\ particular,}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ you\ can\ provide\ a\ default\ address\ to\ connect\ using}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ '@ref\ DXEndpoint::DXPUBLISHER\_ADDRESS\_PROPERTY\ "{}dxpublisher.address"{}'}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ system\ property\ or\ by\ putting\ it\ into}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ '@ref\ DXEndpoint::DXPUBLISHER\_PROPERTIES\_PROPERTY\ "{}dxpublisher.properties"{}'}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ file\ in\ the\ current\ directory.}}
 \DoxyCodeLine{00047\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ The\ following\ code\ publishes\ a\ single\ quote\ for\ a\ "{}A:TEST"{}\ symbol:}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ <pre><tt>}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ auto\ @ref\ Quote\ "{}quote"{}\ =\ std::make\_shared<@ref\ Quote\ "{}Quote"{}>("{}A:TEST"{});}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ quote-\/>@ref\ Quote::setBidPrice\ "{}setBidPrice"{}(100);}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ quote-\/>@ref\ Quote::setAskPrice\ "{}setAskPrice"{}(101);}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ @ref\ DXPublisher\ "{}DXPublisher"{}::@ref\ DXPublisher::getInstance()\ "{}getInstance"{}()-\/>@ref\ DXPublisher::publishEvents()}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ "{}publishEvents"{}(quote);</tt></pre>}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ <h3>Threads\ and\ locks</h3>}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ <h4>Publish\ a\ single\ event</h4>}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ The\ following\ code\ publishes\ a\ single\ quote\ for\ a\ "{}A:TEST"{}\ symbol:}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ <pre><tt>}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ auto\ @ref\ Quote\ "{}quote"{}\ =\ std::make\_shared<@ref\ Quote\ "{}Quote"{}>("{}A:TEST"{});}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ quote-\/>@ref\ Quote::setBidPrice\ "{}setBidPrice"{}(100);}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ quote-\/>@ref\ Quote::setAskPrice\ "{}setAskPrice"{}(101);}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ @ref\ DXPublisher\ "{}DXPublisher"{}::@ref\ DXPublisher::getInstance()\ "{}getInstance"{}()-\/>@ref\ DXPublisher::publishEvents()}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ "{}publishEvents"{}(quote);</tt></pre>}}
 \DoxyCodeLine{00057\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ This\ class\ is\ thread-\/safe\ and\ can\ be\ used\ concurrently\ from\ multiple\ threads\ without\ external\ synchronization.}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00060\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ DXPublisher\ object}}
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}}>;}
-\DoxyCodeLine{00063\ }
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ DXPublisher\ object}}
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{Unique}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{unique\_ptr}}<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}}>;}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_endpoint}{DXEndpoint}};}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ <h3>Threads\ and\ locks</h3>}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ This\ class\ is\ thread-\/safe\ and\ can\ be\ used\ concurrently\ from\ multiple\ threads\ without\ external\ synchronization.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00062\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_d_x_publisher}{DXPublisher}}\ :\ \mbox{\hyperlink{struct_shared_entity}{SharedEntity}}\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ DXPublisher\ object}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{struct_d_x_publisher}{DXPublisher}}>;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ DXPublisher\ object}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{struct_d_x_publisher}{Unique}}\ =\ \mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{unique\_ptr}}<\mbox{\hyperlink{struct_d_x_publisher}{DXPublisher}}>;}
 \DoxyCodeLine{00068\ }
-\DoxyCodeLine{00069\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00070\ \ \ \ \ JavaObjectHandle<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}}>\ handle\_;}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}}>\ create(\textcolor{keywordtype}{void}\ *handle)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ publishEventsImpl(\textcolor{keywordtype}{void}\ *graalEventsList)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00074\ }
-\DoxyCodeLine{00075\ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00076\ \ \ \ \ DXPublisher()\ \textcolor{keyword}{noexcept}\ :\ handle\_\{\}\ \{}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXPublisher()"{}});}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00080\ \ \ \ \ \}}
-\DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00083\ \ \ \ \ \string~DXPublisher()\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXPublisher\{"{}}\ +\ handle\_.toString()\ +\ \textcolor{stringliteral}{"{}\}::\string~DXPublisher()"{}});}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00087\ \ \ \ \ \}}
-\DoxyCodeLine{00088\ }
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ default\ application-\/wide\ singleton\ instance\ of\ DXPublisher.\ Most\ applications\ use\ only\ a\ single}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ data-\/sink\ and\ should\ rely\ on\ this\ method\ to\ get\ one.\ This\ is\ a\ shortcut\ to}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ DXEndpoint\ "{}DXEndpoint"{}::@ref\ DXEndpoint::getInstance()\ "{}getInstance"{}(DXEndpoint::Role::PUBLISHER)-\/>@ref}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ DXEndpoint::getPublisher()\ "{}getPublisher"{}().}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{DXPublisher}}>\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a8c124e524c9918e23f7a89f26c09584f}{getInstance}}()\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00096\ }
-\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ Publishes\ events\ to\ the\ corresponding\ feed.\ If\ the\ @ref\ DXEndpoint\ "{}endpoint"{}\ of\ this\ publisher\ has}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ DXEndpoint::getRole()\ "{}role"{}\ of\ DXEndpoint::Role::PUBLISHER\ and\ it\ is\ connected,\ the}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ published\ events\ will\ be\ delivered\ to\ the\ remote\ endpoints.\ Local\ @ref\ DXEndpoint::getFeed()\ "{}feed"{}\ will}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ always\ receive\ published\ events.}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ This\ method\ serializes\ all\ events\ into\ internal\ representation,\ so\ that\ the\ instance\ of\ the\ collection\ as}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ well\ as\ the\ instances\ of\ events\ can\ be\ reused\ after\ invocation\ of\ this\ method\ returns.}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ DXFeed\ instances\ that\ are\ connected\ to\ this\ publisher\ either\ locally\ or\ via\ network\ receive\ published}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ events\ if\ and\ only\ if\ they\ are\ subscribed\ to\ the\ corresponding\ symbols,\ or\ they\ are\ subscribed\ via}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ WildcardSymbol::ALL,\ or,\ in\ case\ of\ TimeSeriesEvent\ type,\ they\ are\ subscribed\ via\ DXFeedTimeSeriesSubscription}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ for\ the\ corresponding\ symbol\ and\ time\ frame.}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ Published\ events\ are\ not\ stored\ and\ get\ immediately\ lost\ if\ there\ is\ no\ subscription.}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ Last\ published\ events\ of\ LastingEvent\ types\ are\ cached\ as\ long\ as\ subscription\ to\ them\ is\ maintained\ via\ a}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ specific\ event\ symbol\ (WildcardSymbol::ALL\ does\ not\ count)\ and\ the\ cache\ is\ discarded\ as\ soon\ as\ subscription}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ disappears.}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ using\ namespace\ dxfcpp;}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ using\ namespace\ dxfcpp::literals;}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ using\ namespace\ std::literals;}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ System::setProperty("{}dxendpoint.eventTime"{},\ "{}true"{});}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ System::setProperty("{}dxscheme.nanoTime"{},\ "{}true"{});}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ auto\ endpoint\ =\ DXEndpoint::create(DXEndpoint::Role::FEED);}}
-\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ auto\ feed\ =\ endpoint-\/>getFeed();}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ auto\ publisher\ =\ endpoint-\/>getPublisher();}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ feed-\/>createSubscription(\{Quote::TYPE\});}}
-\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ auto\ quote\ =\ std::make\_shared<Quote>("{}AAPL"{});}}
-\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setEventTime(1692975409000);}}
-\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setTimeNanoPart(123);}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setSequence(123);}}
-\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setBidTime(1692975409000);}}
-\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setBidExchangeCode('B');}}
-\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setBidPrice(176.08);}}
-\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setBidSize(1.0);}}
-\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setAskTime(1692975409000);}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setAskExchangeCode('A');}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setAskPrice(176.16);}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setAskSize(2.0);}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addEventListener([](const\ auto\ \&events)\ \{}}
-\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&e\ :\ events)\ \{}}
-\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ (const\ auto\ \&q\ =\ e-\/>template\ sharedAs<Quote>();\ q)\ \{}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ q\ <<\ std::endl;}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols("{}AAPL"{});}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ publisher-\/>publishEvents(quote);}}
-\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ publisher-\/>publishEvents(\{quote,\ quote\});}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{mutable}\ std::recursive\_mutex\ mutex\_\{\};}
+\DoxyCodeLine{00073\ \ \ \ \ JavaObjectHandle<\mbox{\hyperlink{struct_d_x_publisher}{DXPublisher}}>\ handle\_;}
+\DoxyCodeLine{00074\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{struct_observable_subscription}{ObservableSubscription}}>\ subscription\_\{\};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{struct_d_x_publisher}{DXPublisher}}>\ create(\textcolor{keywordtype}{void}\ *handle);}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ publishEventsImpl(\textcolor{keywordtype}{void}\ *graalEventsList)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00080\ \ \ \ \ DXPublisher()\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXPublisher()"{}});}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00084\ \ \ \ \ \}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00087\ \ \ \ \ \string~DXPublisher()\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (Debugger::isDebug)\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ Debugger::debug(\textcolor{stringliteral}{"{}DXPublisher\{"{}}\ +\ handle\_.toString()\ +\ \textcolor{stringliteral}{"{}\}::\string~DXPublisher()"{}});}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ default\ application-\/wide\ singleton\ instance\ of\ DXPublisher.\ Most\ applications\ use\ only\ a\ single}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ data-\/sink\ and\ should\ rely\ on\ this\ method\ to\ get\ one.\ This\ is\ a\ shortcut\ to}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ DXEndpoint\ "{}DXEndpoint"{}::@ref\ DXEndpoint::getInstance()\ "{}getInstance"{}(DXEndpoint::Role::PUBLISHER)-\/>@ref}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ DXEndpoint::getPublisher()\ "{}getPublisher"{}().}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<\mbox{\hyperlink{struct_d_x_publisher}{DXPublisher}}>\ \mbox{\hyperlink{struct_d_x_publisher_accd39b45edf0fa304b3a896a8782af4d}{getInstance}}();}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ Publishes\ events\ to\ the\ corresponding\ feed.\ If\ the\ @ref\ DXEndpoint\ "{}endpoint"{}\ of\ this\ publisher\ has}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ DXEndpoint::getRole()\ "{}role"{}\ of\ DXEndpoint::Role::PUBLISHER\ and\ it\ is\ connected,\ the}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ published\ events\ will\ be\ delivered\ to\ the\ remote\ endpoints.\ Local\ @ref\ DXEndpoint::getFeed()\ "{}feed"{}\ will}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ always\ receive\ published\ events.}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ This\ method\ serializes\ all\ events\ into\ internal\ representation,\ so\ that\ the\ instance\ of\ the\ collection\ as}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ well\ as\ the\ instances\ of\ events\ can\ be\ reused\ after\ invocation\ of\ this\ method\ returns.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ DXFeed\ instances\ that\ are\ connected\ to\ this\ publisher\ either\ locally\ or\ via\ network\ receive\ published}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ events\ if\ and\ only\ if\ they\ are\ subscribed\ to\ the\ corresponding\ symbols,\ or\ they\ are\ subscribed\ via}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ WildcardSymbol::ALL,\ or,\ in\ case\ of\ TimeSeriesEvent\ type,\ they\ are\ subscribed\ via\ DXFeedTimeSeriesSubscription}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ for\ the\ corresponding\ symbol\ and\ time\ frame.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ Published\ events\ are\ not\ stored\ and\ get\ immediately\ lost\ if\ there\ is\ no\ subscription.}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ Last\ published\ events\ of\ LastingEvent\ types\ are\ cached\ as\ long\ as\ subscription\ to\ them\ is\ maintained\ via\ a}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ specific\ event\ symbol\ (WildcardSymbol::ALL\ does\ not\ count)\ and\ the\ cache\ is\ discarded\ as\ soon\ as\ subscription}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ disappears.}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ Example:}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ using\ namespace\ dxfcpp;}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ using\ namespace\ dxfcpp::literals;}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ using\ namespace\ std::literals;}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ System::setProperty("{}dxendpoint.eventTime"{},\ "{}true"{});}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ System::setProperty("{}dxscheme.nanoTime"{},\ "{}true"{});}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ auto\ endpoint\ =\ DXEndpoint::create(DXEndpoint::Role::FEED);}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ auto\ feed\ =\ endpoint-\/>getFeed();}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ auto\ publisher\ =\ endpoint-\/>getPublisher();}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ auto\ sub\ =\ feed-\/>createSubscription(\{Quote::TYPE\});}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ auto\ quote\ =\ std::make\_shared<Quote>("{}AAPL"{});}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setEventTime(1692975409000);}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setTimeNanoPart(123);}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setSequence(123);}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setBidTime(1692975409000);}}
+\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setBidExchangeCode('B');}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setBidPrice(176.08);}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setBidSize(1.0);}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setAskTime(1692975409000);}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setAskExchangeCode('A');}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setAskPrice(176.16);}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ quote-\/>setAskSize(2.0);}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addEventListener([](const\ auto\ \&events)\ \{}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ for\ (const\ auto\ \&e\ :\ events)\ \{}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ if\ (const\ auto\ \&q\ =\ e-\/>template\ sharedAs<Quote>();\ q)\ \{}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ q\ <<\ std::endl;}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \}}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ \});}}
 \DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ std::vector<EventType::Ptr>\ events\{\};}}
-\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ events.push\_back(quote);}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ events.push\_back(quote);}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ publisher-\/>publishEvents(events);}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ std::this\_thread::sleep\_for(1000ms);}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ endpoint-\/>close();}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventsCollection\ The\ type\ of\ events\ collection\ (for\ example:\ std::vector<::EventType::Ptr>)}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ @param\ events\ The\ collection\ of\ events\ to\ publish.}}
-\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventsCollection>}
-\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a9ec3ba1e21e011c21c5d9f30c21305f1}{publishEvents}}(EventsCollection\ \&\&events)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00170\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{requires}}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{requires}}\ \{}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{begin}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{forward}}<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{events}}))\ \};}
-\DoxyCodeLine{00173\ }
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{end}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{forward}}<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{events}}))\ \};}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00176\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
-\DoxyCodeLine{00177\ \ \ \ \ \{}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{keyword}{this}-\/>\textcolor{keyword}{template}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{publishEvents}}<\textcolor{keyword}{decltype}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{begin}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{forward}}<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{events}})))>(}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{begin}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{forward}}<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{events}})),\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{end}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{forward}}<\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{events}})));}
-\DoxyCodeLine{00180\ \ \ \ \ \}}
-\DoxyCodeLine{00181\ }
-\DoxyCodeLine{00182\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ Publishes\ events\ to\ the\ corresponding\ feed.}}
-\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *\ @param\ collection\ The\ collection\ of\ events\ to\ publish.}}
-\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a989c1cf7c5d9b5a1f2633f3d70ac5f7a}{publishEvents}}(std::initializer\_list<std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_event_type}{EventType}}>>\ events)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ publishEvents(std::begin(events),\ std::end(events));}
-\DoxyCodeLine{00189\ \ \ \ \ \}}
-\DoxyCodeLine{00190\ }
-\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ Publishes\ an\ event\ to\ the\ corresponding\ feed.}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ @param\ event\ The\ event\ to\ publish.}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a9be38a4431a7185c826b99d88ec927b1}{publishEvents}}(std::shared\_ptr<\mbox{\hyperlink{structdxfcpp_1_1_event_type}{EventType}}>\ event)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ publishEvents(\{event\});}
-\DoxyCodeLine{00198\ \ \ \ \ \}}
-\DoxyCodeLine{00199\ }
-\DoxyCodeLine{00200\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ Publishes\ events\ to\ the\ corresponding\ feed.}}
-\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventIt\ The\ collection's\ iterator\ type}}
-\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ @param\ begin\ The\ beginning\ of\ the\ collection\ of\ events.}}
-\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ @param\ end\ The\ end\ of\ events\ collection.}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventIt>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_aefb40bdf2a89e6e44fcf2b83c7f1bee2}{publishEvents}}(EventIt\ begin,\ EventIt\ end)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{Debugger}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{isDebug}})\ \{}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{Debugger}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{debug}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{toString}}()\ +\ \textcolor{stringliteral}{"{}::publishEvents(events\ =\ "{}}\ +\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{elementsToString}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{begin}},\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{end}})\ +\ \textcolor{stringliteral}{"{})"{}});}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00211\ }
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{list}}\ =\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{EventMapper}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{toGraalList}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{begin}},\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{end}});}
-\DoxyCodeLine{00213\ }
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{publishEventsImpl}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{list}});}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{EventMapper}}::\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{freeGraalList}}(\mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher}{list}});}
-\DoxyCodeLine{00216\ \ \ \ \ \}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ sub-\/>addSymbols("{}AAPL"{});}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ publisher-\/>publishEvents(quote);}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ publisher-\/>publishEvents(\{quote,\ quote\});}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ std::vector<EventType::Ptr>\ events\{\};}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ events.push\_back(quote);}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ events.push\_back(quote);}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ publisher-\/>publishEvents(events);}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ std::this\_thread::sleep\_for(1000ms);}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ endpoint-\/>close();}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventsCollection\ The\ type\ of\ events\ collection\ (for\ example:\ std::vector<::EventType::Ptr>)}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ @param\ events\ The\ collection\ of\ events\ to\ publish.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventsCollection>}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_d_x_publisher_ae6e8cb6b370ea60f1ad5cb80cea2df30}{publishEvents}}(EventsCollection\ \&\&events)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_d_x_publisher}{requires}}\ \mbox{\hyperlink{struct_d_x_publisher}{requires}}\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{begin}}(\mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{forward}}<\mbox{\hyperlink{struct_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{struct_d_x_publisher}{events}}))\ \};}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{end}}(\mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{forward}}<\mbox{\hyperlink{struct_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{struct_d_x_publisher}{events}}))\ \};}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00180\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00181\ \ \ \ \ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keyword}{this}-\/>\textcolor{keyword}{template}\ \mbox{\hyperlink{struct_d_x_publisher}{publishEvents}}<\textcolor{keyword}{decltype}(\mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{begin}}(\mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{forward}}<\mbox{\hyperlink{struct_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{struct_d_x_publisher}{events}})))>(}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{begin}}(\mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{forward}}<\mbox{\hyperlink{struct_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{struct_d_x_publisher}{events}})),\ \mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{end}}(\mbox{\hyperlink{struct_d_x_publisher}{std}}::\mbox{\hyperlink{struct_d_x_publisher}{forward}}<\mbox{\hyperlink{struct_d_x_publisher}{EventsCollection}}>(\mbox{\hyperlink{struct_d_x_publisher}{events}})));}
+\DoxyCodeLine{00184\ \ \ \ \ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ Publishes\ events\ to\ the\ corresponding\ feed.}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ @param\ events\ The\ collection\ of\ events\ to\ publish.}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_d_x_publisher_a3914d56df33f327b1ff0f90d193a2805}{publishEvents}}(std::initializer\_list<std::shared\_ptr<\mbox{\hyperlink{struct_event_type}{EventType}}>>\ events)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ publishEvents(std::begin(events),\ std::end(events));}
+\DoxyCodeLine{00193\ \ \ \ \ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ Publishes\ an\ event\ to\ the\ corresponding\ feed.}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ @param\ event\ The\ event\ to\ publish.}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_d_x_publisher_aea23a3d950b97bb2d839df79e494023c}{publishEvents}}(std::shared\_ptr<\mbox{\hyperlink{struct_event_type}{EventType}}>\ event)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ publishEvents(\{event\});}
+\DoxyCodeLine{00202\ \ \ \ \ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ Publishes\ events\ to\ the\ corresponding\ feed.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventIt\ The\ collection's\ iterator\ type}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ @param\ begin\ The\ beginning\ of\ the\ collection\ of\ events.}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ @param\ end\ The\ end\ of\ events\ collection.}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventIt>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_d_x_publisher_a5bb058a66da27619e7ad017d8c52d936}{publishEvents}}(EventIt\ begin,\ EventIt\ end)\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{struct_d_x_publisher}{Debugger}}::\mbox{\hyperlink{struct_d_x_publisher}{isDebug}})\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_d_x_publisher}{Debugger}}::\mbox{\hyperlink{struct_d_x_publisher}{debug}}(\mbox{\hyperlink{struct_d_x_publisher}{toString}}()\ +\ \textcolor{stringliteral}{"{}::publishEvents(events\ =\ "{}}\ +\ \mbox{\hyperlink{struct_d_x_publisher}{elementsToString}}(\mbox{\hyperlink{struct_d_x_publisher}{begin}},\ \mbox{\hyperlink{struct_d_x_publisher}{end}})\ +\ \textcolor{stringliteral}{"{})"{}});}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ *\mbox{\hyperlink{struct_d_x_publisher}{list}}\ =\ \mbox{\hyperlink{struct_d_x_publisher}{EventMapper}}::\mbox{\hyperlink{struct_d_x_publisher}{toGraalList}}(\mbox{\hyperlink{struct_d_x_publisher}{begin}},\ \mbox{\hyperlink{struct_d_x_publisher}{end}});}
 \DoxyCodeLine{00217\ }
-\DoxyCodeLine{00218\ \ \ \ \ std::shared\_ptr<ObservableSubscription>\ getSubscription(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&);}
-\DoxyCodeLine{00219\ }
-\DoxyCodeLine{00220\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_d_x_publisher_a3b21f65e2744e795e14fe352a80906db}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00221\ \};}
-\DoxyCodeLine{00222\ }
-\DoxyCodeLine{00223\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_d_x_publisher}{publishEventsImpl}}(\mbox{\hyperlink{struct_d_x_publisher}{list}});}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_d_x_publisher}{EventMapper}}::\mbox{\hyperlink{struct_d_x_publisher}{freeGraalList}}(\mbox{\hyperlink{struct_d_x_publisher}{list}});}
+\DoxyCodeLine{00220\ \ \ \ \ \}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ observable\ set\ of\ subscribed\ symbols\ for\ the\ specified\ event\ type.}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *\ Note,\ that\ subscription\ is\ represented\ by\ SymbolWrapper\ symbols.\ Check\ the\ type\ of\ each\ symbol}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ *\ in\ ObservableSubscription\ using\ SymbolWrapper::isStringSymbol(),\ SymbolWrapper::isWildcardSymbol(),}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ SymbolWrapper::isIndexedEventSubscriptionSymbol(),\ SymbolWrapper::isTimeSeriesSubscriptionSymbol(),}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ SymbolWrapper::isCandleSymbol().}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ The\ set\ of\ subscribed\ symbols\ contains\ WildcardSymbol::ALL\ if\ and}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ only\ if\ there\ is\ a\ subscription\ to\ this\ wildcard\ symbol.}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ If\ DXFeedTimeSeriesSubscription\ is\ used\ to\ subscribe\ to\ time-\/service\ of\ the\ events\ of\ this\ type,\ then}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ instances\ of\ TimeSeriesSubscriptionSymbol\ class\ represent\ the\ corresponding\ subscription\ item.}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ <p>\ The\ resulting\ observable\ subscription\ can\ generate\ repeated\ ObservableSubscriptionChangeListener::onSymbolsAdded\_\ notifications\ to}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ its\ listeners\ for\ the\ same\ symbols\ without\ the\ corresponding\ ObservableSubscriptionChangeListener::onSymbolsRemoved\_}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ notifications\ in\ between\ them.\ It\ happens\ when\ subscription\ disappears,\ cached\ data\ is\ lost,\ and\ subscription}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *\ reappears\ again.\ On\ each\ ObservableSubscriptionChangeListener::onSymbolsAdded\_}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *\ notification\ data\ provider\ shall\ @ref\ DXPublisher::publishEvents()\ "{}publish"{}\ the\ most\ recent\ events\ for}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ *\ the\ corresponding\ symbols.}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType\ The\ event\ type.}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Observable\ subscription\ for\ the\ specified\ event\ type.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00245\ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{struct_observable_subscription}{ObservableSubscription}}>\ \mbox{\hyperlink{struct_d_x_publisher_a37411b5420828b6d8dbd7ba920bff3ad}{getSubscription}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&eventType);}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_d_x_publisher_a2cdf4b9e4ad4582c591792b6ede47299}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00248\ \};}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

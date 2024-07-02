@@ -9,438 +9,442 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{algorithm}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{numeric}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{sstream}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{algorithm}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{numeric}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{sstream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
 \DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ Some\ indexed\ event\ sources\ provide\ a\ consistent\ view\ of\ a\ set\ of\ events\ for\ a\ given\ symbol.\ Their\ updates}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ may\ incorporate\ multiple\ changes\ that\ have\ to\ be\ processed\ at\ the\ same\ time.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ IndexedEvent::getEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ <p>\ The\ value\ of\ @ref\ IndexedEvent::getEventFlags()\ "{}eventFlags"{}\ property\ has\ several\ significant\ bits\ that\ are}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ <pre><tt>}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ \ \ \ 31..7\ \ \ \ 6\ \ \ \ 5\ \ \ \ 4\ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ |\ \ \ \ \ \ \ \ \ |\ SM\ |\ \ \ \ |\ SS\ |\ SE\ |\ SB\ |\ RE\ |\ TX\ |}}
+\DoxyCodeLine{00019\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Some\ indexed\ event\ sources\ provide\ a\ consistent\ view\ of\ a\ set\ of\ events\ for\ a\ given\ symbol.\ Their\ updates}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ may\ incorporate\ multiple\ changes\ that\ have\ to\ be\ processed\ at\ the\ same\ time.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ IndexedEvent::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ <p>\ The\ value\ of\ @ref\ IndexedEvent::getEventFlags()\ "{}eventFlags"{}\ property\ has\ several\ significant\ bits\ that\ are}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <pre><tt>}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ \ \ \ 31..7\ \ \ \ 6\ \ \ \ 5\ \ \ \ 4\ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
 \DoxyCodeLine{00033\ \textcolor{comment}{\ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ </tt></pre>}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ Each\ source\ updates\ its\ transactional\ state\ using\ these\ bits\ separately.}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ The\ state\ of\ each\ source\ has\ to\ be\ tracked\ separately\ in\ a\ map\ for\ each\ source.}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ However,\ event\ @ref\ IndexedEvent::getIndex()\ "{}index"{}\ is\ unique\ across\ the\ sources.\ This\ is\ achieved\ by\ allocating}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ an\ event-\/specific\ number\ of\ most\ significant\ bits\ of\ @ref\ IndexedEvent::getIndex()\ "{}index"{}\ for\ use\ as}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ a\ @ref\ IndexedEvent::getSource()\ "{}source"{}\ @ref\ IndexedEventSource::id()\ "{}id"{}.}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ <p>\ \`{}TX`\ (bit\ 0)\ \&mdash;\ ::TX\_PENDING\ is\ an\ indicator\ of\ pending\ transactional\ update.}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ It\ can\ be\ retrieved\ from\ \`{}eventFlags`\ with\ the\ following\ piece\ of\ code:}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ bool\ txPending\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::TX\_PENDING)\ !=\ 0;}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ <p>When\ \`{}txPending`\ is\ \`{}true`\ it\ means,\ that\ an\ ongoing\ transaction\ update\ that\ spans\ multiple\ events\ is}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ in\ process.\ All\ events\ with\ \`{}txPending`\ \`{}true`\ shall\ be\ put\ into\ a\ separate\ <em>pending\ list</em>}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ for\ each\ source\ id\ and\ should\ be\ processed\ later\ when\ an\ event\ for\ this\ source\ id\ with\ \`{}txPending`\ \`{}false`\ comes.}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ <p>\ \`{}RE`\ (bit\ 1)\ \&mdash;\ ::REMOVE\_EVENT\ is\ used\ to\ indicate\ that\ that\ the\ event\ with\ the}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ corresponding\ index\ has\ to\ be\ removed.}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ bool\ removeEvent\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::REMOVE\_EVENT)\ !=\ 0;}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ <p>\ \`{}SB`\ (bit\ 2)\ \&mdash;\ ::SNAPSHOT\_BEGIN\ is\ used\ to\ indicate\ when\ the\ loading\ of\ a\ snapshot\ starts.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ |\ \ \ \ \ \ \ \ \ |\ SM\ |\ \ \ \ |\ SS\ |\ SE\ |\ SB\ |\ RE\ |\ TX\ |}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ </tt></pre>}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ Each\ source\ updates\ its\ transactional\ state\ using\ these\ bits\ separately.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ The\ state\ of\ each\ source\ has\ to\ be\ tracked\ separately\ in\ a\ map\ for\ each\ source.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ However,\ event\ @ref\ IndexedEvent::getIndex()\ "{}index"{}\ is\ unique\ across\ the\ sources.\ This\ is\ achieved\ by\ allocating}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ an\ event-\/specific\ number\ of\ most\ significant\ bits\ of\ @ref\ IndexedEvent::getIndex()\ "{}index"{}\ for\ use\ as}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ a\ @ref\ IndexedEvent::getSource()\ "{}source"{}\ @ref\ IndexedEventSource::id()\ "{}id"{}.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ <p>\ \`{}TX`\ (bit\ 0)\ \&mdash;\ ::TX\_PENDING\ is\ an\ indicator\ of\ pending\ transactional\ update.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ It\ can\ be\ retrieved\ from\ \`{}eventFlags`\ with\ the\ following\ piece\ of\ code:}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ bool\ txPending\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::TX\_PENDING)\ !=\ 0;}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *\ <p>When\ \`{}txPending`\ is\ \`{}true`\ it\ means,\ that\ an\ ongoing\ transaction\ update\ that\ spans\ multiple\ events\ is}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ in\ process.\ All\ events\ with\ \`{}txPending`\ \`{}true`\ shall\ be\ put\ into\ a\ separate\ <em>pending\ list</em>}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ for\ each\ source\ id\ and\ should\ be\ processed\ later\ when\ an\ event\ for\ this\ source\ id\ with\ \`{}txPending`\ \`{}false`\ comes.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ *\ <p>\ \`{}RE`\ (bit\ 1)\ \&mdash;\ ::REMOVE\_EVENT\ is\ used\ to\ indicate\ that\ that\ the\ event\ with\ the}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ corresponding\ index\ has\ to\ be\ removed.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ bool\ removeEvent\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::REMOVE\_EVENT)\ !=\ 0;}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ \`{}\`{}\`{}}}
 \DoxyCodeLine{00061\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ *\ bool\ snapshotBegin\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_BEGIN)\ !=\ 0;}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ <p>\ Snapshot\ load\ starts\ on\ new\ subscription\ and\ the\ first\ indexed\ event\ that\ arrives\ for\ each\ non-\/zero\ source\ id}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ *\ on\ new\ subscription\ may\ have\ \`{}snapshotBegin`\ set\ to\ \`{}true`.\ It\ means,\ that\ an\ ongoing\ snapshot}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ consisting\ of\ multiple\ events\ is\ incoming.\ All\ events\ for\ this\ source\ id\ shall\ be\ put\ into\ a\ separate}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ <em>pending\ list</em>\ for\ each\ source\ id.}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ *\ <p>\ \`{}SE`\ (bit\ 3)\ \&mdash;\ ::SNAPSHOT\_END\ or\ \`{}SS`\ (bit\ 4)\ \&mdash;\ ::SNAPSHOT\_SNIP\ are\ used\ to\ indicate\ the\ end\ of\ a}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ *\ snapshot.}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ *\ bool\ snapshotEnd\ =\ (event-\/>getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_END)\ !=\ 0;}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ *\ bool\ snapshotSnip\ =\ (event-\/>getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_SNIP)\ !=\ 0;}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ <p>The\ last\ event\ of\ a\ snapshot\ is\ marked\ with\ either\ \`{}snapshotEnd`\ or\ \`{}snapshotSnip`.\ At\ this\ time,\ all\ events}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ from\ a\ <em>pending\ list</em>\ for\ the\ corresponding\ source\ can\ be\ processed,\ unless\ \`{}txPending`\ is\ also}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ set\ to\ \`{}true`.\ In\ the\ later\ case,\ the\ processing\ shall\ be\ further\ delayed\ due\ to\ ongoing\ transaction.}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ *\ <p>The\ difference\ between\ \`{}snapshotEnd`\ and\ \`{}snapshotSnip`\ is\ the\ following.}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ *\ \`{}snapshotEnd`\ indicates\ that\ the\ data\ source\ had\ sent\ all\ the\ data\ pertaining\ to\ the\ subscription}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ *\ for\ the\ corresponding\ indexed\ event,\ while\ \`{}snapshotSnip`\ indicates\ that\ some\ limit\ on\ the\ amount}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ of\ data\ was\ reached\ and\ while\ there\ still\ might\ be\ more\ data\ available,\ it\ will\ not\ be\ provided.}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ *\ <p>\ \`{}SM`\ (bit\ 6)\ \&mdash;\ ::SNAPSHOT\_MODE\ is\ used\ to\ instruct\ dxFeed\ to\ use\ snapshot\ mode.}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ *\ It\ is\ intended\ to\ be\ used\ only\ for\ publishing\ to\ activate\ (if\ not\ yet\ activated)\ snapshot\ mode.}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ *\ The\ difference\ from\ ::SNAPSHOT\_BEGIN\ flag\ is\ that\ ::SNAPSHOT\_MODE\ only\ switches\ on\ snapshot\ mode}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ *\ without\ starting\ snapshot\ synchronization\ protocol.}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ *\ <p>\ When\ a\ snapshot\ is\ empty\ or\ consists\ of\ a\ single\ event,\ then\ the\ event\ can\ have\ both\ \`{}snapshotBegin`}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ *\ and\ \`{}snapshotEnd`\ or\ \`{}snapshotSnip`\ flags.\ In\ case\ of\ an\ empty\ snapshot,\ \`{}removeEvent`\ on\ this\ event\ is}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ *\ also\ set\ to\ \`{}true`.}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00097\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ EventFlag\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00098\ \ \ \ \ std::uint32\_t\ flag\_;}
-\DoxyCodeLine{00099\ \ \ \ \ std::string\ name\_;}
-\DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ \ \ \ \ EventFlag(std::uint32\_t\ flag,\ std::string\ name)\ \textcolor{keyword}{noexcept}\ :\ flag\_\{flag\},\ name\_\{std::move(name)\}\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \}}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x01`\ -\/\ A\ bitmask\ to\ get\ transaction\ pending\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ property.}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ bool\ txPending\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::TX\_PENDING)\ !=\ 0;}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_ae57282251576b5b5a09d93c0b588a3d7}{TX\_PENDING}};}
-\DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x02`\ -\/\ A\ bitmask\ to\ get\ removal\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ bool\ removeEvent\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::REMOVE\_EVENT)\ !=\ 0;}}
-\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_ae244786e6fb0f520858ac29c08855708}{REMOVE\_EVENT}};}
-\DoxyCodeLine{00127\ }
-\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x04`\ -\/\ A\ bitmask\ to\ get\ snapshot\ begin\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}}}
-\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ property.}}
-\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ bool\ snapshotBegin\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_BEGIN)\ !=\ 0;}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
-\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a440532930f74605794158bb59a161c59}{SNAPSHOT\_BEGIN}};}
-\DoxyCodeLine{00139\ }
-\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x08`\ -\/\ A\ bitmask\ to\ get\ snapshot\ end\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ bool\ snapshotEnd\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_END)\ !=\ 0;}}
-\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_acd462d106e5f20a5fe315bca6cdc31e0}{SNAPSHOT\_END}};}
-\DoxyCodeLine{00150\ }
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x10`\ -\/\ A\ bitmask\ to\ get\ snapshot\ snip\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
-\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ bool\ snapshotSnip\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_SNIP)\ !=\ 0;}}
-\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
-\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
-\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a138fa2278b8ca4800c8c0b7a402ddac0}{SNAPSHOT\_SNIP}};}
-\DoxyCodeLine{00161\ }
-\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{//\ 0x20\ is\ reserved.\ This\ flag\ will\ fit\ into\ 1-\/byte\ on\ the\ wire\ in\ QTP\ protocol}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ <p>\ \`{}SB`\ (bit\ 2)\ \&mdash;\ ::SNAPSHOT\_BEGIN\ is\ used\ to\ indicate\ when\ the\ loading\ of\ a\ snapshot\ starts.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ *\ bool\ snapshotBegin\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_BEGIN)\ !=\ 0;}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ *\ <p>\ Snapshot\ load\ starts\ on\ new\ subscription\ and\ the\ first\ indexed\ event\ that\ arrives\ for\ each\ non-\/zero\ source\ id}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ on\ new\ subscription\ may\ have\ \`{}snapshotBegin`\ set\ to\ \`{}true`.\ It\ means,\ that\ an\ ongoing\ snapshot}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ consisting\ of\ multiple\ events\ is\ incoming.\ All\ events\ for\ this\ source\ id\ shall\ be\ put\ into\ a\ separate}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *\ <em>pending\ list</em>\ for\ each\ source\ id.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ *\ <p>\ \`{}SE`\ (bit\ 3)\ \&mdash;\ ::SNAPSHOT\_END\ or\ \`{}SS`\ (bit\ 4)\ \&mdash;\ ::SNAPSHOT\_SNIP\ are\ used\ to\ indicate\ the\ end\ of\ a}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ *\ snapshot.}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ *\ bool\ snapshotEnd\ =\ (event-\/>getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_END)\ !=\ 0;}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ *\ bool\ snapshotSnip\ =\ (event-\/>getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_SNIP)\ !=\ 0;}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ *\ <p>The\ last\ event\ of\ a\ snapshot\ is\ marked\ with\ either\ \`{}snapshotEnd`\ or\ \`{}snapshotSnip`.\ At\ this\ time,\ all\ events}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ *\ from\ a\ <em>pending\ list</em>\ for\ the\ corresponding\ source\ can\ be\ processed,\ unless\ \`{}txPending`\ is\ also}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ *\ set\ to\ \`{}true`.\ In\ the\ later\ case,\ the\ processing\ shall\ be\ further\ delayed\ due\ to\ ongoing\ transaction.}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ *\ <p>The\ difference\ between\ \`{}snapshotEnd`\ and\ \`{}snapshotSnip`\ is\ the\ following.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ *\ \`{}snapshotEnd`\ indicates\ that\ the\ data\ source\ had\ sent\ all\ the\ data\ pertaining\ to\ the\ subscription}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ *\ for\ the\ corresponding\ indexed\ event,\ while\ \`{}snapshotSnip`\ indicates\ that\ some\ limit\ on\ the\ amount}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ *\ of\ data\ was\ reached\ and\ while\ there\ still\ might\ be\ more\ data\ available,\ it\ will\ not\ be\ provided.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ *\ <p>\ \`{}SM`\ (bit\ 6)\ \&mdash;\ ::SNAPSHOT\_MODE\ is\ used\ to\ instruct\ dxFeed\ to\ use\ snapshot\ mode.}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ *\ It\ is\ intended\ to\ be\ used\ only\ for\ publishing\ to\ activate\ (if\ not\ yet\ activated)\ snapshot\ mode.}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ *\ The\ difference\ from\ ::SNAPSHOT\_BEGIN\ flag\ is\ that\ ::SNAPSHOT\_MODE\ only\ switches\ on\ snapshot\ mode}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ *\ without\ starting\ snapshot\ synchronization\ protocol.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ *\ <p>\ When\ a\ snapshot\ is\ empty\ or\ consists\ of\ a\ single\ event,\ then\ the\ event\ can\ have\ both\ \`{}snapshotBegin`}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ *\ and\ \`{}snapshotEnd`\ or\ \`{}snapshotSnip`\ flags.\ In\ case\ of\ an\ empty\ snapshot,\ \`{}removeEvent`\ on\ this\ event\ is}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ *\ also\ set\ to\ \`{}true`.}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00099\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ EventFlag\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ std::uint32\_t\ flag\_;}
+\DoxyCodeLine{00101\ \ \ \ \ std::string\ name\_;}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ EventFlag(std::uint32\_t\ flag,\ std::string\ name)\ \textcolor{keyword}{noexcept}\ :\ flag\_\{flag\},\ name\_\{std::move(name)\}\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x01`\ -\/\ A\ bitmask\ to\ get\ transaction\ pending\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ property.}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ bool\ txPending\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::TX\_PENDING)\ !=\ 0;}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{class_event_flag_a71255c51ec6183bab9adf3561929429a}{TX\_PENDING}};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x02`\ -\/\ A\ bitmask\ to\ get\ removal\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ bool\ removeEvent\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::REMOVE\_EVENT)\ !=\ 0;}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{class_event_flag_af6f440540c8c371ef1acef7d910ab23d}{REMOVE\_EVENT}};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x04`\ -\/\ A\ bitmask\ to\ get\ snapshot\ begin\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ property.}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ bool\ snapshotBegin\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_BEGIN)\ !=\ 0;}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{class_event_flag_ab1246c3963485123672b05d5b9dbdfec}{SNAPSHOT\_BEGIN}};}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x08`\ -\/\ A\ bitmask\ to\ get\ snapshot\ end\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ bool\ snapshotEnd\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_END)\ !=\ 0;}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{class_event_flag_adc2ec8ed07a2a2efaf2389fe4f7459c6}{SNAPSHOT\_END}};}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x10`\ -\/\ A\ bitmask\ to\ get\ snapshot\ snip\ indicator\ from\ the\ value\ of\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}cpp}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ bool\ snapshotSnip\ =\ (event-\/>\ getEventFlags()\ \&\ IndexedEvent::SNAPSHOT\_SNIP)\ !=\ 0;}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ \`{}\`{}\`{}}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{class_event_flag_a522d708878957a9412299bebfb3e1e4d}{SNAPSHOT\_SNIP}};}
 \DoxyCodeLine{00163\ }
-\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x40`\ -\/\ A\ bitmask\ to\ set\ snapshot\ mode\ indicator\ into\ the\ value\ of\ @ref\ ::setEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ This\ flag\ is\ intended\ for\ publishing\ only.}}
-\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
-\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a0688aae67c8839a36ce85e634503a8f5}{SNAPSHOT\_MODE}};}
-\DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x80`\ -\/\ For\ internal\ use.\ Marks\ a\ subscription\ for\ deletion.}}
-\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a6181d88706e072646fb4594e4fce94ed}{REMOVE\_SYMBOL}};}
-\DoxyCodeLine{00176\ }
-\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ invalid\ event\ flag}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_ad3307d1486c562586d74d51e3fd2b7b6}{EventFlag}}()\ \textcolor{keyword}{noexcept}\ :\ flag\_\{\textcolor{keywordtype}{unsigned}(-\/1)\},\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_ad3307d1486c562586d74d51e3fd2b7b6}{name\_}}\{\textcolor{stringliteral}{"{}INVALID"{}}\}\ \{}
-\DoxyCodeLine{00181\ \ \ \ \ \}}
-\DoxyCodeLine{00182\ }
-\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ event\ flag's\ value}}
-\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00186\ \ \ \ \ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ flag\_;}
-\DoxyCodeLine{00188\ \ \ \ \ \}}
-\DoxyCodeLine{00189\ }
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ Determines\ if\ the\ given\ flag\ is\ in\ the\ mask.}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlagsMask\ The\ event\ flags\ mask}}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{//\ 0x20\ is\ reserved.\ This\ flag\ will\ fit\ into\ 1-\/byte\ on\ the\ wire\ in\ QTP\ protocol}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x40`\ -\/\ A\ bitmask\ to\ set\ snapshot\ mode\ indicator\ into\ the\ value\ of\ @ref\ ::setEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ This\ flag\ is\ intended\ for\ publishing\ only.}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ See\ <a\ href="{}./de/d03/classdxfcpp\_1\_1\_event\_flag.html\#eventFlagsSection"{}>"{}Event\ Flags"{}\ section</a>}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{class_event_flag_a689ed612dddae7bb9e0f3387711842b8}{SNAPSHOT\_MODE}};}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ \`{}0x80`\ -\/\ For\ internal\ use.\ Marks\ a\ subscription\ for\ deletion.}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ EventFlag\ \mbox{\hyperlink{class_event_flag_aca64bfd839413b0612f2530f6c5d9d36}{REMOVE\_SYMBOL}};}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ invalid\ event\ flag}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_event_flag_a4373f4534b27d6b000b6760a84a53e17}{EventFlag}}()\ \textcolor{keyword}{noexcept}\ :\ flag\_\{\textcolor{keywordtype}{unsigned}(-\/1)\},\ \mbox{\hyperlink{class_event_flag_a4373f4534b27d6b000b6760a84a53e17}{name\_}}\{\textcolor{stringliteral}{"{}INVALID"{}}\}\ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ event\ flag's\ value}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00188\ \ \ \ \ std::uint32\_t\ \mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ flag\_;}
+\DoxyCodeLine{00190\ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ Determines\ if\ the\ given\ flag\ is\ in\ the\ mask.}}
 \DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ the\ given\ flag\ is\ in\ the\ mask.}}
-\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_aa0b904e1d50c6f79d8739f028559cffc}{in}}(std::uint32\_t\ eventFlagsMask)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (eventFlagsMask\ \&\ flag\_)\ !=\ 0;}
-\DoxyCodeLine{00199\ \ \ \ \ \}}
-\DoxyCodeLine{00200\ }
-\DoxyCodeLine{00201\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *\ Determines\ if\ the\ given\ flag\ is\ in\ the\ mask.}}
-\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventFlagsMask\ An\ event\ flags\ mask\ type\ that\ satisfies\ the\ condition:\ there\ is\ a\ \`{}getMask`\ method\ that}}
-\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ returns\ std::uint32\_t}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlagsMask\ The\ event\ flags\ mask.}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ the\ given\ flag\ is\ in\ the\ mask.}}
-\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventFlagsMask>}
-\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_ae109db0bd6293f60d84f8c2e96118992}{in}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlagsMask)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00211\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ requires\ requires\ \{}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ eventFlagsMask.getMask()\ \}\ -\/>\ std::same\_as<std::uint32\_t>;}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00215\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
-\DoxyCodeLine{00216\ \ \ \ \ \{}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ in(eventFlagsMask.getMask());}
-\DoxyCodeLine{00218\ \ \ \ \ \}}
-\DoxyCodeLine{00219\ }
-\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&getName()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00223\ \ \ \ \ \}}
-\DoxyCodeLine{00224\ }
-\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&toString()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00228\ \ \ \ \ \}}
-\DoxyCodeLine{00229\ }
-\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag\ (std::int32\_t)}}
-\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::int32\_t)}}
-\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keyword}{friend}\ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a35ee25c6a8d7ce838443e529ad830deb}{operator}}|(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ std::int32\_t\ eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(dxfcpp::orOp(eventFlag1\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}},\ eventFlag2));}
-\DoxyCodeLine{00239\ \ \ \ \ \}}
-\DoxyCodeLine{00240\ }
-\DoxyCodeLine{00241\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag\ (std::int32\_t)}}
-\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
-\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::int32\_t)}}
-\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keyword}{friend}\ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a538948d97dc613e29f32fcc859f5df40}{operator}}|(std::int32\_t\ eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::orOp(eventFlag1,\ eventFlag2\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}});}
-\DoxyCodeLine{00250\ \ \ \ \ \}}
-\DoxyCodeLine{00251\ }
-\DoxyCodeLine{00252\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
-\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag\ (std::int32\_t)}}
-\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::int32\_t)}}
-\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keyword}{friend}\ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a4d76868ccb82effad248ce3f1b9bdd4d}{operator}}\&(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ std::int32\_t\ eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(dxfcpp::andOp(eventFlag1\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}},\ eventFlag2));}
-\DoxyCodeLine{00261\ \ \ \ \ \}}
-\DoxyCodeLine{00262\ }
-\DoxyCodeLine{00263\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag\ (std::int32\_t)}}
-\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
-\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::int32\_t)}}
-\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keyword}{friend}\ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a65ef9e1ee26b3e8f8390d98de08a17bd}{operator}}\&(std::int32\_t\ eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(eventFlag1,\ eventFlag2\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}});}
-\DoxyCodeLine{00272\ \ \ \ \ \}}
-\DoxyCodeLine{00273\ }
-\DoxyCodeLine{00274\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
-\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag\ (std::uint32\_t)}}
-\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::uint32\_t)}}
-\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keyword}{friend}\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a8d07316b301b7df2b0595dc529f92d13}{operator}}|(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ std::uint32\_t\ eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventFlag1\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}}\ |\ eventFlag2;}
-\DoxyCodeLine{00283\ \ \ \ \ \}}
-\DoxyCodeLine{00284\ }
-\DoxyCodeLine{00285\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag\ (std::uint32\_t)}}
-\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
-\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::uint32\_t)}}
-\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keyword}{friend}\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a2a1dd311e064a894a0621af1b4bd6bcc}{operator}}|(std::uint32\_t\ eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::orOp(eventFlag1,\ eventFlag2\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}});}
-\DoxyCodeLine{00294\ \ \ \ \ \}}
-\DoxyCodeLine{00295\ }
-\DoxyCodeLine{00296\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
-\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag\ (std::uint32\_t)}}
-\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::uint32\_t)}}
-\DoxyCodeLine{00302\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keyword}{friend}\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_a2e3541e8c6988f1e72c306076e669597}{operator}}\&(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ std::uint32\_t\ eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(dxfcpp::andOp(eventFlag1\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}},\ eventFlag2));}
-\DoxyCodeLine{00305\ \ \ \ \ \}}
-\DoxyCodeLine{00306\ }
-\DoxyCodeLine{00307\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag\ (std::uint32\_t)}}
-\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
-\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::uint32\_t)}}
-\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keyword}{friend}\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flag_ac20b1c15b4dd06be79d33a32ae79c2ca}{operator}}\&(std::uint32\_t\ eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(eventFlag1,\ eventFlag2\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}});}
-\DoxyCodeLine{00316\ \ \ \ \ \}}
-\DoxyCodeLine{00317\ \};}
-\DoxyCodeLine{00318\ }
-\DoxyCodeLine{00319\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlagsMask\ The\ event\ flags\ mask}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ the\ given\ flag\ is\ in\ the\ mask.}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_event_flag_a09014057d39dfa6b033b8089e98b933d}{in}}(std::uint32\_t\ eventFlagsMask)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (eventFlagsMask\ \&\ flag\_)\ !=\ 0;}
+\DoxyCodeLine{00201\ \ \ \ \ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ Determines\ if\ the\ given\ flag\ is\ in\ the\ mask.}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventFlagsMask\ An\ event\ flags\ mask\ type\ that\ satisfies\ the\ condition:\ there\ is\ a\ \`{}getMask`\ method\ that}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ returns\ std::uint32\_t}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlagsMask\ The\ event\ flags\ mask.}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ the\ given\ flag\ is\ in\ the\ mask.}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventFlagsMask>}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_event_flag_a6bc5bf251a9d20db70b810f80d4747d2}{in}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlagsMask)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00213\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{\_\_cpp\_concepts}}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ requires\ requires\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ eventFlagsMask.getMask()\ \}\ -\/>\ std::same\_as<std::uint32\_t>;}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00217\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00218\ \ \ \ \ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ in(eventFlagsMask.getMask());}
+\DoxyCodeLine{00220\ \ \ \ \ \}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&getName()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00225\ \ \ \ \ \}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&toString()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00230\ \ \ \ \ \}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag\ (std::int32\_t)}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::int32\_t)}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keyword}{friend}\ std::int32\_t\ \mbox{\hyperlink{class_event_flag_a35ee25c6a8d7ce838443e529ad830deb}{operator}}|(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ std::int32\_t\ eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(dxfcpp::orOp(eventFlag1\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}},\ eventFlag2));}
+\DoxyCodeLine{00241\ \ \ \ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag\ (std::int32\_t)}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::int32\_t)}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keyword}{friend}\ std::int32\_t\ \mbox{\hyperlink{class_event_flag_a538948d97dc613e29f32fcc859f5df40}{operator}}|(std::int32\_t\ eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::orOp(eventFlag1,\ eventFlag2\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}});}
+\DoxyCodeLine{00252\ \ \ \ \ \}}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
+\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag\ (std::int32\_t)}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::int32\_t)}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keyword}{friend}\ std::int32\_t\ \mbox{\hyperlink{class_event_flag_a4d76868ccb82effad248ce3f1b9bdd4d}{operator}}\&(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ std::int32\_t\ eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(dxfcpp::andOp(eventFlag1\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}},\ eventFlag2));}
+\DoxyCodeLine{00263\ \ \ \ \ \}}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag\ (std::int32\_t)}}
+\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
+\DoxyCodeLine{00270\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::int32\_t)}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keyword}{friend}\ std::int32\_t\ \mbox{\hyperlink{class_event_flag_a65ef9e1ee26b3e8f8390d98de08a17bd}{operator}}\&(std::int32\_t\ eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(eventFlag1,\ eventFlag2\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}});}
+\DoxyCodeLine{00274\ \ \ \ \ \}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag\ (std::uint32\_t)}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::uint32\_t)}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keyword}{friend}\ std::uint32\_t\ \mbox{\hyperlink{class_event_flag_a8d07316b301b7df2b0595dc529f92d13}{operator}}|(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ std::uint32\_t\ eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventFlag1\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}}\ |\ eventFlag2;}
+\DoxyCodeLine{00285\ \ \ \ \ \}}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag\ (std::uint32\_t)}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
+\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::uint32\_t)}}
+\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keyword}{friend}\ std::uint32\_t\ \mbox{\hyperlink{class_event_flag_a2a1dd311e064a894a0621af1b4bd6bcc}{operator}}|(std::uint32\_t\ eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::orOp(eventFlag1,\ eventFlag2\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}});}
+\DoxyCodeLine{00296\ \ \ \ \ \}}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
+\DoxyCodeLine{00302\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag\ (std::uint32\_t)}}
+\DoxyCodeLine{00303\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::uint32\_t)}}
+\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{keyword}{friend}\ std::uint32\_t\ \mbox{\hyperlink{class_event_flag_a2e3541e8c6988f1e72c306076e669597}{operator}}\&(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ std::uint32\_t\ eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(dxfcpp::andOp(eventFlag1\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}},\ eventFlag2));}
+\DoxyCodeLine{00307\ \ \ \ \ \}}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag\ (std::uint32\_t)}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (std::uint32\_t)}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keyword}{friend}\ std::uint32\_t\ \mbox{\hyperlink{class_event_flag_ac20b1c15b4dd06be79d33a32ae79c2ca}{operator}}\&(std::uint32\_t\ eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::andOp(eventFlag1,\ eventFlag2\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}});}
+\DoxyCodeLine{00318\ \ \ \ \ \}}
+\DoxyCodeLine{00319\ \};}
 \DoxyCodeLine{00320\ }
-\DoxyCodeLine{00321\ \textcolor{comment}{///}}
-\DoxyCodeLine{00322\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::EventFlag>\ \{}
-\DoxyCodeLine{00323\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::EventFlag\ \&eventFlag)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventFlag\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}};}
-\DoxyCodeLine{00325\ \ \ \ \ \}}
-\DoxyCodeLine{00326\ \};}
-\DoxyCodeLine{00327\ }
-\DoxyCodeLine{00328\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00321\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \textcolor{comment}{///}}
+\DoxyCodeLine{00324\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::EventFlag>\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::EventFlag\ \&eventFlag)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventFlag\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}};}
+\DoxyCodeLine{00327\ \ \ \ \ \}}
+\DoxyCodeLine{00328\ \};}
 \DoxyCodeLine{00329\ }
-\DoxyCodeLine{00330\ \textcolor{comment}{///\ The\ event\ flags'\ mask\ (a\ set\ of\ bit\ flags)}}
-\DoxyCodeLine{00331\ \textcolor{keyword}{class}\ EventFlagsMask\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00332\ \ \ \ \ std::uint32\_t\ mask\_;}
-\DoxyCodeLine{00333\ }
-\DoxyCodeLine{00334\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00335\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ empty\ event\ flags\ mask}}
-\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00338\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a14e333f9f07916341a23cd9f4fadc405}{EventFlagsMask}}()\ \textcolor{keyword}{noexcept}\ :\ mask\_\{0u\}\ \{}
-\DoxyCodeLine{00339\ \ \ \ \ \}}
-\DoxyCodeLine{00340\ }
-\DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ Create\ event\ flags\ mask\ by\ integer\ value}}
-\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ MaskType\ The\ type\ of\ integer\ mask}}
-\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ *\ @param\ mask\ The\ integer\ mask\ value}}
-\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00347\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ MaskType>}
-\DoxyCodeLine{00348\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a87155c7656f499821851481cd8193229}{EventFlagsMask}}(MaskType\ mask)\ \textcolor{keyword}{noexcept}\ :\ mask\_\{\textcolor{keyword}{static\_cast}<std::uint32\_t>(mask)\}\ \{}
-\DoxyCodeLine{00349\ \ \ \ \ \}}
-\DoxyCodeLine{00350\ }
-\DoxyCodeLine{00351\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ event\ flags\ mask\ by\ iterators\ of\ container\ with\ flags}}
-\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventFlagIt\ The\ iterator\ type}}
-\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ *\ @param\ begin\ The\ start\ position}}
-\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ *\ @param\ end\ The\ end\ position}}
-\DoxyCodeLine{00357\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventFlagIt>\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a9a18895cd0ac1ce9d043061fa0a5de08}{EventFlagsMask}}(EventFlagIt\ begin,\ EventFlagIt\ end)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ mask\_\ =\ std::accumulate(begin,\ end,\ 0u,\ [](\textcolor{keywordtype}{unsigned}\ mask,\ \textcolor{keyword}{const}\ EventFlag\ \&flag)\ \{}
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ mask\ |\ flag.getFlag();}
-\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00362\ \ \ \ \ \}}
-\DoxyCodeLine{00363\ }
-\DoxyCodeLine{00364\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00365\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ event\ flags\ mask\ by\ initializer\ list\ with\ flags\(\backslash\)}}
-\DoxyCodeLine{00366\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTypes\ The\ list\ with\ flags}}
-\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00369\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7}{EventFlagsMask}}(std::initializer\_list<EventFlag>\ eventFlags)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7}{EventFlagsMask}}(\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7}{eventFlags}}.\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7}{begin}}(),\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7}{eventFlags}}.\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_aa4210165cd064c3593216396e1c788c7}{end}}())\ \{}
-\DoxyCodeLine{00371\ \ \ \ \ \}}
-\DoxyCodeLine{00372\ }
-\DoxyCodeLine{00373\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ an\ integer\ representation\ of\ event\ mask}}
-\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00376\ \textcolor{comment}{\ \ \ \ \ *\ @return\ an\ integer\ representation}}
-\DoxyCodeLine{00377\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00378\ \ \ \ \ \textcolor{keyword}{constexpr}\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{getMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ mask\_;}
-\DoxyCodeLine{00380\ \ \ \ \ \}}
-\DoxyCodeLine{00381\ }
-\DoxyCodeLine{00382\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ an\ event\ flags'\ mask\ and\ an\ event\ flag}}
-\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlagsMask\ The\ event\ flags'\ mask}}
-\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlag\ The\ event\ flag}}
-\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (event\ flags'\ mask)}}
-\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00389\ \ \ \ \ \textcolor{keyword}{friend}\ EventFlagsMask\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a6f4e131b6f4b547d98ca52c3f6d1b9e1}{operator}}|(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlagsMask,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask\{eventFlagsMask.mask\_\ |\ eventFlag\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}}\};}
-\DoxyCodeLine{00391\ \ \ \ \ \}}
-\DoxyCodeLine{00392\ }
-\DoxyCodeLine{00393\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ an\ event\ flags'\ mask\ and\ an\ event\ flag}}
-\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlagsMask\ The\ event\ flags'\ mask}}
-\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlag\ The\ event\ flag}}
-\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (event\ flags'\ mask)}}
-\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00400\ \ \ \ \ \textcolor{keyword}{friend}\ EventFlagsMask\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_ae683f6c55ced9dd5a338d3e00a2fa93a}{operator}}\&(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlagsMask,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask\{eventFlagsMask.mask\_\ \&\ eventFlag\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}}\};}
-\DoxyCodeLine{00402\ \ \ \ \ \}}
-\DoxyCodeLine{00403\ }
-\DoxyCodeLine{00404\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00405\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
-\DoxyCodeLine{00406\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00407\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
-\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
-\DoxyCodeLine{00409\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (event\ flags'\ mask\ )}}
-\DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00411\ \ \ \ \ \textcolor{keyword}{friend}\ EventFlagsMask\ \mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_abf6d59fc04b8ae48fd8ffe9d171433a2}{operator}}|(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask\{eventFlag1\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}}\ |\ eventFlag2\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{getFlag}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flag_aedaf887a29938eb65fcc542504b62048}{)}}\};}
-\DoxyCodeLine{00413\ \ \ \ \ \}}
-\DoxyCodeLine{00414\ }
-\DoxyCodeLine{00415\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00416\ \ \ \ \ std::string\ toString()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ addOrSign\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ std::ostringstream\ result\{\};}
-\DoxyCodeLine{00419\ }
-\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&flag\ :}
-\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{EventFlag::TX\_PENDING,\ EventFlag::REMOVE\_EVENT,\ EventFlag::SNAPSHOT\_BEGIN,\ EventFlag::SNAPSHOT\_END,}
-\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EventFlag::SNAPSHOT\_SNIP,\ EventFlag::SNAPSHOT\_MODE,\ EventFlag::REMOVE\_SYMBOL\})\ \{}
-\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (flag.in(mask\_))\ \{}
-\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (addOrSign)\ \{}
-\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ <<\ \textcolor{stringliteral}{"{}|"{}};}
-\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ addOrSign\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00429\ }
-\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ <<\ flag.toString();}
-\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00433\ }
-\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ result\ <<\ \textcolor{stringliteral}{"{}(0x"{}}\ <<\ std::hex\ <<\ mask\_\ <<\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{00330\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \textcolor{comment}{///\ The\ event\ flags'\ mask\ (a\ set\ of\ bit\ flags)}}
+\DoxyCodeLine{00333\ \textcolor{keyword}{class}\ EventFlagsMask\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00334\ \ \ \ \ std::uint32\_t\ mask\_;}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ empty\ event\ flags\ mask}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00340\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_event_flags_mask_a7267d9655045fa1a4260d0e9e7269433}{EventFlagsMask}}()\ \textcolor{keyword}{noexcept}\ :\ mask\_\{0u\}\ \{}
+\DoxyCodeLine{00341\ \ \ \ \ \}}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ *\ Create\ event\ flags\ mask\ by\ integer\ value}}
+\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ MaskType\ The\ type\ of\ integer\ mask}}
+\DoxyCodeLine{00347\ \textcolor{comment}{\ \ \ \ \ *\ @param\ mask\ The\ integer\ mask\ value}}
+\DoxyCodeLine{00348\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ MaskType>}
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_event_flags_mask_ab0d6039017c2db7b81166e54d929fbcc}{EventFlagsMask}}(MaskType\ mask)\ \textcolor{keyword}{noexcept}\ :\ mask\_\{\textcolor{keyword}{static\_cast}<std::uint32\_t>(mask)\}\ \{}
+\DoxyCodeLine{00351\ \ \ \ \ \}}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ event\ flags\ mask\ by\ iterators\ of\ container\ with\ flags}}
+\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ EventFlagIt\ The\ iterator\ type}}
+\DoxyCodeLine{00357\ \textcolor{comment}{\ \ \ \ \ *\ @param\ begin\ The\ start\ position}}
+\DoxyCodeLine{00358\ \textcolor{comment}{\ \ \ \ \ *\ @param\ end\ The\ end\ position}}
+\DoxyCodeLine{00359\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00360\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ EventFlagIt>\ \mbox{\hyperlink{class_event_flags_mask_ab3be5a9c8678ffcc81531d55b4b3b7a3}{EventFlagsMask}}(EventFlagIt\ begin,\ EventFlagIt\ end)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ mask\_\ =\ std::accumulate(begin,\ end,\ 0u,\ [](\textcolor{keywordtype}{unsigned}\ mask,\ \textcolor{keyword}{const}\ EventFlag\ \&flag)\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ mask\ |\ flag.getFlag();}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00364\ \ \ \ \ \}}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ event\ flags\ mask\ by\ initializer\ list\ with\ flags\(\backslash\)}}
+\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTypes\ The\ list\ with\ flags}}
+\DoxyCodeLine{00370\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00371\ \ \ \ \ \mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{EventFlagsMask}}(std::initializer\_list<EventFlag>\ eventFlags)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{EventFlagsMask}}(\mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{eventFlags}}.\mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{begin}}(),\ \mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{eventFlags}}.\mbox{\hyperlink{class_event_flags_mask_a8cade513b39f9820836fe6e2731b310c}{end}}())\ \{}
+\DoxyCodeLine{00373\ \ \ \ \ \}}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00376\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ an\ integer\ representation\ of\ event\ mask}}
+\DoxyCodeLine{00377\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00378\ \textcolor{comment}{\ \ \ \ \ *\ @return\ an\ integer\ representation}}
+\DoxyCodeLine{00379\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{keyword}{constexpr}\ std::uint32\_t\ \mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{getMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ mask\_;}
+\DoxyCodeLine{00382\ \ \ \ \ \}}
+\DoxyCodeLine{00383\ }
+\DoxyCodeLine{00384\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ an\ event\ flags'\ mask\ and\ an\ event\ flag}}
+\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlagsMask\ The\ event\ flags'\ mask}}
+\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlag\ The\ event\ flag}}
+\DoxyCodeLine{00389\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (event\ flags'\ mask)}}
+\DoxyCodeLine{00390\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00391\ \ \ \ \ \textcolor{keyword}{friend}\ EventFlagsMask\ \mbox{\hyperlink{class_event_flags_mask_a6f4e131b6f4b547d98ca52c3f6d1b9e1}{operator}}|(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlagsMask,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask\{eventFlagsMask.mask\_\ |\ eventFlag\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}}\};}
+\DoxyCodeLine{00393\ \ \ \ \ \}}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}and`\ operation\ with\ an\ event\ flags'\ mask\ and\ an\ event\ flag}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00398\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlagsMask\ The\ event\ flags'\ mask}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlag\ The\ event\ flag}}
+\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (event\ flags'\ mask)}}
+\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00402\ \ \ \ \ \textcolor{keyword}{friend}\ EventFlagsMask\ \mbox{\hyperlink{class_event_flags_mask_ae683f6c55ced9dd5a338d3e00a2fa93a}{operator}}\&(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlagsMask,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask\{eventFlagsMask.mask\_\ \&\ eventFlag\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}}\};}
+\DoxyCodeLine{00404\ \ \ \ \ \}}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00407\ \textcolor{comment}{\ \ \ \ \ *\ Performs\ a\ bit\ \`{}or`\ operation\ with\ two\ event\ flags}}
+\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00409\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType1\ The\ first\ event\ flag}}
+\DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventType2\ The\ second\ event\ flag}}
+\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ result\ (event\ flags'\ mask\ )}}
+\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00413\ \ \ \ \ \textcolor{keyword}{friend}\ EventFlagsMask\ \mbox{\hyperlink{class_event_flags_mask_abf6d59fc04b8ae48fd8ffe9d171433a2}{operator}}|(\textcolor{keyword}{const}\ EventFlag\ \&eventFlag1,\ \textcolor{keyword}{const}\ EventFlag\ \&eventFlag2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask\{eventFlag1\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}}\ |\ eventFlag2\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{.}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{getFlag}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{(}}\mbox{\hyperlink{class_event_flag_a0c4ab83954c100a812e6133133659ee7}{)}}\};}
+\DoxyCodeLine{00415\ \ \ \ \ \}}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00418\ \ \ \ \ std::string\ toString()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ addOrSign\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ std::ostringstream\ result\{\};}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&flag\ :}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{EventFlag::TX\_PENDING,\ EventFlag::REMOVE\_EVENT,\ EventFlag::SNAPSHOT\_BEGIN,\ EventFlag::SNAPSHOT\_END,}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EventFlag::SNAPSHOT\_SNIP,\ EventFlag::SNAPSHOT\_MODE,\ EventFlag::REMOVE\_SYMBOL\})\ \{}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (flag.in(mask\_))\ \{}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (addOrSign)\ \{}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ <<\ \textcolor{stringliteral}{"{}|"{}};}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ addOrSign\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ <<\ flag.toString();}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00435\ }
-\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result.str();}
-\DoxyCodeLine{00437\ \ \ \ \ \}}
-\DoxyCodeLine{00438\ \};}
-\DoxyCodeLine{00439\ }
-\DoxyCodeLine{00440\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ result\ <<\ \textcolor{stringliteral}{"{}(0x"{}}\ <<\ std::hex\ <<\ mask\_\ <<\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result.str();}
+\DoxyCodeLine{00439\ \ \ \ \ \}}
+\DoxyCodeLine{00440\ \};}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

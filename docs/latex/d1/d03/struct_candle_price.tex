@@ -1,0 +1,184 @@
+\doxysubsection{Candle\+Price Struct Reference}
+\hypertarget{struct_candle_price}{}\label{struct_candle_price}\index{CandlePrice@{CandlePrice}}
+
+
+Price type attribute of \doxylink{struct_candle_symbol}{Candle\+Symbol} defines price that is used to build the candles.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Price.\+hpp$>$}
+
+Inheritance diagram for Candle\+Price\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d1/d03/struct_candle_price}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{struct_candle_price_ac4fae584fddf49486cea7db77a246ecf}{change\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol) const override
+\begin{DoxyCompactList}\small\item\em Returns candle event symbol string with this candle price type set. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{struct_candle_price_aa48e720eb3df20b9b1f50e03927fc945}{to\+String}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this candle price type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} $>$ \mbox{\hyperlink{struct_candle_price_a893141c71d17ddd8170b434a7a6a9b9a}{parse}} (const dxfcpp\+::\+String\+Like\+Wrapper \&s)
+\begin{DoxyCompactList}\small\item\em Parses string representation of candle price type into object. \end{DoxyCompactList}\item 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} $>$ \mbox{\hyperlink{struct_candle_price_a818b1aff65d1ede7e5843861b2549141}{get\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns candle price type of the given candle symbol string. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{struct_candle_price_a243a595cd702180cf1a47857b40e3f38}{normalize\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol)
+\begin{DoxyCompactList}\small\item\em Returns candle symbol string with the normalized representation of the candle price type attribute. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_candle_price_a81644d93d41d6cd64bad82961637ca54}\label{struct_candle_price_a81644d93d41d6cd64bad82961637ca54} 
+static const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} {\bfseries LAST} \{"{}last"{}\}
+\begin{DoxyCompactList}\small\item\em Last trading price. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_price_a296fa2c4dd8e5569f13224ebe654b702}\label{struct_candle_price_a296fa2c4dd8e5569f13224ebe654b702} 
+static const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} {\bfseries BID} \{"{}bid"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_quote}{Quote} bid price. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_price_a5924d8c8be2feb6db1ac887131c469a6}\label{struct_candle_price_a5924d8c8be2feb6db1ac887131c469a6} 
+static const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} {\bfseries ASK} \{"{}ask"{}\}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_quote}{Quote} ask price. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_price_a82566eb66c5f1d03a93ab61994817574}\label{struct_candle_price_a82566eb66c5f1d03a93ab61994817574} 
+static const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} {\bfseries MARK} \{"{}mark"{}\}
+\begin{DoxyCompactList}\small\item\em Market price defined as average between quote bid and ask prices. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} \mbox{\hyperlink{struct_candle_price_aac615d755dcc3fef383c593c932ede33}{SETTLEMENT}} \{"{}s"{}\}
+\begin{DoxyCompactList}\small\item\em Official settlement price that is defined by exchange or last trading price otherwise. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_price_aaa64eb3406aee159e63485e0fe07d5f9}\label{struct_candle_price_aaa64eb3406aee159e63485e0fe07d5f9} 
+static const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} {\bfseries DEFAULT} = \mbox{\hyperlink{struct_candle_price_a81644d93d41d6cd64bad82961637ca54}{LAST}}
+\begin{DoxyCompactList}\small\item\em Default price type is \doxylink{struct_candle_price_a81644d93d41d6cd64bad82961637ca54}{Candle\+Price\+::\+LAST}. \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_candle_price_ae38797977ef63681da68c45ffeaa1450}{ATTRIBUTE\+\_\+\+KEY}} \{"{}price"{}\}
+\begin{DoxyCompactList}\small\item\em The attribute key that is used to store the value of {\ttfamily \doxylink{struct_candle_price}{Candle\+Price}} in a symbol string using methods of \doxylink{struct_market_event_symbols}{Market\+Event\+Symbols} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Price type attribute of \doxylink{struct_candle_symbol}{Candle\+Symbol} defines price that is used to build the candles. 
+
+\doxysubsubsubsubsection*{Implementation details}
+
+This attribute is encoded in a symbol string with \doxylink{struct_market_event_symbols_a8eea112429ea61730be80e4fac021095}{Market\+Event\+Symbols.get\+Attribute\+String\+By\+Key}, \doxylink{struct_market_event_symbols_ab4184832b9b58374117d61b1f8c94617}{change\+Attribute\+String\+By\+Key}, and \doxylink{struct_market_event_symbols_ab0369d51b1181a4fb7ccb674923ddb9d}{remove\+Attribute\+String\+By\+Key} methods. The key to use with these methods is available via \doxylink{struct_candle_price_ae38797977ef63681da68c45ffeaa1450}{Candle\+Price\+::\+ATTRIBUTE\+\_\+\+KEY} constant. The value that this key shall be set to is equal to the corresponding \doxylink{struct_candle_price_aa48e720eb3df20b9b1f50e03927fc945}{Candle\+Price\+::to\+String()} 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_candle_price_ac4fae584fddf49486cea7db77a246ecf}\index{CandlePrice@{CandlePrice}!changeAttributeForSymbol@{changeAttributeForSymbol}}
+\index{changeAttributeForSymbol@{changeAttributeForSymbol}!CandlePrice@{CandlePrice}}
+\doxyparagraph{\texorpdfstring{changeAttributeForSymbol()}{changeAttributeForSymbol()}}
+{\footnotesize\ttfamily \label{struct_candle_price_ac4fae584fddf49486cea7db77a246ecf} 
+std\+::string Candle\+Price\+::change\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Returns candle event symbol string with this candle price type set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & original candle event symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle event symbol string with this candle price type set. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_candle_symbol_attribute_a965d1af360208c9f1733d47ac278bdad}{Candle\+Symbol\+Attribute}}.
+
+\Hypertarget{struct_candle_price_a818b1aff65d1ede7e5843861b2549141}\index{CandlePrice@{CandlePrice}!getAttributeForSymbol@{getAttributeForSymbol}}
+\index{getAttributeForSymbol@{getAttributeForSymbol}!CandlePrice@{CandlePrice}}
+\doxyparagraph{\texorpdfstring{getAttributeForSymbol()}{getAttributeForSymbol()}}
+{\footnotesize\ttfamily \label{struct_candle_price_a818b1aff65d1ede7e5843861b2549141} 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} $>$ Candle\+Price\+::get\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle price type of the given candle symbol string. 
+
+The result is \doxylink{struct_candle_price_aaa64eb3406aee159e63485e0fe07d5f9}{Candle\+Price\+::\+DEFAULT} if the symbol does not have candle price type attribute.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle price type of the given candle symbol string. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_price_a243a595cd702180cf1a47857b40e3f38}\index{CandlePrice@{CandlePrice}!normalizeAttributeForSymbol@{normalizeAttributeForSymbol}}
+\index{normalizeAttributeForSymbol@{normalizeAttributeForSymbol}!CandlePrice@{CandlePrice}}
+\doxyparagraph{\texorpdfstring{normalizeAttributeForSymbol()}{normalizeAttributeForSymbol()}}
+{\footnotesize\ttfamily \label{struct_candle_price_a243a595cd702180cf1a47857b40e3f38} 
+static std\+::string Candle\+Price\+::normalize\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns candle symbol string with the normalized representation of the candle price type attribute. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle symbol string with the normalized representation of the the candle price type attribute. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_price_a893141c71d17ddd8170b434a7a6a9b9a}\index{CandlePrice@{CandlePrice}!parse@{parse}}
+\index{parse@{parse}!CandlePrice@{CandlePrice}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily \label{struct_candle_price_a893141c71d17ddd8170b434a7a6a9b9a} 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} $>$ Candle\+Price\+::parse (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Parses string representation of candle price type into object. 
+
+Any string that was returned by \doxylink{struct_candle_price_aa48e720eb3df20b9b1f50e03927fc945}{Candle\+Price\+::to\+String()} can be parsed and case is ignored for parsing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string representation of candle price type. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The candle price type (reference). 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_price_aa48e720eb3df20b9b1f50e03927fc945}\index{CandlePrice@{CandlePrice}!toString@{toString}}
+\index{toString@{toString}!CandlePrice@{CandlePrice}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{struct_candle_price_aa48e720eb3df20b9b1f50e03927fc945} 
+const std\+::string \& Candle\+Price\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this candle price type. 
+
+The string representation of candle price type is a lower case string that corresponds to its name. For example, \doxylink{struct_candle_price_a81644d93d41d6cd64bad82961637ca54}{Candle\+Price\+::\+LAST} is represented as "{}last"{}.
+
+\begin{DoxyReturn}{Returns}
+string representation of this candle price type. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{struct_candle_price_ae38797977ef63681da68c45ffeaa1450}\index{CandlePrice@{CandlePrice}!ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}}
+\index{ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}!CandlePrice@{CandlePrice}}
+\doxyparagraph{\texorpdfstring{ATTRIBUTE\_KEY}{ATTRIBUTE\_KEY}}
+{\footnotesize\ttfamily \label{struct_candle_price_ae38797977ef63681da68c45ffeaa1450} 
+const std\+::string Candle\+Price\+::\+ATTRIBUTE\+\_\+\+KEY \{"{}price"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The attribute key that is used to store the value of {\ttfamily \doxylink{struct_candle_price}{Candle\+Price}} in a symbol string using methods of \doxylink{struct_market_event_symbols}{Market\+Event\+Symbols} class. 
+
+The value of this constant is "{}price"{}. The value that this key shall be set to is equal to the corresponding \doxylink{struct_candle_price_aa48e720eb3df20b9b1f50e03927fc945}{Candle\+Price\+::to\+String()} \Hypertarget{struct_candle_price_aac615d755dcc3fef383c593c932ede33}\index{CandlePrice@{CandlePrice}!SETTLEMENT@{SETTLEMENT}}
+\index{SETTLEMENT@{SETTLEMENT}!CandlePrice@{CandlePrice}}
+\doxyparagraph{\texorpdfstring{SETTLEMENT}{SETTLEMENT}}
+{\footnotesize\ttfamily \label{struct_candle_price_aac615d755dcc3fef383c593c932ede33} 
+const \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} Candle\+Price\+::\+SETTLEMENT \{"{}s"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Official settlement price that is defined by exchange or last trading price otherwise. 
+
+It updates based on all \doxylink{struct_price_type}{Price\+Type} values\+: \doxylink{struct_price_type_aefd99588b07f308a5c65680880afd63a}{Price\+Type\+::\+INDICATIVE}, \doxylink{struct_price_type_a36c20fc2df361747e60c503e059976e5}{Price\+Type\+::\+PRELIMINARY}, and \doxylink{struct_price_type_a5d47698e3a1fbf0264460ce2c67f9c98}{Price\+Type\+::\+FINAL}\}. 

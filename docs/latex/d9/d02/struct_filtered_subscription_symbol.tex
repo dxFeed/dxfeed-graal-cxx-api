@@ -1,0 +1,25 @@
+\doxysubsection{Filtered\+Subscription\+Symbol Struct Reference}
+\hypertarget{struct_filtered_subscription_symbol}{}\label{struct_filtered_subscription_symbol}\index{FilteredSubscriptionSymbol@{FilteredSubscriptionSymbol}}
+
+
+This marker interface marks subscription symbol classes (like \doxylink{class_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}) that attach "{}filters"{} to the actual symbols.  
+
+
+
+
+{\ttfamily \#include $<$Filtered\+Subscription\+Symbol.\+hpp$>$}
+
+Inheritance diagram for Filtered\+Subscription\+Symbol\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d9/d02/struct_filtered_subscription_symbol}
+\end{center}
+\end{figure}
+
+
+\doxysubsubsection{Detailed Description}
+This marker interface marks subscription symbol classes (like \doxylink{class_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol}) that attach "{}filters"{} to the actual symbols. 
+
+Filtered subscription symbols implement their {\ttfamily operator ==} and {\ttfamily std\+::hash\texorpdfstring{$<$}{<}\texorpdfstring{$>$}{>}} based on their symbol only, without considering their "{}filter"{} part (for example, a \doxylink{class_time_series_subscription_symbol}{Time\+Series\+Subscription\+Symbol} has a \doxylink{class_time_series_subscription_symbol_a7ea676e77bdea236aa088925ce8a3c93}{from\+Time} filter on a time range of events).
+
+\doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} has the following behavior for filtered symbols. There can be only one active filter per symbol. Adding new filtered symbol with the same symbol but different filter removes the old one from subscription, adds the new one, and {\itshape notifies} Observable\+Subscription\+Change\+Listener {\itshape about this subscription change}. The later is a special behaviour for filtered subscription symbols, because on other types of symbols (like \doxylink{struct_string_symbol}{String\+Symbol}, for example) there is no notification when replacing one symbol with the other that is "{}equal"{} to the first one. 

@@ -9,966 +9,696 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventType.hpp"{}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../IndexedEventSource.hpp"{}}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../TimeSeriesEvent.hpp"{}}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_8hpp}{"{}CandleSymbol.hpp"{}}}}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventType.hpp"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../IndexedEventSource.hpp"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../TimeSeriesEvent.hpp"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_8hpp}{"{}CandleSymbol.hpp"{}}}}
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00024\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
 \DoxyCodeLine{00025\ }
-\DoxyCodeLine{00026\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Candle\ event\ with\ open,\ high,\ low,\ close\ prices\ and\ other\ information\ for\ a\ specific\ period.}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ Candles\ are\ build\ with\ a\ specified\ CandlePeriod\ using\ a\ specified\ CandlePrice\ type\ with\ a\ data\ taken\ from\ the}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ specified\ CandleExchange\ from\ the\ specified\ CandleSession\ with\ further\ details\ of\ aggregation\ provided\ by}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ CandleAlignment.}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ <p>\ Event\ symbol\ of\ the\ candle\ is\ represented\ with\ CandleSymbol\ class.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Since\ the\ \`{}Candle\ is\ a\ time-\/series\ event,\ it\ is\ typically\ subscribed\ to\ using\ DXFeedTimeSeriesSubscription\ class}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ that\ handles\ the\ necessarily\ wrapping\ of\ the\ symbol\ into\ TimeSeriesSubscriptionSymbol\ to\ specify\ a\ subscription}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ time\ range.}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ Candle\ event\ with\ open,\ high,\ low,\ close\ prices\ and\ other\ information\ for\ a\ specific\ period.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ Candles\ are\ build\ with\ a\ specified\ CandlePeriod\ using\ a\ specified\ CandlePrice\ type\ with\ a\ data\ taken\ from\ the}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ specified\ CandleExchange\ from\ the\ specified\ CandleSession\ with\ further\ details\ of\ aggregation\ provided\ by}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ CandleAlignment.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <p>\ Event\ symbol\ of\ the\ candle\ is\ represented\ with\ CandleSymbol\ class.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ Since\ the\ \`{}Candle\ is\ a\ time-\/series\ event,\ it\ is\ typically\ subscribed\ to\ using\ DXFeedTimeSeriesSubscription\ class}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ that\ handles\ the\ necessarily\ wrapping\ of\ the\ symbol\ into\ TimeSeriesSubscriptionSymbol\ to\ specify\ a\ subscription}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ time\ range.}}
 \DoxyCodeLine{00038\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ Some\ candle\ sources\ provide\ a\ consistent\ view\ of\ the\ set\ of\ known\ candles.}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ Candle::getEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ The\ logic\ behind\ this\ property\ is\ detailed\ in\ IndexedEvent\ class\ documentation.}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ Multiple\ event\ sources\ for\ the\ same\ symbol\ are\ not\ supported\ for\ candles,\ thus\ @ref\ Candle::getSource()\ "{}source"{}}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ property\ is\ always\ @ref\ IndexedEventSource::DEFAULT\ "{}DEFAULT"{}.}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ <p>TimeSeriesEventModel\ class\ handles\ all\ the\ snapshot\ and\ transaction\ logic\ and\ conveniently\ represents\ a\ list}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ *\ current\ of\ time-\/series\ events\ order\ by\ their\ @ref\ Candle::getTime()\ "{}time"{}.}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ It\ relies\ on\ the\ code\ of\ AbstractIndexedEventModel\ to\ handle\ this\ logic.}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ Use\ the\ source\ code\ of\ AbstractIndexedEventModel\ for\ clarification\ on\ transactions\ and\ snapshot\ logic.}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ <h3>Publishing\ Candles</h3>}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ Some\ candle\ sources\ provide\ a\ consistent\ view\ of\ the\ set\ of\ known\ candles.}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ Candle::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ The\ logic\ behind\ this\ property\ is\ detailed\ in\ IndexedEvent\ class\ documentation.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ Multiple\ event\ sources\ for\ the\ same\ symbol\ are\ not\ supported\ for\ candles,\ thus\ @ref\ Candle::getSource()\ "{}source"{}}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ property\ is\ always\ @ref\ IndexedEventSource::DEFAULT\ "{}DEFAULT"{}.}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ <p>TimeSeriesEventModel\ class\ handles\ all\ the\ snapshot\ and\ transaction\ logic\ and\ conveniently\ represents\ a\ list}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ current\ of\ time-\/series\ events\ order\ by\ their\ @ref\ Candle::getTime()\ "{}time"{}.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ It\ relies\ on\ the\ code\ of\ AbstractIndexedEventModel\ to\ handle\ this\ logic.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ Use\ the\ source\ code\ of\ AbstractIndexedEventModel\ for\ clarification\ on\ transactions\ and\ snapshot\ logic.}}
 \DoxyCodeLine{00051\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ Publishing\ of\ candle\ events\ follows\ the\ general\ rules\ explained\ in\ TimeSeriesEvent\ class\ documentation.}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ <h3>Publishing\ Candles</h3>}}
 \DoxyCodeLine{00053\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ Publishing\ of\ candle\ events\ follows\ the\ general\ rules\ explained\ in\ TimeSeriesEvent\ class\ documentation.}}
 \DoxyCodeLine{00055\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ record\ \`{}TradeHistory`\ for\ tick\ candles\ with\ CandlePeriod::TICK,}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ *\ records\ \`{}Trade.<period>`\ for\ a\ certain\ set\ of\ popular\ periods,\ and\ QDS\ record\ \`{}Candle`\ for\ arbitrary\ custom}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ periods,\ with\ a\ set\ of\ \`{}Candle\{<attributes>\}`\ records\ for\ a\ popular\ combinations\ of\ custom\ candle\ symbol\ attributes}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ like\ CandlePrice\ for\ an\ efficient\ support\ of\ bid-\/ask\ charting.}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00061\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Candle\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ EventTypeWithSymbol<CandleSymbol>,}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_time_series_event}{TimeSeriesEvent}},}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}\ \{}
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ SECONDS\_SHIFT\ =\ 32ULL;}
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_SHIFT\ =\ 22ULL;}
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_MASK\ =\ 0x3ffULL;}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{/*}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ EventFlags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ 31..7\ \ \ \ 6\ \ \ \ 5\ \ \ \ 4\ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ \ |\ SM\ |\ \ \ \ |\ SS\ |\ SE\ |\ SB\ |\ RE\ |\ TX\ |}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ record\ \`{}TradeHistory`\ for\ tick\ candles\ with\ CandlePeriod::TICK,}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ records\ \`{}Trade.<period>`\ for\ a\ certain\ set\ of\ popular\ periods,\ and\ QDS\ record\ \`{}Candle`\ for\ arbitrary\ custom}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ periods,\ with\ a\ set\ of\ \`{}Candle\{<attributes>\}`\ records\ for\ a\ popular\ combinations\ of\ custom\ candle\ symbol\ attributes}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ like\ CandlePrice\ for\ an\ efficient\ support\ of\ bid-\/ask\ charting.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00063\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Candle\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ EventTypeWithSymbol<CandleSymbol>,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_time_series_event}{TimeSeriesEvent}},}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_lasting_event}{LastingEvent}}\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ SECONDS\_SHIFT\ =\ 32ULL;}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_SHIFT\ =\ 22ULL;}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_MASK\ =\ 0x3ffULL;}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ EventFlags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ 31..7\ \ \ \ 6\ \ \ \ 5\ \ \ \ 4\ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
 \DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00078\ \ \ \ \ std::optional<CandleSymbol>\ eventSymbol\_\{\};}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ \ |\ SM\ |\ \ \ \ |\ SS\ |\ SE\ |\ SB\ |\ RE\ |\ TX\ |}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ */}}
 \DoxyCodeLine{00079\ }
-\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ dxfg\_event\_type\_t\ event\_type;}}
-\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ const\ char\ *event\_symbol;}}
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ std::int64\_t\ eventTime\{\};}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ std::int32\_t\ eventFlags\{\};}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ std::int64\_t\ index\{\};}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ std::int64\_t\ count\{\};}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ open\ =\ math::NaN;}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ high\ =\ math::NaN;}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ low\ =\ math::NaN;}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ close\ =\ math::NaN;}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ volume\ =\ math::NaN;}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ vwap\ =\ math::NaN;}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ bidVolume\ =\ math::NaN;}
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ askVolume\ =\ math::NaN;}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ impVolatility\ =\ math::NaN;}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ openInterest\ =\ math::NaN;}
-\DoxyCodeLine{00097\ \ \ \ \ \};}
-\DoxyCodeLine{00098\ }
-\DoxyCodeLine{00099\ \ \ \ \ Data\ data\_\{\};}
+\DoxyCodeLine{00080\ \ \ \ \ std::optional<CandleSymbol>\ eventSymbol\_\{\};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ dxfg\_event\_type\_t\ event\_type;}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ const\ char\ *event\_symbol;}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ std::int64\_t\ eventTime\{\};}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ std::int32\_t\ eventFlags\{\};}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ std::int64\_t\ index\{\};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ std::int64\_t\ count\{\};}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ open\ =\ math::NaN;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ high\ =\ math::NaN;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ low\ =\ math::NaN;}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ close\ =\ math::NaN;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ volume\ =\ math::NaN;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ vwap\ =\ math::NaN;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ bidVolume\ =\ math::NaN;}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ askVolume\ =\ math::NaN;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ impVolatility\ =\ math::NaN;}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ openInterest\ =\ math::NaN;}
+\DoxyCodeLine{00099\ \ \ \ \ \};}
 \DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Candle>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_candle_ae0e69d73bdb3e11f674fe6eb03916b72}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ae0e69d73bdb3e11f674fe6eb03916b72}{override}};}
+\DoxyCodeLine{00101\ \ \ \ \ Data\ data\_\{\};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Candle\ object}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<Candle>;}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Candle\ object}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<Candle>;}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{class_candle_a69d6a0eed0322a5be1565e8554badb63}{TYPE}};}
 \DoxyCodeLine{00116\ }
 \DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ Maximum\ allowed\ sequence\ value.}}
 \DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::setSequence()}}
 \DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a4b34219ad5ccc101757c86dfc4c0ab6a}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ \mbox{\hyperlink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\_SEQUENCE}}\ =\ (1U\ <<\ 22U)\ -\/\ 1U;}
 \DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ Maximum\ allowed\ sequence\ value.}}
-\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::setSequence()}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a4c0eb85a7751edcae5abe9b603f821e5}{MAX\_SEQUENCE}}\ =\ (1U\ <<\ 22U)\ -\/\ 1U;}
-\DoxyCodeLine{00131\ }
-\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Candle\ object}}
-\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<Candle>;}
-\DoxyCodeLine{00134\ }
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Candle\ object}}
-\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<Candle>;}
-\DoxyCodeLine{00137\ }
-\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
-\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a85b951cf29c07be1a41fddebb07f03f3}{TYPE}};}
-\DoxyCodeLine{00140\ }
-\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ candle\ with\ default\ values.}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00144\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_candle_a67cc9763fda81f6ce8cb1078a3a871d3}{Candle}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ candle\ with\ the\ specified\ candle\ event\ symbol.}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ candle\ event\ symbol.}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a8a20e127796da60258ea6d990ebcea61}{Candle}}(\mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{CandleSymbol}}\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a8a20e127796da60258ea6d990ebcea61}{eventSymbol\_}}\{\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a20e127796da60258ea6d990ebcea61}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a20e127796da60258ea6d990ebcea61}{move}}(\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a20e127796da60258ea6d990ebcea61}{eventSymbol}})\}\ \{}
-\DoxyCodeLine{00151\ \ \ \ \ \}}
-\DoxyCodeLine{00152\ }
-\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ dxfcpp::CandleSymbol::NUL\ (`dxfcpp::CandleSymbol\{"{}<null>"{}\}`)}}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{class_candle_a0db9deb31c7f27837ab222dcf480a149}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{class_candle_a9e2e74f855856be1427b763739a8d7aa}{toGraal}}()\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_candle_a9e2e74f855856be1427b763739a8d7aa}{override}};}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_ad257d0d6eb4904b373bb93034db307ac}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ candle\ with\ default\ values.}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{class_candle_a5de5ae3a9a961935de54bfaa013439d9}{Candle}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ candle\ with\ the\ specified\ candle\ event\ symbol.}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ candle\ event\ symbol.}}
 \DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{CandleSymbol}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_af01cf5f6c103644bf46142bbd6e345cc}{getEventSymbol}}()\ \textcolor{keyword}{const}\&\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_af01cf5f6c103644bf46142bbd6e345cc}{override}}\ \{}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!eventSymbol\_)\ \{}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{CandleSymbol}}::NUL;}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_candle_a3b1381b3b7be7f27b1c0d81378c62c6e}{Candle}}(\mbox{\hyperlink{struct_candle_symbol}{CandleSymbol}}\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{class_candle_a3b1381b3b7be7f27b1c0d81378c62c6e}{eventSymbol\_}}\{\mbox{\hyperlink{class_candle_a3b1381b3b7be7f27b1c0d81378c62c6e}{std}}::\mbox{\hyperlink{class_candle_a3b1381b3b7be7f27b1c0d81378c62c6e}{move}}(\mbox{\hyperlink{class_candle_a3b1381b3b7be7f27b1c0d81378c62c6e}{eventSymbol}})\}\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{comment}{//\ EventType\ methods}}
 \DoxyCodeLine{00162\ }
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_.value();}
-\DoxyCodeLine{00164\ \ \ \ \ \}}
-\DoxyCodeLine{00165\ }
-\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ \`{}std::nullopt`.}}
-\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ab17e5610a2a84ef6c3df26c70b54ea86}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_candle_ab17e5610a2a84ef6c3df26c70b54ea86}{optional}}<\mbox{\hyperlink{classdxfcpp_1_1_candle_ab17e5610a2a84ef6c3df26c70b54ea86}{CandleSymbol}}>\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_ab17e5610a2a84ef6c3df26c70b54ea86}{getEventSymbolOpt}}()\ \textcolor{keyword}{const}\&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_;}
-\DoxyCodeLine{00173\ \ \ \ \ \}}
-\DoxyCodeLine{00174\ }
-\DoxyCodeLine{00175\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{setEventSymbol}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{CandleSymbol}}\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{override}}\ \{}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ eventSymbol\_\ =\ eventSymbol;}
-\DoxyCodeLine{00178\ \ \ \ \ \}}
-\DoxyCodeLine{00179\ }
-\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ candle.}}
-\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00186\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a8e930ea0c14e1a3ca7802563fc49dfd2}{withEventSymbol}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{CandleSymbol}}\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{setEventSymbol}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{(}}eventSymbol\mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{)}};}
-\DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00190\ \ \ \ \ \}}
-\DoxyCodeLine{00191\ }
-\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
-\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00201\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_aa839a130e1c164edefea564bb5df8d4a}{withEventSymbolShared}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol}{CandleSymbol}}\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{setEventSymbol}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{(}}eventSymbol\mbox{\hyperlink{classdxfcpp_1_1_candle_a33b6f27e8fa586b23741109d9dc83bd9}{)}};}
-\DoxyCodeLine{00203\ }
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ dxfcpp::CandleSymbol::NUL\ (`dxfcpp::CandleSymbol\{"{}<null>"{}\}`)}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_symbol}{CandleSymbol}}\ \&\mbox{\hyperlink{class_candle_a83aa759aa93bf8c2a83c51d12337a76b}{getEventSymbol}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_candle_a83aa759aa93bf8c2a83c51d12337a76b}{override}}\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!eventSymbol\_)\ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_candle_symbol}{CandleSymbol}}::NUL;}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_.value();}
+\DoxyCodeLine{00174\ \ \ \ \ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ \`{}std::nullopt`.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_candle_a6d2da6d33dd41a2013a247650a841589}{std}}::\mbox{\hyperlink{class_candle_a6d2da6d33dd41a2013a247650a841589}{optional}}<\mbox{\hyperlink{class_candle_a6d2da6d33dd41a2013a247650a841589}{CandleSymbol}}>\ \&\mbox{\hyperlink{class_candle_a6d2da6d33dd41a2013a247650a841589}{getEventSymbolOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_;}
+\DoxyCodeLine{00183\ \ \ \ \ \}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{setEventSymbol}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_symbol}{CandleSymbol}}\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{override}}\ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ eventSymbol\_\ =\ eventSymbol;}
+\DoxyCodeLine{00188\ \ \ \ \ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ candle.}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00196\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_aa277e94136b5e02ff9eae40d15d567d2}{withEventSymbol}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_symbol}{CandleSymbol}}\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{::}}\mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{setEventSymbol}}\mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{(}}eventSymbol\mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{)}};}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00200\ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00203\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_candle_ad497043cf7e1de9e0a285a835bb2dd05}{getEventTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_candle_ad497043cf7e1de9e0a285a835bb2dd05}{override}}\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.eventTime;}
 \DoxyCodeLine{00205\ \ \ \ \ \}}
 \DoxyCodeLine{00206\ }
 \DoxyCodeLine{00207\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00208\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a21c183e08ed2396ae0dea46bafd58793}{getEventTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a21c183e08ed2396ae0dea46bafd58793}{override}}\ \{}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.eventTime;}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}{setEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}{override}}\ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ data\_.eventTime\ =\ eventTime;}
 \DoxyCodeLine{00210\ \ \ \ \ \}}
 \DoxyCodeLine{00211\ }
-\DoxyCodeLine{00212\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{setEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{override}}\ \{}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ data\_.eventTime\ =\ eventTime;}
-\DoxyCodeLine{00215\ \ \ \ \ \}}
-\DoxyCodeLine{00216\ }
-\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ candle.}}
-\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
-\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00224\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_af5fbd115ede99a4910b2e3a61a59c05f}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{setEventTime}}\mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{(}}eventTime\mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{)}};}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ candle.}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00219\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_aea048a32fb1e63843aa89ea8ead57b7a}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}{::}}\mbox{\hyperlink{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}{setEventTime}}\mbox{\hyperlink{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}{(}}eventTime\mbox{\hyperlink{class_candle_a7b899baf6e140e1b3d75a12c5d34340b}{)}};}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00223\ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{//\ IndexedEvent\ methods}}
 \DoxyCodeLine{00226\ }
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00228\ \ \ \ \ \}}
-\DoxyCodeLine{00229\ }
-\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
-\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
-\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00240\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a649fc3afa31d388e8fc31441003b9441}{withEventTimeShared}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{setEventTime}}\mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{(}}eventTime\mbox{\hyperlink{classdxfcpp_1_1_candle_afcd41e477d87e63d3cf754ea8392330b}{)}};}
-\DoxyCodeLine{00242\ }
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00244\ \ \ \ \ \}}
-\DoxyCodeLine{00245\ }
-\DoxyCodeLine{00246\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a33d6146c9e07a9e4185e5967eae094f6}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a33d6146c9e07a9e4185e5967eae094f6}{override}};}
-\DoxyCodeLine{00247\ }
-\DoxyCodeLine{00248\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00249\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a7ba850252e025efbd427207c0bfc7de4}{getEventFlags}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.eventFlags;}
-\DoxyCodeLine{00251\ \ \ \ \ \}}
-\DoxyCodeLine{00252\ }
-\DoxyCodeLine{00253\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00254\ \ \ \ \ EventFlagsMask\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a60cdc12148d5eb165d5f820b573da973}{getEventFlagsMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask(data\_.eventFlags);}
-\DoxyCodeLine{00256\ \ \ \ \ \}}
-\DoxyCodeLine{00257\ }
-\DoxyCodeLine{00258\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{setEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ eventFlags;}
-\DoxyCodeLine{00261\ \ \ \ \ \}}
-\DoxyCodeLine{00262\ }
-\DoxyCodeLine{00263\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ candle.}}
-\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
-\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00270\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a8e21b22578c9d6ddd6e531d03904372f}{withEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{setEventFlags}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{(}}eventFlags\mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{)}};}
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00228\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{class_candle_aec9692d1a464d7526280204185b6f5c5}{getEventFlags}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.eventFlags;}
+\DoxyCodeLine{00230\ \ \ \ \ \}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00233\ \ \ \ \ EventFlagsMask\ \mbox{\hyperlink{class_candle_aae006f4b6a7ad84dbc77196cb4c51df6}{getEventFlagsMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask(data\_.eventFlags);}
+\DoxyCodeLine{00235\ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a0c785244a9705023e85a7b6ec7992764}{setEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ eventFlags;}
+\DoxyCodeLine{00240\ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ candle.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00249\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a98c634370ef869ca041c1f5b1a470197}{withEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a0c785244a9705023e85a7b6ec7992764}{::}}\mbox{\hyperlink{class_candle_a0c785244a9705023e85a7b6ec7992764}{setEventFlags}}\mbox{\hyperlink{class_candle_a0c785244a9705023e85a7b6ec7992764}{(}}eventFlags\mbox{\hyperlink{class_candle_a0c785244a9705023e85a7b6ec7992764}{)}};}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00253\ \ \ \ \ \}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_abcc697094b7d051dd8bca33bb9a426d2}{setEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ \textcolor{keyword}{static\_cast}<std::int32\_t>(eventFlags\mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{.}}\mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{getMask}}\mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{(}}\mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{)}});}
+\DoxyCodeLine{00258\ \ \ \ \ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ candle.}}
+\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
+\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00267\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a830a370a776289d785a12b4c6d34237e}{withEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_abcc697094b7d051dd8bca33bb9a426d2}{::}}\mbox{\hyperlink{class_candle_abcc697094b7d051dd8bca33bb9a426d2}{setEventFlags}}\mbox{\hyperlink{class_candle_abcc697094b7d051dd8bca33bb9a426d2}{(}}eventFlags\mbox{\hyperlink{class_candle_abcc697094b7d051dd8bca33bb9a426d2}{)}};}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00271\ \ \ \ \ \}}
 \DoxyCodeLine{00272\ }
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00274\ \ \ \ \ \}}
-\DoxyCodeLine{00275\ }
-\DoxyCodeLine{00276\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags.}}
-\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00286\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ac93d88fc96dcfa32bbb372e8094f1bda}{withEventFlagsShared}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{setEventFlags}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{(}}eventFlags\mbox{\hyperlink{classdxfcpp_1_1_candle_ae5bc70615bb887021c67425225b32317}{)}};}
-\DoxyCodeLine{00288\ }
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00290\ \ \ \ \ \}}
-\DoxyCodeLine{00291\ }
-\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{setEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ \textcolor{keyword}{static\_cast}<std::int32\_t>(eventFlags\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{getMask}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{)}});}
-\DoxyCodeLine{00295\ \ \ \ \ \}}
-\DoxyCodeLine{00296\ }
-\DoxyCodeLine{00297\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ the\ current\ candle.}}
-\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
-\DoxyCodeLine{00302\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00303\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00304\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a68e18262bf0abbbfcc1aff07ea8e72a3}{withEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{setEventFlags}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{(}}eventFlags\mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{)}};}
-\DoxyCodeLine{00306\ }
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00308\ \ \ \ \ \}}
-\DoxyCodeLine{00309\ }
-\DoxyCodeLine{00310\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ transactional\ event\ flags\ and\ returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ See\ EventFlag\ "{}Event\ Flags"{}\ section.}}
-\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventFlags\ transactional\ event\ flags'\ mask.}}
-\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00320\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a9b818debc9b6c8f419143b538f3aa608}{withEventFlagsShared}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{setEventFlags}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{(}}eventFlags\mbox{\hyperlink{classdxfcpp_1_1_candle_a22c1e309f1a8642dcbf4f7b93ab96a34}{)}};}
-\DoxyCodeLine{00322\ }
-\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00324\ \ \ \ \ \}}
-\DoxyCodeLine{00325\ }
-\DoxyCodeLine{00326\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00327\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{setIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ data\_.index\ =\ index;}
-\DoxyCodeLine{00329\ \ \ \ \ \}}
-\DoxyCodeLine{00330\ }
-\DoxyCodeLine{00331\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ event.}}
-\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd}{setIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ data\_.index\ =\ index;}
+\DoxyCodeLine{00276\ \ \ \ \ \}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ candle.}}
+\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00285\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a9ebcfa6eafbf889d83a68dac63e9ed1c}{withIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd}{::}}\mbox{\hyperlink{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd}{setIndex}}\mbox{\hyperlink{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd}{(}}index\mbox{\hyperlink{class_candle_ac9b2ad3b7e8d70b4a7c326d36931e3dd}{)}};}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00289\ \ \ \ \ \}}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00292\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_candle_ab33b73bda44691319d65a95b03113cea}{getIndex}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.index;}
+\DoxyCodeLine{00294\ \ \ \ \ \}}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ timestamp\ of\ the\ event\ in\ milliseconds.}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ @return\ timestamp\ of\ the\ event\ in\ milliseconds}}
+\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00301\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_candle_a2a229f6b56a57a9277bac05388466ebc}{getTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sar(data\_.index,\ SECONDS\_SHIFT)\ *\ 1000\ +\ andOp(sar(data\_.index,\ MILLISECONDS\_SHIFT),\ MILLISECONDS\_MASK);}
+\DoxyCodeLine{00303\ \ \ \ \ \}}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ timestamp\ of\ the\ event\ in\ milliseconds.}}
+\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ timestamp\ of\ the\ event\ in\ milliseconds.}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::getTime()}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a0beb35aafb7331ac697efae16e067132}{setTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(orOp(sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getSecondsFromTime(time)),\ SECONDS\_SHIFT),}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getMillisFromTime(time)),\ MILLISECONDS\_SHIFT)),}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_candle_aec665a2630f059993d3108da27d13af6}{getSequence}}\mbox{\hyperlink{class_candle_aec665a2630f059993d3108da27d13af6}{(}}\mbox{\hyperlink{class_candle_aec665a2630f059993d3108da27d13af6}{)}});}
+\DoxyCodeLine{00315\ \ \ \ \ \}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ timestamp\ of\ the\ event\ in\ milliseconds.}}
+\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00320\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00321\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ timestamp\ of\ the\ event\ in\ milliseconds.}}
+\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00324\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_ad539e4a7557dbca53cea01c1aca40170}{withTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a0beb35aafb7331ac697efae16e067132}{::}}\mbox{\hyperlink{class_candle_a0beb35aafb7331ac697efae16e067132}{setTime}}\mbox{\hyperlink{class_candle_a0beb35aafb7331ac697efae16e067132}{(}}time\mbox{\hyperlink{class_candle_a0beb35aafb7331ac697efae16e067132}{)}};}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00328\ \ \ \ \ \}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00331\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ sequence\ number\ of\ this\ event\ to\ distinguish\ events\ that\ have\ the\ same\ @ref\ Candle::getTime()\ "{}time"{}.}}
+\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ *\ This\ sequence\ number\ does\ not\ have\ to\ be\ unique\ and\ does\ not\ need\ to\ be\ sequential.}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ Sequence\ can\ range\ from\ 0\ to\ Candle::MAX\_SEQUENCE.}}
 \DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ candle.}}
-\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00338\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a7f211c1e5f3fc6fd2d165c15b4ade194}{withIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{setIndex}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{(}}index\mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{)}};}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ sequence\ number\ of\ this\ event}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00337\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{class_candle_aec665a2630f059993d3108da27d13af6}{getSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(andOp(data\_.index,\ \mbox{\hyperlink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\_SEQUENCE}}));}
+\DoxyCodeLine{00339\ \ \ \ \ \}}
 \DoxyCodeLine{00340\ }
-\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00342\ \ \ \ \ \}}
-\DoxyCodeLine{00343\ }
-\DoxyCodeLine{00344\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ event.}}
-\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00347\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00348\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00349\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00350\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ unique\ per-\/symbol\ index\ of\ this\ candle.}}
-\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00354\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_aa4a32f19f60aa0158720c252841a0e39}{withIndexShared}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{setIndex}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{(}}index\mbox{\hyperlink{classdxfcpp_1_1_candle_a5ff971ff502be1034f5aad98d418d87c}{)}};}
-\DoxyCodeLine{00356\ }
-\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00358\ \ \ \ \ \}}
-\DoxyCodeLine{00359\ }
-\DoxyCodeLine{00360\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00361\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a58d8460e2fd9a808dba96f293764156d}{getIndex}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.index;}
-\DoxyCodeLine{00363\ \ \ \ \ \}}
-\DoxyCodeLine{00364\ }
-\DoxyCodeLine{00365\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00366\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00367\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00368\ \textcolor{comment}{\ \ \ \ \ *\ @return\ timestamp\ of\ the\ event\ in\ milliseconds}}
-\DoxyCodeLine{00369\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00370\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a7439fe39a66e26ec0d4ae5aacd632f3a}{getTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sar(data\_.index,\ SECONDS\_SHIFT)\ *\ 1000\ +\ andOp(sar(data\_.index,\ MILLISECONDS\_SHIFT),\ MILLISECONDS\_MASK);}
-\DoxyCodeLine{00372\ \ \ \ \ \}}
-\DoxyCodeLine{00373\ }
-\DoxyCodeLine{00374\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00376\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00377\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00378\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::getTime()}}
-\DoxyCodeLine{00379\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00380\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{setTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(orOp(sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getSecondsFromTime(time)),\ SECONDS\_SHIFT),}
-\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getMillisFromTime(time)),\ MILLISECONDS\_SHIFT)),}
-\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_candle_ac248cdf8f7147a99c57adf3242d930c9}{getSequence}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ac248cdf8f7147a99c57adf3242d930c9}{(}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ac248cdf8f7147a99c57adf3242d930c9}{)}});}
-\DoxyCodeLine{00384\ \ \ \ \ \}}
-\DoxyCodeLine{00385\ }
-\DoxyCodeLine{00386\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00389\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00390\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00391\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00392\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00393\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_ad59cdba3cd818e514a7ba350fe0452e1}{withTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{setTime}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{(}}time\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{)}};}
-\DoxyCodeLine{00395\ }
-\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00397\ \ \ \ \ \}}
-\DoxyCodeLine{00398\ }
-\DoxyCodeLine{00399\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00400\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00404\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00405\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00406\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00407\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00409\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a22c429db708c3e90f38d95c73b84c9f6}{withTimeShared}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{setTime}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{(}}time\mbox{\hyperlink{classdxfcpp_1_1_candle_a8a6221e044cd6dda2e4fbcd57296c9f2}{)}};}
-\DoxyCodeLine{00411\ }
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00413\ \ \ \ \ \}}
-\DoxyCodeLine{00414\ }
-\DoxyCodeLine{00415\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ sequence\ number\ of\ this\ event\ to\ distinguish\ events\ that\ have\ the\ same\ @ref\ Candle::getTime()\ "{}time"{}.}}
-\DoxyCodeLine{00417\ \textcolor{comment}{\ \ \ \ \ *\ This\ sequence\ number\ does\ not\ have\ to\ be\ unique\ and\ does\ not\ need\ to\ be\ sequential.}}
-\DoxyCodeLine{00418\ \textcolor{comment}{\ \ \ \ \ *\ Sequence\ can\ range\ from\ 0\ to\ Candle::MAX\_SEQUENCE.}}
-\DoxyCodeLine{00419\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00420\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ sequence\ number\ of\ this\ event}}
-\DoxyCodeLine{00421\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00422\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ac248cdf8f7147a99c57adf3242d930c9}{getSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(andOp(data\_.index,\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a4c0eb85a7751edcae5abe9b603f821e5}{MAX\_SEQUENCE}}));}
-\DoxyCodeLine{00424\ \ \ \ \ \}}
-\DoxyCodeLine{00425\ }
-\DoxyCodeLine{00426\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00427\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ Candle::getSequence()\ "{}sequence\ number"{}\ of\ this\ event.}}
-\DoxyCodeLine{00428\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00429\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
-\DoxyCodeLine{00430\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::getSequence()}}
-\DoxyCodeLine{00431\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00432\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{setSequence}}(\textcolor{keywordtype}{int}\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling\ [EN-\/8232]}}
-\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ sequence\ <=\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a4c0eb85a7751edcae5abe9b603f821e5}{MAX\_SEQUENCE}});}
-\DoxyCodeLine{00435\ }
-\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(andOp(data\_.index,\ \string~\mbox{\hyperlink{classdxfcpp_1_1_candle_a4c0eb85a7751edcae5abe9b603f821e5}{MAX\_SEQUENCE}}),\ sequence);}
-\DoxyCodeLine{00437\ \ \ \ \ \}}
-\DoxyCodeLine{00438\ }
-\DoxyCodeLine{00439\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00440\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ Candle::getSequence()\ "{}sequence\ number"{}\ of\ this\ event.}}
-\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00442\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00443\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
-\DoxyCodeLine{00444\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00445\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::getSequence()}}
-\DoxyCodeLine{00446\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00447\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a292ce0d93c00fc748fe489f897435480}{withSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{setSequence}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{(}}sequence\mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{)}};}
-\DoxyCodeLine{00449\ }
-\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00451\ \ \ \ \ \}}
-\DoxyCodeLine{00452\ }
-\DoxyCodeLine{00453\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00454\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ Candle::getSequence()\ "{}sequence\ number"{}\ of\ this\ event.}}
-\DoxyCodeLine{00455\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00456\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00457\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00458\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00459\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00460\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
-\DoxyCodeLine{00461\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00462\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::getSequence()}}
-\DoxyCodeLine{00463\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00464\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a9b1f4b4f14fe38b0d464ac957fe194c1}{withSequenceShared}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{setSequence}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{(}}sequence\mbox{\hyperlink{classdxfcpp_1_1_candle_a10955a366bf9e8e24e36a21f0d614265}{)}};}
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ Candle::getSequence()\ "{}sequence\ number"{}\ of\ this\ event.}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::getSequence()}}
+\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument\ if\ sequence\ is\ below\ zero\ or\ above\ ::MAX\_SEQUENCE.}}
+\DoxyCodeLine{00347\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00348\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a01d8327943ff021e138e273153e218b2}{setSequence}}(std::int32\_t\ sequence)\ \{}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ \textcolor{keyword}{static\_cast}<std::uint32\_t>(sequence)\ <=\ \mbox{\hyperlink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\_SEQUENCE}});}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sequence\ <\ 0\ ||\ \textcolor{keyword}{static\_cast}<std::uint32\_t>(sequence)\ >\ \mbox{\hyperlink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\_SEQUENCE}})\ \{}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Invalid\ value\ for\ argument\ \`{}sequence`:\ "{}}\ +\ std::to\_string(sequence));}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(andOp(data\_.index,\ \string~\mbox{\hyperlink{class_candle_add4a1c1310c2fbda3ca1fa89796014a2}{MAX\_SEQUENCE}}),\ sequence);}
+\DoxyCodeLine{00356\ \ \ \ \ \}}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00359\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ Candle::getSequence()\ "{}sequence\ number"{}\ of\ this\ event.}}
+\DoxyCodeLine{00360\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00361\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00362\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00363\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00364\ \textcolor{comment}{\ \ \ \ \ *\ @see\ Candle::getSequence()}}
+\DoxyCodeLine{00365\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00366\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a0a2b76832d515cdc1e3b624a3c0818ce}{withSequence}}(std::int32\_t\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a01d8327943ff021e138e273153e218b2}{::}}\mbox{\hyperlink{class_candle_a01d8327943ff021e138e273153e218b2}{setSequence}}\mbox{\hyperlink{class_candle_a01d8327943ff021e138e273153e218b2}{(}}sequence\mbox{\hyperlink{class_candle_a01d8327943ff021e138e273153e218b2}{)}};}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00370\ \ \ \ \ \}}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
+\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
+\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00376\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_candle_a7c2b131adebafb027432b04cf51db2a8}{getCount}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.count;}
+\DoxyCodeLine{00378\ \ \ \ \ \}}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
+\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ Total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00384\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_af1758819e858faf388878fb885737ec4}{setCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ data\_.count\ =\ count;}
+\DoxyCodeLine{00386\ \ \ \ \ \}}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00389\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
+\DoxyCodeLine{00390\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00391\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00392\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ Total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
+\DoxyCodeLine{00393\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00395\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a1e53573765534cea0e105462317ce5f5}{withCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_af1758819e858faf388878fb885737ec4}{::}}\mbox{\hyperlink{class_candle_af1758819e858faf388878fb885737ec4}{setCount}}\mbox{\hyperlink{class_candle_af1758819e858faf388878fb885737ec4}{(}}count\mbox{\hyperlink{class_candle_af1758819e858faf388878fb885737ec4}{)}};}
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00399\ \ \ \ \ \}}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00401\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00402\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ first\ (open)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ first\ (open)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00404\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00405\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_a7a224fcc38a8a89aeec75af0872cb058}{getOpen}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.open;}
+\DoxyCodeLine{00407\ \ \ \ \ \}}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ first\ (open)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ @param\ open\ The\ first\ (open)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00413\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe}{setOpen}}(\textcolor{keywordtype}{double}\ open)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ data\_.open\ =\ open;}
+\DoxyCodeLine{00415\ \ \ \ \ \}}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00418\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ first\ (open)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00419\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00420\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00421\ \textcolor{comment}{\ \ \ \ \ *\ @param\ open\ The\ first\ (open)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00422\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00423\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00424\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a14629a4de043b21cf4c66202948285dd}{withOpen}}(\textcolor{keywordtype}{double}\ open)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe}{::}}\mbox{\hyperlink{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe}{setOpen}}\mbox{\hyperlink{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe}{(}}open\mbox{\hyperlink{class_candle_a5ba36e571c30b032e8d9c7256d81d8fe}{)}};}
+\DoxyCodeLine{00426\ }
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00428\ \ \ \ \ \}}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00431\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ maximal\ (high)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00432\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ maximal\ (high)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00433\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00434\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_a892a243f64663efda25f3061a36e487b}{getHigh}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.high;}
+\DoxyCodeLine{00436\ \ \ \ \ \}}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00439\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00440\ \textcolor{comment}{\ \ \ \ \ *\ @param\ high\ The\ maximal\ (high)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00441\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00442\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146}{setHigh}}(\textcolor{keywordtype}{double}\ high)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ data\_.high\ =\ high;}
+\DoxyCodeLine{00444\ \ \ \ \ \}}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00447\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00448\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00449\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00450\ \textcolor{comment}{\ \ \ \ \ *\ @param\ high\ The\ maximal\ (high)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00451\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00452\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00453\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a16c7aa2a3411ced91272cd0aa915d5d9}{withHigh}}(\textcolor{keywordtype}{double}\ high)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146}{::}}\mbox{\hyperlink{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146}{setHigh}}\mbox{\hyperlink{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146}{(}}high\mbox{\hyperlink{class_candle_a8ddae1b4cd3a8c0b1cdcc2cee48da146}{)}};}
+\DoxyCodeLine{00455\ }
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00457\ \ \ \ \ \}}
+\DoxyCodeLine{00458\ }
+\DoxyCodeLine{00459\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00460\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ minimal\ (low)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00461\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ minimal\ (low)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00462\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00463\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_a9eb29260eacf0af29eb74e0e081bcb21}{getLow}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.low;}
+\DoxyCodeLine{00465\ \ \ \ \ \}}
 \DoxyCodeLine{00466\ }
-\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00468\ \ \ \ \ \}}
-\DoxyCodeLine{00469\ }
-\DoxyCodeLine{00470\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
-\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
-\DoxyCodeLine{00473\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00474\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ae2288dfaadfc8f1796b79b229e5bc7b1}{getCount}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.count;}
-\DoxyCodeLine{00476\ \ \ \ \ \}}
-\DoxyCodeLine{00477\ }
-\DoxyCodeLine{00478\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00479\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
-\DoxyCodeLine{00480\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ Total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
+\DoxyCodeLine{00467\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00468\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00469\ \textcolor{comment}{\ \ \ \ \ *\ @param\ low\ The\ minimal\ (low)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00470\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00471\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_ab9deb19d4662af654b9f5eade2ed7301}{setLow}}(\textcolor{keywordtype}{double}\ low)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ data\_.low\ =\ low;}
+\DoxyCodeLine{00473\ \ \ \ \ \}}
+\DoxyCodeLine{00474\ }
+\DoxyCodeLine{00475\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00476\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00477\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00478\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00479\ \textcolor{comment}{\ \ \ \ \ *\ @param\ low\ The\ minimal\ (low)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00480\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
 \DoxyCodeLine{00481\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00482\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{setCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ data\_.count\ =\ count;}
-\DoxyCodeLine{00484\ \ \ \ \ \}}
-\DoxyCodeLine{00485\ }
-\DoxyCodeLine{00486\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00487\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
-\DoxyCodeLine{00488\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00489\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00490\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ Total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
-\DoxyCodeLine{00491\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00492\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00493\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_ac737823874e7b1cd759da3d7a37cf028}{withCount}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{setCount}}\mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{(}}count\mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{)}};}
+\DoxyCodeLine{00482\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_aa24c939cd2e7026b87b0e049781469c9}{withLow}}(\textcolor{keywordtype}{double}\ low)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_ab9deb19d4662af654b9f5eade2ed7301}{::}}\mbox{\hyperlink{class_candle_ab9deb19d4662af654b9f5eade2ed7301}{setLow}}\mbox{\hyperlink{class_candle_ab9deb19d4662af654b9f5eade2ed7301}{(}}low\mbox{\hyperlink{class_candle_ab9deb19d4662af654b9f5eade2ed7301}{)}};}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00486\ \ \ \ \ \}}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00489\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ last\ (close)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00490\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ last\ (close)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00491\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00492\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_ae4559395abc3fcdb4d6fc8269ef2c075}{getClose}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.close;}
+\DoxyCodeLine{00494\ \ \ \ \ \}}
 \DoxyCodeLine{00495\ }
-\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00497\ \ \ \ \ \}}
-\DoxyCodeLine{00498\ }
-\DoxyCodeLine{00499\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00500\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
-\DoxyCodeLine{00501\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00502\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00503\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00504\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00505\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00506\ \textcolor{comment}{\ \ \ \ \ *\ @param\ count\ Total\ number\ of\ original\ trade\ (or\ quote)\ events\ in\ this\ candle.}}
-\DoxyCodeLine{00507\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00508\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00509\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a015676f3a309bb91280986d60b41a71d}{withCountShared}}(std::int64\_t\ count)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{setCount}}\mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{(}}count\mbox{\hyperlink{classdxfcpp_1_1_candle_abc0aa17fb93aff7f10bb8b117e09e393}{)}};}
-\DoxyCodeLine{00511\ }
-\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00513\ \ \ \ \ \}}
-\DoxyCodeLine{00514\ }
-\DoxyCodeLine{00515\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00516\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ first\ (open)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00517\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ first\ (open)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00518\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00519\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_afe66a59df75a68ff82ee496b0264cc65}{getOpen}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.open;}
-\DoxyCodeLine{00521\ \ \ \ \ \}}
-\DoxyCodeLine{00522\ }
-\DoxyCodeLine{00523\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00524\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ first\ (open)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00525\ \textcolor{comment}{\ \ \ \ \ *\ @param\ open\ The\ first\ (open)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00526\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00527\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{setOpen}}(\textcolor{keywordtype}{double}\ open)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ data\_.open\ =\ open;}
-\DoxyCodeLine{00529\ \ \ \ \ \}}
-\DoxyCodeLine{00530\ }
-\DoxyCodeLine{00531\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00532\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ first\ (open)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00533\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00534\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00535\ \textcolor{comment}{\ \ \ \ \ *\ @param\ open\ The\ first\ (open)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00536\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00537\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00538\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a41a013bd5dafcc90883cc60c25c7f689}{withOpen}}(\textcolor{keywordtype}{double}\ open)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{setOpen}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{(}}open\mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{)}};}
-\DoxyCodeLine{00540\ }
-\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00542\ \ \ \ \ \}}
-\DoxyCodeLine{00543\ }
-\DoxyCodeLine{00544\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00545\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ first\ (open)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00546\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00547\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00548\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00549\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00550\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00551\ \textcolor{comment}{\ \ \ \ \ *\ @param\ open\ The\ first\ (open)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00552\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00553\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00554\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a43d31939c8377f9db1bb84070db04cf6}{withOpenShared}}(\textcolor{keywordtype}{double}\ open)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{setOpen}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{(}}open\mbox{\hyperlink{classdxfcpp_1_1_candle_a89dbcbf762e119ae436a51c2f109b950}{)}};}
-\DoxyCodeLine{00556\ }
-\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00558\ \ \ \ \ \}}
-\DoxyCodeLine{00559\ }
-\DoxyCodeLine{00560\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00561\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ maximal\ (high)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00562\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ maximal\ (high)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00563\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00564\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a6661edcbaddde10f49ecae00dba7b537}{getHigh}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.high;}
-\DoxyCodeLine{00566\ \ \ \ \ \}}
-\DoxyCodeLine{00567\ }
-\DoxyCodeLine{00568\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00569\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00570\ \textcolor{comment}{\ \ \ \ \ *\ @param\ high\ The\ maximal\ (high)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00571\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00572\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{setHigh}}(\textcolor{keywordtype}{double}\ high)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ data\_.high\ =\ high;}
-\DoxyCodeLine{00574\ \ \ \ \ \}}
-\DoxyCodeLine{00575\ }
-\DoxyCodeLine{00576\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00577\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00578\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00579\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00580\ \textcolor{comment}{\ \ \ \ \ *\ @param\ high\ The\ maximal\ (high)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00581\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00582\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00583\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a85f910c01f50487758711deb76b1e47e}{withHigh}}(\textcolor{keywordtype}{double}\ high)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{setHigh}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{(}}high\mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{)}};}
-\DoxyCodeLine{00585\ }
-\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00587\ \ \ \ \ \}}
-\DoxyCodeLine{00588\ }
-\DoxyCodeLine{00589\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00590\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00591\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00592\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00593\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00594\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00595\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00596\ \textcolor{comment}{\ \ \ \ \ *\ @param\ high\ The\ maximal\ (high)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00599\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a05e40b2b2a3ac47010c1ef05e430ddec}{withHighShared}}(\textcolor{keywordtype}{double}\ high)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{setHigh}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{(}}high\mbox{\hyperlink{classdxfcpp_1_1_candle_a5f4ca4404d2e34aa5eb1a2e6eab83740}{)}};}
-\DoxyCodeLine{00601\ }
-\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00603\ \ \ \ \ \}}
-\DoxyCodeLine{00604\ }
-\DoxyCodeLine{00605\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00606\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ minimal\ (low)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00607\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ minimal\ (low)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00608\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00609\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_acb73f0f331c47819a3e4c36e96e9ffff}{getLow}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.low;}
-\DoxyCodeLine{00611\ \ \ \ \ \}}
-\DoxyCodeLine{00612\ }
-\DoxyCodeLine{00613\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00614\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00615\ \textcolor{comment}{\ \ \ \ \ *\ @param\ low\ The\ minimal\ (low)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00617\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{setLow}}(\textcolor{keywordtype}{double}\ low)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ data\_.low\ =\ low;}
-\DoxyCodeLine{00619\ \ \ \ \ \}}
-\DoxyCodeLine{00620\ }
-\DoxyCodeLine{00621\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00622\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00623\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00624\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00625\ \textcolor{comment}{\ \ \ \ \ *\ @param\ low\ The\ minimal\ (low)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00626\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00627\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00628\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a4e4828ba2bd38f1ee61edbd4ef000cc4}{withLow}}(\textcolor{keywordtype}{double}\ low)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{setLow}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{(}}low\mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{)}};}
-\DoxyCodeLine{00630\ }
-\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00632\ \ \ \ \ \}}
-\DoxyCodeLine{00633\ }
-\DoxyCodeLine{00634\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00635\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00636\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00637\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00638\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00639\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00640\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00641\ \textcolor{comment}{\ \ \ \ \ *\ @param\ low\ The\ minimal\ (low)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00642\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00643\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00644\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_aafabd8fd072261b41945061ba8b39704}{withLowShared}}(\textcolor{keywordtype}{double}\ low)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{setLow}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{(}}low\mbox{\hyperlink{classdxfcpp_1_1_candle_a5a380fac4ce7c0ac9a258058eadc10cc}{)}};}
-\DoxyCodeLine{00646\ }
-\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00648\ \ \ \ \ \}}
-\DoxyCodeLine{00649\ }
-\DoxyCodeLine{00650\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00651\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ last\ (close)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00652\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ last\ (close)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00653\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00654\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a96c7e479f4e3c417f21c0fbf68394764}{getClose}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.close;}
-\DoxyCodeLine{00656\ \ \ \ \ \}}
-\DoxyCodeLine{00657\ }
-\DoxyCodeLine{00658\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00659\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00660\ \textcolor{comment}{\ \ \ \ \ *\ @param\ close\ The\ last\ (close)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00661\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00662\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{setClose}}(\textcolor{keywordtype}{double}\ close)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ data\_.close\ =\ close;}
-\DoxyCodeLine{00664\ \ \ \ \ \}}
-\DoxyCodeLine{00665\ }
-\DoxyCodeLine{00666\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00667\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00668\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00669\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00670\ \textcolor{comment}{\ \ \ \ \ *\ @param\ close\ The\ last\ (close)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00671\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00672\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00673\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_aac7c38822e42a02fbc4b1e73b031ab6e}{withClose}}(\textcolor{keywordtype}{double}\ close)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{setClose}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{(}}close\mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{)}};}
-\DoxyCodeLine{00675\ }
-\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00677\ \ \ \ \ \}}
-\DoxyCodeLine{00678\ }
-\DoxyCodeLine{00679\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00680\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00681\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00682\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00683\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ *\ @param\ close\ The\ last\ (close)\ price\ of\ this\ candle.}}
-\DoxyCodeLine{00687\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00688\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00689\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a0153fae1da3e9221d105ff767a9a912c}{withCloseShared}}(\textcolor{keywordtype}{double}\ close)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{setClose}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{(}}close\mbox{\hyperlink{classdxfcpp_1_1_candle_ab7ac0d83ea618f05b4c8f47780d9603e}{)}};}
-\DoxyCodeLine{00691\ }
-\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00693\ \ \ \ \ \}}
-\DoxyCodeLine{00694\ }
-\DoxyCodeLine{00695\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00696\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ total\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00697\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Total\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00698\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00699\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_add955908376091ecd46e165e60c4f1c7}{getVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.volume;}
-\DoxyCodeLine{00701\ \ \ \ \ \}}
-\DoxyCodeLine{00702\ }
-\DoxyCodeLine{00703\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00704\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00705\ \textcolor{comment}{\ \ \ \ \ *\ @param\ volume\ Total\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00706\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00707\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{setVolume}}(\textcolor{keywordtype}{double}\ volume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ data\_.volume\ =\ volume;}
-\DoxyCodeLine{00709\ \ \ \ \ \}}
-\DoxyCodeLine{00710\ }
-\DoxyCodeLine{00711\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00712\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00713\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00714\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00715\ \textcolor{comment}{\ \ \ \ \ *\ @param\ volume\ Total\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00716\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00717\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00718\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a0c7f0bbf7701cfae1944123071639335}{withVolume}}(\textcolor{keywordtype}{double}\ volume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{setVolume}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{(}}volume\mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{)}};}
-\DoxyCodeLine{00720\ }
-\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00722\ \ \ \ \ \}}
-\DoxyCodeLine{00723\ }
-\DoxyCodeLine{00724\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00725\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00726\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00727\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00728\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00729\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00730\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00731\ \textcolor{comment}{\ \ \ \ \ *\ @param\ volume\ Total\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00732\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00733\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00734\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a3653d011eeced476a0957e1a875ce6ec}{withVolumeShared}}(\textcolor{keywordtype}{double}\ volume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{setVolume}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{(}}volume\mbox{\hyperlink{classdxfcpp_1_1_candle_a72d1c2827ce30b08895f919cfd09d4f0}{)}};}
-\DoxyCodeLine{00736\ }
-\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00738\ \ \ \ \ \}}
-\DoxyCodeLine{00739\ }
-\DoxyCodeLine{00740\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00741\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
-\DoxyCodeLine{00742\ \textcolor{comment}{\ \ \ \ \ *\ Total\ turnover\ in\ this\ candle\ can\ be\ computed\ with\ <code>getVWAP()\ *\ @ref\ Candle::getVolume()}}
-\DoxyCodeLine{00743\ \textcolor{comment}{\ \ \ \ \ *\ "{}getVolume"{}()</code>.}}
-\DoxyCodeLine{00744\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
-\DoxyCodeLine{00745\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00746\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a78495c18f52a6485d0818858d4bf9771}{getVWAP}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.vwap;}
-\DoxyCodeLine{00748\ \ \ \ \ \}}
-\DoxyCodeLine{00749\ }
-\DoxyCodeLine{00750\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00751\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
-\DoxyCodeLine{00752\ \textcolor{comment}{\ \ \ \ \ *\ @param\ vwap\ Volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
-\DoxyCodeLine{00753\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00754\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{setVWAP}}(\textcolor{keywordtype}{double}\ vwap)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ data\_.vwap\ =\ vwap;}
-\DoxyCodeLine{00756\ \ \ \ \ \}}
-\DoxyCodeLine{00757\ }
-\DoxyCodeLine{00758\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00759\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
-\DoxyCodeLine{00760\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00761\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00762\ \textcolor{comment}{\ \ \ \ \ *\ @param\ vwap\ Volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
-\DoxyCodeLine{00763\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00764\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00765\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a13556117b6d07e7112bb2d95954e6ab8}{withVWAP}}(\textcolor{keywordtype}{double}\ vwap)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{setVWAP}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{(}}vwap\mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{)}};}
-\DoxyCodeLine{00767\ }
-\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00769\ \ \ \ \ \}}
-\DoxyCodeLine{00770\ }
-\DoxyCodeLine{00771\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00772\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
-\DoxyCodeLine{00773\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00774\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00775\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00776\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00777\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00778\ \textcolor{comment}{\ \ \ \ \ *\ @param\ vwap\ Volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
-\DoxyCodeLine{00779\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00780\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00781\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_abb90765ef5e0f28a37e3a64f578735e5}{withVWAPShared}}(\textcolor{keywordtype}{double}\ vwap)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{setVWAP}}\mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{(}}vwap\mbox{\hyperlink{classdxfcpp_1_1_candle_ad63afd51292dccfaef1f23db90c62fb3}{)}};}
-\DoxyCodeLine{00783\ }
-\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00785\ \ \ \ \ \}}
-\DoxyCodeLine{00786\ }
-\DoxyCodeLine{00787\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00788\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ bid\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00789\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Bid\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00790\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00791\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a0e3f1215b16c3b60bc1bdf7f34263fb5}{getBidVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.bidVolume;}
-\DoxyCodeLine{00793\ \ \ \ \ \}}
-\DoxyCodeLine{00794\ }
-\DoxyCodeLine{00795\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00796\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00797\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidVolume\ Bid\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00798\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00799\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{setBidVolume}}(\textcolor{keywordtype}{double}\ bidVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ data\_.bidVolume\ =\ bidVolume;}
-\DoxyCodeLine{00801\ \ \ \ \ \}}
-\DoxyCodeLine{00802\ }
-\DoxyCodeLine{00803\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00804\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00805\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00806\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00807\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidVolume\ Bid\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00808\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00809\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00810\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_abafdb90c98f3d6e390aad01d4c359c25}{withBidVolume}}(\textcolor{keywordtype}{double}\ bidVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{setBidVolume}}\mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{(}}bidVolume\mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{)}};}
-\DoxyCodeLine{00812\ }
-\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00814\ \ \ \ \ \}}
-\DoxyCodeLine{00815\ }
-\DoxyCodeLine{00816\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00817\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00818\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00819\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00820\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00821\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00822\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00823\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidVolume\ Bid\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00824\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00825\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00826\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_afa180e4935e997d26ddf0c20a1c0ae32}{withBidVolumeShared}}(\textcolor{keywordtype}{double}\ bidVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00827\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{setBidVolume}}\mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{(}}bidVolume\mbox{\hyperlink{classdxfcpp_1_1_candle_acd8f442ae624da22bc69e4e94bd22b83}{)}};}
-\DoxyCodeLine{00828\ }
-\DoxyCodeLine{00829\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00830\ \ \ \ \ \}}
-\DoxyCodeLine{00831\ }
-\DoxyCodeLine{00832\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00833\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ask\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00834\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Ask\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00835\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00836\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a6bbdcc2d04f8a21d4302cc09bcce2474}{getAskVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00837\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.askVolume;}
-\DoxyCodeLine{00838\ \ \ \ \ \}}
-\DoxyCodeLine{00839\ }
-\DoxyCodeLine{00840\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00841\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00842\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askVolume\ Ask\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00843\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00844\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{setAskVolume}}(\textcolor{keywordtype}{double}\ askVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00845\ \ \ \ \ \ \ \ \ data\_.askVolume\ =\ askVolume;}
-\DoxyCodeLine{00846\ \ \ \ \ \}}
-\DoxyCodeLine{00847\ }
-\DoxyCodeLine{00848\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00849\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00850\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00851\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00852\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askVolume\ Ask\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00853\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00854\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00855\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a03cb2ab6fe9b9c0c3eaf27cd212ac02c}{withAskVolume}}(\textcolor{keywordtype}{double}\ askVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00856\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{setAskVolume}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{(}}askVolume\mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{)}};}
-\DoxyCodeLine{00857\ }
-\DoxyCodeLine{00858\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00859\ \ \ \ \ \}}
-\DoxyCodeLine{00860\ }
-\DoxyCodeLine{00861\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00862\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00863\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00864\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00865\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00866\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00867\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00868\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askVolume\ Ask\ volume\ in\ this\ candle.}}
-\DoxyCodeLine{00869\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00870\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00871\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a53c8d4a51bce16f519d1e7e0ba0bfb0a}{withAskVolumeShared}}(\textcolor{keywordtype}{double}\ askVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00872\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{setAskVolume}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{(}}askVolume\mbox{\hyperlink{classdxfcpp_1_1_candle_a270e91191b55d11b46b1a7f13db94e8d}{)}};}
-\DoxyCodeLine{00873\ }
-\DoxyCodeLine{00874\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00875\ \ \ \ \ \}}
-\DoxyCodeLine{00876\ }
-\DoxyCodeLine{00877\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00878\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ implied\ volatility.}}
-\DoxyCodeLine{00879\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ implied\ volatility.}}
-\DoxyCodeLine{00880\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00881\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_ad7ebd83a7b4ba0e4b32b5b37981843a8}{getImpVolatility}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00882\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.impVolatility;}
-\DoxyCodeLine{00883\ \ \ \ \ \}}
-\DoxyCodeLine{00884\ }
-\DoxyCodeLine{00885\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00886\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ implied\ volatility.}}
-\DoxyCodeLine{00887\ \textcolor{comment}{\ \ \ \ \ *\ @param\ impVolatility\ The\ implied\ volatility.}}
-\DoxyCodeLine{00888\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00889\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{setImpVolatility}}(\textcolor{keywordtype}{double}\ impVolatility)\ \{}
-\DoxyCodeLine{00890\ \ \ \ \ \ \ \ \ data\_.impVolatility\ =\ impVolatility;}
-\DoxyCodeLine{00891\ \ \ \ \ \}}
-\DoxyCodeLine{00892\ }
-\DoxyCodeLine{00893\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00894\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ volatility.}}
-\DoxyCodeLine{00895\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00896\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00897\ \textcolor{comment}{\ \ \ \ \ *\ @param\ impVolatility\ The\ implied\ volatility.}}
-\DoxyCodeLine{00898\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00899\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00900\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a64f23326459e73ad2700383a0a9f8a89}{withImpVolatility}}(\textcolor{keywordtype}{double}\ impVolatility)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00901\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{setImpVolatility}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{(}}impVolatility\mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{)}};}
-\DoxyCodeLine{00902\ }
-\DoxyCodeLine{00903\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00904\ \ \ \ \ \}}
-\DoxyCodeLine{00905\ }
-\DoxyCodeLine{00906\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00907\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ volatility.}}
-\DoxyCodeLine{00908\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00909\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00910\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00911\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00912\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00913\ \textcolor{comment}{\ \ \ \ \ *\ @param\ impVolatility\ The\ implied\ volatility.}}
-\DoxyCodeLine{00914\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00915\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00916\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a467e8c5bf158d308e18f6e2e5fd59890}{withImpVolatilityShared}}(\textcolor{keywordtype}{double}\ impVolatility)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00917\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{setImpVolatility}}\mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{(}}impVolatility\mbox{\hyperlink{classdxfcpp_1_1_candle_a3301784256bdff3181d1f9a463789928}{)}};}
-\DoxyCodeLine{00918\ }
-\DoxyCodeLine{00919\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00920\ \ \ \ \ \}}
-\DoxyCodeLine{00921\ }
-\DoxyCodeLine{00922\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00923\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ open\ interest.}}
-\DoxyCodeLine{00924\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ open\ interest.}}
-\DoxyCodeLine{00925\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00926\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a5773e5e6d2c1df29e73431df7ad81550}{getOpenInterest}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00927\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.openInterest;}
-\DoxyCodeLine{00928\ \ \ \ \ \}}
-\DoxyCodeLine{00929\ }
-\DoxyCodeLine{00930\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00931\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ open\ interest.}}
-\DoxyCodeLine{00932\ \textcolor{comment}{\ \ \ \ \ *\ @param\ openInterest\ The\ open\ interest.}}
-\DoxyCodeLine{00933\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00934\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{setOpenInterest}}(\textcolor{keywordtype}{double}\ openInterest)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00935\ \ \ \ \ \ \ \ \ data\_.openInterest\ =\ openInterest;}
-\DoxyCodeLine{00936\ \ \ \ \ \}}
-\DoxyCodeLine{00937\ }
-\DoxyCodeLine{00938\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00939\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ open\ interest.}}
-\DoxyCodeLine{00940\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
-\DoxyCodeLine{00941\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00942\ \textcolor{comment}{\ \ \ \ \ *\ @param\ openInterest\ The\ open\ interest.}}
-\DoxyCodeLine{00943\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
-\DoxyCodeLine{00944\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00945\ \ \ \ \ Candle\ \&\mbox{\hyperlink{classdxfcpp_1_1_candle_a4b7773036e5cba571934c506ab44b6b9}{withOpenInterest}}(\textcolor{keywordtype}{double}\ openInterest)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00946\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{setOpenInterest}}\mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{(}}openInterest\mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{)}};}
-\DoxyCodeLine{00947\ }
-\DoxyCodeLine{00948\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00949\ \ \ \ \ \}}
-\DoxyCodeLine{00950\ }
-\DoxyCodeLine{00951\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00952\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ open\ interest.}}
-\DoxyCodeLine{00953\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00954\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00955\ \textcolor{comment}{\ \ \ \ \ *\ @warning\ Please\ do\ not\ use\ this\ method\ unless\ the\ object\ was\ created\ with\ \`{}std::shared\_ptr<Candle>(new}}
-\DoxyCodeLine{00956\ \textcolor{comment}{\ \ \ \ \ *\ Candle(...))`\ or\ \`{}std::make\_shared<Candle>(...)`}}
-\DoxyCodeLine{00957\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00958\ \textcolor{comment}{\ \ \ \ \ *\ @param\ openInterest\ The\ open\ interest.}}
-\DoxyCodeLine{00959\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ shared\ pointer\ to\ the\ current\ candle.}}
-\DoxyCodeLine{00960\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00961\ \ \ \ \ Candle::Ptr\ \mbox{\hyperlink{classdxfcpp_1_1_candle_a01774a5986b6e1943a9dea4940b46b8b}{withOpenInterestShared}}(\textcolor{keywordtype}{double}\ openInterest)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00962\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{::}}\mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{setOpenInterest}}\mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{(}}openInterest\mbox{\hyperlink{classdxfcpp_1_1_candle_acb798cb4deb5dcca097c7fcb976c8836}{)}};}
-\DoxyCodeLine{00963\ }
-\DoxyCodeLine{00964\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shared\_from\_this()-\/>sharedAs<Candle>();}
-\DoxyCodeLine{00965\ \ \ \ \ \}}
-\DoxyCodeLine{00966\ \};}
-\DoxyCodeLine{00967\ }
-\DoxyCodeLine{00968\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00496\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00497\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00498\ \textcolor{comment}{\ \ \ \ \ *\ @param\ close\ The\ last\ (close)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00499\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00500\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a09162f58dce3904b408d5dd089810176}{setClose}}(\textcolor{keywordtype}{double}\ close)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ data\_.close\ =\ close;}
+\DoxyCodeLine{00502\ \ \ \ \ \}}
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00504\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00505\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00506\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00507\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00508\ \textcolor{comment}{\ \ \ \ \ *\ @param\ close\ The\ last\ (close)\ price\ of\ this\ candle.}}
+\DoxyCodeLine{00509\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00510\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00511\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a89929320198aa658463d87e602f041a1}{withClose}}(\textcolor{keywordtype}{double}\ close)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a09162f58dce3904b408d5dd089810176}{::}}\mbox{\hyperlink{class_candle_a09162f58dce3904b408d5dd089810176}{setClose}}\mbox{\hyperlink{class_candle_a09162f58dce3904b408d5dd089810176}{(}}close\mbox{\hyperlink{class_candle_a09162f58dce3904b408d5dd089810176}{)}};}
+\DoxyCodeLine{00513\ }
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00515\ \ \ \ \ \}}
+\DoxyCodeLine{00516\ }
+\DoxyCodeLine{00517\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00518\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ total\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00519\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Total\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00520\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00521\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_ab2370fc5b0359cce58ffbf72eeed47bb}{getVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.volume;}
+\DoxyCodeLine{00523\ \ \ \ \ \}}
+\DoxyCodeLine{00524\ }
+\DoxyCodeLine{00525\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00526\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00527\ \textcolor{comment}{\ \ \ \ \ *\ @param\ volume\ Total\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00528\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00529\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e}{setVolume}}(\textcolor{keywordtype}{double}\ volume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ data\_.volume\ =\ volume;}
+\DoxyCodeLine{00531\ \ \ \ \ \}}
+\DoxyCodeLine{00532\ }
+\DoxyCodeLine{00533\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00534\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00535\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00536\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00537\ \textcolor{comment}{\ \ \ \ \ *\ @param\ volume\ Total\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00538\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00539\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00540\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a97d66c2648b03d71f62c1e661e08d8e5}{withVolume}}(\textcolor{keywordtype}{double}\ volume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e}{::}}\mbox{\hyperlink{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e}{setVolume}}\mbox{\hyperlink{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e}{(}}volume\mbox{\hyperlink{class_candle_afd1aa7aa4e3a4dc9d8a19cb137326e6e}{)}};}
+\DoxyCodeLine{00542\ }
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00544\ \ \ \ \ \}}
+\DoxyCodeLine{00545\ }
+\DoxyCodeLine{00546\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00547\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
+\DoxyCodeLine{00548\ \textcolor{comment}{\ \ \ \ \ *\ Total\ turnover\ in\ this\ candle\ can\ be\ computed\ with\ <code>getVWAP()\ *\ @ref\ Candle::getVolume()}}
+\DoxyCodeLine{00549\ \textcolor{comment}{\ \ \ \ \ *\ "{}getVolume"{}()</code>.}}
+\DoxyCodeLine{00550\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
+\DoxyCodeLine{00551\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00552\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_a902c1c96e50d5c6d620f2ac499e93e08}{getVWAP}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.vwap;}
+\DoxyCodeLine{00554\ \ \ \ \ \}}
+\DoxyCodeLine{00555\ }
+\DoxyCodeLine{00556\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00557\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
+\DoxyCodeLine{00558\ \textcolor{comment}{\ \ \ \ \ *\ @param\ vwap\ Volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
+\DoxyCodeLine{00559\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00560\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_ae1187377845c789e8fb6fd8e33b1e562}{setVWAP}}(\textcolor{keywordtype}{double}\ vwap)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ data\_.vwap\ =\ vwap;}
+\DoxyCodeLine{00562\ \ \ \ \ \}}
+\DoxyCodeLine{00563\ }
+\DoxyCodeLine{00564\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00565\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
+\DoxyCodeLine{00566\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00567\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00568\ \textcolor{comment}{\ \ \ \ \ *\ @param\ vwap\ Volume-\/weighted\ average\ price\ (VWAP)\ in\ this\ candle.}}
+\DoxyCodeLine{00569\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00570\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00571\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_adc35330fa2e64bae91ff365bf21536de}{withVWAP}}(\textcolor{keywordtype}{double}\ vwap)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_ae1187377845c789e8fb6fd8e33b1e562}{::}}\mbox{\hyperlink{class_candle_ae1187377845c789e8fb6fd8e33b1e562}{setVWAP}}\mbox{\hyperlink{class_candle_ae1187377845c789e8fb6fd8e33b1e562}{(}}vwap\mbox{\hyperlink{class_candle_ae1187377845c789e8fb6fd8e33b1e562}{)}};}
+\DoxyCodeLine{00573\ }
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00575\ \ \ \ \ \}}
+\DoxyCodeLine{00576\ }
+\DoxyCodeLine{00577\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00578\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ bid\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00579\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Bid\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00580\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00581\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_a80a9374f7209b75ffd5817791402bf0e}{getBidVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.bidVolume;}
+\DoxyCodeLine{00583\ \ \ \ \ \}}
+\DoxyCodeLine{00584\ }
+\DoxyCodeLine{00585\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00586\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00587\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidVolume\ Bid\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00588\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00589\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f}{setBidVolume}}(\textcolor{keywordtype}{double}\ bidVolume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ data\_.bidVolume\ =\ bidVolume;}
+\DoxyCodeLine{00591\ \ \ \ \ \}}
+\DoxyCodeLine{00592\ }
+\DoxyCodeLine{00593\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00594\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ bid\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00595\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00596\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00597\ \textcolor{comment}{\ \ \ \ \ *\ @param\ bidVolume\ Bid\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00598\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00599\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00600\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a045e1b91b193c549165128b28b938fca}{withBidVolume}}(\textcolor{keywordtype}{double}\ bidVolume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f}{::}}\mbox{\hyperlink{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f}{setBidVolume}}\mbox{\hyperlink{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f}{(}}bidVolume\mbox{\hyperlink{class_candle_a0c6ddefe7643607a2e0b6c1237ef726f}{)}};}
+\DoxyCodeLine{00602\ }
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00604\ \ \ \ \ \}}
+\DoxyCodeLine{00605\ }
+\DoxyCodeLine{00606\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00607\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ ask\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00608\ \textcolor{comment}{\ \ \ \ \ *\ @return\ Ask\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00609\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00610\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_a297a2f60a7ad0e261b7f7bb282cf5dcb}{getAskVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.askVolume;}
+\DoxyCodeLine{00612\ \ \ \ \ \}}
+\DoxyCodeLine{00613\ }
+\DoxyCodeLine{00614\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00615\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00616\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askVolume\ Ask\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00617\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00618\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83}{setAskVolume}}(\textcolor{keywordtype}{double}\ askVolume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ data\_.askVolume\ =\ askVolume;}
+\DoxyCodeLine{00620\ \ \ \ \ \}}
+\DoxyCodeLine{00621\ }
+\DoxyCodeLine{00622\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00623\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ ask\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00624\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00625\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00626\ \textcolor{comment}{\ \ \ \ \ *\ @param\ askVolume\ Ask\ volume\ in\ this\ candle.}}
+\DoxyCodeLine{00627\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00628\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00629\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_a219f6e572cfb30c0c3eb0942539d2064}{withAskVolume}}(\textcolor{keywordtype}{double}\ askVolume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83}{::}}\mbox{\hyperlink{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83}{setAskVolume}}\mbox{\hyperlink{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83}{(}}askVolume\mbox{\hyperlink{class_candle_a7d0f9c35d267f04e1334d2b44c08ac83}{)}};}
+\DoxyCodeLine{00631\ }
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00633\ \ \ \ \ \}}
+\DoxyCodeLine{00634\ }
+\DoxyCodeLine{00635\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00636\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ implied\ volatility.}}
+\DoxyCodeLine{00637\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ implied\ volatility.}}
+\DoxyCodeLine{00638\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00639\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_a04d59291f30e584b8b2ad939bdc5c3fc}{getImpVolatility}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.impVolatility;}
+\DoxyCodeLine{00641\ \ \ \ \ \}}
+\DoxyCodeLine{00642\ }
+\DoxyCodeLine{00643\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00644\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ implied\ volatility.}}
+\DoxyCodeLine{00645\ \textcolor{comment}{\ \ \ \ \ *\ @param\ impVolatility\ The\ implied\ volatility.}}
+\DoxyCodeLine{00646\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00647\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_a103f748100c0b152707d23979c297a6b}{setImpVolatility}}(\textcolor{keywordtype}{double}\ impVolatility)\ \{}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ data\_.impVolatility\ =\ impVolatility;}
+\DoxyCodeLine{00649\ \ \ \ \ \}}
+\DoxyCodeLine{00650\ }
+\DoxyCodeLine{00651\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00652\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ volatility.}}
+\DoxyCodeLine{00653\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00654\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00655\ \textcolor{comment}{\ \ \ \ \ *\ @param\ impVolatility\ The\ implied\ volatility.}}
+\DoxyCodeLine{00656\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00657\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00658\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_acb25c67738bb372cde041abe01310e21}{withImpVolatility}}(\textcolor{keywordtype}{double}\ impVolatility)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_a103f748100c0b152707d23979c297a6b}{::}}\mbox{\hyperlink{class_candle_a103f748100c0b152707d23979c297a6b}{setImpVolatility}}\mbox{\hyperlink{class_candle_a103f748100c0b152707d23979c297a6b}{(}}impVolatility\mbox{\hyperlink{class_candle_a103f748100c0b152707d23979c297a6b}{)}};}
+\DoxyCodeLine{00660\ }
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00662\ \ \ \ \ \}}
+\DoxyCodeLine{00663\ }
+\DoxyCodeLine{00664\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00665\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ open\ interest.}}
+\DoxyCodeLine{00666\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ open\ interest.}}
+\DoxyCodeLine{00667\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00668\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_candle_af9c9d31ac6950ef89cf67a219048755b}{getOpenInterest}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.openInterest;}
+\DoxyCodeLine{00670\ \ \ \ \ \}}
+\DoxyCodeLine{00671\ }
+\DoxyCodeLine{00672\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00673\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ open\ interest.}}
+\DoxyCodeLine{00674\ \textcolor{comment}{\ \ \ \ \ *\ @param\ openInterest\ The\ open\ interest.}}
+\DoxyCodeLine{00675\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00676\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_candle_ad190222645b01a23418b9ac48810b5ae}{setOpenInterest}}(\textcolor{keywordtype}{double}\ openInterest)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ data\_.openInterest\ =\ openInterest;}
+\DoxyCodeLine{00678\ \ \ \ \ \}}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00680\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00681\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ open\ interest.}}
+\DoxyCodeLine{00682\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ current\ candle.}}
+\DoxyCodeLine{00683\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00684\ \textcolor{comment}{\ \ \ \ \ *\ @param\ openInterest\ The\ open\ interest.}}
+\DoxyCodeLine{00685\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ candle.}}
+\DoxyCodeLine{00686\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00687\ \ \ \ \ Candle\ \&\mbox{\hyperlink{class_candle_ad33f38ffb13013b4e28a96764bab7cbe}{withOpenInterest}}(\textcolor{keywordtype}{double}\ openInterest)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ Candle\mbox{\hyperlink{class_candle_ad190222645b01a23418b9ac48810b5ae}{::}}\mbox{\hyperlink{class_candle_ad190222645b01a23418b9ac48810b5ae}{setOpenInterest}}\mbox{\hyperlink{class_candle_ad190222645b01a23418b9ac48810b5ae}{(}}openInterest\mbox{\hyperlink{class_candle_ad190222645b01a23418b9ac48810b5ae}{)}};}
+\DoxyCodeLine{00689\ }
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00691\ \ \ \ \ \}}
+\DoxyCodeLine{00692\ }
+\DoxyCodeLine{00693\ \ \ \ \ std::string\ \mbox{\hyperlink{class_candle_a8e4362a595a51b7907b79bea57eadaaf}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_candle_a8e4362a595a51b7907b79bea57eadaaf}{override}};}
+\DoxyCodeLine{00694\ \};}
+\DoxyCodeLine{00695\ }
+\DoxyCodeLine{00696\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

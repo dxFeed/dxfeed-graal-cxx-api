@@ -1,0 +1,51 @@
+\doxysubsection{Observable\+Subscription\+Change\+Listener.\+hpp}
+\hypertarget{_observable_subscription_change_listener_8hpp_source}{}\label{_observable_subscription_change_listener_8hpp_source}\index{ObservableSubscriptionChangeListener.hpp@{ObservableSubscriptionChangeListener.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../symbols/SymbolWrapper.hpp"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ ObservableSubscriptionChangeListener\ :\ RequireMakeShared<ObservableSubscriptionChangeListener>\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{explicit}\ ObservableSubscriptionChangeListener(LockExternalConstructionTag);}
+\DoxyCodeLine{00019\ \ \ \string~ObservableSubscriptionChangeListener()\ \textcolor{keyword}{noexcept}\ override;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<ObservableSubscriptionChangeListener>}
+\DoxyCodeLine{00022\ \ \ \ \ create(std::function<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::unordered\_set<SymbolWrapper>\ \&symbols)>\ onSymbolsAdded);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<ObservableSubscriptionChangeListener>}
+\DoxyCodeLine{00025\ \ \ \ \ create(std::function<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::unordered\_set<SymbolWrapper>\ \&symbols)>\ onSymbolsAdded,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ std::function<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::unordered\_set<SymbolWrapper>\ \&symbols)>\ onSymbolsRemoved,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ std::function<\textcolor{keywordtype}{void}()>\ onSubscriptionClosed);}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{const}\ JavaObjectHandle<ObservableSubscriptionChangeListener>\ \&getHandle()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{mutable}\ std::recursive\_mutex\ mutex\_\{\};}
+\DoxyCodeLine{00033\ \ \ \ \ JavaObjectHandle<ObservableSubscriptionChangeListener>\ handle\_;}
+\DoxyCodeLine{00034\ \ \ \ \ SimpleHandler<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::unordered\_set<SymbolWrapper>\ \&symbols)>\ onSymbolsAdded\_\{\};}
+\DoxyCodeLine{00035\ \ \ \ \ SimpleHandler<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ std::unordered\_set<SymbolWrapper>\ \&symbols)>\ onSymbolsRemoved\_\{\};}
+\DoxyCodeLine{00036\ \ \ \ \ SimpleHandler<\textcolor{keywordtype}{void}()>\ onSubscriptionClosed\_\{\};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{struct}\ Impl;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ std::unique\_ptr<Impl>\ impl\_;}
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
+
+\end{DoxyCode}

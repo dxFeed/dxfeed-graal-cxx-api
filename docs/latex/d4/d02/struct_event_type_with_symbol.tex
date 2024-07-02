@@ -1,0 +1,138 @@
+\doxysubsection{Event\+Type\+With\+Symbol\texorpdfstring{$<$}{<} Symbol \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{struct_event_type_with_symbol}{}\label{struct_event_type_with_symbol}\index{EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}}
+
+
+Event type parametrized by a symbol.  
+
+
+
+
+{\ttfamily \#include $<$Event\+Type.\+hpp$>$}
+
+Inheritance diagram for Event\+Type\+With\+Symbol\texorpdfstring{$<$}{<} Symbol \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{d4/d02/struct_event_type_with_symbol}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_event_type_with_symbol_a16f3fce14a92aba49909004594304bf2}\label{struct_event_type_with_symbol_a16f3fce14a92aba49909004594304bf2} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$Symbol$>$$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_event_type}{Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_event_type}{Event\+Type}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_event_type}{Event\+Type} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual const Symbol \& \mbox{\hyperlink{struct_event_type_with_symbol_ab00a9edb649a6aa0f00b42420c5439ad}{get\+Event\+Symbol}} () const \&noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns event symbol that identifies this event type in \doxylink{class_d_x_feed_subscription}{subscription}. \end{DoxyCompactList}\item 
+virtual const std\+::optional$<$ Symbol $>$ \& \mbox{\hyperlink{struct_event_type_with_symbol_a1170c3107d8ab9b924e9b6cd0e04369e}{get\+Event\+Symbol\+Opt}} () const \&noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns event symbol that identifies this event type in \doxylink{class_d_x_feed_subscription}{subscription}. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{struct_event_type_with_symbol_a8ea9877b148603252021aad739c7e524}{set\+Event\+Symbol}} (const Symbol \&event\+Symbol) noexcept=0
+\begin{DoxyCompactList}\small\item\em Changes event symbol that identifies this event type in \doxylink{class_d_x_feed_subscription}{subscription}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_event_type}{Event\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{struct_event_type_a1c9c34884f4fcce70579a059252bdf1a}{get\+Event\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{struct_event_type_ad5ae35b7dac44e2f0df5fa44c0830ad9}{set\+Event\+Time}} (std\+::int64\+\_\+t) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\item 
+virtual void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_event_type_a799e0cd6b15e38e217ae15b5ab9963aa}{to\+Graal}} () const =0
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{struct_event_type_a6d1f37572f827b462dfb95857f19f4d2}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{struct_shared_entity_ae774e293e95fbf8ebb4d22f714e80272}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a348c971deaca898a477262e5bd190d03}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\subsubsection*{template$<$typename Symbol$>$\newline
+struct Event\+Type\+With\+Symbol$<$ Symbol $>$}
+Event type parametrized by a symbol. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol} & The type od symbol \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_event_type_with_symbol_ab00a9edb649a6aa0f00b42420c5439ad}\index{EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}!getEventSymbol@{getEventSymbol}}
+\index{getEventSymbol@{getEventSymbol}!EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}}
+\doxyparagraph{\texorpdfstring{getEventSymbol()}{getEventSymbol()}}
+{\footnotesize\ttfamily \label{struct_event_type_with_symbol_ab00a9edb649a6aa0f00b42420c5439ad} 
+template$<$typename Symbol $>$ \\
+virtual const Symbol \& \mbox{\hyperlink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ Symbol $>$\+::get\+Event\+Symbol (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns event symbol that identifies this event type in \doxylink{class_d_x_feed_subscription}{subscription}. 
+
+\begin{DoxyReturn}{Returns}
+The event symbol. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_candle_a83aa759aa93bf8c2a83c51d12337a76b}{Candle}}, \mbox{\hyperlink{struct_market_event_a6f4f9f4bdb7ef23cda9d5a57640a8db3}{Market\+Event}}, and \mbox{\hyperlink{class_message_a1e633559b4d0af8a025e4162eba315ca}{Message}}.
+
+\Hypertarget{struct_event_type_with_symbol_a1170c3107d8ab9b924e9b6cd0e04369e}\index{EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}!getEventSymbolOpt@{getEventSymbolOpt}}
+\index{getEventSymbolOpt@{getEventSymbolOpt}!EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}}
+\doxyparagraph{\texorpdfstring{getEventSymbolOpt()}{getEventSymbolOpt()}}
+{\footnotesize\ttfamily \label{struct_event_type_with_symbol_a1170c3107d8ab9b924e9b6cd0e04369e} 
+template$<$typename Symbol $>$ \\
+virtual const std\+::optional$<$ Symbol $>$ \& \mbox{\hyperlink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ Symbol $>$\+::get\+Event\+Symbol\+Opt (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns event symbol that identifies this event type in \doxylink{class_d_x_feed_subscription}{subscription}. 
+
+\begin{DoxyReturn}{Returns}
+The event symbol or std\+::nullopt. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_candle_a6d2da6d33dd41a2013a247650a841589}{Candle}}, \mbox{\hyperlink{struct_market_event_aae8ffbf25a247a64eec19eff14095524}{Market\+Event}}, and \mbox{\hyperlink{class_message_af3cba2e17ccc07383aed652358e8c9bd}{Message}}.
+
+\Hypertarget{struct_event_type_with_symbol_a8ea9877b148603252021aad739c7e524}\index{EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}!setEventSymbol@{setEventSymbol}}
+\index{setEventSymbol@{setEventSymbol}!EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}}
+\doxyparagraph{\texorpdfstring{setEventSymbol()}{setEventSymbol()}}
+{\footnotesize\ttfamily \label{struct_event_type_with_symbol_a8ea9877b148603252021aad739c7e524} 
+template$<$typename Symbol $>$ \\
+virtual void \mbox{\hyperlink{struct_event_type_with_symbol}{Event\+Type\+With\+Symbol}}$<$ Symbol $>$\+::set\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const Symbol \&}]{event\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event symbol that identifies this event type in \doxylink{class_d_x_feed_subscription}{subscription}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_candle_a3dd1414e8fb0b4bb69fe804c84304cb3}{Candle}}, \mbox{\hyperlink{struct_market_event_ae3358224a62a18b5e4ad9bad053dc8ed}{Market\+Event}}, and \mbox{\hyperlink{class_message_a0134e5bc98853deb4796697a4a3e9681}{Message}}.
+

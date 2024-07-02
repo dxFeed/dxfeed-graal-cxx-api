@@ -9,119 +9,123 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Id.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/JavaObjectHandle.hpp"{}}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../entity/SharedEntity.hpp"{}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Id.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/JavaObjectHandle.hpp"{}}}
 \DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_instrument_profile_8hpp}{"{}InstrumentProfile.hpp"{}}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../entity/SharedEntity.hpp"{}}}
 \DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_instrument_profile_8hpp}{"{}InstrumentProfile.hpp"{}}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{optional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00025\ }
-\DoxyCodeLine{00026\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Reads\ instrument\ profiles\ from\ the\ stream\ using\ Instrument\ Profile\ Format\ (IPF).}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ Please\ see\ <b>Instrument\ Profile\ Format</b>\ documentation\ for\ complete\ description.}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ This\ reader\ automatically\ uses\ data\ formats\ as\ specified\ in\ the\ stream.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <p>This\ reader\ is\ intended\ for\ "{}one\ time\ only"{}\ usage:\ create\ new\ instances\ for\ new\ IPF\ reads.}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ <p>Use\ \{@link\ InstrumentProfileConnection\}\ if\ support\ for\ streaming\ updates\ of\ instrument\ profiles\ is\ needed.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <p>For\ backward\ compatibility\ reader\ can\ be\ configured\ with\ system\ property\ "{}-\/Dcom.dxfeed.ipf.complete"{}\ to\ control}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ the\ strategy\ for\ missing\ "{}\#\#COMPLETE"{}\ tag\ when\ reading\ IPF,\ possible\ values\ are:}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ <ul>}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ \ \ \ \ <li>\{@code\ warn\}\ -\/\ show\ warning\ in\ the\ log\ (default)</li>}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ \ \ \ \ <li>\{@code\ error\}\ -\/\ throw\ exception\ (future\ default)</li>}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ \ \ \ \ <li>\{@code\ ignore\}\ -\/\ do\ nothing\ (for\ backward\ compatibility)</li>}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ </ul>}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00042\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ InstrumentProfileReader\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_shared_entity}{SharedEntity}}\ \{}
-\DoxyCodeLine{00043\ \ \ \ \ Id<InstrumentProfileReader>\ id\_;}
-\DoxyCodeLine{00044\ \ \ \ \ JavaObjectHandle<InstrumentProfileReader>\ handle\_;}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \ \ InstrumentProfileReader()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00026\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ Reads\ instrument\ profiles\ from\ the\ stream\ using\ Instrument\ Profile\ Format\ (IPF).}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ Please\ see\ <b>Instrument\ Profile\ Format</b>\ documentation\ for\ complete\ description.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ This\ reader\ automatically\ uses\ data\ formats\ as\ specified\ in\ the\ stream.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ <p>This\ reader\ is\ intended\ for\ "{}one\ time\ only"{}\ usage:\ create\ new\ instances\ for\ new\ IPF\ reads.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <p>Use\ \{@link\ InstrumentProfileConnection\}\ if\ support\ for\ streaming\ updates\ of\ instrument\ profiles\ is\ needed.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ <p>For\ backward\ compatibility\ reader\ can\ be\ configured\ with\ system\ property\ "{}-\/Dcom.dxfeed.ipf.complete"{}\ to\ control}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ the\ strategy\ for\ missing\ "{}\#\#COMPLETE"{}\ tag\ when\ reading\ IPF,\ possible\ values\ are:}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ <ul>}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ \ \ \ \ <li>\{@code\ warn\}\ -\/\ show\ warning\ in\ the\ log\ (default)</li>}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ \ \ \ \ <li>\{@code\ error\}\ -\/\ throw\ exception\ (future\ default)</li>}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ \ \ \ \ <li>\{@code\ ignore\}\ -\/\ do\ nothing\ (for\ backward\ compatibility)</li>}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ </ul>}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00044\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ InstrumentProfileReader\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_shared_entity}{SharedEntity}}\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ Id<InstrumentProfileReader>\ id\_;}
+\DoxyCodeLine{00046\ \ \ \ \ JavaObjectHandle<InstrumentProfileReader>\ handle\_;}
 \DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ InstrumentProfileReader\ object}}
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<InstrumentProfileReader>;}
-\DoxyCodeLine{00051\ }
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ InstrumentProfileReader\ object}}
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<InstrumentProfileReader>;}
-\DoxyCodeLine{00054\ }
-\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ InstrumentProfileReader}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ new\ InstrumentProfileReader}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ create()\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ last\ modification\ time\ (in\ milliseconds)\ from\ last\ InstrumentProfileReader::readFromFile()\ operation}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ or\ zero\ if\ it\ is\ unknown.}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00066\ \ \ \ \ std::int64\_t\ getLastModified()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ if\ IPF\ was\ fully\ read\ on\ last\ InstrumentProfileReader::readFromFile()\ operation.}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{bool}\ wasComplete()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00072\ }
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ Converts\ a\ specified\ string\ address\ specification\ into\ an\ URL\ that\ will\ be\ read\ by}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ InstrumentProfileReader::readFromFile()\ method.}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ resolveSourceURL(\textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Reads\ and\ returns\ instrument\ profiles\ from\ specified\ file.}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ recognizes\ data\ compression\ formats\ "{}zip"{}\ and\ "{}gzip"{}\ automatically.}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ In\ case\ of\ <em>zip</em>\ the\ first\ file\ entry\ will\ be\ read\ and\ parsed\ as\ a\ plain\ data\ stream.}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ In\ case\ of\ <em>gzip</em>\ compressed\ content\ will\ be\ read\ and\ processed.}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ In\ other\ cases\ data\ considered\ uncompressed\ and\ will\ be\ parsed\ as\ is.}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ <p>Authentication\ information\ can\ be\ supplied\ to\ this\ method\ as\ part\ of\ URL\ user\ info}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ like\ \{@code\ "{}http://user:password@host:port/path/file.ipf"{}\}.}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ is\ a\ shortcut\ for}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ <code>\{@link\ \#readFromFile(String,\ String,\ String)\ readFromFile\}(address,\ <b>null</b>,\ <b>null</b>)</code>.}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ operation\ updates\ \{@link\ \#getLastModified()\ lastModified\}\ and\ \{@link\ \#wasComplete()\ wasComplete\}.}}
+\DoxyCodeLine{00048\ \ \ \ \ InstrumentProfileReader();}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ InstrumentProfileReader\ object}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<InstrumentProfileReader>;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ InstrumentProfileReader\ object}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<InstrumentProfileReader>;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ InstrumentProfileReader}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ new\ InstrumentProfileReader}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ create();}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ last\ modification\ time\ (in\ milliseconds)\ from\ last\ InstrumentProfileReader::readFromFile()\ operation}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ or\ zero\ if\ it\ is\ unknown.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00068\ \ \ \ \ std::int64\_t\ getLastModified()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ if\ IPF\ was\ fully\ read\ on\ last\ InstrumentProfileReader::readFromFile()\ operation.}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{bool}\ wasComplete()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ Converts\ a\ specified\ string\ address\ specification\ into\ an\ URL\ that\ will\ be\ read\ by}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ InstrumentProfileReader::readFromFile()\ method.}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ resolveSourceURL(\textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ Reads\ and\ returns\ instrument\ profiles\ from\ specified\ file.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ recognizes\ data\ compression\ formats\ "{}zip"{}\ and\ "{}gzip"{}\ automatically.}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ In\ case\ of\ <em>zip</em>\ the\ first\ file\ entry\ will\ be\ read\ and\ parsed\ as\ a\ plain\ data\ stream.}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ In\ case\ of\ <em>gzip</em>\ compressed\ content\ will\ be\ read\ and\ processed.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ In\ other\ cases\ data\ considered\ uncompressed\ and\ will\ be\ parsed\ as\ is.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ <p>Authentication\ information\ can\ be\ supplied\ to\ this\ method\ as\ part\ of\ URL\ user\ info}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ like\ \{@code\ "{}http://user:password@host:port/path/file.ipf"{}\}.}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ is\ a\ shortcut\ for}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ <code>\{@link\ \#readFromFile(String,\ String,\ String)\ readFromFile\}(address,\ <b>null</b>,\ <b>null</b>)</code>.}}
 \DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ @param\ address\ URL\ of\ file\ to\ read\ from}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ @return\ list\ of\ instrument\ profiles}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00097\ \ \ \ \ std::vector<std::shared\_ptr<InstrumentProfile>>\ readFromFile(\textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00098\ }
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ Reads\ and\ returns\ instrument\ profiles\ from\ specified\ address\ with\ a\ specified\ basic\ user\ and\ password}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ credentials.}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ recognizes\ data\ compression\ formats\ "{}zip"{}\ and\ "{}gzip"{}\ automatically.}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ In\ case\ of\ <em>zip</em>\ the\ first\ file\ entry\ will\ be\ read\ and\ parsed\ as\ a\ plain\ data\ stream.}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ In\ case\ of\ <em>gzip</em>\ compressed\ content\ will\ be\ read\ and\ processed.}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ In\ other\ cases\ data\ considered\ uncompressed\ and\ will\ be\ parsed\ as\ is.}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ <p>Specified\ user\ and\ password\ take\ precedence\ over\ authentication\ information\ that\ is\ supplied\ to\ this\ method}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ as\ part\ of\ URL\ user\ info\ like\ \{@code\ "{}http://user:password@host:port/path/file.ipf"{}\}.}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ operation\ updates\ \{@link\ \#getLastModified()\ lastModified\}\ and\ \{@link\ \#wasComplete()\ wasComplete\}.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ operation\ updates\ \{@link\ \#getLastModified()\ lastModified\}\ and\ \{@link\ \#wasComplete()\ wasComplete\}.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @param\ address\ URL\ of\ file\ to\ read\ from}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ @return\ list\ of\ instrument\ profiles}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00099\ \ \ \ \ std::vector<std::shared\_ptr<InstrumentProfile>>\ readFromFile(\textcolor{keyword}{const}\ std::string\ \&address)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ Reads\ and\ returns\ instrument\ profiles\ from\ specified\ address\ with\ a\ specified\ basic\ user\ and\ password}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ credentials.}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ This\ method\ recognizes\ data\ compression\ formats\ "{}zip"{}\ and\ "{}gzip"{}\ automatically.}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ In\ case\ of\ <em>zip</em>\ the\ first\ file\ entry\ will\ be\ read\ and\ parsed\ as\ a\ plain\ data\ stream.}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ In\ case\ of\ <em>gzip</em>\ compressed\ content\ will\ be\ read\ and\ processed.}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ In\ other\ cases\ data\ considered\ uncompressed\ and\ will\ be\ parsed\ as\ is.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ <p>Specified\ user\ and\ password\ take\ precedence\ over\ authentication\ information\ that\ is\ supplied\ to\ this\ method}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ as\ part\ of\ URL\ user\ info\ like\ \{@code\ "{}http://user:password@host:port/path/file.ipf"{}\}.}}
 \DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @param\ address\ URL\ of\ file\ to\ read\ from}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ @param\ user\ the\ user\ name\ (may\ be\ null)}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @param\ password\ the\ password\ (may\ be\ null)}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ @return\ list\ of\ instrument\ profiles}}
-\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00117\ \ \ \ \ std::vector<std::shared\_ptr<InstrumentProfile>>\ readFromFile(\textcolor{keyword}{const}\ std::string\ \&address,\ \textcolor{keyword}{const}\ std::string\ \&user,}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&password)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00119\ \};}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ <p>This\ operation\ updates\ \{@link\ \#getLastModified()\ lastModified\}\ and\ \{@link\ \#wasComplete()\ wasComplete\}.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @param\ address\ URL\ of\ file\ to\ read\ from}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ @param\ user\ the\ user\ name\ (may\ be\ null)}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ @param\ password\ the\ password\ (may\ be\ null)}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ @return\ list\ of\ instrument\ profiles}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00119\ \ \ \ \ std::vector<std::shared\_ptr<InstrumentProfile>>\ readFromFile(\textcolor{keyword}{const}\ std::string\ \&address,\ \textcolor{keyword}{const}\ std::string\ \&user,}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&password)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00121\ \};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

@@ -11,6 +11,8 @@ var dir_46a719e660b41fb76aba6a0e912afd26 =
     [ "OrderAction.hpp", "d5/d00/_order_action_8hpp_source.html", null ],
     [ "OrderBase.hpp", "d8/d00/_order_base_8hpp_source.html", null ],
     [ "OrderSource.hpp", "da/d01/_order_source_8hpp_source.html", null ],
+    [ "OtcMarketsOrder.hpp", "dd/d02/_otc_markets_order_8hpp_source.html", null ],
+    [ "OtcMarketsPriceType.hpp", "dc/d03/_otc_markets_price_type_8hpp_source.html", null ],
     [ "PriceType.hpp", "d3/d03/_price_type_8hpp_source.html", null ],
     [ "Profile.hpp", "d7/d03/_profile_8hpp_source.html", null ],
     [ "Quote.hpp", "dd/d01/_quote_8hpp_source.html", null ],

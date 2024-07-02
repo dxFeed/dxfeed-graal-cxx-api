@@ -1,0 +1,116 @@
+\doxysubsection{Time\+Format Struct Reference}
+\hypertarget{struct_time_format}{}\label{struct_time_format}\index{TimeFormat@{TimeFormat}}
+
+
+Utility class for parsing and formatting dates and times in ISO-\/compatible format.  
+
+
+
+
+{\ttfamily \#include $<$Time\+Format.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{struct_time_format_ab394080ae0adbe9959873dbeba511579}{parse}} (const std\+::string \&value) const
+\begin{DoxyCompactList}\small\item\em Reads Date from String and returns timestamp. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{struct_time_format_a0328a4e7070049bddfa67d05c5d2f394}{format}} (std\+::int64\+\_\+t timestamp) const
+\begin{DoxyCompactList}\small\item\em Converts timestamp into string according to the format. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_time_format_ab353972c833e6906274c841102370630}\label{struct_time_format_ab353972c833e6906274c841102370630} 
+static const \mbox{\hyperlink{struct_time_format}{Time\+Format}} {\bfseries DEFAULT}
+\begin{DoxyCompactList}\small\item\em An instance of \doxylink{struct_time_format}{Time\+Format} that corresponds to default timezone as returned by Time\+Zone\+::get\+Default() method. \end{DoxyCompactList}\item 
+\Hypertarget{struct_time_format_a23b64f8b0b4110b4a107cca243daa830}\label{struct_time_format_a23b64f8b0b4110b4a107cca243daa830} 
+static const \mbox{\hyperlink{struct_time_format}{Time\+Format}} {\bfseries GMT}
+\begin{DoxyCompactList}\small\item\em An instance of \doxylink{struct_time_format}{Time\+Format} that corresponds to GMT timezone as returned by Time\+Zone\+::get\+Time\+Zone("{}GMT"{}). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Utility class for parsing and formatting dates and times in ISO-\/compatible format. 
+
+Some methods that are not marked {\ttfamily noexcept} may throw exceptions\+:
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if handle is invalid. \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & if something happened with the dx\+Feed API backend \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & if something happened with the Graal\+VM \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_time_format_a0328a4e7070049bddfa67d05c5d2f394}\index{TimeFormat@{TimeFormat}!format@{format}}
+\index{format@{format}!TimeFormat@{TimeFormat}}
+\doxyparagraph{\texorpdfstring{format()}{format()}}
+{\footnotesize\ttfamily \label{struct_time_format_a0328a4e7070049bddfa67d05c5d2f394} 
+std\+::string Time\+Format\+::format (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{timestamp}{}\end{DoxyParamCaption}) const}
+
+
+
+Converts timestamp into string according to the format. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timestamp} & The date and time timestamp. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string representation of data and time or empty string on error 
+\end{DoxyReturn}
+\Hypertarget{struct_time_format_ab394080ae0adbe9959873dbeba511579}\index{TimeFormat@{TimeFormat}!parse@{parse}}
+\index{parse@{parse}!TimeFormat@{TimeFormat}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily \label{struct_time_format_ab394080ae0adbe9959873dbeba511579} 
+std\+::int64\+\_\+t Time\+Format\+::parse (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{value}{}\end{DoxyParamCaption}) const}
+
+
+
+Reads Date from String and returns timestamp. 
+
+This method is designed to understand \href{http://en.wikipedia.org/wiki/ISO_8601}{\texttt{ ISO 8601}} formatted date and time. It accepts the following formats\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries{{\ttfamily 0}}} is parsed as zero time.  
+\item {\bfseries{{\ttfamily \textquotesingle{}-\/\textquotesingle{}\texorpdfstring{$<$}{<}time-\/period\texorpdfstring{$>$}{>}}}} it is parsed as \texorpdfstring{$<$}{<}current time\texorpdfstring{$>$}{>} -\/ \texorpdfstring{$<$}{<}time-\/period\texorpdfstring{$>$}{>}.  
+\item {\bfseries{{\ttfamily \texorpdfstring{$<$}{<}long-\/value-\/in-\/milliseconds\texorpdfstring{$>$}{>}}}} It should be positive and have at least 9 digits (otherwise it could not be distinguished from date in format {\ttfamily \textquotesingle{}yyyymmdd\textquotesingle{}}). Each date since 1970-\/01-\/03 can be represented in this form.  
+\item {\bfseries{{\ttfamily \texorpdfstring{$<$}{<}date\texorpdfstring{$>$}{>}\mbox{[}(\textquotesingle{}T\textquotesingle{}\texorpdfstring{$\vert$}{|}\textquotesingle{}t\textquotesingle{}\texorpdfstring{$\vert$}{|}\textquotesingle{}-\/\textquotesingle{}\texorpdfstring{$\vert$}{|}\textquotesingle{} \textquotesingle{})\texorpdfstring{$<$}{<}time\texorpdfstring{$>$}{>}\mbox{]}\mbox{[}\texorpdfstring{$<$}{<}timezone\texorpdfstring{$>$}{>}\mbox{]}}}} If time is missing it is supposed to be {\ttfamily \textquotesingle{}00\+:00\+:00\textquotesingle{}}.  
+\item {\bfseries{{\ttfamily \mbox{[}\textquotesingle{}T\textquotesingle{}\texorpdfstring{$\vert$}{|}\textquotesingle{}t\textquotesingle{}\mbox{]}\texorpdfstring{$<$}{<}time\texorpdfstring{$>$}{>}\mbox{[}\texorpdfstring{$<$}{<}timezone\texorpdfstring{$>$}{>}\mbox{]}}}} In this case current date is used.  
+\end{DoxyItemize}Here 
+\begin{DoxyItemize}
+\item {\bfseries{{\ttfamily \texorpdfstring{$<$}{<}date\texorpdfstring{$>$}{>}}}} is one of 
+\begin{DoxyItemize}
+\item {\bfseries{{\ttfamily yyyy-\/\+MM-\/dd}}} 
+\item {\bfseries{{\ttfamily yyyy\+MMdd}}} 
+\end{DoxyItemize}
+\item {\bfseries{{\ttfamily \texorpdfstring{$<$}{<}time\texorpdfstring{$>$}{>}}}} is one of 
+\begin{DoxyItemize}
+\item {\bfseries{{\ttfamily HH\+:mm\+:ss\mbox{[}.sss\mbox{]}}}} 
+\item {\bfseries{{\ttfamily HHmmss\mbox{[}.sss\mbox{]}}}} 
+\item {\bfseries{{\ttfamily HH\+:mm}}} 
+\item {\bfseries{{\ttfamily HHmm}}} 
+\item {\bfseries{{\ttfamily HH}}} 
+\end{DoxyItemize}
+\item {\bfseries{{\ttfamily \texorpdfstring{$<$}{<}timezone\texorpdfstring{$>$}{>}}}} is one of 
+\begin{DoxyItemize}
+\item {\bfseries{{\ttfamily \mbox{[}+-\/\mbox{]}HH\+:mm}}} 
+\item {\bfseries{{\ttfamily \mbox{[}+-\/\mbox{]}HHmm}}} 
+\item {\bfseries{{\ttfamily \mbox{[}+-\/\mbox{]}HH}}} 
+\item {\bfseries{{\ttfamily Z}}} for UTC. 
+\item or any timezone that can be parsed by Java Simple\+Date\+Format. 
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & String value to parse. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Date\textquotesingle{}s timestamp parsed from {\ttfamily value} or {\ttfamily 0} if {\ttfamily value} has wrong format. 
+\end{DoxyReturn}

@@ -9,193 +9,193 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../schedule/SessionFilter.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00018\ }
-\DoxyCodeLine{00019\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../schedule/SessionFilter.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ Session\ attribute\ of\ CandleSymbol\ defines\ trading\ that\ is\ used\ to\ build\ the\ candles.}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00021\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Session\ attribute\ of\ CandleSymbol\ defines\ trading\ that\ is\ used\ to\ build\ the\ candles.}}
 \DoxyCodeLine{00025\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ attribute\ is\ encoded\ in\ a\ symbol\ string\ with}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::getAttributeStringByKey()\ "{}MarketEventSymbols.getAttributeStringByKey"{},}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::changeAttributeStringByKey()\ "{}changeAttributeStringByKey"{},\ and}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::removeAttributeStringByKey()\ "{}removeAttributeStringByKey"{}\ methods.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <p>\ CandleSession::ANY\ session\ is\ a\ default.}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ The\ key\ to\ use\ with\ these\ methods\ is\ available\ via\ CandleSession::ATTRIBUTE\_KEY\ constant.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandleSession::toString()}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00035\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session}{CandleSession}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_symbol_attribute}{CandleSymbolAttribute}}\ \{}
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ All\ trading\ sessions\ are\ used\ to\ build\ candles.}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session}{CandleSession}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_ab7e6e4a28535cf8b18fb811be3687031}{ANY}};}
-\DoxyCodeLine{00040\ }
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *\ Only\ regular\ trading\ session\ data\ is\ used\ to\ build\ candles.}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session}{CandleSession}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_ae82772cc910881bd78a26b2ee9855c58}{REGULAR}};}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ Default\ trading\ session\ is\ CandleSession::ANY.}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session}{CandleSession}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a26b7216fc16cd8b16cd018ab510e6c46}{DEFAULT}};}
-\DoxyCodeLine{00050\ }
-\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *\ The\ attribute\ key\ that\ is\ used\ to\ store\ the\ value\ of\ CandleSession\ in}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ a\ symbol\ string\ using\ methods\ of\ MarketEventSymbols\ class.}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ of\ this\ constant\ is\ "{}tho"{},\ which\ is\ an\ abbreviation\ for\ "{}trading\ hours\ only"{}.}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ the\ corresponding\ CandleSession::toString()}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_adfd0e3e15583968f4af20d2cb1ed9c75}{ATTRIBUTE\_KEY}};}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ CandleSession>>\ BY\_STRING;}
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::reference\_wrapper<\textcolor{keyword}{const}\ CandleSession>>\ VALUES;}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{SessionFilter}}\ *sessionFilter\_;}
-\DoxyCodeLine{00065\ \ \ \ \ std::string\ string\_;}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ CandleSession(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{SessionFilter}}\ \&sessionFilter,\ std::string\ string)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ :\ sessionFilter\_\{\&sessionFilter\},\ string\_\{std::move(string)\}\ \{}
-\DoxyCodeLine{00069\ \ \ \ \ \}}
-\DoxyCodeLine{00070\ }
-\DoxyCodeLine{00071\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00072\ \ \ \ \ CandleSession()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandleSession()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00074\ }
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ session\ filter\ that\ corresponds\ to\ this\ session\ attribute.}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ @return\ session\ filter\ that\ corresponds\ to\ this\ session\ attribute.}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_session_filter}{SessionFilter}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a09bb260179479d2995994c8043f2db20}{getSessionFilter}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *sessionFilter\_;}
-\DoxyCodeLine{00081\ \ \ \ \ \}}
-\DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ event\ symbol\ string\ with\ this\ session\ attribute\ set.}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ original\ candle\ event\ symbol.}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ event\ symbol\ string\ with\ this\ session\ attribute\ set.}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00088\ \ \ \ \ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a9a77190d0fe5f44e23939e13f4294af2}{changeAttributeForSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this}\ ==\ DEFAULT\ ?\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY)}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ toString());}
-\DoxyCodeLine{00091\ \ \ \ \ \}}
-\DoxyCodeLine{00092\ }
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ candle\ session\ attribute.}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ The\ string\ representation\ of\ candle\ session\ attribute\ is\ a\ lower\ case\ string\ that\ corresponds\ to\ its}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ CandleSession::name()\ "{}name"{}.\ For\ example,\ CandleSession::ANY\ is\ represented\ as\ "{}any"{}.}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ candle\ session\ attribute.}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a72c6c934b4d3f1598b772429f8458fc6}{toString}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_;}
-\DoxyCodeLine{00102\ \ \ \ \ \}}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session}{CandleSession}}\ \&candleSession)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *sessionFilter\_\ ==\ candleSession.getSessionFilter()\ \&\&\ string\_\ ==\ candleSession.toString();}
-\DoxyCodeLine{00106\ \ \ \ \ \}}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ string\ representation\ of\ candle\ session\ attribute\ into\ object.}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ Any\ string\ that\ was\ returned\ by\ CandleSession::toString()\ can\ be\ parsed\ and\ case\ is\ ignored\ for\ parsing.}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @param\ s\ The\ string\ representation\ of\ candle\ session\ attribute.}}
-\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ candle\ session\ attribute\ (reference)\ or\ std::nullopt\ if\ there\ is\ no\ supported\ attribute's\ value.}}
-\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{reference\_wrapper}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{CandleSession}}>>\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{parse}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a1eea00c97198534d434f53cedcaa894d}{s}})\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ n\ =\ s.length();}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ ==\ 0)\ \{}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ [EN-\/8232]\ throw\ IllegalArgumentException("{}Missing\ candle\ session"{});}}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ found\ =\ BY\_STRING.find(s);}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ This\ attribute\ is\ encoded\ in\ a\ symbol\ string\ with}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::getAttributeStringByKey()\ "{}MarketEventSymbols.getAttributeStringByKey"{},}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::changeAttributeStringByKey()\ "{}changeAttributeStringByKey"{},\ and}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ @ref\ MarketEventSymbols::removeAttributeStringByKey()\ "{}removeAttributeStringByKey"{}\ methods.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ <p>\ CandleSession::ANY\ session\ is\ a\ default.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ The\ key\ to\ use\ with\ these\ methods\ is\ available\ via\ CandleSession::ATTRIBUTE\_KEY\ constant.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to\ the\ corresponding\ CandleSession::toString()}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00037\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_candle_session}{CandleSession}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_candle_symbol_attribute}{CandleSymbolAttribute}}\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ *\ All\ trading\ sessions\ are\ used\ to\ build\ candles.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_session}{CandleSession}}\ \mbox{\hyperlink{struct_candle_session_a67d891c75a8f8571d1c63d09615c98c6}{ANY}};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *\ Only\ regular\ trading\ session\ data\ is\ used\ to\ build\ candles.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_session}{CandleSession}}\ \mbox{\hyperlink{struct_candle_session_a0bcf55985ba269b352c4868ddaeb5ae9}{REGULAR}};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ Default\ trading\ session\ is\ CandleSession::ANY.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_session}{CandleSession}}\ \mbox{\hyperlink{struct_candle_session_adfca884c06a101bfe4df1f7e60c076c0}{DEFAULT}};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ The\ attribute\ key\ that\ is\ used\ to\ store\ the\ value\ of\ CandleSession\ in}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ a\ symbol\ string\ using\ methods\ of\ MarketEventSymbols\ class.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ of\ this\ constant\ is\ "{}tho"{},\ which\ is\ an\ abbreviation\ for\ "{}trading\ hours\ only"{}.}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ The\ value\ that\ this\ key\ shall\ be\ set\ to\ is\ equal\ to}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ the\ corresponding\ CandleSession::toString()}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{struct_candle_session_a9711ee826ebf3527e69f5e01725ca5e4}{ATTRIBUTE\_KEY}};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ CandleSession>>\ BY\_STRING;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::reference\_wrapper<\textcolor{keyword}{const}\ CandleSession>>\ VALUES;}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_filter}{SessionFilter}}\ *sessionFilter\_;}
+\DoxyCodeLine{00067\ \ \ \ \ std::string\ string\_;}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ CandleSession(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_filter}{SessionFilter}}\ \&sessionFilter,\ \textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&string)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ :\ sessionFilter\_\{\&sessionFilter\},\ string\_\{string\}\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00074\ \ \ \ \ CandleSession()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandleSession()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ session\ filter\ that\ corresponds\ to\ this\ session\ attribute.}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ @return\ session\ filter\ that\ corresponds\ to\ this\ session\ attribute.}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_filter}{SessionFilter}}\ \&\mbox{\hyperlink{struct_candle_session_ae84fa96d71b3da9cabeac71601cebf33}{getSessionFilter}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *sessionFilter\_;}
+\DoxyCodeLine{00083\ \ \ \ \ \}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ event\ symbol\ string\ with\ this\ session\ attribute\ set.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ original\ candle\ event\ symbol.}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ event\ symbol\ string\ with\ this\ session\ attribute\ set.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00090\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_candle_session_a0b1d667d74d74192719b7a96f7d9ad88}{changeAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this}\ ==\ DEFAULT\ ?\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY)}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ toString());}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ candle\ session\ attribute.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ The\ string\ representation\ of\ candle\ session\ attribute\ is\ a\ lower\ case\ string\ that\ corresponds\ to\ its}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ @ref\ CandleSession::name()\ "{}name"{}.\ For\ example,\ CandleSession::ANY\ is\ represented\ as\ "{}any"{}.}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ candle\ session\ attribute.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{struct_candle_session_a01d65e306c5af0cc2c8116a736f543c2}{toString}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_;}
+\DoxyCodeLine{00104\ \ \ \ \ \}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_session}{CandleSession}}\ \&candleSession)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *sessionFilter\_\ ==\ candleSession.getSessionFilter()\ \&\&\ string\_\ ==\ candleSession.toString();}
+\DoxyCodeLine{00108\ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ string\ representation\ of\ candle\ session\ attribute\ into\ object.}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ Any\ string\ that\ was\ returned\ by\ CandleSession::toString()\ can\ be\ parsed\ and\ case\ is\ ignored\ for\ parsing.}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ @param\ s\ The\ string\ representation\ of\ candle\ session\ attribute.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ candle\ session\ attribute\ (reference).}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{static}\ std::reference\_wrapper<\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_session}{CandleSession}}>\ \mbox{\hyperlink{struct_candle_session_a3e65f5b9900896a44459c82b56560497}{parse}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&s)\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ sw\ =\ s.operator\ std::string\_view();}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ n\ =\ sw.length();}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ ==\ 0)\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Missing\ candle\ session"{}});}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00125\ }
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (found\ !=\ BY\_STRING.end())\ \{}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00129\ }
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&sessionRef\ :\ VALUES)\ \{}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&sessionStr\ =\ sessionRef.get().toString();}
-\DoxyCodeLine{00132\ }
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sessionStr.length()\ >=\ n\ \&\&\ iEquals(sessionStr.substr(0,\ n),\ s))\ \{}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sessionRef;}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00137\ }
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ [EN-\/8232]\ throw\ IllegalArgumentException("{}Unknown\ candle\ session:\ "{}\ +\ s);}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ found\ =\ BY\_STRING.find(s);}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (found\ !=\ BY\_STRING.end())\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&sessionRef\ :\ VALUES)\ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&sessionStr\ =\ sessionRef.get().toString();}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sessionStr.length()\ >=\ n\ \&\&\ iEquals(sessionStr.substr(0,\ n),\ s))\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sessionRef;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00139\ }
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown\ candle\ session:\ "{}}\ +\ s);}
 \DoxyCodeLine{00141\ \ \ \ \ \}}
 \DoxyCodeLine{00142\ }
 \DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{/**}}
 \DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ session\ attribute\ of\ the\ given\ candle\ symbol\ string.}}
-\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ CandleSession::DEFAULT\ if\ the\ symbol\ does\ not\ have\ candle\ session\ attribute\ or\ std::nullopt\ if}}
-\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *\ there\ is\ no\ supported\ attribute's\ value.}}
-\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ candle\ symbol\ string.}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ session\ attribute\ of\ the\ given\ candle\ symbol\ string\ or\ std::nullopt\ if\ there\ is\ no\ supported}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ attribute's\ value.}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{reference\_wrapper}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{CandleSession}}>>}
-\DoxyCodeLine{00153\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{getAttributeForSymbol}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a33979bb0f392d42b102e8d4c926df949}{symbol}})\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ stringOpt\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ The\ result\ is\ CandleSession::DEFAULT\ if\ the\ symbol\ does\ not\ have\ candle\ session\ attribute.}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ The\ candle\ symbol\ string.}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ session\ attribute\ of\ the\ given\ candle\ symbol\ string.}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{static}\ std::reference\_wrapper<\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_session}{CandleSession}}>\ \mbox{\hyperlink{struct_candle_session_a6f31c98d8463064909fc6471b52cd684}{getAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ stringOpt\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !stringOpt\ ?\ std::cref(DEFAULT)\ :\ parse(stringOpt.value());}
+\DoxyCodeLine{00154\ \ \ \ \ \}}
 \DoxyCodeLine{00155\ }
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !stringOpt\ ?\ DEFAULT\ :\ parse(stringOpt.value());}
-\DoxyCodeLine{00157\ \ \ \ \ \}}
-\DoxyCodeLine{00158\ }
-\DoxyCodeLine{00159\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ candle\ session\ attribute.}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ candle\ symbol\ string.}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ the\ candle\ session\ attribute.}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{_conf_8hpp_a63f82fcc5291362c0a4bb47827f80ac8}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_candle_session_ad869fc3903b667df70a4507790b6b533}{normalizeAttributeForSymbol}}(\textcolor{keyword}{const}\ std::string\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ a\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
-\DoxyCodeLine{00167\ }
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!a)\ \{}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ candle\ session\ attribute.}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ @param\ symbol\ candle\ symbol\ string.}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ @return\ candle\ symbol\ string\ with\ the\ normalized\ representation\ of\ the\ the\ candle\ session\ attribute.}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ \mbox{\hyperlink{struct_candle_session_a1f7d1d9e94da88d44c555ebb9f8a05c6}{normalizeAttributeForSymbol}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&symbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ a\ =\ MarketEventSymbols::getAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!a)\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ other\ =\ parse(a.value());}
 \DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ other\ =\ parse(a.value());}
-\DoxyCodeLine{00173\ }
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other.has\_value())\ \{}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other.value()\ ==\ DEFAULT)\ \{}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00178\ }
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (a.value()\ !=\ other.value().get().toString())\ \{}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.value().get().toString());}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other\ ==\ DEFAULT)\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::removeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY);}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (a.value()\ !=\ other.get().toString())\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ MarketEventSymbols::changeAttributeStringByKey(symbol,\ ATTRIBUTE\_KEY,\ other.get().toString());}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::invalid\_argument\ \&)\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
 \DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ symbol;}
-\DoxyCodeLine{00186\ \ \ \ \ \}}
-\DoxyCodeLine{00187\ \};}
+\DoxyCodeLine{00184\ \ \ \ \ \}}
+\DoxyCodeLine{00185\ \};}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
 \DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
-\DoxyCodeLine{00190\ }
-\DoxyCodeLine{00191\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_session}{CandleSession}}>\ \{}
-\DoxyCodeLine{00192\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_session}{CandleSession}}\ \&candleSession)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(candleSession\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a72c6c934b4d3f1598b772429f8458fc6}{.}}\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a72c6c934b4d3f1598b772429f8458fc6}{toString}}\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a72c6c934b4d3f1598b772429f8458fc6}{(}}\mbox{\hyperlink{structdxfcpp_1_1_candle_session_a72c6c934b4d3f1598b772429f8458fc6}{)}});}
-\DoxyCodeLine{00194\ \ \ \ \ \}}
-\DoxyCodeLine{00195\ \};}
+\DoxyCodeLine{00189\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{struct_candle_session}{CandleSession}}>\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_candle_session}{CandleSession}}\ \&candleSession)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(candleSession\mbox{\hyperlink{struct_candle_session_a01d65e306c5af0cc2c8116a736f543c2}{.}}\mbox{\hyperlink{struct_candle_session_a01d65e306c5af0cc2c8116a736f543c2}{toString}}\mbox{\hyperlink{struct_candle_session_a01d65e306c5af0cc2c8116a736f543c2}{(}}\mbox{\hyperlink{struct_candle_session_a01d65e306c5af0cc2c8116a736f543c2}{)}});}
+\DoxyCodeLine{00192\ \ \ \ \ \}}
+\DoxyCodeLine{00193\ \};}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

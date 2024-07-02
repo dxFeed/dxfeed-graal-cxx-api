@@ -9,345 +9,358 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../IndexedEventSource.hpp"{}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../TimeSeriesEvent.hpp"{}}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEvent.hpp"{}}}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../IndexedEventSource.hpp"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../TimeSeriesEvent.hpp"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEvent.hpp"{}}}
 \DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00022\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ Theo\ price\ is\ a\ snapshot\ of\ the\ theoretical\ option\ price\ computation\ that\ is}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ periodically\ performed\ by\ <a\ href="{}http://www.devexperts.com/en/products/price.html"{}>dxPrice</a>}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ model-\/free\ computation.}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ corresponding}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ values\ at\ any\ given\ moment\ of\ time.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ The\ values\ include\ first\ and\ second\ order\ derivative\ of\ the\ price\ curve\ by\ price,\ so\ that}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ the\ real-\/time\ theoretical\ option\ price\ can\ be\ estimated\ on\ real-\/time\ changes\ of\ the\ underlying}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ price\ in\ the\ vicinity.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Theo\ price\ is\ a\ snapshot\ of\ the\ theoretical\ option\ price\ computation\ that\ is}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ periodically\ performed\ by\ <a\ href="{}http://www.devexperts.com/en/products/price.html"{}>dxPrice</a>}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ model-\/free\ computation.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ corresponding}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ values\ at\ any\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ The\ values\ include\ first\ and\ second\ order\ derivative\ of\ the\ price\ curve\ by\ price,\ so\ that}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ the\ real-\/time\ theoretical\ option\ price\ can\ be\ estimated\ on\ real-\/time\ changes\ of\ the\ underlying}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ price\ in\ the\ vicinity.}}
 \DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ Some\ TheoPrice\ sources\ provide\ a\ consistent\ view\ of\ the\ set\ of\ known\ TheoPrice.}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ The\ logic\ behind\ this\ property\ is\ detailed\ in\ IndexedEvent\ class\ documentation.}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ Multiple\ event\ sources\ for\ the\ same\ symbol\ are\ not\ supported\ for\ TheoPrice,\ thus}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ @ref\ ::getSource()\ "{}source"{}\ property\ is\ always\ @ref\ IndexedEventSource::DEFAULT\ "{}DEFAULT"{}.}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ <p>TimeSeriesEventModel\ class\ handles\ all\ the\ snapshot\ and\ transaction\ logic\ and\ conveniently\ represents}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ *\ a\ list\ current\ of\ time-\/series\ events\ order\ by\ their\ @ref\ ::getTime()\ "{}time"{}.}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ <h3>Publishing\ TheoPrice</h3>}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ <h3><a\ name="{}eventFlagsSection"{}>Event\ flags,\ transactions\ and\ snapshots</a></h3>}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ Some\ TheoPrice\ sources\ provide\ a\ consistent\ view\ of\ the\ set\ of\ known\ TheoPrice.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ The\ corresponding\ information\ is\ carried\ in\ @ref\ ::getEventFlags()\ "{}eventFlags"{}\ property.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *\ The\ logic\ behind\ this\ property\ is\ detailed\ in\ IndexedEvent\ class\ documentation.}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ Multiple\ event\ sources\ for\ the\ same\ symbol\ are\ not\ supported\ for\ TheoPrice,\ thus}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ @ref\ ::getSource()\ "{}source"{}\ property\ is\ always\ @ref\ IndexedEventSource::DEFAULT\ "{}DEFAULT"{}.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ <p>TimeSeriesEventModel\ class\ handles\ all\ the\ snapshot\ and\ transaction\ logic\ and\ conveniently\ represents}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *\ a\ list\ current\ of\ time-\/series\ events\ order\ by\ their\ @ref\ ::getTime()\ "{}time"{}.}}
 \DoxyCodeLine{00046\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ Publishing\ of\ TheoPrice\ events\ follows\ the\ general\ rules\ explained\ in\ TimeSeriesEvent\ class}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ *\ documentation.}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ *\ <h3>Publishing\ TheoPrice</h3>}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ Publishing\ of\ TheoPrice\ events\ follows\ the\ general\ rules\ explained\ in\ TimeSeriesEvent\ class}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ documentation.}}
 \DoxyCodeLine{00051\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ records\ \`{}TheoPrice`.}}
-\DoxyCodeLine{00053\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00054\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ TheoPrice\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_time_series_event}{TimeSeriesEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}\ \{}
-\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ SECONDS\_SHIFT\ =\ 32ULL;}
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_SHIFT\ =\ 22ULL;}
-\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_MASK\ =\ 0x3ffULL;}
-\DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ EventFlags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ <br>}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ 31..7\ \ \ \ 6\ \ \ \ 5\ \ \ \ 4\ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ |\ SM\ |\ \ \ \ |\ SS\ |\ SE\ |\ SB\ |\ RE\ |\ TX\ |}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ records\ \`{}TheoPrice`.}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00056\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ TheoPrice\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_market_event}{MarketEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_time_series_event}{TimeSeriesEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_lasting_event}{LastingEvent}}\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ SECONDS\_SHIFT\ =\ 32ULL;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_SHIFT\ =\ 22ULL;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint64\_t\ MILLISECONDS\_MASK\ =\ 0x3ffULL;}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ EventFlags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ <br>}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ <pre><tt>}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ 31..7\ \ \ \ 6\ \ \ \ 5\ \ \ \ 4\ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
 \DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ </tt></pre>}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ std::int32\_t\ eventFlags\{\};}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ std::int64\_t\ index\{\};}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ price\ =\ math::NaN;}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ underlyingPrice\ =\ math::NaN;}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ delta\ =\ math::NaN;}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ gamma\ =\ math::NaN;}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dividend\ =\ math::NaN;}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ interest\ =\ math::NaN;}
-\DoxyCodeLine{00081\ \ \ \ \ \};}
-\DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ \ \ \ \ Data\ data\_\{\};}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ |\ SM\ |\ \ \ \ |\ SS\ |\ SE\ |\ SB\ |\ RE\ |\ TX\ |}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ </tt></pre>}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ std::int32\_t\ eventFlags\{\};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ std::int64\_t\ index\{\};}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ price\ =\ math::NaN;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ underlyingPrice\ =\ math::NaN;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ delta\ =\ math::NaN;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ gamma\ =\ math::NaN;}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dividend\ =\ math::NaN;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ interest\ =\ math::NaN;}
+\DoxyCodeLine{00083\ \ \ \ \ \};}
 \DoxyCodeLine{00084\ }
-\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<TheoPrice>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_theo_price_a9ddbb1509ec844cfb06b65f3eceabc3f}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a9ddbb1509ec844cfb06b65f3eceabc3f}{override}};}
+\DoxyCodeLine{00085\ \ \ \ \ Data\ data\_\{\};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ TheoPrice\ object}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<TheoPrice>;}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ TheoPrice\ object}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<TheoPrice>;}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{class_theo_price_acc3f09f80aa50266de98ada31a914385}{TYPE}};}
 \DoxyCodeLine{00099\ }
 \DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Maximum\ allowed\ sequence\ value.}}
 \DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::setSequence()}}
 \DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a6227c0082c66ae6da2bf0e6acc18a42f}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ \mbox{\hyperlink{class_theo_price_a68fb7aefe40dbc7dc49d602bbdff11a9}{MAX\_SEQUENCE}}\ =\ (1U\ <<\ 22U)\ -\/\ 1U;}
 \DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ Maximum\ allowed\ sequence\ value.}}
-\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::setSequence()}}
-\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a6a8127a23c449b33c7a0d2099bbc5e68}{MAX\_SEQUENCE}}\ =\ (1U\ <<\ 22U)\ -\/\ 1U;}
-\DoxyCodeLine{00114\ }
-\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ TheoPrice\ object}}
-\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<TheoPrice>;}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ TheoPrice\ object}}
-\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<TheoPrice>;}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
-\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_theo_price_a2ddf817335cae7342a8025084ff8bdea}{TYPE}};}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ theoprice\ event\ with\ default\ values.}}
-\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a0486ba978f89e3ff2153dbb0722e4470}{TheoPrice}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00126\ }
-\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ theoprice\ event\ with\ the\ specified\ event\ symbol.}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
-\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_aa73e254510efea4c7a773f9c9dcf08da}{TheoPrice}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{(}}std::move(eventSymbol)\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{)}}\ \{}
-\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{class_theo_price_a5fd84d0633d58de139e78fcb81b7e0ef}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{class_theo_price_aa4e4101ed4ba8a07d2703c6d28774052}{toGraal}}()\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_theo_price_aa4e4101ed4ba8a07d2703c6d28774052}{override}};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_aeef377e33797473ecf4e3fb7f1f1c8ce}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ theoprice\ event\ with\ default\ values.}}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{class_theo_price_ab362a5017a9421813f96593f1e07b34b}{TheoPrice}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
 \DoxyCodeLine{00134\ }
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_theo_price_a41ac1ef1fc6b203ae1230c542f0eebd6}{getSource}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{::}}\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source_ab7bc1a5037c8e18b2adeb45237cea5eb}{DEFAULT}};}
-\DoxyCodeLine{00138\ \ \ \ \ \}}
-\DoxyCodeLine{00139\ }
-\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00141\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a0c336c08711ef6c5ae0758f5bd47a3b0}{getEventFlags}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.eventFlags;}
-\DoxyCodeLine{00143\ \ \ \ \ \}}
-\DoxyCodeLine{00144\ }
-\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00146\ \ \ \ \ EventFlagsMask\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_add29202f4998b8f060fc39b2b3ecf95e}{getEventFlagsMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask(data\_.eventFlags);}
-\DoxyCodeLine{00148\ \ \ \ \ \}}
-\DoxyCodeLine{00149\ }
-\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_aa03866fd384c044255d9e232d9428c34}{setEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ eventFlags;}
-\DoxyCodeLine{00153\ \ \ \ \ \}}
-\DoxyCodeLine{00154\ }
-\DoxyCodeLine{00155\ \ \ \ \ \textcolor{comment}{///}}
-\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a4b0fdb1c093e128e97be5affbabff5cf}{setEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ \textcolor{keyword}{static\_cast}<std::int32\_t>(eventFlags\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{getMask}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_flags_mask_a1b25dedbfced78bf9e15ca5a2f65d977}{)}});}
-\DoxyCodeLine{00158\ \ \ \ \ \}}
-\DoxyCodeLine{00159\ }
-\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ unique\ per-\/symbol\ index\ of\ this\ event.}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ The\ index\ is\ composed\ of\ @ref\ ::getTime()\ "{}time"{}\ and\ @ref\ ::getSequence()\ "{}sequence"{}.}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ Changing\ either\ time\ or\ sequence\ changes\ event\ index.}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *\ @return\ unique\ index\ of\ this\ event.}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00167\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a588c8eadce607761dfaf35f394aaf36d}{getIndex}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.index;}
-\DoxyCodeLine{00169\ \ \ \ \ \}}
-\DoxyCodeLine{00170\ }
-\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ event.}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ The\ index\ is\ composed\ of\ @ref\ ::getTime()\ "{}time"{}\ and\ @ref\ ::getSequence()\ "{}sequence"{}\ and}}
-\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ invocation\ of\ this\ method\ changes\ time\ and\ sequence.}}
-\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ <b>Do\ not\ use\ this\ method\ directly.</b>}}
-\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ Change\ @ref\ ::setTime()\ "{}time"{}\ and/or\ @ref\ ::setSequence()\ "{}sequence"{}.}}
-\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ the\ event\ index.}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getIndex()}}
-\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a074ea9e7efa4f1b721398a62481caa96}{setIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ data\_.index\ =\ index;}
-\DoxyCodeLine{00183\ \ \ \ \ \}}
-\DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *\ @return\ timestamp\ of\ the\ event\ in\ milliseconds}}
-\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00190\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_ae0613b3cd9e24ed38687e6b99b4fdc14}{getTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sar(data\_.index,\ SECONDS\_SHIFT)\ *\ 1000\ +\ andOp(sar(data\_.index,\ MILLISECONDS\_SHIFT),\ MILLISECONDS\_MASK);}
-\DoxyCodeLine{00192\ \ \ \ \ \}}
-\DoxyCodeLine{00193\ }
-\DoxyCodeLine{00194\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ timestamp\ of\ the\ event\ in\ milliseconds.}}
-\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getTime()}}
-\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a21cfe78423cfa168cbcc20c1c07c6cea}{setTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(orOp(sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getSecondsFromTime(time)),\ SECONDS\_SHIFT),}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getMillisFromTime(time)),\ MILLISECONDS\_SHIFT)),}
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_afa8cd07f9f851bf591a6e5091226549e}{getSequence}}\mbox{\hyperlink{classdxfcpp_1_1_theo_price_afa8cd07f9f851bf591a6e5091226549e}{(}}\mbox{\hyperlink{classdxfcpp_1_1_theo_price_afa8cd07f9f851bf591a6e5091226549e}{)}});}
-\DoxyCodeLine{00204\ \ \ \ \ \}}
-\DoxyCodeLine{00205\ }
-\DoxyCodeLine{00206\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ sequence\ number\ of\ this\ event\ to\ distinguish\ events\ that\ have\ the\ same\ @ref\ ::getTime()\ "{}time"{}.}}
-\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ This\ sequence\ number\ does\ not\ have\ to\ be\ unique\ and\ does\ not\ need\ to\ be\ sequential.}}
-\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ *\ Sequence\ can\ range\ from\ 0\ to\ ::MAX\_SEQUENCE.}}
-\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ sequence\ number\ of\ this\ event}}
-\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00213\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_afa8cd07f9f851bf591a6e5091226549e}{getSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(andOp(data\_.index,\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a6a8127a23c449b33c7a0d2099bbc5e68}{MAX\_SEQUENCE}}));}
-\DoxyCodeLine{00215\ \ \ \ \ \}}
-\DoxyCodeLine{00216\ }
-\DoxyCodeLine{00217\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ ::getSequence()\ "{}sequence\ number"{}\ of\ this\ event.}}
-\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
-\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getSequence()}}
-\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_ac7e007a068b748bd019d2d258f8a0b24}{setSequence}}(\textcolor{keywordtype}{int}\ sequence)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Improve\ error\ handling\ [EN-\/8232]}}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ sequence\ <=\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a6a8127a23c449b33c7a0d2099bbc5e68}{MAX\_SEQUENCE}});}
-\DoxyCodeLine{00225\ }
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(andOp(data\_.index,\ \string~\mbox{\hyperlink{classdxfcpp_1_1_theo_price_a6a8127a23c449b33c7a0d2099bbc5e68}{MAX\_SEQUENCE}}),\ sequence);}
-\DoxyCodeLine{00227\ \ \ \ \ \}}
-\DoxyCodeLine{00228\ }
-\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ theoretical\ option\ price.}}
-\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *\ @return\ theoretical\ option\ price.}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a7d5b05a00505d7ee2253f05fc23ba7a9}{getPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.price;}
-\DoxyCodeLine{00236\ \ \ \ \ \}}
-\DoxyCodeLine{00237\ }
-\DoxyCodeLine{00238\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ theoretical\ option\ price.}}
-\DoxyCodeLine{00240\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ theoretical\ option\ price.}}
-\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a369e3c62d2422a7159cca610dfe22bfe}{setPrice}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ data\_.price\ =\ price;}
-\DoxyCodeLine{00245\ \ \ \ \ \}}
-\DoxyCodeLine{00246\ }
-\DoxyCodeLine{00247\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ underlying\ price\ at\ the\ time\ of\ theo\ price\ computation.}}
-\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ @return\ underlying\ price\ at\ the\ time\ of\ theo\ price\ computation.}}
-\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_aeb9f19f3db2f473b140add61127f4b00}{getUnderlyingPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.underlyingPrice;}
-\DoxyCodeLine{00254\ \ \ \ \ \}}
-\DoxyCodeLine{00255\ }
-\DoxyCodeLine{00256\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ underlying\ price\ at\ the\ time\ of\ theo\ price\ computation.}}
-\DoxyCodeLine{00258\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ *\ @param\ underlyingPrice\ underlying\ price\ at\ the\ time\ of\ theo\ price\ computation.}}
-\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a0c645a59281f987b06c42c39ef8afa4d}{setUnderlyingPrice}}(\textcolor{keywordtype}{double}\ underlyingPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ data\_.underlyingPrice\ =\ underlyingPrice;}
-\DoxyCodeLine{00263\ \ \ \ \ \}}
-\DoxyCodeLine{00264\ }
-\DoxyCodeLine{00265\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ delta\ of\ the\ theoretical\ price.}}
-\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ *\ Delta\ is\ the\ first\ derivative\ of\ the\ theoretical\ price\ by\ the\ underlying\ price.}}
-\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ *\ @return\ delta\ of\ the\ theoretical\ price.}}
-\DoxyCodeLine{00270\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a4d2b9af3d87c5edbefcf80e29acd6091}{getDelta}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.delta;}
-\DoxyCodeLine{00273\ \ \ \ \ \}}
-\DoxyCodeLine{00274\ }
-\DoxyCodeLine{00275\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ delta\ of\ the\ theoretical\ price.}}
-\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ @param\ delta\ delta\ of\ the\ theoretical\ price.}}
-\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_aeed7a002818f541b5190f8b8f2bdba4e}{setDelta}}(\textcolor{keywordtype}{double}\ delta)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ data\_.delta\ =\ delta;}
-\DoxyCodeLine{00282\ \ \ \ \ \}}
-\DoxyCodeLine{00283\ }
-\DoxyCodeLine{00284\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ gamma\ of\ the\ theoretical\ price.}}
-\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *\ Gamma\ is\ the\ second\ derivative\ of\ the\ theoretical\ price\ by\ the\ underlying\ price.}}
-\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ @return\ gamma\ of\ the\ theoretical\ price.}}
-\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a37c2f6e810b43eb40beb33a0a73da69b}{getGamma}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.gamma;}
-\DoxyCodeLine{00292\ \ \ \ \ \}}
-\DoxyCodeLine{00293\ }
-\DoxyCodeLine{00294\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ gamma\ of\ the\ theoretical\ price.}}
-\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ @param\ gamma\ gamma\ of\ the\ theoretical\ price.}}
-\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a5f1814b183d248c9f64e08e530d1067a}{setGamma}}(\textcolor{keywordtype}{double}\ gamma)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ data\_.gamma\ =\ gamma;}
-\DoxyCodeLine{00301\ \ \ \ \ \}}
-\DoxyCodeLine{00302\ }
-\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00304\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00305\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00308\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a1f873dece3ce0cc3400fb36c31fe737c}{getDividend}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dividend;}
-\DoxyCodeLine{00310\ \ \ \ \ \}}
-\DoxyCodeLine{00311\ }
-\DoxyCodeLine{00312\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dividend\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00317\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a577fccf3fcaec8bc02dc25d436c11b6a}{setDividend}}(\textcolor{keywordtype}{double}\ dividend)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ data\_.dividend\ =\ dividend;}
-\DoxyCodeLine{00319\ \ \ \ \ \}}
-\DoxyCodeLine{00320\ }
-\DoxyCodeLine{00321\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_ad74bfe2b2cac4f80e500727895d82334}{getInterest}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.interest;}
-\DoxyCodeLine{00328\ \ \ \ \ \}}
-\DoxyCodeLine{00329\ }
-\DoxyCodeLine{00330\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00331\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ @param\ interest\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
-\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_aed460f55d0b68b2e41bb1d52437437ed}{setInterest}}(\textcolor{keywordtype}{double}\ interest)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ data\_.interest\ =\ interest;}
-\DoxyCodeLine{00337\ \ \ \ \ \}}
-\DoxyCodeLine{00338\ }
-\DoxyCodeLine{00339\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00340\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
-\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
-\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00344\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a511b9dd099e453f7129dbe9ecb562c5b}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_theo_price_a511b9dd099e453f7129dbe9ecb562c5b}{override}};}
-\DoxyCodeLine{00345\ \};}
-\DoxyCodeLine{00346\ }
-\DoxyCodeLine{00347\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ theoprice\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_theo_price_ad823a54171d036be0366905fbc8f0a1a}{TheoPrice}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{class_theo_price_ad823a54171d036be0366905fbc8f0a1a}{MarketEvent}}(\mbox{\hyperlink{class_theo_price_ad823a54171d036be0366905fbc8f0a1a}{std}}::\mbox{\hyperlink{class_theo_price_ad823a54171d036be0366905fbc8f0a1a}{move}}(\mbox{\hyperlink{class_theo_price_ad823a54171d036be0366905fbc8f0a1a}{eventSymbol}}))\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \&\mbox{\hyperlink{class_theo_price_a5db2cf3d8c3b6bd7298871294cd44e68}{getSource}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\mbox{\hyperlink{class_indexed_event_source_ab359b82d74ee151707106b66eec0a4e3}{::}}\mbox{\hyperlink{class_indexed_event_source_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}};}
+\DoxyCodeLine{00146\ \ \ \ \ \}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00149\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{class_theo_price_a395c746a2bf5523b2d66c72a1fc2feab}{getEventFlags}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.eventFlags;}
+\DoxyCodeLine{00151\ \ \ \ \ \}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00154\ \ \ \ \ EventFlagsMask\ \mbox{\hyperlink{class_theo_price_a480fb599df1c2db60f387b61ce373df1}{getEventFlagsMask}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EventFlagsMask(data\_.eventFlags);}
+\DoxyCodeLine{00156\ \ \ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_a2268fe83a4685ee9642b0ceb03a3b15a}{setEventFlags}}(std::int32\_t\ eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ eventFlags;}
+\DoxyCodeLine{00161\ \ \ \ \ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_aad35985dcbce875f06e06e1135e0d91b}{setEventFlags}}(\textcolor{keyword}{const}\ EventFlagsMask\ \&eventFlags)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ data\_.eventFlags\ =\ \textcolor{keyword}{static\_cast}<std::int32\_t>(eventFlags\mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{.}}\mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{getMask}}\mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{(}}\mbox{\hyperlink{class_event_flags_mask_a60c07fa47c1cd08eaab93f07066e0b3f}{)}});}
+\DoxyCodeLine{00166\ \ \ \ \ \}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ The\ index\ is\ composed\ of\ @ref\ ::getTime()\ "{}time"{}\ and\ @ref\ ::getSequence()\ "{}sequence"{}.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *\ Changing\ either\ time\ or\ sequence\ changes\ event\ index.}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ @return\ unique\ index\ of\ this\ event.}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00175\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_theo_price_a3ce75d4942ba13a4645bdf234c945d56}{getIndex}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.index;}
+\DoxyCodeLine{00177\ \ \ \ \ \}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ unique\ per-\/symbol\ index\ of\ this\ event.}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ The\ index\ is\ composed\ of\ @ref\ ::getTime()\ "{}time"{}\ and\ @ref\ ::getSequence()\ "{}sequence"{}\ and}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *\ invocation\ of\ this\ method\ changes\ time\ and\ sequence.}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ <b>Do\ not\ use\ this\ method\ directly.</b>}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ Change\ @ref\ ::setTime()\ "{}time"{}\ and/or\ @ref\ ::setSequence()\ "{}sequence"{}.}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ *\ @param\ index\ the\ event\ index.}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getIndex()}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_ad41f2200ff600aad64503366393ffb67}{setIndex}}(std::int64\_t\ index)\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ data\_.index\ =\ index;}
+\DoxyCodeLine{00191\ \ \ \ \ \}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ timestamp\ of\ the\ event\ in\ milliseconds.}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ @return\ timestamp\ of\ the\ event\ in\ milliseconds}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00198\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_theo_price_a558ade41de4e5030d761a667fe495def}{getTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sar(data\_.index,\ SECONDS\_SHIFT)\ *\ 1000\ +\ andOp(sar(data\_.index,\ MILLISECONDS\_SHIFT),\ MILLISECONDS\_MASK);}
+\DoxyCodeLine{00200\ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ timestamp\ of\ the\ event\ in\ milliseconds.}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ @param\ time\ timestamp\ of\ the\ event\ in\ milliseconds.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getTime()}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_a84340c87338fcf94d14cbf2b2dd21fec}{setTime}}(std::int64\_t\ time)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(orOp(sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getSecondsFromTime(time)),\ SECONDS\_SHIFT),}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sal(\textcolor{keyword}{static\_cast}<std::int64\_t>(time\_util::getMillisFromTime(time)),\ MILLISECONDS\_SHIFT)),}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_theo_price_ada2f46621a1cb674bd10c8f42275f432}{getSequence}}\mbox{\hyperlink{class_theo_price_ada2f46621a1cb674bd10c8f42275f432}{(}}\mbox{\hyperlink{class_theo_price_ada2f46621a1cb674bd10c8f42275f432}{)}});}
+\DoxyCodeLine{00212\ \ \ \ \ \}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ sequence\ number\ of\ this\ event\ to\ distinguish\ events\ that\ have\ the\ same\ @ref\ ::getTime()\ "{}time"{}.}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ This\ sequence\ number\ does\ not\ have\ to\ be\ unique\ and\ does\ not\ need\ to\ be\ sequential.}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *\ Sequence\ can\ range\ from\ 0\ to\ ::MAX\_SEQUENCE.}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ sequence\ number\ of\ this\ event}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00221\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{class_theo_price_ada2f46621a1cb674bd10c8f42275f432}{getSequence}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::int32\_t>(andOp(data\_.index,\ \mbox{\hyperlink{class_theo_price_a68fb7aefe40dbc7dc49d602bbdff11a9}{MAX\_SEQUENCE}}));}
+\DoxyCodeLine{00223\ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ @ref\ ::getSequence()\ "{}sequence\ number"{}\ of\ this\ event.}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sequence\ the\ sequence.}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *\ @see\ ::getSequence()}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_a381106e310ec24f37488093198512131}{setSequence}}(std::int32\_t\ sequence)\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ assert(sequence\ >=\ 0\ \&\&\ \textcolor{keyword}{static\_cast}<std::uint32\_t>(sequence)\ <=\ \mbox{\hyperlink{class_theo_price_a68fb7aefe40dbc7dc49d602bbdff11a9}{MAX\_SEQUENCE}});}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sequence\ <\ 0\ ||\ \textcolor{keyword}{static\_cast}<std::uint32\_t>(sequence)\ >\ \mbox{\hyperlink{class_theo_price_a68fb7aefe40dbc7dc49d602bbdff11a9}{MAX\_SEQUENCE}})\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Invalid\ value\ for\ argument\ \`{}sequence`:\ "{}}\ +\ std::to\_string(sequence));}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ data\_.index\ =\ orOp(andOp(data\_.index,\ \string~\mbox{\hyperlink{class_theo_price_a68fb7aefe40dbc7dc49d602bbdff11a9}{MAX\_SEQUENCE}}),\ sequence);}
+\DoxyCodeLine{00238\ \ \ \ \ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00241\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ theoretical\ option\ price.}}
+\DoxyCodeLine{00242\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *\ @return\ theoretical\ option\ price.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_theo_price_a400b34292e5209932021ea22acc8fdb4}{getPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.price;}
+\DoxyCodeLine{00247\ \ \ \ \ \}}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ theoretical\ option\ price.}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *\ @param\ price\ theoretical\ option\ price.}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_a1a2ee577d72a26e6d805d6b12fdad2cf}{setPrice}}(\textcolor{keywordtype}{double}\ price)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ data\_.price\ =\ price;}
+\DoxyCodeLine{00256\ \ \ \ \ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ underlying\ price\ at\ the\ time\ of\ theo\ price\ computation.}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ @return\ underlying\ price\ at\ the\ time\ of\ theo\ price\ computation.}}
+\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_theo_price_acffe1f15604e06c3d2362023d4412442}{getUnderlyingPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.underlyingPrice;}
+\DoxyCodeLine{00265\ \ \ \ \ \}}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ underlying\ price\ at\ the\ time\ of\ theo\ price\ computation.}}
+\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00270\ \textcolor{comment}{\ \ \ \ \ *\ @param\ underlyingPrice\ underlying\ price\ at\ the\ time\ of\ theo\ price\ computation.}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_a277df49bb6a253c68b37c556677fd5c6}{setUnderlyingPrice}}(\textcolor{keywordtype}{double}\ underlyingPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ data\_.underlyingPrice\ =\ underlyingPrice;}
+\DoxyCodeLine{00274\ \ \ \ \ \}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ delta\ of\ the\ theoretical\ price.}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ *\ Delta\ is\ the\ first\ derivative\ of\ the\ theoretical\ price\ by\ the\ underlying\ price.}}
+\DoxyCodeLine{00279\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00280\ \textcolor{comment}{\ \ \ \ \ *\ @return\ delta\ of\ the\ theoretical\ price.}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_theo_price_ae67c036b1630017da4b3abeb84c2ad3a}{getDelta}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.delta;}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ delta\ of\ the\ theoretical\ price.}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ *\ @param\ delta\ delta\ of\ the\ theoretical\ price.}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_a97fb03c7dc8d42ee4587c51e61c3ebfb}{setDelta}}(\textcolor{keywordtype}{double}\ delta)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ data\_.delta\ =\ delta;}
+\DoxyCodeLine{00293\ \ \ \ \ \}}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ gamma\ of\ the\ theoretical\ price.}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ *\ Gamma\ is\ the\ second\ derivative\ of\ the\ theoretical\ price\ by\ the\ underlying\ price.}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ @return\ gamma\ of\ the\ theoretical\ price.}}
+\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_theo_price_a43056137e9ee2ed4e8d937b8978e1b4b}{getGamma}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.gamma;}
+\DoxyCodeLine{00303\ \ \ \ \ \}}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00306\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ gamma\ of\ the\ theoretical\ price.}}
+\DoxyCodeLine{00307\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ @param\ gamma\ gamma\ of\ the\ theoretical\ price.}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_a148fd057efb48e9866961e9fff23ff22}{setGamma}}(\textcolor{keywordtype}{double}\ gamma)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ data\_.gamma\ =\ gamma;}
+\DoxyCodeLine{00312\ \ \ \ \ \}}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00316\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_theo_price_aa3c8368d34c77771d8451bd7d2c51d6f}{getDividend}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dividend;}
+\DoxyCodeLine{00321\ \ \ \ \ \}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dividend\ implied\ simple\ dividend\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_ab69c5d4a00953932afa26b93771fbb21}{setDividend}}(\textcolor{keywordtype}{double}\ dividend)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ data\_.dividend\ =\ dividend;}
+\DoxyCodeLine{00330\ \ \ \ \ \}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ @return\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_theo_price_afec0fbd94fa4be4f125807281049a54c}{getInterest}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.interest;}
+\DoxyCodeLine{00339\ \ \ \ \ \}}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00343\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ \ \ *\ @param\ interest\ implied\ simple\ interest\ return\ of\ the\ corresponding\ option\ series.}}
+\DoxyCodeLine{00345\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00346\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_theo_price_a0c6eeaa37c489a3462965393ce89e0e8}{setInterest}}(\textcolor{keywordtype}{double}\ interest)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ data\_.interest\ =\ interest;}
+\DoxyCodeLine{00348\ \ \ \ \ \}}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00355\ \ \ \ \ std::string\ \mbox{\hyperlink{class_theo_price_a7688718de97d2529cea3177f13c457f1}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_theo_price_a7688718de97d2529cea3177f13c457f1}{override}};}
+\DoxyCodeLine{00356\ \};}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

@@ -1,0 +1,92 @@
+\doxysubsection{System Struct Reference}
+\hypertarget{struct_system}{}\label{struct_system}\index{System@{System}}
+
+
+A class that allows to set JVM system properties and get the values of JVM system properties.  
+
+
+
+
+{\ttfamily \#include $<$System.\+hpp$>$}
+
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{struct_system_aa186bb9091ffb41fe84d616b29f4a189}{set\+Property}} (const std\+::string \&key, const std\+::string \&value)
+\begin{DoxyCompactList}\small\item\em Sets the JVM system property indicated by the specified key. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Properties $>$ }\\static void \mbox{\hyperlink{struct_system_a878602507d4182f701eecaeab04d50eb}{set\+Properties}} (Properties \&\&properties)
+\begin{DoxyCompactList}\small\item\em Sets the JVM system properties to the Properties argument. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{struct_system_aa1f3a655f81e1dfbf7492d1f9e4bf0c4}{get\+Property}} (const std\+::string \&key)
+\begin{DoxyCompactList}\small\item\em Gets the system property indicated by the specified key. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A class that allows to set JVM system properties and get the values of JVM system properties. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_system_aa1f3a655f81e1dfbf7492d1f9e4bf0c4}\index{System@{System}!getProperty@{getProperty}}
+\index{getProperty@{getProperty}!System@{System}}
+\doxyparagraph{\texorpdfstring{getProperty()}{getProperty()}}
+{\footnotesize\ttfamily \label{struct_system_aa1f3a655f81e1dfbf7492d1f9e4bf0c4} 
+std\+::string System\+::get\+Property (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Gets the system property indicated by the specified key. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The name of the system property (UTF-\/8 string). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value of a JVM system property (UTF-\/8 string), or an empty string. 
+\end{DoxyReturn}
+\Hypertarget{struct_system_a878602507d4182f701eecaeab04d50eb}\index{System@{System}!setProperties@{setProperties}}
+\index{setProperties@{setProperties}!System@{System}}
+\doxyparagraph{\texorpdfstring{setProperties()}{setProperties()}}
+{\footnotesize\ttfamily \label{struct_system_a878602507d4182f701eecaeab04d50eb} 
+template$<$typename Properties $>$ \\
+static void System\+::set\+Properties (\begin{DoxyParamCaption}\item[{Properties \&\&}]{properties}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Sets the JVM system properties to the Properties argument. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Properties} & The properties\textquotesingle{} type (std\+::map, std\+::unordered\+\_\+map etc). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em properties} & The new system properties. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\Hypertarget{struct_system_aa186bb9091ffb41fe84d616b29f4a189}\index{System@{System}!setProperty@{setProperty}}
+\index{setProperty@{setProperty}!System@{System}}
+\doxyparagraph{\texorpdfstring{setProperty()}{setProperty()}}
+{\footnotesize\ttfamily \label{struct_system_aa186bb9091ffb41fe84d616b29f4a189} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE bool System\+::set\+Property (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key}{, }\item[{const std\+::string \&}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Sets the JVM system property indicated by the specified key. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The name of the system property (UTF-\/8 string). \\
+\hline
+{\em value} & The value of the system property (UTF-\/8 string). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the setting of the JVM system property succeeded. 
+\end{DoxyReturn}
+
+
+Referenced by \mbox{\hyperlink{api_8h_a722e328b10a5bab3efd3e9c8aee5e976}{dxfc\+\_\+system\+\_\+set\+\_\+property()}}.
+

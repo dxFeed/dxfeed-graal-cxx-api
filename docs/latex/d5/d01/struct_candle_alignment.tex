@@ -1,0 +1,171 @@
+\doxysubsection{Candle\+Alignment Struct Reference}
+\hypertarget{struct_candle_alignment}{}\label{struct_candle_alignment}\index{CandleAlignment@{CandleAlignment}}
+
+
+\doxylink{class_candle}{Candle} alignment attribute of \doxylink{struct_candle_symbol}{Candle\+Symbol} defines how candle are aligned with respect to time.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Alignment.\+hpp$>$}
+
+Inheritance diagram for Candle\+Alignment\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d5/d01/struct_candle_alignment}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{struct_candle_alignment_aa9405c16faa8dc0447b3f92f84d30de0}{change\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol) const override
+\begin{DoxyCompactList}\small\item\em Returns candle event symbol string with this candle alignment set. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{struct_candle_alignment_aaad3e93c3271d2ece752681fb490ed57}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this candle alignment. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} $>$ \mbox{\hyperlink{struct_candle_alignment_ade94ab6dbb87166f7715142fa38ffc93}{parse}} (const dxfcpp\+::\+String\+Like\+Wrapper \&s)
+\begin{DoxyCompactList}\small\item\em Parses string representation of candle alignment into object. \end{DoxyCompactList}\item 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} $>$ \mbox{\hyperlink{struct_candle_alignment_a7c8a575e946b2b09b6d09abb52e58bf2}{get\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol)
+\begin{DoxyCompactList}\small\item\em Returns candle alignment of the given candle symbol string. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{struct_candle_alignment_a897ee6b3194cbdf5f6cd97538764e1ea}{normalize\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol)
+\begin{DoxyCompactList}\small\item\em Returns candle symbol string with the normalized representation of the candle alignment attribute. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_candle_alignment_a079e387c53a40c7660131a528d509851}\label{struct_candle_alignment_a079e387c53a40c7660131a528d509851} 
+static const \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} {\bfseries MIDNIGHT} \{"{}m"{}\}
+\begin{DoxyCompactList}\small\item\em Align candles on midnight. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_alignment_a18335909e5dfa7eb38ec5787418e3035}\label{struct_candle_alignment_a18335909e5dfa7eb38ec5787418e3035} 
+static const \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} {\bfseries SESSION} \{"{}s"{}\}
+\begin{DoxyCompactList}\small\item\em Align candles on trading sessions. \end{DoxyCompactList}\item 
+\Hypertarget{struct_candle_alignment_a0363ed33802a705c64abded7697e442d}\label{struct_candle_alignment_a0363ed33802a705c64abded7697e442d} 
+static const \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} {\bfseries DEFAULT} = \mbox{\hyperlink{struct_candle_alignment_a079e387c53a40c7660131a528d509851}{MIDNIGHT}}
+\begin{DoxyCompactList}\small\item\em Default alignment is \doxylink{struct_candle_alignment_a079e387c53a40c7660131a528d509851}{Candle\+Alignment\+::\+MIDNIGHT}. \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_candle_alignment_a8ce587e43a5f8496c1a8ea0bf24b9499}{ATTRIBUTE\+\_\+\+KEY}} \{"{}a"{}\}
+\begin{DoxyCompactList}\small\item\em The attribute key that is used to store the value of \doxylink{struct_candle_alignment}{Candle\+Alignment} in a symbol string using methods of \doxylink{struct_market_event_symbols}{Market\+Event\+Symbols} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{class_candle}{Candle} alignment attribute of \doxylink{struct_candle_symbol}{Candle\+Symbol} defines how candle are aligned with respect to time. 
+
+\doxysubsubsubsubsection*{Implementation details}
+
+This attribute is encoded in a symbol string with \doxylink{struct_market_event_symbols_a8eea112429ea61730be80e4fac021095}{Market\+Event\+Symbols.get\+Attribute\+String\+By\+Key}, \doxylink{struct_market_event_symbols_ab4184832b9b58374117d61b1f8c94617}{change\+Attribute\+String\+By\+Key}, and \doxylink{struct_market_event_symbols_ab0369d51b1181a4fb7ccb674923ddb9d}{remove\+Attribute\+String\+By\+Key} methods. The key to use with these methods is available via \doxylink{struct_candle_alignment_a8ce587e43a5f8496c1a8ea0bf24b9499}{Candle\+Alignment\+::\+ATTRIBUTE\+\_\+\+KEY} constant. The value that this key shall be set to is equal to the corresponding \doxylink{struct_candle_alignment_aaad3e93c3271d2ece752681fb490ed57}{Candle\+Alignment\+::to\+String()} 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_candle_alignment_aa9405c16faa8dc0447b3f92f84d30de0}\index{CandleAlignment@{CandleAlignment}!changeAttributeForSymbol@{changeAttributeForSymbol}}
+\index{changeAttributeForSymbol@{changeAttributeForSymbol}!CandleAlignment@{CandleAlignment}}
+\doxyparagraph{\texorpdfstring{changeAttributeForSymbol()}{changeAttributeForSymbol()}}
+{\footnotesize\ttfamily \label{struct_candle_alignment_aa9405c16faa8dc0447b3f92f84d30de0} 
+std\+::string Candle\+Alignment\+::change\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Returns candle event symbol string with this candle alignment set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The original candle event symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle event symbol string with this candle alignment set. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{struct_candle_symbol_attribute_a965d1af360208c9f1733d47ac278bdad}{Candle\+Symbol\+Attribute}}.
+
+\Hypertarget{struct_candle_alignment_a7c8a575e946b2b09b6d09abb52e58bf2}\index{CandleAlignment@{CandleAlignment}!getAttributeForSymbol@{getAttributeForSymbol}}
+\index{getAttributeForSymbol@{getAttributeForSymbol}!CandleAlignment@{CandleAlignment}}
+\doxyparagraph{\texorpdfstring{getAttributeForSymbol()}{getAttributeForSymbol()}}
+{\footnotesize\ttfamily \label{struct_candle_alignment_a7c8a575e946b2b09b6d09abb52e58bf2} 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} $>$ Candle\+Alignment\+::get\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns candle alignment of the given candle symbol string. 
+
+The result is \doxylink{struct_candle_alignment_a0363ed33802a705c64abded7697e442d}{Candle\+Alignment\+::\+DEFAULT} if the symbol does not have candle alignment attribute.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle alignment of the given candle symbol string. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_alignment_a897ee6b3194cbdf5f6cd97538764e1ea}\index{CandleAlignment@{CandleAlignment}!normalizeAttributeForSymbol@{normalizeAttributeForSymbol}}
+\index{normalizeAttributeForSymbol@{normalizeAttributeForSymbol}!CandleAlignment@{CandleAlignment}}
+\doxyparagraph{\texorpdfstring{normalizeAttributeForSymbol()}{normalizeAttributeForSymbol()}}
+{\footnotesize\ttfamily \label{struct_candle_alignment_a897ee6b3194cbdf5f6cd97538764e1ea} 
+static std\+::string Candle\+Alignment\+::normalize\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns candle symbol string with the normalized representation of the candle alignment attribute. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle symbol string with the normalized representation of the the candle alignment attribute. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_alignment_ade94ab6dbb87166f7715142fa38ffc93}\index{CandleAlignment@{CandleAlignment}!parse@{parse}}
+\index{parse@{parse}!CandleAlignment@{CandleAlignment}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily \label{struct_candle_alignment_ade94ab6dbb87166f7715142fa38ffc93} 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} $>$ Candle\+Alignment\+::parse (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Parses string representation of candle alignment into object. 
+
+Any string that was returned by \doxylink{struct_candle_alignment_aaad3e93c3271d2ece752681fb490ed57}{Candle\+Alignment\+::to\+String()} can be parsed and case is ignored for parsing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string representation of candle alignment. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The candle alignment (reference) 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if the string representation is invalid. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_candle_alignment_aaad3e93c3271d2ece752681fb490ed57}\index{CandleAlignment@{CandleAlignment}!toString@{toString}}
+\index{toString@{toString}!CandleAlignment@{CandleAlignment}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{struct_candle_alignment_aaad3e93c3271d2ece752681fb490ed57} 
+std\+::string Candle\+Alignment\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this candle alignment. 
+
+The string representation of candle alignment "{}m"{} for \doxylink{struct_candle_alignment_a079e387c53a40c7660131a528d509851}{Candle\+Alignment\+::\+MIDNIGHT} and "{}s"{} for \doxylink{struct_candle_alignment_a18335909e5dfa7eb38ec5787418e3035}{Candle\+Alignment\+::\+SESSION}.
+
+\begin{DoxyReturn}{Returns}
+string representation of this candle alignment. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{struct_candle_alignment_a8ce587e43a5f8496c1a8ea0bf24b9499}\index{CandleAlignment@{CandleAlignment}!ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}}
+\index{ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}!CandleAlignment@{CandleAlignment}}
+\doxyparagraph{\texorpdfstring{ATTRIBUTE\_KEY}{ATTRIBUTE\_KEY}}
+{\footnotesize\ttfamily \label{struct_candle_alignment_a8ce587e43a5f8496c1a8ea0bf24b9499} 
+const std\+::string Candle\+Alignment\+::\+ATTRIBUTE\+\_\+\+KEY \{"{}a"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The attribute key that is used to store the value of \doxylink{struct_candle_alignment}{Candle\+Alignment} in a symbol string using methods of \doxylink{struct_market_event_symbols}{Market\+Event\+Symbols} class. 
+
+The value of this constant is "{}a"{}. The value that this key shall be set to is equal to the corresponding \doxylink{struct_candle_alignment_aaad3e93c3271d2ece752681fb490ed57}{Candle\+Alignment\+::to\+String()} 

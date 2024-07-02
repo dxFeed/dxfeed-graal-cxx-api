@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['year_0',['YEAR',['../da/d01/structdxfcpp_1_1_candle_type.html#a38d150332769454b25fada01c86b5a15',1,'dxfcpp::CandleType']]]
+  ['year_0',['YEAR',['../d2/d02/struct_candle_type.html#afb593fcdd34322e4a858a1d4bf0f15e1',1,'CandleType']]]
 ];

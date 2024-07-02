@@ -1,0 +1,297 @@
+\doxysubsection{Candle\+Symbol Struct Reference}
+\hypertarget{struct_candle_symbol}{}\label{struct_candle_symbol}\index{CandleSymbol@{CandleSymbol}}
+
+
+Symbol that should be used with \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} class to subscribe for \doxylink{class_candle}{Candle} events.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Symbol.\+hpp$>$}
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{struct_candle_symbol_a33d055a65873b13cbfa241efe31d07da}{get\+Base\+Symbol}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns base market symbol without attributes. \end{DoxyCompactList}\item 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_exchange}{Candle\+Exchange}} $>$ \& \mbox{\hyperlink{struct_candle_symbol_a30b9988b75fab9eae5d78af8287db5ba}{get\+Exchange}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange attribute of this symbol. \end{DoxyCompactList}\item 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} $>$ \& \mbox{\hyperlink{struct_candle_symbol_aacdb0a424121348c25eeb11852f0ff3d}{get\+Price}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns price type attribute of this symbol. \end{DoxyCompactList}\item 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_session}{Candle\+Session}} $>$ \& \mbox{\hyperlink{struct_candle_symbol_af386486d74f2d27f96ebe337afb44633}{get\+Session}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns session attribute of this symbol. \end{DoxyCompactList}\item 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_period}{Candle\+Period}} $>$ \& \mbox{\hyperlink{struct_candle_symbol_a203232e639dc9e517c2d327f6c1cb52b}{get\+Period}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns aggregation period of this symbol. \end{DoxyCompactList}\item 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} $>$ \& \mbox{\hyperlink{struct_candle_symbol_afda1708a28b6cd2d5168715c173f2939}{get\+Alignment}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns alignment attribute of this symbol. \end{DoxyCompactList}\item 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_price_level}{Candle\+Price\+Level}} $>$ \& \mbox{\hyperlink{struct_candle_symbol_a2a508ea75703766fc999e4d40a2618dd}{get\+Price\+Level}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns price level attribute of this symbol. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{struct_candle_symbol_adc2115295246731eacb2f6c6df27f175}{to\+String}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this symbol. \end{DoxyCompactList}\item 
+virtual void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_candle_symbol_acb65088ffa8236fa02485f86f2c1b680}{to\+Graal}} () const
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{struct_candle_symbol_ae099fa0df23c75db2805c76257be7346}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \mbox{\hyperlink{struct_candle_symbol_af79b46399e1413e00a54ed048897cc39}{from\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \mbox{\hyperlink{struct_candle_symbol_ab4294a03f10c11e642f03c2be68a2cc0}{value\+Of}} (std\+::string symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Converts the given string symbol into the candle symbol object. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \mbox{\hyperlink{struct_candle_symbol_ab9e22e56352823bfda2aa7a8f4552c8b}{value\+Of}} (std\+::string symbol, const Candle\+Symbol\+Attribute\+Variant \&attribute) noexcept
+\begin{DoxyCompactList}\small\item\em Converts the given string symbol into the candle symbol object with the specified attribute set. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} \mbox{\hyperlink{struct_candle_symbol_a30933b10b08b28027ed4d22a37102e7d}{value\+Of}} (std\+::string symbol, std\+::initializer\+\_\+list$<$ Candle\+Symbol\+Attribute\+Variant $>$ attributes) noexcept
+\begin{DoxyCompactList}\small\item\em Converts the given string symbol into the candle symbol object with the specified attributes set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Symbol that should be used with \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} class to subscribe for \doxylink{class_candle}{Candle} events. 
+
+{\ttfamily \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription}} also accepts a string representation of the candle symbol for subscription.
+
+\doxysubsubsubsubsection*{String representation}
+
+The string representation of the candle symbol consist of a \doxylink{struct_candle_symbol_a33d055a65873b13cbfa241efe31d07da}{base\+Symbol} followed by an optional \textquotesingle{}\&\textquotesingle{} with an \doxylink{struct_candle_symbol_a30b9988b75fab9eae5d78af8287db5ba}{exchange} code letter and followed by an optional list of comma-\/separated key=value pairs in curly braces\+:
+
+`$<$base\+Symbol$>$ \mbox{[} '\&\textquotesingle{} $<$exchange$>$ \mbox{]} \mbox{[} \textquotesingle{}\{\textquotesingle{} $<$key1$>$=$<$value1$>$ \mbox{[} \textquotesingle{},\textquotesingle{} $<$key2$>$=$<$value2$>$ \mbox{]} ... \textquotesingle{}\}\textquotesingle{} \mbox{]}\`{}
+
+Properties of the candle symbol correspond to the keys in the string representation in the following way\+:
+
+
+\begin{DoxyItemize}
+\item Empty key corresponds to \doxylink{struct_candle_symbol_a203232e639dc9e517c2d327f6c1cb52b}{period} --- aggregation period of this symbol. The period value is composed of an optional \doxylink{struct_candle_period_a1e2e33ae5421ab04b022a50db2a4ad0a}{value} which defaults to 1 when not specified, followed by a \doxylink{struct_candle_period_a89aef310d793d619458f1afa53166402}{type} string which is defined by one of the \doxylink{struct_candle_type}{Candle\+Type} values and can be abbreviated to first letters. For example, a daily candle of "{}\+IBM"{} base symbol can be specified as "{}\+IBM\{=d\}"{} and 15 minute candle on it as "{}\+IBM\{=15m\}"{}. The shortest possible abbreviation for \doxylink{struct_candle_type_a11b9390c342db5b8d2d8c17847c85880}{Candle\+Type\+::\+MONTH} is "{}mo"{}, so the monthly candle can be specified as "{}\+IBM\{=mo\}"{}. When period is not specified, then the \doxylink{struct_candle_period_a2934f6797a1c4aeb8ff49560370f0550}{Candle\+Period\+::\+TICK} aggregation period is assumed as default. Note, that tick aggregation may not be available on the demo system which is limited to a subset of symbols and aggregation periods. 
+\item "{}price"{} key corresponds to \doxylink{struct_candle_symbol_aacdb0a424121348c25eeb11852f0ff3d}{price} --- price type attribute of this symbol. The \doxylink{struct_candle_price}{Candle\+Price} defines possible values with \doxylink{struct_candle_price_a81644d93d41d6cd64bad82961637ca54}{Candle\+Price\+::\+LAST} being default. For legacy backwards-\/compatibility purposes, most of the price values cannot be abbreviated, so a one-\/minute candle of "{}\+EUR/\+USD"{} bid price shall be specified with "{}\+EUR/\+USD\{=m,price=bid\}"{} candle symbol string. However, the \doxylink{struct_candle_price_aac615d755dcc3fef383c593c932ede33}{Candle\+Price\+::\+SETTLEMENT} can be abbreviated to "{}s"{}, so a daily candle on "{}/\+ES"{} futures settlement prices can be specified with "{}/\+ES\{=d,price=s\}"{} string. 
+\item "{}tho"{} key with a value of "{}true"{} corresponds to \doxylink{struct_candle_symbol_af386486d74f2d27f96ebe337afb44633}{session} set to \doxylink{struct_candle_session_a0bcf55985ba269b352c4868ddaeb5ae9}{Candle\+Session\+::\+REGULAR} which limits the candle to trading hours only, so a 133 tick candles on "{}\+GOOG"{} base symbol collected over trading hours only can be specified with "{}\+GOOG\{=133t,tho=true\}"{} string. Note, that the default daily candles for US equities are special for historical reasons and correspond to the way US equity exchange report their daily summary data. The volume the US equity default daily candle corresponds to the total daily traded volume, while open, high, low, and close correspond to the regular trading hours only. 
+\item "{}a"{} key corresponds to \doxylink{struct_candle_symbol_afda1708a28b6cd2d5168715c173f2939}{alignment} --- alignment attribute of this symbol. The \doxylink{struct_candle_alignment}{Candle\+Alignment} defines possible values with \doxylink{struct_candle_alignment_a079e387c53a40c7660131a528d509851}{Candle\+Alignment\+::\+MIDNIGHT} being default. The alignment values can be abbreviated to the first letter. So, a 1 hour candle on a symbol "{}\+AAPL"{} that starts at the regular trading session at 9\+:30 am ET can be specified with "{}\+AAPL\{=h,a=s,tho=true\}"{}. Contrast that to the "{}\+AAPL\{=h,tho=true\}"{} candle that is aligned at midnight and thus starts at 9\+:00 am. 
+\item "{}pl"{} key corresponds to \doxylink{struct_candle_symbol_a2a508ea75703766fc999e4d40a2618dd}{price level} --- price level attribute of this symbol. The \doxylink{struct_candle_price_level}{Candle\+Price\+Level} defines additional axis to split candles within particular price corridor in addition to \doxylink{struct_candle_period}{Candle\+Period} attribute with the default value {\ttfamily NaN}. So a one-\/minute candles of "{}\+AAPL"{} with price level 0.\+1 shall be specified with "{}\+AAPL\{=m,pl=0.\+1\}"{}. 
+\end{DoxyItemize}
+
+Keys in the candle symbol are case-\/sensitive, while values are not. The \doxylink{struct_candle_symbol_ab4294a03f10c11e642f03c2be68a2cc0}{Candle\+Symbol\+::value\+Of()} method parses any valid string representation into a candle symbol object. The result of the candle symbol \doxylink{struct_candle_symbol_adc2115295246731eacb2f6c6df27f175}{Candle\+Symbol\+::to\+String()} method is always normalized\+: keys are ordered lexicographically, values are in lower-\/case and are abbreviated to their shortest possible form. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_candle_symbol_ae099fa0df23c75db2805c76257be7346}\index{CandleSymbol@{CandleSymbol}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_ae099fa0df23c75db2805c76257be7346} 
+void Candle\+Symbol\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{struct_symbol_wrapper_ac9b57f8528d3c52d9664a8561b858594}{Symbol\+Wrapper\+::free\+Graal()}}.
+
+\Hypertarget{struct_candle_symbol_af79b46399e1413e00a54ed048897cc39}\index{CandleSymbol@{CandleSymbol}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_af79b46399e1413e00a54ed048897cc39} 
+\mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} Candle\+Symbol\+::from\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+
+
+Referenced by \mbox{\hyperlink{struct_symbol_wrapper_a2a2045e8abcc80df07832870dec412c7}{Symbol\+Wrapper\+::from\+Graal()}}.
+
+\Hypertarget{struct_candle_symbol_afda1708a28b6cd2d5168715c173f2939}\index{CandleSymbol@{CandleSymbol}!getAlignment@{getAlignment}}
+\index{getAlignment@{getAlignment}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{getAlignment()}{getAlignment()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_afda1708a28b6cd2d5168715c173f2939} 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_alignment}{Candle\+Alignment}} $>$ \& Candle\+Symbol\+::get\+Alignment (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns alignment attribute of this symbol. 
+
+\begin{DoxyReturn}{Returns}
+alignment attribute of this symbol. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_a33d055a65873b13cbfa241efe31d07da}\index{CandleSymbol@{CandleSymbol}!getBaseSymbol@{getBaseSymbol}}
+\index{getBaseSymbol@{getBaseSymbol}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{getBaseSymbol()}{getBaseSymbol()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_a33d055a65873b13cbfa241efe31d07da} 
+const std\+::string \& Candle\+Symbol\+::get\+Base\+Symbol (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns base market symbol without attributes. 
+
+\begin{DoxyReturn}{Returns}
+base market symbol without attributes. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_a30b9988b75fab9eae5d78af8287db5ba}\index{CandleSymbol@{CandleSymbol}!getExchange@{getExchange}}
+\index{getExchange@{getExchange}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{getExchange()}{getExchange()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_a30b9988b75fab9eae5d78af8287db5ba} 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_exchange}{Candle\+Exchange}} $>$ \& Candle\+Symbol\+::get\+Exchange (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange attribute of this symbol. 
+
+\begin{DoxyReturn}{Returns}
+exchange attribute of this symbol. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_a203232e639dc9e517c2d327f6c1cb52b}\index{CandleSymbol@{CandleSymbol}!getPeriod@{getPeriod}}
+\index{getPeriod@{getPeriod}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{getPeriod()}{getPeriod()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_a203232e639dc9e517c2d327f6c1cb52b} 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_period}{Candle\+Period}} $>$ \& Candle\+Symbol\+::get\+Period (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns aggregation period of this symbol. 
+
+\begin{DoxyReturn}{Returns}
+aggregation period of this symbol. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_aacdb0a424121348c25eeb11852f0ff3d}\index{CandleSymbol@{CandleSymbol}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_aacdb0a424121348c25eeb11852f0ff3d} 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_price}{Candle\+Price}} $>$ \& Candle\+Symbol\+::get\+Price (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns price type attribute of this symbol. 
+
+\begin{DoxyReturn}{Returns}
+price type attribute of this symbol. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_a2a508ea75703766fc999e4d40a2618dd}\index{CandleSymbol@{CandleSymbol}!getPriceLevel@{getPriceLevel}}
+\index{getPriceLevel@{getPriceLevel}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{getPriceLevel()}{getPriceLevel()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_a2a508ea75703766fc999e4d40a2618dd} 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_price_level}{Candle\+Price\+Level}} $>$ \& Candle\+Symbol\+::get\+Price\+Level (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns price level attribute of this symbol. 
+
+\begin{DoxyReturn}{Returns}
+price level attribute of this symbol. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_af386486d74f2d27f96ebe337afb44633}\index{CandleSymbol@{CandleSymbol}!getSession@{getSession}}
+\index{getSession@{getSession}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{getSession()}{getSession()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_af386486d74f2d27f96ebe337afb44633} 
+const std\+::optional$<$ \mbox{\hyperlink{struct_candle_session}{Candle\+Session}} $>$ \& Candle\+Symbol\+::get\+Session (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns session attribute of this symbol. 
+
+\begin{DoxyReturn}{Returns}
+session attribute of this symbol. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_acb65088ffa8236fa02485f86f2c1b680}\index{CandleSymbol@{CandleSymbol}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_acb65088ffa8236fa02485f86f2c1b680} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE void \texorpdfstring{$\ast$}{*} Candle\+Symbol\+::to\+Graal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_adc2115295246731eacb2f6c6df27f175}\index{CandleSymbol@{CandleSymbol}!toString@{toString}}
+\index{toString@{toString}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_adc2115295246731eacb2f6c6df27f175} 
+const std\+::string \& Candle\+Symbol\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this symbol. 
+
+The string representation can be transformed back into symbol object using \doxylink{struct_candle_symbol_ab4294a03f10c11e642f03c2be68a2cc0}{Candle\+Symbol\+::value\+Of()} method.
+
+\begin{DoxyReturn}{Returns}
+string representation of this symbol. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_ab4294a03f10c11e642f03c2be68a2cc0}\index{CandleSymbol@{CandleSymbol}!valueOf@{valueOf}}
+\index{valueOf@{valueOf}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{valueOf()}{valueOf()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_ab4294a03f10c11e642f03c2be68a2cc0} 
+static \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} Candle\+Symbol\+::value\+Of (\begin{DoxyParamCaption}\item[{std\+::string}]{symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Converts the given string symbol into the candle symbol object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & the string symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the candle symbol object. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_ab9e22e56352823bfda2aa7a8f4552c8b}\index{CandleSymbol@{CandleSymbol}!valueOf@{valueOf}}
+\index{valueOf@{valueOf}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{valueOf()}{valueOf()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_ab9e22e56352823bfda2aa7a8f4552c8b} 
+static \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} Candle\+Symbol\+::value\+Of (\begin{DoxyParamCaption}\item[{std\+::string}]{symbol}{, }\item[{const Candle\+Symbol\+Attribute\+Variant \&}]{attribute}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Converts the given string symbol into the candle symbol object with the specified attribute set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & the string symbol. \\
+\hline
+{\em attribute} & the attribute to set. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the candle symbol object. 
+\end{DoxyReturn}
+\Hypertarget{struct_candle_symbol_a30933b10b08b28027ed4d22a37102e7d}\index{CandleSymbol@{CandleSymbol}!valueOf@{valueOf}}
+\index{valueOf@{valueOf}!CandleSymbol@{CandleSymbol}}
+\doxyparagraph{\texorpdfstring{valueOf()}{valueOf()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{struct_candle_symbol_a30933b10b08b28027ed4d22a37102e7d} 
+static \mbox{\hyperlink{struct_candle_symbol}{Candle\+Symbol}} Candle\+Symbol\+::value\+Of (\begin{DoxyParamCaption}\item[{std\+::string}]{symbol}{, }\item[{std\+::initializer\+\_\+list$<$ Candle\+Symbol\+Attribute\+Variant $>$}]{attributes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Converts the given string symbol into the candle symbol object with the specified attributes set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & the string symbol. \\
+\hline
+{\em attributes} & more attributes to set. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the candle symbol object. 
+\end{DoxyReturn}

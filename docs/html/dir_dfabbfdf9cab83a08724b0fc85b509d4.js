@@ -6,5 +6,6 @@ var dir_dfabbfdf9cab83a08724b0fc85b509d4 =
     [ "DXFeed.hpp", "d7/d02/_d_x_feed_8hpp_source.html", null ],
     [ "DXFeedSubscription.hpp", "db/d03/_d_x_feed_subscription_8hpp_source.html", null ],
     [ "DXPublisher.hpp", "d1/d03/_d_x_publisher_8hpp_source.html", null ],
+    [ "DXPublisherObservableSubscription.hpp", "d0/d03/_d_x_publisher_observable_subscription_8hpp_source.html", null ],
     [ "FilteredSubscriptionSymbol.hpp", "dc/d00/_filtered_subscription_symbol_8hpp_source.html", null ]
 ];

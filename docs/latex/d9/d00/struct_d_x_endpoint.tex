@@ -1,0 +1,1125 @@
+\doxysubsection{DXEndpoint Struct Reference}
+\hypertarget{struct_d_x_endpoint}{}\label{struct_d_x_endpoint}\index{DXEndpoint@{DXEndpoint}}
+
+
+Manages network connections to \doxylink{struct_d_x_feed}{feed} or \doxylink{struct_d_x_publisher}{publisher}.  
+
+
+
+
+{\ttfamily \#include $<$DXEndpoint.\+hpp$>$}
+
+
+
+Inherits Require\+Make\+Shared$<$ T $>$.
+
+\doxysubsubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{Builder}}
+\begin{DoxyCompactList}\small\item\em \doxylink{class_d_x_endpoint_1_1_builder}{Builder} class for \doxylink{struct_d_x_endpoint}{DXEndpoint} that supports additional configuration properties. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{Role}} \+: std\+::int32\+\_\+t \{ \newline
+\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED}}
+, \mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED}}
+, \mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a08e8da2638e7a4a4dfb3d29ab5afb751}{STREAM\+\_\+\+FEED}}
+, \mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{PUBLISHER}}
+, \newline
+\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a511c10e349c1261b726f4bf830c8a0e2}{STREAM\+\_\+\+PUBLISHER}}
+, \mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a16722a7e83ac68f9bc32cae5242046f5}{LOCAL\+\_\+\+HUB}}
+ \}
+\begin{DoxyCompactList}\small\item\em Represents the role of endpoint that was specified during its \doxylink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{creation}. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}{State}} \+: std\+::int32\+\_\+t \{ \mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED}}
+, \mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a9a14f95e151eec641316e7c784ce832d}{CONNECTING}}
+, \mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737aa5afd6edd5336d91316964e493936858}{CONNECTED}}
+, \mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}}
+ \}
+\begin{DoxyCompactList}\small\item\em Represents the current state of endpoint. \end{DoxyCompactList}\item 
+\Hypertarget{struct_d_x_endpoint_a309812425d1bf8d900e46c84d275b424}\label{struct_d_x_endpoint_a309812425d1bf8d900e46c84d275b424} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_d_x_endpoint}{DXEndpoint} object. \end{DoxyCompactList}\item 
+\Hypertarget{struct_d_x_endpoint_a99ba21aae1ae08966e3e6e191ecc3505}\label{struct_d_x_endpoint_a99ba21aae1ae08966e3e6e191ecc3505} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{struct_d_x_endpoint}{DXEndpoint} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{Role}} \mbox{\hyperlink{struct_d_x_endpoint_ae81f772b56b6aa100fcc1e4e4f954bc7}{get\+Role}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the role of this endpoint. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}{State}} \mbox{\hyperlink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{get\+State}} () const
+\begin{DoxyCompactList}\small\item\em Returns the state of this endpoint. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{struct_d_x_endpoint_a0422752047c36a081a1538f850ccdd5d}{is\+Closed}} () const
+\item 
+const std\+::string \& \mbox{\hyperlink{struct_d_x_endpoint_a3db0a904823b5abf9f5167a374628c94}{get\+Name}} () const \&noexcept
+\item 
+{\footnotesize template$<$typename State\+Change\+Listener $>$ }\\std\+::size\+\_\+t \mbox{\hyperlink{struct_d_x_endpoint_a0c0702ccc58a355c9be982716e11efb8}{add\+State\+Change\+Listener}} (State\+Change\+Listener \&\&listener) noexcept
+\begin{DoxyCompactList}\small\item\em Adds listener that is notified about changes in \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} property. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_endpoint_a3ac9ae2a08ffceedc4a0d25c2019a93e}{remove\+State\+Change\+Listener}} (std\+::size\+\_\+t listener\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Removes listener that is notified about changes in \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} property. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_simple_handler}{Simple\+Handler}}$<$ void(\mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}{DXEndpoint\+::\+State}}, \mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}{DXEndpoint\+::\+State}})$>$ \& \mbox{\hyperlink{struct_d_x_endpoint_a0b484115bbc8b17b3622f7239f846901}{on\+State\+Change}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns the on\+State\+Change \doxylink{struct_simple_handler}{handler} that can be used to add or remove listeners. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a9842b7d2972913abca385169ae105323}{user}} (const std\+::string \&user)
+\begin{DoxyCompactList}\small\item\em Changes user name for this endpoint. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a7034d598bddd78f65578a0db952f9edf}{password}} (const std\+::string \&password)
+\begin{DoxyCompactList}\small\item\em Changes password for this endpoint. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect}} (const std\+::string \&address)
+\begin{DoxyCompactList}\small\item\em Connects to the specified remote address. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_endpoint_a301fe3402bcdb2f2b73c995a94582e41}{reconnect}} ()
+\begin{DoxyCompactList}\small\item\em Terminates all established network connections and initiates connecting again with the same address. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_endpoint_af9899de33d7550f1ab4173718e86aae1}{disconnect}} ()
+\begin{DoxyCompactList}\small\item\em Terminates all remote network connections. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_endpoint_a2e72d4d9098d6fa281e059925ba0e455}{disconnect\+And\+Clear}} ()
+\begin{DoxyCompactList}\small\item\em Terminates all remote network connections and clears stored data. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_endpoint_a70b8f61781bf5991e1c0b77e4a13cb06}{close}} ()
+\begin{DoxyCompactList}\small\item\em Closes this endpoint. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_endpoint_a8080b3c2f79a7e80c411248dc6a5bc63}{await\+Not\+Connected}} ()
+\begin{DoxyCompactList}\small\item\em Waits while this endpoint \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED} or \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_endpoint_a1d1329829cb13fd1a4cc8dddf2475f18}{await\+Processed}} ()
+\begin{DoxyCompactList}\small\item\em Waits until this endpoint stops processing data (becomes quiescent). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_endpoint_a80d897f97c6add4404c967c57b20d5ed}{close\+And\+Await\+Termination}} ()
+\begin{DoxyCompactList}\small\item\em Closes this endpoint and wait until all pending data processing tasks are completed. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_feed}{DXFeed}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{get\+Feed}} ()
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_publisher}{DXPublisher}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf}{get\+Publisher}} ()
+\item 
+std\+::string \mbox{\hyperlink{struct_d_x_endpoint_aff039fb8eef7fc51fe3e7ae62e84fc25}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a9ee308e31ef33e66ec8b8b83b9cff4de}{get\+Instance}} ()
+\begin{DoxyCompactList}\small\item\em Returns a default application-\/wide singleton instance of \doxylink{struct_d_x_endpoint}{DXEndpoint} with a \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} role. \end{DoxyCompactList}\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a6c83e450d3fc9b9cb65b6422d93e36e8}{get\+Instance}} (\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{Role}} role)
+\begin{DoxyCompactList}\small\item\em Returns a default application-\/wide singleton instance of \doxylink{struct_d_x_endpoint}{DXEndpoint} for a specific role. \end{DoxyCompactList}\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675}{new\+Builder}} ()
+\begin{DoxyCompactList}\small\item\em Creates new \doxylink{class_d_x_endpoint_1_1_builder}{Builder} instance. \end{DoxyCompactList}\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{create}} ()
+\begin{DoxyCompactList}\small\item\em Creates an endpoint with \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} role. \end{DoxyCompactList}\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{struct_d_x_endpoint_a0f37d24021fc5165d273487eb7b2ef86}{create}} (\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{Role}} role)
+\begin{DoxyCompactList}\small\item\em Creates an endpoint with a specified role. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_ac08663f8cff546ca2e927426386b09af}{NAME\+\_\+\+PROPERTY}} = "{}name"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}name"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_ae872b2b0d0ccbc65a834fca353301e4f}{DXFEED\+\_\+\+PROPERTIES\+\_\+\+PROPERTY}} = "{}dxfeed.\+properties"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxfeed.\+properties"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_ad9116d8671ed8bf808c1b2ff0b936d0c}{DXFEED\+\_\+\+ADDRESS\+\_\+\+PROPERTY}} = "{}dxfeed.\+address"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxfeed.\+address"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_ab1972a4cbacd6a89180ff399bed520b3}{DXFEED\+\_\+\+USER\+\_\+\+PROPERTY}} = "{}dxfeed.\+user"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxfeed.\+user"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_a0dc153453c2325f7ba0c09ffab28f538}{DXFEED\+\_\+\+PASSWORD\+\_\+\+PROPERTY}} = "{}dxfeed.\+password"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxfeed.\+password"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_a7ac81902099106f9271ba63a2bfe9c9a}{DXFEED\+\_\+\+THREAD\+\_\+\+POOL\+\_\+\+SIZE\+\_\+\+PROPERTY}} = "{}dxfeed.\+thread\+Pool\+Size"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxfeed.\+thread\+Pool\+Size"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_a6fc312eff32b4a01436f1cb3b055d57d}{DXFEED\+\_\+\+AGGREGATION\+\_\+\+PERIOD\+\_\+\+PROPERTY}} = "{}dxfeed.\+aggregation\+Period"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxfeed.\+aggregation\+Period"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_a5561c2d3250895fcf180b50cc64c8fd2}{DXFEED\+\_\+\+WILDCARD\+\_\+\+ENABLE\+\_\+\+PROPERTY}} = "{}dxfeed.\+wildcard.\+enable"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxfeed.\+wildcard.\+enable"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_acca58c4de1589b6a92a08fc2fb8c7f0a}{DXPUBLISHER\+\_\+\+PROPERTIES\+\_\+\+PROPERTY}} = "{}dxpublisher.\+properties"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxpublisher.\+properties"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_aa4b009e5a7c4ff24f959845940d85d3a}{DXPUBLISHER\+\_\+\+ADDRESS\+\_\+\+PROPERTY}} = "{}dxpublisher.\+address"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxpublisher.\+address"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_a5a8ecf1f43b5448906177b3a09593188}{DXPUBLISHER\+\_\+\+THREAD\+\_\+\+POOL\+\_\+\+SIZE\+\_\+\+PROPERTY}} = "{}dxpublisher.\+thread\+Pool\+Size"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxpublisher.\+thread\+Pool\+Size"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_a59bc3053ef198595c2ed5a450ba5a2a4}{DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY}} = "{}dxendpoint.\+event\+Time"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxendpoint.\+event\+Time"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_a610ac393c442c3cd8524444f29bc1d7b}{DXENDPOINT\+\_\+\+STORE\+\_\+\+EVERYTHING\+\_\+\+PROPERTY}} = "{}dxendpoint.\+store\+Everything"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxendpoint.\+store\+Everything"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_acdd47b033770029d81407acdb7e0be4c}{DXSCHEME\+\_\+\+NANO\+\_\+\+TIME\+\_\+\+PROPERTY}} = "{}dxscheme.\+nano\+Time"{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxscheme.\+nano\+Time"{}} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{struct_d_x_endpoint_acac421c239f5aef5e0642b694e031349}{DXSCHEME\+\_\+\+ENABLED\+\_\+\+PROPERTY\+\_\+\+PREFIX}} = "{}dxscheme.\+enabled."{}
+\begin{DoxyCompactList}\small\item\em {\ttfamily "{}dxscheme.\+enabled."{}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_d_x_endpoint_a8c0775c5b7fb53b304df9d537bea32c5}\label{struct_d_x_endpoint_a8c0775c5b7fb53b304df9d537bea32c5} 
+struct {\bfseries On\+Demand\+Service}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Manages network connections to \doxylink{struct_d_x_feed}{feed} or \doxylink{struct_d_x_publisher}{publisher}. 
+
+There are per-\/process (per Graal\+VM Isolate for now) ready-\/to-\/use singleton instances that are available with \doxylink{struct_d_x_endpoint_a9ee308e31ef33e66ec8b8b83b9cff4de}{DXEndpoint\+::get\+Instance()} and \doxylink{struct_d_x_endpoint_a6c83e450d3fc9b9cb65b6422d93e36e8}{DXEndpoint\+::get\+Instance(\+Role)} methods as well as factory methods \doxylink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{DXEndpoint\+::create()} and \doxylink{struct_d_x_endpoint_a0f37d24021fc5165d273487eb7b2ef86}{DXEndpoint\+::create(\+Role)}, and a number of configuration methods. Advanced properties can be configured using \doxylink{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675}{new\+Builder()}.\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property(key, value)}.\doxylink{class_d_x_endpoint_1_1_builder_a1d4fc6e3ac57d058cc012dba3ab205ff}{build()}.
+
+See \doxylink{struct_d_x_feed}{DXFeed} for details on how to subscribe to symbols and receive events.
+
+\doxysubsubsubsubsection*{Endpoint role}
+
+Each endpoint has a role that is specified on its creation and cannot be changed afterwards. The default factory method \doxylink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{DXEndpoint\+::create()} creates an endpoint with a \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} role. Endpoints with other roles are created with \doxylink{struct_d_x_endpoint_a0f37d24021fc5165d273487eb7b2ef86}{DXEndpoint\+::create(\+Role)} factory method. Endpoint role is represented by \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{DXEndpoint\+::Role} enumeration.
+
+Endpoint role defines the behavior of its \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect} method\+:
+
+
+\begin{DoxyItemize}
+\item \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} connects to the remote data feed provider and is optimized for real-\/time or delayed data processing ({\bfseries{this is a default role}}). \doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{DXEndpoint\+::get\+Feed()} method returns a feed object that subscribes to this remote data feed provider and receives events from it. When event processing threads cannot keep up (don\textquotesingle{}t have enough CPU time), data is dynamically conflated to minimize latency between received events and their processing time. For example\+:
+\begin{DoxyItemize}
+\item {\bfseries{{\ttfamily \doxylink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{DXEndpoint\+::create()}-\/\texorpdfstring{$>$}{>}connect("{}demo.\+dxfeed.\+com\+:7300"{})-\/\texorpdfstring{$>$}{>}\doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{get\+Feed()}}}} returns a demo feed from dx\+Feed with sample market quotes.
+\item {\bfseries{{\ttfamily \doxylink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{DXEndpoint\+::create()}-\/\texorpdfstring{$>$}{>}connect("{}localhost\+:7400"{})-\/\texorpdfstring{$>$}{>}\doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{get\+Feed()}}}} returns a feed that is connected to a publisher that is running on the same host. See example below.
+\item {\bfseries{{\ttfamily \doxylink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{DXEndpoint\+::create()}-\/\texorpdfstring{$>$}{>}connect("{}file\+:demo-\/sample.\+data"{})-\/\texorpdfstring{$>$}{>}\doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{get\+Feed()}}}} returns a feed that is connected to a "{}demo-\/sample.\+data"{} file and plays back it as if it was received in real time.
+\end{DoxyItemize}
+
+This endpoint is automatically connected to the configured data feed as explained in default properties section.
+\item \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED} is similar to \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED}, but it is designed to be used with \doxylink{struct_on_demand_service}{On\+Demand\+Service} for historical data replay only. It is configured with default properties, but is not connected automatically to the data provider until On\+Demand\+Service\+::replay method is invoked.
+\item \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a08e8da2638e7a4a4dfb3d29ab5afb751}{STREAM\+\_\+\+FEED} is similar to \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} and also connects to the remote data feed provider, but is designed for bulk parsing of data from files. \doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{DXEndpoint\+::get\+Feed()} method returns feed object that subscribes to the data from the opened files and receives events from them. Events from the files are not conflated and are processed as fast as possible. Note, that in this role, DXFeed\+::get\+Last\+Event() method does not work and time-\/series subscription is not supported. For example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ endpoint\ =\ \mbox{\hyperlink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{DXEndpoint::create}}(\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a08e8da2638e7a4a4dfb3d29ab5afb751}{DXEndpoint::Role::STREAM\_FEED}});}
+\DoxyCodeLine{\textcolor{keyword}{auto}\ feed\ =\ endpoint-\/>getFeed();}
+
+\end{DoxyCode}
+ creates a feed that is ready to read data from file as soon as the following code is invoked\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{endpoint-\/>connect(\textcolor{stringliteral}{"{}file:demo-\/sample.data[speed=max]"{}});}
+
+\end{DoxyCode}
+ "{}\mbox{[}speed=max\mbox{]}"{} clause forces to the file reader to play back all the data from "{}demo-\/sample.\+data"{} file as fast as data subscribers are processing it.
+\item \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{PUBLISHER} connects to the remote publisher hub (also known as multiplexor) or creates a publisher on the local host. \doxylink{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf}{DXEndpoint\+::get\+Publisher()} method returns a publisher object that publishes events to all connected feeds. For example\+: {\bfseries{{\ttfamily DXEndpoint-\/\texorpdfstring{$>$}{>}create(\+DXEndpoint\+::\+Role\+::\+PUBLISHER)-\/\texorpdfstring{$>$}{>}connect("{}\+:7400"{})-\/\texorpdfstring{$>$}{>}\doxylink{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf}{get\+Publisher()}}}} returns a publisher that is waiting for connections on TCP/\+IP port 7400. The published events will be delivered to all feeds that are connected to this publisher. This endpoint is automatically connected to the configured data feed as explained in default properties section.
+\item \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a16722a7e83ac68f9bc32cae5242046f5}{LOCAL\+\_\+\+HUB} creates a local hub without ability to establish network connections. Events that are published via \doxylink{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf}{publisher} are delivered to local \doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{feed} only.
+\end{DoxyItemize}
+
+\doxysubsubsubsubsection*{Endpoint state}
+
+Each endpoint has a state that can be retrieved with \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{DXEndpoint\+::get\+State()} method. When endpoint is created with any role and default address is not specified in default properties, then it is not connected to any remote endpoint. Its state is \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED}.
+
+\doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{Feed} and \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{publisher} endpoints can connect to remote endpoints of the opposite role. Connection is initiated by \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect} method. The endpoint state becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a9a14f95e151eec641316e7c784ce832d}{CONNECTING}.
+
+When the actual connection to the remote endpoint is established, the endpoint state becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737aa5afd6edd5336d91316964e493936858}{CONNECTED}.
+
+Network connections can temporarily break and return endpoint back into \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a9a14f95e151eec641316e7c784ce832d}{CONNECTING} state. File connections can be completed and return endpoint into \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED} state.
+
+Connection to the remote endpoint can be terminated with \doxylink{struct_d_x_endpoint_af9899de33d7550f1ab4173718e86aae1}{DXEndpoint\+::disconnect()} method. The endpoint state becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED}.
+
+Endpoint can be closed with \doxylink{struct_d_x_endpoint_a70b8f61781bf5991e1c0b77e4a13cb06}{DXEndpoint\+::close()} method. The endpoint state becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}. This is a final state. All connection are terminated and all internal resources that are held by this endpoint are freed. No further connections can be initiated.
+
+\doxysubsubsubsubsection*{Event times}
+
+The \doxylink{struct_event_type_a1c9c34884f4fcce70579a059252bdf1a}{Event\+Type\+::get\+Event\+Time()} on received events is available only when the endpoint is created with \doxylink{struct_d_x_endpoint_a59bc3053ef198595c2ed5a450ba5a2a4}{DXEndpoint\+::\+DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY} property and the data source has embedded event times. This is typically true only for data events that are read from historical tape files (see above) and from \doxylink{struct_on_demand_service}{On\+Demand\+Service}. Events that are coming from a network connections do not have an embedded event time information and event time is not available for them anyway.
+
+\doxysubsubsubsubsection*{\label{struct_d_x_endpoint_defaultPropertiesSection}%
+\Hypertarget{struct_d_x_endpoint_defaultPropertiesSection}%
+Default properties}
+
+Default properties are loaded from "{}dxfeed.\+properties"{} or "{}dxpublisher.\+properties"{} file depending on the \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{role} of created endpoint. "{}dxfeed.\+properties"{} is used for \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} and \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED}, "{}dxpublisher.\+properties"{} is used for \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{PUBLISHER}\}. \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a08e8da2638e7a4a4dfb3d29ab5afb751}{STREAM\+\_\+\+FEED} and \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a16722a7e83ac68f9bc32cae5242046f5}{LOCAL\+\_\+\+HUB} do not support properties file.
+
+The location of this file can be specified using \doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property}(\doxylink{struct_d_x_endpoint_ae872b2b0d0ccbc65a834fca353301e4f}{DXFEED\+\_\+\+PROPERTIES\+\_\+\+PROPERTY}, path) or \doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property}(\doxylink{struct_d_x_endpoint_acca58c4de1589b6a92a08fc2fb8c7f0a}{DXPUBLISHER\+\_\+\+PROPERTIES\+\_\+\+PROPERTY}, path) correspondingly. When the location of this file is not explicitly specified using \doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property} method, then the file path is taken from a system property with the corresponding name.
+
+When the path to the above properties file is not provided, then a resource named "{}dxfeed.\+properties"{} or "{}dxpublisher.\+properties"{} is loaded from classpath. When classpath is set to "{}."{} (current directory), it means that the corresponding file can be placed into the current directory with any need to specify additional properties.
+
+Defaults for individual properties can be also provided using system properties when they are not specified in the configuration file. \doxylink{struct_system}{System} properties override configuration loaded from classpath resource, but don\textquotesingle{}t override configuration from the user-\/specified configuration file.
+
+The \doxylink{struct_d_x_endpoint_ac08663f8cff546ca2e927426386b09af}{DXEndpoint\+::\+NAME\+\_\+\+PROPERTY} is the exception from the above rule. It is never loaded from system properties. It can be only specified in configuration file or programmatically. There is a convenience \doxylink{class_d_x_endpoint_1_1_builder_a5b547c011d6efbc0d1b970de353eb393}{Builder.with\+Name} method for it. It is recommended to assign short and meaningful endpoint names when multiple endpoints are used in the same process (one Graal\+VM Isolate for now). The name of the endpoint shall describe its role in the particular application.
+
+Note, that individual properties that are programmatically set using \doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property} method always take precedence.
+
+\doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} and \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{PUBLISHER} automatically establish connection on creation when the corresponding \doxylink{struct_d_x_endpoint_ad9116d8671ed8bf808c1b2ff0b936d0c}{DXEndpoint\+::\+DXFEED\+\_\+\+ADDRESS\+\_\+\+PROPERTY} or \doxylink{struct_d_x_endpoint_aa4b009e5a7c4ff24f959845940d85d3a}{DXEndpoint\+::\+DXPUBLISHER\+\_\+\+ADDRESS\+\_\+\+PROPERTY} is specified.
+
+\doxysubsubsubsubsection*{Permanent subscription}
+
+Endpoint properties can define permanent subscription for specific sets of symbols and event types in the data feed, so that \doxylink{struct_d_x_feed}{DXFeed} methods like get\+Last\+Event\+If\+Subscribed, get\+Indexed\+Events\+If\+Subscribed, and get\+Time\+Series\+If\+Subscribed can be used without a need to create a separate \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} object. Please, contact dx\+Feed support for details on the required configuration.
+
+\doxysubsubsubsubsection*{Threads and locks}
+
+This class is thread-\/safe and can be used concurrently from multiple threads without external synchronization.
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html}{\texttt{ Javadoc.}}
+
+Some methods that are not marked {\ttfamily noexcept} may throw exceptions\+:
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if handle is invalid. \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & if something happened with the dx\+Feed API backend \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & if something happened with the Graal\+VM \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsubsection{Member Enumeration Documentation}
+\Hypertarget{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}\index{DXEndpoint@{DXEndpoint}!Role@{Role}}
+\index{Role@{Role}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{Role}{Role}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810} 
+enum class \mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{DXEndpoint\+::\+Role}} \+: std\+::int32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Represents the role of endpoint that was specified during its \doxylink{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}{creation}. 
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{struct_d_x_endpoint}{DXEndpoint} 
+\end{DoxySeeAlso}
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FEED@{FEED}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!FEED@{FEED}}}\Hypertarget{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}\label{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810} 
+FEED&{\ttfamily FEED} endpoint connects to the remote data feed provider and is optimized for real-\/time or delayed data processing ({\bfseries{this is a default role}}). \doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{DXEndpoint\+::get\+Feed()} method returns feed object that subscribes to the remote data feed provider and receives events from it. When event processing threads cannot keep up (don\textquotesingle{}t have enough CPU time), data is dynamically conflated to minimize latency between received events and their processing time.
+
+This endpoint is automatically connected to the configured data feed as explained in \href{\#defaultPropertiesSection}{\texttt{ default properties section}}. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ON\_DEMAND\_FEED@{ON\_DEMAND\_FEED}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!ON\_DEMAND\_FEED@{ON\_DEMAND\_FEED}}}\Hypertarget{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}\label{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810} 
+ON\+\_\+\+DEMAND\+\_\+\+FEED&{\ttfamily ON\+\_\+\+DEMAND\+\_\+\+FEED} endpoint is similar to \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{DXEndpoint\+::\+FEED}, but it is designed to be used with \doxylink{struct_on_demand_service}{On\+Demand\+Service} for historical data replay only. It is configured with \href{\#defaultPropertiesSection}{\texttt{ default properties}}, but is not connected automatically to the data provider until On\+Demand\+Service\+:\+:(std\+::int64\+\_\+t,double) "{}\+On\+Demand\+Service.\+replay"{} method is invoked.
+
+{\ttfamily ON\+\_\+\+DEMAND\+\_\+\+FEED} endpoint cannot be connected to an ordinary data feed at all. \doxylink{struct_on_demand_service_a6bdef0502b1c6b0026dadd21d8553835}{On\+Demand\+Service\+::stop\+And\+Resume()} will have a similar effect to \doxylink{struct_on_demand_service_a8d657647f6b2f0b267dd30d7dc384bd7}{On\+Demand\+Service\+::stop\+And\+Clear()}.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{struct_on_demand_service}{On\+Demand\+Service} 
+\end{DoxySeeAlso}
+\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STREAM\_FEED@{STREAM\_FEED}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!STREAM\_FEED@{STREAM\_FEED}}}\Hypertarget{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a08e8da2638e7a4a4dfb3d29ab5afb751}\label{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810} 
+STREAM\+\_\+\+FEED&{\ttfamily STREAM\+\_\+\+FEED} endpoint is similar to \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{DXEndpoint\+::\+FEED} and also connects to the remote data feed provider, but is designed for bulk parsing of data from files. \doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{DXEndpoint\+::get\+Feed()} method returns feed object that subscribes to the data from the opened files and receives events from them. Events from the files are not conflated, are not skipped, and are processed as fast as possible. Note, that in this role, DXFeed\+::get\+Last\+Event method does not work. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PUBLISHER@{PUBLISHER}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!PUBLISHER@{PUBLISHER}}}\Hypertarget{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}\label{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810} 
+PUBLISHER&{\ttfamily PUBLISHER} endpoint connects to the remote publisher hub (also known as multiplexor) or creates a publisher on the local host. \doxylink{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf}{DXEndpoint\+::get\+Publisher()} method returns a publisher object that publishes events to all connected feeds. Note, that in this role, DXFeed\+::get\+Last\+Event method does not work and time-\/series subscription is not supported.
+
+This endpoint is automatically connected to the configured data feed as explained in \href{\#defaultPropertiesSection}{\texttt{ default properties section}}. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STREAM\_PUBLISHER@{STREAM\_PUBLISHER}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!STREAM\_PUBLISHER@{STREAM\_PUBLISHER}}}\Hypertarget{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a511c10e349c1261b726f4bf830c8a0e2}\label{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810} 
+STREAM\+\_\+\+PUBLISHER&{\ttfamily STREAM\+\_\+\+PUBLISHER} endpoint is similar to \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{DXEndpoint\+::\+PUBLISHER} and also connects to the remote publisher hub, but is designed for bulk publishing of data. \doxylink{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf}{DXEndpoint\+::get\+Publisher()} method returns a publisher object that publishes events to all connected feeds. Published events are not conflated, are not skipped, and are processed as fast as possible. Note, that in this role, DXFeed\+::get\+Last\+Event method does not work and time-\/series subscription is not supported. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LOCAL\_HUB@{LOCAL\_HUB}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!LOCAL\_HUB@{LOCAL\_HUB}}}\Hypertarget{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a16722a7e83ac68f9bc32cae5242046f5}\label{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810} 
+LOCAL\+\_\+\+HUB&{\ttfamily LOCAL\+\_\+\+HUB} endpoint is a local hub without ability to establish network connections. Events that are published via \doxylink{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf}{publisher} are delivered to local \doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{feed} only. \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}\index{DXEndpoint@{DXEndpoint}!State@{State}}
+\index{State@{State}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{State}{State}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a262bde1f84968663012a21898c646737} 
+enum class \mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}{DXEndpoint\+::\+State}} \+: std\+::int32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Represents the current state of endpoint. 
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{struct_d_x_endpoint}{DXEndpoint} 
+\end{DoxySeeAlso}
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NOT\_CONNECTED@{NOT\_CONNECTED}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!NOT\_CONNECTED@{NOT\_CONNECTED}}}\Hypertarget{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}\label{struct_d_x_endpoint_a262bde1f84968663012a21898c646737} 
+NOT\+\_\+\+CONNECTED&Endpoint was created by is not connected to remote endpoints. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CONNECTING@{CONNECTING}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!CONNECTING@{CONNECTING}}}\Hypertarget{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a9a14f95e151eec641316e7c784ce832d}\label{struct_d_x_endpoint_a262bde1f84968663012a21898c646737} 
+CONNECTING&The \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect} method was called to establish connection to remove endpoint, but connection is not actually established yet or was lost. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CONNECTED@{CONNECTED}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!CONNECTED@{CONNECTED}}}\Hypertarget{struct_d_x_endpoint_a262bde1f84968663012a21898c646737aa5afd6edd5336d91316964e493936858}\label{struct_d_x_endpoint_a262bde1f84968663012a21898c646737} 
+CONNECTED&The connection to remote endpoint is established. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CLOSED@{CLOSED}!DXEndpoint@{DXEndpoint}}\index{DXEndpoint@{DXEndpoint}!CLOSED@{CLOSED}}}\Hypertarget{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}\label{struct_d_x_endpoint_a262bde1f84968663012a21898c646737} 
+CLOSED&Endpoint was \doxylink{struct_d_x_endpoint_a70b8f61781bf5991e1c0b77e4a13cb06}{closed}. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_d_x_endpoint_a0c0702ccc58a355c9be982716e11efb8}\index{DXEndpoint@{DXEndpoint}!addStateChangeListener@{addStateChangeListener}}
+\index{addStateChangeListener@{addStateChangeListener}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{addStateChangeListener()}{addStateChangeListener()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a0c0702ccc58a355c9be982716e11efb8} 
+template$<$typename State\+Change\+Listener $>$ \\
+std\+::size\+\_\+t DXEndpoint\+::add\+State\+Change\+Listener (\begin{DoxyParamCaption}\item[{State\+Change\+Listener \&\&}]{listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds listener that is notified about changes in \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} property. 
+
+Installed listener can be removed by {\ttfamily id} with \doxylink{struct_d_x_endpoint_a3ac9ae2a08ffceedc4a0d25c2019a93e}{DXEndpoint\+::remove\+State\+Change\+Listener} method or by call {\ttfamily \doxylink{struct_d_x_endpoint_a0b484115bbc8b17b3622f7239f846901}{on\+State\+Change()} -\/= id};
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em State\+Change\+Listener} & The listener type. It can be any callable with signature\+: {\ttfamily void(\+State, State)} \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the listener id 
+\end{DoxyReturn}
+\Hypertarget{struct_d_x_endpoint_a8080b3c2f79a7e80c411248dc6a5bc63}\index{DXEndpoint@{DXEndpoint}!awaitNotConnected@{awaitNotConnected}}
+\index{awaitNotConnected@{awaitNotConnected}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{awaitNotConnected()}{awaitNotConnected()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a8080b3c2f79a7e80c411248dc6a5bc63} 
+void DXEndpoint\+::await\+Not\+Connected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Waits while this endpoint \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED} or \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}. 
+
+It is a signal that any files that were opened with \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect("{}file\+:..."{})} method were finished reading, but not necessary were completely processed by the corresponding subscription listeners. Use \doxylink{struct_d_x_endpoint_a80d897f97c6add4404c967c57b20d5ed}{close\+And\+Await\+Termination()} after this method returns to make sure that all processing has completed.
+
+{\bfseries{This method is blocking.}}
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#awaitNotConnected--}{\texttt{ Javadoc.}}
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a1d1329829cb13fd1a4cc8dddf2475f18}\index{DXEndpoint@{DXEndpoint}!awaitProcessed@{awaitProcessed}}
+\index{awaitProcessed@{awaitProcessed}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{awaitProcessed()}{awaitProcessed()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a1d1329829cb13fd1a4cc8dddf2475f18} 
+void DXEndpoint\+::await\+Processed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Waits until this endpoint stops processing data (becomes quiescent). 
+
+This is important when writing data to file via "{}tape\+:..."{} connector to make sure that all published data was written before closing this endpoint.
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#awaitProcessed--}{\texttt{ Javadoc.}}
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a70b8f61781bf5991e1c0b77e4a13cb06}\index{DXEndpoint@{DXEndpoint}!close@{close}}
+\index{close@{close}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a70b8f61781bf5991e1c0b77e4a13cb06} 
+void DXEndpoint\+::close (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Closes this endpoint. 
+
+All network connection are terminated as with \doxylink{struct_d_x_endpoint_af9899de33d7550f1ab4173718e86aae1}{disconnect()} method and no further connections can be established.
+
+The endpoint \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} immediately becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}. All resources associated with this endpoint are released.
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#close--}{\texttt{ Javadoc.}}
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a80d897f97c6add4404c967c57b20d5ed}\index{DXEndpoint@{DXEndpoint}!closeAndAwaitTermination@{closeAndAwaitTermination}}
+\index{closeAndAwaitTermination@{closeAndAwaitTermination}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{closeAndAwaitTermination()}{closeAndAwaitTermination()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a80d897f97c6add4404c967c57b20d5ed} 
+void DXEndpoint\+::close\+And\+Await\+Termination (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Closes this endpoint and wait until all pending data processing tasks are completed. 
+
+This method performs the same actions as close \doxylink{struct_d_x_endpoint_a70b8f61781bf5991e1c0b77e4a13cb06}{close()}, but also awaits termination of all outstanding data processing tasks. It is designed to be used with \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a08e8da2638e7a4a4dfb3d29ab5afb751}{STREAM\+\_\+\+FEED} role after \doxylink{struct_d_x_endpoint_a8080b3c2f79a7e80c411248dc6a5bc63}{await\+Not\+Connected()} method returns to make sure that file was completely processed.
+
+{\bfseries{This method is blocking.}}
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#closeAndAwaitTermination--}{\texttt{ Javadoc.}}
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}\index{DXEndpoint@{DXEndpoint}!connect@{connect}}
+\index{connect@{connect}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ DXEndpoint\+::connect (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{address}{}\end{DoxyParamCaption})}
+
+
+
+Connects to the specified remote address. 
+
+Previously established connections are closed if the new address is different from the old one. This method does nothing if address does not change or if this endpoint is \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}. The endpoint \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} immediately becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a9a14f95e151eec641316e7c784ce832d}{CONNECTING} otherwise.
+
+The address string is provided with the market data vendor agreement. Use "{}demo.\+dxfeed.\+com\+:7300"{} for a demo quote feed.
+
+The simplest address strings have the following format\+:
+\begin{DoxyItemize}
+\item {\ttfamily host\+:port} to establish a TCP/\+IP connection.
+\item {\ttfamily \+:port} to listen for a TCP/\+IP connection with a plain socket connector (good for up to a few hundred of connections).
+\end{DoxyItemize}
+
+For premium services access credentials must be configured before invocation of {\ttfamily connect} method using \doxylink{struct_d_x_endpoint_a9842b7d2972913abca385169ae105323}{user} and \doxylink{struct_d_x_endpoint_a7034d598bddd78f65578a0db952f9edf}{password} methods.
+
+{\bfseries{This method does not wait until connection actually gets established}}. The actual connection establishment happens asynchronously after the invocation of this method. However, this method waits until notification about state transition from \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{State\+::\+NOT\+\_\+\+CONNECTED} to \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a9a14f95e151eec641316e7c784ce832d}{State\+::\+CONNECTING} gets processed by all listeners.
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#connect-java.lang.String-}{\texttt{ Javadoc.}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The data source address. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this \doxylink{struct_d_x_endpoint}{DXEndpoint}.
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & if something happened with the dx\+Feed API backend or if address string is malformed. \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693}\index{DXEndpoint@{DXEndpoint}!create@{create}}
+\index{create@{create}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a386ce8b42d0c703d2991a6790983c693} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ DXEndpoint\+::create (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an endpoint with \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} role. 
+
+The result of this method is the same as {\bfseries{{\ttfamily create(\+DXEndpoint\+::\+Role\+::\+FEED)}}}. This is a shortcut to \doxylink{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675}{new\+Builder()}-\/\texorpdfstring{$>$}{>}\doxylink{class_d_x_endpoint_1_1_builder_a1d4fc6e3ac57d058cc012dba3ab205ff}{build()}
+
+\begin{DoxyReturn}{Returns}
+the created endpoint. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a0f37d24021fc5165d273487eb7b2ef86}\index{DXEndpoint@{DXEndpoint}!create@{create}}
+\index{create@{create}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a0f37d24021fc5165d273487eb7b2ef86} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ DXEndpoint\+::create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{DXEndpoint\+::\+Role}}}]{role}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an endpoint with a specified role. 
+
+This is a shortcut to \doxylink{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675}{new\+Builder()}-\/\texorpdfstring{$>$}{>}\doxylink{class_d_x_endpoint_1_1_builder_adc012fe22e2c955cdefe43376346a08d}{with\+Role(role)}-\/\texorpdfstring{$>$}{>}\doxylink{class_d_x_endpoint_1_1_builder_a1d4fc6e3ac57d058cc012dba3ab205ff}{build()}
+
+
+\begin{DoxyParams}{Parameters}
+{\em role} & the role. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the created endpoint. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_af9899de33d7550f1ab4173718e86aae1}\index{DXEndpoint@{DXEndpoint}!disconnect@{disconnect}}
+\index{disconnect@{disconnect}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{disconnect()}{disconnect()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_af9899de33d7550f1ab4173718e86aae1} 
+void DXEndpoint\+::disconnect (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Terminates all remote network connections. 
+
+This method does nothing if this endpoint is \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}. The endpoint \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} immediately becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED} otherwise.
+
+This method does not release all resources that are associated with this endpoint. Use \doxylink{struct_d_x_endpoint_a70b8f61781bf5991e1c0b77e4a13cb06}{close()} method to release all resources.
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#disconnect--}{\texttt{ Javadoc.}}
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a2e72d4d9098d6fa281e059925ba0e455}\index{DXEndpoint@{DXEndpoint}!disconnectAndClear@{disconnectAndClear}}
+\index{disconnectAndClear@{disconnectAndClear}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{disconnectAndClear()}{disconnectAndClear()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a2e72d4d9098d6fa281e059925ba0e455} 
+void DXEndpoint\+::disconnect\+And\+Clear (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Terminates all remote network connections and clears stored data. 
+
+This method does nothing if this endpoint is \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}. The endpoint \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} immediately becomes \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED} otherwise.
+
+This method does not release all resources that are associated with this endpoint. Use \doxylink{struct_d_x_endpoint_a70b8f61781bf5991e1c0b77e4a13cb06}{close()} method to release all resources.
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#disconnectAndClear--}{\texttt{ Javadoc.}}
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}\index{DXEndpoint@{DXEndpoint}!getFeed@{getFeed}}
+\index{getFeed@{getFeed}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{getFeed()}{getFeed()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_feed}{DXFeed}} $>$ DXEndpoint\+::get\+Feed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+The feed that is associated with this endpoint. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a9ee308e31ef33e66ec8b8b83b9cff4de}\index{DXEndpoint@{DXEndpoint}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a9ee308e31ef33e66ec8b8b83b9cff4de} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ DXEndpoint\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Returns a default application-\/wide singleton instance of \doxylink{struct_d_x_endpoint}{DXEndpoint} with a \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} role. 
+
+Most applications use only a single data-\/source and should rely on this method to get one. This method creates an endpoint on the first use with a default configuration as explained in \href{\#defaultPropertiesSection}{\texttt{ default properties section}} of \doxylink{struct_d_x_endpoint}{DXEndpoint} class documentation. You can provide configuration via system properties as explained there.
+
+This is a shortcut to \doxylink{struct_d_x_endpoint_a6c83e450d3fc9b9cb65b6422d93e36e8}{get\+Instance}(\doxylink{struct_d_x_endpoint}{DXEndpoint}\+::\doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{Role}\+::\doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED}). \begin{DoxySeeAlso}{See also}
+\doxylink{struct_d_x_endpoint_a6c83e450d3fc9b9cb65b6422d93e36e8}{DXEndpoint\+::get\+Instance(\+Role)} 
+\end{DoxySeeAlso}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a6c83e450d3fc9b9cb65b6422d93e36e8}\index{DXEndpoint@{DXEndpoint}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a6c83e450d3fc9b9cb65b6422d93e36e8} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ DXEndpoint\+::get\+Instance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{DXEndpoint\+::\+Role}}}]{role}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Returns a default application-\/wide singleton instance of \doxylink{struct_d_x_endpoint}{DXEndpoint} for a specific role. 
+
+Most applications use only a single data-\/source and should rely on this method to get one. This method creates an endpoint with the corresponding role on the first use with a default configuration as explained in \href{\#defaultPropertiesSection}{\texttt{ default properties section}} of \doxylink{struct_d_x_endpoint}{DXEndpoint} class documentation. You can provide configuration via system properties as explained there.
+
+The configuration does not have to include an address. You can use \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect(address)} and \doxylink{struct_d_x_endpoint_af9899de33d7550f1ab4173718e86aae1}{DXEndpoint\+::disconnect()} methods on the instance that is returned by this method to programmatically establish and tear-\/down connection to a user-\/provided address.
+
+If you need a fully programmatic configuration and/or multiple endpoints of the same role in your application, then create a custom instance of \doxylink{struct_d_x_endpoint}{DXEndpoint} with \doxylink{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675}{DXEndpoint\+::new\+Builder()} method, configure it, and use \doxylink{class_d_x_endpoint_1_1_builder_a1d4fc6e3ac57d058cc012dba3ab205ff}{Builder\+::build()} method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em role} & The role of \doxylink{struct_d_x_endpoint}{DXEndpoint} instance \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The \doxylink{struct_d_x_endpoint}{DXEndpoint} instance 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a3db0a904823b5abf9f5167a374628c94}\index{DXEndpoint@{DXEndpoint}!getName@{getName}}
+\index{getName@{getName}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a3db0a904823b5abf9f5167a374628c94} 
+const std\+::string \& DXEndpoint\+::get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The user defined endpoint\textquotesingle{}s name 
+\end{DoxyReturn}
+\Hypertarget{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf}\index{DXEndpoint@{DXEndpoint}!getPublisher@{getPublisher}}
+\index{getPublisher@{getPublisher}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{getPublisher()}{getPublisher()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a6ea691ae833f90eb88367de17d2fbcbf} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_publisher}{DXPublisher}} $>$ DXEndpoint\+::get\+Publisher (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+The publisher that is associated with this endpoint. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_ae81f772b56b6aa100fcc1e4e4f954bc7}\index{DXEndpoint@{DXEndpoint}!getRole@{getRole}}
+\index{getRole@{getRole}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{getRole()}{getRole()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_ae81f772b56b6aa100fcc1e4e4f954bc7} 
+\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{DXEndpoint\+::\+Role}} DXEndpoint\+::get\+Role (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns the role of this endpoint. 
+
+\begin{DoxyReturn}{Returns}
+the role.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{struct_d_x_endpoint}{DXEndpoint} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}\index{DXEndpoint@{DXEndpoint}!getState@{getState}}
+\index{getState@{getState}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{getState()}{getState()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a} 
+\mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}{DXEndpoint\+::\+State}} DXEndpoint\+::get\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Returns the state of this endpoint. 
+
+\begin{DoxyReturn}{Returns}
+the state.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{struct_d_x_endpoint}{DXEndpoint} 
+\end{DoxySeeAlso}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a0422752047c36a081a1538f850ccdd5d}\index{DXEndpoint@{DXEndpoint}!isClosed@{isClosed}}
+\index{isClosed@{isClosed}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{isClosed()}{isClosed()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a0422752047c36a081a1538f850ccdd5d} 
+bool DXEndpoint\+::is\+Closed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the endpoint is closed 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675}\index{DXEndpoint@{DXEndpoint}!newBuilder@{newBuilder}}
+\index{newBuilder@{newBuilder}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{newBuilder()}{newBuilder()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{DXEndpoint\+::\+Builder}} $>$ DXEndpoint\+::new\+Builder (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates new \doxylink{class_d_x_endpoint_1_1_builder}{Builder} instance. 
+
+Use \doxylink{class_d_x_endpoint_1_1_builder_a1d4fc6e3ac57d058cc012dba3ab205ff}{Builder\+::build()} to build an instance of \doxylink{struct_d_x_endpoint}{DXEndpoint} when all configuration properties were set.
+
+\begin{DoxyReturn}{Returns}
+the created endpoint builder. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a0b484115bbc8b17b3622f7239f846901}\index{DXEndpoint@{DXEndpoint}!onStateChange@{onStateChange}}
+\index{onStateChange@{onStateChange}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{onStateChange()}{onStateChange()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a0b484115bbc8b17b3622f7239f846901} 
+\mbox{\hyperlink{struct_simple_handler}{Simple\+Handler}}$<$ void(\mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}{DXEndpoint\+::\+State}}, \mbox{\hyperlink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737}{DXEndpoint\+::\+State}})$>$ \& DXEndpoint\+::on\+State\+Change (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns the on\+State\+Change \doxylink{struct_simple_handler}{handler} that can be used to add or remove listeners. 
+
+\begin{DoxyReturn}{Returns}
+on\+State\+Change handler with {\ttfamily void(\+State, State)} signature 
+\end{DoxyReturn}
+\Hypertarget{struct_d_x_endpoint_a7034d598bddd78f65578a0db952f9edf}\index{DXEndpoint@{DXEndpoint}!password@{password}}
+\index{password@{password}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{password()}{password()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a7034d598bddd78f65578a0db952f9edf} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ DXEndpoint\+::password (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{password}{}\end{DoxyParamCaption})}
+
+
+
+Changes password for this endpoint. 
+
+This method shall be called before \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect} together with \doxylink{struct_d_x_endpoint_a9842b7d2972913abca385169ae105323}{user} to configure service access credentials.
+
+
+\begin{DoxyParams}{Parameters}
+{\em password} & The password.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this \doxylink{struct_d_x_endpoint}{DXEndpoint}. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a301fe3402bcdb2f2b73c995a94582e41}\index{DXEndpoint@{DXEndpoint}!reconnect@{reconnect}}
+\index{reconnect@{reconnect}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{reconnect()}{reconnect()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a301fe3402bcdb2f2b73c995a94582e41} 
+void DXEndpoint\+::reconnect (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Terminates all established network connections and initiates connecting again with the same address. 
+
+The effect of the method is alike to invoking \doxylink{struct_d_x_endpoint_af9899de33d7550f1ab4173718e86aae1}{disconnect()} and \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect(const std\+::string\&)} with the current address, but internal resources used for connections may be reused by implementation. TCP connections with multiple target addresses will try switch to an alternative address, configured reconnect timeouts will apply.
+
+{\bfseries{Note\+:}} The method will not connect endpoint that was not initially connected with \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect(const std\+::string\&)} method or was disconnected with \doxylink{struct_d_x_endpoint_af9899de33d7550f1ab4173718e86aae1}{disconnect()} method.
+
+The method initiates a short-\/path way for reconnecting, so whether observers will have a chance to see an intermediate state \doxylink{struct_d_x_endpoint_a262bde1f84968663012a21898c646737ad91be9b5ceb9fe0af02b9b02413eccf8}{State\+::\+NOT\+\_\+\+CONNECTED} depends on the implementation.
+
+\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html\#reconnect--}{\texttt{ Javadoc.}}
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{struct_d_x_endpoint_a3ac9ae2a08ffceedc4a0d25c2019a93e}\index{DXEndpoint@{DXEndpoint}!removeStateChangeListener@{removeStateChangeListener}}
+\index{removeStateChangeListener@{removeStateChangeListener}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{removeStateChangeListener()}{removeStateChangeListener()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a3ac9ae2a08ffceedc4a0d25c2019a93e} 
+void DXEndpoint\+::remove\+State\+Change\+Listener (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{listener\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Removes listener that is notified about changes in \doxylink{struct_d_x_endpoint_a5b0b249ad1a51b174430f0fe99cf2c0a}{state} property. 
+
+It removes the listener that was previously installed with \doxylink{struct_d_x_endpoint_a0c0702ccc58a355c9be982716e11efb8}{DXEndpoint\+::add\+State\+Change\+Listener} method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener\+Id} & The listener id to remove \\
+\hline
+\end{DoxyParams}
+\Hypertarget{struct_d_x_endpoint_aff039fb8eef7fc51fe3e7ae62e84fc25}\index{DXEndpoint@{DXEndpoint}!toString@{toString}}
+\index{toString@{toString}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_aff039fb8eef7fc51fe3e7ae62e84fc25} 
+std\+::string DXEndpoint\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{struct_shared_entity_a84179ef824d835d61488dab36f4f0325}{Shared\+Entity}}.
+
+\Hypertarget{struct_d_x_endpoint_a9842b7d2972913abca385169ae105323}\index{DXEndpoint@{DXEndpoint}!user@{user}}
+\index{user@{user}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{user()}{user()}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a9842b7d2972913abca385169ae105323} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ DXEndpoint\+::user (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{user}{}\end{DoxyParamCaption})}
+
+
+
+Changes user name for this endpoint. 
+
+This method shall be called before \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect} together with \doxylink{struct_d_x_endpoint_a7034d598bddd78f65578a0db952f9edf}{password} to configure service access credentials.
+
+
+\begin{DoxyParams}{Parameters}
+{\em user} & The user name.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this \doxylink{struct_d_x_endpoint}{DXEndpoint}. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{struct_d_x_endpoint_a59bc3053ef198595c2ed5a450ba5a2a4}\index{DXEndpoint@{DXEndpoint}!DXENDPOINT\_EVENT\_TIME\_PROPERTY@{DXENDPOINT\_EVENT\_TIME\_PROPERTY}}
+\index{DXENDPOINT\_EVENT\_TIME\_PROPERTY@{DXENDPOINT\_EVENT\_TIME\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXENDPOINT\_EVENT\_TIME\_PROPERTY}{DXENDPOINT\_EVENT\_TIME\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a59bc3053ef198595c2ed5a450ba5a2a4} 
+const std\+::string DXEndpoint\+::\+DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY = "{}dxendpoint.\+event\+Time"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxendpoint.\+event\+Time"{}} 
+
+Set this property to {\ttfamily true} to enable \doxylink{struct_event_type_a1c9c34884f4fcce70579a059252bdf1a}{event time} support. By default, the endpoint does not support event time.
+
+The event time is available only when the corresponding \doxylink{struct_d_x_endpoint}{DXEndpoint} is created with this property and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from \doxylink{struct_on_demand_service}{On\+Demand\+Service}. Events that are coming from a network connections do not have an embedded event time information and event time is not available for them anyway.
+
+Use this property if you need to work with historical data coming from files or from \doxylink{struct_on_demand_service}{On\+Demand\+Service} or writing data with times to file via \doxylink{struct_d_x_publisher}{DXPublisher} using "{}tape\+:..."{} address. \Hypertarget{struct_d_x_endpoint_a610ac393c442c3cd8524444f29bc1d7b}\index{DXEndpoint@{DXEndpoint}!DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY@{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}}
+\index{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY@{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}{DXENDPOINT\_STORE\_EVERYTHING\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a610ac393c442c3cd8524444f29bc1d7b} 
+const std\+::string DXEndpoint\+::\+DXENDPOINT\+\_\+\+STORE\+\_\+\+EVERYTHING\+\_\+\+PROPERTY = "{}dxendpoint.\+store\+Everything"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxendpoint.\+store\+Everything"{}} 
+
+Set this property to to store all \doxylink{struct_lasting_event}{lasting} and \doxylink{struct_indexed_event}{indexed} events even when there is no subscription on them. By default, the endpoint stores only events from subscriptions. It works in the same way both for \doxylink{struct_d_x_feed}{DXFeed} and \doxylink{struct_d_x_publisher}{DXPublisher}.
+
+Use this property with extreme care, since API does not currently provide any means to remove those events from the storage and there might be an effective memory leak if the spaces of symbols on which events are published grows without bound. \Hypertarget{struct_d_x_endpoint_ad9116d8671ed8bf808c1b2ff0b936d0c}\index{DXEndpoint@{DXEndpoint}!DXFEED\_ADDRESS\_PROPERTY@{DXFEED\_ADDRESS\_PROPERTY}}
+\index{DXFEED\_ADDRESS\_PROPERTY@{DXFEED\_ADDRESS\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXFEED\_ADDRESS\_PROPERTY}{DXFEED\_ADDRESS\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_ad9116d8671ed8bf808c1b2ff0b936d0c} 
+const std\+::string DXEndpoint\+::\+DXFEED\+\_\+\+ADDRESS\+\_\+\+PROPERTY = "{}dxfeed.\+address"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxfeed.\+address"{}} 
+
+Defines default connection address for an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} or \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED}. Connection is established to this address by role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} as soon as endpoint is created, while role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED} waits until \doxylink{struct_on_demand_service}{On\+Demand\+Service}\+:\+:(std\+::int64\+\_\+t,double) is invoked before connecting.
+
+By default, without this property, connection is not established until \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{connect(address)} is invoked.
+
+Credentials for access to premium services may be configured with \doxylink{struct_d_x_endpoint_ab1972a4cbacd6a89180ff399bed520b3}{DXEndpoint\+::\+DXFEED\+\_\+\+USER\+\_\+\+PROPERTY} and \doxylink{struct_d_x_endpoint_a0dc153453c2325f7ba0c09ffab28f538}{DXEndpoint\+::\+DXFEED\+\_\+\+PASSWORD\+\_\+\+PROPERTY}.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{Builder\+::with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_a6fc312eff32b4a01436f1cb3b055d57d}\index{DXEndpoint@{DXEndpoint}!DXFEED\_AGGREGATION\_PERIOD\_PROPERTY@{DXFEED\_AGGREGATION\_PERIOD\_PROPERTY}}
+\index{DXFEED\_AGGREGATION\_PERIOD\_PROPERTY@{DXFEED\_AGGREGATION\_PERIOD\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXFEED\_AGGREGATION\_PERIOD\_PROPERTY}{DXFEED\_AGGREGATION\_PERIOD\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a6fc312eff32b4a01436f1cb3b055d57d} 
+const std\+::string DXEndpoint\+::\+DXFEED\+\_\+\+AGGREGATION\+\_\+\+PERIOD\+\_\+\+PROPERTY = "{}dxfeed.\+aggregation\+Period"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxfeed.\+aggregation\+Period"{}} 
+
+Defines data aggregation period an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} that limits the rate of data notifications. For example, setting the value of this property to "{}0.\+1s"{} limits notification to once every 100ms (at most 10 per second). \begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{Builder\+::with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_a0dc153453c2325f7ba0c09ffab28f538}\index{DXEndpoint@{DXEndpoint}!DXFEED\_PASSWORD\_PROPERTY@{DXFEED\_PASSWORD\_PROPERTY}}
+\index{DXFEED\_PASSWORD\_PROPERTY@{DXFEED\_PASSWORD\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXFEED\_PASSWORD\_PROPERTY}{DXFEED\_PASSWORD\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a0dc153453c2325f7ba0c09ffab28f538} 
+const std\+::string DXEndpoint\+::\+DXFEED\+\_\+\+PASSWORD\+\_\+\+PROPERTY = "{}dxfeed.\+password"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxfeed.\+password"{}} 
+
+Defines default password for an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} or \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED}.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{struct_d_x_endpoint_a7034d598bddd78f65578a0db952f9edf}{DXEndpoint\+::password(const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_ae872b2b0d0ccbc65a834fca353301e4f}\index{DXEndpoint@{DXEndpoint}!DXFEED\_PROPERTIES\_PROPERTY@{DXFEED\_PROPERTIES\_PROPERTY}}
+\index{DXFEED\_PROPERTIES\_PROPERTY@{DXFEED\_PROPERTIES\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXFEED\_PROPERTIES\_PROPERTY}{DXFEED\_PROPERTIES\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_ae872b2b0d0ccbc65a834fca353301e4f} 
+const std\+::string DXEndpoint\+::\+DXFEED\+\_\+\+PROPERTIES\+\_\+\+PROPERTY = "{}dxfeed.\+properties"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxfeed.\+properties"{}} 
+
+Defines path to a file with properties for an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} or \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED}. By default, properties a loaded from a path resource named "{}dxfeed.\+properties"{}.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{Builder\+::with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_a7ac81902099106f9271ba63a2bfe9c9a}\index{DXEndpoint@{DXEndpoint}!DXFEED\_THREAD\_POOL\_SIZE\_PROPERTY@{DXFEED\_THREAD\_POOL\_SIZE\_PROPERTY}}
+\index{DXFEED\_THREAD\_POOL\_SIZE\_PROPERTY@{DXFEED\_THREAD\_POOL\_SIZE\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXFEED\_THREAD\_POOL\_SIZE\_PROPERTY}{DXFEED\_THREAD\_POOL\_SIZE\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a7ac81902099106f9271ba63a2bfe9c9a} 
+const std\+::string DXEndpoint\+::\+DXFEED\+\_\+\+THREAD\+\_\+\+POOL\+\_\+\+SIZE\+\_\+\+PROPERTY = "{}dxfeed.\+thread\+Pool\+Size"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxfeed.\+thread\+Pool\+Size"{}} 
+
+Defines thread pool size for an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED}. By default, the thread pool size is equal to the number of available processors. \begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{Builder\+::with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_ab1972a4cbacd6a89180ff399bed520b3}\index{DXEndpoint@{DXEndpoint}!DXFEED\_USER\_PROPERTY@{DXFEED\_USER\_PROPERTY}}
+\index{DXFEED\_USER\_PROPERTY@{DXFEED\_USER\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXFEED\_USER\_PROPERTY}{DXFEED\_USER\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_ab1972a4cbacd6a89180ff399bed520b3} 
+const std\+::string DXEndpoint\+::\+DXFEED\+\_\+\+USER\+\_\+\+PROPERTY = "{}dxfeed.\+user"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxfeed.\+user"{}} 
+
+Defines default user name for an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED} or \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22}{ON\+\_\+\+DEMAND\+\_\+\+FEED}.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{struct_d_x_endpoint_a9842b7d2972913abca385169ae105323}{DXEndpoint\+::user(const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_a5561c2d3250895fcf180b50cc64c8fd2}\index{DXEndpoint@{DXEndpoint}!DXFEED\_WILDCARD\_ENABLE\_PROPERTY@{DXFEED\_WILDCARD\_ENABLE\_PROPERTY}}
+\index{DXFEED\_WILDCARD\_ENABLE\_PROPERTY@{DXFEED\_WILDCARD\_ENABLE\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXFEED\_WILDCARD\_ENABLE\_PROPERTY}{DXFEED\_WILDCARD\_ENABLE\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a5561c2d3250895fcf180b50cc64c8fd2} 
+const std\+::string DXEndpoint\+::\+DXFEED\+\_\+\+WILDCARD\+\_\+\+ENABLE\+\_\+\+PROPERTY = "{}dxfeed.\+wildcard.\+enable"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxfeed.\+wildcard.\+enable"{}} 
+
+Set this property to {\ttfamily true} to turns on wildcard support. By default, the endpoint does not support wildcards. This property is needed for \doxylink{struct_wildcard_symbol}{Wildcard\+Symbol} support and for the use of "{}tape\+:..."{} address in \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{struct_d_x_endpoint_aa4b009e5a7c4ff24f959845940d85d3a}\index{DXEndpoint@{DXEndpoint}!DXPUBLISHER\_ADDRESS\_PROPERTY@{DXPUBLISHER\_ADDRESS\_PROPERTY}}
+\index{DXPUBLISHER\_ADDRESS\_PROPERTY@{DXPUBLISHER\_ADDRESS\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXPUBLISHER\_ADDRESS\_PROPERTY}{DXPUBLISHER\_ADDRESS\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_aa4b009e5a7c4ff24f959845940d85d3a} 
+const std\+::string DXEndpoint\+::\+DXPUBLISHER\+\_\+\+ADDRESS\+\_\+\+PROPERTY = "{}dxpublisher.\+address"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxpublisher.\+address"{}} 
+
+Defines default connection address for an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{PUBLISHER}. Connection is established to this address as soon as endpoint is created. By default, connection is not established until \doxylink{struct_d_x_endpoint_a5ab0665c63bbc41f17dffa714dbef31b}{DXEndpoint\+::connect(const std\+::string\&)} is invoked. \begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{Builder\+::with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_acca58c4de1589b6a92a08fc2fb8c7f0a}\index{DXEndpoint@{DXEndpoint}!DXPUBLISHER\_PROPERTIES\_PROPERTY@{DXPUBLISHER\_PROPERTIES\_PROPERTY}}
+\index{DXPUBLISHER\_PROPERTIES\_PROPERTY@{DXPUBLISHER\_PROPERTIES\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXPUBLISHER\_PROPERTIES\_PROPERTY}{DXPUBLISHER\_PROPERTIES\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_acca58c4de1589b6a92a08fc2fb8c7f0a} 
+const std\+::string DXEndpoint\+::\+DXPUBLISHER\+\_\+\+PROPERTIES\+\_\+\+PROPERTY = "{}dxpublisher.\+properties"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxpublisher.\+properties"{}} 
+
+Defines path to a file with properties for an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{PUBLISHER}. By default, properties a loaded from a classpath resource named "{}dxpublisher.\+properties"{}. \begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{Builder\+::with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_a5a8ecf1f43b5448906177b3a09593188}\index{DXEndpoint@{DXEndpoint}!DXPUBLISHER\_THREAD\_POOL\_SIZE\_PROPERTY@{DXPUBLISHER\_THREAD\_POOL\_SIZE\_PROPERTY}}
+\index{DXPUBLISHER\_THREAD\_POOL\_SIZE\_PROPERTY@{DXPUBLISHER\_THREAD\_POOL\_SIZE\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXPUBLISHER\_THREAD\_POOL\_SIZE\_PROPERTY}{DXPUBLISHER\_THREAD\_POOL\_SIZE\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_a5a8ecf1f43b5448906177b3a09593188} 
+const std\+::string DXEndpoint\+::\+DXPUBLISHER\+\_\+\+THREAD\+\_\+\+POOL\+\_\+\+SIZE\+\_\+\+PROPERTY = "{}dxpublisher.\+thread\+Pool\+Size"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxpublisher.\+thread\+Pool\+Size"{}} 
+
+Defines thread pool size for an endpoint with role \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{PUBLISHER}. By default, the thread pool size is equal to the number of available processors. \begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{Builder\+::with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_endpoint_acac421c239f5aef5e0642b694e031349}\index{DXEndpoint@{DXEndpoint}!DXSCHEME\_ENABLED\_PROPERTY\_PREFIX@{DXSCHEME\_ENABLED\_PROPERTY\_PREFIX}}
+\index{DXSCHEME\_ENABLED\_PROPERTY\_PREFIX@{DXSCHEME\_ENABLED\_PROPERTY\_PREFIX}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXSCHEME\_ENABLED\_PROPERTY\_PREFIX}{DXSCHEME\_ENABLED\_PROPERTY\_PREFIX}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_acac421c239f5aef5e0642b694e031349} 
+const std\+::string DXEndpoint\+::\+DXSCHEME\+\_\+\+ENABLED\+\_\+\+PROPERTY\+\_\+\+PREFIX = "{}dxscheme.\+enabled."{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxscheme.\+enabled."{}} 
+
+Defines whether a specified field from the scheme should be enabled instead of it\textquotesingle{}s default behaviour. Use it according to following format\+:~\newline
+ {\bfseries{{\ttfamily dxscheme.\+enabled.\texorpdfstring{$<$}{<}field\+\_\+property\+\_\+name\texorpdfstring{$>$}{>}=\texorpdfstring{$<$}{<}event\+\_\+name\+\_\+mask\+\_\+glob\texorpdfstring{$>$}{>}}}}
+
+For example, {\bfseries{{\ttfamily dxscheme.\+enabled.\+Time\+Nano\+Part=\doxylink{class_trade}{Trade}}}} enables {\ttfamily Nano\+Time\+Part} internal field only in \doxylink{class_trade}{Trade} events.
+
+There is a shortcut for turning on nano-\/time support using \doxylink{struct_d_x_endpoint_acdd47b033770029d81407acdb7e0be4c}{DXEndpoint\+::\+DXSCHEME\+\_\+\+NANO\+\_\+\+TIME\+\_\+\+PROPERTY}. \Hypertarget{struct_d_x_endpoint_acdd47b033770029d81407acdb7e0be4c}\index{DXEndpoint@{DXEndpoint}!DXSCHEME\_NANO\_TIME\_PROPERTY@{DXSCHEME\_NANO\_TIME\_PROPERTY}}
+\index{DXSCHEME\_NANO\_TIME\_PROPERTY@{DXSCHEME\_NANO\_TIME\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{DXSCHEME\_NANO\_TIME\_PROPERTY}{DXSCHEME\_NANO\_TIME\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_acdd47b033770029d81407acdb7e0be4c} 
+const std\+::string DXEndpoint\+::\+DXSCHEME\+\_\+\+NANO\+\_\+\+TIME\+\_\+\+PROPERTY = "{}dxscheme.\+nano\+Time"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}dxscheme.\+nano\+Time"{}} 
+
+Set this property to {\ttfamily true} to turn on nanoseconds precision business time. By default, this feature is turned off. Business time in most events is available with millisecond precision by default, while \doxylink{class_quote}{Quote} events business \doxylink{class_quote_aadd06ef7afb2cd2d50867974d50bc130}{time} is available with seconds precision.
+
+This method provides a higher-\/level control than turning on individual properties that are responsible for nano-\/time via \doxylink{struct_d_x_endpoint_acac421c239f5aef5e0642b694e031349}{DXEndpoint\+::\+DXSCHEME\+\_\+\+ENABLED\+\_\+\+PROPERTY\+\_\+\+PREFIX}. The later can be used to override of fine-\/time nano-\/time support for individual fields. Setting this property to {\ttfamily true} is essentially equivalent to setting\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{dxscheme.enabled.Sequence=*}
+\DoxyCodeLine{dxscheme.enabled.TimeNanoPart=*}
+
+\end{DoxyCode}
+ \Hypertarget{struct_d_x_endpoint_ac08663f8cff546ca2e927426386b09af}\index{DXEndpoint@{DXEndpoint}!NAME\_PROPERTY@{NAME\_PROPERTY}}
+\index{NAME\_PROPERTY@{NAME\_PROPERTY}!DXEndpoint@{DXEndpoint}}
+\doxyparagraph{\texorpdfstring{NAME\_PROPERTY}{NAME\_PROPERTY}}
+{\footnotesize\ttfamily \label{struct_d_x_endpoint_ac08663f8cff546ca2e927426386b09af} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE const std\+::string DXEndpoint\+::\+NAME\+\_\+\+PROPERTY = "{}name"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily "{}name"{}} 
+
+Defines property for endpoint name that is used to distinguish multiple endpoints in the same process in logs and in other diagnostic means. Use \doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{Builder\+::with\+Property(const std\+::string\&, const std\+::string\&)} method. This property is also changed by \doxylink{class_d_x_endpoint_1_1_builder_a5b547c011d6efbc0d1b970de353eb393}{Builder\+::with\+Name(const std\+::string\&)} method. 

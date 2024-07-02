@@ -1,16 +1,16 @@
 var searchData=
 [
-  ['abe_0',['ABE',['../da/d03/classdxfcpp_1_1_order_source.html#afe077a5f51fd3db2b64557eb1e77be0f',1,'dxfcpp::OrderSource']]],
-  ['active_1',['ACTIVE',['../da/d02/structdxfcpp_1_1_short_sale_restriction.html#a9aaad37646ab7ea16488735538d1a927',1,'dxfcpp::ShortSaleRestriction::ACTIVE'],['../d9/d02/structdxfcpp_1_1_trading_status.html#ab779651641bb7685ca24bf62848fe1d8',1,'dxfcpp::TradingStatus::ACTIVE']]],
-  ['after_5fmarket_2',['AFTER_MARKET',['../df/d01/structdxfcpp_1_1_session_filter.html#aa4cbf52fa181a03c650c97f78abe93e9',1,'dxfcpp::SessionFilter::AFTER_MARKET'],['../d5/d02/structdxfcpp_1_1_session_type.html#abbcad8dd2286e381cc9912caa9e29f5b',1,'dxfcpp::SessionType::AFTER_MARKET']]],
-  ['aggregate_3',['AGGREGATE',['../d8/d00/structdxfcpp_1_1_scope.html#af43d9a06f77d62ec2153bf6f001399e2',1,'dxfcpp::Scope']]],
-  ['aggregate_5fask_4',['AGGREGATE_ASK',['../da/d03/classdxfcpp_1_1_order_source.html#a04c738279aeef41e9c19af191320559c',1,'dxfcpp::OrderSource']]],
-  ['aggregate_5fbid_5',['AGGREGATE_BID',['../da/d03/classdxfcpp_1_1_order_source.html#a9290fe6ec805b6d7f1e654f70f2f4a9c',1,'dxfcpp::OrderSource']]],
-  ['all_6',['ALL',['../dd/d03/structdxfcpp_1_1_wildcard_symbol.html#a7c4084f144af571c8ac73b68c49dbc5c',1,'dxfcpp::WildcardSymbol']]],
-  ['any_7',['ANY',['../d1/d02/structdxfcpp_1_1_candle_session.html#ab7e6e4a28535cf8b18fb811be3687031',1,'dxfcpp::CandleSession::ANY'],['../df/d01/structdxfcpp_1_1_session_filter.html#ad6b89afe5d02468794e4e97ce8469a35',1,'dxfcpp::SessionFilter::ANY'],['../db/d02/structdxfcpp_1_1_day_filter.html#aa20423c945ca6a7bd001350f15280457',1,'dxfcpp::DayFilter::ANY']]],
-  ['argument_5fparsing_5ffailed_8',['ARGUMENT_PARSING_FAILED',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#a5480767c2f85a4fbac6a2497e9b74654',1,'dxfcpp::CEntryPointErrors']]],
-  ['ask_9',['ASK',['../d1/d00/structdxfcpp_1_1_candle_price.html#a211b648f1da56a094450fdbdfbacb86a',1,'dxfcpp::CandlePrice']]],
-  ['attribute_5fkey_10',['ATTRIBUTE_KEY',['../d1/d02/structdxfcpp_1_1_candle_alignment.html#a9c3c16aad08be954175dc6b05a0f80f8',1,'dxfcpp::CandleAlignment::ATTRIBUTE_KEY'],['../d0/d01/structdxfcpp_1_1_candle_period.html#a0719bbfc3999fdead85dcbbc8dc17df0',1,'dxfcpp::CandlePeriod::ATTRIBUTE_KEY'],['../d1/d00/structdxfcpp_1_1_candle_price.html#a911189d05dde81679dd3b59cb38ead84',1,'dxfcpp::CandlePrice::ATTRIBUTE_KEY'],['../d3/d03/structdxfcpp_1_1_candle_price_level.html#add552e7d72addd2df0f8ce17aa409fc1',1,'dxfcpp::CandlePriceLevel::ATTRIBUTE_KEY'],['../d1/d02/structdxfcpp_1_1_candle_session.html#adfd0e3e15583968f4af20d2cb1ed9c75',1,'dxfcpp::CandleSession::ATTRIBUTE_KEY']]],
-  ['aux_5fimage_5fprimary_5fimage_5fmismatch_11',['AUX_IMAGE_PRIMARY_IMAGE_MISMATCH',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#a90fbb14ae1ef9525157809538c0b12f0',1,'dxfcpp::CEntryPointErrors']]],
-  ['aux_5fimage_5funsupported_12',['AUX_IMAGE_UNSUPPORTED',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#a59ee692e38cf4d93d3eec5ee6e2c33b9',1,'dxfcpp::CEntryPointErrors']]]
+  ['abe_0',['ABE',['../d2/d02/class_order_source.html#a48761a5474bd9aefd4b3ed64a9698e36',1,'OrderSource']]],
+  ['active_1',['ACTIVE',['../db/d01/struct_short_sale_restriction.html#a7bacf01617b2e23b96d0d55bfb36949a',1,'ShortSaleRestriction::ACTIVE'],['../dd/d02/struct_trading_status.html#ab218342cc8fd44abe0708e8085e79286',1,'TradingStatus::ACTIVE']]],
+  ['actual_2',['ACTUAL',['../df/d02/struct_otc_markets_price_type.html#adb461157c7e452fd90a0f573cf4995e7',1,'OtcMarketsPriceType']]],
+  ['after_5fmarket_3',['AFTER_MARKET',['../db/d01/struct_session_filter.html#a82fb8b53b7c374edef5864ca591cdee3',1,'SessionFilter::AFTER_MARKET'],['../da/d00/struct_session_type.html#a180e6440f87435b7b73527df878b70bf',1,'SessionType::AFTER_MARKET']]],
+  ['aggregate_4',['AGGREGATE',['../d7/d00/struct_scope.html#a93aa5fc2d20e8f6a513e64cc5b906113',1,'Scope']]],
+  ['aggregate_5fask_5',['AGGREGATE_ASK',['../d2/d02/class_order_source.html#a164e1f90d334b032429689cdbb563c22',1,'OrderSource']]],
+  ['aggregate_5fbid_6',['AGGREGATE_BID',['../d2/d02/class_order_source.html#a56c96834b2987e6ea3cb02bd1002394c',1,'OrderSource']]],
+  ['all_7',['ALL',['../d3/d00/struct_wildcard_symbol.html#acf6b6b4eeecdb9cca6e311ed7db387f6',1,'WildcardSymbol']]],
+  ['any_8',['ANY',['../db/d01/struct_session_filter.html#a50e4dee1c7f3f0bff8af5c2aa151a565',1,'SessionFilter::ANY'],['../d1/d01/struct_day_filter.html#a9826a50c14094ef2c3136a6ca7bfecbc',1,'DayFilter::ANY'],['../d5/d03/struct_candle_session.html#a67d891c75a8f8571d1c63d09615c98c6',1,'CandleSession::ANY']]],
+  ['arca_9',['ARCA',['../d2/d02/class_order_source.html#ace4e855e5a449537d2edd23dc56d8f08',1,'OrderSource']]],
+  ['arca_10',['arca',['../d2/d02/class_order_source.html#afb2766f935ec0d7201793937360ca7f6',1,'OrderSource']]],
+  ['ask_11',['ASK',['../d1/d03/struct_candle_price.html#a5924d8c8be2feb6db1ac887131c469a6',1,'CandlePrice']]],
+  ['attribute_5fkey_12',['ATTRIBUTE_KEY',['../d5/d01/struct_candle_alignment.html#a8ce587e43a5f8496c1a8ea0bf24b9499',1,'CandleAlignment::ATTRIBUTE_KEY'],['../d9/d03/struct_candle_period.html#a2875205da52d8568bdbe57b6a59cf154',1,'CandlePeriod::ATTRIBUTE_KEY'],['../d1/d03/struct_candle_price.html#ae38797977ef63681da68c45ffeaa1450',1,'CandlePrice::ATTRIBUTE_KEY'],['../dd/d01/struct_candle_price_level.html#a7f251a4f9dc8ff3bfb447561fcad9d89',1,'CandlePriceLevel::ATTRIBUTE_KEY'],['../d5/d03/struct_candle_session.html#a9711ee826ebf3527e69f5e01725ca5e4',1,'CandleSession::ATTRIBUTE_KEY']]]
 ];

@@ -9,22 +9,214 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cassert}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{comment}{//\ TODO:\ implement\ [EN-\/8236]}}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Message\ \{\};}
-\DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Message\ event\ with\ application-\/specific\ attachment.\ Messages\ are\ never\ conflated\ and\ are\ delivered\ to}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ all\ connected\ subscribers.\ There\ is\ no\ built-\/in\ persistence\ for\ messages.\ They\ are\ lost\ when\ subscribers}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ are\ not\ connected\ to\ the\ message\ publisher,\ so\ they\ shall\ be\ only\ used\ for\ notification\ purposes\ in}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ addition\ to\ persistence\ mechanism.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ <h3>Implementation\ details</h3>}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ This\ event\ is\ implemented\ on\ top\ of\ QDS\ record\ \`{}Message`.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00033\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{class_message}{Message}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_message}{EventTypeWithSymbol}}<\mbox{\hyperlink{class_message}{std}}::\mbox{\hyperlink{class_message}{string}}>\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ std::optional<std::string>\ eventSymbol\_\{\};}
+\DoxyCodeLine{00037\ \ \ \ \ std::int64\_t\ eventTime\_\{\};}
+\DoxyCodeLine{00038\ \ \ \ \ std::optional<std::string>\ attachment\_\{\};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ freeGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Message\ object}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<\mbox{\hyperlink{class_message}{Message}}>;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Message\ object}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{class_message}{Unique}}\ =\ \mbox{\hyperlink{class_message}{std}}::\mbox{\hyperlink{class_message}{unique\_ptr}}<\mbox{\hyperlink{class_message}{Message}}>;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{class_message_a6c21931937ce9b32cd405dce1f57867b}{TYPE}};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{class_message_ab8eda26a7f699fd1b7f039e1b4a53f09}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{class_message_a52523f9a10a77e9bc250f3eb7fc30f0e}{toGraal}}()\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_message_a52523f9a10a77e9bc250f3eb7fc30f0e}{override}};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_message_acb2e40a006d05ce1d3c4670deb0ba811}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ message\ with\ default\ values.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{class_message_af20055721940f8bdbaeac742a5fed878}{Message}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ message\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ event\ symbol.}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_message_a974a40147271d3279c3e2c03a612fb8d}{Message}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{class_message_a974a40147271d3279c3e2c03a612fb8d}{eventSymbol\_}}\{\mbox{\hyperlink{class_message_a974a40147271d3279c3e2c03a612fb8d}{std}}::\mbox{\hyperlink{class_message_a974a40147271d3279c3e2c03a612fb8d}{move}}(\mbox{\hyperlink{class_message_a974a40147271d3279c3e2c03a612fb8d}{eventSymbol}})\}\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ message\ with\ the\ specified\ event\ symbol\ and\ attachment.}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ event\ symbol.}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ @param\ attachment\ attachment.}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{Message}}(std::string\ eventSymbol,\ std::string\ attachment)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{eventSymbol\_}}\{\mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{std}}::\mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{move}}(\mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{eventSymbol}})\},\ \mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{attachment\_}}\{\mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{std}}::\mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{move}}(\mbox{\hyperlink{class_message_a1f6468e62c712ef350c8bc907ba58c7c}{attachment}})\}\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ dxfcpp::String::NUL\ (`std::string\{"{}<null>"{}\}`)}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{class_message_a1e633559b4d0af8a025e4162eba315ca}{getEventSymbol}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_message_a1e633559b4d0af8a025e4162eba315ca}{override}}\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!eventSymbol\_)\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::String::NUL;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_.value();}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ @return\ symbol\ of\ this\ event\ or\ \`{}std::nullopt`.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_message_af3cba2e17ccc07383aed652358e8c9bd}{std}}::\mbox{\hyperlink{class_message_af3cba2e17ccc07383aed652358e8c9bd}{optional}}<\mbox{\hyperlink{class_message_af3cba2e17ccc07383aed652358e8c9bd}{std}}::\mbox{\hyperlink{class_message_af3cba2e17ccc07383aed652358e8c9bd}{string}}>\ \&\mbox{\hyperlink{class_message_af3cba2e17ccc07383aed652358e8c9bd}{getEventSymbolOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override}\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventSymbol\_;}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_message_a0134e5bc98853deb4796697a4a3e9681}{setEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_message_a0134e5bc98853deb4796697a4a3e9681}{override}}\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ check\ invalid\ utf-\/8\ [EN-\/8233]}}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ eventSymbol\_\ =\ eventSymbol;}
+\DoxyCodeLine{00130\ \ \ \ \ \}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ symbol\ and\ returns\ the\ current\ message.}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ symbol\ of\ this\ event.}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ message.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00138\ \ \ \ \ \mbox{\hyperlink{class_message}{Message}}\ \&\mbox{\hyperlink{class_message_ac59bc5f8a2f54ffeff8afe3ae0c8dcac}{withEventSymbol}}(\textcolor{keyword}{const}\ std::string\ \&eventSymbol)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_message}{Message}}\mbox{\hyperlink{class_message_a0134e5bc98853deb4796697a4a3e9681}{::}}\mbox{\hyperlink{class_message_a0134e5bc98853deb4796697a4a3e9681}{setEventSymbol}}\mbox{\hyperlink{class_message_a0134e5bc98853deb4796697a4a3e9681}{(}}eventSymbol\mbox{\hyperlink{class_message_a0134e5bc98853deb4796697a4a3e9681}{)}};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00142\ \ \ \ \ \}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00145\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_message_a3fef2ab663e769e87d282a1e999fa1f7}{getEventTime}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_message_a3fef2ab663e769e87d282a1e999fa1f7}{override}}\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTime\_;}
+\DoxyCodeLine{00147\ \ \ \ \ \}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{///}}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_message_a0d08f81e081d22724c597f562c998163}{setEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_message_a0d08f81e081d22724c597f562c998163}{override}}\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ eventTime\_\ =\ eventTime;}
+\DoxyCodeLine{00152\ \ \ \ \ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ event's\ creation\ time\ and\ returns\ the\ current\ message.}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventTime\ the\ difference,\ measured\ in\ milliseconds,\ between\ the\ event\ creation\ time\ and}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ midnight,\ January\ 1,\ 1970\ UTC.}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ message.}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00161\ \ \ \ \ \mbox{\hyperlink{class_message}{Message}}\ \&\mbox{\hyperlink{class_message_a1009f14a0a30fc096eb984efc559a57d}{withEventTime}}(std::int64\_t\ eventTime)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_message}{Message}}\mbox{\hyperlink{class_message_a0d08f81e081d22724c597f562c998163}{::}}\mbox{\hyperlink{class_message_a0d08f81e081d22724c597f562c998163}{setEventTime}}\mbox{\hyperlink{class_message_a0d08f81e081d22724c597f562c998163}{(}}eventTime\mbox{\hyperlink{class_message_a0d08f81e081d22724c597f562c998163}{)}};}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00165\ \ \ \ \ \}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ attachment.}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ @return\ attachment.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{class_message_aba03c458bb3416d949d47c6127442c67}{getAttachment}}()\ \textcolor{keyword}{const}\ \&\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!attachment\_)\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dxfcpp::String::NUL;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ attachment\_.value();}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ attachment\ of\ this\ event.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \ *\ @return\ attachment\ of\ this\ event\ or\ \`{}std::nullopt`.}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_message_a5ba50e784936125500dcc1d8e1b81c78}{std}}::\mbox{\hyperlink{class_message_a5ba50e784936125500dcc1d8e1b81c78}{optional}}<\mbox{\hyperlink{class_message_a5ba50e784936125500dcc1d8e1b81c78}{std}}::\mbox{\hyperlink{class_message_a5ba50e784936125500dcc1d8e1b81c78}{string}}>\ \&\mbox{\hyperlink{class_message_a5ba50e784936125500dcc1d8e1b81c78}{getAttachmentOpt}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ attachment\_;}
+\DoxyCodeLine{00187\ \ \ \ \ \}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ attachment.}}
+\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *\ @param\ attachment\ attachment.}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_message_af94952d3f54ae03d7ddf5321e31be1da}{setAttachment}}(std::string\ attachment)\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ attachment\_\ =\ std::move(attachment);}
+\DoxyCodeLine{00196\ \ \ \ \ \}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ attachment.\ and\ returns\ the\ current\ message.}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ @param\ attachment\ attachment.}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ message.}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00205\ \ \ \ \ \mbox{\hyperlink{class_message}{Message}}\ \&\mbox{\hyperlink{class_message_a39c78d1c0f5ed58eb4b4f02df3691b81}{withAttachment}}(std::string\ attachment)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ Message::setAttachment(std::move(attachment));}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00209\ \ \ \ \ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ std::string\ \mbox{\hyperlink{class_message_abe482dcaa45133def4eaf4481eda36b9}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_message_abe482dcaa45133def4eaf4481eda36b9}{override}};}
+\DoxyCodeLine{00212\ \};}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

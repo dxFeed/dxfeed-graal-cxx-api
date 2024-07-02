@@ -12,39 +12,102 @@
 \DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
 \DoxyCodeLine{00009\ }
 \DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DXFCXX\_VERSION}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCXX\_VERSION}\ \textcolor{stringliteral}{"{}0.0.0"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCXX\_VERSION}\ \textcolor{stringliteral}{"{}0.0.0"{}}}
 \DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
 \DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{error}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}\ \textcolor{preprocessor}{was}\ \textcolor{preprocessor}{previously}\ \textcolor{preprocessor}{defined}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{DXFCPP\_USE\_DLLS}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\_MSC\_VER\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{LIBDXFCPP\_EXPORTS}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}\ \textcolor{preprocessor}{\_\_declspec}\textcolor{preprocessor}{(}\textcolor{preprocessor}{dllexport}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DECLARE}}
-\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DEFINE}\ \textcolor{preprocessor}{\_\_declspec}\textcolor{preprocessor}{(}\textcolor{preprocessor}{dllexport}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{else}}
-\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}\ \textcolor{preprocessor}{\_\_declspec}\textcolor{preprocessor}{(}\textcolor{preprocessor}{dllimport}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DECLARE}}
-\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DEFINE}\ \textcolor{preprocessor}{\_\_declspec}\textcolor{preprocessor}{(}\textcolor{preprocessor}{dllimport}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ defined(LIBDXFCPP\_EXPORTS)}}
-\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{elif}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{DXFCPP\_USE\_DLLS}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{LIBDXFCPP\_EXPORTS}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}\ \textcolor{preprocessor}{\_\_attribute\_\_}\textcolor{preprocessor}{(}\textcolor{preprocessor}{(}\textcolor{preprocessor}{visibility}\textcolor{preprocessor}{(}\textcolor{stringliteral}{"{}default"{}}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DECLARE}\ \textcolor{preprocessor}{\_\_attribute\_\_}\textcolor{preprocessor}{(}\textcolor{preprocessor}{(}\textcolor{preprocessor}{visibility}\textcolor{preprocessor}{(}\textcolor{stringliteral}{"{}default"{}}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DEFINE}}
-\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
-\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}}
-\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DECLARE}}
-\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DEFINE}}
-\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
-\DoxyCodeLine{00037\ }
-\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}
-\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{\_\_cpp\_lib\_constexpr\_string}\textcolor{preprocessor}{)}}
-\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}\ \textcolor{preprocessor}{constexpr}}
-\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{else}}
-\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}
-\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}}
-\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\_MSC\_VER\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}\textcolor{preprocessor}{(}\textcolor{preprocessor}{...}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\_\_pragma}\textcolor{preprocessor}{(}\textcolor{preprocessor}{warning}\textcolor{preprocessor}{(}\textcolor{preprocessor}{push}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\_\_pragma}\textcolor{preprocessor}{(}\textcolor{preprocessor}{warning}\textcolor{preprocessor}{(}\textcolor{preprocessor}{disable}\ \textcolor{preprocessor}{:}\ \textcolor{preprocessor}{\_\_VA\_ARGS\_\_}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}\textcolor{preprocessor}{(}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\_\_pragma}\textcolor{preprocessor}{(}\textcolor{preprocessor}{warning}\textcolor{preprocessor}{(}\textcolor{preprocessor}{pop}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}\textcolor{preprocessor}{(}\textcolor{preprocessor}{warnings}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}\textcolor{preprocessor}{(}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{error}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}\ \textcolor{preprocessor}{was}\ \textcolor{preprocessor}{previously}\ \textcolor{preprocessor}{defined}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{DXFCPP\_USE\_DLLS}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\_MSC\_VER\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{LIBDXFCPP\_EXPORTS}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}\ \textcolor{preprocessor}{\_\_declspec}\textcolor{preprocessor}{(}\textcolor{preprocessor}{dllexport}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DECLARE}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DEFINE}\ \textcolor{preprocessor}{\_\_declspec}\textcolor{preprocessor}{(}\textcolor{preprocessor}{dllexport}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{else}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}\ \textcolor{preprocessor}{\_\_declspec}\textcolor{preprocessor}{(}\textcolor{preprocessor}{dllimport}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DECLARE}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DEFINE}\ \textcolor{preprocessor}{\_\_declspec}\textcolor{preprocessor}{(}\textcolor{preprocessor}{dllimport}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}\ \textcolor{comment}{//\ defined(LIBDXFCPP\_EXPORTS)}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{elif}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{DXFCPP\_USE\_DLLS}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{LIBDXFCPP\_EXPORTS}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}\ \textcolor{preprocessor}{\_\_attribute\_\_}\textcolor{preprocessor}{(}\textcolor{preprocessor}{(}\textcolor{preprocessor}{visibility}\textcolor{preprocessor}{(}\textcolor{stringliteral}{"{}default"{}}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DECLARE}\ \textcolor{preprocessor}{\_\_attribute\_\_}\textcolor{preprocessor}{(}\textcolor{preprocessor}{(}\textcolor{preprocessor}{visibility}\textcolor{preprocessor}{(}\textcolor{stringliteral}{"{}default"{}}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DEFINE}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DECLARE}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_EXPORT\_TEMPLATE\_DEFINE}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DXFCPP\_BEGIN\_NAMESPACE}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_BEGIN\_NAMESPACE}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{namespace}\ \textcolor{preprocessor}{dxfcpp}\ \textcolor{preprocessor}{\{}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{namespace}\ \textcolor{preprocessor}{v2}\ \textcolor{preprocessor}{\{}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_END\_NAMESPACE}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{\}}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{\}}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \_\_has\_include}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{if}\ \_\_has\_include\textcolor{preprocessor}{(}\textcolor{preprocessor}{<}\textcolor{preprocessor}{ciso646}\textcolor{preprocessor}{>}\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{ciso646}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{elif}\ \textcolor{preprocessor}{\_\_has\_include}\textcolor{preprocessor}{(}\textcolor{preprocessor}{<}\textcolor{preprocessor}{iso646}\textcolor{preprocessor}{.}\textcolor{preprocessor}{h}\textcolor{preprocessor}{>}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iso646}\textcolor{preprocessor}{.}\textcolor{preprocessor}{h}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{ciso646}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\_\_clang\_\_\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00072\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isClangFlavouredCompiler\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00074\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isClangFlavouredCompiler\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifdef}\ \textcolor{preprocessor}{\_LIBCPP\_VERSION}}
+\DoxyCodeLine{00078\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isLibCPP\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00079\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isLibCXX\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00080\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isMSSTL\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00081\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isUnknownSTL\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{elif}\ \textcolor{preprocessor}{\_\_GLIBCXX\_\_}\ \textcolor{comment}{//\ Note:\ only\ version\ 6.1\ or\ newer\ define\ this\ in\ ciso646}}
+\DoxyCodeLine{00083\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isLibCPP\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00084\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isLibCXX\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00085\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isMSSTL\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00086\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isUnknownSTL\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{elif}\ \_CPPLIB\_VER\ \textcolor{comment}{//\ Note:\ used\ by\ Visual\ Studio}}
+\DoxyCodeLine{00088\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isLibCPP\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00089\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isLibCXX\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00090\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isMSSTL\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00091\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isUnknownSTL\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{else}}
+\DoxyCodeLine{00093\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isLibCPP\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00094\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isLibCXX\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00095\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isMSSTL\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00096\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ isUnknownSTL\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{ifndef}\ \textcolor{preprocessor}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{if}\ \textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{\_\_cpp\_lib\_constexpr\_string}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \textcolor{preprocessor}{(}\textcolor{preprocessor}{(}\textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\textcolor{preprocessor}{\_\_GNUC\_\_}\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \textcolor{preprocessor}{\_\_GNUC\_\_}\ \textcolor{preprocessor}{>=}\ 12\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{||}\ \textcolor{preprocessor}{(}\textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\_\_clang\_major\_\_\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \_\_clang\_major\_\_\ \textcolor{preprocessor}{>=}\ 15\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{||}\ \textcolor{preprocessor}{(}\textcolor{preprocessor}{defined}\textcolor{preprocessor}{(}\_MSC\_VER\textcolor{preprocessor}{)}\ \textcolor{preprocessor}{\&\&}\ \_MSC\_VER\ \textcolor{preprocessor}{>=}\ 1929\textcolor{preprocessor}{)}\textcolor{preprocessor}{)}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}\ \textcolor{preprocessor}{constexpr}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{else}}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#}\ \ \ \ \ \ \ \ \textcolor{preprocessor}{define}\ \textcolor{preprocessor}{DXFCPP\_CXX20\_CONSTEXPR\_STRING}}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#}\ \ \ \ \textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{endif}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
 
 \end{DoxyCode}

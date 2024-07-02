@@ -1,0 +1,198 @@
+\doxysubsection{Indexed\+Event\+Subscription\+Symbol Class Reference}
+\hypertarget{class_indexed_event_subscription_symbol}{}\label{class_indexed_event_subscription_symbol}\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+
+
+Represents subscription to a specific source of indexed events.  
+
+
+
+
+{\ttfamily \#include $<$Indexed\+Event\+Subscription\+Symbol.\+hpp$>$}
+
+Inheritance diagram for Indexed\+Event\+Subscription\+Symbol\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{df/d03/class_indexed_event_subscription_symbol}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_indexed_event_subscription_symbol_a99ae5f29e149ccd475645d993fba3e4a}{Indexed\+Event\+Subscription\+Symbol}} (const \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} \&event\+Symbol, const \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}} \&source)
+\begin{DoxyCompactList}\small\item\em Creates indexed event subscription symbol with a specified event symbol and source. \end{DoxyCompactList}\item 
+virtual const std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ \& \mbox{\hyperlink{class_indexed_event_subscription_symbol_a261f514071ad68164ff238f9bb34f775}{get\+Event\+Symbol}} () const
+\begin{DoxyCompactList}\small\item\em Returns the wrapped event symbol (\doxylink{struct_candle_symbol}{Candle\+Symbol}, \doxylink{struct_wildcard_symbol}{Wildcard\+Symbol}, etc). \end{DoxyCompactList}\item 
+virtual const \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{class_indexed_event_subscription_symbol_a61dfc08b2b581362c71daf7d56e2c71e}{get\+Source}} () const
+\begin{DoxyCompactList}\small\item\em Returns indexed event source. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_indexed_event_subscription_symbol_a5efb867e3ec450e05225cd73059319b5}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this indexed event subscription symbol. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_indexed_event_subscription_symbol_a3904a2928d86d860290af46b414eace2}{to\+Graal}} () const
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_indexed_event_subscription_symbol_a9e0ba01c4e0b06d69bae17c094ba700a}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{class_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol}} \mbox{\hyperlink{class_indexed_event_subscription_symbol_a77a81e8d2c32fcf867466708411dbd87}{from\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents subscription to a specific source of indexed events. 
+
+This is symbol is observed by Observable\+Subscription\+Change\+Listener methods symbols\+Added and symbols\+Removed when subscription to \doxylink{struct_indexed_event}{Indexed\+Event} is defined.
+
+Instances of this class can be used with \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} to specify subscription to a particular source of indexed events. By default, when subscribing to indexed events by their event symbol object, the subscription is performed to all supported sources.
+
+\doxysubsubsubsubsection*{Equality and hash codes}
+
+Indexed event subscription symbols are compared based on their \doxylink{class_indexed_event_subscription_symbol_a261f514071ad68164ff238f9bb34f775}{event\+Symbol} and \doxylink{class_indexed_event_subscription_symbol_a61dfc08b2b581362c71daf7d56e2c71e}{source}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_indexed_event_subscription_symbol_a99ae5f29e149ccd475645d993fba3e4a}\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}!IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}!IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{IndexedEventSubscriptionSymbol()}{IndexedEventSubscriptionSymbol()}}
+{\footnotesize\ttfamily \label{class_indexed_event_subscription_symbol_a99ae5f29e149ccd475645d993fba3e4a} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE Indexed\+Event\+Subscription\+Symbol\+::\+Indexed\+Event\+Subscription\+Symbol (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} \&}]{event\+Symbol}{, }\item[{const \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}} \&}]{source}{}\end{DoxyParamCaption})}
+
+
+
+Creates indexed event subscription symbol with a specified event symbol and source. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & the wrapped event symbol (\doxylink{struct_candle_symbol}{Candle\+Symbol}, \doxylink{struct_wildcard_symbol}{Wildcard\+Symbol}, etc). \\
+\hline
+{\em source} & the source. \\
+\hline
+\end{DoxyParams}
+
+
+References \mbox{\hyperlink{class_indexed_event_subscription_symbol_a99ae5f29e149ccd475645d993fba3e4a}{Indexed\+Event\+Subscription\+Symbol()}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_indexed_event_subscription_symbol_a99ae5f29e149ccd475645d993fba3e4a}{Indexed\+Event\+Subscription\+Symbol()}}.
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_indexed_event_subscription_symbol_a9e0ba01c4e0b06d69bae17c094ba700a}\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \label{class_indexed_event_subscription_symbol_a9e0ba01c4e0b06d69bae17c094ba700a} 
+void Indexed\+Event\+Subscription\+Symbol\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+
+
+References \mbox{\hyperlink{class_indexed_event_source_a04c744156c520020e973aae3d08ff342}{Indexed\+Event\+Source\+::free\+Graal()}}, and \mbox{\hyperlink{struct_symbol_wrapper_ac9b57f8528d3c52d9664a8561b858594}{Symbol\+Wrapper\+::free\+Graal()}}.
+
+
+
+Referenced by \mbox{\hyperlink{struct_symbol_wrapper_ac9b57f8528d3c52d9664a8561b858594}{Symbol\+Wrapper\+::free\+Graal()}}.
+
+\Hypertarget{class_indexed_event_subscription_symbol_a77a81e8d2c32fcf867466708411dbd87}\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily \label{class_indexed_event_subscription_symbol_a77a81e8d2c32fcf867466708411dbd87} 
+\mbox{\hyperlink{class_indexed_event_subscription_symbol}{Indexed\+Event\+Subscription\+Symbol}} Indexed\+Event\+Subscription\+Symbol\+::from\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+
+
+References \mbox{\hyperlink{class_indexed_event_source_ab2cd529df185b88c3a040e80b742fde2}{Indexed\+Event\+Source\+::from\+Graal()}}, and \mbox{\hyperlink{struct_symbol_wrapper_a2a2045e8abcc80df07832870dec412c7}{Symbol\+Wrapper\+::from\+Graal()}}.
+
+
+
+Referenced by \mbox{\hyperlink{struct_symbol_wrapper_a2a2045e8abcc80df07832870dec412c7}{Symbol\+Wrapper\+::from\+Graal()}}.
+
+\Hypertarget{class_indexed_event_subscription_symbol_a261f514071ad68164ff238f9bb34f775}\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}!getEventSymbol@{getEventSymbol}}
+\index{getEventSymbol@{getEventSymbol}!IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{getEventSymbol()}{getEventSymbol()}}
+{\footnotesize\ttfamily \label{class_indexed_event_subscription_symbol_a261f514071ad68164ff238f9bb34f775} 
+const std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{struct_symbol_wrapper}{Symbol\+Wrapper}} $>$ \& Indexed\+Event\+Subscription\+Symbol\+::get\+Event\+Symbol (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Returns the wrapped event symbol (\doxylink{struct_candle_symbol}{Candle\+Symbol}, \doxylink{struct_wildcard_symbol}{Wildcard\+Symbol}, etc). 
+
+\begin{DoxyReturn}{Returns}
+the wrapped event symbol. 
+\end{DoxyReturn}
+\Hypertarget{class_indexed_event_subscription_symbol_a61dfc08b2b581362c71daf7d56e2c71e}\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}!getSource@{getSource}}
+\index{getSource@{getSource}!IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily \label{class_indexed_event_subscription_symbol_a61dfc08b2b581362c71daf7d56e2c71e} 
+const \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}} \& Indexed\+Event\+Subscription\+Symbol\+::get\+Source (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Returns indexed event source. 
+
+\begin{DoxyReturn}{Returns}
+indexed event source. 
+\end{DoxyReturn}
+\Hypertarget{class_indexed_event_subscription_symbol_a3904a2928d86d860290af46b414eace2}\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \label{class_indexed_event_subscription_symbol_a3904a2928d86d860290af46b414eace2} 
+void \texorpdfstring{$\ast$}{*} Indexed\+Event\+Subscription\+Symbol\+::to\+Graal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_time_series_subscription_symbol_a05cae06d2c9cbb24f39e60b7a8da2fa9}{Time\+Series\+Subscription\+Symbol}}.
+
+\Hypertarget{class_indexed_event_subscription_symbol_a5efb867e3ec450e05225cd73059319b5}\index{IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}!toString@{toString}}
+\index{toString@{toString}!IndexedEventSubscriptionSymbol@{IndexedEventSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{class_indexed_event_subscription_symbol_a5efb867e3ec450e05225cd73059319b5} 
+std\+::string Indexed\+Event\+Subscription\+Symbol\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this indexed event subscription symbol. 
+
+\begin{DoxyReturn}{Returns}
+string representation of this indexed event subscription symbol. 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_time_series_subscription_symbol_ad6e252263aae3ee58428c0bd06345d6f}{Time\+Series\+Subscription\+Symbol}}.
+

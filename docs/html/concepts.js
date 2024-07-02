@@ -5,42 +5,39 @@ var concepts =
       [ "Reasons for the New CXX API Repository", "index.html#autotoc_md2", null ],
       [ "Benefits of the New Version", "index.html#autotoc_md3", null ],
       [ "Milestones", "index.html#autotoc_md4", null ],
-      [ "Future Development", "index.html#autotoc_md5", null ],
-      [ "Migration", "index.html#autotoc_md7", [
-        [ "Sample Mapping", "index.html#autotoc_md8", null ]
+      [ "Migration", "index.html#autotoc_md5", [
+        [ "Sample Mapping", "index.html#autotoc_md6", null ]
       ] ],
-      [ "Implementation Details", "index.html#autotoc_md9", null ],
-      [ "Architectural Restrictions and Other Limitations of the Old Version", "index.html#autotoc_md10", null ]
+      [ "Implementation Details", "index.html#autotoc_md7", null ],
+      [ "Architectural Restrictions and Other Limitations of the Old Version", "index.html#autotoc_md8", null ]
     ] ],
-    [ "Documentation", "index.html#autotoc_md11", null ],
-    [ "Requirements", "index.html#autotoc_md12", [
-      [ "Windows", "index.html#autotoc_md13", [
-        [ "Requirements", "index.html#autotoc_md14", null ]
+    [ "Documentation", "index.html#autotoc_md9", null ],
+    [ "Requirements", "index.html#autotoc_md10", [
+      [ "Windows", "index.html#autotoc_md11", [
+        [ "Requirements", "index.html#autotoc_md12", null ]
       ] ],
-      [ "Linux", "index.html#autotoc_md15", [
-        [ "Libc compatibility", "index.html#autotoc_md16", null ],
-        [ "Libpthread compatibility", "index.html#autotoc_md17", null ]
+      [ "Linux", "index.html#autotoc_md13", [
+        [ "libc compatibility", "index.html#autotoc_md14", null ],
+        [ "libpthread compatibility", "index.html#autotoc_md15", null ]
       ] ],
-      [ "macOS", "index.html#autotoc_md18", null ]
+      [ "macOS", "index.html#autotoc_md16", null ]
     ] ],
-    [ "Installation", "index.html#autotoc_md19", null ],
-    [ "Usage", "index.html#autotoc_md20", [
-      [ "How to connect to QD endpoint", "index.html#autotoc_md21", null ],
-      [ "How to connect to dxLink", "index.html#autotoc_md22", null ]
+    [ "Installation", "index.html#autotoc_md17", null ],
+    [ "Usage", "index.html#autotoc_md18", [
+      [ "How to connect to QD endpoint", "index.html#autotoc_md19", null ],
+      [ "How to connect to dxLink", "index.html#autotoc_md20", null ]
     ] ],
-    [ "Tools", "index.html#autotoc_md23", null ],
-    [ "Samples", "index.html#autotoc_md24", null ],
-    [ "Current State", "index.html#autotoc_md25", [
-      [ "Endpoint Roles", "index.html#autotoc_md26", null ],
-      [ "Event Types", "index.html#autotoc_md27", null ],
-      [ "Subscription Symbols", "index.html#autotoc_md28", null ],
-      [ "Subscriptions & Models", "index.html#autotoc_md29", null ],
-      [ "IPF & Schedule", "index.html#autotoc_md30", null ],
-      [ "Services", "index.html#autotoc_md31", null ]
+    [ "Tools", "index.html#autotoc_md21", null ],
+    [ "Samples", "index.html#autotoc_md22", null ],
+    [ "Current State", "index.html#autotoc_md23", [
+      [ "Endpoint Roles", "index.html#autotoc_md24", null ],
+      [ "Event Types", "index.html#autotoc_md25", null ],
+      [ "Subscription Symbols", "index.html#autotoc_md26", null ],
+      [ "Subscriptions & Models", "index.html#autotoc_md27", null ],
+      [ "IPF & Schedule", "index.html#autotoc_md28", null ],
+      [ "Services", "index.html#autotoc_md29", null ]
     ] ],
-    [ "dxfcpp", null, [
-      [ "ConvertibleToSymbolWrapper", "d1/d03/conceptdxfcpp_1_1_convertible_to_symbol_wrapper.html", null ],
-      [ "ConvertibleToSymbolWrapperCollection", "dd/d01/conceptdxfcpp_1_1_convertible_to_symbol_wrapper_collection.html", null ],
-      [ "ConvertibleToStringSymbol", "d9/d02/conceptdxfcpp_1_1_convertible_to_string_symbol.html", null ]
-    ] ]
+    [ "ConvertibleToStringSymbol", "da/d02/concept_convertible_to_string_symbol.html", null ],
+    [ "ConvertibleToSymbolWrapper", "d6/d02/concept_convertible_to_symbol_wrapper.html", null ],
+    [ "ConvertibleToSymbolWrapperCollection", "d0/d03/concept_convertible_to_symbol_wrapper_collection.html", null ]
 ];

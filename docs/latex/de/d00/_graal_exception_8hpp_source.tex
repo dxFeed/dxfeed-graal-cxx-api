@@ -1,0 +1,56 @@
+\doxysubsection{Graal\+Exception.\+hpp}
+\hypertarget{_graal_exception_8hpp_source}{}\label{_graal_exception_8hpp_source}\index{GraalException.hpp@{GraalException.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ (c)\ 2024\ Devexperts\ LLC.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ SPDX-\/License-\/Identifier:\ MPL-\/2.0}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{pragma}\ \textcolor{preprocessor}{once}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251\ 4275)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/CEntryPointErrors.hpp"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{stdexcept}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ The\ wrapper\ over\ CEntryPointErrorsEnum,\ the\ error\ code\ returned\ by\ GraalVM.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_graal_exception}{GraalException}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_graal_exception}{std}}::\mbox{\hyperlink{struct_graal_exception}{runtime\_error}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ \ *\ Constructs\ an\ exception.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ *\ @param\ entryPointErrorsEnum\ The\ error\ code\ returned\ by\ GraalVM.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{struct_graal_exception_ace8adac3651defe5bf4ece48046c09ee}{GraalException}}(CEntryPointErrorsEnum\ entryPointErrorsEnum);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ *\ @return\ dxFeed\ Graal\ CXX\ API\ stack\ trace}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{struct_graal_exception_a1fcaf686b35f3f7514625383259afab8}{getStackTrace}}()\ \textcolor{keyword}{const}\&;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ std::string\ createMessage(CEntryPointErrorsEnum\ entryPointErrorsEnum)\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ result\ =\ CEntryPointErrorsEnumToStr(entryPointErrorsEnum);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!result)\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::string(\textcolor{stringliteral}{"{}Unknown\ error\ with\ error\ code:\ "{}})\ +}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(\textcolor{keyword}{static\_cast}<std::size\_t>(entryPointErrorsEnum));}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ std::string\ stackTrace\_;}
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
+
+\end{DoxyCode}

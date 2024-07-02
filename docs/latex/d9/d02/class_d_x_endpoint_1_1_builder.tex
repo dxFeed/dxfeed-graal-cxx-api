@@ -1,0 +1,232 @@
+\doxysubsection{DXEndpoint\+::Builder Class Reference}
+\hypertarget{class_d_x_endpoint_1_1_builder}{}\label{class_d_x_endpoint_1_1_builder}\index{DXEndpoint::Builder@{DXEndpoint::Builder}}
+
+
+\doxylink{class_d_x_endpoint_1_1_builder}{Builder} class for \doxylink{struct_d_x_endpoint}{DXEndpoint} that supports additional configuration properties.  
+
+
+
+
+{\ttfamily \#include $<$DXEndpoint.\+hpp$>$}
+
+
+
+Inherits Require\+Make\+Shared$<$ T $>$.
+
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_d_x_endpoint_1_1_builder_ace6a9aaac33d763392ea01690ea0e438}\label{class_d_x_endpoint_1_1_builder_ace6a9aaac33d763392ea01690ea0e438} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Builder} () noexcept override
+\begin{DoxyCompactList}\small\item\em Releases the Graal\+VM handle. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder_a5b547c011d6efbc0d1b970de353eb393}{with\+Name}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Changes name that is used to distinguish multiple endpoints in the same process (Graal\+VM Isolate) in logs and in other diagnostic means. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder_adc012fe22e2c955cdefe43376346a08d}{with\+Role}} (\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{Role}} role)
+\begin{DoxyCompactList}\small\item\em Sets role for the created \doxylink{struct_d_x_endpoint}{DXEndpoint}. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property}} (const std\+::string \&key, const std\+::string \&value)
+\begin{DoxyCompactList}\small\item\em Sets the specified property. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Properties $>$ }\\std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{Builder}} $>$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder_ac3db2767e536a401b350ce0865484abc}{with\+Properties}} (Properties \&\&properties)
+\begin{DoxyCompactList}\small\item\em Sets all supported properties from the provided properties object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_d_x_endpoint_1_1_builder_a1172125d8c4b2898ffd3e46f763520c8}{supports\+Property}} (const std\+::string \&key)
+\begin{DoxyCompactList}\small\item\em Checks if a property is supported. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder_a1d4fc6e3ac57d058cc012dba3ab205ff}{build}} ()
+\begin{DoxyCompactList}\small\item\em Builds \doxylink{struct_d_x_endpoint}{DXEndpoint} instance. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxylink{class_d_x_endpoint_1_1_builder}{Builder} class for \doxylink{struct_d_x_endpoint}{DXEndpoint} that supports additional configuration properties. 
+
+Some methods that are not marked {\ttfamily noexcept} may throw exceptions\+:
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if handle is invalid. \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & if something happened with the dx\+Feed API backend \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & if something happened with the Graal\+VM \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_d_x_endpoint_1_1_builder_a1d4fc6e3ac57d058cc012dba3ab205ff}\index{DXEndpoint::Builder@{DXEndpoint::Builder}!build@{build}}
+\index{build@{build}!DXEndpoint::Builder@{DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{build()}{build()}}
+{\footnotesize\ttfamily \label{class_d_x_endpoint_1_1_builder_a1d4fc6e3ac57d058cc012dba3ab205ff} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_endpoint}{DXEndpoint}} $>$ DXEndpoint\+::\+Builder\+::build (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Builds \doxylink{struct_d_x_endpoint}{DXEndpoint} instance. 
+
+\begin{DoxyReturn}{Returns}
+the created endpoint. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_d_x_endpoint_1_1_builder_a1172125d8c4b2898ffd3e46f763520c8}\index{DXEndpoint::Builder@{DXEndpoint::Builder}!supportsProperty@{supportsProperty}}
+\index{supportsProperty@{supportsProperty}!DXEndpoint::Builder@{DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{supportsProperty()}{supportsProperty()}}
+{\footnotesize\ttfamily \label{class_d_x_endpoint_1_1_builder_a1172125d8c4b2898ffd3e46f763520c8} 
+bool DXEndpoint\+::\+Builder\+::supports\+Property (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key}{}\end{DoxyParamCaption})}
+
+
+
+Checks if a property is supported. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The property\textquotesingle{}s key to be checked for support \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the corresponding property key is supported.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_d_x_endpoint_1_1_builder_a5b547c011d6efbc0d1b970de353eb393}\index{DXEndpoint::Builder@{DXEndpoint::Builder}!withName@{withName}}
+\index{withName@{withName}!DXEndpoint::Builder@{DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{withName()}{withName()}}
+{\footnotesize\ttfamily \label{class_d_x_endpoint_1_1_builder_a5b547c011d6efbc0d1b970de353eb393} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{DXEndpoint\+::\+Builder}} $>$ DXEndpoint\+::\+Builder\+::with\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Changes name that is used to distinguish multiple endpoints in the same process (Graal\+VM Isolate) in logs and in other diagnostic means. 
+
+This is a shortcut for \doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property}(\doxylink{struct_d_x_endpoint_ac08663f8cff546ca2e927426386b09af}{NAME\+\_\+\+PROPERTY}, {\ttfamily name})
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The endpoint\textquotesingle{}s name\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} endpoint builder. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_d_x_endpoint_1_1_builder_ac3db2767e536a401b350ce0865484abc}\index{DXEndpoint::Builder@{DXEndpoint::Builder}!withProperties@{withProperties}}
+\index{withProperties@{withProperties}!DXEndpoint::Builder@{DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{withProperties()}{withProperties()}}
+{\footnotesize\ttfamily \label{class_d_x_endpoint_1_1_builder_ac3db2767e536a401b350ce0865484abc} 
+template$<$typename Properties $>$ \\
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{Builder}} $>$ DXEndpoint\+::\+Builder\+::with\+Properties (\begin{DoxyParamCaption}\item[{Properties \&\&}]{properties}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Sets all supported properties from the provided properties object. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Properties} & The properties\textquotesingle{} type (std\+::map, std\+::unordered\+\_\+map etc) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em properties} & The endpoint\textquotesingle{}s properties \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} endpoint builder.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}{with\+Property(const std\+::string\&, const std\+::string\&)} 
+\end{DoxySeeAlso}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec}\index{DXEndpoint::Builder@{DXEndpoint::Builder}!withProperty@{withProperty}}
+\index{withProperty@{withProperty}!DXEndpoint::Builder@{DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{withProperty()}{withProperty()}}
+{\footnotesize\ttfamily \label{class_d_x_endpoint_1_1_builder_a33b674850c9fa104e42e3d45f71bf3ec} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{DXEndpoint\+::\+Builder}} $>$ DXEndpoint\+::\+Builder\+::with\+Property (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key}{, }\item[{const std\+::string \&}]{value}{}\end{DoxyParamCaption})}
+
+
+
+Sets the specified property. 
+
+Unsupported properties are ignored.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The endpoint\textquotesingle{}s property key \\
+\hline
+{\em value} & The endpoint\textquotesingle{}s property value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} endpoint builder.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_endpoint_1_1_builder_a1172125d8c4b2898ffd3e46f763520c8}{supports\+Property(const std\+::string\&)} 
+\end{DoxySeeAlso}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_d_x_endpoint_1_1_builder_adc012fe22e2c955cdefe43376346a08d}\index{DXEndpoint::Builder@{DXEndpoint::Builder}!withRole@{withRole}}
+\index{withRole@{withRole}!DXEndpoint::Builder@{DXEndpoint::Builder}}
+\doxyparagraph{\texorpdfstring{withRole()}{withRole()}}
+{\footnotesize\ttfamily \label{class_d_x_endpoint_1_1_builder_adc012fe22e2c955cdefe43376346a08d} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_endpoint_1_1_builder}{DXEndpoint\+::\+Builder}} $>$ DXEndpoint\+::\+Builder\+::with\+Role (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810}{DXEndpoint\+::\+Role}}}]{role}{}\end{DoxyParamCaption})}
+
+
+
+Sets role for the created \doxylink{struct_d_x_endpoint}{DXEndpoint}. 
+
+Default role is \doxylink{struct_d_x_endpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{FEED}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em role} & The endpoint\textquotesingle{}s role\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} endpoint builder. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+{\em \doxylink{struct_java_exception}{Java\+Exception}} & \\
+\hline
+{\em \doxylink{struct_graal_exception}{Graal\+Exception}} & \\
+\hline
+\end{DoxyExceptions}

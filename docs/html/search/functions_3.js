@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['detach_0',['detach',['../d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html#a66a071b089569e7b8b14c2a03a5f79f7',1,'dxfcpp::DXFeedSubscription']]],
-  ['detachsubscription_1',['detachSubscription',['../d7/d00/structdxfcpp_1_1_d_x_feed.html#af12bc9145e7f705ff12c45e74fdd3bbe',1,'dxfcpp::DXFeed']]],
-  ['detachsubscriptionandclear_2',['detachSubscriptionAndClear',['../d7/d00/structdxfcpp_1_1_d_x_feed.html#a25e1791f5b4a117483b4838e900cb98b',1,'dxfcpp::DXFeed']]],
-  ['disconnect_3',['disconnect',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#a3cd3eb1eef171e3cc16e8a811e7c276e',1,'dxfcpp::DXEndpoint']]],
-  ['disconnectandclear_4',['disconnectAndClear',['../d0/d03/structdxfcpp_1_1_d_x_endpoint.html#a54870cea9e9e4b541549f183c76fda4d',1,'dxfcpp::DXEndpoint']]],
-  ['downloaddefaults_5',['downloadDefaults',['../d1/d00/structdxfcpp_1_1_schedule.html#a9c6541a2f047a8de3435b047dfdcbdb3',1,'dxfcpp::Schedule']]],
+  ['detach_0',['detach',['../dc/d00/class_d_x_feed_subscription.html#abe5fa8fdc03fe385d685195a938e11a2',1,'DXFeedSubscription']]],
+  ['detachsubscription_1',['detachSubscription',['../d1/d00/struct_d_x_feed.html#a5052561608cdd4772d2fadc01f4b8c7e',1,'DXFeed']]],
+  ['detachsubscriptionandclear_2',['detachSubscriptionAndClear',['../d1/d00/struct_d_x_feed.html#a55951c9ededf92ffa426dfb52d80cda6',1,'DXFeed']]],
+  ['disconnect_3',['disconnect',['../d9/d00/struct_d_x_endpoint.html#af9899de33d7550f1ab4173718e86aae1',1,'DXEndpoint']]],
+  ['disconnectandclear_4',['disconnectAndClear',['../d9/d00/struct_d_x_endpoint.html#a2e72d4d9098d6fa281e059925ba0e455',1,'DXEndpoint']]],
+  ['downloaddefaults_5',['downloadDefaults',['../d3/d03/struct_schedule.html#a06d71538a7d9f8bcd568b5630810a7d9',1,'Schedule']]],
   ['dxfc_5fdxendpoint_5fadd_5fstate_5fchange_5flistener_6',['dxfc_dxendpoint_add_state_change_listener',['../dc/d01/api_8h.html#af2f5c570bbf2897082c2ff8c3dc8d784',1,'DXEndpoint.cpp']]],
   ['dxfc_5fdxendpoint_5fawait_5fnot_5fconnected_7',['dxfc_dxendpoint_await_not_connected',['../dc/d01/api_8h.html#a1efb70ae4cc208bcfe65150b5c345612',1,'DXEndpoint.cpp']]],
   ['dxfc_5fdxendpoint_5fawait_5fprocessed_8',['dxfc_dxendpoint_await_processed',['../dc/d01/api_8h.html#afcd8a7bdbfd180aaed93a75ea844a88c',1,'DXEndpoint.cpp']]],

@@ -9,418 +9,422 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{deque}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{future}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{deque}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{functional}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{future}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{mutex}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ A\ thread-\/safe\ class\ that\ allows\ to\ asynchronously\ notify\ listeners\ with\ a\ given\ signature.}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ Listeners\ can\ be\ any\ callable\ entities.}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ Listeners\ are\ placed\ in\ a\ future.\ Within\ one\ batch,\ listeners\ will\ be\ called\ sequentially.\ Futures\ are\ placed\ in}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ a\ circular\ buffer\ and\ executed\ asynchronously.}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ If\ you\ need\ synchronous\ execution\ of\ listeners,\ but\ it\ was\ possible\ to\ execute\ them\ in\ another\ thread,\ then\ limit}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ the\ buffer\ size\ to\ one.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ @tparam\ Signature\ The\ arguments\ "{}signature"{}\ (example:\ \`{}void(int,\ int)`)}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00028\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Signature>\ \textcolor{keyword}{struct}\ Handler;}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ A\ thread-\/safe\ class\ that\ allows\ to\ asynchronously\ notify\ listeners\ with\ a\ given\ signature.}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ Listeners\ can\ be\ any\ callable\ entities.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Listeners\ are\ placed\ in\ a\ future.\ Within\ one\ batch,\ listeners\ will\ be\ called\ sequentially.\ Futures\ are\ placed\ in}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ a\ circular\ buffer\ and\ executed\ asynchronously.}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ If\ you\ need\ synchronous\ execution\ of\ listeners,\ but\ it\ was\ possible\ to\ execute\ them\ in\ another\ thread,\ then\ limit}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ the\ buffer\ size\ to\ one.}}
-\DoxyCodeLine{00038\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ @tparam\ ArgTypes\ The\ arguments\ "{}signature"{}\ (example:\ \`{}void(int,\ int)`)}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00041\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ ArgTypes>\ \textcolor{keyword}{struct}\ Handler<\textcolor{keywordtype}{void}(ArgTypes...)>\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{///\ The\ listener\ type}}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{using}\ ListenerType\ =\ std::function<\textcolor{keywordtype}{void}(ArgTypes...)>;}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ FAKE\_ID\{\textcolor{keyword}{static\_cast}<std::size\_t>(-\/1)\};}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ MAIN\_FUTURES\_DEFAULT\_SIZE\ =\ 1;}
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \ \ \ \ std::recursive\_mutex\ listenersMutex\_\{\};}
-\DoxyCodeLine{00050\ \ \ \ \ std::unordered\_map<std::size\_t,\ ListenerType>\ listeners\_\{\};}
-\DoxyCodeLine{00051\ \ \ \ \ std::unordered\_map<std::size\_t,\ ListenerType>\ lowPriorityListeners\_\{\};}
-\DoxyCodeLine{00052\ }
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::atomic<std::size\_t>\ lastId\_\{\};}
+\DoxyCodeLine{00017\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ A\ thread-\/safe\ class\ that\ allows\ to\ asynchronously\ notify\ listeners\ with\ a\ given\ signature.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ Listeners\ can\ be\ any\ callable\ entities.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ Listeners\ are\ placed\ in\ a\ future.\ Within\ one\ batch,\ listeners\ will\ be\ called\ sequentially.\ Futures\ are\ placed\ in}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ a\ circular\ buffer\ and\ executed\ asynchronously.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ If\ you\ need\ synchronous\ execution\ of\ listeners,\ but\ it\ was\ possible\ to\ execute\ them\ in\ another\ thread,\ then\ limit}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ the\ buffer\ size\ to\ one.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ @tparam\ Signature\ The\ arguments\ "{}signature"{}\ (example:\ \`{}void(int,\ int)`)}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00030\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Signature>\ \textcolor{keyword}{struct}\ Handler;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ A\ thread-\/safe\ class\ that\ allows\ to\ asynchronously\ notify\ listeners\ with\ a\ given\ signature.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ Listeners\ can\ be\ any\ callable\ entities.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ Listeners\ are\ placed\ in\ a\ future.\ Within\ one\ batch,\ listeners\ will\ be\ called\ sequentially.\ Futures\ are\ placed\ in}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ a\ circular\ buffer\ and\ executed\ asynchronously.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ *\ If\ you\ need\ synchronous\ execution\ of\ listeners,\ but\ it\ was\ possible\ to\ execute\ them\ in\ another\ thread,\ then\ limit}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ *\ the\ buffer\ size\ to\ one.}}
+\DoxyCodeLine{00040\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00041\ \textcolor{comment}{\ *\ @tparam\ ArgTypes\ The\ arguments\ "{}signature"{}\ (example:\ \`{}void(int,\ int)`)}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00043\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ ArgTypes>\ \textcolor{keyword}{struct}\ Handler<\textcolor{keywordtype}{void}(ArgTypes...)>\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{///\ The\ listener\ type}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{using}\ ListenerType\ =\ std::function<\textcolor{keywordtype}{void}(ArgTypes...)>;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ FAKE\_ID\{\textcolor{keyword}{static\_cast}<std::size\_t>(-\/1)\};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ MAIN\_FUTURES\_DEFAULT\_SIZE\ =\ 1;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ std::recursive\_mutex\ listenersMutex\_\{\};}
+\DoxyCodeLine{00052\ \ \ \ \ std::unordered\_map<std::size\_t,\ ListenerType>\ listeners\_\{\};}
+\DoxyCodeLine{00053\ \ \ \ \ std::unordered\_map<std::size\_t,\ ListenerType>\ lowPriorityListeners\_\{\};}
 \DoxyCodeLine{00054\ }
-\DoxyCodeLine{00055\ \ \ \ \ std::recursive\_mutex\ mainFuturesMutex\_\{\};}
-\DoxyCodeLine{00056\ \ \ \ \ std::vector<std::shared\_future<\textcolor{keywordtype}{void}>>\ mainFutures\_\{\};}
-\DoxyCodeLine{00057\ \ \ \ \ std::size\_t\ mainFuturesCurrentIndex\_\{\};}
-\DoxyCodeLine{00058\ \ \ \ \ std::size\_t\ mainFuturesSize\_\{\};}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \ \ \ \ std::shared\_future<\textcolor{keywordtype}{void}>\ handleImpl(ArgTypes...\ args)\ \{}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::async(}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ std::launch::async,}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](ArgTypes...\ args)\ \{}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&listener\ :\ listeners\_)\ \{}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listener.second(args...);}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&listener\ :\ lowPriorityListeners\_)\ \{}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listener.second(args...);}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ args...);}
-\DoxyCodeLine{00075\ \ \ \ \ \}}
-\DoxyCodeLine{00076\ }
-\DoxyCodeLine{00077\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ handler\ by\ specified\ size\ of\ circular\ buffer\ of\ futures}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ @param\ mainFuturesSize\ The\ size\ of\ the\ circular\ buffer\ of\ futures}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_ad7ed5f74288003a29ca670e0f2650161}{Handler}}(std::size\_t\ mainFuturesSize\ =\ MAIN\_FUTURES\_DEFAULT\_SIZE)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ :\ mainFuturesCurrentIndex\_\{0ULL\},\ mainFuturesSize\_\{mainFuturesSize\}\ \{}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mainFuturesSize\ >\ 1)\ \{}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ mainFutures\_.reserve(mainFuturesSize);}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00088\ \ \ \ \ \}}
-\DoxyCodeLine{00089\ }
-\DoxyCodeLine{00090\ \ \ \ \ Handler(\textcolor{keyword}{const}\ Handler\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::atomic<std::size\_t>\ lastId\_\{\};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ std::recursive\_mutex\ mainFuturesMutex\_\{\};}
+\DoxyCodeLine{00058\ \ \ \ \ std::vector<std::shared\_future<\textcolor{keywordtype}{void}>>\ mainFutures\_\{\};}
+\DoxyCodeLine{00059\ \ \ \ \ std::size\_t\ mainFuturesCurrentIndex\_\{\};}
+\DoxyCodeLine{00060\ \ \ \ \ std::size\_t\ mainFuturesSize\_\{\};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ std::shared\_future<\textcolor{keywordtype}{void}>\ handleImpl(ArgTypes...\ args)\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::async(}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ std::launch::async,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](ArgTypes...\ args)\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&listener\ :\ listeners\_)\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listener.second(args...);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&listener\ :\ lowPriorityListeners\_)\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listener.second(args...);}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ args...);}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ handler\ by\ specified\ size\ of\ circular\ buffer\ of\ futures}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ @param\ mainFuturesSize\ The\ size\ of\ the\ circular\ buffer\ of\ futures}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a8522c5d62be8f0818471af0321e3ebd1}{Handler}}(std::size\_t\ mainFuturesSize\ =\ MAIN\_FUTURES\_DEFAULT\_SIZE)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ :\ mainFuturesCurrentIndex\_\{0ULL\},\ mainFuturesSize\_\{mainFuturesSize\}\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mainFuturesSize\ >\ 1)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ mainFutures\_.reserve(mainFuturesSize);}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \}}
 \DoxyCodeLine{00091\ }
-\DoxyCodeLine{00092\ \ \ \ \ Handler(Handler\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ std::scoped\_lock\ lock(other.listenersMutex\_,\ other.mainFuturesMutex\_);}
-\DoxyCodeLine{00094\ }
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ listeners\_.swap(other.listeners\_);}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.swap(other.lowPriorityListeners\_);}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ mainFutures\_.swap(other.mainFutures\_);}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ mainFuturesCurrentIndex\_\ =\ other.mainFuturesCurrentIndex\_;}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ mainFuturesSize\_\ =\ other.mainFuturesSize\_;}
-\DoxyCodeLine{00100\ \ \ \ \ \}}
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \ \ \ \ Handler\ \&operator=(\textcolor{keyword}{const}\ Handler\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00092\ \ \ \ \ Handler(\textcolor{keyword}{const}\ Handler\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ Handler(Handler\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ std::scoped\_lock\ lock(other.listenersMutex\_,\ other.mainFuturesMutex\_);}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ listeners\_.swap(other.listeners\_);}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.swap(other.lowPriorityListeners\_);}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ mainFutures\_.swap(other.mainFutures\_);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ mainFuturesCurrentIndex\_\ =\ other.mainFuturesCurrentIndex\_;}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ mainFuturesSize\_\ =\ other.mainFuturesSize\_;}
+\DoxyCodeLine{00102\ \ \ \ \ \}}
 \DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \ Handler\ \&operator=(Handler\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ std::scoped\_lock\ lock(listenersMutex\_,\ mainFuturesMutex\_,\ other.listenersMutex\_,\ other.mainFuturesMutex\_);}
-\DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ listeners\_.swap(other.listeners\_);}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.swap(other.lowPriorityListeners\_);}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ mainFutures\_.swap(other.mainFutures\_);}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ mainFuturesCurrentIndex\_\ =\ other.mainFuturesCurrentIndex\_;}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ mainFuturesSize\_\ =\ other.mainFuturesSize\_;}
-\DoxyCodeLine{00112\ }
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00114\ \ \ \ \ \}}
-\DoxyCodeLine{00115\ }
-\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *\ Calls\ the\ listeners\ and\ pass\ the\ args\ to\ them}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ @param\ args\ The\ listeners\ arguments}}
-\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_ad57717cd50bf8d216122c3312beb5655}{handle}}(ArgTypes...\ args)\ \{}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ f\ =\ handleImpl(args...);}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mainFuturesSize\_\ <=\ 1)\ \{}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ f.wait();}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{mainFuturesMutex\_\};}
-\DoxyCodeLine{00128\ }
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mainFutures\_.size()\ <\ mainFuturesSize\_)\ \{}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFutures\_.emplace\_back(f);}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFuturesCurrentIndex\_\ \%=\ mainFuturesSize\_;}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFutures\_[mainFuturesCurrentIndex\_].wait();}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFutures\_[mainFuturesCurrentIndex\_]\ =\ f;}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFuturesCurrentIndex\_++;}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00138\ \ \ \ \ \}}
-\DoxyCodeLine{00139\ }
-\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *\ Calls\ the\ listeners\ and\ pass\ the\ ars\ to\ them}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ @param\ args\ The\ listeners\ arguments}}
-\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_acf3c46e822d94dd73db7c0049cff5e98}{operator}}()(ArgTypes...\ args)\ \{}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ handle(args...);}
-\DoxyCodeLine{00147\ \ \ \ \ \}}
-\DoxyCodeLine{00148\ }
-\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ listener\ to\ "{}main"{}\ group}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00155\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_a845abea0f4f416a3f33130153edf9f7e}{add}}(ListenerType\ \&\&listener)\ \{}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00157\ }
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lastId\_\ >=\ FAKE\_ID\ -\/\ 1)\ \{}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ FAKE\_ID;}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00161\ }
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ++lastId\_;}
+\DoxyCodeLine{00104\ \ \ \ \ Handler\ \&operator=(\textcolor{keyword}{const}\ Handler\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ Handler\ \&operator=(Handler\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ std::scoped\_lock\ lock(listenersMutex\_,\ mainFuturesMutex\_,\ other.listenersMutex\_,\ other.mainFuturesMutex\_);}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ listeners\_.swap(other.listeners\_);}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.swap(other.lowPriorityListeners\_);}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ mainFutures\_.swap(other.mainFutures\_);}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ mainFuturesCurrentIndex\_\ =\ other.mainFuturesCurrentIndex\_;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ mainFuturesSize\_\ =\ other.mainFuturesSize\_;}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00116\ \ \ \ \ \}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ *\ Calls\ the\ listeners\ and\ pass\ the\ args\ to\ them}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ *\ @param\ args\ The\ listeners\ arguments}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a094e3ac5032c33c1690ce1eb021d5f17}{handle}}(ArgTypes...\ args)\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ f\ =\ handleImpl(args...);}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mainFuturesSize\_\ <=\ 1)\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ f.wait();}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{mainFuturesMutex\_\};}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mainFutures\_.size()\ <\ mainFuturesSize\_)\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFutures\_.emplace\_back(f);}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFuturesCurrentIndex\_\ \%=\ mainFuturesSize\_;}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFutures\_[mainFuturesCurrentIndex\_].wait();}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFutures\_[mainFuturesCurrentIndex\_]\ =\ f;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainFuturesCurrentIndex\_++;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00140\ \ \ \ \ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ Calls\ the\ listeners\ and\ pass\ the\ ars\ to\ them}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ @param\ args\ The\ listeners\ arguments}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a5af8176a10f303392113e3dcef9ae8ab}{operator}}()(ArgTypes...\ args)\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ handle(args...);}
+\DoxyCodeLine{00149\ \ \ \ \ \}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ listener\ to\ "{}main"{}\ group}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00157\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a0c96c15b9b0954f9bb82e4defaca1442}{add}}(ListenerType\ \&\&listener)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lastId\_\ >=\ FAKE\_ID\ -\/\ 1)\ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ FAKE\_ID;}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00163\ }
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ listeners\_.emplace(id,\ std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ++lastId\_;}
 \DoxyCodeLine{00165\ }
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
-\DoxyCodeLine{00167\ \ \ \ \ \}}
-\DoxyCodeLine{00168\ }
-\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ low\ priority\ listener\ (to\ the\ "{}low\ priority"{}\ group)}}
-\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *\ It\ will\ be\ called\ after\ the\ "{}main"{}\ listeners}}
-\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
-\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00176\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_a92d291de6b5347bc519ceb457a797462}{addLowPriority}}(ListenerType\ \&\&listener)\ \{}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00178\ }
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lastId\_\ >=\ FAKE\_ID\ -\/\ 1)\ \{}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ FAKE\_ID;}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00182\ }
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ++lastId\_;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ listeners\_.emplace(id,\ std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00169\ \ \ \ \ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ low\ priority\ listener\ (to\ the\ "{}low\ priority"{}\ group)}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ It\ will\ be\ called\ after\ the\ "{}main"{}\ listeners}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00178\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_aaa4b9d5f0a93c3c0ec8aa56c56f95c09}{addLowPriority}}(ListenerType\ \&\&listener)\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lastId\_\ >=\ FAKE\_ID\ -\/\ 1)\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ FAKE\_ID;}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.emplace(id,\ std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ++lastId\_;}
 \DoxyCodeLine{00186\ }
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
-\DoxyCodeLine{00188\ \ \ \ \ \}}
-\DoxyCodeLine{00189\ }
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ listener\ to\ "{}main"{}\ group}}
-\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
-\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00196\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_a4f7397739f26b1f78a2d86be9f8f5211}{operator}}+=(ListenerType\ \&\&listener)\ \{}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ add(std::forward<ListenerType>(listener));}
-\DoxyCodeLine{00198\ \ \ \ \ \}}
-\DoxyCodeLine{00199\ }
-\DoxyCodeLine{00200\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ low\ priority\ listener\ (to\ the\ "{}low\ priority"{}\ group).}}
-\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ *\ It\ will\ be\ called\ after\ the\ "{}main"{}\ listeners}}
-\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
-\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00207\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_af6c01a862fc80facca52d320bf9cc1af}{operator}}\%=(ListenerType\ \&\&listener)\ \{}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ addLowPriority(std::forward<ListenerType>(listener));}
-\DoxyCodeLine{00209\ \ \ \ \ \}}
-\DoxyCodeLine{00210\ }
-\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ a\ listener\ by\ the\ id}}
-\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ listener\ id}}
-\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_ab2609d65f0497ab0064b08b2c3ace012}{remove}}(std::size\_t\ id)\ \{}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00218\ }
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (id\ ==\ FAKE\_ID)\ \{}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00222\ }
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (listeners\_.count(id)\ >\ 0)\ \{}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ listeners\_.erase(id);}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (lowPriorityListeners\_.count(id)\ >\ 0)\ \{}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ lowPriorityListeners\_.erase(id);}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00228\ \ \ \ \ \}}
-\DoxyCodeLine{00229\ }
-\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ a\ listener\ by\ the\ id}}
-\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ listener\ id}}
-\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_handler_3_01void_07_arg_types_8_8_8_08_4_a3fa94d4cd2deb830bca670389843a178}{operator}}-\/=(std::size\_t\ id)\ \{}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ remove(id);}
-\DoxyCodeLine{00237\ \ \ \ \ \}}
-\DoxyCodeLine{00238\ \};}
-\DoxyCodeLine{00239\ }
-\DoxyCodeLine{00240\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00241\ \textcolor{comment}{\ *\ A\ thread-\/safe\ class\ that\ allows\ to\ asynchronously\ notify\ listeners\ with\ a\ given\ signature.}}
-\DoxyCodeLine{00242\ \textcolor{comment}{\ *\ Listeners\ can\ be\ any\ callable\ entities.}}
-\DoxyCodeLine{00243\ \textcolor{comment}{\ *\ Listeners\ are\ placed\ in\ one\ future\ without\ queues.}}
-\DoxyCodeLine{00244\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00245\ \textcolor{comment}{\ *\ @tparam\ Signature\ The\ arguments\ "{}signature"{}\ (example:\ \`{}void(int,\ int)`)}}
-\DoxyCodeLine{00246\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00247\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Signature>\ \textcolor{keyword}{struct}\ SimpleHandler;}
-\DoxyCodeLine{00248\ }
-\DoxyCodeLine{00249\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00250\ \textcolor{comment}{\ *\ A\ thread-\/safe\ class\ that\ allows\ to\ asynchronously\ notify\ listeners\ with\ a\ given\ signature.}}
-\DoxyCodeLine{00251\ \textcolor{comment}{\ *\ Listeners\ can\ be\ any\ callable\ entities.}}
-\DoxyCodeLine{00252\ \textcolor{comment}{\ *\ Listeners\ are\ placed\ in\ one\ future\ without\ queues.}}
-\DoxyCodeLine{00253\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00254\ \textcolor{comment}{\ *\ @tparam\ ArgTypes\ The\ arguments\ "{}signature"{}\ (example:\ \`{}void(int,\ int)`)}}
-\DoxyCodeLine{00255\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00256\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ ArgTypes>\ \textcolor{keyword}{struct}\ SimpleHandler<\textcolor{keywordtype}{void}(ArgTypes...)>\ \textcolor{keyword}{final}\ \{}
-\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keyword}{using}\ ListenerType\ =\ std::function<\textcolor{keywordtype}{void}(ArgTypes...)>;}
-\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ FAKE\_ID\{\textcolor{keyword}{static\_cast}<std::size\_t>(-\/1)\};}
-\DoxyCodeLine{00259\ }
-\DoxyCodeLine{00260\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00261\ \ \ \ \ std::recursive\_mutex\ listenersMutex\_\{\};}
-\DoxyCodeLine{00262\ \ \ \ \ std::unordered\_map<std::size\_t,\ ListenerType>\ listeners\_\{\};}
-\DoxyCodeLine{00263\ \ \ \ \ std::unordered\_map<std::size\_t,\ ListenerType>\ lowPriorityListeners\_\{\};}
-\DoxyCodeLine{00264\ }
-\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::atomic<std::size\_t>\ lastId\_\{\};}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.emplace(id,\ std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00190\ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ listener\ to\ "{}main"{}\ group}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00198\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a421fd83e00a713bed277e766789003ef}{operator}}+=(ListenerType\ \&\&listener)\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ add(std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00200\ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ low\ priority\ listener\ (to\ the\ "{}low\ priority"{}\ group).}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ *\ It\ will\ be\ called\ after\ the\ "{}main"{}\ listeners}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00209\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a2dd4358a28b85e1f35f2de85d5a240d2}{operator}}\%=(ListenerType\ \&\&listener)\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ addLowPriority(std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00211\ \ \ \ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ a\ listener\ by\ the\ id}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ listener\ id}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_aea0e4f429d682d388424f6f31c884a0d}{remove}}(std::size\_t\ id)\ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (id\ ==\ FAKE\_ID)\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (listeners\_.count(id)\ >\ 0)\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ listeners\_.erase(id);}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (lowPriorityListeners\_.count(id)\ >\ 0)\ \{}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ lowPriorityListeners\_.erase(id);}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00230\ \ \ \ \ \}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ a\ listener\ by\ the\ id}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ listener\ id}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_handler_3_01void_07_arg_types_8_8_8_08_4_a9a9274ece06eadc8feeb8a3b3c5b7bae}{operator}}-\/=(std::size\_t\ id)\ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ remove(id);}
+\DoxyCodeLine{00239\ \ \ \ \ \}}
+\DoxyCodeLine{00240\ \};}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ *\ A\ thread-\/safe\ class\ that\ allows\ to\ asynchronously\ notify\ listeners\ with\ a\ given\ signature.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ *\ Listeners\ can\ be\ any\ callable\ entities.}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ *\ Listeners\ are\ placed\ in\ one\ future\ without\ queues.}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ *\ @tparam\ Signature\ The\ arguments\ "{}signature"{}\ (example:\ \`{}void(int,\ int)`)}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00249\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Signature>\ \textcolor{keyword}{struct}\ SimpleHandler;}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ *\ A\ thread-\/safe\ class\ that\ allows\ to\ asynchronously\ notify\ listeners\ with\ a\ given\ signature.}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ *\ Listeners\ can\ be\ any\ callable\ entities.}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ *\ Listeners\ are\ placed\ in\ one\ future\ without\ queues.}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ *\ @tparam\ ArgTypes\ The\ arguments\ "{}signature"{}\ (example:\ \`{}void(int,\ int)`)}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00258\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ ArgTypes>\ \textcolor{keyword}{struct}\ SimpleHandler<\textcolor{keywordtype}{void}(ArgTypes...)>\ \textcolor{keyword}{final}\ \{}
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keyword}{using}\ ListenerType\ =\ std::function<\textcolor{keywordtype}{void}(ArgTypes...)>;}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ FAKE\_ID\{\textcolor{keyword}{static\_cast}<std::size\_t>(-\/1)\};}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00263\ \ \ \ \ std::recursive\_mutex\ listenersMutex\_\{\};}
+\DoxyCodeLine{00264\ \ \ \ \ std::unordered\_map<std::size\_t,\ ListenerType>\ listeners\_\{\};}
+\DoxyCodeLine{00265\ \ \ \ \ std::unordered\_map<std::size\_t,\ ListenerType>\ lowPriorityListeners\_\{\};}
 \DoxyCodeLine{00266\ }
-\DoxyCodeLine{00267\ \ \ \ \ std::shared\_future<\textcolor{keywordtype}{void}>\ handleImpl(ArgTypes...\ args)\ \{}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::async(}
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ std::launch::async,}
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](ArgTypes...\ args)\ \{}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00272\ }
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&listener\ :\ listeners\_)\ \{}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listener.second(args...);}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00276\ }
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&listener\ :\ lowPriorityListeners\_)\ \{}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listener.second(args...);}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ args...);}
-\DoxyCodeLine{00282\ \ \ \ \ \}}
-\DoxyCodeLine{00283\ }
-\DoxyCodeLine{00284\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00285\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ handler}}
-\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00288\ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_ad61817f97608b59ef4ed5330d90f8d07}{SimpleHandler}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00289\ \ \ \ \ SimpleHandler(\textcolor{keyword}{const}\ SimpleHandler\ \&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00290\ }
-\DoxyCodeLine{00291\ \ \ \ \ SimpleHandler(SimpleHandler\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ std::scoped\_lock\ lock(other.listenersMutex\_);}
-\DoxyCodeLine{00293\ }
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ listeners\_.swap(other.listeners\_);}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.swap(other.lowPriorityListeners\_);}
-\DoxyCodeLine{00296\ \ \ \ \ \}}
-\DoxyCodeLine{00297\ }
-\DoxyCodeLine{00298\ \ \ \ \ SimpleHandler\ \&operator=(\textcolor{keyword}{const}\ SimpleHandler\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ std::atomic<std::size\_t>\ lastId\_\{\};}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ std::shared\_future<\textcolor{keywordtype}{void}>\ handleImpl(ArgTypes...\ args)\ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::async(}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ std::launch::async,}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](ArgTypes...\ args)\ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&listener\ :\ listeners\_)\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listener.second(args...);}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&listener\ :\ lowPriorityListeners\_)\ \{}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listener.second(args...);}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \},}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ args...);}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ the\ new\ handler}}
+\DoxyCodeLine{00289\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00290\ \ \ \ \ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_ab951c631463189cd2befaaf819a3c846}{SimpleHandler}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00291\ \ \ \ \ SimpleHandler(\textcolor{keyword}{const}\ SimpleHandler\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ SimpleHandler(SimpleHandler\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ std::scoped\_lock\ lock(other.listenersMutex\_);}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ listeners\_.swap(other.listeners\_);}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.swap(other.lowPriorityListeners\_);}
+\DoxyCodeLine{00298\ \ \ \ \ \}}
 \DoxyCodeLine{00299\ }
-\DoxyCodeLine{00300\ \ \ \ \ SimpleHandler\ \&operator=(SimpleHandler\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ std::scoped\_lock\ lock(listenersMutex\_,\ other.listenersMutex\_);}
-\DoxyCodeLine{00302\ }
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ listeners\_.swap(other.listeners\_);}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.swap(other.lowPriorityListeners\_);}
-\DoxyCodeLine{00305\ }
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00307\ \ \ \ \ \}}
-\DoxyCodeLine{00308\ }
-\DoxyCodeLine{00309\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *\ Calls\ the\ listeners\ and\ pass\ the\ args\ to\ them}}
-\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ @param\ args\ The\ listeners\ arguments}}
-\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_af1de639832de99890d0c4b0c48ae0390}{handle}}(ArgTypes...\ args)\ \{}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ f\ =\ handleImpl(args...);}
-\DoxyCodeLine{00316\ }
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ f.wait();}
-\DoxyCodeLine{00318\ \ \ \ \ \}}
-\DoxyCodeLine{00319\ }
-\DoxyCodeLine{00320\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00321\ \textcolor{comment}{\ \ \ \ \ *\ Calls\ the\ listeners\ and\ pass\ the\ ars\ to\ them}}
-\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *\ @param\ args\ The\ listeners\ arguments}}
-\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00325\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a58f5eb33116de00704b8cd1450c05072}{operator}}()(ArgTypes...\ args)\ \{}
-\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ handle(args...);}
-\DoxyCodeLine{00327\ \ \ \ \ \}}
-\DoxyCodeLine{00328\ }
-\DoxyCodeLine{00329\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00330\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ listener\ to\ "{}main"{}\ group}}
-\DoxyCodeLine{00331\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
-\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00335\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a5a61183594efd828a885864a1654b88c}{add}}(ListenerType\ \&\&listener)\ \{}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00337\ }
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lastId\_\ >=\ FAKE\_ID\ -\/\ 1)\ \{}
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ FAKE\_ID;}
-\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00341\ }
-\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ++lastId\_;}
+\DoxyCodeLine{00300\ \ \ \ \ SimpleHandler\ \&operator=(\textcolor{keyword}{const}\ SimpleHandler\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ SimpleHandler\ \&operator=(SimpleHandler\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ std::scoped\_lock\ lock(listenersMutex\_,\ other.listenersMutex\_);}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ listeners\_.swap(other.listeners\_);}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.swap(other.lowPriorityListeners\_);}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00309\ \ \ \ \ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ *\ Calls\ the\ listeners\ and\ pass\ the\ args\ to\ them}}
+\DoxyCodeLine{00313\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ *\ @param\ args\ The\ listeners\ arguments}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a5b0b7ae2d8988b6766481e166cf00792}{handle}}(ArgTypes...\ args)\ \{}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ f\ =\ handleImpl(args...);}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ f.wait();}
+\DoxyCodeLine{00320\ \ \ \ \ \}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ *\ Calls\ the\ listeners\ and\ pass\ the\ ars\ to\ them}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ *\ @param\ args\ The\ listeners\ arguments}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00327\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a628437cb5332eea6b4dfe3a4c3e79abd}{operator}}()(ArgTypes...\ args)\ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ handle(args...);}
+\DoxyCodeLine{00329\ \ \ \ \ \}}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00332\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ listener\ to\ "{}main"{}\ group}}
+\DoxyCodeLine{00333\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00334\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
+\DoxyCodeLine{00335\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00337\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_aed04f50e4f90ebb4e5a0c9f4b2869605}{add}}(ListenerType\ \&\&listener)\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lastId\_\ >=\ FAKE\_ID\ -\/\ 1)\ \{}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ FAKE\_ID;}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00343\ }
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ listeners\_.emplace(id,\ std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ++lastId\_;}
 \DoxyCodeLine{00345\ }
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
-\DoxyCodeLine{00347\ \ \ \ \ \}}
-\DoxyCodeLine{00348\ }
-\DoxyCodeLine{00349\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00350\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ low\ priority\ listener\ (to\ the\ "{}low\ priority"{}\ group)}}
-\DoxyCodeLine{00351\ \textcolor{comment}{\ \ \ \ \ *\ It\ will\ be\ called\ after\ the\ "{}main"{}\ listeners}}
-\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
-\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00356\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_acbb6416fdbe5b3a3af856995b8b8f4df}{addLowPriority}}(ListenerType\ \&\&listener)\ \{}
-\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00358\ }
-\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lastId\_\ >=\ FAKE\_ID\ -\/\ 1)\ \{}
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ FAKE\_ID;}
-\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00362\ }
-\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ++lastId\_;}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ listeners\_.emplace(id,\ std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00349\ \ \ \ \ \}}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00352\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ low\ priority\ listener\ (to\ the\ "{}low\ priority"{}\ group)}}
+\DoxyCodeLine{00353\ \textcolor{comment}{\ \ \ \ \ *\ It\ will\ be\ called\ after\ the\ "{}main"{}\ listeners}}
+\DoxyCodeLine{00354\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00355\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
+\DoxyCodeLine{00356\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00357\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00358\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_acb98601acec4d6b4ae3b54e5a1f3a44e}{addLowPriority}}(ListenerType\ \&\&listener)\ \{}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lastId\_\ >=\ FAKE\_ID\ -\/\ 1)\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ FAKE\_ID;}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00364\ }
-\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.emplace(id,\ std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ id\ =\ ++lastId\_;}
 \DoxyCodeLine{00366\ }
-\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
-\DoxyCodeLine{00368\ \ \ \ \ \}}
-\DoxyCodeLine{00369\ }
-\DoxyCodeLine{00370\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00371\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ listener\ to\ "{}main"{}\ group}}
-\DoxyCodeLine{00372\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
-\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00376\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a7a1399ea3ea96350d30a2535b9221ad9}{operator}}+=(ListenerType\ \&\&listener)\ \{}
-\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ add(std::forward<ListenerType>(listener));}
-\DoxyCodeLine{00378\ \ \ \ \ \}}
-\DoxyCodeLine{00379\ }
-\DoxyCodeLine{00380\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00381\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ low\ priority\ listener\ (to\ the\ "{}low\ priority"{}\ group).}}
-\DoxyCodeLine{00382\ \textcolor{comment}{\ \ \ \ \ *\ It\ will\ be\ called\ after\ the\ "{}main"{}\ listeners}}
-\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
-\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
-\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00387\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a25355993e52afcd13ca393615554ce36}{operator}}\%=(ListenerType\ \&\&listener)\ \{}
-\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ addLowPriority(std::forward<ListenerType>(listener));}
-\DoxyCodeLine{00389\ \ \ \ \ \}}
-\DoxyCodeLine{00390\ }
-\DoxyCodeLine{00391\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00392\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ a\ listener\ by\ the\ id}}
-\DoxyCodeLine{00393\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ listener\ id}}
-\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00396\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a614365a1e8ceb11ef4057329a0fe7890}{remove}}(std::size\_t\ id)\ \{}
-\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
-\DoxyCodeLine{00398\ }
-\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (id\ ==\ FAKE\_ID)\ \{}
-\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00402\ }
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (listeners\_.count(id)\ >\ 0)\ \{}
-\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ listeners\_.erase(id);}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (lowPriorityListeners\_.count(id)\ >\ 0)\ \{}
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ lowPriorityListeners\_.erase(id);}
-\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00408\ \ \ \ \ \}}
-\DoxyCodeLine{00409\ }
-\DoxyCodeLine{00410\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00411\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ a\ listener\ by\ the\ id}}
-\DoxyCodeLine{00412\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ listener\ id}}
-\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00415\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a9a3a6f6164c4584b4f109375085a5596}{operator}}-\/=(std::size\_t\ id)\ \{}
-\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ remove(id);}
-\DoxyCodeLine{00417\ \ \ \ \ \}}
-\DoxyCodeLine{00418\ \};}
-\DoxyCodeLine{00419\ }
-\DoxyCodeLine{00420\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ lowPriorityListeners\_.emplace(id,\ std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id;}
+\DoxyCodeLine{00370\ \ \ \ \ \}}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00373\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ listener\ to\ "{}main"{}\ group}}
+\DoxyCodeLine{00374\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00375\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
+\DoxyCodeLine{00376\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00377\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00378\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a18e2c9d2e1b72f8667c71dff0624e7a3}{operator}}+=(ListenerType\ \&\&listener)\ \{}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ add(std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00380\ \ \ \ \ \}}
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00383\ \textcolor{comment}{\ \ \ \ \ *\ Adds\ the\ low\ priority\ listener\ (to\ the\ "{}low\ priority"{}\ group).}}
+\DoxyCodeLine{00384\ \textcolor{comment}{\ \ \ \ \ *\ It\ will\ be\ called\ after\ the\ "{}main"{}\ listeners}}
+\DoxyCodeLine{00385\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00386\ \textcolor{comment}{\ \ \ \ \ *\ @param\ listener\ The\ listener}}
+\DoxyCodeLine{00387\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ listener\ id}}
+\DoxyCodeLine{00388\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00389\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_ad96602c165dd5b09bcd6ceb77d5ac25e}{operator}}\%=(ListenerType\ \&\&listener)\ \{}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ addLowPriority(std::forward<ListenerType>(listener));}
+\DoxyCodeLine{00391\ \ \ \ \ \}}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00394\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ a\ listener\ by\ the\ id}}
+\DoxyCodeLine{00395\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00396\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ listener\ id}}
+\DoxyCodeLine{00397\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_a3f23a68cbbc8aa178bfeb2d250249961}{remove}}(std::size\_t\ id)\ \{}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ std::lock\_guard\ guard\{listenersMutex\_\};}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (id\ ==\ FAKE\_ID)\ \{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00404\ }
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (listeners\_.count(id)\ >\ 0)\ \{}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ listeners\_.erase(id);}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (lowPriorityListeners\_.count(id)\ >\ 0)\ \{}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ lowPriorityListeners\_.erase(id);}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00410\ \ \ \ \ \}}
+\DoxyCodeLine{00411\ }
+\DoxyCodeLine{00412\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ *\ Removes\ a\ listener\ by\ the\ id}}
+\DoxyCodeLine{00414\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00415\ \textcolor{comment}{\ \ \ \ \ *\ @param\ id\ The\ listener\ id}}
+\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00417\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_simple_handler_3_01void_07_arg_types_8_8_8_08_4_ad41f145c4c093894a820ca9615101aa2}{operator}}-\/=(std::size\_t\ id)\ \{}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ remove(id);}
+\DoxyCodeLine{00419\ \ \ \ \ \}}
+\DoxyCodeLine{00420\ \};}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

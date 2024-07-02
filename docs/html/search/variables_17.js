@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['zero_0',['ZERO',['../dc/d03/structdxfcpp_1_1_direction.html#a8f35df343051d2ccab48adee22e48e1d',1,'dxfcpp::Direction']]],
-  ['zero_5fdown_1',['ZERO_DOWN',['../dc/d03/structdxfcpp_1_1_direction.html#a5c280dcaf9e2d12e6fcdb091c8ec4f9f',1,'dxfcpp::Direction']]],
-  ['zero_5fup_2',['ZERO_UP',['../dc/d03/structdxfcpp_1_1_direction.html#a0d9172a737701f90c8c2484dc597bc30',1,'dxfcpp::Direction']]]
+  ['zero_0',['ZERO',['../d0/d01/struct_direction.html#a239064573fb1e619078fc545f9bced58',1,'Direction']]],
+  ['zero_5fdown_1',['ZERO_DOWN',['../d0/d01/struct_direction.html#a4b12560fe073808faea78a7f07dd2855',1,'Direction']]],
+  ['zero_5fup_2',['ZERO_UP',['../d0/d01/struct_direction.html#aed226ae7fb889c633805f6239446b4e3',1,'Direction']]]
 ];

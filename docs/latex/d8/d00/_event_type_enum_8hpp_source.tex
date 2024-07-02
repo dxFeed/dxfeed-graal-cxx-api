@@ -9,194 +9,223 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00013\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_set}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ The\ enumeration\ type\ that\ provides\ additional\ information\ about\ the\ dxFeed\ Graal\ C++-\/API\ event\ type.}}
-\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ Useful\ when\ used\ as\ a\ subscription\ parameter.}}
-\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00019\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \{}
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{///\ The\ dxFeed\ Graal\ Native\ C-\/API\ event\ class\ id\ corresponding\ to\ the\ current\ enum\ element.}}
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{const}\ std::uint32\_t\ id\_;}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ name\_;}
+\DoxyCodeLine{00015\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ The\ enumeration\ type\ that\ provides\ additional\ information\ about\ the\ dxFeed\ Graal\ C++-\/API\ event\ type.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ Useful\ when\ used\ as\ a\ subscription\ parameter.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{///\ The\ dxFeed\ Graal\ Native\ C-\/API\ event\ class\ id\ corresponding\ to\ the\ current\ enum\ element.}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{const}\ std::uint32\_t\ id\_;}
 \DoxyCodeLine{00024\ }
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ className\_;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ name\_;}
 \DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ Lasting\ (TICKER)\ event.}}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isLasting\_;}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ Indexed\ event.}}
-\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isIndexed\_;}
-\DoxyCodeLine{00032\ }
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ TimeSeries\ (HISTORY)\ event.}}
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isTimeSeries\_;}
-\DoxyCodeLine{00035\ }
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ OnlyIndexed\ (Indexed,\ but\ not}}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ TimeSeries)\ event.}}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isOnlyIndexed\_;}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ Market\ event.}}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isMarket\_;}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \ \ EventTypeEnum(std::uint32\_t\ id,\ std::string\ name,\ std::string\ className,\ \textcolor{keywordtype}{bool}\ isLasting,\ \textcolor{keywordtype}{bool}\ isIndexed\ =\ \textcolor{keyword}{false},}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isTimeSeries\ =\ \textcolor{keyword}{false},\ \textcolor{keywordtype}{bool}\ isMarket\ =\ \textcolor{keyword}{true})\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ :\ id\_\{id\},\ name\_\{std::move(name)\},\ className\_\{std::move(className)\},\ isLasting\_\{isLasting\},}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ isIndexed\_\{isIndexed\ ||\ isTimeSeries\},\ isTimeSeries\_\{isTimeSeries\},}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ isOnlyIndexed\_\{isIndexed\ \&\&\ !isTimeSeries\},\ isMarket\_\{isMarket\}\ \{}
-\DoxyCodeLine{00048\ \ \ \ \ \}}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{RefSetType}}\ =}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{unordered\_set}}<\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{reference\_wrapper}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>,\ \textcolor{keyword}{decltype}([](\textcolor{keyword}{auto}\ \&\&\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{eventTypeRef}})\ \{}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{size\_t}}>(\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{eventTypeRef}}.\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{get}}().\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{getId}}());}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \})>;}
-\DoxyCodeLine{00055\ }
-\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ QUOTE;}
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ PROFILE;}
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ SUMMARY;}
-\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ GREEKS;}
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ CANDLE;}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{//\ static\ const\ EventTypeEnum\ DAILY\_CANDLE;\ //\ deprecated}}
-\DoxyCodeLine{00063\ }
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ UNDERLYING;}
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ THEO\_PRICE;}
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ TRADE;}
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ TRADE\_ETH;}
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ CONFIGURATION;}
-\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ MESSAGE;}
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ TIME\_AND\_SALE;}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ static\ const\ EventTypeEnum\ ORDER\_BASE;\ //\ non\ abstract,\ unusable}}
-\DoxyCodeLine{00073\ }
-\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ ORDER;}
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ ANALYTIC\_ORDER;}
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ SPREAD\_ORDER;}
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ SERIES;}
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ OPTION\_SALE;}
-\DoxyCodeLine{00079\ }
-\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ ALL;}
-\DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ ALL\_BY\_NAME;}
-\DoxyCodeLine{00083\ }
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ ALL\_BY\_CLASS\_NAME;}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ EventTypeEnum()\ \textcolor{keyword}{noexcept}\ :\ EventTypeEnum\{\textcolor{keyword}{static\_cast}<std::uint32\_t>(-\/1),\ \textcolor{stringliteral}{"{}INVALID"{}},\ \textcolor{stringliteral}{"{}Invalid"{}},\ \textcolor{keyword}{false}\}\ \{}
-\DoxyCodeLine{00087\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ className\_;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ Lasting\ (TICKER)\ event.}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isLasting\_;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ Indexed\ event.}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isIndexed\_;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ TimeSeries\ (HISTORY)\ event.}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isTimeSeries\_;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ OnlyIndexed\ (Indexed,\ but\ not}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ TimeSeries)\ event.}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isOnlyIndexed\_;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{//\ A\ flag\ that\ indicates\ that\ the\ current\ enum\ element\ is\ characterizing\ the\ Market\ event.}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ isMarket\_;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ EventTypeEnum(std::uint32\_t\ id,\ std::string\ name,\ std::string\ className,\ \textcolor{keywordtype}{bool}\ isLasting,\ \textcolor{keywordtype}{bool}\ isIndexed\ =\ \textcolor{keyword}{false},}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isTimeSeries\ =\ \textcolor{keyword}{false},\ \textcolor{keywordtype}{bool}\ isMarket\ =\ \textcolor{keyword}{true})\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ :\ id\_\{id\},\ name\_\{std::move(name)\},\ className\_\{std::move(className)\},\ isLasting\_\{isLasting\},}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ isIndexed\_\{isIndexed\ ||\ isTimeSeries\},\ isTimeSeries\_\{isTimeSeries\},}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ isOnlyIndexed\_\{isIndexed\ \&\&\ !isTimeSeries\},\ isMarket\_\{isMarket\}\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{using}\ \mbox{\hyperlink{class_event_type_enum}{RefSetType}}\ =}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_event_type_enum}{std}}::\mbox{\hyperlink{class_event_type_enum}{unordered\_set}}<\mbox{\hyperlink{class_event_type_enum}{std}}::\mbox{\hyperlink{class_event_type_enum}{reference\_wrapper}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>,\ \textcolor{keyword}{decltype}([](\textcolor{keyword}{auto}\ \&\&\mbox{\hyperlink{class_event_type_enum}{eventTypeRef}})\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<\mbox{\hyperlink{class_event_type_enum}{std}}::\mbox{\hyperlink{class_event_type_enum}{size\_t}}>(\mbox{\hyperlink{class_event_type_enum}{eventTypeRef}}.\mbox{\hyperlink{class_event_type_enum}{get}}().\mbox{\hyperlink{class_event_type_enum}{getId}}());}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \})>;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ INVALID\_EVENT\_TYPE;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ QUOTE;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ PROFILE;}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ SUMMARY;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ GREEKS;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ CANDLE;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ static\ const\ EventTypeEnum\ DAILY\_CANDLE;\ //\ deprecated}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ UNDERLYING;}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ THEO\_PRICE;}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ TRADE;}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ TRADE\_ETH;}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ CONFIGURATION;}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ MESSAGE;}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ TIME\_AND\_SALE;}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//\ static\ const\ EventTypeEnum\ ORDER\_BASE;\ //\ non\ abstract,\ unusable}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ ORDER;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ ANALYTIC\_ORDER;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ OTC\_MARKETS\_ORDER;}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ SPREAD\_ORDER;}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ SERIES;}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ OPTION\_SALE;}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ ALL;}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ ALL\_BY\_NAME;}
 \DoxyCodeLine{00088\ }
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~EventTypeEnum()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ ALL\_BY\_CLASS\_NAME;}
 \DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ dxFeed\ Graal\ Native\ C-\/API\ event\ class\ id}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00094\ \ \ \ \ [[\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{nodiscard}}]]\ std::uint32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a360d428ee50d2fa819fb098dc88a8bed}{getId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_;}
-\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::uint32\_t,\ std::reference\_wrapper<\textcolor{keyword}{const}\ EventTypeEnum>>\ ALL\_BY\_ID;}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ EventTypeEnum()\ \textcolor{keyword}{noexcept}\ :\ EventTypeEnum\{\textcolor{keyword}{static\_cast}<std::uint32\_t>(-\/1),\ \textcolor{stringliteral}{"{}INVALID"{}},\ \textcolor{stringliteral}{"{}Invalid"{}},\ \textcolor{keyword}{false}\}\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~EventTypeEnum()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
 \DoxyCodeLine{00097\ }
 \DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ enum\ element\ name}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ dxFeed\ Graal\ Native\ C-\/API\ event\ class\ id}}
 \DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00101\ \ \ \ \ [[\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{nodiscard}}]]\ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a8127eddaa8b2a9e6511831d795880c7f}{getName}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00101\ \ \ \ \ [[\mbox{\hyperlink{class_event_type_enum}{nodiscard}}]]\ std::uint32\_t\ \mbox{\hyperlink{class_event_type_enum_ac76dd8774b1f3d0192fed7a9dd98a9f6}{getId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_;}
 \DoxyCodeLine{00103\ \ \ \ \ \}}
 \DoxyCodeLine{00104\ }
 \DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ enum\ element\ class\ name}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ enum\ element\ name}}
 \DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00108\ \ \ \ \ [[\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{nodiscard}}]]\ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_af0dd2875613e8e5f37fc8e71485d78e3}{getClassName}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ className\_;}
+\DoxyCodeLine{00108\ \ \ \ \ [[\mbox{\hyperlink{class_event_type_enum}{nodiscard}}]]\ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{class_event_type_enum_af8347e4618ca961be98ee07627f4cd5c}{getName}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
 \DoxyCodeLine{00110\ \ \ \ \ \}}
 \DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventTypeEnum)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ ==\ eventTypeEnum.id\_;}
-\DoxyCodeLine{00114\ \ \ \ \ \}}
-\DoxyCodeLine{00115\ }
-\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ ==\ eventTypeEnum.get().id\_;}
-\DoxyCodeLine{00118\ \ \ \ \ \}}
-\DoxyCodeLine{00119\ }
-\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum1,}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypeEnum1.get().id\_\ ==\ eventTypeEnum2.get().id\_;}
-\DoxyCodeLine{00123\ \ \ \ \ \}}
-\DoxyCodeLine{00124\ }
-\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum1,}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventTypeEnum2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypeEnum1.get().id\_\ ==\ eventTypeEnum2.id\_;}
-\DoxyCodeLine{00128\ \ \ \ \ \}}
-\DoxyCodeLine{00129\ }
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventTypeEnum)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ <\ eventTypeEnum.id\_;}
-\DoxyCodeLine{00132\ \ \ \ \ \}}
-\DoxyCodeLine{00133\ }
-\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ <\ eventTypeEnum.get().id\_;}
-\DoxyCodeLine{00136\ \ \ \ \ \}}
-\DoxyCodeLine{00137\ }
-\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum1,}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypeEnum1.get().id\_\ <\ eventTypeEnum2.get().id\_;}
-\DoxyCodeLine{00141\ \ \ \ \ \}}
-\DoxyCodeLine{00142\ }
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum1,}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventTypeEnum2)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypeEnum1.get().id\_\ ==\ eventTypeEnum2.id\_;}
-\DoxyCodeLine{00146\ \ \ \ \ \}}
-\DoxyCodeLine{00147\ }
-\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ Lasting\ (TICKER)\ event}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00151\ \ \ \ \ [[\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_afc503113362d61acbf91a9429d7626e4}{isLasting}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isLasting\_;}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ current\ enum\ element\ class\ name}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00115\ \ \ \ \ [[\mbox{\hyperlink{class_event_type_enum}{nodiscard}}]]\ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{class_event_type_enum_a5b35c310511b1713a0a8357c26d5b88a}{getClassName}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ className\_;}
+\DoxyCodeLine{00117\ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&eventTypeEnum)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ ==\ eventTypeEnum.id\_;}
+\DoxyCodeLine{00121\ \ \ \ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ ==\ eventTypeEnum.get().id\_;}
+\DoxyCodeLine{00125\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum1,}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypeEnum1.get().id\_\ ==\ eventTypeEnum2.get().id\_;}
+\DoxyCodeLine{00130\ \ \ \ \ \}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum1,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&eventTypeEnum2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypeEnum1.get().id\_\ ==\ eventTypeEnum2.id\_;}
+\DoxyCodeLine{00135\ \ \ \ \ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&eventTypeEnum)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ <\ eventTypeEnum.id\_;}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ id\_\ <\ eventTypeEnum.get().id\_;}
+\DoxyCodeLine{00143\ \ \ \ \ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum1,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypeEnum1.get().id\_\ <\ eventTypeEnum2.get().id\_;}
+\DoxyCodeLine{00148\ \ \ \ \ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventTypeEnum1,}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&eventTypeEnum2)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eventTypeEnum1.get().id\_\ <\ eventTypeEnum2.id\_;}
 \DoxyCodeLine{00153\ \ \ \ \ \}}
 \DoxyCodeLine{00154\ }
 \DoxyCodeLine{00155\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ Indexed\ event.}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ Lasting\ (TICKER)\ event}}
 \DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00158\ \ \ \ \ [[\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a52cbec49c8921bb5be3543b311a7d056}{isIndexed}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isIndexed\_;}
+\DoxyCodeLine{00158\ \ \ \ \ [[\mbox{\hyperlink{class_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_event_type_enum_a74786d2b61aa2719693a76b74e792fc1}{isLasting}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isLasting\_;}
 \DoxyCodeLine{00160\ \ \ \ \ \}}
 \DoxyCodeLine{00161\ }
 \DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ TimeSeries\ (HISTORY)\ event.}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ Indexed\ event.}}
 \DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00165\ \ \ \ \ [[\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a3bfd1a0aef9d454e03632391bb4619ce}{isTimeSeries}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isTimeSeries\_;}
+\DoxyCodeLine{00165\ \ \ \ \ [[\mbox{\hyperlink{class_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_event_type_enum_ab4a84d7eddb337ee77bc3a5dcf64cf01}{isIndexed}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isIndexed\_;}
 \DoxyCodeLine{00167\ \ \ \ \ \}}
 \DoxyCodeLine{00168\ }
 \DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ OnlyIndexed\ (Indexed,\ but\ not\ TimeSeries)\ event.}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ TimeSeries\ (HISTORY)\ event.}}
 \DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00172\ \ \ \ \ [[\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_abf850871484b8212eb536d2b8f85a992}{isOnlyIndexed}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isOnlyIndexed\_;}
+\DoxyCodeLine{00172\ \ \ \ \ [[\mbox{\hyperlink{class_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_event_type_enum_a0ebf6c43f4f44bbb295f484cb10caadb}{isTimeSeries}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isTimeSeries\_;}
 \DoxyCodeLine{00174\ \ \ \ \ \}}
 \DoxyCodeLine{00175\ }
 \DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ Market\ event.}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ OnlyIndexed\ (Indexed,\ but\ not\ TimeSeries)\ event.}}
 \DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00179\ \ \ \ \ [[\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a47526e9460c8a0f6bade07f84a6eab65}{isMarket}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ [[\mbox{\hyperlink{class_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_event_type_enum_a9f7e80a13dcdae6f620293637ca1fdfe}{isOnlyIndexed}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
 \DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isOnlyIndexed\_;}
 \DoxyCodeLine{00181\ \ \ \ \ \}}
-\DoxyCodeLine{00182\ \};}
-\DoxyCodeLine{00183\ }
-\DoxyCodeLine{00184\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
-\DoxyCodeLine{00185\ }
-\DoxyCodeLine{00186\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \{}
-\DoxyCodeLine{00187\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&eventType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::size\_t>(eventType\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a360d428ee50d2fa819fb098dc88a8bed}{.}}\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a360d428ee50d2fa819fb098dc88a8bed}{getId}}\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a360d428ee50d2fa819fb098dc88a8bed}{(}}\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum_a360d428ee50d2fa819fb098dc88a8bed}{)}});}
-\DoxyCodeLine{00189\ \ \ \ \ \}}
-\DoxyCodeLine{00190\ \};}
-\DoxyCodeLine{00191\ }
-\DoxyCodeLine{00192\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>>\ \{}
-\DoxyCodeLine{00193\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}>\ \&eventType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::size\_t>(eventType.get().getId());}
-\DoxyCodeLine{00195\ \ \ \ \ \}}
-\DoxyCodeLine{00196\ \};}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ current\ enum\ element\ is\ characterizing\ the\ Market\ event.}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00186\ \ \ \ \ [[\mbox{\hyperlink{class_event_type_enum}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_event_type_enum_af4686c05ec8270a9774c4051354b3c46}{isMarket}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ isOnlyIndexed\_;}
+\DoxyCodeLine{00188\ \ \ \ \ \}}
+\DoxyCodeLine{00189\ \};}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \textcolor{keyword}{inline}\ \textcolor{keyword}{namespace}\ literals\ \{}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ *\ String\ literal\ that\ helps\ to\ construct\ EventTypeEnum\ from\ a\ char\ array.}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ *\ @param\ eventTypeString\ The\ event\ type\ name's\ char\ array}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ *\ @param\ length\ The\ char\ array's\ length}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ *\ @return\ EventTypeEnum\ built\ on\ char\ array}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00200\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ operator\textcolor{stringliteral}{"{}"{}\_et}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *eventTypeString,\ size\_t)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ it\ =\ EventTypeEnum::ALL\_BY\_NAME.find(eventTypeString);\ it\ !=\ EventTypeEnum::ALL\_BY\_NAME.end())\ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ it-\/>second;}
+\DoxyCodeLine{00203\ \ \ \ \ \}}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}::INVALID\_EVENT\_TYPE;}
+\DoxyCodeLine{00206\ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \}\ \textcolor{comment}{//\ namespace\ literals}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&eventType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::size\_t>(eventType\mbox{\hyperlink{class_event_type_enum_ac76dd8774b1f3d0192fed7a9dd98a9f6}{.}}\mbox{\hyperlink{class_event_type_enum_ac76dd8774b1f3d0192fed7a9dd98a9f6}{getId}}\mbox{\hyperlink{class_event_type_enum_ac76dd8774b1f3d0192fed7a9dd98a9f6}{(}}\mbox{\hyperlink{class_event_type_enum_ac76dd8774b1f3d0192fed7a9dd98a9f6}{)}});}
+\DoxyCodeLine{00216\ \ \ \ \ \}}
+\DoxyCodeLine{00217\ \};}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>>\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ std::reference\_wrapper<\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}>\ \&eventType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<std::size\_t>(eventType.get().getId());}
+\DoxyCodeLine{00222\ \ \ \ \ \}}
+\DoxyCodeLine{00223\ \};}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

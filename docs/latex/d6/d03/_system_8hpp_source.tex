@@ -9,50 +9,54 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/CEntryPointErrors.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Isolate.hpp"{}}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
-\DoxyCodeLine{00018\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ A\ class\ that\ allows\ to\ set\ JVM\ system\ properties\ and\ get\ the\ values\ of\ JVM\ system\ properties.}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00021\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_system}{System}}\ \{}
-\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ *\ Sets\ the\ JVM\ system\ property\ indicated\ by\ the\ specified\ key.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ The\ name\ of\ the\ system\ property\ (UTF-\/8\ string).}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *\ @param\ value\ The\ value\ of\ the\ system\ property\ (UTF-\/8\ string).}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ *\ @return\ true\ if\ the\ setting\ of\ the\ JVM\ system\ property\ succeeded.}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_system_aac369091e4fd1d35efcfc018db452905}{setProperty}}(\textcolor{keyword}{const}\ std::string\ \&key,\ \textcolor{keyword}{const}\ std::string\ \&value);}
-\DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ Sets\ the\ JVM\ system\ properties\ to\ the\ Properties\ argument.}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ Properties\ The\ properties'\ type\ (std::map,\ std::unordered\_map\ etc).}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ new\ system\ properties.}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ @return}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Properties>\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structdxfcpp_1_1_system_a4d6dec1437d62a3d41c1a413f68517bf}{setProperties}}(Properties\ \&\&properties)\ \{}
-\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&\&[\mbox{\hyperlink{structdxfcpp_1_1_system}{k}},\ \mbox{\hyperlink{structdxfcpp_1_1_system}{v}}]\ :\ \mbox{\hyperlink{structdxfcpp_1_1_system}{properties}})\ \{}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structdxfcpp_1_1_system}{setProperty}}(\mbox{\hyperlink{structdxfcpp_1_1_system}{k}},\ \mbox{\hyperlink{structdxfcpp_1_1_system}{v}});}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00041\ \ \ \ \ \}}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *\ Gets\ the\ system\ property\ indicated\ by\ the\ specified\ key.}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ The\ name\ of\ the\ system\ property\ (UTF-\/8\ string).}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ value\ of\ a\ JVM\ system\ property\ (UTF-\/8\ string),\ or\ an\ empty\ string.}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ \mbox{\hyperlink{structdxfcpp_1_1_system_af2918454df4b12fa0d26476ac800d208}{getProperty}}(\textcolor{keyword}{const}\ std::string\ \&key);}
-\DoxyCodeLine{00050\ \};}
-\DoxyCodeLine{00051\ }
-\DoxyCodeLine{00052\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/CEntryPointErrors.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Common.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Isolate.hpp"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{iostream}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{variant}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00020\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ A\ class\ that\ allows\ to\ set\ JVM\ system\ properties\ and\ get\ the\ values\ of\ JVM\ system\ properties.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_system}{System}}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ *\ Sets\ the\ JVM\ system\ property\ indicated\ by\ the\ specified\ key.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ The\ name\ of\ the\ system\ property\ (UTF-\/8\ string).}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ *\ @param\ value\ The\ value\ of\ the\ system\ property\ (UTF-\/8\ string).}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ *\ @return\ true\ if\ the\ setting\ of\ the\ JVM\ system\ property\ succeeded.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_system_aa186bb9091ffb41fe84d616b29f4a189}{setProperty}}(\textcolor{keyword}{const}\ std::string\ \&key,\ \textcolor{keyword}{const}\ std::string\ \&value);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ Sets\ the\ JVM\ system\ properties\ to\ the\ Properties\ argument.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ Properties\ The\ properties'\ type\ (std::map,\ std::unordered\_map\ etc).}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ @param\ properties\ The\ new\ system\ properties.}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ @return}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Properties>\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_system_a878602507d4182f701eecaeab04d50eb}{setProperties}}(Properties\ \&\&properties)\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&\&[\mbox{\hyperlink{struct_system}{k}},\ \mbox{\hyperlink{struct_system}{v}}]\ :\ \mbox{\hyperlink{struct_system}{properties}})\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_system}{setProperty}}(\mbox{\hyperlink{struct_system}{k}},\ \mbox{\hyperlink{struct_system}{v}});}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ Gets\ the\ system\ property\ indicated\ by\ the\ specified\ key.}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ @param\ key\ The\ name\ of\ the\ system\ property\ (UTF-\/8\ string).}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ value\ of\ a\ JVM\ system\ property\ (UTF-\/8\ string),\ or\ an\ empty\ string.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ \mbox{\hyperlink{struct_system_aa1f3a655f81e1dfbf7492d1f9e4bf0c4}{getProperty}}(\textcolor{keyword}{const}\ std::string\ \&key);}
+\DoxyCodeLine{00052\ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

@@ -1,17 +1,17 @@
 var searchData=
 [
-  ['saturday_0',['SATURDAY',['../db/d02/structdxfcpp_1_1_day_filter.html#a99b68f30d9b432747e80ddd7964b82a6',1,'dxfcpp::DayFilter']]],
-  ['second_1',['SECOND',['../da/d01/structdxfcpp_1_1_candle_type.html#aeece720e4fdfa6327079903f8f245140',1,'dxfcpp::CandleType']]],
-  ['sell_2',['SELL',['../d7/d03/structdxfcpp_1_1_side.html#af096940bf04b6ad2592efa11e56e67bd',1,'dxfcpp::Side']]],
-  ['session_3',['SESSION',['../d1/d02/structdxfcpp_1_1_candle_alignment.html#a8dd12d56ad5062c13fc3e851979290ec',1,'dxfcpp::CandleAlignment']]],
-  ['settlement_4',['SETTLEMENT',['../d1/d00/structdxfcpp_1_1_candle_price.html#a12106fe368553fc82190896877ad4042',1,'dxfcpp::CandlePrice']]],
-  ['short_5fday_5',['SHORT_DAY',['../db/d02/structdxfcpp_1_1_day_filter.html#a2f93d9522e996a02d80cbf42f9bc6485',1,'dxfcpp::DayFilter']]],
-  ['smfe_6',['SMFE',['../da/d03/classdxfcpp_1_1_order_source.html#a63fd96e70e0a132f48ae3f51e2051909',1,'dxfcpp::OrderSource']]],
-  ['smfe_7',['smfe',['../da/d03/classdxfcpp_1_1_order_source.html#ac7e5f6511f6e70f23629bc4db7518afd',1,'dxfcpp::OrderSource']]],
-  ['snapshot_5fbegin_8',['SNAPSHOT_BEGIN',['../de/d03/classdxfcpp_1_1_event_flag.html#a440532930f74605794158bb59a161c59',1,'dxfcpp::EventFlag::SNAPSHOT_BEGIN'],['../da/d01/structdxfcpp_1_1_indexed_event.html#aacdbdadf8af938b9edbe9a59830aa0b5',1,'dxfcpp::IndexedEvent::SNAPSHOT_BEGIN']]],
-  ['snapshot_5fend_9',['SNAPSHOT_END',['../de/d03/classdxfcpp_1_1_event_flag.html#acd462d106e5f20a5fe315bca6cdc31e0',1,'dxfcpp::EventFlag::SNAPSHOT_END'],['../da/d01/structdxfcpp_1_1_indexed_event.html#a8140c207eb5efb3f656842509700366f',1,'dxfcpp::IndexedEvent::SNAPSHOT_END']]],
-  ['snapshot_5fmode_10',['SNAPSHOT_MODE',['../de/d03/classdxfcpp_1_1_event_flag.html#a0688aae67c8839a36ce85e634503a8f5',1,'dxfcpp::EventFlag::SNAPSHOT_MODE'],['../da/d01/structdxfcpp_1_1_indexed_event.html#a70abbd72b7c45f74886a902df5928829',1,'dxfcpp::IndexedEvent::SNAPSHOT_MODE']]],
-  ['snapshot_5fsnip_11',['SNAPSHOT_SNIP',['../de/d03/classdxfcpp_1_1_event_flag.html#a138fa2278b8ca4800c8c0b7a402ddac0',1,'dxfcpp::EventFlag::SNAPSHOT_SNIP'],['../da/d01/structdxfcpp_1_1_indexed_event.html#a0615ae7acfc0032e03ada68c26433aa5',1,'dxfcpp::IndexedEvent::SNAPSHOT_SNIP']]],
-  ['sunday_12',['SUNDAY',['../db/d02/structdxfcpp_1_1_day_filter.html#aaa3195092c9cc80c41208c442fef1a1c',1,'dxfcpp::DayFilter']]],
-  ['synthetic_13',['SYNTHETIC',['../da/d02/structdxfcpp_1_1_iceberg_type.html#a0182dd8f548bff25aba7b9b598b94ae4',1,'dxfcpp::IcebergType']]]
+  ['saturday_0',['SATURDAY',['../d1/d01/struct_day_filter.html#ab17b434ba9e8322507cf8ab77fdcd34f',1,'DayFilter']]],
+  ['second_1',['SECOND',['../d2/d02/struct_candle_type.html#ab8170e814aa322766ea077e7dcd7e781',1,'CandleType']]],
+  ['sell_2',['SELL',['../dc/d02/struct_side.html#aad66b9c98db24f184b224cf0457a74b9',1,'Side']]],
+  ['session_3',['SESSION',['../d5/d01/struct_candle_alignment.html#a18335909e5dfa7eb38ec5787418e3035',1,'CandleAlignment']]],
+  ['settlement_4',['SETTLEMENT',['../d1/d03/struct_candle_price.html#aac615d755dcc3fef383c593c932ede33',1,'CandlePrice']]],
+  ['short_5fday_5',['SHORT_DAY',['../d1/d01/struct_day_filter.html#a5fd88d20b05558160453f167f63d32e8',1,'DayFilter']]],
+  ['smfe_6',['SMFE',['../d2/d02/class_order_source.html#afb3432865c2f907bdbc257dc4bc9a9a9',1,'OrderSource']]],
+  ['smfe_7',['smfe',['../d2/d02/class_order_source.html#a02b7fc16e58cb1eb5686b0fb43d34cdf',1,'OrderSource']]],
+  ['snapshot_5fbegin_8',['SNAPSHOT_BEGIN',['../dd/d02/class_event_flag.html#ab1246c3963485123672b05d5b9dbdfec',1,'EventFlag::SNAPSHOT_BEGIN'],['../da/d02/struct_indexed_event.html#ac87eb588da470259ee75b490dbcaabf7',1,'IndexedEvent::SNAPSHOT_BEGIN']]],
+  ['snapshot_5fend_9',['SNAPSHOT_END',['../dd/d02/class_event_flag.html#adc2ec8ed07a2a2efaf2389fe4f7459c6',1,'EventFlag::SNAPSHOT_END'],['../da/d02/struct_indexed_event.html#a4604235ec9a455bea7c80d1b71546bf9',1,'IndexedEvent::SNAPSHOT_END']]],
+  ['snapshot_5fmode_10',['SNAPSHOT_MODE',['../dd/d02/class_event_flag.html#a689ed612dddae7bb9e0f3387711842b8',1,'EventFlag::SNAPSHOT_MODE'],['../da/d02/struct_indexed_event.html#a6ae2747bf52c574da7aa47fbcd7bf32f',1,'IndexedEvent::SNAPSHOT_MODE']]],
+  ['snapshot_5fsnip_11',['SNAPSHOT_SNIP',['../dd/d02/class_event_flag.html#a522d708878957a9412299bebfb3e1e4d',1,'EventFlag::SNAPSHOT_SNIP'],['../da/d02/struct_indexed_event.html#a8824670805f7487194b7070fe06afe47',1,'IndexedEvent::SNAPSHOT_SNIP']]],
+  ['sunday_12',['SUNDAY',['../d1/d01/struct_day_filter.html#a2ee7703793fb7e9bba6aa63a0fc250df',1,'DayFilter']]],
+  ['synthetic_13',['SYNTHETIC',['../da/d03/struct_iceberg_type.html#a0e29a6c8573c0d6b6cf33b17dbc70902',1,'IcebergType']]]
 ];

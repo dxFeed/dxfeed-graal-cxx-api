@@ -9,85 +9,89 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
 \DoxyCodeLine{00009\ }
-\DoxyCodeLine{00010\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ SessionTypeEnum\ :\ std::uint32\_t\ \{}
-\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{///\ Non-\/trading\ session\ type\ is\ used\ to\ mark\ periods\ of\ time\ during\ which\ trading\ is\ not\ allowed.}}
-\DoxyCodeLine{00012\ \ \ \ \ NO\_TRADING\ =\ 0,}
-\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{///\ Pre-\/market\ session\ type\ marks\ extended\ trading\ session\ before\ regular\ trading\ hours.}}
-\DoxyCodeLine{00014\ \ \ \ \ PRE\_MARKET,}
-\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{///\ Regular\ session\ type\ marks\ regular\ trading\ hours\ session.}}
-\DoxyCodeLine{00016\ \ \ \ \ REGULAR,}
-\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{///\ After-\/market\ session\ type\ marks\ extended\ trading\ session\ after\ regular\ trading\ hours.}}
-\DoxyCodeLine{00018\ \ \ \ \ AFTER\_MARKET,}
-\DoxyCodeLine{00019\ \};}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ Defines\ type\ of\ session\ -\/\ what\ kind\ of\ trading\ activity\ is\ allowed\ (if\ any),}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ what\ rules\ are\ used,\ what\ impact\ on\ daily\ trading\ statistics\ it\ has,\ etc.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ The\ SessionType::NO\_TRADING\ session\ type\ is\ used\ for\ non-\/trading\ sessions.}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ <p>}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ Some\ exchanges\ support\ all\ session\ types\ defined\ here,\ others\ do\ not.}}
+\DoxyCodeLine{00010\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{enum}\ \textcolor{keyword}{class}\ SessionTypeEnum\ :\ std::uint32\_t\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{///\ Non-\/trading\ session\ type\ is\ used\ to\ mark\ periods\ of\ time\ during\ which\ trading\ is\ not\ allowed.}}
+\DoxyCodeLine{00014\ \ \ \ \ NO\_TRADING\ =\ 0,}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{///\ Pre-\/market\ session\ type\ marks\ extended\ trading\ session\ before\ regular\ trading\ hours.}}
+\DoxyCodeLine{00016\ \ \ \ \ PRE\_MARKET,}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{///\ Regular\ session\ type\ marks\ regular\ trading\ hours\ session.}}
+\DoxyCodeLine{00018\ \ \ \ \ REGULAR,}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{///\ After-\/market\ session\ type\ marks\ extended\ trading\ session\ after\ regular\ trading\ hours.}}
+\DoxyCodeLine{00020\ \ \ \ \ AFTER\_MARKET,}
+\DoxyCodeLine{00021\ \};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ Defines\ type\ of\ session\ -\/\ what\ kind\ of\ trading\ activity\ is\ allowed\ (if\ any),}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ what\ rules\ are\ used,\ what\ impact\ on\ daily\ trading\ statistics\ it\ has,\ etc.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ The\ SessionType::NO\_TRADING\ session\ type\ is\ used\ for\ non-\/trading\ sessions.}}
 \DoxyCodeLine{00027\ \textcolor{comment}{\ *\ <p>}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ Some\ sessions\ may\ have\ zero\ duration\ -\/\ e.g.\ indices\ that\ post\ value\ once\ a\ day.}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ Such\ sessions\ can\ be\ of\ any\ appropriate\ type,\ trading\ or\ non-\/trading.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00031\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type}{SessionType}}\ \{}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{///\ Non-\/trading\ session\ type\ is\ used\ to\ mark\ periods\ of\ time\ during\ which\ trading\ is\ not\ allowed.}}
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type}{SessionType}}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type_a6885846053d5dfadd349f93710ca0fa3}{NO\_TRADING}};}
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ Pre-\/market\ session\ type\ marks\ extended\ trading\ session\ before\ regular\ trading\ hours.}}
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type}{SessionType}}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type_ae343864a83844a9785b517522531330a}{PRE\_MARKET}};}
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{///\ Regular\ session\ type\ marks\ regular\ trading\ hours\ session.}}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type}{SessionType}}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type_a0684f14af67113af717d7adaab3faf4c}{REGULAR}};}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ After-\/market\ session\ type\ marks\ extended\ trading\ session\ after\ regular\ trading\ hours.}}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type}{SessionType}}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type_abbcad8dd2286e381cc9912caa9e29f5b}{AFTER\_MARKET}};}
-\DoxyCodeLine{00040\ }
-\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00042\ \ \ \ \ SessionTypeEnum\ code\_\{\};}
-\DoxyCodeLine{00043\ \ \ \ \ std::string\ name\_\{\};}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{bool}\ trading\_\{\};}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \ \ SessionType(SessionTypeEnum\ code,\ std::string\ name,\ \textcolor{keywordtype}{bool}\ trading)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ :\ code\_\{code\},\ name\_\{std::move(name)\},\ trading\_\{trading\}\ \{}
-\DoxyCodeLine{00048\ \ \ \ \ \}}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00051\ \ \ \ \ SessionType()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~SessionType()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \ \ \ \ SessionTypeEnum\ getCode()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ code\_;}
-\DoxyCodeLine{00056\ \ \ \ \ \}}
-\DoxyCodeLine{00057\ }
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&getName()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00060\ \ \ \ \ \}}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ if\ trading\ activity\ is\ allowed\ for\ this\ type\ of\ session.}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ <p>}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ Some\ sessions\ may\ have\ zero\ duration\ -\/\ e.g.\ indices\ that\ post\ value\ once\ a\ day.}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ Such\ sessions\ can\ be\ of\ any\ appropriate\ type,\ trading\ or\ non-\/trading.}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type_aba906f02e0e56f416d88bc31ca2621df}{isTrading}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ trading\_;}
-\DoxyCodeLine{00070\ \ \ \ \ \}}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&toString()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00074\ \ \ \ \ \}}
-\DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_session_type}{SessionType}}\ \&sessionType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ code\_\ ==\ sessionType.getCode();}
-\DoxyCodeLine{00078\ \ \ \ \ \}}
-\DoxyCodeLine{00079\ \};}
-\DoxyCodeLine{00080\ }
-\DoxyCodeLine{00081\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ Some\ exchanges\ support\ all\ session\ types\ defined\ here,\ others\ do\ not.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ <p>}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ Some\ sessions\ may\ have\ zero\ duration\ -\/\ e.g.\ indices\ that\ post\ value\ once\ a\ day.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ Such\ sessions\ can\ be\ of\ any\ appropriate\ type,\ trading\ or\ non-\/trading.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00033\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_session_type}{SessionType}}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{///\ Non-\/trading\ session\ type\ is\ used\ to\ mark\ periods\ of\ time\ during\ which\ trading\ is\ not\ allowed.}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_type}{SessionType}}\ \mbox{\hyperlink{struct_session_type_a54a07823a8e290b498ae61a6896fe7b9}{NO\_TRADING}};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{///\ Pre-\/market\ session\ type\ marks\ extended\ trading\ session\ before\ regular\ trading\ hours.}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_type}{SessionType}}\ \mbox{\hyperlink{struct_session_type_a218d9ab5ed4f897e3ff3406b57a2991b}{PRE\_MARKET}};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{///\ Regular\ session\ type\ marks\ regular\ trading\ hours\ session.}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_type}{SessionType}}\ \mbox{\hyperlink{struct_session_type_a4cf5e16f9081aeebe3863cf54d919ce5}{REGULAR}};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{///\ After-\/market\ session\ type\ marks\ extended\ trading\ session\ after\ regular\ trading\ hours.}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_type}{SessionType}}\ \mbox{\hyperlink{struct_session_type_a180e6440f87435b7b73527df878b70bf}{AFTER\_MARKET}};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00044\ \ \ \ \ SessionTypeEnum\ code\_\{\};}
+\DoxyCodeLine{00045\ \ \ \ \ std::string\ name\_\{\};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{bool}\ trading\_\{\};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ SessionType(SessionTypeEnum\ code,\ std::string\ name,\ \textcolor{keywordtype}{bool}\ trading)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ :\ code\_\{code\},\ name\_\{std::move(name)\},\ trading\_\{trading\}\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ SessionType()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~SessionType()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ SessionTypeEnum\ getCode()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ code\_;}
+\DoxyCodeLine{00058\ \ \ \ \ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&getName()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ \`{}true`\ if\ trading\ activity\ is\ allowed\ for\ this\ type\ of\ session.}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ <p>}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ Some\ sessions\ may\ have\ zero\ duration\ -\/\ e.g.\ indices\ that\ post\ value\ once\ a\ day.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Such\ sessions\ can\ be\ of\ any\ appropriate\ type,\ trading\ or\ non-\/trading.}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_session_type_ab71ae4ac80c460d53a7626169c2656fa}{isTrading}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ trading\_;}
+\DoxyCodeLine{00072\ \ \ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&toString()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00076\ \ \ \ \ \}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_session_type}{SessionType}}\ \&sessionType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ code\_\ ==\ sessionType.getCode();}
+\DoxyCodeLine{00080\ \ \ \ \ \}}
+\DoxyCodeLine{00081\ \};}
 \DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_session_type}{SessionType}}>\ \{}
-\DoxyCodeLine{00084\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_session_type}{SessionType}}\ \&sessionType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(sessionType.getName());}
-\DoxyCodeLine{00086\ \ \ \ \ \}}
-\DoxyCodeLine{00087\ \};}
+\DoxyCodeLine{00083\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{struct_session_type}{SessionType}}>\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_session_type}{SessionType}}\ \&sessionType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(sessionType.getName());}
+\DoxyCodeLine{00088\ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

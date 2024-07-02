@@ -9,118 +9,126 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../event/IndexedEventSource.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../symbols/SymbolWrapper.hpp"{}}}
-\DoxyCodeLine{00010\ }
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../event/IndexedEventSource.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../symbols/SymbolWrapper.hpp"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{keyword}{class}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}};}
-\DoxyCodeLine{00018\ \textcolor{keyword}{struct}\ SymbolWrapper;}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ Represents\ subscription\ to\ a\ specific\ source\ of\ indexed\ events.}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ This\ is\ symbol\ is\ observed\ by\ ObservableSubscriptionChangeListener}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ methods\ @ref\ ObservableSubscriptionChangeListener::symbolsAdded()\ "{}symbolsAdded"{}}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ and\ @ref\ ObservableSubscriptionChangeListener::symbolsRemoved()\ "{}symbolsRemoved"{}}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ when\ subscription\ to\ IndexedEvent\ is\ defined.}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ <p>Instances\ of\ this\ class\ can\ be\ used\ with\ DXFeedSubscription\ to\ specify\ subscription}}
-\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ to\ a\ particular\ source\ of\ indexed\ events.\ By\ default,\ when\ subscribing\ to\ indexed\ events\ by}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ their\ event\ symbol\ object,\ the\ subscription\ is\ performed\ to\ all\ supported\ sources.}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ <h3>Equality\ and\ hash\ codes</h3>}}
+\DoxyCodeLine{00017\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{class}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}};}
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ SymbolWrapper;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Represents\ subscription\ to\ a\ specific\ source\ of\ indexed\ events.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ This\ is\ symbol\ is\ observed\ by\ ObservableSubscriptionChangeListener}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ methods\ @ref\ ObservableSubscriptionChangeListener::symbolsAdded()\ "{}symbolsAdded"{}}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ and\ @ref\ ObservableSubscriptionChangeListener::symbolsRemoved()\ "{}symbolsRemoved"{}}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ when\ subscription\ to\ IndexedEvent\ is\ defined.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ <p>Instances\ of\ this\ class\ can\ be\ used\ with\ DXFeedSubscription\ to\ specify\ subscription}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ to\ a\ particular\ source\ of\ indexed\ events.\ By\ default,\ when\ subscribing\ to\ indexed\ events\ by}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ their\ event\ symbol\ object,\ the\ subscription\ is\ performed\ to\ all\ supported\ sources.}}
 \DoxyCodeLine{00032\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Indexed\ event\ subscription\ symbols\ are\ compared\ based\ on\ their\ @ref\ IndexedEventSubscriptionSymbol::getEventSymbol()}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ "{}eventSymbol"{}\ and}}
-\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ @ref\ IndexedEventSubscriptionSymbol::getSource()\ "{}source"{}.}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00037\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \{}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{friend}\ SymbolWrapper;}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \ \ \ \ std::unique\_ptr<SymbolWrapper>\ eventSymbol\_;}
-\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ source\_;}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_a52cc092331cf934ee37d949170c9a9d7}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00052\ }
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00055\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_ab5c3bac0b71f3b17ba8342fee14d31be}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ if\ necessary).}}
-\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_a3fac7f17815609a3ce52d203a05b0ddd}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00068\ }
-\DoxyCodeLine{00069\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ indexed\ event\ subscription\ symbol\ with\ a\ specified\ event\ symbol\ and\ source.}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ the\ wrapped\ event\ symbol\ (CandleSymbol,\ WildcardSymbol,\ etc).}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ the\ source.}}
-\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_af054e3abd90886bcf6890d3b4ee76739}{IndexedEventSubscriptionSymbol}}(\textcolor{keyword}{const}\ SymbolWrapper\ \&eventSymbol,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&source)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00078\ \ \ \ \ IndexedEventSubscriptionSymbol(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00079\ \ \ \ \ IndexedEventSubscriptionSymbol(\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&\&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&}
-\DoxyCodeLine{00081\ \ \ \ \ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&operator=(\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&\&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00083\ \ \ \ \ IndexedEventSubscriptionSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~IndexedEventSubscriptionSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ wrapped\ event\ symbol\ (CandleSymbol,\ WildcardSymbol,\ etc).}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ wrapped\ event\ symbol.}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_a2b36d0b96ab6b044bb77a7beab960ec5}{std}}::\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_a2b36d0b96ab6b044bb77a7beab960ec5}{unique\_ptr}}<\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_a2b36d0b96ab6b044bb77a7beab960ec5}{SymbolWrapper}}>\ \&\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_a2b36d0b96ab6b044bb77a7beab960ec5}{getEventSymbol}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00092\ }
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ indexed\ event\ source.}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ @return\ indexed\ event\ source.}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_source}{IndexedEventSource}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_ae62e55989d38a5a54222dd1db34b1dab}{getSource}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00099\ }
-\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ indexed\ event\ subscription\ symbol.}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ indexed\ event\ subscription\ symbol.}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{virtual}\ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol_ac26c581c57f9671d10db1f1fdd07ee81}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00108\ }
-\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00110\ \};}
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
-\DoxyCodeLine{00113\ }
-\DoxyCodeLine{00114\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}>\ \{}
-\DoxyCodeLine{00115\ \ \ \ \ std::size\_t}
-\DoxyCodeLine{00116\ \ \ \ \ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{classdxfcpp_1_1_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::unique\_ptr<dxfcpp::SymbolWrapper>>\{\}(indexedEventSubscriptionSymbol.getEventSymbol())\ +}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::hash<dxfcpp::IndexedEventSource>\{\}(indexedEventSubscriptionSymbol.getSource())\ *\ 31;}
-\DoxyCodeLine{00119\ \ \ \ \ \}}
-\DoxyCodeLine{00120\ \};}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ <h3>Equality\ and\ hash\ codes</h3>}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *\ Indexed\ event\ subscription\ symbols\ are\ compared\ based\ on\ their\ @ref\ IndexedEventSubscriptionSymbol::getEventSymbol()}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ "{}eventSymbol"{}\ and}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ @ref\ IndexedEventSubscriptionSymbol::getSource()\ "{}source"{}.}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00039\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{friend}\ SymbolWrapper;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ std::unique\_ptr<SymbolWrapper>\ eventSymbol\_;}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ source\_;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{class_indexed_event_subscription_symbol_a3904a2928d86d860290af46b414eace2}{toGraal}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol_a9e0ba01c4e0b06d69bae17c094ba700a}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ *\ if\ necessary).}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol_a77a81e8d2c32fcf867466708411dbd87}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ indexed\ event\ subscription\ symbol\ with\ a\ specified\ event\ symbol\ and\ source.}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ the\ wrapped\ event\ symbol\ (CandleSymbol,\ WildcardSymbol,\ etc).}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ @param\ source\ the\ source.}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{class_indexed_event_subscription_symbol_a99ae5f29e149ccd475645d993fba3e4a}{IndexedEventSubscriptionSymbol}}(\textcolor{keyword}{const}\ SymbolWrapper\ \&eventSymbol,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \&source);}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ IndexedEventSubscriptionSymbol(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol);}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ IndexedEventSubscriptionSymbol(\mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&\&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&}
+\DoxyCodeLine{00086\ \ \ \ \ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol);}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&operator=(\mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&\&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00089\ \ \ \ \ IndexedEventSubscriptionSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~IndexedEventSubscriptionSymbol()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ wrapped\ event\ symbol\ (CandleSymbol,\ WildcardSymbol,\ etc).}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ wrapped\ event\ symbol.}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol_a261f514071ad68164ff238f9bb34f775}{std}}::\mbox{\hyperlink{class_indexed_event_subscription_symbol_a261f514071ad68164ff238f9bb34f775}{unique\_ptr}}<\mbox{\hyperlink{class_indexed_event_subscription_symbol_a261f514071ad68164ff238f9bb34f775}{SymbolWrapper}}>\ \&\mbox{\hyperlink{class_indexed_event_subscription_symbol_a261f514071ad68164ff238f9bb34f775}{getEventSymbol}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ indexed\ event\ source.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ @return\ indexed\ event\ source.}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_source}{IndexedEventSource}}\ \&\mbox{\hyperlink{class_indexed_event_subscription_symbol_a61dfc08b2b581362c71daf7d56e2c71e}{getSource}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ indexed\ event\ subscription\ symbol.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ indexed\ event\ subscription\ symbol.}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{virtual}\ std::string\ \mbox{\hyperlink{class_indexed_event_subscription_symbol_a5efb867e3ec450e05225cd73059319b5}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00116\ \};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ std::hash<dxfcpp::\mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}>\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ std::size\_t}
+\DoxyCodeLine{00122\ \ \ \ \ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{class_indexed_event_subscription_symbol}{IndexedEventSubscriptionSymbol}}\ \&indexedEventSubscriptionSymbol)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::unique\_ptr<dxfcpp::SymbolWrapper>>\{\}(indexedEventSubscriptionSymbol.getEventSymbol())\ +}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::hash<dxfcpp::IndexedEventSource>\{\}(indexedEventSubscriptionSymbol.getSource())\ *\ 31;}
+\DoxyCodeLine{00125\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ \};}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

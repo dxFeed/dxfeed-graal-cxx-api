@@ -9,314 +9,324 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_price_type_8hpp}{"{}PriceType.hpp"{}}}}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{memory}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Common.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../EventTypeEnum.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../LastingEvent.hpp"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_market_event_8hpp}{"{}MarketEvent.hpp"{}}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_price_type_8hpp}{"{}PriceType.hpp"{}}}}
 \DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00020\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
 \DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Summary\ information\ snapshot\ about\ the\ trading\ session\ including\ session\ highs,\ lows,\ etc.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ trading\ session\ in}}
-\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ the\ market\ at\ any\ given\ moment\ of\ time.}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00027\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Summary\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structdxfcpp_1_1_lasting_event}{LastingEvent}}\ \{}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/*}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ *\ Flags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ *\ \ \ 31..4\ \ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
-\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ |\ \ Close\ \ |PrevClose|}}
+\DoxyCodeLine{00022\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ Summary\ information\ snapshot\ about\ the\ trading\ session\ including\ session\ highs,\ lows,\ etc.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ It\ represents\ the\ most\ recent\ information\ that\ is\ available\ about\ the\ trading\ session\ in}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ the\ market\ at\ any\ given\ moment\ of\ time.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00029\ \textcolor{keyword}{class}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ Summary\ \textcolor{keyword}{final}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_market_event}{MarketEvent}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_lasting_event}{LastingEvent}}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{struct}\ EventMapper;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ Flags\ property\ has\ several\ significant\ bits\ that\ are\ packed\ into\ an\ integer\ in\ the\ following\ way:}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ *\ \ \ 31..4\ \ \ \ \ 3\ \ \ \ 2\ \ \ \ 1\ \ \ \ 0}}
 \DoxyCodeLine{00035\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00037\ }
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ PRICE\_TYPE\ values\ are\ taken\ from\ PriceType\ enum.}}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ DAY\_CLOSE\_PRICE\_TYPE\_MASK\ =\ 3;}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ DAY\_CLOSE\_PRICE\_TYPE\_SHIFT\ =\ 2;}
-\DoxyCodeLine{00041\ }
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{//\ PRICE\_TYPE\ values\ are\ taken\ from\ PriceType\ enum.}}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_MASK\ =\ 3;}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_SHIFT\ =\ 0;}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ std::int32\_t\ dayId\{\};}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayOpenPrice\ =\ math::NaN;}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayHighPrice\ =\ math::NaN;}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayLowPrice\ =\ math::NaN;}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayClosePrice\ =\ math::NaN;}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ std::int32\_t\ prevDayId\{\};}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ prevDayClosePrice\ =\ math::NaN;}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ prevDayVolume\ =\ math::NaN;}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ std::int64\_t\ openInterest\{\};}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ std::int32\_t\ flags\{\};}
-\DoxyCodeLine{00057\ \ \ \ \ \};}
-\DoxyCodeLine{00058\ }
-\DoxyCodeLine{00059\ \ \ \ \ Data\ data\_\{\};}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ |\ \ \ \ \ \ \ \ |\ \ Close\ \ |PrevClose|}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ *\ +-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ PRICE\_TYPE\ values\ are\ taken\ from\ PriceType\ enum.}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ DAY\_CLOSE\_PRICE\_TYPE\_MASK\ =\ 3;}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ DAY\_CLOSE\_PRICE\_TYPE\_SHIFT\ =\ 2;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ PRICE\_TYPE\ values\ are\ taken\ from\ PriceType\ enum.}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_MASK\ =\ 3;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::uint32\_t\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_SHIFT\ =\ 0;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{struct}\ Data\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::int32\_t\ dayId\{\};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayOpenPrice\ =\ math::NaN;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayHighPrice\ =\ math::NaN;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayLowPrice\ =\ math::NaN;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ dayClosePrice\ =\ math::NaN;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ std::int32\_t\ prevDayId\{\};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ prevDayClosePrice\ =\ math::NaN;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ prevDayVolume\ =\ math::NaN;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ std::int64\_t\ openInterest\{\};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ std::int32\_t\ flags\{\};}
+\DoxyCodeLine{00059\ \ \ \ \ \};}
 \DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00063\ }
-\DoxyCodeLine{00064\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{static}\ std::shared\_ptr<Summary>\ fromGraal(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classdxfcpp_1_1_summary_a9b80becb77c5c4d4e75498abf90a851e}{toGraal}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a9b80becb77c5c4d4e75498abf90a851e}{override}};}
+\DoxyCodeLine{00061\ \ \ \ \ Data\ data\_\{\};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ fillData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ fillGraalData(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Summary\ object}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<Summary>;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Summary\ object}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<Summary>;}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{class_summary_a5bd165d2fa5578589dfc3bf068832f40}{TYPE}};}
 \DoxyCodeLine{00075\ }
 \DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ an\ object\ of\ the\ current\ type\ and\ fills\ it\ with\ data\ from\ the\ the\ dxFeed\ Graal\ SDK\ structure.}}
 \DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *}}
 \DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a3f29b5421c5454fdeef84bca7e4b0995}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative)\ \textcolor{keyword}{noexcept};}
-\DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ shared\ pointer\ to\ the\ Summary\ object}}
-\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{using}\ Ptr\ =\ std::shared\_ptr<Summary>;}
-\DoxyCodeLine{00086\ }
-\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{///\ The\ alias\ to\ a\ type\ of\ unique\ pointer\ to\ the\ Summary\ object}}
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{using}\ Unique\ =\ std::unique\_ptr<Summary>;}
-\DoxyCodeLine{00089\ }
-\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{///\ Type\ identifier\ and\ additional\ information\ about\ the\ current\ event\ class.}}
-\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classdxfcpp_1_1_event_type_enum}{EventTypeEnum}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_summary_a047356cbfbb3279928463abec2823339}{TYPE}};}
-\DoxyCodeLine{00092\ }
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ summary\ event\ with\ default\ values.}}
-\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{classdxfcpp_1_1_summary_a1cc650c3e373ad9336fefeb8101abfe4}{Summary}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00095\ }
-\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ summary\ event\ with\ the\ specified\ event\ symbol.}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a9d11a72888ffa9e339dfe5bdbc246a43}{Summary}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{structdxfcpp_1_1_market_event}{MarketEvent}}\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{(}}std::move(eventSymbol)\mbox{\hyperlink{structdxfcpp_1_1_market_event_afeb8874ca4d6b603d5b941f19e0735cf}{)}}\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ object\ of\ current\ type.}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{static}\ Ptr\ \mbox{\hyperlink{class_summary_a55d678665de262f067c7db950a6602fb}{fromGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ Allocates\ memory\ for\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ Fills\ the\ dxFeed\ Graal\ SDK\ structure's\ fields\ by\ the\ data\ of\ the\ current\ entity\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ pointer\ to\ the\ filled\ structure.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ pointer\ to\ the\ filled\ dxFeed\ Graal\ SDK\ structure}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{class_summary_a8c7d63124ad917aa87c583a35b1ccc41}{toGraal}}()\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_summary_a8c7d63124ad917aa87c583a35b1ccc41}{override}};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ Releases\ the\ memory\ occupied\ by\ the\ dxFeed\ Graal\ SDK\ structure\ (recursively\ if\ necessary).}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ @param\ graalNative\ The\ pointer\ to\ the\ dxFeed\ Graal\ SDK\ structure.}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_ac824faf652b90ad850f127acd0a10358}{freeGraal}}(\textcolor{keywordtype}{void}\ *graalNative);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{///\ Creates\ new\ summary\ event\ with\ default\ values.}}
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{class_summary_a5b3af9e181034ebf63b55ef2f9e0e847}{Summary}}()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
 \DoxyCodeLine{00103\ }
 \DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ identifier\ of\ the\ day\ that\ this\ summary\ represents.}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ @return\ identifier\ of\ the\ day\ that\ this\ summary\ represents.}}
-\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00110\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a71051a7dc76eb6a5cae828519f17abac}{getDayId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayId;}
-\DoxyCodeLine{00112\ \ \ \ \ \}}
-\DoxyCodeLine{00113\ }
-\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ identifier\ of\ the\ day\ that\ this\ summary\ represents.}}
-\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
-\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayId\ identifier\ of\ the\ day\ that\ this\ summary\ represents.}}
-\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_aa1f0fdf295e92e32e78a54282d57b18f}{setDayId}}(std::int32\_t\ dayId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ data\_.dayId\ =\ dayId;}
-\DoxyCodeLine{00122\ \ \ \ \ \}}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ first\ (open)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ first\ (open)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a96b662e30a684e80d9acbff5588a748e}{getDayOpenPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayOpenPrice;}
-\DoxyCodeLine{00131\ \ \ \ \ \}}
-\DoxyCodeLine{00132\ }
-\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ first\ (open)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayOpenPrice\ the\ first\ (open)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_ad1020082021b8661ba248a7ebf5d282d}{setDayOpenPrice}}(\textcolor{keywordtype}{double}\ dayOpenPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ data\_.dayOpenPrice\ =\ dayOpenPrice;}
-\DoxyCodeLine{00140\ \ \ \ \ \}}
-\DoxyCodeLine{00141\ }
-\DoxyCodeLine{00142\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ maximal\ (high)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ maximal\ (high)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a6c55fb43b75aca30386b172ba936d4d6}{getDayHighPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayHighPrice;}
-\DoxyCodeLine{00149\ \ \ \ \ \}}
-\DoxyCodeLine{00150\ }
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayHighPrice\ the\ maximal\ (high)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_aacc35d8903b33ee6101270d9eeca0413}{setDayHighPrice}}(\textcolor{keywordtype}{double}\ dayHighPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ data\_.dayHighPrice\ =\ dayHighPrice;}
-\DoxyCodeLine{00158\ \ \ \ \ \}}
-\DoxyCodeLine{00159\ }
-\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ minimal\ (low)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ minimal\ (low)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a19d9278e50d127ec79ea13028bab774a}{getDayLowPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayLowPrice;}
-\DoxyCodeLine{00167\ \ \ \ \ \}}
-\DoxyCodeLine{00168\ }
-\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayLowPrice\ the\ minimal\ (low)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_ad9a127719efcc08582f7dd80d35d22ff}{setDayLowPrice}}(\textcolor{keywordtype}{double}\ dayLowPrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ data\_.dayLowPrice\ =\ dayLowPrice;}
-\DoxyCodeLine{00176\ \ \ \ \ \}}
-\DoxyCodeLine{00177\ }
-\DoxyCodeLine{00178\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ last\ (close)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ last\ (close)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_ad8228746e552de35ded8da2e074e0475}{getDayClosePrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayClosePrice;}
-\DoxyCodeLine{00185\ \ \ \ \ \}}
-\DoxyCodeLine{00186\ }
-\DoxyCodeLine{00187\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayClosePrice\ the\ last\ (close)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00191\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a0a1bafedffc42b64274d565086453baa}{setDayClosePrice}}(\textcolor{keywordtype}{double}\ dayClosePrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ data\_.dayClosePrice\ =\ dayClosePrice;}
-\DoxyCodeLine{00194\ \ \ \ \ \}}
-\DoxyCodeLine{00195\ }
-\DoxyCodeLine{00196\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_summary_acfa9f74f364f6e51cabc08bffb9ee395}{getDayClosePriceType}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ PriceType::valueOf(getBits(data\_.flags,\ DAY\_CLOSE\_PRICE\_TYPE\_MASK,\ DAY\_CLOSE\_PRICE\_TYPE\_SHIFT));}
-\DoxyCodeLine{00203\ \ \ \ \ \}}
-\DoxyCodeLine{00204\ }
-\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ *\ @param\ type\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ day.}}
-\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a0f5402eac74510504246a01ce1afb3a9}{setDayClosePriceType}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ \&type)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ data\_.flags\ =\ setBits(data\_.flags,\ DAY\_CLOSE\_PRICE\_TYPE\_MASK,\ DAY\_CLOSE\_PRICE\_TYPE\_SHIFT,\ type.getCode());}
-\DoxyCodeLine{00212\ \ \ \ \ \}}
-\DoxyCodeLine{00213\ }
-\DoxyCodeLine{00214\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ identifier\ of\ the\ previous\ day\ that\ this\ summary\ represents.}}
-\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
-\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \ *\ @return\ identifier\ of\ the\ previous\ day\ that\ this\ summary\ represents.}}
-\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00220\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{classdxfcpp_1_1_summary_aa1fce06b95cadb4b1fb41e478ad781d9}{getPrevDayId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.prevDayId;}
-\DoxyCodeLine{00222\ \ \ \ \ \}}
-\DoxyCodeLine{00223\ }
-\DoxyCodeLine{00224\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ identifier\ of\ the\ previous\ day\ that\ this\ summary\ represents.}}
-\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
-\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ *\ @param\ prevDayId\ identifier\ of\ the\ previous\ day\ that\ this\ summary\ represents.}}
-\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_ab2d19daae5be777ac6fd5421da0a80fa}{setPrevDayId}}(std::int32\_t\ prevDayId)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ data\_.prevDayId\ =\ prevDayId;}
-\DoxyCodeLine{00232\ \ \ \ \ \}}
-\DoxyCodeLine{00233\ }
-\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a1a4a2eefc04d5c1905551735961386a3}{getPrevDayClosePrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.prevDayClosePrice;}
-\DoxyCodeLine{00241\ \ \ \ \ \}}
-\DoxyCodeLine{00242\ }
-\DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ *\ @param\ prevDayClosePrice\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a460068ed1f62945937321c6b94c2b9dc}{setPrevDayClosePrice}}(\textcolor{keywordtype}{double}\ prevDayClosePrice)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ data\_.prevDayClosePrice\ =\ prevDayClosePrice;}
-\DoxyCodeLine{00250\ \ \ \ \ \}}
-\DoxyCodeLine{00251\ }
-\DoxyCodeLine{00252\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ \&\mbox{\hyperlink{classdxfcpp_1_1_summary_a8980a6b2cd23839609f55039a3f3f07e}{getPrevDayClosePriceType}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ PriceType::valueOf(}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ getBits(data\_.flags,\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_MASK,\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_SHIFT));}
-\DoxyCodeLine{00260\ \ \ \ \ \}}
-\DoxyCodeLine{00261\ }
-\DoxyCodeLine{00262\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00265\ \textcolor{comment}{\ \ \ \ \ *\ @param\ type\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00266\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a8cfa67d3850d0b1f5cb38d16147c10fb}{setPrevDayClosePriceType}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_price_type}{PriceType}}\ \&type)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ data\_.flags\ =}
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ setBits(data\_.flags,\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_MASK,\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_SHIFT,\ type.getCode());}
-\DoxyCodeLine{00270\ \ \ \ \ \}}
-\DoxyCodeLine{00271\ }
-\DoxyCodeLine{00272\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ total\ volume\ traded\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ *\ @return\ total\ volume\ traded\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_aaae7234790bcecb82ac657f60cd5569c}{getPrevDayVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.prevDayVolume;}
-\DoxyCodeLine{00279\ \ \ \ \ \}}
-\DoxyCodeLine{00280\ }
-\DoxyCodeLine{00281\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ volume\ traded\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ \ *\ @param\ prevDayVolume\ total\ volume\ traded\ for\ the\ previous\ day.}}
-\DoxyCodeLine{00285\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00286\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a23863ed8ebb62b6ba9a7e7ff2a573f98}{setPrevDayVolume}}(\textcolor{keywordtype}{double}\ prevDayVolume)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ data\_.prevDayVolume\ =\ prevDayVolume;}
-\DoxyCodeLine{00288\ \ \ \ \ \}}
-\DoxyCodeLine{00289\ }
-\DoxyCodeLine{00290\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ open\ interest\ of\ the\ symbol\ as\ the\ number\ of\ open\ contracts.}}
-\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ *\ @return\ open\ interest\ of\ the\ symbol\ as\ the\ number\ of\ open\ contracts.}}
-\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00295\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a90653a395e262e6f9a2c6298a6abfa43}{getOpenInterest}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.openInterest;}
-\DoxyCodeLine{00297\ \ \ \ \ \}}
-\DoxyCodeLine{00298\ }
-\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ open\ interest\ of\ the\ symbol\ as\ the\ number\ of\ open\ contracts.}}
-\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00302\ \textcolor{comment}{\ \ \ \ \ *\ @param\ openInterest\ open\ interest\ of\ the\ symbol\ as\ the\ number\ of\ open\ contracts.}}
-\DoxyCodeLine{00303\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a66bde4e748f87e6e5f97e412ceb84938}{setOpenInterest}}(std::int64\_t\ openInterest)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ data\_.openInterest\ =\ openInterest;}
-\DoxyCodeLine{00306\ \ \ \ \ \}}
-\DoxyCodeLine{00307\ }
-\DoxyCodeLine{00308\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
-\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
-\DoxyCodeLine{00312\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00313\ \ \ \ \ std::string\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a257b545647d7ca36d9cc9cc34fe5aab4}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{classdxfcpp_1_1_summary_a257b545647d7ca36d9cc9cc34fe5aab4}{override}};}
-\DoxyCodeLine{00314\ \};}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ Creates\ new\ summary\ event\ with\ the\ specified\ event\ symbol.}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ @param\ eventSymbol\ The\ event\ symbol.}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{class_summary_ab1104364a1e078dc8d6981368890255c}{Summary}}(std::string\ eventSymbol)\ \textcolor{keyword}{noexcept}\ :\ \mbox{\hyperlink{class_summary_ab1104364a1e078dc8d6981368890255c}{MarketEvent}}(\mbox{\hyperlink{class_summary_ab1104364a1e078dc8d6981368890255c}{std}}::\mbox{\hyperlink{class_summary_ab1104364a1e078dc8d6981368890255c}{move}}(\mbox{\hyperlink{class_summary_ab1104364a1e078dc8d6981368890255c}{eventSymbol}}))\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00113\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ identifier\ of\ the\ day\ that\ this\ summary\ represents.}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \ *\ @return\ identifier\ of\ the\ day\ that\ this\ summary\ represents.}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00118\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{class_summary_ad7ec66c2c25555d714076ff4c5316aef}{getDayId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayId;}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ identifier\ of\ the\ day\ that\ this\ summary\ represents.}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayId\ identifier\ of\ the\ day\ that\ this\ summary\ represents.}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_ac2c4098bd23002f62cd1c9257ebce767}{setDayId}}(std::int32\_t\ dayId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ data\_.dayId\ =\ dayId;}
+\DoxyCodeLine{00130\ \ \ \ \ \}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ first\ (open)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ first\ (open)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_summary_a519554f0f7ba9f0d89c36938ce1f7748}{getDayOpenPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayOpenPrice;}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ first\ (open)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayOpenPrice\ the\ first\ (open)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_a56efc72923f5a6af3c32daf6863a2d5a}{setDayOpenPrice}}(\textcolor{keywordtype}{double}\ dayOpenPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ data\_.dayOpenPrice\ =\ dayOpenPrice;}
+\DoxyCodeLine{00148\ \ \ \ \ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ maximal\ (high)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ maximal\ (high)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_summary_aa68a70631721e06e6c6fe5d662a01ac4}{getDayHighPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayHighPrice;}
+\DoxyCodeLine{00157\ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ maximal\ (high)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayHighPrice\ the\ maximal\ (high)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_ae46dae1b223e5350d4a2f56e25853469}{setDayHighPrice}}(\textcolor{keywordtype}{double}\ dayHighPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ data\_.dayHighPrice\ =\ dayHighPrice;}
+\DoxyCodeLine{00166\ \ \ \ \ \}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ minimal\ (low)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ minimal\ (low)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_summary_a61be437541231c11284f11321c31696d}{getDayLowPrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayLowPrice;}
+\DoxyCodeLine{00175\ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ minimal\ (low)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayLowPrice\ the\ minimal\ (low)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_ae0b7bfec1ef3c3a818d07db2a4ecb497}{setDayLowPrice}}(\textcolor{keywordtype}{double}\ dayLowPrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ data\_.dayLowPrice\ =\ dayLowPrice;}
+\DoxyCodeLine{00184\ \ \ \ \ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ last\ (close)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ last\ (close)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_summary_ad38760a92af38015dd5c1aa1256b5909}{getDayClosePrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.dayClosePrice;}
+\DoxyCodeLine{00193\ \ \ \ \ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00196\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00197\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dayClosePrice\ the\ last\ (close)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_aa5459b6d06b70dfcf401b357f3cc8d11}{setDayClosePrice}}(\textcolor{keywordtype}{double}\ dayClosePrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ data\_.dayClosePrice\ =\ dayClosePrice;}
+\DoxyCodeLine{00202\ \ \ \ \ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_price_type}{PriceType}}\ \&\mbox{\hyperlink{class_summary_a92a8d3799dadf6be21c0a79b639d03fe}{getDayClosePriceType}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ PriceType::valueOf(getBits(data\_.flags,\ DAY\_CLOSE\_PRICE\_TYPE\_MASK,\ DAY\_CLOSE\_PRICE\_TYPE\_SHIFT));}
+\DoxyCodeLine{00211\ \ \ \ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ *\ @param\ type\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ day.}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_aa040705ed8d5b1d8e56696b3e16054e0}{setDayClosePriceType}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_price_type}{PriceType}}\ \&type)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ data\_.flags\ =\ setBits(data\_.flags,\ DAY\_CLOSE\_PRICE\_TYPE\_MASK,\ DAY\_CLOSE\_PRICE\_TYPE\_SHIFT,\ type.getCode());}
+\DoxyCodeLine{00220\ \ \ \ \ \}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ identifier\ of\ the\ previous\ day\ that\ this\ summary\ represents.}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ *\ @return\ identifier\ of\ the\ previous\ day\ that\ this\ summary\ represents.}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00228\ \ \ \ \ std::int32\_t\ \mbox{\hyperlink{class_summary_af8fcdf52e3d47812be5a0788172a54d9}{getPrevDayId}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.prevDayId;}
+\DoxyCodeLine{00230\ \ \ \ \ \}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ identifier\ of\ the\ previous\ day\ that\ this\ summary\ represents.}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ Identifier\ of\ the\ day\ is\ the\ number\ of\ days\ passed\ since\ January\ 1,\ 1970.}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ *\ @param\ prevDayId\ identifier\ of\ the\ previous\ day\ that\ this\ summary\ represents.}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_a19f19d9301756283e37c3fb69a6f0e29}{setPrevDayId}}(std::int32\_t\ prevDayId)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ data\_.prevDayId\ =\ prevDayId;}
+\DoxyCodeLine{00240\ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_summary_acf2cb75a9415251a81e7aac93fb2b9c8}{getPrevDayClosePrice}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.prevDayClosePrice;}
+\DoxyCodeLine{00249\ \ \ \ \ \}}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ *\ @param\ prevDayClosePrice\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_a9124003fe1113b593e6ccab7e0f6ea17}{setPrevDayClosePrice}}(\textcolor{keywordtype}{double}\ prevDayClosePrice)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ data\_.prevDayClosePrice\ =\ prevDayClosePrice;}
+\DoxyCodeLine{00258\ \ \ \ \ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00261\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00262\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ \ \ *\ @return\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_price_type}{PriceType}}\ \&\mbox{\hyperlink{class_summary_a9ae1752e7a173c8f80e5ad991374d21a}{getPrevDayClosePriceType}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ PriceType::valueOf(}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ getBits(data\_.flags,\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_MASK,\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_SHIFT));}
+\DoxyCodeLine{00268\ \ \ \ \ \}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ *\ @param\ type\ the\ price\ type\ of\ the\ last\ (close)\ price\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_aad563e865828f82a4ebe7c7a9ad3cf84}{setPrevDayClosePriceType}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_price_type}{PriceType}}\ \&type)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ data\_.flags\ =}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ setBits(data\_.flags,\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_MASK,\ PREV\_DAY\_CLOSE\_PRICE\_TYPE\_SHIFT,\ type.getCode());}
+\DoxyCodeLine{00278\ \ \ \ \ \}}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00281\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ total\ volume\ traded\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00282\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00283\ \textcolor{comment}{\ \ \ \ \ *\ @return\ total\ volume\ traded\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00284\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_summary_a94d2a257ee4e2b02f651b4d32f3a37d6}{getPrevDayVolume}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.prevDayVolume;}
+\DoxyCodeLine{00287\ \ \ \ \ \}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ total\ volume\ traded\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ \ \ *\ @param\ prevDayVolume\ total\ volume\ traded\ for\ the\ previous\ day.}}
+\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_ac42ba09c9c8909b6e76ed687e11b3c9b}{setPrevDayVolume}}(\textcolor{keywordtype}{double}\ prevDayVolume)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ data\_.prevDayVolume\ =\ prevDayVolume;}
+\DoxyCodeLine{00296\ \ \ \ \ \}}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ open\ interest\ of\ the\ symbol\ as\ the\ number\ of\ open\ contracts.}}
+\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ *\ @return\ open\ interest\ of\ the\ symbol\ as\ the\ number\ of\ open\ contracts.}}
+\DoxyCodeLine{00302\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00303\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{class_summary_af8ef57947df49c3c2cc6f246e9924a6b}{getOpenInterest}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ data\_.openInterest;}
+\DoxyCodeLine{00305\ \ \ \ \ \}}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ *\ Changes\ open\ interest\ of\ the\ symbol\ as\ the\ number\ of\ open\ contracts.}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ \ *\ @param\ openInterest\ open\ interest\ of\ the\ symbol\ as\ the\ number\ of\ open\ contracts.}}
+\DoxyCodeLine{00311\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00312\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_summary_ad7f0bedfab6006e3359568da94201472}{setOpenInterest}}(std::int64\_t\ openInterest)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ data\_.openInterest\ =\ openInterest;}
+\DoxyCodeLine{00314\ \ \ \ \ \}}
 \DoxyCodeLine{00315\ }
-\DoxyCodeLine{00316\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ the\ current\ object.}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00320\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00321\ \ \ \ \ std::string\ \mbox{\hyperlink{class_summary_ae7939f5b3bab6494900c545d986b3f76}{toString}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \mbox{\hyperlink{class_summary_ae7939f5b3bab6494900c545d986b3f76}{override}};}
+\DoxyCodeLine{00322\ \};}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

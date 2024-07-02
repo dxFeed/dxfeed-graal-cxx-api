@@ -9,111 +9,116 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_conf_8hpp}{"{}Conf.hpp"{}}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{concepts}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_common_8hpp}{"{}Common.hpp"{}}}}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{cstdint}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{concepts}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_common_8hpp}{"{}Common.hpp"{}}}}
 \DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Child,\ \textcolor{keyword}{typename}\ Code>\ \textcolor{keyword}{struct}\ Enum\ \{}
-\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using}\ ParentType\ =\ Enum<Child,\ Code>;}
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using}\ ChildType\ =\ Child;}
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{using}\ CodeType\ =\ Code;}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{const}\ CodeType\ code\_;}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ name\_;}
-\DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ OtherCodeType>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ CodeType\ convertToInnerCodeType(OtherCodeType\ code)\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<Code>(\textcolor{keyword}{static\_cast}<std::make\_unsigned\_t<Code>>(code));}
-\DoxyCodeLine{00030\ \ \ \ \ \}}
-\DoxyCodeLine{00031\ }
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ OtherCodeType>}
-\DoxyCodeLine{00033\ \ \ \ \ Enum(OtherCodeType\ code,\ std::string\ name)\ \textcolor{keyword}{noexcept}\ :\ code\_\{convertToInnerCodeType(code)\},\ name\_\{std::move(name)\}\ \{}
-\DoxyCodeLine{00034\ \ \ \ \ \}}
-\DoxyCodeLine{00035\ }
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ Child>>\ ALL;}
+\DoxyCodeLine{00018\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Child,\ \textcolor{keyword}{typename}\ Code>\ \textcolor{keyword}{struct}\ Enum\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{using}\ ParentType\ =\ Enum<Child,\ Code>;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using}\ ChildType\ =\ Child;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{using}\ CodeType\ =\ Code;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{const}\ CodeType\ code\_;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ name\_;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ OtherCodeType>\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ CodeType\ convertToInnerCodeType(OtherCodeType\ code)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast}<Code>(\textcolor{keyword}{static\_cast}<std::make\_unsigned\_t<Code>>(code));}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ OtherCodeType>}
+\DoxyCodeLine{00035\ \ \ \ \ Enum(OtherCodeType\ code,\ std::string\ name)\ \textcolor{keyword}{noexcept}\ :\ code\_\{convertToInnerCodeType(code)\},\ name\_\{std::move(name)\}\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \}}
 \DoxyCodeLine{00037\ }
-\DoxyCodeLine{00038\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00040\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ code\ that\ is\ used\ in\ flag\ bits.}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *\ @return\ code.}}
-\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00044\ \ \ \ \ [[nodiscard]]\ Code\ getCode()\ \textcolor{keyword}{const}\ \{}
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ code\_;}
-\DoxyCodeLine{00046\ \ \ \ \ \}}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ enum\ element\ name}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ @return\ name}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00053\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ std::string\ \&getName()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00055\ \ \ \ \ \}}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ an\ enum\ element.}}
-\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00062\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ std::string\ \&toString()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00064\ \ \ \ \ \}}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ *\ Compares\ two\ elements\ of\ an\ enum.}}
-\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ E\ Type\ convertible\ to\ enum\ \`{}Enum<Child,\ Code>`}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *\ @param\ e1\ The\ first\ element\ of\ the\ enum\ to\ be\ compared}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ @param\ e2\ The\ second\ element\ of\ the\ enum\ to\ be\ compared}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ elements\ are\ the\ same}}
-\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{template}\ <dxfcpp::ConvertibleTo<Enum<Child,\ Code>>\ E>\ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ E\ \&e1,\ \textcolor{keyword}{const}\ E\ \&e2)\ \{}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ e1.getCode()\ ==\ e2.getCode();}
-\DoxyCodeLine{00077\ \ \ \ \ \}}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ Puts\ the\ string\ representation\ of\ an\ enum\ element\ to\ the\ output\ stream.}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ OStream\ A\ type\ of\ the\ output\ stream}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ E\ Type\ convertible\ to\ enum\ \`{}Enum<Child,\ Code>`}}
-\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ @param\ os\ The\ output\ stream}}
-\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ @param\ e\ The\ element\ of\ the\ enum}}
-\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ output\ stream}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ OStream,\ dxfcpp::ConvertibleTo<Enum<Child,\ Code>>\ E>}
-\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{friend}\ OStream\ \&operator<<(OStream\ \&os,\ \textcolor{keyword}{const}\ E\ \&e)\ \{}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os\ <<\ e.toString();}
-\DoxyCodeLine{00092\ \ \ \ \ \}}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ enum\ element\ by\ integer\ code\ bit\ pattern.}}
-\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ @param\ code\ integer\ code.}}
-\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *\ @return\ enum\ element.}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ OtherCodeType>\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ Child\ \&valueOf(OtherCodeType\ code)\ \{}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ found\ =\ ALL.find(convertToInnerCodeType(code));\ found\ !=\ ALL.end())\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00104\ }
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ try\ to\ implement\ C++11-\/like\ code\ for\ this}}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ Child::getDefault();\ \})\ \{}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Child::getDefault();}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ALL.at(0);}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00111\ \ \ \ \ \}}
-\DoxyCodeLine{00112\ \};}
-\DoxyCodeLine{00113\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<CodeType,\ std::reference\_wrapper<\textcolor{keyword}{const}\ Child>>\ ALL;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ code\ that\ is\ used\ in\ flag\ bits.}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ *\ @return\ code.}}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00046\ \ \ \ \ [[nodiscard]]\ Code\ getCode()\ \textcolor{keyword}{const}\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ code\_;}
+\DoxyCodeLine{00048\ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ the\ enum\ element\ name}}
+\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ @return\ name}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00055\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ std::string\ \&getName()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ string\ representation\ of\ an\ enum\ element.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ *\ @return\ a\ string\ representation}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00064\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{const}\ std::string\ \&toString()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00066\ \ \ \ \ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ *\ Compares\ two\ elements\ of\ an\ enum.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ E\ Type\ convertible\ to\ enum\ \`{}Enum<Child,\ Code>`}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ *\ @param\ e1\ The\ first\ element\ of\ the\ enum\ to\ be\ compared}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ @param\ e2\ The\ second\ element\ of\ the\ enum\ to\ be\ compared}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ *\ @return\ \`{}true`\ if\ the\ elements\ are\ the\ same}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{template}\ <dxfcpp::ConvertibleTo<Enum<Child,\ Code>>\ E>\ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ E\ \&e1,\ \textcolor{keyword}{const}\ E\ \&e2)\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ e1.getCode()\ ==\ e2.getCode();}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ Puts\ the\ string\ representation\ of\ an\ enum\ element\ to\ the\ output\ stream.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ OStream\ A\ type\ of\ the\ output\ stream}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ *\ @tparam\ E\ Type\ convertible\ to\ enum\ \`{}Enum<Child,\ Code>`}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ *\ @param\ os\ The\ output\ stream}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ @param\ e\ The\ element\ of\ the\ enum}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ @return\ The\ output\ stream}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ OStream,\ dxfcpp::ConvertibleTo<Enum<Child,\ Code>>\ E>}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{friend}\ OStream\ \&operator<<(OStream\ \&os,\ \textcolor{keyword}{const}\ E\ \&e)\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os\ <<\ e.toString();}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ enum\ element\ by\ integer\ code\ bit\ pattern.}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ @param\ code\ integer\ code.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ @return\ enum\ element.}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{template}\ <Integral\ OtherCodeType>\ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ Child\ \&valueOf(OtherCodeType\ code)\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{auto}\ found\ =\ ALL.find(convertToInnerCodeType(code));\ found\ !=\ ALL.end())\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found-\/>second;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ try\ to\ implement\ C++11-\/like\ code\ for\ this}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (requires\ \{\ Child::getDefault();\ \})\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Child::getDefault();}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ALL.at(0);}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00113\ \ \ \ \ \}}
+\DoxyCodeLine{00114\ \};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

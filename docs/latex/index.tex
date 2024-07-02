@@ -17,7 +17,6 @@ This package provides access to \href{https://dxfeed.com/market-data/}{\texttt{ 
 \item Reasons for the New C/\+C++ API Repository
 \item Benefits of the New Version
 \item Milestones
-\item Future Development
 \item Migration
 \item Implementation Details
 \item Architectural Restrictions and Other Limitations in the Old Version
@@ -37,40 +36,21 @@ This package provides access to \href{https://dxfeed.com/market-data/}{\texttt{ 
 \item How To Build
 \item 3rd Party Licenses
 \end{DoxyItemize}\hypertarget{index_autotoc_md1}{}\doxysubsubsection{\texorpdfstring{Overview}{Overview}}\label{index_autotoc_md1}
-\hypertarget{index_autotoc_md2}{}\doxyparagraph{\texorpdfstring{Reasons for the New CXX API Repository}{Reasons for the New CXX API Repository}}\label{index_autotoc_md2}
-The old version of \href{https://github.com/dxFeed/dxfeed-c-api}{\texttt{ dx\+Feed C API}}, has several architectural restrictions that prevent us from providing a state-\/of-\/the-\/art technological solution.\hypertarget{index_autotoc_md3}{}\doxyparagraph{\texorpdfstring{Benefits of the New Version}{Benefits of the New Version}}\label{index_autotoc_md3}
+\hypertarget{index_autotoc_md2}{}\doxysubsubsubsection{\texorpdfstring{Reasons for the New CXX API Repository}{Reasons for the New CXX API Repository}}\label{index_autotoc_md2}
+The old version of \href{https://github.com/dxFeed/dxfeed-c-api}{\texttt{ dx\+Feed C API}}, has several architectural restrictions that prevent us from providing a state-\/of-\/the-\/art technological solution.\hypertarget{index_autotoc_md3}{}\doxysubsubsubsection{\texorpdfstring{Benefits of the New Version}{Benefits of the New Version}}\label{index_autotoc_md3}
 
 \begin{DoxyItemize}
 \item \+:rocket\+: Increased performance
 \item \+:milky\+\_\+way\+: Wider functionality
 \item \+:gemini\+: Identical programming interfaces to our best API
 \item \+:thumbsup\+: Higher quality of support and service
-\end{DoxyItemize}\hypertarget{index_autotoc_md4}{}\doxyparagraph{\texorpdfstring{Milestones}{Milestones}}\label{index_autotoc_md4}
+\end{DoxyItemize}\hypertarget{index_autotoc_md4}{}\doxysubsubsubsection{\texorpdfstring{Milestones}{Milestones}}\label{index_autotoc_md4}
 Feature development has already stopped for the \href{https://github.com/dxFeed/dxfeed-c-api}{\texttt{ old version}} of dx\+Feed C API.
 
-We expect the new repository to go into production in Q1’2024. At the same time, the old version will be considered deprecated, and at the end of 2024, we plan to end the service. If you’re already our customer and have difficulty with a future transition, please contact us via our \href{https://jira.in.devexperts.com/servicedesk/customer/portal/1/create/122}{\texttt{ customer portal}}.\hypertarget{index_autotoc_md5}{}\doxyparagraph{\texorpdfstring{Future Development}{Future Development}}\label{index_autotoc_md5}
-Features planned with {\bfseries{high priority}}\+:
-
-
-\begin{DoxyItemize}
-\item Add unit tests and conduct different types of testing
-\item Add necessary entities for more convenient API usage (\href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html}{\texttt{ IPF}}, \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/TimeSeriesEventModel.html}{\texttt{ Time\+Series\+Event\+Model}}, \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/market/OrderBookModel.html}{\texttt{ Order\+Book\+Model}}, \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getTimeSeriesPromise-java.lang.Class-java.lang.Object-long-long-}{\texttt{ Get\+Time\+Series\+Promise}}, etc.)
-\item Provide more samples
-\item Provide performance test results along with a comparison with the old API version
-\end{DoxyItemize}
-
-\DoxyHorRuler{0}
- Features planned for the {\bfseries{next stage}}\+:
-
-
-\begin{DoxyItemize}
-\item Implement a model of \href{https://kb.dxfeed.com/en/data-services/real-time-data-services/-net-api-incremental-updates.html}{\texttt{ incremental updates}} in Java API and add it to С/\+C++ API
-\item Implement Order\+Book\+Model with advanced logic (e.\+g., On\+New\+Book, On\+Book\+Update, On\+Book\+Incremental\+Change) in Java API and add it to C/\+C++ API
-\item Add samples or implement a convenient API for \href{https://kb.dxfeed.com/en/data-services/aggregated-data-services/candlewebservice.html}{\texttt{ Candlewebservice}}
-\end{DoxyItemize}\hypertarget{index_autotoc_md7}{}\doxyparagraph{\texorpdfstring{Migration}{Migration}}\label{index_autotoc_md7}
+The old version will be considered deprecated, and at the end of 2024, we plan to end the service. If you’re already our customer and have difficulty with a future transition, please contact us via our customer portal.\hypertarget{index_autotoc_md5}{}\doxysubsubsubsection{\texorpdfstring{Migration}{Migration}}\label{index_autotoc_md5}
 To help you rewrite the existing API calls, we’ve prepared samples demonstrating how to work with the new API and how several functionalities are implemented. More examples will follow. The table below shows the sample mapping between the old and new versions.
 
-Our support team on our \href{https://jira.in.devexperts.com/servicedesk/customer/portal/1/create/122}{\texttt{ customer portal}} is ready to answer any questions and help with the transition.\hypertarget{index_autotoc_md8}{}\doxysubparagraph{\texorpdfstring{Sample Mapping}{Sample Mapping}}\label{index_autotoc_md8}
+Our support team on our \href{https://jira.in.devexperts.com/servicedesk/customer/portal/1/create/122}{\texttt{ customer portal}} is ready to answer any questions and help with the transition.\hypertarget{index_autotoc_md6}{}\doxysubsubsubsubsection{\texorpdfstring{Sample Mapping}{Sample Mapping}}\label{index_autotoc_md6}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
 \hline
@@ -81,13 +61,13 @@ Our support team on our \href{https://jira.in.devexperts.com/servicedesk/custome
 \hline
 \PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ \#   }&\cellcolor{\tableheadbgcolor}\textbf{ Sample   }&\cellcolor{\tableheadbgcolor}\textbf{ Old Version   }&\cellcolor{\tableheadbgcolor}\textbf{ New Version    }\\\cline{1-4}
 \endhead
-\PBS\centering 1   &How to subscribe to {\ttfamily Order}, {\ttfamily Spread\+Order}, {\ttfamily Candle}, {\ttfamily Time\+And\+Sale}, {\ttfamily Greeks}, {\ttfamily Series} snapshots   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample}{\texttt{ Snapshot\+Console\+Sample}}   &{\itshape Q1’2024}, please see TBD section    \\\cline{1-4}
-\PBS\centering 2   &How to subscribe to depth of market   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample}{\texttt{ Price\+Level\+Book\+Sample}}   &{\itshape Q1’2024}, please see TBD section    \\\cline{1-4}
-\PBS\centering 3   &How to subscribe to order snapshot with incremental updates   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample}{\texttt{ Inc\+Snapshot\+Console\+Sample}}   &{\itshape Q1’2024}, please see TBD section    \\\cline{1-4}
-\PBS\centering 4   &How to get and display the full order book   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/FullOrderBookSample}{\texttt{ Full\+Order\+Book\+Sample}}   &{\itshape Q1’2024}, please see TBD section    \\\cline{1-4}
-\PBS\centering 5   &How to access and visualize regional market data   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/RegionalBookSample}{\texttt{ Regional\+Book\+Sample}}   &{\itshape Q1’2024}, please see TBD section   \\\cline{1-4}
+\PBS\centering 1   &How to subscribe to {\ttfamily \doxylink{class_order}{Order}}, {\ttfamily \doxylink{class_spread_order}{Spread\+Order}}, {\ttfamily \doxylink{class_candle}{Candle}}, {\ttfamily \doxylink{class_time_and_sale}{Time\+And\+Sale}}, {\ttfamily \doxylink{class_greeks}{Greeks}}, {\ttfamily \doxylink{class_series}{Series}} snapshots   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample}{\texttt{ Snapshot\+Console\+Sample}}   &{\itshape Q2’2024}, please see TBD section    \\\cline{1-4}
+\PBS\centering 2   &How to subscribe to depth of market   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample}{\texttt{ Price\+Level\+Book\+Sample}}   &{\itshape Q2’2024}, please see TBD section    \\\cline{1-4}
+\PBS\centering 3   &How to subscribe to order snapshot with incremental updates   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample}{\texttt{ Inc\+Snapshot\+Console\+Sample}}   &{\itshape Q2’2024}, please see TBD section    \\\cline{1-4}
+\PBS\centering 4   &How to get and display the full order book   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/FullOrderBookSample}{\texttt{ Full\+Order\+Book\+Sample}}   &{\itshape Q2’2024}, please see TBD section    \\\cline{1-4}
+\PBS\centering 5   &How to access and visualize regional market data   &\href{https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/RegionalBookSample}{\texttt{ Regional\+Book\+Sample}}   &{\itshape Q2’2024}, please see TBD section   \\\cline{1-4}
 \end{longtabu}
-\hypertarget{index_autotoc_md9}{}\doxyparagraph{\texorpdfstring{Implementation Details}{Implementation Details}}\label{index_autotoc_md9}
+\hypertarget{index_autotoc_md7}{}\doxysubsubsubsection{\texorpdfstring{Implementation Details}{Implementation Details}}\label{index_autotoc_md7}
 We use \href{https://www.graalvm.org/latest/reference-manual/native-image/}{\texttt{ Graal\+VM Native Image}} technology and specially written code that {\itshape wraps} Java methods into native ones to get dynamically linked libraries for different platforms (Linux, mac\+OS, and Windows) based on the \href{https://dxfeed.jfrog.io/artifactory/maven-open/com/devexperts/qd/dxfeed-api/}{\texttt{ latest Java API package}}.
 
 Then, the resulting dynamic link library (dx\+Feed Graal-\/native) is used through C \href{https://en.wikipedia.org/wiki/Application_binary_interface}{\texttt{ ABI}} (application binary interface), and we write programming interfaces that describe our business model (similar to Java API).
@@ -96,7 +76,7 @@ As a result, we get a full-\/featured, similar performance as with Java API. Reg
 
 Below is a scheme of this process\+:
 
-$<$picture$>$ $<$source media="{}(prefers-\/color-\/scheme\+: dark)"{} srcset="{}docs/images/scheme\+\_\+dark.\+svg"{}$>$  $<$/picture$>$\hypertarget{index_autotoc_md10}{}\doxyparagraph{\texorpdfstring{Architectural Restrictions and Other Limitations of the Old Version}{Architectural Restrictions and Other Limitations of the Old Version}}\label{index_autotoc_md10}
+$<$picture$>$ $<$source media="{}(prefers-\/color-\/scheme\+: dark)"{} srcset="{}docs/images/scheme\+\_\+dark.\+svg"{}$>$  $<$/picture$>$\hypertarget{index_autotoc_md8}{}\doxysubsubsubsection{\texorpdfstring{Architectural Restrictions and Other Limitations of the Old Version}{Architectural Restrictions and Other Limitations of the Old Version}}\label{index_autotoc_md8}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
 \hline
@@ -112,14 +92,14 @@ $<$picture$>$ $<$source media="{}(prefers-\/color-\/scheme\+: dark)"{} srcset="{
 \PBS\centering 3   &In event callbacks, one market event type and one data portion always arrive (excluding snapshot subscription), which increases the load on the CPU with a large amount of incoming data   &Event callbacks can receive different market event types, and more than one by batch    \\\cline{1-3}
 \PBS\centering 4   &It’s impossible to subscribe to data without getting \href{https://kb.dxfeed.com/en/data-model/exchange-codes.html}{\texttt{ regionals}} (if it is available for the market event) or only for a certain regional   &{\ttfamily subscription-\/\texorpdfstring{$>$}{>}add\+Symbols(\{"{}\+AAPL"{}\});} -\/ \href{https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html\#quote-47603}{\texttt{ composite}}~\newline
 {\ttfamily subscription-\/\texorpdfstring{$>$}{>}add\+Symbols(\{"{}\+AAPL\&\+Q"{}\});} -\/ \href{https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html\#quote-x--regional-quote-}{\texttt{ regional}}    \\\cline{1-3}
-\PBS\centering 5   &It’s impossible to subscribe to Order event (excluding snapshot subscription) without getting\+: all \href{https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html\#order-x}{\texttt{ sources}}, Order by Quote (including regionals), Order by \href{https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html\#marketmaker-47603}{\texttt{ Market\+Maker}}   &{\ttfamily subscription-\/\texorpdfstring{$>$}{>}add\+Symbols(Indexed\+Event\+Subscription\+Symbol\+::create("{}\+AAPL"{}, Order\+Source\+::\+NTV));} -\/ \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/include/dxfeed_graal_native_cpp_api/event/market/OrderSource.hpp}{\texttt{ Order\+Source}} determines which data is being subscribed to    \\\cline{1-3}
+\PBS\centering 5   &It’s impossible to subscribe to {\ttfamily \doxylink{class_order}{Order}} event (excluding snapshot subscription) without getting\+: all \href{https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html\#order-x}{\texttt{ sources}}, {\ttfamily \doxylink{class_order}{Order}} by {\ttfamily \doxylink{class_quote}{Quote}} (including regionals), \doxylink{class_order}{Order} by \href{https://kb.dxfeed.com/en/data-model/qd-model-of-market-events.html\#marketmaker-47603}{\texttt{ Market\+Maker}}   &{\ttfamily subscription-\/\texorpdfstring{$>$}{>}add\+Symbols(Indexed\+Event\+Subscription\+Symbol\+::create("{}\+AAPL"{}, \doxylink{class_order_source_a082ff436a692c22800fb4cb54e9e7d58}{Order\+Source\+::\+NTV}));} -\/ \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/include/dxfeed_graal_native_cpp_api/event/market/OrderSource.hpp}{\texttt{ Order\+Source}} determines which data is being subscribed to    \\\cline{1-3}
 \PBS\centering 6   &Data is mixed up when creating two subscriptions (regular and time series) for the same market event type. Both regular and time series data go to both subscriptions   &Each subscription instance receives only the data requested    \\\cline{1-3}
 \PBS\centering 7   &Each subsequent request for the same symbol set in a subscription instance overwrites the existing one in another subscription instance   &Subscription instances and the data they receive are independent of each other    \\\cline{1-3}
 \PBS\centering 8   &Removing a symbol from one subscription instance caused it to be removed from all others   &Subscription instances and the data they receive are independent of each other    \\\cline{1-3}
-\PBS\centering 9   &Incorrect behavior when reading from a file (if a market event in the file hasn’t been subscribed to). Reading from a file always occurs at maximum speed. The supported format is binary only   &{\ttfamily endpoint-\/\texorpdfstring{$>$}{>}connect("{}file\+:tape.\+txt\mbox{[}format=text\mbox{]}"{});} -\/ processing a text file with at it\textquotesingle{}s "{}real"{} speed by timestamps$<$br$>${\ttfamily endpoint-\/\texorpdfstring{$>$}{>}connect("{}file\+:tape.\+bin\mbox{[}format=binary,speed=max\mbox{]}"{});} -\/ processing a binary file with max speed   \\\cline{1-3}
+\PBS\centering 9   &Incorrect behavior when reading from a file (if a market event in the file hasn\textbackslash{}\textquotesingle{}t been subscribed to). Reading from a file always occurs at maximum speed. The supported format is binary only   &{\ttfamily endpoint-\/\texorpdfstring{$>$}{>}connect("{}file\+:tape.\+txt\mbox{[}format=text\mbox{]}"{});} -\/ processing a text file with at it\textquotesingle{}s "{}real"{} speed by timestamps$<$br$>${\ttfamily endpoint-\/\texorpdfstring{$>$}{>}connect("{}file\+:tape.\+bin\mbox{[}format=binary,speed=max\mbox{]}"{});} -\/ processing a binary file with max speed   \\\cline{1-3}
 \end{longtabu}
-\hypertarget{index_autotoc_md11}{}\doxysubsubsection{\texorpdfstring{Documentation}{Documentation}}\label{index_autotoc_md11}
-Find useful information in our self-\/service dx\+Feed Knowledge Base or .NET API documentation\+:
+\hypertarget{index_autotoc_md9}{}\doxysubsubsection{\texorpdfstring{Documentation}{Documentation}}\label{index_autotoc_md9}
+Find useful information in our self-\/service dx\+Feed Knowledge Base or CXX API documentation\+:
 
 
 \begin{DoxyItemize}
@@ -136,8 +116,8 @@ Find useful information in our self-\/service dx\+Feed Knowledge Base or .NET AP
 \item \href{https://kb.dxfeed.com/en/data-model/dxfeed-order-book/order-book-reconstruction.html}{\texttt{ Order Book reconstruction}}
 \item \href{https://kb.dxfeed.com/en/data-model/symbology-guide.html}{\texttt{ Symbology Guide}}
 \end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{index_autotoc_md12}{}\doxysubsubsection{\texorpdfstring{Requirements}{Requirements}}\label{index_autotoc_md12}
-\hypertarget{index_autotoc_md13}{}\doxyparagraph{\texorpdfstring{Windows}{Windows}}\label{index_autotoc_md13}
+\end{DoxyItemize}\hypertarget{index_autotoc_md10}{}\doxysubsubsection{\texorpdfstring{Requirements}{Requirements}}\label{index_autotoc_md10}
+\hypertarget{index_autotoc_md11}{}\doxysubsubsubsection{\texorpdfstring{Windows}{Windows}}\label{index_autotoc_md11}
 Only x64 versions are supported.
 
 \tabulinesep=1mm
@@ -157,18 +137,18 @@ Only x64 versions are supported.
 \href{https://learn.microsoft.com/windows-server/}{\texttt{ Windows Server Core}}   &2012+   &x64    \\\cline{1-3}
 \href{https://learn.microsoft.com/windows-server/get-started/getting-started-with-nano-server}{\texttt{ Nano Server}}   &Version 1809+   &x64   \\\cline{1-3}
 \end{longtabu}
-\hypertarget{index_autotoc_md14}{}\doxysubparagraph{\texorpdfstring{Requirements}{Requirements}}\label{index_autotoc_md14}
+\hypertarget{index_autotoc_md12}{}\doxysubsubsubsubsection{\texorpdfstring{Requirements}{Requirements}}\label{index_autotoc_md12}
 
 \begin{DoxyItemize}
 \item \href{https://aka.ms/vs/17/release/vc_redist.x64.exe}{\texttt{ Visual C++ Redistributable for Visual Studio 2015}}
-\end{DoxyItemize}\hypertarget{index_autotoc_md15}{}\doxyparagraph{\texorpdfstring{Linux}{Linux}}\label{index_autotoc_md15}
-Only x64 versions are supported.\hypertarget{index_autotoc_md16}{}\doxysubparagraph{\texorpdfstring{Libc compatibility}{Libc compatibility}}\label{index_autotoc_md16}
+\end{DoxyItemize}\hypertarget{index_autotoc_md13}{}\doxysubsubsubsection{\texorpdfstring{Linux}{Linux}}\label{index_autotoc_md13}
+Only x64 versions are supported.\hypertarget{index_autotoc_md14}{}\doxysubsubsubsubsection{\texorpdfstring{libc compatibility}{libc compatibility}}\label{index_autotoc_md14}
 
 \begin{DoxyItemize}
 \item \href{https://www.gnu.org/software/libc/}{\texttt{ glibc}}\+: 2.\+35+ (from Ubuntu 22.\+04)
 \item \href{https://musl.libc.org/}{\texttt{ musl}}\+: temporarily unsupported
-\end{DoxyItemize}\hypertarget{index_autotoc_md17}{}\doxysubparagraph{\texorpdfstring{Libpthread compatibility}{Libpthread compatibility}}\label{index_autotoc_md17}
-A symlink on libpthread.\+so, libpthread.\+so.\+0, or libcoreclr.\+so must exist.\hypertarget{index_autotoc_md18}{}\doxyparagraph{\texorpdfstring{mac\+OS}{mac\+OS}}\label{index_autotoc_md18}
+\end{DoxyItemize}\hypertarget{index_autotoc_md15}{}\doxysubsubsubsubsection{\texorpdfstring{libpthread compatibility}{libpthread compatibility}}\label{index_autotoc_md15}
+A symlink on {\ttfamily libpthread.\+so}, {\ttfamily libpthread.\+so.\+0}, or {\ttfamily libcoreclr.\+so} must exist.\hypertarget{index_autotoc_md16}{}\doxysubsubsubsection{\texorpdfstring{mac\+OS}{mac\+OS}}\label{index_autotoc_md16}
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
 \hline
@@ -182,11 +162,11 @@ A symlink on libpthread.\+so, libpthread.\+so.\+0, or libcoreclr.\+so must exist
 \href{https://support.apple.com/macos}{\texttt{ mac\+OS}}   &10.\+15+   &x64    \\\cline{1-3}
 \href{https://support.apple.com/macos}{\texttt{ mac\+OS}}   &11+   &Arm64   \\\cline{1-3}
 \end{longtabu}
-\hypertarget{index_autotoc_md19}{}\doxysubsubsection{\texorpdfstring{Installation}{Installation}}\label{index_autotoc_md19}
+\hypertarget{index_autotoc_md17}{}\doxysubsubsection{\texorpdfstring{Installation}{Installation}}\label{index_autotoc_md17}
 Examples of how to install the library and integrate with the library can be found \href{https://github.com/dxFeed/dxfeed-graal-cxx-api-samples}{\texttt{ here}}.
 
-The API is delivered as a dynamic library ({\ttfamily dx\+Feed\+Graal\+Cxx\+Api.\+so\texorpdfstring{$\vert$}{|}dll\texorpdfstring{$\vert$}{|}dylib}) and a static one ({\ttfamily dx\+Feed\+Graal\+Cxx\+Api\+\_\+static.\+a\texorpdfstring{$\vert$}{|}lib}). Also, it depends on {\ttfamily Dx\+Feed\+Graal\+Native\+Sdk.\+so\texorpdfstring{$\vert$}{|}dll\texorpdfstring{$\vert$}{|}dylib}. Please place it nearby or available on {\ttfamily PATH} (Or use {\ttfamily RPATH}, {\ttfamily LD\+\_\+\+LIBRARY\+\_\+\+PATH}).\hypertarget{index_autotoc_md20}{}\doxysubsubsection{\texorpdfstring{Usage}{Usage}}\label{index_autotoc_md20}
-\hypertarget{index_autotoc_md21}{}\doxyparagraph{\texorpdfstring{How to connect to QD endpoint}{How to connect to QD endpoint}}\label{index_autotoc_md21}
+The API is delivered as a dynamic library ({\ttfamily dx\+Feed\+Graal\+Cxx\+Api.\+so\texorpdfstring{$\vert$}{|}dll\texorpdfstring{$\vert$}{|}dylib}) and a static one ({\ttfamily dx\+Feed\+Graal\+Cxx\+Api\+\_\+static.\+a\texorpdfstring{$\vert$}{|}lib}). Also, it depends on {\ttfamily Dx\+Feed\+Graal\+Native\+Sdk.\+so\texorpdfstring{$\vert$}{|}dll\texorpdfstring{$\vert$}{|}dylib}. Please place it nearby or available on {\ttfamily PATH} (Or use {\ttfamily RPATH}, {\ttfamily LD\+\_\+\+LIBRARY\+\_\+\+PATH}).\hypertarget{index_autotoc_md18}{}\doxysubsubsection{\texorpdfstring{Usage}{Usage}}\label{index_autotoc_md18}
+\hypertarget{index_autotoc_md19}{}\doxysubsubsubsection{\texorpdfstring{How to connect to QD endpoint}{How to connect to QD endpoint}}\label{index_autotoc_md19}
 To use the dynamic library define the {\ttfamily DXFCPP\+\_\+\+USE\+\_\+\+DLLS} preprocessor directive.
 
 
@@ -199,14 +179,14 @@ To use the dynamic library define the {\ttfamily DXFCPP\+\_\+\+USE\+\_\+\+DLLS} 
 \DoxyCodeLine{\ \ \ \ }
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ For\ token-\/based\ authorization,\ use\ the\ following\ address\ format:}}
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ "{}demo.dxfeed.com:7300[login=entitle:token]"{}}}
-\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ endpoint\ =\ DXEndpoint::newBuilder()}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ endpoint\ =\ \mbox{\hyperlink{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675}{DXEndpoint::newBuilder}}()}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ -\/>withProperty(\textcolor{stringliteral}{"{}dxfeed.address"{}},\ \textcolor{stringliteral}{"{}demo.dxfeed.com:7300"{}})}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ -\/>build();}
 \DoxyCodeLine{\ \ \ \ }
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ Another\ way\ to\ connect\ the\ endpoint.}}
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ auto\ endpoint\ =\ DXEndpoint::create()-\/>connect("{}demo.dxfeed.com:7300"{});}}
 \DoxyCodeLine{\ \ \ \ }
-\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ subscription\ =\ endpoint-\/>getFeed()-\/>createSubscription(Quote::TYPE);}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ subscription\ =\ endpoint-\/>getFeed()-\/>createSubscription(\mbox{\hyperlink{class_quote_a21144621df5bd59e2a342592bd501d0e}{Quote::TYPE}});}
 \DoxyCodeLine{\ \ \ \ }
 \DoxyCodeLine{\ \ \ \ subscription-\/>addEventListener([](\textcolor{keyword}{auto}\&\&\ events)\ \{}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\&\ e\ :\ events)\ \{}
@@ -246,7 +226,7 @@ To use the dynamic library define the {\ttfamily DXFCPP\+\_\+\+USE\+\_\+\+DLLS} 
 
 
 \end{adjustwidth}
-\hypertarget{index_autotoc_md22}{}\doxyparagraph{\texorpdfstring{How to connect to dx\+Link}{How to connect to dx\+Link}}\label{index_autotoc_md22}
+\hypertarget{index_autotoc_md20}{}\doxysubsubsubsection{\texorpdfstring{How to connect to dx\+Link}{How to connect to dx\+Link}}\label{index_autotoc_md20}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\textcolor{preprocessor}{\#include\ <iostream>}}
@@ -256,20 +236,20 @@ To use the dynamic library define the {\ttfamily DXFCPP\+\_\+\+USE\+\_\+\+DLLS} 
 \DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ namespace\ }dxfcpp;}
 \DoxyCodeLine{\ \ \ \ }
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ Enable\ experimental\ feature.}}
-\DoxyCodeLine{\ \ \ \ System::SetProperty(\textcolor{stringliteral}{"{}dxfeed.experimental.dxlink.enable"{}},\ \textcolor{stringliteral}{"{}true"{}});}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{struct_system_aa186bb9091ffb41fe84d616b29f4a189}{System::setProperty}}(\textcolor{stringliteral}{"{}dxfeed.experimental.dxlink.enable"{}},\ \textcolor{stringliteral}{"{}true"{}});}
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ Set\ scheme\ for\ dxLink.}}
-\DoxyCodeLine{\ \ \ \ System::SetProperty(\textcolor{stringliteral}{"{}scheme"{}},\ \textcolor{stringliteral}{"{}ext:opt:sysprops,resource:dxlink.xml"{}});}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{struct_system_aa186bb9091ffb41fe84d616b29f4a189}{System::setProperty}}(\textcolor{stringliteral}{"{}scheme"{}},\ \textcolor{stringliteral}{"{}ext:opt:sysprops,resource:dxlink.xml"{}});}
 \DoxyCodeLine{\ \ \ \ }
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ For\ token-\/based\ authorization,\ use\ the\ following\ address\ format:}}
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ "{}dxlink:wss://demo.dxfeed.com/dxlink-\/ws[login=dxlink:token]"{}}}
-\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ endpoint\ =\ DXEndpoint::newBuilder()}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ endpoint\ =\ \mbox{\hyperlink{struct_d_x_endpoint_af6479387384b9d5564dfe0ef4ad74675}{DXEndpoint::newBuilder}}()}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ -\/>withProperty(\textcolor{stringliteral}{"{}dxfeed.address"{}},\ \textcolor{stringliteral}{"{}dxlink:wss://demo.dxfeed.com/dxlink-\/ws"{}})}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ -\/>build();}
 \DoxyCodeLine{\ \ \ \ }
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ Another\ way\ to\ connect\ the\ endpoint.}}
 \DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ auto\ endpoint\ =\ DXEndpoint::create()-\/>connect("{}dxlink:wss://demo.dxfeed.com/dxlink-\/ws"{});}}
 \DoxyCodeLine{\ \ \ \ }
-\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ subscription\ =\ endpoint-\/>getFeed()-\/>createSubscription(Quote::TYPE);}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ subscription\ =\ endpoint-\/>getFeed()-\/>createSubscription(\mbox{\hyperlink{class_quote_a21144621df5bd59e2a342592bd501d0e}{Quote::TYPE}});}
 \DoxyCodeLine{\ \ \ \ }
 \DoxyCodeLine{\ \ \ \ subscription-\/>addEventListener([](\textcolor{keyword}{auto}\&\&\ events)\ \{}
 \DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\&\ e\ :\ events)\ \{}
@@ -312,7 +292,7 @@ To use the dynamic library define the {\ttfamily DXFCPP\+\_\+\+USE\+\_\+\+DLLS} 
 \end{adjustwidth}
 
 
-To familiarize with the dx\+Link protocol, please click \href{https://demo.dxfeed.com/dxlink-ws/debug/\#/protocol}{\texttt{ here}}.\hypertarget{index_autotoc_md23}{}\doxysubsubsection{\texorpdfstring{Tools}{Tools}}\label{index_autotoc_md23}
+To familiarize with the dx\+Link protocol, please click \href{https://demo.dxfeed.com/dxlink-ws/debug/\#/protocol}{\texttt{ here}}.\hypertarget{index_autotoc_md21}{}\doxysubsubsection{\texorpdfstring{Tools}{Tools}}\label{index_autotoc_md21}
 \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/}{\texttt{ Tools}} is a collection of utilities that allow you to subscribe to various market events for the specified symbols. The tools can be downloaded from \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/releases}{\texttt{ Release}} (including self-\/contained versions)\+:
 
 
@@ -321,281 +301,300 @@ To familiarize with the dx\+Link protocol, please click \href{https://demo.dxfee
 \item \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Dump/DumpTool.hpp}{\texttt{ Dump}} dumps all events received from address. This was designed to retrieve data from a file
 \item \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/PerfTest/PerfTestTool.hpp}{\texttt{ Perf\+Test}} connects to the specified address(es) and calculates performance counters (events per second, memory usage, CPU usage, etc.)
 \item \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/LatencyTest/LatencyTestTool.hpp}{\texttt{ Latency\+Test}} connects to the specified address(es) and calculates latency
-\end{DoxyItemize}\hypertarget{index_autotoc_md24}{}\doxysubsubsection{\texorpdfstring{Samples}{Samples}}\label{index_autotoc_md24}
+\item \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Qds/QdsTool.hpp}{\texttt{ Qds}} collection of tools ported from the Java qds-\/tools
+\end{DoxyItemize}\hypertarget{index_autotoc_md22}{}\doxysubsubsection{\texorpdfstring{Samples}{Samples}}\label{index_autotoc_md22}
 
 \begin{DoxyItemize}
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ConvertTapeFile/src/main.cpp}{\texttt{ Convert\+Tape\+File}} demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedFileParser/src/main.cpp}{\texttt{ Dx\+Feed\+File\+Parser}} is a simple demonstration of how events are read form a tape file
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedSample/src/main.cpp}{\texttt{ Dx\+Feed\+Sample}} is a simple demonstration of how to create multiple event listeners and subscribe to {\ttfamily Quote} and {\ttfamily Trade} events
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PrintQuoteEvents/src/main.cpp}{\texttt{ Print\+Quote\+Events}} is a simple demonstration of how to subscribe to the {\ttfamily Quote} event, using a {\ttfamily Dx\+Feed} instance singleton and {\ttfamily dxfeed.\+properties} file
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp}{\texttt{ Write\+Tape\+File}} is a simple demonstration of how to write events to a tape file
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedIpfConnect/src/main.cpp}{\texttt{ Dx\+Feed\+Ipf\+Connect}} is a simple demonstration of how to get Instrument Profiles
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp}{\texttt{ Dx\+Feed\+Live\+Ipf\+Sample}} is a simple demonstration of how to get live updates for Instrument Profiles
-\item \mbox{[} \mbox{]} Dx\+Feed\+Publish\+Profiles is a simple demonstration of how to publish market events
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp}{\texttt{ Schedule\+Sample}} is a simple demonstration of how to get various scheduling information for instruments
-\item \mbox{[}x\mbox{]} \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp}{\texttt{ On\+Demand\+Sample}} a sample that demonstrates how to use the dx\+Feed on-\/demand history data replay service API
-\end{DoxyItemize}\hypertarget{index_autotoc_md25}{}\doxysubsubsection{\texorpdfstring{Current State}{Current State}}\label{index_autotoc_md25}
-\hypertarget{index_autotoc_md26}{}\doxyparagraph{\texorpdfstring{Endpoint Roles}{Endpoint Roles}}\label{index_autotoc_md26}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ConvertTapeFile/src/main.cpp}{\texttt{ Convert\+Tape\+File}} demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedFileParser/src/main.cpp}{\texttt{ Dx\+Feed\+File\+Parser}} is a simple demonstration of how events are read form a tape file
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedSample/src/main.cpp}{\texttt{ Dx\+Feed\+Sample}} is a simple demonstration of how to create multiple event listeners and subscribe to {\ttfamily \doxylink{class_quote}{Quote}} and {\ttfamily \doxylink{class_trade}{Trade}} events
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PrintQuoteEvents/src/main.cpp}{\texttt{ Print\+Quote\+Events}} is a simple demonstration of how to subscribe to the {\ttfamily \doxylink{class_quote}{Quote}} event, using a {\ttfamily Dx\+Feed} instance singleton and {\ttfamily dxfeed.\+properties} file
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp}{\texttt{ Write\+Tape\+File}} is a simple demonstration of how to write events to a tape file
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedIpfConnect/src/main.cpp}{\texttt{ Dx\+Feed\+Ipf\+Connect}} is a simple demonstration of how to get Instrument Profiles
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp}{\texttt{ Dx\+Feed\+Live\+Ipf\+Sample}} is a simple demonstration of how to get live updates for Instrument Profiles
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PublishProfiles/src/main.cpp}{\texttt{ Publish\+Profiles}} is a simple demonstration of how to publish market events
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp}{\texttt{ Schedule\+Sample}} is a simple demonstration of how to get various scheduling information for instruments
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] \href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp}{\texttt{ On\+Demand\+Sample}} a sample that demonstrates how to use the dx\+Feed on-\/demand history data replay service API
+\end{DoxyItemize}\hypertarget{index_autotoc_md23}{}\doxysubsubsection{\texorpdfstring{Current State}{Current State}}\label{index_autotoc_md23}
+\hypertarget{index_autotoc_md24}{}\doxysubsubsubsection{\texorpdfstring{Endpoint Roles}{Endpoint Roles}}\label{index_autotoc_md24}
 
 \begin{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html\#FEED}{\texttt{ FEED}} connects to the remote data feed provider and is optimized for real-\/time or delayed data processing ({\bfseries{this is a default role}})
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html\#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c}{\texttt{ FEED}} connects to the remote data feed provider and is optimized for real-\/time or delayed data processing, this is a default role
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html\#STREAM_FEED}{\texttt{ STREAM\+\_\+\+FEED}} is similar to FEED and also connects to the remote data feed provider but is designed for bulk data parsing from files
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html\#PUBLISHER}{\texttt{ PUBLISHER}} connects to the remote publisher hub (also known as multiplexor) or creates a publisher on the local host (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/WriteTapeFile.java}{\texttt{ Java API sample}})
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html\#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da08e8da2638e7a4a4dfb3d29ab5afb751}{\texttt{ STREAM\+\_\+\+FEED}} is similar to FEED and also connects to the remote data feed provider but is designed for bulk data parsing from files
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html\#STREAM_PUBLISHER}{\texttt{ STREAM\+\_\+\+PUBLISHER}} is similar to PUBLISHER and also connects to the remote publisher hub, but is designed for bulk data publishing
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html\#LOCAL_HUB}{\texttt{ LOCAL\+\_\+\+HUB}} is a local hub without the ability to establish network connections. Events published via publisher are delivered to local feed only.
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html\#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da02c25714ac6e2973dfb530a7520c80ae}{\texttt{ PUBLISHER}} connects to the remote publisher hub (also known as multiplexor) or creates a publisher on the local host (\href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp}{\texttt{ Write\+Tape\+File}})
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.Role.html\#ON_DEMAND_FEED}{\texttt{ ON\+\_\+\+DEMAND\+\_\+\+FEED}} is similar to FEED, but it is designed to be used with On\+Demand\+Service for historical data replay only
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{index_autotoc_md27}{}\doxyparagraph{\texorpdfstring{Event Types}{Event Types}}\label{index_autotoc_md27}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html\#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da511c10e349c1261b726f4bf830c8a0e2}{\texttt{ STREAM\+\_\+\+PUBLISHER}} is similar to PUBLISHER and also connects to the remote publisher hub, but is designed for bulk data publishing
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html\#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da16722a7e83ac68f9bc32cae5242046f5}{\texttt{ LOCAL\+\_\+\+HUB}} is a local hub without the ability to establish network connections. Events published via publisher are delivered to local feed only.
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html\#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22}{\texttt{ ON\+\_\+\+DEMAND\+\_\+\+FEED}} is similar to FEED, but it is designed to be used with \doxylink{struct_on_demand_service}{On\+Demand\+Service} for historical data replay only
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{index_autotoc_md25}{}\doxysubsubsubsection{\texorpdfstring{Event Types}{Event Types}}\label{index_autotoc_md25}
 
 \begin{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Order.html}{\texttt{ Order}} is a snapshot of the full available market depth for a symbol
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d00/classdxfcpp_1_1_order.html}{\texttt{ Order}} is a snapshot of the full available market depth for a symbol
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/SpreadOrder.html}{\texttt{ Spread\+Order}} is a snapshot of the full available market depth for all spreads
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/AnalyticOrder.html}{\texttt{ Analytic\+Order}} represents an extension of Order introducing analytic information, e.\+g., adding iceberg-\/related information to this order
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/da/d01/classdxfcpp_1_1_spread_order.html}{\texttt{ Spread\+Order}} is a snapshot of the full available market depth for all spreads
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Trade.html}{\texttt{ Trade}} is a snapshot of the price and size of the last trade during regular trading hours and an overall day volume and day turnover
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TradeETH.html}{\texttt{ Trade\+ETH}} is a snapshot of the price and size of the last trade during extended trading hours and the extended trading hours day volume and day turnover
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d4/d00/classdxfcpp_1_1_analytic_order.html}{\texttt{ Analytic\+Order}} represents an extension of \doxylink{class_order}{Order} introducing analytic information, e.\+g., adding iceberg-\/related information to this order
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html}{\texttt{ Candle}} -\/ event with open, high, low, and close prices and other information for a specific period
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Quote.html}{\texttt{ Quote}} is a snapshot of the best bid and ask prices and other fields that change with each quote
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d01/classdxfcpp_1_1_trade.html}{\texttt{ Trade}} is a snapshot of the price and size of the last trade during regular trading hours and an overall day volume and day turnover
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Profile.html}{\texttt{ Profile}} is a snapshot that contains the security instrument description
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/Summary.html}{\texttt{ Summary}} is a snapshot of the trading session, including session highs, lows, etc.
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/dd/d02/classdxfcpp_1_1_trade_e_t_h.html}{\texttt{ Trade\+ETH}} is a snapshot of the price and size of the last trade during extended trading hours and the extended trading hours day volume and day turnover
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/TimeAndSale.html}{\texttt{ Time\+And\+Sale}} -\/ represents a trade or other market event with price, like market open/close price, etc.
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Greeks.html}{\texttt{ Greeks}} is a snapshot of the option price, Black-\/\+Scholes volatility, and Greeks
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d03/classdxfcpp_1_1_candle.html}{\texttt{ Candle}} -\/ event with open, high, low, and close prices and other information for a specific period
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Series.html}{\texttt{ Series}} is a snapshot of computed values available for all options series for a given underlying symbol based on options market prices
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/TheoPrice.html}{\texttt{ Theo\+Price}} is a snapshot of the theoretical option price computation that is periodically performed by \href{http://www.devexperts.com/en/products/price.html}{\texttt{ dx\+Price}} model-\/free computation
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/df/d03/classdxfcpp_1_1_quote.html}{\texttt{ Quote}} is a snapshot of the best bid and ask prices and other fields that change with each quote
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/option/Underlying.html}{\texttt{ Underlying}} is a snapshot of computed values available for an option underlying symbol based on the market’s option prices
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Configuration.html}{\texttt{ Configuration}} is an event with an application-\/specific attachment
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d00/classdxfcpp_1_1_profile.html}{\texttt{ Profile}} is a snapshot that contains the security instrument description
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/dd/d03/classdxfcpp_1_1_summary.html}{\texttt{ Summary}} is a snapshot of the trading session, including session highs, lows, etc.
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d00/classdxfcpp_1_1_time_and_sale.html}{\texttt{ Time\+And\+Sale}} -\/ represents a trade or other market event with price, like market open/close price, etc.
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d9/d01/classdxfcpp_1_1_greeks.html}{\texttt{ Greeks}} is a snapshot of the option price, Black-\/\+Scholes volatility, and \doxylink{class_greeks}{Greeks}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d1/d02/classdxfcpp_1_1_series.html}{\texttt{ Series}} is a snapshot of computed values available for all options series for a given underlying symbol based on options market prices
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d2/d03/classdxfcpp_1_1_theo_price.html}{\texttt{ Theo\+Price}} is a snapshot of the theoretical option price computation that is periodically performed by \href{http://www.devexperts.com/en/products/price.html}{\texttt{ dx\+Price}} model-\/free computation
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d02/classdxfcpp_1_1_underlying.html}{\texttt{ Underlying}} is a snapshot of computed values available for an option underlying symbol based on the market’s option prices
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
 \item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/Message.html}{\texttt{ Message}} is an event with an application-\/specific attachment
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{index_autotoc_md28}{}\doxyparagraph{\texorpdfstring{Subscription Symbols}{Subscription Symbols}}\label{index_autotoc_md28}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d02/classdxfcpp_1_1_option_sale.html}{\texttt{ Option\+Sale}} is an event that represents a trade or another market event with the price (for example, market open/close price, etc.) for each option symbol listed under the specified \doxylink{class_underlying}{Underlying}
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/OtcMarketsOrder.html}{\texttt{ Otc\+Markets\+Order}} represents an extension of {\ttfamily \doxylink{class_order}{Order}} for the symbols traded on the OTC Markets
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{index_autotoc_md26}{}\doxysubsubsubsection{\texorpdfstring{Subscription Symbols}{Subscription Symbols}}\label{index_autotoc_md26}
 
 \begin{DoxyItemize}
-\item \href{https://en.cppreference.com/w/cpp/string/basic_string}{\texttt{ String}} is a string representation of the symbol
+\item String is a string representation of the symbol
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/TimeSeriesSubscriptionSymbol.html}{\texttt{ Time\+Series\+Subscription\+Symbol}} represents subscription to time-\/series events
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/IndexedEventSubscriptionSymbol.html}{\texttt{ Indexed\+Subscription\+Symbol}} represents subscription to a specific source of indexed events
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d6/d01/classdxfcpp_1_1_time_series_subscription_symbol.html}{\texttt{ Time\+Series\+Subscription\+Symbol}} represents subscription to time-\/series events
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/osub/WildcardSymbol.html}{\texttt{ Wildcard\+Symbol.\+ALL}} represents a {\itshape wildcard} subscription to all events of the specific event type
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/CandleSymbol.html}{\texttt{ Candle\+Symbol}} symbol used with \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html}{\texttt{ DXFeed\+Subscription}} class to subscribe for \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/candle/Candle.html}{\texttt{ Candle}} events
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/df/d02/classdxfcpp_1_1_indexed_event_subscription_symbol.html}{\texttt{ Indexed\+Event\+Subscription\+Symbol}} represents subscription to a specific source of indexed events
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{index_autotoc_md29}{}\doxyparagraph{\texorpdfstring{Subscriptions \& Models}{Subscriptions \& Models}}\label{index_autotoc_md29}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/dd/d03/structdxfcpp_1_1_wildcard_symbol.html}{\texttt{ Wildcard\+Symbol.\+ALL}} represents a {\itshape wildcard} subscription to all events of the specific event type
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/da/d01/structdxfcpp_1_1_candle_symbol.html}{\texttt{ Candle\+Symbol}} symbol used with \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html}{\texttt{ DXFeed\+Subscription}} class to subscribe for \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d03/classdxfcpp_1_1_candle.html}{\texttt{ Candle}} events
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{index_autotoc_md27}{}\doxysubsubsubsection{\texorpdfstring{Subscriptions \& Models}{Subscriptions \& Models}}\label{index_autotoc_md27}
 
 \begin{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html}{\texttt{ DXFeed\+Subscription}} is a subscription for a set of symbols and event types
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html}{\texttt{ DXFeed\+Subscription}} is a subscription for a set of symbols and event types
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedTimeSeriesSubscription.html}{\texttt{ DXFeed\+Time\+Series\+Subscription}} extends DXFeed\+Subscription to conveniently subscribe to time series of events for a set of symbols and event types (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/api/DXFeedConnect.java}{\texttt{ Java API sample}})
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://github.com/devexperts/QD/blob/master/dxfeed-api/src/main/java/com/dxfeed/api/osub/ObservableSubscription.java}{\texttt{ Observable\+Subscription}} is an observable set of subscription symbols for the specific event type (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/PublishProfiles.java}{\texttt{ Java API sample}})
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getLastEvent-E-}{\texttt{ Get\+Last\+Event}} returns the last event for the specified event instance (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/api/DXFeedSample.java}{\texttt{ Java API sample}})
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getLastEvents-java.util.Collection-}{\texttt{ Get\+Last\+Events}} returns the last events for the specified event instances list
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getLastEventPromise-java.lang.Class-java.lang.Object-}{\texttt{ Get\+Last\+Event\+Promise}} requests the last event for the specified event type and symbol (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/console/LastEventsConsole.java}{\texttt{ Java API sample}})
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getLastEventsPromises-java.lang.Class-java.util.Collection-}{\texttt{ Get\+Last\+Events\+Promises}} requests the last events for the specified event type and symbol collection
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getLastEventIfSubscribed-java.lang.Class-java.lang.Object-}{\texttt{ Get\+Last\+Event\+If\+Subscribed}} returns the last event for the specified event type and symbol if there’s a subscription for it
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getIndexedEventsPromise-java.lang.Class-java.lang.Object-com.dxfeed.event.IndexedEventSource-}{\texttt{ Get\+Indexed\+Events\+Promise}} requests an indexed events list for the specified event type, symbol, and source
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getIndexedEventsIfSubscribed-java.lang.Class-java.lang.Object-com.dxfeed.event.IndexedEventSource-}{\texttt{ Get\+Indexed\+Events\+If\+Subscribed}} requests an indexed events list for the specified event type, symbol, and source if there’s a subscription for it
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getTimeSeriesPromise-java.lang.Class-java.lang.Object-long-long-}{\texttt{ Get\+Time\+Series\+Promise}} requests time series of events for the specified event type, symbol, and time range (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/_simple_/FetchDailyCandles.java}{\texttt{ Java API sample}})
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html\#getTimeSeriesIfSubscribed-java.lang.Class-java.lang.Object-long-long-}{\texttt{ Get\+Time\+Series\+If\+Subscribed}} requests time series of events for the specified event type, symbol, and time range if there’s a subscription for it
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/TimeSeriesEventModel.html}{\texttt{ Time\+Series\+Event\+Model}} -\/ is a model of a list of time series events (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ui/swing/DXFeedCandleChart.java}{\texttt{ Java API sample}})
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/IndexedEventModel.html}{\texttt{ Indexed\+Event\+Model}} is a model of a list of indexed events (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ui/swing/DXFeedTimeAndSales.java}{\texttt{ Java API sample}})
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/model/market/OrderBookModel.html}{\texttt{ Order\+Book\+Model}} is a model of convenient Order Book management (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ui/swing/DXFeedMarketDepth.java}{\texttt{ Java API sample}})
-\begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
-\end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{index_autotoc_md30}{}\doxyparagraph{\texorpdfstring{IPF \& Schedule}{IPF \& Schedule}}\label{index_autotoc_md30}
+\end{DoxyItemize}\hypertarget{index_autotoc_md28}{}\doxysubsubsubsection{\texorpdfstring{IPF \& Schedule}{IPF \& Schedule}}\label{index_autotoc_md28}
 
 \begin{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfile.html}{\texttt{ Instrument\+Profile}} represents basic profile information about a market instrument (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedIpfConnect.java}{\texttt{ Java API sample}})
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d8/d01/classdxfcpp_1_1_instrument_profile.html}{\texttt{ Instrument\+Profile}} represents basic profile information about a market instrument
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfileReader.html}{\texttt{ Instrument\+Profile\+Reader}} reads instrument profiles from the stream using Instrument Profile Format (IPF).
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API (\href{https://github.com/dxFeed/dxfeed-graal-cxx-api/tree/main/samples/cpp/DxFeedIpfConnect}{\texttt{ Dx\+Feed\+Ipf\+Connect}})
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileConnection.html}{\texttt{ Instrument\+Profile\+Connection}} connects to an instrument profile URL and reads instrument profiles with support of streaming live updates.
+\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfileReader.html}{\texttt{ Instrument\+Profile\+Reader}} reads instrument profiles from the stream using Instrument \doxylink{class_profile}{Profile} Format (IPF).
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/live/InstrumentProfileCollector.html}{\texttt{ Instrument\+Profile\+Collector}} collects instrument profile updates and provides the live instrument profiles list (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ipf/DXFeedLiveIpfSample.java}{\texttt{ Java API sample}})
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/schedule/Schedule.html}{\texttt{ Schedule}} provides API to retrieve and explore various exchanges’ trading schedules and different financial instrument classes (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/schedule/ScheduleSample.java}{\texttt{ Java API sample}})
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d00/classdxfcpp_1_1_instrument_profile_connection.html}{\texttt{ Instrument\+Profile\+Connection}} connects to an instrument profile URL and reads instrument profiles with support of streaming live updates.
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[}x\mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyUnchecked] dx\+Feed Graal C API
 \end{DoxyItemize}
-\item \href{https://github.com/devexperts/QD/blob/master/dxfeed-api/src/main/java/com/dxfeed/ipf/option/OptionSeries.java}{\texttt{ Option Series}} is a series of call and put options with different strike sharing the same attributes of expiration, last trading day, spc, multiplies, etc. (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/schedule/ScheduleSample.java}{\texttt{ Java API sample}})
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API
+\item[\DoxyChecked] dx\+Feed Graal C++ API
 \end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{index_autotoc_md31}{}\doxyparagraph{\texorpdfstring{Services}{Services}}\label{index_autotoc_md31}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d03/classdxfcpp_1_1_instrument_profile_collector.html}{\texttt{ Instrument\+Profile\+Collector}} collects instrument profile updates and provides the live instrument profiles list
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API (\href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp}{\texttt{ Dx\+Feed\+Live\+Ipf\+Sample}})
+\end{DoxyItemize}
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d1/d00/structdxfcpp_1_1_schedule.html}{\texttt{ Schedule}} provides API to retrieve and explore various exchanges’ trading schedules and different financial instrument classes
+\begin{DoxyItemize}
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API (\href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp}{\texttt{ Schedule\+Sample}})
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{index_autotoc_md29}{}\doxysubsubsubsection{\texorpdfstring{Services}{Services}}\label{index_autotoc_md29}
 
 \begin{DoxyItemize}
-\item \href{https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ondemand/OnDemandService.html}{\texttt{ On\+Demand\+Service}} provides on-\/demand historical tick data replay controls (\href{https://github.com/devexperts/QD/blob/master/dxfeed-samples/src/main/java/com/dxfeed/sample/ondemand/OnDemandSample.java}{\texttt{ Java API sample}})
+\item \href{https://dxfeed.github.io/dxfeed-graal-cxx-api/d4/d02/structdxfcpp_1_1_on_demand_service.html}{\texttt{ On\+Demand\+Service}} provides on-\/demand historical tick data replay controls (\href{https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp}{\texttt{ On\+Demand\+Sample}})
 \begin{DoxyItemize}
-\item \mbox{[} \mbox{]} dx\+Feed Graal C API
-\item \mbox{[} \mbox{]} dx\+Feed Graal C++ API 
+\item[\DoxyUnchecked] dx\+Feed Graal C API
+\end{DoxyItemize}
+\begin{DoxyItemize}
+\item[\DoxyChecked] dx\+Feed Graal C++ API 
 \end{DoxyItemize}
 \end{DoxyItemize}

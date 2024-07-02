@@ -1,0 +1,299 @@
+\doxysubsection{DXFeed Struct Reference}
+\hypertarget{struct_d_x_feed}{}\label{struct_d_x_feed}\index{DXFeed@{DXFeed}}
+
+
+Main entry class for dx\+Feed API ({\bfseries{read it first}}).  
+
+
+
+
+{\ttfamily \#include $<$DXFeed.\+hpp$>$}
+
+Inheritance diagram for DXFeed\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d1/d00/struct_d_x_feed}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_d_x_feed_ada114928a7e5c6119e41ad6d07cda533}\label{struct_d_x_feed_ada114928a7e5c6119e41ad6d07cda533} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_d_x_feed}{DXFeed}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_d_x_feed}{DXFeed} object. \end{DoxyCompactList}\item 
+\Hypertarget{struct_d_x_feed_a5c7eedb4ed6ef2785fc5ac9915bf478f}\label{struct_d_x_feed_a5c7eedb4ed6ef2785fc5ac9915bf478f} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{struct_d_x_feed}{DXFeed}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{struct_d_x_feed}{DXFeed} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{struct_d_x_feed_a73653c3400f53c4733bc1e37f8e65f18}{attach\+Subscription}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ subscription) noexcept
+\begin{DoxyCompactList}\small\item\em Attaches the given subscription to this feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_feed_a5052561608cdd4772d2fadc01f4b8c7e}{detach\+Subscription}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ subscription) noexcept
+\begin{DoxyCompactList}\small\item\em Detaches the given subscription from this feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_d_x_feed_a55951c9ededf92ffa426dfb52d80cda6}{detach\+Subscription\+And\+Clear}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ subscription) noexcept
+\begin{DoxyCompactList}\small\item\em Detaches the given subscription from this feed and clears data delivered to this subscription by publishing empty events. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{struct_d_x_feed_a9d128f641db12f6bdf08a41b5bf3dbec}{create\+Subscription}} (const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \&event\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new subscription for a single event type that is {\itshape attached} to this feed. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Type\+It $>$ }\\std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{struct_d_x_feed_a572b082410490eea2adefe3c296f5c6a}{create\+Subscription}} (Event\+Type\+It begin, Event\+Type\+It end) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new subscription for multiple event types that is {\itshape attached} to this feed. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{struct_d_x_feed_a0aba770746b8db54fa44c2e875ac7364}{create\+Subscription}} (std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} $>$ event\+Types) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new subscription for multiple event types that is {\itshape attached} to this feed. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Types\+Collection $>$ }\\std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ \mbox{\hyperlink{struct_d_x_feed_aed488139177e82876eadcfaa1239de65}{create\+Subscription}} (Event\+Types\+Collection \&\&event\+Types) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new subscription for multiple event types that is {\itshape attached} to this feed. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{struct_d_x_feed_a2a75e4581b0117ee3051a63020d6729a}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{struct_shared_entity_ae774e293e95fbf8ebb4d22f714e80272}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a348c971deaca898a477262e5bd190d03}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_feed}{DXFeed}} $>$ \mbox{\hyperlink{struct_d_x_feed_ac03322a8e22a52beebd6268fc8a167ee}{get\+Instance}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a default application-\/wide singleton instance of feed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{struct_d_x_feed_a99ca9e3a2966be589876135ed3d833a7}\label{struct_d_x_feed_a99ca9e3a2966be589876135ed3d833a7} 
+struct {\bfseries DXEndpoint}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Main entry class for dx\+Feed API ({\bfseries{read it first}}). 
+
+\doxysubsubsubsubsection*{Sample usage}
+
+This section gives sample usage scenarios.
+
+\doxysubsubsubsubsubsection*{Default singleton instance}
+
+There is a singleton instance of the feed that is returned by \doxylink{struct_d_x_feed_ac03322a8e22a52beebd6268fc8a167ee}{DXFeed\+::get\+Instance()} method. It is created on the first use with default configuration properties that are explained in detail in documentation for \doxylink{struct_d_x_endpoint}{DXEndpoint} class in the "{}\+Default properties"{} section.
+
+In particular, you can provide a default address to connect and credentials using "{}@ref DXEndpoint\+::\+DXFEED\+\_\+\+ADDRESS\+\_\+\+PROPERTY "{}dxfeed.\+address"{}"{}, "{}@ref DXEndpoint\+::\+DXFEED\+\_\+\+USER\+\_\+\+PROPERTY "{}dxfeed.\+user"{}"{}, and "{}@ref DXEndpoint\+::\+DXFEED\+\_\+\+PASSWORD\+\_\+\+PROPERTY "{}dxfeed.\+password"{}"{} system properties or by putting them into "{}@ref DXEndpoint\+::\+DXFEED\+\_\+\+PROPERTIES\+\_\+\+PROPERTY "{}dxfeed.\+properties"{}"{} file in the same directory. dx\+Feed API samples come with a ready-\/to-\/use "{}$<$b$>$dxfeed.\+properties$<$/b$>$"{} file that contains an address of dx\+Feed demo feed at "{}$<$b$>$demo.\+dxfeed.\+com\+:7300$<$/b$>$"{} and demo access credentials.
+
+\doxysubsubsubsubsubsection*{Subscribe for single event type}
+
+The following code creates listener that prints mid price for each quote and subscribes for quotes on SPDR S\&P 500 ETF symbol\+: 
+\begin{DoxyPre}{\ttfamily 
+auto sub = \doxylink{struct_d_x_feed}{DXFeed}::\doxylink{struct_d_x_feed_ac03322a8e22a52beebd6268fc8a167ee}{getInstance}()-\/>\doxylink{struct_d_x_feed_a9d128f641db12f6bdf08a41b5bf3dbec}{createSubscription}(\doxylink{class_quote_a21144621df5bd59e2a342592bd501d0e}{Quote::TYPE});
+
+sub-\/>\doxylink{class_d_x_feed_subscription_a5bccde40320ad27942299b88519b379c}{addEventListener}<Quote>([](const auto\& quotes) \{
+    for (const auto\& quote : quotes) \{
+        std::cout << "{}Mid = "{} + (quote-\/>\doxylink{class_quote_a55ac60689157fcb1cdc4540c15324a43}{getBidPrice}() + quote-\/>\doxylink{class_quote_af5e7f5da9d7414d7281242d72c272ea5}{getAskPrice}()) / 2) << std::endl;
+    \}
+\});
+
+sub-\/>\doxylink{class_d_x_feed_subscription_a43713365d3db41d8cf9e3a9e894611a4}{addSymbols}("{}SPY"{});}\end{DoxyPre}
+
+
+Note, that order of calls is important here. By attaching listeners first and then setting subscription we ensure that the current quote gets received by the listener. See \doxylink{class_d_x_feed_subscription_a43713365d3db41d8cf9e3a9e894611a4}{DXFeed\+Subscription\+::add\+Symbols()} for details. If a set of symbols is changed first, then \doxylink{class_d_x_feed_subscription_a5bccde40320ad27942299b88519b379c}{sub-\/\texorpdfstring{$>$}{>}add\+Event\+Listener} raises an Illegal\+State\+Exception in JVM to protected from hard-\/to-\/catch bugs with potentially missed events.
+
+\doxysubsubsubsubsubsection*{Subscribe for multiple event types}
+
+The following code creates listener that prints each received event and subscribes for quotes and trades on SPDR S\&P 500 ETF symbol\+: 
+\begin{DoxyPre}{\ttfamily 
+auto sub = \doxylink{struct_d_x_feed}{DXFeed}::\doxylink{struct_d_x_feed_ac03322a8e22a52beebd6268fc8a167ee}{getInstance}()-\/>\doxylink{struct_d_x_feed_a9d128f641db12f6bdf08a41b5bf3dbec}{createSubscription}(\{\doxylink{class_quote_a21144621df5bd59e2a342592bd501d0e}{Quote::TYPE}, \doxylink{class_trade_a2ac80fbec5eff5162e191e7bfc528fc3}{Trade::TYPE}\});
+
+sub-\/>\doxylink{class_d_x_feed_subscription_a5bccde40320ad27942299b88519b379c}{addEventListener}([](auto\&\& events) \{
+    for (const auto\& event : events) \{
+        std::cout << event << std::endl;
+    \}
+\});
+
+sub-\/>\doxylink{class_d_x_feed_subscription_a43713365d3db41d8cf9e3a9e894611a4}{addSymbols}("{}SPY"{});}\end{DoxyPre}
+
+
+\doxysubsubsubsubsubsection*{Subscribe for event and query periodically its last value}
+
+The following code subscribes for trades on SPDR S\&P 500 ETF symbol and prints last trade every second.
+
+
+\begin{DoxyPre}{\ttfamily 
+using namespace std::chrono\_literals;
+
+auto sub = \doxylink{struct_d_x_feed}{DXFeed}::\doxylink{struct_d_x_feed_ac03322a8e22a52beebd6268fc8a167ee}{getInstance}()-\/>\doxylink{struct_d_x_feed_a9d128f641db12f6bdf08a41b5bf3dbec}{createSubscription}(\{\doxylink{class_trade_a2ac80fbec5eff5162e191e7bfc528fc3}{Trade::TYPE}\});
+
+sub-\/>\doxylink{class_d_x_feed_subscription_a43713365d3db41d8cf9e3a9e894611a4}{addSymbols}("{}SPY"{});
+
+auto feed = \doxylink{struct_d_x_feed}{DXFeed}::\doxylink{struct_d_x_feed_ac03322a8e22a52beebd6268fc8a167ee}{getInstance}();
+
+while (true) \{
+    std::cout << System.out.println(feed-\/>getLastEvent(Trade::create("{}SPY"{})));
+    std::this\_thread::sleep\_for(1000ms);
+\}}\end{DoxyPre}
+
+
+\doxysubsubsubsubsection*{Threads and locks}
+
+This class is thread-\/safe and can be used concurrently from multiple threads without external synchronization. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{struct_d_x_feed_a73653c3400f53c4733bc1e37f8e65f18}\index{DXFeed@{DXFeed}!attachSubscription@{attachSubscription}}
+\index{attachSubscription@{attachSubscription}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{attachSubscription()}{attachSubscription()}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_a73653c3400f53c4733bc1e37f8e65f18} 
+void DXFeed\+::attach\+Subscription (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$}]{subscription}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Attaches the given subscription to this feed. 
+
+This method does nothing if the corresponding subscription is already attached to this feed.
+
+This feed publishes data to the attached subscription. Application can attach event listener via \doxylink{class_d_x_feed_subscription_a5bccde40320ad27942299b88519b379c}{DXFeed\+Subscription\+::add\+Event\+Listener} to get notified about data changes and can change its data subscription via \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} methods.
+
+\doxysubsubsubsubsection*{Implementation notes}
+
+This method adds a non-\/serializable Observable\+Subscription\+Change\+Listener for the given subscription via DXFeed\+Subscription\+::add\+Change\+Listener method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em subscription} & The subscription. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_feed_a9d128f641db12f6bdf08a41b5bf3dbec}\index{DXFeed@{DXFeed}!createSubscription@{createSubscription}}
+\index{createSubscription@{createSubscription}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{createSubscription()}{createSubscription()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_a9d128f641db12f6bdf08a41b5bf3dbec} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ DXFeed\+::create\+Subscription (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} \&}]{event\+Type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Creates new subscription for a single event type that is {\itshape attached} to this feed. 
+
+This method creates new \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} and invokes \doxylink{}{Example\+: \{cpp\} auto sub = dxfcpp\+::\+DXFeed\+::get\+Instance()-\/\texorpdfstring{$>$}{>}create\+Subscription(dxfcpp\+::\+Quote\+::\+TYPE);   event\+Type The type of event  The new subscription }
+
+References \mbox{\hyperlink{class_event_type_enum_af8347e4618ca961be98ee07627f4cd5c}{Event\+Type\+Enum\+::get\+Name()}}, and \mbox{\hyperlink{struct_d_x_feed_a2a75e4581b0117ee3051a63020d6729a}{to\+String()}}.
+
+\Hypertarget{struct_d_x_feed_a572b082410490eea2adefe3c296f5c6a}\index{DXFeed@{DXFeed}!createSubscription@{createSubscription}}
+\index{createSubscription@{createSubscription}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{createSubscription()}{createSubscription()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_a572b082410490eea2adefe3c296f5c6a} 
+template$<$typename Event\+Type\+It $>$ \\
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ DXFeed\+::create\+Subscription (\begin{DoxyParamCaption}\item[{Event\+Type\+It}]{begin}{, }\item[{Event\+Type\+It}]{end}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new subscription for multiple event types that is {\itshape attached} to this feed. 
+
+This method creates new \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} and invokes \doxylink{}{Example\+: \{cpp\} auto event\+Types = \{dxfcpp\+::\+Quote\+::\+TYPE, dxfcpp\+::\+Time\+And\+Sale\+::\+TYPE\}; auto sub = dxfcpp\+::\+DXFeed\+::get\+Instance()-\/\texorpdfstring{$>$}{>}create\+Subscription(event\+Types.\+begin(), event\+Types.\+end());  \{cpp\} std\+::vector types\{dxfcpp\+::\+Quote\+::\+TYPE, dxfcpp\+::\+Trade\+::\+TYPE, dxfcpp\+::\+Summary\+::\+TYPE\}; auto sub = dxfcpp\+::\+DXFeed\+Subscription\+::create(types.\+begin(), types.\+end());  \{cpp\} std\+::set types\{dxfcpp\+::\+Quote\+::\+TYPE, dxfcpp\+::\+Trade\+::\+TYPE, dxfcpp\+::\+Summary\+::\+TYPE\}; auto endpoint = dxfcpp\+::\+DXEndpoint\+::new\+Builder()-\/\texorpdfstring{$>$}{>}with\+Role(dxfcpp\+::\+DXEndpoint\+::\+Role\+::\+FEED)-\/\texorpdfstring{$>$}{>}build(); auto sub = endpoint-\/\texorpdfstring{$>$}{>}get\+Feed()-\/\texorpdfstring{$>$}{>}create\+Subscription(event\+Types.\+begin(), event\+Types.\+end()); endpoint-\/\texorpdfstring{$>$}{>}connect("{}demo.\+dxfeed.\+com\+:7300"{});   Event\+Type\+It The iterator type of the collection of event types  begin The start iterator  end The end iterator  The new subscription }\Hypertarget{struct_d_x_feed_aed488139177e82876eadcfaa1239de65}\index{DXFeed@{DXFeed}!createSubscription@{createSubscription}}
+\index{createSubscription@{createSubscription}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{createSubscription()}{createSubscription()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_aed488139177e82876eadcfaa1239de65} 
+template$<$typename Event\+Types\+Collection $>$ \\
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ DXFeed\+::create\+Subscription (\begin{DoxyParamCaption}\item[{Event\+Types\+Collection \&\&}]{event\+Types}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new subscription for multiple event types that is {\itshape attached} to this feed. 
+
+This method creates new \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} and invokes \doxylink{}{Example\+: \{cpp\} auto sub = dxfcpp\+::\+DXFeed\+::get\+Instance()-\/\texorpdfstring{$>$}{>}create\+Subscription(std\+::unordered\+\_\+set\{dxfcpp\+::\+Quote\+::\+TYPE, dxfcpp\+::\+Time\+And\+Sale\+::\+TYPE\});  \{cpp\} std\+::vector types = \{dxfcpp\+::\+Quote\+::\+TYPE, dxfcpp\+::\+Time\+And\+Sale\+::\+TYPE\}; auto sub = dxfcpp\+::\+DXFeed\+::get\+Instance()-\/\texorpdfstring{$>$}{>}create\+Subscription(types);   Event\+Types\+Collection The class of the collection of event types  event\+Types The collection of event types  The new subscription }\Hypertarget{struct_d_x_feed_a0aba770746b8db54fa44c2e875ac7364}\index{DXFeed@{DXFeed}!createSubscription@{createSubscription}}
+\index{createSubscription@{createSubscription}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{createSubscription()}{createSubscription()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_a0aba770746b8db54fa44c2e875ac7364} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$ DXFeed\+::create\+Subscription (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{class_event_type_enum}{Event\+Type\+Enum}} $>$}]{event\+Types}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Creates new subscription for multiple event types that is {\itshape attached} to this feed. 
+
+This method creates new \doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} and invokes \doxylink{}{Example\+: \{cpp\} auto sub = dxfcpp\+::\+DXFeed\+::get\+Instance()-\/\texorpdfstring{$>$}{>}create\+Subscription(\{dxfcpp\+::\+Quote\+::\+TYPE, dxfcpp\+::\+Time\+And\+Sale\+::\+TYPE\});   event\+Types The initializer list of event types  The new subscription }\Hypertarget{struct_d_x_feed_a5052561608cdd4772d2fadc01f4b8c7e}\index{DXFeed@{DXFeed}!detachSubscription@{detachSubscription}}
+\index{detachSubscription@{detachSubscription}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{detachSubscription()}{detachSubscription()}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_a5052561608cdd4772d2fadc01f4b8c7e} 
+void DXFeed\+::detach\+Subscription (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$}]{subscription}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Detaches the given subscription from this feed. 
+
+This method does nothing if the corresponding subscription is not attached to this feed.
+
+\doxysubsubsubsubsection*{Implementation notes}
+
+This method removes Observable\+Subscription\+Change\+Listener from the given subscription via DXFeed\+Subscription\+::remove\+Change\+Listener method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em subscription} & The subscription. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{class_d_x_feed_subscription}{DXFeed\+Subscription} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_feed_a55951c9ededf92ffa426dfb52d80cda6}\index{DXFeed@{DXFeed}!detachSubscriptionAndClear@{detachSubscriptionAndClear}}
+\index{detachSubscriptionAndClear@{detachSubscriptionAndClear}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{detachSubscriptionAndClear()}{detachSubscriptionAndClear()}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_a55951c9ededf92ffa426dfb52d80cda6} 
+void DXFeed\+::detach\+Subscription\+And\+Clear (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_d_x_feed_subscription}{DXFeed\+Subscription}} $>$}]{subscription}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Detaches the given subscription from this feed and clears data delivered to this subscription by publishing empty events. 
+
+This method does nothing if the corresponding subscription is not attached to this feed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em subscription} & The subscription. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{struct_d_x_feed_a5052561608cdd4772d2fadc01f4b8c7e}{DXFeed\+::detach\+Subscription()} 
+\end{DoxySeeAlso}
+\Hypertarget{struct_d_x_feed_ac03322a8e22a52beebd6268fc8a167ee}\index{DXFeed@{DXFeed}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_ac03322a8e22a52beebd6268fc8a167ee} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_d_x_feed}{DXFeed}} $>$ DXFeed\+::get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a default application-\/wide singleton instance of feed. 
+
+Most applications use only a single data-\/source and should rely on this method to get one. This is a shortcut to \doxylink{struct_d_x_endpoint}{DXEndpoint}\+::\doxylink{struct_d_x_endpoint_a9ee308e31ef33e66ec8b8b83b9cff4de}{get\+Instance()}-\/\texorpdfstring{$>$}{>}\doxylink{struct_d_x_endpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{get\+Feed()}.
+
+\begin{DoxyReturn}{Returns}
+The \doxylink{struct_d_x_feed}{DXFeed} instance 
+\end{DoxyReturn}
+\Hypertarget{struct_d_x_feed_a2a75e4581b0117ee3051a63020d6729a}\index{DXFeed@{DXFeed}!toString@{toString}}
+\index{toString@{toString}!DXFeed@{DXFeed}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily \label{struct_d_x_feed_a2a75e4581b0117ee3051a63020d6729a} 
+std\+::string DXFeed\+::to\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{struct_shared_entity_a84179ef824d835d61488dab36f4f0325}{Shared\+Entity}}.
+
+
+
+Referenced by \mbox{\hyperlink{struct_d_x_feed_a9d128f641db12f6bdf08a41b5bf3dbec}{create\+Subscription()}}.
+

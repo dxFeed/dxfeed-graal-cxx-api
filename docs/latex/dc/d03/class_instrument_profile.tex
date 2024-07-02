@@ -1,0 +1,2302 @@
+\doxysubsection{Instrument\+Profile Class Reference}
+\hypertarget{class_instrument_profile}{}\label{class_instrument_profile}\index{InstrumentProfile@{InstrumentProfile}}
+
+
+Represents basic profile information about market instrument.  
+
+
+
+
+{\ttfamily \#include $<$Instrument\+Profile.\+hpp$>$}
+
+Inheritance diagram for Instrument\+Profile\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{dc/d03/class_instrument_profile}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_instrument_profile_a6fd56a941810ed09427400faa72661bc}\label{class_instrument_profile_a6fd56a941810ed09427400faa72661bc} 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{class_instrument_profile}{Instrument\+Profile} object. \end{DoxyCompactList}\item 
+\Hypertarget{class_instrument_profile_a17148e2d43c03966008e452bfcf38fab}\label{class_instrument_profile_a17148e2d43c03966008e452bfcf38fab} 
+using {\bfseries Unique} = std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \doxylink{class_instrument_profile}{Instrument\+Profile} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Ptr} = std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}$>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \doxylink{struct_shared_entity}{Shared\+Entity} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_instrument_profile_ab10c6d09c5bd531de1deec543335544c}{to\+Graal}} () const
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+\Hypertarget{class_instrument_profile_ace90df9d41b888a9bfe3e09ce555dc2f}\label{class_instrument_profile_ace90df9d41b888a9bfe3e09ce555dc2f} 
+{\bfseries Instrument\+Profile} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new instrument profile with default values. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a94ba60696c85685b14750e8cf59971f3}{get\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns type of instrument. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a79982381be288fb47416450da8861244}{set\+Type}} (const std\+::string \&type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes type of instrument. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a3148eeb76a4b74121d9344dbf5ae9af3}{with\+Type}} (const std\+::string \&type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes type of instrument and returns the current instrument profile. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_abd4194939cecbda13730b9012d3187c7}{get\+Symbol}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns identifier of instrument, preferable an international one in Latin alphabet. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a6153a3b9458e4a2de374554607ca68d2}{set\+Symbol}} (const std\+::string \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of instrument, preferable an international one in Latin alphabet. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_af2ddfdf592b4f27cf787952e2dcb10bb}{with\+Symbol}} (const std\+::string \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of instrument, preferable an international one in Latin alphabet. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_aae263a5b51ac6bc259f62453278baa31}{get\+Description}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns the description of instrument, preferable an international one in Latin alphabet. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a1caa676f7725f81811c2fe7d88ab12d7}{set\+Description}} (const std\+::string \&description) noexcept
+\begin{DoxyCompactList}\small\item\em Changes description of instrument, preferable an international one in Latin alphabet. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_ad259783bc8963177a6d5c88fb9d3c76f}{with\+Description}} (const std\+::string \&description) noexcept
+\begin{DoxyCompactList}\small\item\em Changes description of instrument, preferable an international one in Latin alphabet. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a254c4949b0ae98ac3877f7058a2d34b1}{get\+Local\+Symbol}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns identifier of instrument in national language. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a60bc78a7f8ed5a422a738bab25bc31a0}{set\+Local\+Symbol}} (const std\+::string \&local\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of instrument in national language. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_abe56467a47f0a3d61e9a94eab0af2443}{with\+Local\+Symbol}} (const std\+::string \&local\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of instrument in national language. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_afe1cb7e52c4733856b798e5d087bcb9f}{get\+Local\+Description}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns description of instrument in national language. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_af5f2da861a4c106143c147e15be85977}{set\+Local\+Description}} (const std\+::string \&local\+Description) noexcept
+\begin{DoxyCompactList}\small\item\em Changes description of instrument in national language. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a5b3ee6a80762d2710c5594d09fbc7a40}{with\+Local\+Description}} (const std\+::string \&local\+Description) noexcept
+\begin{DoxyCompactList}\small\item\em Changes description of instrument in national language. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a913b2df6303f0fe4d48f487e73dc23bd}{get\+Country}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns country of origin (incorporation) of corresponding company or parent entity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_abdcc1da4eec52e8de6fed02fc1ebc5b6}{set\+Country}} (const std\+::string \&country) noexcept
+\begin{DoxyCompactList}\small\item\em Changes country of origin (incorporation) of corresponding company or parent entity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_ad3cf51f8de8e9021290d22e4074586f3}{with\+Country}} (const std\+::string \&country) noexcept
+\begin{DoxyCompactList}\small\item\em Changes country of origin (incorporation) of corresponding company or parent entity. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a298b19748a4d178553404043df4285d5}{get\+OPOL}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns official Place Of Listing, the organization that have listed this instrument. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a5e3c5d00e8a991c29fbba46103632383}{set\+OPOL}} (const std\+::string \&opol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes official Place Of Listing, the organization that have listed this instrument. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a5871b4b1ffdc55340aa26b8763f60a05}{with\+OPOL}} (const std\+::string \&opol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes official Place Of Listing, the organization that have listed this instrument. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a87ba2ce0c5c337f02d2ff1812af3aff8}{get\+Exchange\+Data}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange-\/specific data required to properly identify instrument when communicating with exchange. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_ac11c84fedc48460f98716588222ed05d}{set\+Exchange\+Data}} (const std\+::string \&exchange\+Data) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange-\/specific data required to properly identify instrument when communicating with exchange. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a310538494e744d1a883f123127dd40a3}{with\+Exchange\+Data}} (const std\+::string \&exchange\+Data) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange-\/specific data required to properly identify instrument when communicating with exchange. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a6e357e0dba2b17a4d69e84b5a6cbfa9b}{get\+Exchanges}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns list of exchanges where instrument is quoted or traded. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a158b369d71fe7be03f3261816f8e89f4}{set\+Exchanges}} (const std\+::string \&exchanges) noexcept
+\begin{DoxyCompactList}\small\item\em Changes list of exchanges where instrument is quoted or traded. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a28b1270e00017d1a4ddd7eeb5f996672}{with\+Exchanges}} (const std\+::string \&exchanges) noexcept
+\begin{DoxyCompactList}\small\item\em Changes list of exchanges where instrument is quoted or traded. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_ad18cd4362e059df9002d76b81f04d300}{get\+Currency}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns currency of quotation, pricing and trading. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_ade6b2b7ef02837ed3cc8a8e39d6fce65}{set\+Currency}} (const std\+::string \&currency) noexcept
+\begin{DoxyCompactList}\small\item\em Changes currency of quotation, pricing and trading. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_ad7a00c9886d45e273233a6a16ee6a376}{with\+Currency}} (const std\+::string \&currency) noexcept
+\begin{DoxyCompactList}\small\item\em Changes currency of quotation, pricing and trading. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a6699a76a23259627ffab8ee068870773}{get\+Base\+Currency}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns base currency of currency pair (FOREX instruments). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_abb3be844ea483b13874c8b060d288abe}{set\+Base\+Currency}} (const std\+::string \&base\+Currency) noexcept
+\begin{DoxyCompactList}\small\item\em Changes base currency of currency pair (FOREX instruments). \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a1c49207262515cefe87e4b79e1468dc9}{with\+Base\+Currency}} (const std\+::string \&base\+Currency) noexcept
+\begin{DoxyCompactList}\small\item\em Changes base currency of currency pair (FOREX instruments). \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_acbdd542bf4816368c289b23fa7909487}{get\+CFI}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns Classification of Financial Instruments code. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a19cf5ce6bcabf266177ef3f5726dda64}{set\+CFI}} (const std\+::string \&cfi) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Classification of Financial Instruments code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a4bab6083fe448e0dad4247992bd733a4}{with\+CFI}} (const std\+::string \&cfi) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Classification of Financial Instruments code. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_aa466ac9c0345e5cfa80fe1a52eca0762}{get\+ISIN}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns International Securities Identifying Number. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a0a372c3768ba8cd7d5a1687178e2808f}{set\+ISIN}} (const std\+::string \&isin) noexcept
+\begin{DoxyCompactList}\small\item\em Changes International Securities Identifying Number. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a5d6da60411f29fa2627c1a999e48702c}{with\+ISIN}} (const std\+::string \&isin) noexcept
+\begin{DoxyCompactList}\small\item\em Changes International Securities Identifying Number. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a5c371535397b24b1263996bb310e469a}{get\+SEDOL}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns Stock Exchange Daily Official List. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_acc4634a895b9b1f3dc88c58f00790656}{set\+SEDOL}} (const std\+::string \&sedol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Stock Exchange Daily Official List. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a660cacfa98a8b31db5a56e4ccc6f32bb}{with\+SEDOL}} (const std\+::string \&sedol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Stock Exchange Daily Official List. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_abc3e5297c5a60579118fc6e1722e525d}{get\+CUSIP}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns Committee on Uniform Security Identification Procedures code. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a09e604e51e564a4c7e7df7ab79988a19}{set\+CUSIP}} (const std\+::string \&cusip) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Committee on Uniform Security Identification Procedures code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a48804e90f4a68e168e016afaa2cf87eb}{with\+CUSIP}} (const std\+::string \&cusip) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Committee on Uniform Security Identification Procedures code. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_instrument_profile_acecb2807bd0917ee1c23178b44bd59da}{get\+ICB}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns Industry Classification Benchmark. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a8c2f62961478e47c96701e5d30311f97}{set\+ICB}} (std\+::int32\+\_\+t icb) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Industry Classification Benchmark. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a855fd72f97a5ce08c481fb689cd446aa}{with\+ICB}} (std\+::int32\+\_\+t icb) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Industry Classification Benchmark. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_instrument_profile_af47aaf052d68a22246dbfa403cfae85b}{get\+SIC}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns Standard Industrial Classification. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_adc0386085c4a235eca31c7a6d8c2c813}{set\+SIC}} (std\+::int32\+\_\+t sic) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Standard Industrial Classification. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a5e72c6c3e7b539284f2fdcfe751d93a2}{with\+SIC}} (std\+::int32\+\_\+t sic) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Standard Industrial Classification. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_instrument_profile_ad54b6370e7a34b967ba6d307d7d7dd5a}{get\+Multiplier}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns market value multiplier. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a7693dfde2dc53e980592d97aa67d567c}{set\+Multiplier}} (double multiplier) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market value multiplier. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a072de588f4c4d3345a0e0cc4295080ac}{with\+Multiplier}} (double multiplier) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market value multiplier. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_acbe1e49969cb847377668e46d5e5805a}{get\+Product}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns product for futures and options on futures (underlying asset name). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a3cd91a0a85ff8c28f9c6fc5c9ce50ea4}{set\+Product}} (const std\+::string \&product) noexcept
+\begin{DoxyCompactList}\small\item\em Changes product for futures and options on futures (underlying asset name). \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a8c2b7af1c5d4af4f0d08623b532d01b1}{with\+Product}} (const std\+::string \&product) noexcept
+\begin{DoxyCompactList}\small\item\em Changes product for futures and options on futures (underlying asset name). \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a470d74d4a9abb1a631023fe045b6cb0b}{get\+Underlying}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns primary underlying symbol for options. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a65dc10553d9acad360c82e9e7a221ad4}{set\+Underlying}} (const std\+::string \&underlying) noexcept
+\begin{DoxyCompactList}\small\item\em Changes primary underlying symbol for options. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a7a49e394a41b4986d71de6dcb832a7f4}{with\+Underlying}} (const std\+::string \&underlying) noexcept
+\begin{DoxyCompactList}\small\item\em Changes primary underlying symbol for options. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_instrument_profile_a42e5b37725798db0ee295c5cc358e2ee}{get\+SPC}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns shares per contract for options. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a6963b9f92410699375c6d7c37fb4a7c5}{set\+SPC}} (double spc) noexcept
+\begin{DoxyCompactList}\small\item\em Changes shares per contract for options. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_abd076418657824fa9f69ca4a93aae46a}{with\+SPC}} (double spc) noexcept
+\begin{DoxyCompactList}\small\item\em Changes shares per contract for options. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a1a1fd9010dd278aa32ddc1712b742eb1}{get\+Additional\+Underlyings}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns additional underlyings for options, including additional cash. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a44037972d69c539dcd101ad6eebceeff}{set\+Additional\+Underlyings}} (const std\+::string \&additional\+Underlyings) noexcept
+\begin{DoxyCompactList}\small\item\em Changes additional underlyings for options, including additional cash. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_ad087a456f773ad993da710bf01a068fb}{with\+Additional\+Underlyings}} (const std\+::string \&additional\+Underlyings) noexcept
+\begin{DoxyCompactList}\small\item\em Changes additional underlyings for options, including additional cash. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a5a555a4bf0e2c2a12e7fd4866f18461d}{get\+MMY}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns maturity month-\/year as provided for corresponding FIX tag (200). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a4c3448a3247f30cec22c4ef5b738a41c}{set\+MMY}} (const std\+::string \&mmy) noexcept
+\begin{DoxyCompactList}\small\item\em Changes maturity month-\/year as provided for corresponding FIX tag (200). \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a4fca0ee050cb48a5e81888b18b15a4b4}{with\+MMY}} (const std\+::string \&mmy) noexcept
+\begin{DoxyCompactList}\small\item\em Changes maturity month-\/year as provided for corresponding FIX tag (200). \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_instrument_profile_aa2b56c92ca632f5a8570757cef46e91e}{get\+Expiration}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns day id of expiration. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_ab3a6d45f197cbe489f933ff0b9d16d76}{set\+Expiration}} (std\+::int32\+\_\+t expiration) noexcept
+\begin{DoxyCompactList}\small\item\em Changes day id of expiration. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_acef7c97b1f11b074f6eebc3fc44c5468}{with\+Expiration}} (std\+::int32\+\_\+t expiration) noexcept
+\begin{DoxyCompactList}\small\item\em Changes day id of expiration. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_instrument_profile_a8996436ca06cd389f0fd5ca309938194}{get\+Last\+Trade}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns day id of last trading day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a405b202083b4d0a403d6ba9f76afdfd1}{set\+Last\+Trade}} (std\+::int32\+\_\+t last\+Trade) noexcept
+\begin{DoxyCompactList}\small\item\em Changes day id of last trading day. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a9c4edb35a55f9e30511cd2beb19e5a68}{with\+Last\+Trade}} (std\+::int32\+\_\+t last\+Trade) noexcept
+\begin{DoxyCompactList}\small\item\em Changes day id of last trading day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_instrument_profile_adbdcb9b5a0e9871dfbf0aba3d50cb618}{get\+Strike}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns strike price for options. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_aace1a7879f26421ce6cebe891a83f5bc}{set\+Strike}} (double strike) noexcept
+\begin{DoxyCompactList}\small\item\em Changes strike price for options. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a0610c10d5a22f1c4ef7b86450b9d64f7}{with\+Strike}} (double strike) noexcept
+\begin{DoxyCompactList}\small\item\em Changes strike price for options. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a5ad48c7968c9266d2ef7d0023532056c}{get\+Option\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns type of option. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_aae033ae2e93d52d20f7374e16bcc0b91}{set\+Option\+Type}} (const std\+::string \&option\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes type of option. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a546f2d5a5e961c59cd724de7ac41dd10}{with\+Option\+Type}} (const std\+::string \&option\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes type of option. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_aa41ea90838a00b0cb99c8ca27af038d3}{get\+Expiration\+Style}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns expiration cycle style, such as "{}\+Weeklys"{}, "{}\+Quarterlys"{}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a4030478117e8956a5be03d443a5cdc3a}{set\+Expiration\+Style}} (const std\+::string \&expiration\+Style) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the expiration cycle style, such as "{}\+Weeklys"{}, "{}\+Quarterlys"{}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a037f7d76fdf54a76f4f5dc5a284ac565}{with\+Expiration\+Style}} (const std\+::string \&expiration\+Style) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the expiration cycle style, such as "{}\+Weeklys"{}, "{}\+Quarterlys"{}. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_ac8aa2527d30cb7608fb9dd5585a40d04}{get\+Settlement\+Style}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns settlement price determination style, such as "{}\+Open"{}, "{}\+Close"{}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_a62c93fe9e4fef1f6e5a98b0650ff4844}{set\+Settlement\+Style}} (const std\+::string \&settlement\+Style) noexcept
+\begin{DoxyCompactList}\small\item\em Changes settlement price determination style, such as "{}\+Open"{}, "{}\+Close"{}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a5b78d448e194ddd9e2a71ad7480d7eb4}{with\+Settlement\+Style}} (const std\+::string \&settlement\+Style) noexcept
+\begin{DoxyCompactList}\small\item\em Changes settlement price determination style, such as "{}\+Open"{}, "{}\+Close"{}. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_adbf9be4554d2674599b0e8613df4aebc}{get\+Price\+Increments}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns minimum allowed price increments with corresponding price ranges. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_ab55b4dd8fcc00256164a8ea4f1842a56}{set\+Price\+Increments}} (const std\+::string \&price\+Increments) noexcept
+\begin{DoxyCompactList}\small\item\em Changes minimum allowed price increments with corresponding price ranges. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a0a5e6f6402b80e4afbbbbe5ee910ad97}{with\+Price\+Increments}} (const std\+::string \&price\+Increments) noexcept
+\begin{DoxyCompactList}\small\item\em Changes minimum allowed price increments with corresponding price ranges. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_instrument_profile_a3f8a7eb2b6340141d539198272bb0ede}{get\+Trading\+Hours}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns trading hours specification. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_instrument_profile_acc4a4d9c722fbfc6820fffb79de30129}{set\+Trading\+Hours}} (const std\+::string \&trading\+Hours) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trading hours specification. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& \mbox{\hyperlink{class_instrument_profile_a54087c607a8fc2ad66e05f8897bf3420}{with\+Trading\+Hours}} (const std\+::string \&trading\+Hours) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trading hours specification. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_shared_entity}{Shared\+Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{struct_shared_entity_ae774e293e95fbf8ebb4d22f714e80272}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T\texorpdfstring{$\ast$}{*} In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a95c4521da539591dee08051ba77a10a8}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{struct_shared_entity_a348c971deaca898a477262e5bd190d03}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{struct_shared_entity_a84179ef824d835d61488dab36f4f0325}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{struct_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Entity} () noexcept=default
+\begin{DoxyCompactList}\small\item\em The default virtual d-\/tor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_instrument_profile_a6fd56a941810ed09427400faa72661bc}{Ptr}} \mbox{\hyperlink{class_instrument_profile_a2aeaecc8b899c1131feccfda81821a47}{from\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static std\+::vector$<$ \mbox{\hyperlink{class_instrument_profile_a6fd56a941810ed09427400faa72661bc}{Ptr}} $>$ \mbox{\hyperlink{class_instrument_profile_a3a91a236713ffaeb0b35c59ced4dbc66}{from\+Graal\+List}} (void \texorpdfstring{$\ast$}{*}graal\+List)
+\begin{DoxyCompactList}\small\item\em Creates a vector of objects of the current type and fills it with data from the the dx\+Feed Graal SDK list of structures. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_instrument_profile_aaaeae5dcae85270d8cbb04487f6714c9}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents basic profile information about market instrument. 
+
+Please see \href{http://www.dxfeed.com/downloads/documentation/dxFeed_Instrument_Profile_Format.pdf}{\texttt{ Instrument Profile Format documentation}} for complete description. 
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_instrument_profile_aaaeae5dcae85270d8cbb04487f6714c9}\index{InstrumentProfile@{InstrumentProfile}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_aaaeae5dcae85270d8cbb04487f6714c9} 
+void Instrument\+Profile\+::free\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_collector_a7a099f2838c9703acf038fbfeae1e54f}{Instrument\+Profile\+Collector\+::update\+Instrument\+Profile()}}.
+
+\Hypertarget{class_instrument_profile_a2aeaecc8b899c1131feccfda81821a47}\index{InstrumentProfile@{InstrumentProfile}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a2aeaecc8b899c1131feccfda81821a47} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} $>$ Instrument\+Profile\+::from\+Graal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+Native}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_instrument_profile_a3a91a236713ffaeb0b35c59ced4dbc66}\index{InstrumentProfile@{InstrumentProfile}!fromGraalList@{fromGraalList}}
+\index{fromGraalList@{fromGraalList}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{fromGraalList()}{fromGraalList()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a3a91a236713ffaeb0b35c59ced4dbc66} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} $>$ $>$ Instrument\+Profile\+::from\+Graal\+List (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{graal\+List}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates a vector of objects of the current type and fills it with data from the the dx\+Feed Graal SDK list of structures. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+List} & The pointer to the dx\+Feed Graal SDK list of structures. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The vector of objects of current type 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_instrument_profile_a1a1fd9010dd278aa32ddc1712b742eb1}\index{InstrumentProfile@{InstrumentProfile}!getAdditionalUnderlyings@{getAdditionalUnderlyings}}
+\index{getAdditionalUnderlyings@{getAdditionalUnderlyings}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getAdditionalUnderlyings()}{getAdditionalUnderlyings()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a1a1fd9010dd278aa32ddc1712b742eb1} 
+const std\+::string \& Instrument\+Profile\+::get\+Additional\+Underlyings (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns additional underlyings for options, including additional cash. 
+
+It shall use following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ <VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <LIST>\ ::=\ <AU>\ |\ <AU>\ <semicolon>\ <space>\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <AU>\ ::=\ <UNDERLYING>\ <space>\ <SPC>}
+\DoxyCodeLine{the\ list\ shall\ be\ sorted\ by\ <UNDERLYING>.}
+
+\end{DoxyCode}
+ Example\+: "{}\+SE 50"{}, "{}\+FIS 53; US\$ 45.\+46"{}.
+
+\begin{DoxyReturn}{Returns}
+The additional underlyings for options, including additional cash. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a6699a76a23259627ffab8ee068870773}\index{InstrumentProfile@{InstrumentProfile}!getBaseCurrency@{getBaseCurrency}}
+\index{getBaseCurrency@{getBaseCurrency}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getBaseCurrency()}{getBaseCurrency()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a6699a76a23259627ffab8ee068870773} 
+const std\+::string \& Instrument\+Profile\+::get\+Base\+Currency (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns base currency of currency pair (FOREX instruments). 
+
+It shall use three-\/letter currency code similarly to \doxylink{class_instrument_profile_ad18cd4362e059df9002d76b81f04d300}{currency}.
+
+\begin{DoxyReturn}{Returns}
+The base currency of currency pair (FOREX instruments). 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_acbdd542bf4816368c289b23fa7909487}\index{InstrumentProfile@{InstrumentProfile}!getCFI@{getCFI}}
+\index{getCFI@{getCFI}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getCFI()}{getCFI()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_acbdd542bf4816368c289b23fa7909487} 
+const std\+::string \& Instrument\+Profile\+::get\+CFI (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Classification of Financial Instruments code. 
+
+It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/\+Put type, American/\+European exercise, Cash/\+Physical delivery. It shall use six-\/letter CFI code from ISO 10962 standard. It is allowed to use \textquotesingle{}X\textquotesingle{} extensively and to omit trailing letters (assumed to be \textquotesingle{}X\textquotesingle{}). See \href{http://en.wikipedia.org/wiki/ISO_10962}{\texttt{ ISO 10962 on Wikipedia}}. Example\+: "{}\+ESNTPB"{}, "{}\+ESXXXX"{}, "{}\+ES"{} , "{}\+OPASPS"{}.
+
+\begin{DoxyReturn}{Returns}
+CFI code. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a913b2df6303f0fe4d48f487e73dc23bd}\index{InstrumentProfile@{InstrumentProfile}!getCountry@{getCountry}}
+\index{getCountry@{getCountry}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getCountry()}{getCountry()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a913b2df6303f0fe4d48f487e73dc23bd} 
+const std\+::string \& Instrument\+Profile\+::get\+Country (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns country of origin (incorporation) of corresponding company or parent entity. 
+
+It shall use two-\/letter country code from ISO 3166-\/1 standard. See \href{http://en.wikipedia.org/wiki/ISO_3166-1}{\texttt{ ISO 3166-\/1 on Wikipedia}}. Example\+: "{}\+US"{}, "{}\+RU"{}.
+
+\begin{DoxyReturn}{Returns}
+The country of origin (incorporation) of corresponding company or parent entity. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_ad18cd4362e059df9002d76b81f04d300}\index{InstrumentProfile@{InstrumentProfile}!getCurrency@{getCurrency}}
+\index{getCurrency@{getCurrency}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getCurrency()}{getCurrency()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ad18cd4362e059df9002d76b81f04d300} 
+const std\+::string \& Instrument\+Profile\+::get\+Currency (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns currency of quotation, pricing and trading. 
+
+It shall use three-\/letter currency code from ISO 4217 standard. See \href{http://en.wikipedia.org/wiki/ISO_4217}{\texttt{ ISO 4217 on Wikipedia}}. Example\+: "{}\+USD"{}, "{}\+RUB"{}.
+
+\begin{DoxyReturn}{Returns}
+Currency of quotation, pricing and trading. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_abc3e5297c5a60579118fc6e1722e525d}\index{InstrumentProfile@{InstrumentProfile}!getCUSIP@{getCUSIP}}
+\index{getCUSIP@{getCUSIP}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getCUSIP()}{getCUSIP()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_abc3e5297c5a60579118fc6e1722e525d} 
+const std\+::string \& Instrument\+Profile\+::get\+CUSIP (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Committee on Uniform Security Identification Procedures code. 
+
+It shall use nine-\/letter code assigned by CUSIP Services Bureau. See \href{http://en.wikipedia.org/wiki/CUSIP}{\texttt{ CUSIP on Wikipedia}}. Example\+: "{}38259\+P508"{}.
+
+\begin{DoxyReturn}{Returns}
+CUSIP code. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_aae263a5b51ac6bc259f62453278baa31}\index{InstrumentProfile@{InstrumentProfile}!getDescription@{getDescription}}
+\index{getDescription@{getDescription}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getDescription()}{getDescription()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_aae263a5b51ac6bc259f62453278baa31} 
+const std\+::string \& Instrument\+Profile\+::get\+Description (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the description of instrument, preferable an international one in Latin alphabet. 
+
+Example\+: "{}\+Google Inc."{}, "{}\+Mini Gold Futures,\+Jun-\/2009,\+ETH"{}.
+
+\begin{DoxyReturn}{Returns}
+The description of instrument. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a87ba2ce0c5c337f02d2ff1812af3aff8}\index{InstrumentProfile@{InstrumentProfile}!getExchangeData@{getExchangeData}}
+\index{getExchangeData@{getExchangeData}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getExchangeData()}{getExchangeData()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a87ba2ce0c5c337f02d2ff1812af3aff8} 
+const std\+::string \& Instrument\+Profile\+::get\+Exchange\+Data (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange-\/specific data required to properly identify instrument when communicating with exchange. 
+
+It uses exchange-\/specific format.
+
+\begin{DoxyReturn}{Returns}
+The exchange-\/specific data required to properly identify instrument when communicating with exchange. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a6e357e0dba2b17a4d69e84b5a6cbfa9b}\index{InstrumentProfile@{InstrumentProfile}!getExchanges@{getExchanges}}
+\index{getExchanges@{getExchanges}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getExchanges()}{getExchanges()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a6e357e0dba2b17a4d69e84b5a6cbfa9b} 
+const std\+::string \& Instrument\+Profile\+::get\+Exchanges (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns list of exchanges where instrument is quoted or traded. 
+
+Its shall use the following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{<VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{<LIST>\ ::=\ <MIC>\ |\ <MIC>\ <semicolon>}
+\DoxyCodeLine{}
+\DoxyCodeLine{<LIST>\ the\ list\ shall\ be\ sorted\ by\ MIC.}
+
+\end{DoxyCode}
+ Example\+: "{}\+ARCX;\+CBSX ;\+XNAS;\+XNYS"{}.
+
+\begin{DoxyReturn}{Returns}
+The list of exchanges where instrument is quoted or traded. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_aa2b56c92ca632f5a8570757cef46e91e}\index{InstrumentProfile@{InstrumentProfile}!getExpiration@{getExpiration}}
+\index{getExpiration@{getExpiration}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getExpiration()}{getExpiration()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_aa2b56c92ca632f5a8570757cef46e91e} 
+std\+::int32\+\_\+t Instrument\+Profile\+::get\+Expiration (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns day id of expiration. 
+
+Example\+: day\+\_\+util\+:\+:\#get\+Day\+Id\+By\+Year\+Month\+Day() "{}dxfcpp\+::day\+\_\+util\+::get\+Day\+Id\+By\+Year\+Month\+Day"{}(20090117).
+
+\begin{DoxyReturn}{Returns}
+The day id of expiration. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_aa41ea90838a00b0cb99c8ca27af038d3}\index{InstrumentProfile@{InstrumentProfile}!getExpirationStyle@{getExpirationStyle}}
+\index{getExpirationStyle@{getExpirationStyle}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getExpirationStyle()}{getExpirationStyle()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_aa41ea90838a00b0cb99c8ca27af038d3} 
+const std\+::string \& Instrument\+Profile\+::get\+Expiration\+Style (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns expiration cycle style, such as "{}\+Weeklys"{}, "{}\+Quarterlys"{}. 
+
+\begin{DoxyReturn}{Returns}
+The expiration cycle style. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_acecb2807bd0917ee1c23178b44bd59da}\index{InstrumentProfile@{InstrumentProfile}!getICB@{getICB}}
+\index{getICB@{getICB}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getICB()}{getICB()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_acecb2807bd0917ee1c23178b44bd59da} 
+std\+::int32\+\_\+t Instrument\+Profile\+::get\+ICB (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Industry Classification Benchmark. 
+
+It shall use four-\/digit number from ICB catalog. See \href{http://en.wikipedia.org/wiki/Industry_Classification_Benchmark}{\texttt{ ICB on Wikipedia}} or \href{http://www.icbenchmark.com/}{\texttt{ ICB homepage}}. Example\+: "{}9535"{}.
+
+\begin{DoxyReturn}{Returns}
+Industry Classification Benchmark. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_aa466ac9c0345e5cfa80fe1a52eca0762}\index{InstrumentProfile@{InstrumentProfile}!getISIN@{getISIN}}
+\index{getISIN@{getISIN}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getISIN()}{getISIN()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_aa466ac9c0345e5cfa80fe1a52eca0762} 
+const std\+::string \& Instrument\+Profile\+::get\+ISIN (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns International Securities Identifying Number. 
+
+It shall use twelve-\/letter code from ISO 6166 standard. See \href{http://en.wikipedia.org/wiki/ISO_6166}{\texttt{ ISO 6166 on Wikipedia}} or \href{http://en.wikipedia.org/wiki/International_Securities_Identifying_Number}{\texttt{ ISIN on Wikipedia}}. Example\+: "{}\+DE0007100000"{}, "{}\+US38259\+P5089"{}.
+
+\begin{DoxyReturn}{Returns}
+International Securities Identifying Number. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a8996436ca06cd389f0fd5ca309938194}\index{InstrumentProfile@{InstrumentProfile}!getLastTrade@{getLastTrade}}
+\index{getLastTrade@{getLastTrade}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getLastTrade()}{getLastTrade()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a8996436ca06cd389f0fd5ca309938194} 
+std\+::int32\+\_\+t Instrument\+Profile\+::get\+Last\+Trade (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns day id of last trading day. 
+
+Example\+: day\+\_\+util\+:\+:\#get\+Day\+Id\+By\+Year\+Month\+Day() "{}dxfcpp\+::day\+\_\+util\+::get\+Day\+Id\+By\+Year\+Month\+Day"{}(20090116).
+
+\begin{DoxyReturn}{Returns}
+The day id of last trading day. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_afe1cb7e52c4733856b798e5d087bcb9f}\index{InstrumentProfile@{InstrumentProfile}!getLocalDescription@{getLocalDescription}}
+\index{getLocalDescription@{getLocalDescription}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getLocalDescription()}{getLocalDescription()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_afe1cb7e52c4733856b798e5d087bcb9f} 
+const std\+::string \& Instrument\+Profile\+::get\+Local\+Description (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns description of instrument in national language. 
+
+It shall be empty if same as \doxylink{class_instrument_profile_aae263a5b51ac6bc259f62453278baa31}{description}.
+
+\begin{DoxyReturn}{Returns}
+The description of instrument in national language. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a254c4949b0ae98ac3877f7058a2d34b1}\index{InstrumentProfile@{InstrumentProfile}!getLocalSymbol@{getLocalSymbol}}
+\index{getLocalSymbol@{getLocalSymbol}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getLocalSymbol()}{getLocalSymbol()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a254c4949b0ae98ac3877f7058a2d34b1} 
+const std\+::string \& Instrument\+Profile\+::get\+Local\+Symbol (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns identifier of instrument in national language. 
+
+It shall be empty if same as \doxylink{class_instrument_profile_abd4194939cecbda13730b9012d3187c7}{symbol}.
+
+\begin{DoxyReturn}{Returns}
+The identifier of instrument in national language. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a5a555a4bf0e2c2a12e7fd4866f18461d}\index{InstrumentProfile@{InstrumentProfile}!getMMY@{getMMY}}
+\index{getMMY@{getMMY}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getMMY()}{getMMY()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5a555a4bf0e2c2a12e7fd4866f18461d} 
+const std\+::string \& Instrument\+Profile\+::get\+MMY (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns maturity month-\/year as provided for corresponding FIX tag (200). 
+
+It can use several different formats depending on data source\+: 
+\begin{DoxyItemize}
+\item YYYYMM – if only year and month are specified 
+\item YYYYMMDD – if full date is specified 
+\item YYYYMMwN – if week number (within a month) is specified 
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+The maturity month-\/year as provided for corresponding FIX tag (200). 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_ad54b6370e7a34b967ba6d307d7d7dd5a}\index{InstrumentProfile@{InstrumentProfile}!getMultiplier@{getMultiplier}}
+\index{getMultiplier@{getMultiplier}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getMultiplier()}{getMultiplier()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ad54b6370e7a34b967ba6d307d7d7dd5a} 
+double Instrument\+Profile\+::get\+Multiplier (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns market value multiplier. 
+
+Example\+: 100, 33.\+2.
+
+\begin{DoxyReturn}{Returns}
+The market value multiplier. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a298b19748a4d178553404043df4285d5}\index{InstrumentProfile@{InstrumentProfile}!getOPOL@{getOPOL}}
+\index{getOPOL@{getOPOL}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getOPOL()}{getOPOL()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a298b19748a4d178553404043df4285d5} 
+const std\+::string \& Instrument\+Profile\+::get\+OPOL (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns official Place Of Listing, the organization that have listed this instrument. 
+
+Instruments with multiple listings shall use separate profiles for each listing. It shall use Market Identifier Code (MIC) from ISO 10383 standard. See \href{http://en.wikipedia.org/wiki/ISO_10383}{\texttt{ ISO 10383 on Wikipedia}} or \href{http://www.iso15022.org/MIC/homepageMIC.htm}{\texttt{ MIC homepage}}. Example\+: "{}\+XNAS"{}, "{}\+RTSX"{}
+
+\begin{DoxyReturn}{Returns}
+The official Place Of Listing, the organization that have listed this instrument. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a5ad48c7968c9266d2ef7d0023532056c}\index{InstrumentProfile@{InstrumentProfile}!getOptionType@{getOptionType}}
+\index{getOptionType@{getOptionType}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getOptionType()}{getOptionType()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5ad48c7968c9266d2ef7d0023532056c} 
+const std\+::string \& Instrument\+Profile\+::get\+Option\+Type (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns type of option. 
+
+It shall use one of following values\+: 
+\begin{DoxyItemize}
+\item STAN = Standard Options 
+\item LEAP = Long-\/term Equity Antici\+Pation Securities 
+\item SDO = Special Dated Options 
+\item BINY = Binary Options 
+\item FLEX = FLexible EXchange Options 
+\item VSO = Variable Start Options 
+\item RNGE = Range 
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+The type of option. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_adbf9be4554d2674599b0e8613df4aebc}\index{InstrumentProfile@{InstrumentProfile}!getPriceIncrements@{getPriceIncrements}}
+\index{getPriceIncrements@{getPriceIncrements}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getPriceIncrements()}{getPriceIncrements()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_adbf9be4554d2674599b0e8613df4aebc} 
+const std\+::string \& Instrument\+Profile\+::get\+Price\+Increments (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns minimum allowed price increments with corresponding price ranges. 
+
+It shall use following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ <VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <LIST>\ ::=\ <INCREMENT>\ |\ <RANGE>\ <semicolon>\ <space>\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <RANGE>\ ::=\ <INCREMENT>\ <space>\ <UPPER\_LIMIT>}
+\DoxyCodeLine{the\ list\ shall\ be\ sorted\ by\ <UPPER\_LIMIT>.}
+
+\end{DoxyCode}
+ Example\+: "{}0.\+25"{}, "{}0.\+01 3; 0.\+05"{}.
+
+\begin{DoxyReturn}{Returns}
+The minimum allowed price increments with corresponding price ranges. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_acbe1e49969cb847377668e46d5e5805a}\index{InstrumentProfile@{InstrumentProfile}!getProduct@{getProduct}}
+\index{getProduct@{getProduct}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getProduct()}{getProduct()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_acbe1e49969cb847377668e46d5e5805a} 
+const std\+::string \& Instrument\+Profile\+::get\+Product (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns product for futures and options on futures (underlying asset name). 
+
+Example\+: "{}/\+YG"{}.
+
+\begin{DoxyReturn}{Returns}
+The product for futures and options on futures (underlying asset name). 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a5c371535397b24b1263996bb310e469a}\index{InstrumentProfile@{InstrumentProfile}!getSEDOL@{getSEDOL}}
+\index{getSEDOL@{getSEDOL}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getSEDOL()}{getSEDOL()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5c371535397b24b1263996bb310e469a} 
+const std\+::string \& Instrument\+Profile\+::get\+SEDOL (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Stock Exchange Daily Official List. 
+
+It shall use seven-\/letter code assigned by London Stock Exchange. See \href{http://en.wikipedia.org/wiki/SEDOL}{\texttt{ SEDOL on Wikipedia}} or \href{http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/}{\texttt{ SEDOL on LSE}}. Example\+: "{}2310967"{}, "{}5766857"{}.
+
+\begin{DoxyReturn}{Returns}
+Stock Exchange Daily Official List. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_ac8aa2527d30cb7608fb9dd5585a40d04}\index{InstrumentProfile@{InstrumentProfile}!getSettlementStyle@{getSettlementStyle}}
+\index{getSettlementStyle@{getSettlementStyle}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getSettlementStyle()}{getSettlementStyle()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ac8aa2527d30cb7608fb9dd5585a40d04} 
+const std\+::string \& Instrument\+Profile\+::get\+Settlement\+Style (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns settlement price determination style, such as "{}\+Open"{}, "{}\+Close"{}. 
+
+\begin{DoxyReturn}{Returns}
+The settlement price determination style. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_af47aaf052d68a22246dbfa403cfae85b}\index{InstrumentProfile@{InstrumentProfile}!getSIC@{getSIC}}
+\index{getSIC@{getSIC}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getSIC()}{getSIC()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_af47aaf052d68a22246dbfa403cfae85b} 
+std\+::int32\+\_\+t Instrument\+Profile\+::get\+SIC (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Standard Industrial Classification. 
+
+It shall use four-\/digit number from SIC catalog. See \href{http://en.wikipedia.org/wiki/Standard_Industrial_Classification}{\texttt{ SIC on Wikipedia}} or \href{https://www.osha.gov/pls/imis/sic_manual.html}{\texttt{ SIC structure}}. Example\+: "{}7371"{}.
+
+\begin{DoxyReturn}{Returns}
+Standard Industrial Classification. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a42e5b37725798db0ee295c5cc358e2ee}\index{InstrumentProfile@{InstrumentProfile}!getSPC@{getSPC}}
+\index{getSPC@{getSPC}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getSPC()}{getSPC()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a42e5b37725798db0ee295c5cc358e2ee} 
+double Instrument\+Profile\+::get\+SPC (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns shares per contract for options. 
+
+Example\+: 1, 100.
+
+\begin{DoxyReturn}{Returns}
+shares per contract for options. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_adbdcb9b5a0e9871dfbf0aba3d50cb618}\index{InstrumentProfile@{InstrumentProfile}!getStrike@{getStrike}}
+\index{getStrike@{getStrike}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getStrike()}{getStrike()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_adbdcb9b5a0e9871dfbf0aba3d50cb618} 
+double Instrument\+Profile\+::get\+Strike (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns strike price for options. 
+
+Example\+: 80, 22.\+5.
+
+\begin{DoxyReturn}{Returns}
+The strike price for options. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_abd4194939cecbda13730b9012d3187c7}\index{InstrumentProfile@{InstrumentProfile}!getSymbol@{getSymbol}}
+\index{getSymbol@{getSymbol}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getSymbol()}{getSymbol()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_abd4194939cecbda13730b9012d3187c7} 
+const std\+::string \& Instrument\+Profile\+::get\+Symbol (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns identifier of instrument, preferable an international one in Latin alphabet. 
+
+It is a mandatory field. It may not be empty. Example\+: "{}\+GOOG"{}, "{}/\+YGM9"{}, "{}.\+ZYEAD"{}.
+
+\begin{DoxyReturn}{Returns}
+The identifier of instrument. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a3f8a7eb2b6340141d539198272bb0ede}\index{InstrumentProfile@{InstrumentProfile}!getTradingHours@{getTradingHours}}
+\index{getTradingHours@{getTradingHours}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getTradingHours()}{getTradingHours()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a3f8a7eb2b6340141d539198272bb0ede} 
+const std\+::string \& Instrument\+Profile\+::get\+Trading\+Hours (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns trading hours specification. 
+
+See \doxylink{struct_schedule_ad6952457d94887d98fe974b57f0aabd0}{Schedule\+::get\+Instance()}.
+
+\begin{DoxyReturn}{Returns}
+The trading hours specification. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a94ba60696c85685b14750e8cf59971f3}\index{InstrumentProfile@{InstrumentProfile}!getType@{getType}}
+\index{getType@{getType}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a94ba60696c85685b14750e8cf59971f3} 
+const std\+::string \& Instrument\+Profile\+::get\+Type (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns type of instrument. 
+
+It takes precedence in conflict cases with other fields. It is a mandatory field. It may not be empty. Example\+: "{}\+STOCK"{}, "{}\+FUTURE"{}, "{}\+OPTION"{}.
+
+\begin{DoxyReturn}{Returns}
+type of instrument. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a470d74d4a9abb1a631023fe045b6cb0b}\index{InstrumentProfile@{InstrumentProfile}!getUnderlying@{getUnderlying}}
+\index{getUnderlying@{getUnderlying}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{getUnderlying()}{getUnderlying()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a470d74d4a9abb1a631023fe045b6cb0b} 
+const std\+::string \& Instrument\+Profile\+::get\+Underlying (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns primary underlying symbol for options. 
+
+Example\+: "{}\+C"{}, "{}/\+YGM9"{}
+
+\begin{DoxyReturn}{Returns}
+The primary underlying symbol for options. 
+\end{DoxyReturn}
+\Hypertarget{class_instrument_profile_a44037972d69c539dcd101ad6eebceeff}\index{InstrumentProfile@{InstrumentProfile}!setAdditionalUnderlyings@{setAdditionalUnderlyings}}
+\index{setAdditionalUnderlyings@{setAdditionalUnderlyings}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setAdditionalUnderlyings()}{setAdditionalUnderlyings()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a44037972d69c539dcd101ad6eebceeff} 
+void Instrument\+Profile\+::set\+Additional\+Underlyings (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{additional\+Underlyings}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes additional underlyings for options, including additional cash. 
+
+It shall use following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ <VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <LIST>\ ::=\ <AU>\ |\ <AU>\ <semicolon>\ <space>\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <AU>\ ::=\ <UNDERLYING>\ <space>\ <SPC>}
+\DoxyCodeLine{the\ list\ shall\ be\ sorted\ by\ <UNDERLYING>.}
+
+\end{DoxyCode}
+ Example\+: "{}\+SE 50"{}, "{}\+FIS 53; US\$ 45.\+46"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em additional\+Underlyings} & The additional underlyings for options, including additional cash. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_ad087a456f773ad993da710bf01a068fb}{with\+Additional\+Underlyings()}}.
+
+\Hypertarget{class_instrument_profile_abb3be844ea483b13874c8b060d288abe}\index{InstrumentProfile@{InstrumentProfile}!setBaseCurrency@{setBaseCurrency}}
+\index{setBaseCurrency@{setBaseCurrency}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setBaseCurrency()}{setBaseCurrency()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_abb3be844ea483b13874c8b060d288abe} 
+void Instrument\+Profile\+::set\+Base\+Currency (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{base\+Currency}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes base currency of currency pair (FOREX instruments). 
+
+It shall use three-\/letter currency code similarly to \doxylink{class_instrument_profile_ad18cd4362e059df9002d76b81f04d300}{currency}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em base\+Currency} & The base currency of currency pair (FOREX instruments). \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a1c49207262515cefe87e4b79e1468dc9}{with\+Base\+Currency()}}.
+
+\Hypertarget{class_instrument_profile_a19cf5ce6bcabf266177ef3f5726dda64}\index{InstrumentProfile@{InstrumentProfile}!setCFI@{setCFI}}
+\index{setCFI@{setCFI}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setCFI()}{setCFI()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a19cf5ce6bcabf266177ef3f5726dda64} 
+void Instrument\+Profile\+::set\+CFI (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{cfi}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Classification of Financial Instruments code. 
+
+It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/\+Put type, American/\+European exercise, Cash/\+Physical delivery. It shall use six-\/letter CFI code from ISO 10962 standard. It is allowed to use \textquotesingle{}X\textquotesingle{} extensively and to omit trailing letters (assumed to be \textquotesingle{}X\textquotesingle{}). See \href{http://en.wikipedia.org/wiki/ISO_10962}{\texttt{ ISO 10962 on Wikipedia}}. Example\+: "{}\+ESNTPB"{}, "{}\+ESXXXX"{}, "{}\+ES"{} , "{}\+OPASPS"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfi} & CFI code. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a4bab6083fe448e0dad4247992bd733a4}{with\+CFI()}}.
+
+\Hypertarget{class_instrument_profile_abdcc1da4eec52e8de6fed02fc1ebc5b6}\index{InstrumentProfile@{InstrumentProfile}!setCountry@{setCountry}}
+\index{setCountry@{setCountry}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setCountry()}{setCountry()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_abdcc1da4eec52e8de6fed02fc1ebc5b6} 
+void Instrument\+Profile\+::set\+Country (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{country}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes country of origin (incorporation) of corresponding company or parent entity. 
+
+It shall use two-\/letter country code from ISO 3166-\/1 standard. See \href{http://en.wikipedia.org/wiki/ISO_3166-1}{\texttt{ ISO 3166-\/1 on Wikipedia}}. Example\+: "{}\+US"{}, "{}\+RU"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em country} & The country of origin (incorporation) of corresponding company or parent entity. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_ad3cf51f8de8e9021290d22e4074586f3}{with\+Country()}}.
+
+\Hypertarget{class_instrument_profile_ade6b2b7ef02837ed3cc8a8e39d6fce65}\index{InstrumentProfile@{InstrumentProfile}!setCurrency@{setCurrency}}
+\index{setCurrency@{setCurrency}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setCurrency()}{setCurrency()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ade6b2b7ef02837ed3cc8a8e39d6fce65} 
+void Instrument\+Profile\+::set\+Currency (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{currency}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes currency of quotation, pricing and trading. 
+
+It shall use three-\/letter currency code from ISO 4217 standard. See \href{http://en.wikipedia.org/wiki/ISO_4217}{\texttt{ ISO 4217 on Wikipedia}}. Example\+: "{}\+USD"{}, "{}\+RUB"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em currency} & Currency of quotation, pricing and trading. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_ad7a00c9886d45e273233a6a16ee6a376}{with\+Currency()}}.
+
+\Hypertarget{class_instrument_profile_a09e604e51e564a4c7e7df7ab79988a19}\index{InstrumentProfile@{InstrumentProfile}!setCUSIP@{setCUSIP}}
+\index{setCUSIP@{setCUSIP}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setCUSIP()}{setCUSIP()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a09e604e51e564a4c7e7df7ab79988a19} 
+void Instrument\+Profile\+::set\+CUSIP (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{cusip}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Committee on Uniform Security Identification Procedures code. 
+
+It shall use nine-\/letter code assigned by CUSIP Services Bureau. See \href{http://en.wikipedia.org/wiki/CUSIP}{\texttt{ CUSIP on Wikipedia}}. Example\+: "{}38259\+P508"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cusip} & CUSIP code. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a48804e90f4a68e168e016afaa2cf87eb}{with\+CUSIP()}}.
+
+\Hypertarget{class_instrument_profile_a1caa676f7725f81811c2fe7d88ab12d7}\index{InstrumentProfile@{InstrumentProfile}!setDescription@{setDescription}}
+\index{setDescription@{setDescription}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setDescription()}{setDescription()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a1caa676f7725f81811c2fe7d88ab12d7} 
+void Instrument\+Profile\+::set\+Description (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes description of instrument, preferable an international one in Latin alphabet. 
+
+Example\+: "{}\+Google Inc."{}, "{}\+Mini Gold Futures,\+Jun-\/2009,\+ETH"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em description} & The description of instrument. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_ad259783bc8963177a6d5c88fb9d3c76f}{with\+Description()}}.
+
+\Hypertarget{class_instrument_profile_ac11c84fedc48460f98716588222ed05d}\index{InstrumentProfile@{InstrumentProfile}!setExchangeData@{setExchangeData}}
+\index{setExchangeData@{setExchangeData}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setExchangeData()}{setExchangeData()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ac11c84fedc48460f98716588222ed05d} 
+void Instrument\+Profile\+::set\+Exchange\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{exchange\+Data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange-\/specific data required to properly identify instrument when communicating with exchange. 
+
+It uses exchange-\/specific format.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Data} & The exchange-\/specific data required to properly identify instrument when communicating with exchange. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a310538494e744d1a883f123127dd40a3}{with\+Exchange\+Data()}}.
+
+\Hypertarget{class_instrument_profile_a158b369d71fe7be03f3261816f8e89f4}\index{InstrumentProfile@{InstrumentProfile}!setExchanges@{setExchanges}}
+\index{setExchanges@{setExchanges}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setExchanges()}{setExchanges()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a158b369d71fe7be03f3261816f8e89f4} 
+void Instrument\+Profile\+::set\+Exchanges (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{exchanges}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes list of exchanges where instrument is quoted or traded. 
+
+It shall use the following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{<VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{<LIST>\ ::=\ <MIC>\ |\ <MIC>\ <semicolon>}
+\DoxyCodeLine{}
+\DoxyCodeLine{<LIST>\ the\ list\ shall\ be\ sorted\ by\ MIC.}
+
+\end{DoxyCode}
+ Example\+: "{}\+ARCX;\+CBSX ;\+XNAS;\+XNYS"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchanges} & The list of exchanges where instrument is quoted or traded. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a28b1270e00017d1a4ddd7eeb5f996672}{with\+Exchanges()}}.
+
+\Hypertarget{class_instrument_profile_ab3a6d45f197cbe489f933ff0b9d16d76}\index{InstrumentProfile@{InstrumentProfile}!setExpiration@{setExpiration}}
+\index{setExpiration@{setExpiration}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setExpiration()}{setExpiration()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ab3a6d45f197cbe489f933ff0b9d16d76} 
+void Instrument\+Profile\+::set\+Expiration (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{expiration}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes day id of expiration. 
+
+Example\+: day\+\_\+util\+:\+:\#get\+Day\+Id\+By\+Year\+Month\+Day() "{}dxfcpp\+::day\+\_\+util\+::get\+Day\+Id\+By\+Year\+Month\+Day"{}(20090117).
+
+
+\begin{DoxyParams}{Parameters}
+{\em expiration} & The day id of expiration. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_acef7c97b1f11b074f6eebc3fc44c5468}{with\+Expiration()}}.
+
+\Hypertarget{class_instrument_profile_a4030478117e8956a5be03d443a5cdc3a}\index{InstrumentProfile@{InstrumentProfile}!setExpirationStyle@{setExpirationStyle}}
+\index{setExpirationStyle@{setExpirationStyle}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setExpirationStyle()}{setExpirationStyle()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a4030478117e8956a5be03d443a5cdc3a} 
+void Instrument\+Profile\+::set\+Expiration\+Style (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{expiration\+Style}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the expiration cycle style, such as "{}\+Weeklys"{}, "{}\+Quarterlys"{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em expiration\+Style} & The expiration cycle style. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a037f7d76fdf54a76f4f5dc5a284ac565}{with\+Expiration\+Style()}}.
+
+\Hypertarget{class_instrument_profile_a8c2f62961478e47c96701e5d30311f97}\index{InstrumentProfile@{InstrumentProfile}!setICB@{setICB}}
+\index{setICB@{setICB}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setICB()}{setICB()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a8c2f62961478e47c96701e5d30311f97} 
+void Instrument\+Profile\+::set\+ICB (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{icb}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Industry Classification Benchmark. 
+
+It shall use four-\/digit number from ICB catalog. See \href{http://en.wikipedia.org/wiki/Industry_Classification_Benchmark}{\texttt{ ICB on Wikipedia}} or \href{http://www.icbenchmark.com/}{\texttt{ ICB homepage}}. Example\+: "{}9535"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em icb} & Industry Classification Benchmark. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a855fd72f97a5ce08c481fb689cd446aa}{with\+ICB()}}.
+
+\Hypertarget{class_instrument_profile_a0a372c3768ba8cd7d5a1687178e2808f}\index{InstrumentProfile@{InstrumentProfile}!setISIN@{setISIN}}
+\index{setISIN@{setISIN}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setISIN()}{setISIN()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a0a372c3768ba8cd7d5a1687178e2808f} 
+void Instrument\+Profile\+::set\+ISIN (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{isin}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes International Securities Identifying Number. 
+
+It shall use twelve-\/letter code from ISO 6166 standard. See \href{http://en.wikipedia.org/wiki/ISO_6166}{\texttt{ ISO 6166 on Wikipedia}} or \href{http://en.wikipedia.org/wiki/International_Securities_Identifying_Number}{\texttt{ ISIN on Wikipedia}}. Example\+: "{}\+DE0007100000"{}, "{}\+US38259\+P5089"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em isin} & International Securities Identifying Number. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a5d6da60411f29fa2627c1a999e48702c}{with\+ISIN()}}.
+
+\Hypertarget{class_instrument_profile_a405b202083b4d0a403d6ba9f76afdfd1}\index{InstrumentProfile@{InstrumentProfile}!setLastTrade@{setLastTrade}}
+\index{setLastTrade@{setLastTrade}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setLastTrade()}{setLastTrade()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a405b202083b4d0a403d6ba9f76afdfd1} 
+void Instrument\+Profile\+::set\+Last\+Trade (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{last\+Trade}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes day id of last trading day. 
+
+Example\+: day\+\_\+util\+:\+:\#get\+Day\+Id\+By\+Year\+Month\+Day() "{}dxfcpp\+::day\+\_\+util\+::get\+Day\+Id\+By\+Year\+Month\+Day"{}(20090116).
+
+
+\begin{DoxyParams}{Parameters}
+{\em last\+Trade} & The day id of last trading day. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a9c4edb35a55f9e30511cd2beb19e5a68}{with\+Last\+Trade()}}.
+
+\Hypertarget{class_instrument_profile_af5f2da861a4c106143c147e15be85977}\index{InstrumentProfile@{InstrumentProfile}!setLocalDescription@{setLocalDescription}}
+\index{setLocalDescription@{setLocalDescription}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setLocalDescription()}{setLocalDescription()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_af5f2da861a4c106143c147e15be85977} 
+void Instrument\+Profile\+::set\+Local\+Description (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{local\+Description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes description of instrument in national language. 
+
+It shall be empty if same as \doxylink{class_instrument_profile_aae263a5b51ac6bc259f62453278baa31}{description}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em local\+Description} & The description of instrument in national language. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a5b3ee6a80762d2710c5594d09fbc7a40}{with\+Local\+Description()}}.
+
+\Hypertarget{class_instrument_profile_a60bc78a7f8ed5a422a738bab25bc31a0}\index{InstrumentProfile@{InstrumentProfile}!setLocalSymbol@{setLocalSymbol}}
+\index{setLocalSymbol@{setLocalSymbol}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setLocalSymbol()}{setLocalSymbol()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a60bc78a7f8ed5a422a738bab25bc31a0} 
+void Instrument\+Profile\+::set\+Local\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{local\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes identifier of instrument in national language. 
+
+It shall be empty if same as \doxylink{class_instrument_profile_abd4194939cecbda13730b9012d3187c7}{symbol}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em local\+Symbol} & The identifier of instrument in national language. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_abe56467a47f0a3d61e9a94eab0af2443}{with\+Local\+Symbol()}}.
+
+\Hypertarget{class_instrument_profile_a4c3448a3247f30cec22c4ef5b738a41c}\index{InstrumentProfile@{InstrumentProfile}!setMMY@{setMMY}}
+\index{setMMY@{setMMY}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setMMY()}{setMMY()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a4c3448a3247f30cec22c4ef5b738a41c} 
+void Instrument\+Profile\+::set\+MMY (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{mmy}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes maturity month-\/year as provided for corresponding FIX tag (200). 
+
+It can use several different formats depending on data source\+: 
+\begin{DoxyItemize}
+\item YYYYMM – if only year and month are specified 
+\item YYYYMMDD – if full date is specified 
+\item YYYYMMwN – if week number (within a month) is specified 
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em mmy} & The maturity month-\/year as provided for corresponding FIX tag (200). \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a4fca0ee050cb48a5e81888b18b15a4b4}{with\+MMY()}}.
+
+\Hypertarget{class_instrument_profile_a7693dfde2dc53e980592d97aa67d567c}\index{InstrumentProfile@{InstrumentProfile}!setMultiplier@{setMultiplier}}
+\index{setMultiplier@{setMultiplier}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setMultiplier()}{setMultiplier()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a7693dfde2dc53e980592d97aa67d567c} 
+void Instrument\+Profile\+::set\+Multiplier (\begin{DoxyParamCaption}\item[{double}]{multiplier}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes market value multiplier. 
+
+Example\+: 100, 33.\+2.
+
+
+\begin{DoxyParams}{Parameters}
+{\em multiplier} & The market value multiplier. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a072de588f4c4d3345a0e0cc4295080ac}{with\+Multiplier()}}.
+
+\Hypertarget{class_instrument_profile_a5e3c5d00e8a991c29fbba46103632383}\index{InstrumentProfile@{InstrumentProfile}!setOPOL@{setOPOL}}
+\index{setOPOL@{setOPOL}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setOPOL()}{setOPOL()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5e3c5d00e8a991c29fbba46103632383} 
+void Instrument\+Profile\+::set\+OPOL (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{opol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes official Place Of Listing, the organization that have listed this instrument. 
+
+Instruments with multiple listings shall use separate profiles for each listing. It shall use Market Identifier Code (MIC) from ISO 10383 standard. See \href{http://en.wikipedia.org/wiki/ISO_10383}{\texttt{ ISO 10383 on Wikipedia}} or \href{http://www.iso15022.org/MIC/homepageMIC.htm}{\texttt{ MIC homepage}}. Example\+: "{}\+XNAS"{}, "{}\+RTSX"{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em opol} & The official Place Of Listing, the organization that have listed this instrument. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a5871b4b1ffdc55340aa26b8763f60a05}{with\+OPOL()}}.
+
+\Hypertarget{class_instrument_profile_aae033ae2e93d52d20f7374e16bcc0b91}\index{InstrumentProfile@{InstrumentProfile}!setOptionType@{setOptionType}}
+\index{setOptionType@{setOptionType}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setOptionType()}{setOptionType()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_aae033ae2e93d52d20f7374e16bcc0b91} 
+void Instrument\+Profile\+::set\+Option\+Type (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{option\+Type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes type of option. 
+
+It shall use one of following values\+: 
+\begin{DoxyItemize}
+\item STAN = Standard Options 
+\item LEAP = Long-\/term Equity Antici\+Pation Securities 
+\item SDO = Special Dated Options 
+\item BINY = Binary Options 
+\item FLEX = FLexible EXchange Options 
+\item VSO = Variable Start Options 
+\item RNGE = Range 
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em option\+Type} & The type of option. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a546f2d5a5e961c59cd724de7ac41dd10}{with\+Option\+Type()}}.
+
+\Hypertarget{class_instrument_profile_ab55b4dd8fcc00256164a8ea4f1842a56}\index{InstrumentProfile@{InstrumentProfile}!setPriceIncrements@{setPriceIncrements}}
+\index{setPriceIncrements@{setPriceIncrements}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setPriceIncrements()}{setPriceIncrements()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ab55b4dd8fcc00256164a8ea4f1842a56} 
+void Instrument\+Profile\+::set\+Price\+Increments (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{price\+Increments}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes minimum allowed price increments with corresponding price ranges. 
+
+It shall use following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ <VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <LIST>\ ::=\ <INCREMENT>\ |\ <RANGE>\ <semicolon>\ <space>\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <RANGE>\ ::=\ <INCREMENT>\ <space>\ <UPPER\_LIMIT>}
+\DoxyCodeLine{the\ list\ shall\ be\ sorted\ by\ <UPPER\_LIMIT>.}
+
+\end{DoxyCode}
+ Example\+: "{}0.\+25"{}, "{}0.\+01 3; 0.\+05"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em price\+Increments} & The minimum allowed price increments with corresponding price ranges. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a0a5e6f6402b80e4afbbbbe5ee910ad97}{with\+Price\+Increments()}}.
+
+\Hypertarget{class_instrument_profile_a3cd91a0a85ff8c28f9c6fc5c9ce50ea4}\index{InstrumentProfile@{InstrumentProfile}!setProduct@{setProduct}}
+\index{setProduct@{setProduct}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setProduct()}{setProduct()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a3cd91a0a85ff8c28f9c6fc5c9ce50ea4} 
+void Instrument\+Profile\+::set\+Product (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{product}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes product for futures and options on futures (underlying asset name). 
+
+Example\+: "{}/\+YG"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em product} & The product for futures and options on futures (underlying asset name). \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a8c2b7af1c5d4af4f0d08623b532d01b1}{with\+Product()}}.
+
+\Hypertarget{class_instrument_profile_acc4634a895b9b1f3dc88c58f00790656}\index{InstrumentProfile@{InstrumentProfile}!setSEDOL@{setSEDOL}}
+\index{setSEDOL@{setSEDOL}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setSEDOL()}{setSEDOL()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_acc4634a895b9b1f3dc88c58f00790656} 
+void Instrument\+Profile\+::set\+SEDOL (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{sedol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Stock Exchange Daily Official List. 
+
+It shall use seven-\/letter code assigned by London Stock Exchange. See \href{http://en.wikipedia.org/wiki/SEDOL}{\texttt{ SEDOL on Wikipedia}} or \href{http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/}{\texttt{ SEDOL on LSE}}. Example\+: "{}2310967"{}, "{}5766857"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sedol} & Stock Exchange Daily Official List. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a660cacfa98a8b31db5a56e4ccc6f32bb}{with\+SEDOL()}}.
+
+\Hypertarget{class_instrument_profile_a62c93fe9e4fef1f6e5a98b0650ff4844}\index{InstrumentProfile@{InstrumentProfile}!setSettlementStyle@{setSettlementStyle}}
+\index{setSettlementStyle@{setSettlementStyle}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setSettlementStyle()}{setSettlementStyle()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a62c93fe9e4fef1f6e5a98b0650ff4844} 
+void Instrument\+Profile\+::set\+Settlement\+Style (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{settlement\+Style}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes settlement price determination style, such as "{}\+Open"{}, "{}\+Close"{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em settlement\+Style} & The settlement price determination style. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a5b78d448e194ddd9e2a71ad7480d7eb4}{with\+Settlement\+Style()}}.
+
+\Hypertarget{class_instrument_profile_adc0386085c4a235eca31c7a6d8c2c813}\index{InstrumentProfile@{InstrumentProfile}!setSIC@{setSIC}}
+\index{setSIC@{setSIC}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setSIC()}{setSIC()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_adc0386085c4a235eca31c7a6d8c2c813} 
+void Instrument\+Profile\+::set\+SIC (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sic}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Standard Industrial Classification. 
+
+It shall use four-\/digit number from SIC catalog. See \href{http://en.wikipedia.org/wiki/Standard_Industrial_Classification}{\texttt{ SIC on Wikipedia}} or \href{https://www.osha.gov/pls/imis/sic_manual.html}{\texttt{ SIC structure}}. Example\+: "{}7371"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sic} & Standard Industrial Classification. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a5e72c6c3e7b539284f2fdcfe751d93a2}{with\+SIC()}}.
+
+\Hypertarget{class_instrument_profile_a6963b9f92410699375c6d7c37fb4a7c5}\index{InstrumentProfile@{InstrumentProfile}!setSPC@{setSPC}}
+\index{setSPC@{setSPC}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setSPC()}{setSPC()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a6963b9f92410699375c6d7c37fb4a7c5} 
+void Instrument\+Profile\+::set\+SPC (\begin{DoxyParamCaption}\item[{double}]{spc}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes shares per contract for options. 
+
+Example\+: 1, 100.
+
+
+\begin{DoxyParams}{Parameters}
+{\em spc} & The shares per contract for options. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_abd076418657824fa9f69ca4a93aae46a}{with\+SPC()}}.
+
+\Hypertarget{class_instrument_profile_aace1a7879f26421ce6cebe891a83f5bc}\index{InstrumentProfile@{InstrumentProfile}!setStrike@{setStrike}}
+\index{setStrike@{setStrike}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setStrike()}{setStrike()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_aace1a7879f26421ce6cebe891a83f5bc} 
+void Instrument\+Profile\+::set\+Strike (\begin{DoxyParamCaption}\item[{double}]{strike}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes strike price for options. 
+
+Example\+: 80, 22.\+5.
+
+
+\begin{DoxyParams}{Parameters}
+{\em strike} & The strike price for options. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a0610c10d5a22f1c4ef7b86450b9d64f7}{with\+Strike()}}.
+
+\Hypertarget{class_instrument_profile_a6153a3b9458e4a2de374554607ca68d2}\index{InstrumentProfile@{InstrumentProfile}!setSymbol@{setSymbol}}
+\index{setSymbol@{setSymbol}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setSymbol()}{setSymbol()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a6153a3b9458e4a2de374554607ca68d2} 
+void Instrument\+Profile\+::set\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes identifier of instrument, preferable an international one in Latin alphabet. 
+
+It is a mandatory field. It may not be empty. Example\+: "{}\+GOOG"{}, "{}/\+YGM9"{}, "{}.\+ZYEAD"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The identifier of instrument. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_af2ddfdf592b4f27cf787952e2dcb10bb}{with\+Symbol()}}.
+
+\Hypertarget{class_instrument_profile_acc4a4d9c722fbfc6820fffb79de30129}\index{InstrumentProfile@{InstrumentProfile}!setTradingHours@{setTradingHours}}
+\index{setTradingHours@{setTradingHours}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setTradingHours()}{setTradingHours()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_acc4a4d9c722fbfc6820fffb79de30129} 
+void Instrument\+Profile\+::set\+Trading\+Hours (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{trading\+Hours}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trading hours specification. 
+
+See \doxylink{struct_schedule_ad6952457d94887d98fe974b57f0aabd0}{Schedule\+::get\+Instance()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trading\+Hours} & The trading hours specification. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a54087c607a8fc2ad66e05f8897bf3420}{with\+Trading\+Hours()}}.
+
+\Hypertarget{class_instrument_profile_a79982381be288fb47416450da8861244}\index{InstrumentProfile@{InstrumentProfile}!setType@{setType}}
+\index{setType@{setType}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setType()}{setType()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a79982381be288fb47416450da8861244} 
+void Instrument\+Profile\+::set\+Type (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes type of instrument. 
+
+It takes precedence in conflict cases with other fields. It is a mandatory field. It may not be empty. Example\+: "{}\+STOCK"{}, "{}\+FUTURE"{}, "{}\+OPTION"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & The type of instrument. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a3148eeb76a4b74121d9344dbf5ae9af3}{with\+Type()}}.
+
+\Hypertarget{class_instrument_profile_a65dc10553d9acad360c82e9e7a221ad4}\index{InstrumentProfile@{InstrumentProfile}!setUnderlying@{setUnderlying}}
+\index{setUnderlying@{setUnderlying}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{setUnderlying()}{setUnderlying()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a65dc10553d9acad360c82e9e7a221ad4} 
+void Instrument\+Profile\+::set\+Underlying (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{underlying}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes primary underlying symbol for options. 
+
+Example\+: "{}\+C"{}, "{}/\+YGM9"{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em underlying} & The primary underlying symbol for options. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_a7a49e394a41b4986d71de6dcb832a7f4}{with\+Underlying()}}.
+
+\Hypertarget{class_instrument_profile_ab10c6d09c5bd531de1deec543335544c}\index{InstrumentProfile@{InstrumentProfile}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ab10c6d09c5bd531de1deec543335544c} 
+void \texorpdfstring{$\ast$}{*} Instrument\+Profile\+::to\+Graal (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure. 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity. Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Referenced by \mbox{\hyperlink{class_instrument_profile_collector_a7a099f2838c9703acf038fbfeae1e54f}{Instrument\+Profile\+Collector\+::update\+Instrument\+Profile()}}.
+
+\Hypertarget{class_instrument_profile_ad087a456f773ad993da710bf01a068fb}\index{InstrumentProfile@{InstrumentProfile}!withAdditionalUnderlyings@{withAdditionalUnderlyings}}
+\index{withAdditionalUnderlyings@{withAdditionalUnderlyings}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withAdditionalUnderlyings()}{withAdditionalUnderlyings()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ad087a456f773ad993da710bf01a068fb} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Additional\+Underlyings (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{additional\+Underlyings}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes additional underlyings for options, including additional cash. 
+
+It shall use following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ <VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <LIST>\ ::=\ <AU>\ |\ <AU>\ <semicolon>\ <space>\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <AU>\ ::=\ <UNDERLYING>\ <space>\ <SPC>}
+\DoxyCodeLine{the\ list\ shall\ be\ sorted\ by\ <UNDERLYING>.}
+
+\end{DoxyCode}
+ Example\+: "{}\+SE 50"{}, "{}\+FIS 53; US\$ 45.\+46"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em additional\+Underlyings} & The additional underlyings for options, including additional cash. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a44037972d69c539dcd101ad6eebceeff}{set\+Additional\+Underlyings()}}.
+
+\Hypertarget{class_instrument_profile_a1c49207262515cefe87e4b79e1468dc9}\index{InstrumentProfile@{InstrumentProfile}!withBaseCurrency@{withBaseCurrency}}
+\index{withBaseCurrency@{withBaseCurrency}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withBaseCurrency()}{withBaseCurrency()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a1c49207262515cefe87e4b79e1468dc9} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Base\+Currency (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{base\+Currency}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes base currency of currency pair (FOREX instruments). 
+
+It shall use three-\/letter currency code similarly to \doxylink{class_instrument_profile_ad18cd4362e059df9002d76b81f04d300}{currency}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em base\+Currency} & The base currency of currency pair (FOREX instruments). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_abb3be844ea483b13874c8b060d288abe}{set\+Base\+Currency()}}.
+
+\Hypertarget{class_instrument_profile_a4bab6083fe448e0dad4247992bd733a4}\index{InstrumentProfile@{InstrumentProfile}!withCFI@{withCFI}}
+\index{withCFI@{withCFI}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withCFI()}{withCFI()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a4bab6083fe448e0dad4247992bd733a4} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+CFI (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{cfi}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Classification of Financial Instruments code. 
+
+It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/\+Put type, American/\+European exercise, Cash/\+Physical delivery. It shall use six-\/letter CFI code from ISO 10962 standard. It is allowed to use \textquotesingle{}X\textquotesingle{} extensively and to omit trailing letters (assumed to be \textquotesingle{}X\textquotesingle{}). See \href{http://en.wikipedia.org/wiki/ISO_10962}{\texttt{ ISO 10962 on Wikipedia}}. Example\+: "{}\+ESNTPB"{}, "{}\+ESXXXX"{}, "{}\+ES"{} , "{}\+OPASPS"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfi} & CFI code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a19cf5ce6bcabf266177ef3f5726dda64}{set\+CFI()}}.
+
+\Hypertarget{class_instrument_profile_ad3cf51f8de8e9021290d22e4074586f3}\index{InstrumentProfile@{InstrumentProfile}!withCountry@{withCountry}}
+\index{withCountry@{withCountry}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withCountry()}{withCountry()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ad3cf51f8de8e9021290d22e4074586f3} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Country (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{country}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes country of origin (incorporation) of corresponding company or parent entity. 
+
+It shall use two-\/letter country code from ISO 3166-\/1 standard. See \href{http://en.wikipedia.org/wiki/ISO_3166-1}{\texttt{ ISO 3166-\/1 on Wikipedia}}. Example\+: "{}\+US"{}, "{}\+RU"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em country} & The country of origin (incorporation) of corresponding company or parent entity. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_abdcc1da4eec52e8de6fed02fc1ebc5b6}{set\+Country()}}.
+
+\Hypertarget{class_instrument_profile_ad7a00c9886d45e273233a6a16ee6a376}\index{InstrumentProfile@{InstrumentProfile}!withCurrency@{withCurrency}}
+\index{withCurrency@{withCurrency}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withCurrency()}{withCurrency()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ad7a00c9886d45e273233a6a16ee6a376} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Currency (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{currency}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes currency of quotation, pricing and trading. 
+
+It shall use three-\/letter currency code from ISO 4217 standard. See \href{http://en.wikipedia.org/wiki/ISO_4217}{\texttt{ ISO 4217 on Wikipedia}}. Example\+: "{}\+USD"{}, "{}\+RUB"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em currency} & Currency of quotation, pricing and trading. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_ade6b2b7ef02837ed3cc8a8e39d6fce65}{set\+Currency()}}.
+
+\Hypertarget{class_instrument_profile_a48804e90f4a68e168e016afaa2cf87eb}\index{InstrumentProfile@{InstrumentProfile}!withCUSIP@{withCUSIP}}
+\index{withCUSIP@{withCUSIP}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withCUSIP()}{withCUSIP()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a48804e90f4a68e168e016afaa2cf87eb} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+CUSIP (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{cusip}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Committee on Uniform Security Identification Procedures code. 
+
+It shall use nine-\/letter code assigned by CUSIP Services Bureau. See \href{http://en.wikipedia.org/wiki/CUSIP}{\texttt{ CUSIP on Wikipedia}}. Example\+: "{}38259\+P508"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cusip} & CUSIP code \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a09e604e51e564a4c7e7df7ab79988a19}{set\+CUSIP()}}.
+
+\Hypertarget{class_instrument_profile_ad259783bc8963177a6d5c88fb9d3c76f}\index{InstrumentProfile@{InstrumentProfile}!withDescription@{withDescription}}
+\index{withDescription@{withDescription}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withDescription()}{withDescription()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_ad259783bc8963177a6d5c88fb9d3c76f} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Description (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes description of instrument, preferable an international one in Latin alphabet. 
+
+Example\+: "{}\+Google Inc."{}, "{}\+Mini Gold Futures,\+Jun-\/2009,\+ETH"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em description} & The description of instrument. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a1caa676f7725f81811c2fe7d88ab12d7}{set\+Description()}}.
+
+\Hypertarget{class_instrument_profile_a310538494e744d1a883f123127dd40a3}\index{InstrumentProfile@{InstrumentProfile}!withExchangeData@{withExchangeData}}
+\index{withExchangeData@{withExchangeData}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withExchangeData()}{withExchangeData()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a310538494e744d1a883f123127dd40a3} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Exchange\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{exchange\+Data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange-\/specific data required to properly identify instrument when communicating with exchange. 
+
+It uses exchange-\/specific format.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Data} & The exchange-\/specific data required to properly identify instrument when communicating with exchange. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_ac11c84fedc48460f98716588222ed05d}{set\+Exchange\+Data()}}.
+
+\Hypertarget{class_instrument_profile_a28b1270e00017d1a4ddd7eeb5f996672}\index{InstrumentProfile@{InstrumentProfile}!withExchanges@{withExchanges}}
+\index{withExchanges@{withExchanges}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withExchanges()}{withExchanges()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a28b1270e00017d1a4ddd7eeb5f996672} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Exchanges (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{exchanges}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes list of exchanges where instrument is quoted or traded. 
+
+It shall use the following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{<VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{<LIST>\ ::=\ <MIC>\ |\ <MIC>\ <semicolon>}
+\DoxyCodeLine{}
+\DoxyCodeLine{<LIST>\ the\ list\ shall\ be\ sorted\ by\ MIC.}
+
+\end{DoxyCode}
+ Example\+: "{}\+ARCX;\+CBSX ;\+XNAS;\+XNYS"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchanges} & The list of exchanges where instrument is quoted or traded. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a158b369d71fe7be03f3261816f8e89f4}{set\+Exchanges()}}.
+
+\Hypertarget{class_instrument_profile_acef7c97b1f11b074f6eebc3fc44c5468}\index{InstrumentProfile@{InstrumentProfile}!withExpiration@{withExpiration}}
+\index{withExpiration@{withExpiration}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withExpiration()}{withExpiration()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_acef7c97b1f11b074f6eebc3fc44c5468} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Expiration (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{expiration}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes day id of expiration. 
+
+Example\+: day\+\_\+util\+:\+:\#get\+Day\+Id\+By\+Year\+Month\+Day() "{}dxfcpp\+::day\+\_\+util\+::get\+Day\+Id\+By\+Year\+Month\+Day"{}(20090117).
+
+
+\begin{DoxyParams}{Parameters}
+{\em expiration} & The day id of expiration. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_ab3a6d45f197cbe489f933ff0b9d16d76}{set\+Expiration()}}.
+
+\Hypertarget{class_instrument_profile_a037f7d76fdf54a76f4f5dc5a284ac565}\index{InstrumentProfile@{InstrumentProfile}!withExpirationStyle@{withExpirationStyle}}
+\index{withExpirationStyle@{withExpirationStyle}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withExpirationStyle()}{withExpirationStyle()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a037f7d76fdf54a76f4f5dc5a284ac565} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Expiration\+Style (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{expiration\+Style}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the expiration cycle style, such as "{}\+Weeklys"{}, "{}\+Quarterlys"{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em expiration\+Style} & The expiration cycle style. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a4030478117e8956a5be03d443a5cdc3a}{set\+Expiration\+Style()}}.
+
+\Hypertarget{class_instrument_profile_a855fd72f97a5ce08c481fb689cd446aa}\index{InstrumentProfile@{InstrumentProfile}!withICB@{withICB}}
+\index{withICB@{withICB}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withICB()}{withICB()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a855fd72f97a5ce08c481fb689cd446aa} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+ICB (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{icb}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Industry Classification Benchmark. 
+
+It shall use four-\/digit number from ICB catalog. See \href{http://en.wikipedia.org/wiki/Industry_Classification_Benchmark}{\texttt{ ICB on Wikipedia}} or \href{http://www.icbenchmark.com/}{\texttt{ ICB homepage}}. Example\+: "{}9535"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em icb} & Industry Classification Benchmark. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a8c2f62961478e47c96701e5d30311f97}{set\+ICB()}}.
+
+\Hypertarget{class_instrument_profile_a5d6da60411f29fa2627c1a999e48702c}\index{InstrumentProfile@{InstrumentProfile}!withISIN@{withISIN}}
+\index{withISIN@{withISIN}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withISIN()}{withISIN()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5d6da60411f29fa2627c1a999e48702c} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+ISIN (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{isin}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes International Securities Identifying Number. 
+
+It shall use twelve-\/letter code from ISO 6166 standard. See \href{http://en.wikipedia.org/wiki/ISO_6166}{\texttt{ ISO 6166 on Wikipedia}} or \href{http://en.wikipedia.org/wiki/International_Securities_Identifying_Number}{\texttt{ ISIN on Wikipedia}}. Example\+: "{}\+DE0007100000"{}, "{}\+US38259\+P5089"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em isin} & International Securities Identifying Number. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a0a372c3768ba8cd7d5a1687178e2808f}{set\+ISIN()}}.
+
+\Hypertarget{class_instrument_profile_a9c4edb35a55f9e30511cd2beb19e5a68}\index{InstrumentProfile@{InstrumentProfile}!withLastTrade@{withLastTrade}}
+\index{withLastTrade@{withLastTrade}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withLastTrade()}{withLastTrade()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a9c4edb35a55f9e30511cd2beb19e5a68} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Last\+Trade (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{last\+Trade}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes day id of last trading day. 
+
+Example\+: day\+\_\+util\+:\+:\#get\+Day\+Id\+By\+Year\+Month\+Day() "{}dxfcpp\+::day\+\_\+util\+::get\+Day\+Id\+By\+Year\+Month\+Day"{}(20090116).
+
+
+\begin{DoxyParams}{Parameters}
+{\em last\+Trade} & The day id of last trading day. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a405b202083b4d0a403d6ba9f76afdfd1}{set\+Last\+Trade()}}.
+
+\Hypertarget{class_instrument_profile_a5b3ee6a80762d2710c5594d09fbc7a40}\index{InstrumentProfile@{InstrumentProfile}!withLocalDescription@{withLocalDescription}}
+\index{withLocalDescription@{withLocalDescription}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withLocalDescription()}{withLocalDescription()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5b3ee6a80762d2710c5594d09fbc7a40} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Local\+Description (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{local\+Description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes description of instrument in national language. 
+
+It shall be empty if same as \doxylink{class_instrument_profile_aae263a5b51ac6bc259f62453278baa31}{description}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em local\+Description} & The description of instrument in national language. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_af5f2da861a4c106143c147e15be85977}{set\+Local\+Description()}}.
+
+\Hypertarget{class_instrument_profile_abe56467a47f0a3d61e9a94eab0af2443}\index{InstrumentProfile@{InstrumentProfile}!withLocalSymbol@{withLocalSymbol}}
+\index{withLocalSymbol@{withLocalSymbol}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withLocalSymbol()}{withLocalSymbol()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_abe56467a47f0a3d61e9a94eab0af2443} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Local\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{local\+Symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes identifier of instrument in national language. 
+
+It shall be empty if same as \doxylink{class_instrument_profile_abd4194939cecbda13730b9012d3187c7}{symbol}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em local\+Symbol} & The identifier of instrument in national language. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a60bc78a7f8ed5a422a738bab25bc31a0}{set\+Local\+Symbol()}}.
+
+\Hypertarget{class_instrument_profile_a4fca0ee050cb48a5e81888b18b15a4b4}\index{InstrumentProfile@{InstrumentProfile}!withMMY@{withMMY}}
+\index{withMMY@{withMMY}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withMMY()}{withMMY()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a4fca0ee050cb48a5e81888b18b15a4b4} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+MMY (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{mmy}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes maturity month-\/year as provided for corresponding FIX tag (200). 
+
+It can use several different formats depending on data source\+: 
+\begin{DoxyItemize}
+\item YYYYMM – if only year and month are specified 
+\item YYYYMMDD – if full date is specified 
+\item YYYYMMwN – if week number (within a month) is specified 
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em mmy} & The maturity month-\/year as provided for corresponding FIX tag (200). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a4c3448a3247f30cec22c4ef5b738a41c}{set\+MMY()}}.
+
+\Hypertarget{class_instrument_profile_a072de588f4c4d3345a0e0cc4295080ac}\index{InstrumentProfile@{InstrumentProfile}!withMultiplier@{withMultiplier}}
+\index{withMultiplier@{withMultiplier}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withMultiplier()}{withMultiplier()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a072de588f4c4d3345a0e0cc4295080ac} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Multiplier (\begin{DoxyParamCaption}\item[{double}]{multiplier}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes market value multiplier. 
+
+Example\+: 100, 33.\+2.
+
+
+\begin{DoxyParams}{Parameters}
+{\em multiplier} & The market value multiplier. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a7693dfde2dc53e980592d97aa67d567c}{set\+Multiplier()}}.
+
+\Hypertarget{class_instrument_profile_a5871b4b1ffdc55340aa26b8763f60a05}\index{InstrumentProfile@{InstrumentProfile}!withOPOL@{withOPOL}}
+\index{withOPOL@{withOPOL}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withOPOL()}{withOPOL()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5871b4b1ffdc55340aa26b8763f60a05} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+OPOL (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{opol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes official Place Of Listing, the organization that have listed this instrument. 
+
+Instruments with multiple listings shall use separate profiles for each listing. It shall use Market Identifier Code (MIC) from ISO 10383 standard. See \href{http://en.wikipedia.org/wiki/ISO_10383}{\texttt{ ISO 10383 on Wikipedia}} or \href{http://www.iso15022.org/MIC/homepageMIC.htm}{\texttt{ MIC homepage}}. Example\+: "{}\+XNAS"{}, "{}\+RTSX"{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em opol} & The official Place Of Listing, the organization that have listed this instrument. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a5e3c5d00e8a991c29fbba46103632383}{set\+OPOL()}}.
+
+\Hypertarget{class_instrument_profile_a546f2d5a5e961c59cd724de7ac41dd10}\index{InstrumentProfile@{InstrumentProfile}!withOptionType@{withOptionType}}
+\index{withOptionType@{withOptionType}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withOptionType()}{withOptionType()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a546f2d5a5e961c59cd724de7ac41dd10} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Option\+Type (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{option\+Type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes type of option. 
+
+It shall use one of following values\+: 
+\begin{DoxyItemize}
+\item STAN = Standard Options 
+\item LEAP = Long-\/term Equity Antici\+Pation Securities 
+\item SDO = Special Dated Options 
+\item BINY = Binary Options 
+\item FLEX = FLexible EXchange Options 
+\item VSO = Variable Start Options 
+\item RNGE = Range 
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em option\+Type} & The type of option. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_aae033ae2e93d52d20f7374e16bcc0b91}{set\+Option\+Type()}}.
+
+\Hypertarget{class_instrument_profile_a0a5e6f6402b80e4afbbbbe5ee910ad97}\index{InstrumentProfile@{InstrumentProfile}!withPriceIncrements@{withPriceIncrements}}
+\index{withPriceIncrements@{withPriceIncrements}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withPriceIncrements()}{withPriceIncrements()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a0a5e6f6402b80e4afbbbbe5ee910ad97} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Price\+Increments (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{price\+Increments}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes minimum allowed price increments with corresponding price ranges. 
+
+It shall use following format\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ <VALUE>\ ::=\ <empty>\ |\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <LIST>\ ::=\ <INCREMENT>\ |\ <RANGE>\ <semicolon>\ <space>\ <LIST>}
+\DoxyCodeLine{\ \ \ \ <RANGE>\ ::=\ <INCREMENT>\ <space>\ <UPPER\_LIMIT>}
+\DoxyCodeLine{the\ list\ shall\ be\ sorted\ by\ <UPPER\_LIMIT>.}
+
+\end{DoxyCode}
+ Example\+: "{}0.\+25"{}, "{}0.\+01 3; 0.\+05"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em price\+Increments} & The minimum allowed price increments with corresponding price ranges. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_ab55b4dd8fcc00256164a8ea4f1842a56}{set\+Price\+Increments()}}.
+
+\Hypertarget{class_instrument_profile_a8c2b7af1c5d4af4f0d08623b532d01b1}\index{InstrumentProfile@{InstrumentProfile}!withProduct@{withProduct}}
+\index{withProduct@{withProduct}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withProduct()}{withProduct()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a8c2b7af1c5d4af4f0d08623b532d01b1} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Product (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{product}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes product for futures and options on futures (underlying asset name). 
+
+Example\+: "{}/\+YG"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em product} & The product for futures and options on futures (underlying asset name). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a3cd91a0a85ff8c28f9c6fc5c9ce50ea4}{set\+Product()}}.
+
+\Hypertarget{class_instrument_profile_a660cacfa98a8b31db5a56e4ccc6f32bb}\index{InstrumentProfile@{InstrumentProfile}!withSEDOL@{withSEDOL}}
+\index{withSEDOL@{withSEDOL}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withSEDOL()}{withSEDOL()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a660cacfa98a8b31db5a56e4ccc6f32bb} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+SEDOL (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{sedol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Stock Exchange Daily Official List. 
+
+It shall use seven-\/letter code assigned by London Stock Exchange. See \href{http://en.wikipedia.org/wiki/SEDOL}{\texttt{ SEDOL on Wikipedia}} or \href{http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/}{\texttt{ SEDOL on LSE}}. Example\+: "{}2310967"{}, "{}5766857"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sedol} & Stock Exchange Daily Official List. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_acc4634a895b9b1f3dc88c58f00790656}{set\+SEDOL()}}.
+
+\Hypertarget{class_instrument_profile_a5b78d448e194ddd9e2a71ad7480d7eb4}\index{InstrumentProfile@{InstrumentProfile}!withSettlementStyle@{withSettlementStyle}}
+\index{withSettlementStyle@{withSettlementStyle}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withSettlementStyle()}{withSettlementStyle()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5b78d448e194ddd9e2a71ad7480d7eb4} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Settlement\+Style (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{settlement\+Style}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes settlement price determination style, such as "{}\+Open"{}, "{}\+Close"{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em settlement\+Style} & The settlement price determination style. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a62c93fe9e4fef1f6e5a98b0650ff4844}{set\+Settlement\+Style()}}.
+
+\Hypertarget{class_instrument_profile_a5e72c6c3e7b539284f2fdcfe751d93a2}\index{InstrumentProfile@{InstrumentProfile}!withSIC@{withSIC}}
+\index{withSIC@{withSIC}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withSIC()}{withSIC()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a5e72c6c3e7b539284f2fdcfe751d93a2} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+SIC (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sic}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Standard Industrial Classification. 
+
+It shall use four-\/digit number from SIC catalog. See \href{http://en.wikipedia.org/wiki/Standard_Industrial_Classification}{\texttt{ SIC on Wikipedia}} or \href{https://www.osha.gov/pls/imis/sic_manual.html}{\texttt{ SIC structure}}. Example\+: "{}7371"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sic} & Standard Industrial Classification. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_adc0386085c4a235eca31c7a6d8c2c813}{set\+SIC()}}.
+
+\Hypertarget{class_instrument_profile_abd076418657824fa9f69ca4a93aae46a}\index{InstrumentProfile@{InstrumentProfile}!withSPC@{withSPC}}
+\index{withSPC@{withSPC}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withSPC()}{withSPC()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_abd076418657824fa9f69ca4a93aae46a} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+SPC (\begin{DoxyParamCaption}\item[{double}]{spc}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes shares per contract for options. 
+
+Example\+: 1, 100.
+
+
+\begin{DoxyParams}{Parameters}
+{\em spc} & The shares per contract for options. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a6963b9f92410699375c6d7c37fb4a7c5}{set\+SPC()}}.
+
+\Hypertarget{class_instrument_profile_a0610c10d5a22f1c4ef7b86450b9d64f7}\index{InstrumentProfile@{InstrumentProfile}!withStrike@{withStrike}}
+\index{withStrike@{withStrike}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withStrike()}{withStrike()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a0610c10d5a22f1c4ef7b86450b9d64f7} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Strike (\begin{DoxyParamCaption}\item[{double}]{strike}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes strike price for options. 
+
+Example\+: 80, 22.\+5.
+
+
+\begin{DoxyParams}{Parameters}
+{\em strike} & The strike price for options \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_aace1a7879f26421ce6cebe891a83f5bc}{set\+Strike()}}.
+
+\Hypertarget{class_instrument_profile_af2ddfdf592b4f27cf787952e2dcb10bb}\index{InstrumentProfile@{InstrumentProfile}!withSymbol@{withSymbol}}
+\index{withSymbol@{withSymbol}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withSymbol()}{withSymbol()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_af2ddfdf592b4f27cf787952e2dcb10bb} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes identifier of instrument, preferable an international one in Latin alphabet. 
+
+It is a mandatory field. It may not be empty. Example\+: "{}\+GOOG"{}, "{}/\+YGM9"{}, "{}.\+ZYEAD"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The identifier of instrument. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a6153a3b9458e4a2de374554607ca68d2}{set\+Symbol()}}.
+
+\Hypertarget{class_instrument_profile_a54087c607a8fc2ad66e05f8897bf3420}\index{InstrumentProfile@{InstrumentProfile}!withTradingHours@{withTradingHours}}
+\index{withTradingHours@{withTradingHours}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withTradingHours()}{withTradingHours()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a54087c607a8fc2ad66e05f8897bf3420} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Trading\+Hours (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{trading\+Hours}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trading hours specification. 
+
+See \doxylink{struct_schedule_ad6952457d94887d98fe974b57f0aabd0}{Schedule\+::get\+Instance()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trading\+Hours} & The trading hours specification. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_acc4a4d9c722fbfc6820fffb79de30129}{set\+Trading\+Hours()}}.
+
+\Hypertarget{class_instrument_profile_a3148eeb76a4b74121d9344dbf5ae9af3}\index{InstrumentProfile@{InstrumentProfile}!withType@{withType}}
+\index{withType@{withType}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withType()}{withType()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a3148eeb76a4b74121d9344dbf5ae9af3} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Type (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{type}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes type of instrument and returns the current instrument profile. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & The type of instrument. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a79982381be288fb47416450da8861244}{set\+Type()}}.
+
+\Hypertarget{class_instrument_profile_a7a49e394a41b4986d71de6dcb832a7f4}\index{InstrumentProfile@{InstrumentProfile}!withUnderlying@{withUnderlying}}
+\index{withUnderlying@{withUnderlying}!InstrumentProfile@{InstrumentProfile}}
+\doxyparagraph{\texorpdfstring{withUnderlying()}{withUnderlying()}}
+{\footnotesize\ttfamily \label{class_instrument_profile_a7a49e394a41b4986d71de6dcb832a7f4} 
+\mbox{\hyperlink{class_instrument_profile}{Instrument\+Profile}} \& Instrument\+Profile\+::with\+Underlying (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{underlying}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes primary underlying symbol for options. 
+
+Example\+: "{}\+C"{}, "{}/\+YGM9"{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em underlying} & The primary underlying symbol for options. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instrument profile. 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_instrument_profile_a65dc10553d9acad360c82e9e7a221ad4}{set\+Underlying()}}.
+

@@ -1,17 +1,17 @@
 var searchData=
 [
-  ['endpoint_0',['How to connect to QD endpoint',['../index.html#autotoc_md21',1,'']]],
-  ['endpoint_20roles_1',['Endpoint Roles',['../index.html#autotoc_md26',1,'']]],
-  ['entity_2',['Entity',['../d9/d02/structdxfcpp_1_1_entity.html',1,'dxfcpp']]],
-  ['eris_3',['ERIS',['../da/d03/classdxfcpp_1_1_order_source.html#a124fc2e874916b58d0cb3dd0d87ee5f3',1,'dxfcpp::OrderSource']]],
-  ['espd_4',['ESPD',['../da/d03/classdxfcpp_1_1_order_source.html#a7a2e5755ddd39c4cafee2f8d904cb3b0',1,'dxfcpp::OrderSource']]],
-  ['event_20types_5',['Event Types',['../index.html#autotoc_md27',1,'']]],
-  ['eventflag_6',['EventFlag',['../de/d03/classdxfcpp_1_1_event_flag.html',1,'dxfcpp::EventFlag'],['../de/d03/classdxfcpp_1_1_event_flag.html#ad3307d1486c562586d74d51e3fd2b7b6',1,'dxfcpp::EventFlag::EventFlag()']]],
-  ['eventflagsmask_7',['EventFlagsMask',['../d6/d00/classdxfcpp_1_1_event_flags_mask.html',1,'dxfcpp::EventFlagsMask'],['../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a14e333f9f07916341a23cd9f4fadc405',1,'dxfcpp::EventFlagsMask::EventFlagsMask() noexcept'],['../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a87155c7656f499821851481cd8193229',1,'dxfcpp::EventFlagsMask::EventFlagsMask(MaskType mask) noexcept'],['../d6/d00/classdxfcpp_1_1_event_flags_mask.html#a9a18895cd0ac1ce9d043061fa0a5de08',1,'dxfcpp::EventFlagsMask::EventFlagsMask(EventFlagIt begin, EventFlagIt end) noexcept'],['../d6/d00/classdxfcpp_1_1_event_flags_mask.html#aa4210165cd064c3593216396e1c788c7',1,'dxfcpp::EventFlagsMask::EventFlagsMask(std::initializer_list&lt; EventFlag &gt; eventFlags) noexcept']]],
-  ['eventtype_8',['EventType',['../d8/d03/structdxfcpp_1_1_event_type.html',1,'dxfcpp']]],
-  ['eventtypeenum_9',['EventTypeEnum',['../d9/d00/classdxfcpp_1_1_event_type_enum.html',1,'dxfcpp']]],
-  ['eventtypewithsymbol_10',['EventTypeWithSymbol',['../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html',1,'dxfcpp']]],
-  ['eventtypewithsymbol_3c_20candlesymbol_20_3e_11',['EventTypeWithSymbol&lt; CandleSymbol &gt;',['../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html',1,'dxfcpp']]],
-  ['eventtypewithsymbol_3c_20std_3a_3astring_20_3e_12',['EventTypeWithSymbol&lt; std::string &gt;',['../d7/d02/structdxfcpp_1_1_event_type_with_symbol.html',1,'dxfcpp']]],
-  ['execute_13',['EXECUTE',['../df/d01/structdxfcpp_1_1_order_action.html#ad904daf87e661dc4c63346a8528872da',1,'dxfcpp::OrderAction']]]
+  ['endpoint_0',['How to connect to QD endpoint',['../index.html#autotoc_md19',1,'']]],
+  ['endpoint_20roles_1',['Endpoint Roles',['../index.html#autotoc_md24',1,'']]],
+  ['entity_2',['Entity',['../dc/d00/struct_entity.html',1,'']]],
+  ['eris_3',['ERIS',['../d2/d02/class_order_source.html#aeb3d8a2cdabba067b1eb4bb2a412e4ce',1,'OrderSource']]],
+  ['espd_4',['ESPD',['../d2/d02/class_order_source.html#a1bd3ee9b5703f55405b64264e61cec79',1,'OrderSource']]],
+  ['event_20types_5',['Event Types',['../index.html#autotoc_md25',1,'']]],
+  ['eventflag_6',['EventFlag',['../dd/d02/class_event_flag.html',1,'EventFlag'],['../dd/d02/class_event_flag.html#a4373f4534b27d6b000b6760a84a53e17',1,'EventFlag::EventFlag()']]],
+  ['eventflagsmask_7',['EventFlagsMask',['../d8/d03/class_event_flags_mask.html',1,'EventFlagsMask'],['../d8/d03/class_event_flags_mask.html#a7267d9655045fa1a4260d0e9e7269433',1,'EventFlagsMask::EventFlagsMask() noexcept'],['../d8/d03/class_event_flags_mask.html#ab0d6039017c2db7b81166e54d929fbcc',1,'EventFlagsMask::EventFlagsMask(MaskType mask) noexcept'],['../d8/d03/class_event_flags_mask.html#ab3be5a9c8678ffcc81531d55b4b3b7a3',1,'EventFlagsMask::EventFlagsMask(EventFlagIt begin, EventFlagIt end) noexcept'],['../d8/d03/class_event_flags_mask.html#a8cade513b39f9820836fe6e2731b310c',1,'EventFlagsMask::EventFlagsMask(std::initializer_list&lt; EventFlag &gt; eventFlags) noexcept']]],
+  ['eventtype_8',['EventType',['../d3/d03/struct_event_type.html',1,'']]],
+  ['eventtypeenum_9',['EventTypeEnum',['../d3/d01/class_event_type_enum.html',1,'']]],
+  ['eventtypewithsymbol_10',['EventTypeWithSymbol',['../d4/d02/struct_event_type_with_symbol.html',1,'']]],
+  ['eventtypewithsymbol_3c_20candlesymbol_20_3e_11',['EventTypeWithSymbol&lt; CandleSymbol &gt;',['../d4/d02/struct_event_type_with_symbol.html',1,'']]],
+  ['eventtypewithsymbol_3c_20std_3a_3astring_20_3e_12',['EventTypeWithSymbol&lt; std::string &gt;',['../d4/d02/struct_event_type_with_symbol.html',1,'']]],
+  ['execute_13',['EXECUTE',['../d5/d01/struct_order_action.html#a1b4e3016acf340f40f556fb0ccd0e344',1,'OrderAction']]]
 ];

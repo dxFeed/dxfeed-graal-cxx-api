@@ -1,10 +1,6 @@
 var searchData=
 [
-  ['unattached_5fthread_0',['UNATTACHED_THREAD',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#a73fef068db152a57799f076b4f8d7cb3',1,'dxfcpp::CEntryPointErrors']]],
-  ['uncaught_5fexception_1',['UNCAUGHT_EXCEPTION',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#ac3e9e07f0359860762bc5ff96c52a270',1,'dxfcpp::CEntryPointErrors']]],
-  ['undefined_2',['UNDEFINED',['../dc/d03/structdxfcpp_1_1_direction.html#a28ed1ad22def1af115558b95d2743ed5',1,'dxfcpp::Direction::UNDEFINED'],['../da/d02/structdxfcpp_1_1_iceberg_type.html#a1748a6713bfd36d29a770fecae7a11c8',1,'dxfcpp::IcebergType::UNDEFINED'],['../df/d01/structdxfcpp_1_1_order_action.html#aaef7a67cc76d76b2791d31d9edda5395',1,'dxfcpp::OrderAction::UNDEFINED'],['../da/d02/structdxfcpp_1_1_short_sale_restriction.html#a89d854a50c0d747621bbf7d436ee8e44',1,'dxfcpp::ShortSaleRestriction::UNDEFINED'],['../d7/d03/structdxfcpp_1_1_side.html#a3f204205ee6bb9e364a7e482c0716f67',1,'dxfcpp::Side::UNDEFINED'],['../d9/d02/structdxfcpp_1_1_trading_status.html#a5b3c0b4878efb41c71be687478938ed8',1,'dxfcpp::TradingStatus::UNDEFINED']]],
-  ['uninitialized_5fisolate_3',['UNINITIALIZED_ISOLATE',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#af8932884e26b6fc56cf5a5231b0b142c',1,'dxfcpp::CEntryPointErrors']]],
-  ['unspecified_4',['UNSPECIFIED',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#a64426a10151f32b6c708c1dca6265152',1,'dxfcpp::CEntryPointErrors']]],
-  ['unsupported_5fisolate_5fparameters_5fversion_5',['UNSUPPORTED_ISOLATE_PARAMETERS_VERSION',['../d5/d01/structdxfcpp_1_1_c_entry_point_errors.html#ae0016a8ba5ce623fafcab1863ae78841',1,'dxfcpp::CEntryPointErrors']]],
-  ['up_6',['UP',['../dc/d03/structdxfcpp_1_1_direction.html#aad4a9d806115c0698221f57eabfbc04b',1,'dxfcpp::Direction']]]
+  ['undefined_0',['UNDEFINED',['../d0/d01/struct_direction.html#a04c7cefe80029a7bd4a228e18cb21bc5',1,'Direction::UNDEFINED'],['../da/d03/struct_iceberg_type.html#ad09601b33fc4792b9d8cd15147ef1129',1,'IcebergType::UNDEFINED'],['../d5/d01/struct_order_action.html#ac7faf8e63dee936021d84b08cdeddce6',1,'OrderAction::UNDEFINED'],['../db/d01/struct_short_sale_restriction.html#a752fbc3b3e42b9ba0c203cebf2460a5d',1,'ShortSaleRestriction::UNDEFINED'],['../dc/d02/struct_side.html#abef72ea8b6ba0196c9c949fbca20f225',1,'Side::UNDEFINED'],['../dd/d02/struct_trading_status.html#a04e9ea3389367a48e6ce2f975ae6537e',1,'TradingStatus::UNDEFINED']]],
+  ['unpriced_1',['UNPRICED',['../df/d02/struct_otc_markets_price_type.html#a543a2fc4455b8e0b6bc5f530972ffa51',1,'OtcMarketsPriceType']]],
+  ['up_2',['UP',['../d0/d01/struct_direction.html#ae43281276568e135dc1e6c3b23bcb4b7',1,'Direction']]]
 ];

@@ -1,0 +1,694 @@
+\doxysubsection{Order\+Source Class Reference}
+\hypertarget{class_order_source}{}\label{class_order_source}\index{OrderSource@{OrderSource}}
+
+
+Identifies source of \doxylink{class_order}{Order}, \doxylink{class_analytic_order}{Analytic\+Order}, \doxylink{class_otc_markets_order}{Otc\+Markets\+Order} and \doxylink{class_spread_order}{Spread\+Order} events.  
+
+
+
+
+{\ttfamily \#include $<$Order\+Source.\+hpp$>$}
+
+Inheritance diagram for Order\+Source\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d2/d02/class_order_source}
+\end{center}
+\end{figure}
+\doxysubsubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{class_order_source_a19afa88c5599988cfb88941024329d26}{is\+Special\+Source\+Id}} (std\+::int32\+\_\+t source\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Determines whether specified source identifier refers to special order source. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \& \mbox{\hyperlink{class_order_source_a09414ba8bb908e7ec41fea4661a20418}{value\+Of}} (std\+::int32\+\_\+t source\+Id)
+\begin{DoxyCompactList}\small\item\em Returns order source for the specified source identifier. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \& \mbox{\hyperlink{class_order_source_a8b501162d5bc91341706a784aea92e8c}{value\+Of}} (const std\+::string \&\mbox{\hyperlink{class_indexed_event_source_a855e23852633b4df47d38308a42e6079}{name}})
+\begin{DoxyCompactList}\small\item\em Returns order source for the specified source name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Member Functions inherited from \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}}}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_indexed_event_source_a04c744156c520020e973aae3d08ff342}{free\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}} \mbox{\hyperlink{class_indexed_event_source_ab2cd529df185b88c3a040e80b742fde2}{from\+Graal}} (void \texorpdfstring{$\ast$}{*}graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_af9c7de7588af5d798c2857af264c4e47}{COMPOSITE\+\_\+\+BID}}
+\begin{DoxyCompactList}\small\item\em Bid side of a composite \doxylink{class_quote}{Quote}. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a7197bc1f2adb6486e2d55e4ac92dc75f}{COMPOSITE\+\_\+\+ASK}}
+\begin{DoxyCompactList}\small\item\em Ask side of a composite \doxylink{class_quote}{Quote}. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a423546ec13320cbc069f48f94ce689e1}{REGIONAL\+\_\+\+BID}}
+\begin{DoxyCompactList}\small\item\em Bid side of a regional \doxylink{class_quote}{Quote}. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a39021c0afedcdade384daaadfa8f920b}{REGIONAL\+\_\+\+ASK}}
+\begin{DoxyCompactList}\small\item\em Ask side of a regional \doxylink{class_quote}{Quote}. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a56c96834b2987e6ea3cb02bd1002394c}{AGGREGATE\+\_\+\+BID}}
+\begin{DoxyCompactList}\small\item\em Bid side of an aggregate order book (futures depth and NASDAQ Level II). \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a164e1f90d334b032429689cdbb563c22}{AGGREGATE\+\_\+\+ASK}}
+\begin{DoxyCompactList}\small\item\em Ask side of an aggregate order book (futures depth and NASDAQ Level II). \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_aae5e89dc5fa5f9fc9cdbd9a70f9b7104}{DEFAULT}}
+\begin{DoxyCompactList}\small\item\em Default source for publishing custom order books. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a082ff436a692c22800fb4cb54e9e7d58}{NTV}}
+\begin{DoxyCompactList}\small\item\em NASDAQ Total View. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a27437f3055a88df03f50505d016a5cf3}{ntv}}
+\begin{DoxyCompactList}\small\item\em NASDAQ Total View. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_ab2a9e4bfcd734cab80935924008c8206}{NFX}}
+\begin{DoxyCompactList}\small\item\em NASDAQ Futures Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a1bd3ee9b5703f55405b64264e61cec79}{ESPD}}
+\begin{DoxyCompactList}\small\item\em NASDAQ e\+Speed. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a83661ed49cc361cd4b4321f73b327092}{XNFI}}
+\begin{DoxyCompactList}\small\item\em NASDAQ Fixed Income. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a2b337f9130b3032d1508bfe76d83c3ac}{ICE}}
+\begin{DoxyCompactList}\small\item\em Intercontinental Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a91f76f9fbfccf2fbccecb9574287ecfb}{ISE}}
+\begin{DoxyCompactList}\small\item\em International Securities Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a93a0988272f2385d45094401badd594a}{DEA}}
+\begin{DoxyCompactList}\small\item\em Direct-\/\+Edge EDGA Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a057bc5cd3d886a5d23d96b49a27ac4ed}{DEX}}
+\begin{DoxyCompactList}\small\item\em Direct-\/\+Edge EDGX Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a62b787d730209e02d44ce27c4e75a85b}{dex}}
+\begin{DoxyCompactList}\small\item\em Direct-\/\+Edge EDGX Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_aa7d8d3601ff817f10a610fd92fca8b80}{BYX}}
+\begin{DoxyCompactList}\small\item\em Bats BYX Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a2f71991791fe0ad8e8975721fd08ebf6}{BZX}}
+\begin{DoxyCompactList}\small\item\em Bats BZX Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a02d221f60d3cfafcf920bbd661af12b4}{bzx}}
+\begin{DoxyCompactList}\small\item\em Bats BZX Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_aa920e677f92cd6e96210077e26f7c07d}{BATE}}
+\begin{DoxyCompactList}\small\item\em Bats Europe BXE Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_aded6d814cda1de00cc510e9ff71de5be}{CHIX}}
+\begin{DoxyCompactList}\small\item\em Bats Europe CXE Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a4da2f6a893d3a2ff4fad7c74aa97669c}{CEUX}}
+\begin{DoxyCompactList}\small\item\em Bats Europe DXE Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a5a4283a2327f933c91897bf25e54a8b6}{BXTR}}
+\begin{DoxyCompactList}\small\item\em Bats Europe TRF. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_ac18f2bc04a23b7d29be20210524163f2}{IST}}
+\begin{DoxyCompactList}\small\item\em Borsa Istanbul Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_aa139744b116e1d65b92a324394d9a6fb}{BI20}}
+\begin{DoxyCompactList}\small\item\em Borsa Istanbul Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a48761a5474bd9aefd4b3ed64a9698e36}{ABE}}
+\begin{DoxyCompactList}\small\item\em ABE (abe.\+io) exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_aa8c349f2ec8f8fcc45e1ee252ca5edb8}{FAIR}}
+\begin{DoxyCompactList}\small\item\em FAIR (FairX) exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a0032b384b4a260dd9b30637530de0eb7}{GLBX}}
+\begin{DoxyCompactList}\small\item\em CME Globex. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a96590a434834be79162c26ffc70ed9bf}{glbx}}
+\begin{DoxyCompactList}\small\item\em CME Globex. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_aeb3d8a2cdabba067b1eb4bb2a412e4ce}{ERIS}}
+\begin{DoxyCompactList}\small\item\em Eris Exchange group of companies. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_af190de90797295476bf43163f1ab22ac}{XEUR}}
+\begin{DoxyCompactList}\small\item\em Eurex Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a8dd6a7a64ce449400622b86fd77a61fb}{xeur}}
+\begin{DoxyCompactList}\small\item\em Eurex Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a22100d5de0cec7b608a5a61b254ff96a}{CFE}}
+\begin{DoxyCompactList}\small\item\em CBOE Futures Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a308bec57814d78a7dbac6c9c032fc098}{C2\+OX}}
+\begin{DoxyCompactList}\small\item\em CBOE Options C2 Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_afb3432865c2f907bdbc257dc4bc9a9a9}{SMFE}}
+\begin{DoxyCompactList}\small\item\em Small Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a02b7fc16e58cb1eb5686b0fb43d34cdf}{smfe}}
+\begin{DoxyCompactList}\small\item\em Small Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a842d9c08c4addc903f05c8af8e1d7412}{iex}}
+\begin{DoxyCompactList}\small\item\em Investors exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_af6f324cf119de474d52ddd1dfa56937e}{MEMX}}
+\begin{DoxyCompactList}\small\item\em Members Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_ab561d2c80ad71dc67e9cf04c44cadd69}{memx}}
+\begin{DoxyCompactList}\small\item\em Members Exchange. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_a513487b9873b3c7c26bb492494bf41b6}{OCEA}}
+\begin{DoxyCompactList}\small\item\em Blue Ocean Technologies Alternative Trading \doxylink{struct_system}{System}. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_aae3565c67888583c438a6ca1f3c383c0}{pink}}
+\begin{DoxyCompactList}\small\item\em Pink Sheets. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_ace4e855e5a449537d2edd23dc56d8f08}{ARCA}}
+\begin{DoxyCompactList}\small\item\em NYSE Arca traded securities. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \mbox{\hyperlink{class_order_source_afb2766f935ec0d7201793937360ca7f6}{arca}}
+\begin{DoxyCompactList}\small\item\em NYSE Arca traded securities. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxyparagraph*{Static Public Attributes inherited from \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}}}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}} {\bfseries DEFAULT} \{0, "{}DEFAULT"{}\}
+\begin{DoxyCompactList}\small\item\em The default source with zero \doxylink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{identifier} for all events that do not support multiple sources. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{class_indexed_event_source}{Indexed\+Event\+Source}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_indexed_event_source_af79da2a0efb825e9350ff59b6a08bd96}{Indexed\+Event\+Source}} (std\+::int32\+\_\+t \mbox{\hyperlink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{id}}, std\+::string \mbox{\hyperlink{class_indexed_event_source_a855e23852633b4df47d38308a42e6079}{name}}) noexcept
+\begin{DoxyCompactList}\small\item\em Creates the new \doxylink{struct_indexed_event}{Indexed\+Event}\textquotesingle{}s source by id and name. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the source identifier. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{class_indexed_event_source_a855e23852633b4df47d38308a42e6079}{name}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the string representation of the object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_indexed_event_source_ab1eadabd0ef1358e3912fc19e3b94819}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the string representation of the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Identifies source of \doxylink{class_order}{Order}, \doxylink{class_analytic_order}{Analytic\+Order}, \doxylink{class_otc_markets_order}{Otc\+Markets\+Order} and \doxylink{class_spread_order}{Spread\+Order} events. 
+
+There are the following kinds of order sources\+: 
+\begin{DoxyItemize}
+\item {\itshape Synthetic} sources \doxylink{class_order_source_af9c7de7588af5d798c2857af264c4e47}{Order\+Source\+::\+COMPOSITE\+\_\+\+BID}, \doxylink{class_order_source_a7197bc1f2adb6486e2d55e4ac92dc75f}{Order\+Source\+::\+COMPOSITE\+\_\+\+ASK}, \doxylink{class_order_source_a423546ec13320cbc069f48f94ce689e1}{Order\+Source\+::\+REGIONAL\+\_\+\+BID}, and \doxylink{class_order_source_a39021c0afedcdade384daaadfa8f920b}{Order\+Source\+::\+REGIONAL\+\_\+\+ASK} are provided for convenience of a consolidated order book and are automatically generated based on the corresponding \doxylink{class_quote}{Quote} events. 
+\item {\itshape Aggregate} sources \doxylink{class_order_source_a56c96834b2987e6ea3cb02bd1002394c}{Order\+Source\+::\+AGGREGATE\+\_\+\+BID} and \doxylink{class_order_source_a164e1f90d334b032429689cdbb563c22}{Order\+Source\+::\+AGGREGATE\+\_\+\+ASK} provide futures depth (aggregated by price level) and NASDAQ Level II (top of book for each market maker). These source cannot be directly published to via dx\+Feed API. 
+\item {\itshape Publishable} sources \doxylink{class_order_source_aae5e89dc5fa5f9fc9cdbd9a70f9b7104}{Order\+Source\+::\+DEFAULT}, \doxylink{class_order_source_a082ff436a692c22800fb4cb54e9e7d58}{Order\+Source\+::\+NTV}, \doxylink{class_order_source_a91f76f9fbfccf2fbccecb9574287ecfb}{Order\+Source\+::\+ISE} etc support full range of dx\+Feed API features. 
+\end{DoxyItemize}
+
+\doxysubsubsection{Member Function Documentation}
+\Hypertarget{class_order_source_a19afa88c5599988cfb88941024329d26}\index{OrderSource@{OrderSource}!isSpecialSourceId@{isSpecialSourceId}}
+\index{isSpecialSourceId@{isSpecialSourceId}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{isSpecialSourceId()}{isSpecialSourceId()}}
+{\footnotesize\ttfamily \label{class_order_source_a19afa88c5599988cfb88941024329d26} 
+static bool Order\+Source\+::is\+Special\+Source\+Id (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{source\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Determines whether specified source identifier refers to special order source. 
+
+Special order sources are used for wrapping non-\/order events into order events.
+
+
+\begin{DoxyParams}{Parameters}
+{\em source\+Id} & the source identifier. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if it is a special source identifier 
+\end{DoxyReturn}
+
+
+References \mbox{\hyperlink{class_order_source_a164e1f90d334b032429689cdbb563c22}{AGGREGATE\+\_\+\+ASK}}, \mbox{\hyperlink{class_order_source_af9c7de7588af5d798c2857af264c4e47}{COMPOSITE\+\_\+\+BID}}, and \mbox{\hyperlink{class_indexed_event_source_acd2b67cd96f688d1255b45783e9a1df9}{Indexed\+Event\+Source\+::id()}}.
+
+
+
+Referenced by \mbox{\hyperlink{class_order_base_a3451d2eb5655cd3c902c78e3368ecfe3}{Order\+Base\+::set\+Source()}}.
+
+\Hypertarget{class_order_source_a8b501162d5bc91341706a784aea92e8c}\index{OrderSource@{OrderSource}!valueOf@{valueOf}}
+\index{valueOf@{valueOf}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{valueOf()}{valueOf()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_order_source_a8b501162d5bc91341706a784aea92e8c} 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \& Order\+Source\+::value\+Of (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns order source for the specified source name. 
+
+The name must be either predefined, or contain at most 4 alphanumeric characters.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & the name of the source. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+order source. 
+\end{DoxyReturn}
+\Hypertarget{class_order_source_a09414ba8bb908e7ec41fea4661a20418}\index{OrderSource@{OrderSource}!valueOf@{valueOf}}
+\index{valueOf@{valueOf}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{valueOf()}{valueOf()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_order_source_a09414ba8bb908e7ec41fea4661a20418} 
+static const \mbox{\hyperlink{class_order_source}{Order\+Source}} \& Order\+Source\+::value\+Of (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{source\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns order source for the specified source identifier. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source\+Id} & the source identifier. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+order source. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\Hypertarget{class_order_source_a48761a5474bd9aefd4b3ed64a9698e36}\index{OrderSource@{OrderSource}!ABE@{ABE}}
+\index{ABE@{ABE}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{ABE}{ABE}}
+{\footnotesize\ttfamily \label{class_order_source_a48761a5474bd9aefd4b3ed64a9698e36} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+ABE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+ABE (abe.\+io) exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a164e1f90d334b032429689cdbb563c22}\index{OrderSource@{OrderSource}!AGGREGATE\_ASK@{AGGREGATE\_ASK}}
+\index{AGGREGATE\_ASK@{AGGREGATE\_ASK}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{AGGREGATE\_ASK}{AGGREGATE\_ASK}}
+{\footnotesize\ttfamily \label{class_order_source_a164e1f90d334b032429689cdbb563c22} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+AGGREGATE\+\_\+\+ASK\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Ask side of an aggregate order book (futures depth and NASDAQ Level II). 
+
+This source cannot be directly published via dx\+Feed API, but otherwise it is fully operational. 
+
+Referenced by \mbox{\hyperlink{class_order_source_a19afa88c5599988cfb88941024329d26}{is\+Special\+Source\+Id()}}.
+
+\Hypertarget{class_order_source_a56c96834b2987e6ea3cb02bd1002394c}\index{OrderSource@{OrderSource}!AGGREGATE\_BID@{AGGREGATE\_BID}}
+\index{AGGREGATE\_BID@{AGGREGATE\_BID}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{AGGREGATE\_BID}{AGGREGATE\_BID}}
+{\footnotesize\ttfamily \label{class_order_source_a56c96834b2987e6ea3cb02bd1002394c} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+AGGREGATE\+\_\+\+BID\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bid side of an aggregate order book (futures depth and NASDAQ Level II). 
+
+This source cannot be directly published via dx\+Feed API, but otherwise it is fully operational. \Hypertarget{class_order_source_ace4e855e5a449537d2edd23dc56d8f08}\index{OrderSource@{OrderSource}!ARCA@{ARCA}}
+\index{ARCA@{ARCA}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{ARCA}{ARCA}}
+{\footnotesize\ttfamily \label{class_order_source_ace4e855e5a449537d2edd23dc56d8f08} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+ARCA\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+NYSE Arca traded securities. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_afb2766f935ec0d7201793937360ca7f6}\index{OrderSource@{OrderSource}!arca@{arca}}
+\index{arca@{arca}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{arca}{arca}}
+{\footnotesize\ttfamily \label{class_order_source_afb2766f935ec0d7201793937360ca7f6} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::arca\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+NYSE Arca traded securities. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_aa920e677f92cd6e96210077e26f7c07d}\index{OrderSource@{OrderSource}!BATE@{BATE}}
+\index{BATE@{BATE}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{BATE}{BATE}}
+{\footnotesize\ttfamily \label{class_order_source_aa920e677f92cd6e96210077e26f7c07d} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+BATE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bats Europe BXE Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_aa139744b116e1d65b92a324394d9a6fb}\index{OrderSource@{OrderSource}!BI20@{BI20}}
+\index{BI20@{BI20}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{BI20}{BI20}}
+{\footnotesize\ttfamily \label{class_order_source_aa139744b116e1d65b92a324394d9a6fb} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+BI20\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Borsa Istanbul Exchange. 
+
+Record for particular top 20 order book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a5a4283a2327f933c91897bf25e54a8b6}\index{OrderSource@{OrderSource}!BXTR@{BXTR}}
+\index{BXTR@{BXTR}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{BXTR}{BXTR}}
+{\footnotesize\ttfamily \label{class_order_source_a5a4283a2327f933c91897bf25e54a8b6} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+BXTR\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bats Europe TRF. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_aa7d8d3601ff817f10a610fd92fca8b80}\index{OrderSource@{OrderSource}!BYX@{BYX}}
+\index{BYX@{BYX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{BYX}{BYX}}
+{\footnotesize\ttfamily \label{class_order_source_aa7d8d3601ff817f10a610fd92fca8b80} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+BYX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bats BYX Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a2f71991791fe0ad8e8975721fd08ebf6}\index{OrderSource@{OrderSource}!BZX@{BZX}}
+\index{BZX@{BZX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{BZX}{BZX}}
+{\footnotesize\ttfamily \label{class_order_source_a2f71991791fe0ad8e8975721fd08ebf6} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+BZX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bats BZX Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a02d221f60d3cfafcf920bbd661af12b4}\index{OrderSource@{OrderSource}!bzx@{bzx}}
+\index{bzx@{bzx}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{bzx}{bzx}}
+{\footnotesize\ttfamily \label{class_order_source_a02d221f60d3cfafcf920bbd661af12b4} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::bzx\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bats BZX Exchange. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a308bec57814d78a7dbac6c9c032fc098}\index{OrderSource@{OrderSource}!C2OX@{C2OX}}
+\index{C2OX@{C2OX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{C2OX}{C2OX}}
+{\footnotesize\ttfamily \label{class_order_source_a308bec57814d78a7dbac6c9c032fc098} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+C2\+OX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+CBOE Options C2 Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a4da2f6a893d3a2ff4fad7c74aa97669c}\index{OrderSource@{OrderSource}!CEUX@{CEUX}}
+\index{CEUX@{CEUX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{CEUX}{CEUX}}
+{\footnotesize\ttfamily \label{class_order_source_a4da2f6a893d3a2ff4fad7c74aa97669c} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+CEUX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bats Europe DXE Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a22100d5de0cec7b608a5a61b254ff96a}\index{OrderSource@{OrderSource}!CFE@{CFE}}
+\index{CFE@{CFE}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{CFE}{CFE}}
+{\footnotesize\ttfamily \label{class_order_source_a22100d5de0cec7b608a5a61b254ff96a} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+CFE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+CBOE Futures Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_aded6d814cda1de00cc510e9ff71de5be}\index{OrderSource@{OrderSource}!CHIX@{CHIX}}
+\index{CHIX@{CHIX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{CHIX}{CHIX}}
+{\footnotesize\ttfamily \label{class_order_source_aded6d814cda1de00cc510e9ff71de5be} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+CHIX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bats Europe CXE Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a7197bc1f2adb6486e2d55e4ac92dc75f}\index{OrderSource@{OrderSource}!COMPOSITE\_ASK@{COMPOSITE\_ASK}}
+\index{COMPOSITE\_ASK@{COMPOSITE\_ASK}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{COMPOSITE\_ASK}{COMPOSITE\_ASK}}
+{\footnotesize\ttfamily \label{class_order_source_a7197bc1f2adb6486e2d55e4ac92dc75f} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+COMPOSITE\+\_\+\+ASK\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Ask side of a composite \doxylink{class_quote}{Quote}. 
+
+It is a {\itshape synthetic} source. The subscription on composite \doxylink{class_quote}{Quote} event is observed when this source is subscribed to. \Hypertarget{class_order_source_af9c7de7588af5d798c2857af264c4e47}\index{OrderSource@{OrderSource}!COMPOSITE\_BID@{COMPOSITE\_BID}}
+\index{COMPOSITE\_BID@{COMPOSITE\_BID}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{COMPOSITE\_BID}{COMPOSITE\_BID}}
+{\footnotesize\ttfamily \label{class_order_source_af9c7de7588af5d798c2857af264c4e47} 
+DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+COMPOSITE\+\_\+\+BID\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bid side of a composite \doxylink{class_quote}{Quote}. 
+
+It is a {\itshape synthetic} source. The subscription on composite \doxylink{class_quote}{Quote} event is observed when this source is subscribed to. 
+
+Referenced by \mbox{\hyperlink{class_order_source_a19afa88c5599988cfb88941024329d26}{is\+Special\+Source\+Id()}}.
+
+\Hypertarget{class_order_source_a93a0988272f2385d45094401badd594a}\index{OrderSource@{OrderSource}!DEA@{DEA}}
+\index{DEA@{DEA}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{DEA}{DEA}}
+{\footnotesize\ttfamily \label{class_order_source_a93a0988272f2385d45094401badd594a} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+DEA\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Direct-\/\+Edge EDGA Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_aae5e89dc5fa5f9fc9cdbd9a70f9b7104}\index{OrderSource@{OrderSource}!DEFAULT@{DEFAULT}}
+\index{DEFAULT@{DEFAULT}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{DEFAULT}{DEFAULT}}
+{\footnotesize\ttfamily \label{class_order_source_aae5e89dc5fa5f9fc9cdbd9a70f9b7104} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+DEFAULT\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Default source for publishing custom order books. 
+
+\doxylink{class_order}{Order}, \doxylink{class_analytic_order}{Analytic\+Order}, \doxylink{class_otc_markets_order}{Otc\+Markets\+Order} and \doxylink{class_spread_order}{Spread\+Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a057bc5cd3d886a5d23d96b49a27ac4ed}\index{OrderSource@{OrderSource}!DEX@{DEX}}
+\index{DEX@{DEX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{DEX}{DEX}}
+{\footnotesize\ttfamily \label{class_order_source_a057bc5cd3d886a5d23d96b49a27ac4ed} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+DEX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Direct-\/\+Edge EDGX Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a62b787d730209e02d44ce27c4e75a85b}\index{OrderSource@{OrderSource}!dex@{dex}}
+\index{dex@{dex}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{dex}{dex}}
+{\footnotesize\ttfamily \label{class_order_source_a62b787d730209e02d44ce27c4e75a85b} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::dex\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Direct-\/\+Edge EDGX Exchange. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_aeb3d8a2cdabba067b1eb4bb2a412e4ce}\index{OrderSource@{OrderSource}!ERIS@{ERIS}}
+\index{ERIS@{ERIS}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{ERIS}{ERIS}}
+{\footnotesize\ttfamily \label{class_order_source_aeb3d8a2cdabba067b1eb4bb2a412e4ce} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+ERIS\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Eris Exchange group of companies. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a1bd3ee9b5703f55405b64264e61cec79}\index{OrderSource@{OrderSource}!ESPD@{ESPD}}
+\index{ESPD@{ESPD}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{ESPD}{ESPD}}
+{\footnotesize\ttfamily \label{class_order_source_a1bd3ee9b5703f55405b64264e61cec79} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+ESPD\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+NASDAQ e\+Speed. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_aa8c349f2ec8f8fcc45e1ee252ca5edb8}\index{OrderSource@{OrderSource}!FAIR@{FAIR}}
+\index{FAIR@{FAIR}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{FAIR}{FAIR}}
+{\footnotesize\ttfamily \label{class_order_source_aa8c349f2ec8f8fcc45e1ee252ca5edb8} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+FAIR\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+FAIR (FairX) exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a0032b384b4a260dd9b30637530de0eb7}\index{OrderSource@{OrderSource}!GLBX@{GLBX}}
+\index{GLBX@{GLBX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{GLBX}{GLBX}}
+{\footnotesize\ttfamily \label{class_order_source_a0032b384b4a260dd9b30637530de0eb7} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+GLBX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+CME Globex. 
+
+\doxylink{class_order}{Order} and \doxylink{class_analytic_order}{Analytic\+Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a96590a434834be79162c26ffc70ed9bf}\index{OrderSource@{OrderSource}!glbx@{glbx}}
+\index{glbx@{glbx}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{glbx}{glbx}}
+{\footnotesize\ttfamily \label{class_order_source_a96590a434834be79162c26ffc70ed9bf} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::glbx\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+CME Globex. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a2b337f9130b3032d1508bfe76d83c3ac}\index{OrderSource@{OrderSource}!ICE@{ICE}}
+\index{ICE@{ICE}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{ICE}{ICE}}
+{\footnotesize\ttfamily \label{class_order_source_a2b337f9130b3032d1508bfe76d83c3ac} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+ICE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Intercontinental Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a842d9c08c4addc903f05c8af8e1d7412}\index{OrderSource@{OrderSource}!iex@{iex}}
+\index{iex@{iex}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{iex}{iex}}
+{\footnotesize\ttfamily \label{class_order_source_a842d9c08c4addc903f05c8af8e1d7412} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::iex\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Investors exchange. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a91f76f9fbfccf2fbccecb9574287ecfb}\index{OrderSource@{OrderSource}!ISE@{ISE}}
+\index{ISE@{ISE}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{ISE}{ISE}}
+{\footnotesize\ttfamily \label{class_order_source_a91f76f9fbfccf2fbccecb9574287ecfb} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+ISE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+International Securities Exchange. 
+
+\doxylink{class_order}{Order} and \doxylink{class_spread_order}{Spread\+Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_ac18f2bc04a23b7d29be20210524163f2}\index{OrderSource@{OrderSource}!IST@{IST}}
+\index{IST@{IST}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{IST}{IST}}
+{\footnotesize\ttfamily \label{class_order_source_ac18f2bc04a23b7d29be20210524163f2} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+IST\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Borsa Istanbul Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_af6f324cf119de474d52ddd1dfa56937e}\index{OrderSource@{OrderSource}!MEMX@{MEMX}}
+\index{MEMX@{MEMX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{MEMX}{MEMX}}
+{\footnotesize\ttfamily \label{class_order_source_af6f324cf119de474d52ddd1dfa56937e} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+MEMX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Members Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_ab561d2c80ad71dc67e9cf04c44cadd69}\index{OrderSource@{OrderSource}!memx@{memx}}
+\index{memx@{memx}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{memx}{memx}}
+{\footnotesize\ttfamily \label{class_order_source_ab561d2c80ad71dc67e9cf04c44cadd69} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::memx\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Members Exchange. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_ab2a9e4bfcd734cab80935924008c8206}\index{OrderSource@{OrderSource}!NFX@{NFX}}
+\index{NFX@{NFX}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{NFX}{NFX}}
+{\footnotesize\ttfamily \label{class_order_source_ab2a9e4bfcd734cab80935924008c8206} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+NFX\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+NASDAQ Futures Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a082ff436a692c22800fb4cb54e9e7d58}\index{OrderSource@{OrderSource}!NTV@{NTV}}
+\index{NTV@{NTV}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{NTV}{NTV}}
+{\footnotesize\ttfamily \label{class_order_source_a082ff436a692c22800fb4cb54e9e7d58} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+NTV\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+NASDAQ Total View. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a27437f3055a88df03f50505d016a5cf3}\index{OrderSource@{OrderSource}!ntv@{ntv}}
+\index{ntv@{ntv}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{ntv}{ntv}}
+{\footnotesize\ttfamily \label{class_order_source_a27437f3055a88df03f50505d016a5cf3} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::ntv\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+NASDAQ Total View. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a513487b9873b3c7c26bb492494bf41b6}\index{OrderSource@{OrderSource}!OCEA@{OCEA}}
+\index{OCEA@{OCEA}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{OCEA}{OCEA}}
+{\footnotesize\ttfamily \label{class_order_source_a513487b9873b3c7c26bb492494bf41b6} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+OCEA\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Blue Ocean Technologies Alternative Trading \doxylink{struct_system}{System}. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_aae3565c67888583c438a6ca1f3c383c0}\index{OrderSource@{OrderSource}!pink@{pink}}
+\index{pink@{pink}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{pink}{pink}}
+{\footnotesize\ttfamily \label{class_order_source_aae3565c67888583c438a6ca1f3c383c0} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::pink\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Pink Sheets. 
+
+Record for price level book. Pink sheets are listings for stocks that trade over-\/the-\/counter (OTC).
+
+\doxylink{class_order}{Order} and \doxylink{class_otc_markets_order}{Otc\+Markets\+Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a39021c0afedcdade384daaadfa8f920b}\index{OrderSource@{OrderSource}!REGIONAL\_ASK@{REGIONAL\_ASK}}
+\index{REGIONAL\_ASK@{REGIONAL\_ASK}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{REGIONAL\_ASK}{REGIONAL\_ASK}}
+{\footnotesize\ttfamily \label{class_order_source_a39021c0afedcdade384daaadfa8f920b} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+REGIONAL\+\_\+\+ASK\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Ask side of a regional \doxylink{class_quote}{Quote}. 
+
+It is a {\itshape synthetic} source. The subscription on regional \doxylink{class_quote}{Quote} event is observed when this source is subscribed to. \Hypertarget{class_order_source_a423546ec13320cbc069f48f94ce689e1}\index{OrderSource@{OrderSource}!REGIONAL\_BID@{REGIONAL\_BID}}
+\index{REGIONAL\_BID@{REGIONAL\_BID}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{REGIONAL\_BID}{REGIONAL\_BID}}
+{\footnotesize\ttfamily \label{class_order_source_a423546ec13320cbc069f48f94ce689e1} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+REGIONAL\+\_\+\+BID\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Bid side of a regional \doxylink{class_quote}{Quote}. 
+
+It is a {\itshape synthetic} source. The subscription on regional \doxylink{class_quote}{Quote} event is observed when this source is subscribed to. \Hypertarget{class_order_source_afb3432865c2f907bdbc257dc4bc9a9a9}\index{OrderSource@{OrderSource}!SMFE@{SMFE}}
+\index{SMFE@{SMFE}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{SMFE}{SMFE}}
+{\footnotesize\ttfamily \label{class_order_source_afb3432865c2f907bdbc257dc4bc9a9a9} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+SMFE\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Small Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a02b7fc16e58cb1eb5686b0fb43d34cdf}\index{OrderSource@{OrderSource}!smfe@{smfe}}
+\index{smfe@{smfe}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{smfe}{smfe}}
+{\footnotesize\ttfamily \label{class_order_source_a02b7fc16e58cb1eb5686b0fb43d34cdf} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::smfe\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Small Exchange. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_af190de90797295476bf43163f1ab22ac}\index{OrderSource@{OrderSource}!XEUR@{XEUR}}
+\index{XEUR@{XEUR}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{XEUR}{XEUR}}
+{\footnotesize\ttfamily \label{class_order_source_af190de90797295476bf43163f1ab22ac} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+XEUR\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Eurex Exchange. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a8dd6a7a64ce449400622b86fd77a61fb}\index{OrderSource@{OrderSource}!xeur@{xeur}}
+\index{xeur@{xeur}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{xeur}{xeur}}
+{\footnotesize\ttfamily \label{class_order_source_a8dd6a7a64ce449400622b86fd77a61fb} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::xeur\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Eurex Exchange. 
+
+Record for price level book.
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. \Hypertarget{class_order_source_a83661ed49cc361cd4b4321f73b327092}\index{OrderSource@{OrderSource}!XNFI@{XNFI}}
+\index{XNFI@{XNFI}!OrderSource@{OrderSource}}
+\doxyparagraph{\texorpdfstring{XNFI}{XNFI}}
+{\footnotesize\ttfamily \label{class_order_source_a83661ed49cc361cd4b4321f73b327092} 
+const \mbox{\hyperlink{class_order_source}{Order\+Source}} Order\+Source\+::\+XNFI\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+NASDAQ Fixed Income. 
+
+\doxylink{class_order}{Order} events are publishable on this source and the corresponding subscription can be observed via \doxylink{struct_d_x_publisher}{DXPublisher}. 

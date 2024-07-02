@@ -1,0 +1,39 @@
+\doxysubsection{Convertible\+To\+Symbol\+Wrapper\+Collection Concept Reference}
+\hypertarget{concept_convertible_to_symbol_wrapper_collection}{}\label{concept_convertible_to_symbol_wrapper_collection}\index{ConvertibleToSymbolWrapperCollection@{ConvertibleToSymbolWrapperCollection}}
+
+
+A concept that defines a collection of wrapped or wrapping symbols.  
+
+
+
+
+{\ttfamily \#include $<$Symbol\+Wrapper.\+hpp$>$}
+
+\doxysubsubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Collection>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{concept_convertible_to_symbol_wrapper_collection}{ConvertibleToSymbolWrapperCollection}}\ =\ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{requires}(Collection\ c)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::begin(c);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::end(c);}
+\DoxyCodeLine{\ \ \ \ \}\ \&\&}
+\DoxyCodeLine{\ \ \ \ (}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{requires}(Collection\ c)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \{\ *std::begin(c)\ \}\ -\/>\ dxfcpp::ConvertibleTo<SymbolWrapper>;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ ||}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{requires}(Collection\ c)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \{\ *std::begin(c)\ \}\ -\/>\ \mbox{\hyperlink{concept_convertible_to_symbol_wrapper}{ConvertibleToSymbolWrapper}};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \})}
+
+\end{DoxyCode}
+
+
+\doxysubsubsection{Detailed Description}
+A concept that defines a collection of wrapped or wrapping symbols. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Collection} & The collection type \\
+\hline
+\end{DoxyTemplParams}

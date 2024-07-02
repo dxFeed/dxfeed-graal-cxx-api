@@ -9,25 +9,29 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
 \DoxyCodeLine{00009\ }
-\DoxyCodeLine{00010\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ This\ marker\ interface\ marks\ subscription\ symbol\ classes\ (like\ TimeSeriesSubscriptionSymbol)}}
-\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ that\ attach\ "{}filters"{}\ to\ the\ actual\ symbols.\ Filtered\ subscription\ symbols\ implement\ their\ \`{}operator\ ==`}}
-\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ and\ \`{}std::hash<>`\ based\ on\ their\ symbol\ only,\ without\ considering\ their\ "{}filter"{}\ part\ (for\ example,\ a}}
-\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ TimeSeriesSubscriptionSymbol\ has\ a\ @ref\ TimeSeriesSubscriptionSymbol::getFromTime()\ "{}fromTime"{}\ filter\ on\ a\ time\ range}}
-\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ of\ events).}}
-\DoxyCodeLine{00016\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ <p>DXFeedSubscription\ has\ the\ following\ behavior\ for\ filtered\ symbols.\ There\ can\ be\ only\ one}}
-\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ active\ filter\ per\ symbol.\ Adding\ new\ filtered\ symbol\ with\ the\ same\ symbol\ but\ different\ filter}}
-\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ removes\ the\ old\ one\ from\ subscription,\ adds\ the\ new\ one,\ and\ <em>notifies</em>}}
-\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ ObservableSubscriptionChangeListener\ <em>about\ this\ subscription\ change</em>.}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ The\ later\ is\ a\ special\ behaviour\ for\ filtered\ subscription\ symbols,\ because\ on\ other\ types\ of}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ symbols\ (like\ StringSymbol,\ for\ example)\ there\ is\ no\ notification\ when\ replacing\ one\ symbol\ with\ the\ other\ that}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ is\ "{}equal"{}\ to\ the\ first\ one.}}
-\DoxyCodeLine{00024\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00025\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structdxfcpp_1_1_filtered_subscription_symbol}{FilteredSubscriptionSymbol}}\ \{\};}
-\DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
+\DoxyCodeLine{00010\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ This\ marker\ interface\ marks\ subscription\ symbol\ classes\ (like\ TimeSeriesSubscriptionSymbol)}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ that\ attach\ "{}filters"{}\ to\ the\ actual\ symbols.\ Filtered\ subscription\ symbols\ implement\ their\ \`{}operator\ ==`}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ and\ \`{}std::hash<>`\ based\ on\ their\ symbol\ only,\ without\ considering\ their\ "{}filter"{}\ part\ (for\ example,\ a}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ TimeSeriesSubscriptionSymbol\ has\ a\ @ref\ TimeSeriesSubscriptionSymbol::getFromTime()\ "{}fromTime"{}\ filter\ on\ a\ time\ range}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ of\ events).}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ <p>DXFeedSubscription\ has\ the\ following\ behavior\ for\ filtered\ symbols.\ There\ can\ be\ only\ one}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ active\ filter\ per\ symbol.\ Adding\ new\ filtered\ symbol\ with\ the\ same\ symbol\ but\ different\ filter}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ removes\ the\ old\ one\ from\ subscription,\ adds\ the\ new\ one,\ and\ <em>notifies</em>}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ ObservableSubscriptionChangeListener\ <em>about\ this\ subscription\ change</em>.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ The\ later\ is\ a\ special\ behaviour\ for\ filtered\ subscription\ symbols,\ because\ on\ other\ types\ of}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ symbols\ (like\ StringSymbol,\ for\ example)\ there\ is\ no\ notification\ when\ replacing\ one\ symbol\ with\ the\ other\ that}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ is\ "{}equal"{}\ to\ the\ first\ one.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00027\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_filtered_subscription_symbol}{FilteredSubscriptionSymbol}}\ \{\};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}

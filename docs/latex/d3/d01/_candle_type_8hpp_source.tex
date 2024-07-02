@@ -9,212 +9,217 @@
 \DoxyCodeLine{00005\ }
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/Conf.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \textcolor{keyword}{namespace}\ dxfcpp\ \{}
+\DoxyCodeLine{00008\ \mbox{\hyperlink{_conf_8hpp_ac76702872d7ca5610f00bdda3ffb132a}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_PUSH}}(4251)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../../internal/utils/StringUtils.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{"{}../market/MarketEventSymbols.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \mbox{\hyperlink{_candle_symbol_attribute_8hpp}{"{}CandleSymbolAttribute.hpp"{}}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{string}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{type\_traits}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{unordered\_map}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{utility}\textcolor{preprocessor}{>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#}\textcolor{preprocessor}{include}\ \textcolor{preprocessor}{<}\textcolor{preprocessor}{vector}\textcolor{preprocessor}{>}}
 \DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \textcolor{comment}{/**}}
-\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ Type\ of\ the\ candle\ aggregation\ period\ constitutes\ CandlePeriod\ type\ together\ its\ actual}}
-\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ @ref\ CandlePeriod::getValue()\ "{}value"{}.}}
-\DoxyCodeLine{00023\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{00024\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \{}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ ticks.}}
-\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a59f0ea6149c1ba534f59069768b8eeae}{TICK}};}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ seconds.}}
-\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_aeece720e4fdfa6327079903f8f245140}{SECOND}};}
-\DoxyCodeLine{00034\ }
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ minutes.}}
-\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a210b2f75d94ae26b976e9a85336f2138}{MINUTE}};}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00041\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ hours.}}
-\DoxyCodeLine{00042\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a63f3a5169d35f002232f6c712c6779eb}{HOUR}};}
-\DoxyCodeLine{00044\ }
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ days.}}
-\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a93dd1684cf1f987fa18cab8f0df86e62}{DAY}};}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00051\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ weeks.}}
-\DoxyCodeLine{00052\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a38a962983a42004f94dd20fe3e94a45d}{WEEK}};}
-\DoxyCodeLine{00054\ }
-\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00056\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ months.}}
-\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_ad697b3735c337c3e1c984fe6d7fbce48}{MONTH}};}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ option\ expirations.}}
-\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a93551c4f29d5c3a6df6afa12314ace0f}{OPTEXP}};}
-\DoxyCodeLine{00064\ }
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ years.}}
-\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a38d150332769454b25fada01c86b5a15}{YEAR}};}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ volume\ of\ trades.}}
-\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a43403ff8ae9205efbf44f6e188d2f85c}{VOLUME}};}
-\DoxyCodeLine{00074\ }
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00076\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ price\ change,\ calculated\ according\ to\ the\ following\ rules:}}
-\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ *\ <ol>}}
-\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>high(n)\ -\/\ low(n)\ =\ price\ range</li>}}
-\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>close(n)\ =\ high(n)\ or\ close(n)\ =\ low(n)</li>}}
-\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ close(n)</li>}}
-\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ </ol>}}
-\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ where\ n\ is\ the\ number\ of\ the\ bar.}}
-\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_ab8cb67de68ca6279c774605cc07cf808}{PRICE}};}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ price\ change,\ calculated\ according\ to\ the\ following\ rules:}}
-\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ *\ <ol>}}
-\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>high(n)\ -\/\ low(n)\ =\ price\ range</li>}}
-\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>close(n)\ =\ high(n)\ or\ close(n)\ =\ low(n)</li>}}
-\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ close(n)\ +\ tick\ size,\ if\ close(n)\ =\ high(n)</li>}}
-\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ close(n)\ -\/\ tick\ size,\ if\ close(n)\ =\ low(n)</li>}}
-\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ </ol>}}
-\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ where\ n\ is\ the\ number\ of\ the\ bar.}}
-\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a8a3ec1642188afc6d4bd8c2b4f9c28c2}{PRICE\_MOMENTUM}};}
-\DoxyCodeLine{00097\ }
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ price\ change,\ calculated\ according\ to\ the\ following\ rules:}}
-\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ *\ <ol>}}
-\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>high(n+1)\ -\/\ high(n)\ =\ price\ range\ or\ low(n)\ -\/\ low(n+1)\ =\ price\ range</li>}}
-\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>close(n)\ =\ high(n)\ or\ close(n)\ =\ low(n)</li>}}
-\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ high(n),\ if\ high(n+1)\ -\/\ high(n)\ =\ price\ range</li>}}
-\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ low(n),\ if\ low(n)\ -\/\ low(n+1)\ =\ price\ range</li>}}
-\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ </ol>}}
-\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ where\ n\ is\ the\ number\ of\ the\ bar.}}
-\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a776a9b674ffe3013e751f3baca064caa}{PRICE\_RENKO}};}
-\DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ CandleType>>\ BY\_STRING;}
-\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::reference\_wrapper<\textcolor{keyword}{const}\ CandleType>>\ VALUES;}
-\DoxyCodeLine{00112\ }
-\DoxyCodeLine{00113\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00114\ \ \ \ \ std::string\ name\_\{\};}
-\DoxyCodeLine{00115\ \ \ \ \ std::string\ string\_\{\};}
-\DoxyCodeLine{00116\ \ \ \ \ std::int64\_t\ periodIntervalMillis\_\{\};}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ CandleType(std::string\ name,\ std::string\ string,\ std::int64\_t\ periodIntervalMillis)\ \textcolor{keyword}{noexcept}}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ :\ name\_\{std::move(name)\},\ string\_\{std::move(string)\},\ periodIntervalMillis\_\{periodIntervalMillis\}\ \{}
-\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00020\ \mbox{\hyperlink{_conf_8hpp_a8833e6c29ddb3a977272e18bb0be6b63}{DXFCPP\_BEGIN\_NAMESPACE}}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{/**}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ Type\ of\ the\ candle\ aggregation\ period\ constitutes\ CandlePeriod\ type\ together\ its\ actual}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *\ @ref\ CandlePeriod::getValue()\ "{}value"{}.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{_conf_8hpp_a2247137e794d0adca60e1208433f3ec9}{DXFCPP\_EXPORT}}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ ticks.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_a9b1b3884a43c821fb523bf37aec6ed48}{TICK}};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ seconds.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_ab8170e814aa322766ea077e7dcd7e781}{SECOND}};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ minutes.}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_ab974d4262142377679bf1fac841cb993}{MINUTE}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ hours.}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_a5c71b45c9381d6a2f56f2975b42033de}{HOUR}};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00048\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ days.}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_a2691cc240091a23dd83aa1de4d1b802b}{DAY}};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ weeks.}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_a2968630470b0cf7abf195ac5f07884e1}{WEEK}};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ months.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_a11b9390c342db5b8d2d8c17847c85880}{MONTH}};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ option\ expirations.}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_aa39b745f4e42a37ef2a09caff9a9ebe1}{OPTEXP}};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ number\ of\ years.}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_afb593fcdd34322e4a858a1d4bf0f15e1}{YEAR}};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ volume\ of\ trades.}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_a098d111740846b69e69c8fd5d9f1c909}{VOLUME}};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ price\ change,\ calculated\ according\ to\ the\ following\ rules:}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ *\ <ol>}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>high(n)\ -\/\ low(n)\ =\ price\ range</li>}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>close(n)\ =\ high(n)\ or\ close(n)\ =\ low(n)</li>}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ close(n)</li>}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ *\ </ol>}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ *\ where\ n\ is\ the\ number\ of\ the\ bar.}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_a740fe9610a9f04c517e34ba0ebb6aca0}{PRICE}};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00089\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ price\ change,\ calculated\ according\ to\ the\ following\ rules:}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ \ \ *\ <ol>}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>high(n)\ -\/\ low(n)\ =\ price\ range</li>}}
+\DoxyCodeLine{00092\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>close(n)\ =\ high(n)\ or\ close(n)\ =\ low(n)</li>}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ close(n)\ +\ tick\ size,\ if\ close(n)\ =\ high(n)</li>}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ close(n)\ -\/\ tick\ size,\ if\ close(n)\ =\ low(n)</li>}}
+\DoxyCodeLine{00095\ \textcolor{comment}{\ \ \ \ \ *\ </ol>}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ \ \ *\ where\ n\ is\ the\ number\ of\ the\ bar.}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_af4e5c164a1cc5209d2ec521ac8979818}{PRICE\_MOMENTUM}};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ price\ change,\ calculated\ according\ to\ the\ following\ rules:}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ \ *\ <ol>}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>high(n+1)\ -\/\ high(n)\ =\ price\ range\ or\ low(n)\ -\/\ low(n+1)\ =\ price\ range</li>}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>close(n)\ =\ high(n)\ or\ close(n)\ =\ low(n)</li>}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ high(n),\ if\ high(n+1)\ -\/\ high(n)\ =\ price\ range</li>}}
+\DoxyCodeLine{00106\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ <li>open(n+1)\ =\ low(n),\ if\ low(n)\ -\/\ low(n+1)\ =\ price\ range</li>}}
+\DoxyCodeLine{00107\ \textcolor{comment}{\ \ \ \ \ *\ </ol>}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\ \ \ \ \ *\ where\ n\ is\ the\ number\ of\ the\ bar.}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \mbox{\hyperlink{struct_candle_type_a1e8bb5d604e019c943c5af9cc2c6847f}{PRICE\_RENKO}};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::reference\_wrapper<\textcolor{keyword}{const}\ CandleType>,\ dxfcpp::StringHash,}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::equal\_to<>>}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ BY\_STRING;}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::reference\_wrapper<\textcolor{keyword}{const}\ CandleType>>\ VALUES;}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00118\ \ \ \ \ std::string\ name\_\{\};}
+\DoxyCodeLine{00119\ \ \ \ \ std::string\ string\_\{\};}
+\DoxyCodeLine{00120\ \ \ \ \ std::int64\_t\ periodIntervalMillis\_\{\};}
 \DoxyCodeLine{00121\ }
-\DoxyCodeLine{00122\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00123\ \ \ \ \ CandleType()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandleType()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00125\ }
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ type\ period\ in\ milliseconds\ as\ closely\ as\ possible.}}
-\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ types\ like\ CandleType::SECOND\ and\ CandleType::DAY\ span\ a\ specific\ number\ of\ milliseconds.}}
-\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ *\ CandleType::MONTH,\ CandleType::OPTEXP\ and\ CandleType::YEAR\ are\ approximate.\ Candle\ type\ period\ of}}
-\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ *\ CandleType::TICK,\ CandleType::VOLUME,\ CandleType::PRICE,\ CandleType::PRICE\_MOMENTUM\ and\ CandleType::PRICE\_RENKO}}
-\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ *\ is\ not\ defined\ and\ this\ method\ returns\ \`{}0`.}}
-\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ @return\ aggregation\ period\ in\ milliseconds.}}
-\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00135\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_aa2bff8561644f003a80dd08f9fe4b47b}{getPeriodIntervalMillis}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ periodIntervalMillis\_;}
-\DoxyCodeLine{00137\ \ \ \ \ \}}
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00140\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ name\ of\ this\ candle\ type}}
-\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ name\ of\ this\ candle\ type}}
-\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a7e28347d7b408b12808be47b5f100c75}{getName}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
-\DoxyCodeLine{00146\ \ \ \ \ \}}
-\DoxyCodeLine{00147\ }
-\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ candle\ type.}}
-\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ *\ The\ string\ representation\ of\ candle\ type\ is\ the\ shortest\ unique\ prefix\ of\ the\ lower\ case\ string\ that\ corresponds}}
-\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ *\ to\ its\ @ref\ CandleType::getName()\ "{}name"{}.}}
-\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ *\ For\ example,\ CandleType::TICK\ is\ represented\ as\ \`{}"{}t"{}`,\ while\ CandleType::MONTH\ is\ represented\ as\ \`{}"{}mo"{}`\ to}}
-\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \ *\ distinguish\ it\ from\ CandleType::MINUTE\ that\ is\ represented\ as\ \`{}"{}m"{}`.}}
-\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ candle\ price\ type.}}
-\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{toString}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_;}
-\DoxyCodeLine{00159\ \ \ \ \ \}}
-\DoxyCodeLine{00160\ }
-\DoxyCodeLine{00161\ \ \ \ \ \textcolor{comment}{/**}}
-\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ string\ representation\ of\ candle\ type\ into\ object.}}
-\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ *\ Any\ string\ that\ that\ is\ a\ prefix\ of\ candle\ type\ CandleType::getName()\ can\ be\ parsed}}
-\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \ *\ (including\ the\ one\ that\ was\ returned\ by\ CandleType::toString())\ and\ case\ is\ ignored\ for\ parsing.}}
-\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \ *}}
-\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ *\ @param\ s\ The\ string\ representation\ of\ candle\ type.}}
-\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ candle\ type\ or\ std::nullopt\ if\ the\ string\ representation\ is\ invalid.}}
-\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ */}}
-\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{optional}}<\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{reference\_wrapper}}<\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{CandleType}}>>\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{parse}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{std}}::\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{string}}\ \&\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a325ffcc891337202cec8220b77a58a7f}{s}})\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ n\ =\ s.length();}
-\DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ ==\ 0)\ \{}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ [EN-\/8232]\ throw\ IllegalArgumentException("{}Missing\ candle\ type"{});}}
-\DoxyCodeLine{00174\ }
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00177\ }
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ result\ =\ BY\_STRING.find(s);}
-\DoxyCodeLine{00179\ }
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (result\ !=\ BY\_STRING.end())\ \{}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result-\/>second;}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00183\ }
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&typeRef\ :\ VALUES)\ \{}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ =\ typeRef.get().getName();}
-\DoxyCodeLine{00186\ }
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tick|TICK|tick,\ Minute|MINUTE|minute,\ Second|SECOND|second,\ etc}}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (name.length()\ >=\ n\ \&\&\ iEquals(name.substr(0,\ n),\ s))\ \{}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ typeRef;}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00122\ \ \ \ \ CandleType(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&name,\ \textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&string,}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::int64\_t\ periodIntervalMillis)\ \textcolor{keyword}{noexcept}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ :\ name\_\{name\},\ string\_\{string\},\ periodIntervalMillis\_\{periodIntervalMillis\}\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00128\ \ \ \ \ CandleType()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~CandleType()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ candle\ type\ period\ in\ milliseconds\ as\ closely\ as\ possible.}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \ *\ Certain\ types\ like\ CandleType::SECOND\ and\ CandleType::DAY\ span\ a\ specific\ number\ of\ milliseconds.}}
+\DoxyCodeLine{00134\ \textcolor{comment}{\ \ \ \ \ *\ CandleType::MONTH,\ CandleType::OPTEXP\ and\ CandleType::YEAR\ are\ approximate.\ Candle\ type\ period\ of}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \ *\ CandleType::TICK,\ CandleType::VOLUME,\ CandleType::PRICE,\ CandleType::PRICE\_MOMENTUM\ and\ CandleType::PRICE\_RENKO}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \ *\ is\ not\ defined\ and\ this\ method\ returns\ \`{}0`.}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ *\ @return\ aggregation\ period\ in\ milliseconds.}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00140\ \ \ \ \ std::int64\_t\ \mbox{\hyperlink{struct_candle_type_a27fd5004e3830b14c56fcb81b4146e68}{getPeriodIntervalMillis}}()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ periodIntervalMillis\_;}
+\DoxyCodeLine{00142\ \ \ \ \ \}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ a\ name\ of\ this\ candle\ type}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ name\ of\ this\ candle\ type}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{struct_candle_type_ad065d41271eb53eb3ecbb2c88e2e83b4}{getName}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ name\_;}
+\DoxyCodeLine{00151\ \ \ \ \ \}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \ *\ Returns\ string\ representation\ of\ this\ candle\ type.}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ *\ The\ string\ representation\ of\ candle\ type\ is\ the\ shortest\ unique\ prefix\ of\ the\ lower\ case\ string\ that\ corresponds}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ *\ to\ its\ @ref\ CandleType::getName()\ "{}name"{}.}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ *\ For\ example,\ CandleType::TICK\ is\ represented\ as\ \`{}"{}t"{}`,\ while\ CandleType::MONTH\ is\ represented\ as\ \`{}"{}mo"{}`\ to}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \ *\ distinguish\ it\ from\ CandleType::MINUTE\ that\ is\ represented\ as\ \`{}"{}m"{}`.}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ *\ @return\ string\ representation\ of\ this\ candle\ price\ type.}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ *\ @throws\ std::invalid\_argument\ if\ the\ string\ representation\ is\ invalid.}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{toString}}()\ \textcolor{keyword}{const}\ \&\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_;}
+\DoxyCodeLine{00165\ \ \ \ \ \}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{/**}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ *\ Parses\ string\ representation\ of\ candle\ type\ into\ object.}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ *\ Any\ string\ that\ that\ is\ a\ prefix\ of\ candle\ type\ CandleType::getName()\ can\ be\ parsed}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \ *\ (including\ the\ one\ that\ was\ returned\ by\ CandleType::toString())\ and\ case\ is\ ignored\ for\ parsing.}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ *\ @param\ s\ The\ string\ representation\ of\ candle\ type.}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ *\ @return\ A\ candle\ type.}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{static}\ std::reference\_wrapper<\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}>\ \mbox{\hyperlink{struct_candle_type_a26397f582f7a7d52a97150516a0ba066}{parse}}(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_string_like_wrapper}{StringLikeWrapper}}\ \&s)\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ sw\ =\ s.operator\ std::string\_view();}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ n\ =\ sw.length();}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ ==\ 0)\ \{}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Missing\ candle\ type"{}});}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ result\ =\ BY\_STRING.find(sw);}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (result\ !=\ BY\_STRING.end())\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result-\/>second;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&typeRef\ :\ VALUES)\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&name\ =\ typeRef.get().getName();}
 \DoxyCodeLine{00191\ }
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ticks,\ Minutes,\ Seconds,\ etc}}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (s.ends\_with(\textcolor{stringliteral}{"{}s"{}})\ \&\&\ iEquals(name,\ s.substr(0,\ n\ -\/\ 1)))\ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tick|TICK|tick,\ Minute|MINUTE|minute,\ Second|SECOND|second,\ etc}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (name.length()\ >=\ n\ \&\&\ iEquals(name.substr(0,\ n),\ sw))\ \{}
 \DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ typeRef;}
 \DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00197\ }
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ error\ handling\ [EN-\/8232]\ throw\ IllegalArgumentException("{}Unknown\ candle\ type:\ "{}\ +\ s);}}
-\DoxyCodeLine{00199\ }
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::nullopt;}
-\DoxyCodeLine{00201\ \ \ \ \ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ticks,\ Minutes,\ Seconds,\ etc}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sw.ends\_with(\textcolor{stringliteral}{"{}s"{}})\ \&\&\ iEquals(name,\ sw.substr(0,\ n\ -\/\ 1)))\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ typeRef;}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00202\ }
-\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \&candleType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_\ ==\ candleType.string\_;}
-\DoxyCodeLine{00205\ \ \ \ \ \}}
-\DoxyCodeLine{00206\ \};}
-\DoxyCodeLine{00207\ }
-\DoxyCodeLine{00208\ \}\ \textcolor{comment}{//\ namespace\ dxfcpp}}
-\DoxyCodeLine{00209\ }
-\DoxyCodeLine{00210\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}>\ \{}
-\DoxyCodeLine{00211\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{structdxfcpp_1_1_candle_type}{CandleType}}\ \&candleType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(candleType\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{.}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{toString}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{(}}\mbox{\hyperlink{structdxfcpp_1_1_candle_type_a218880fb3b9d78c64a78e845326c4bb4}{)}});}
-\DoxyCodeLine{00213\ \ \ \ \ \}}
-\DoxyCodeLine{00214\ \};}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown\ candle\ type:\ "{}}\ +\ s);}
+\DoxyCodeLine{00204\ \ \ \ \ \}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_candle_type}{CandleType}}\ \&candleType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ string\_\ ==\ candleType.string\_;}
+\DoxyCodeLine{00208\ \ \ \ \ \}}
+\DoxyCodeLine{00209\ \};}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \mbox{\hyperlink{_conf_8hpp_a6aa36b693984a09d348905ce3411f283}{DXFCPP\_END\_NAMESPACE}}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct}\ std::hash<dxfcpp::\mbox{\hyperlink{struct_candle_type}{CandleType}}>\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ std::size\_t\ operator()(\textcolor{keyword}{const}\ dxfcpp::\mbox{\hyperlink{struct_candle_type}{CandleType}}\ \&candleType)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::hash<std::string>\{\}(candleType\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{.}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{toString}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{(}}\mbox{\hyperlink{struct_candle_type_aa185704b86fe989ddefa6f8c2abfa8b5}{)}});}
+\DoxyCodeLine{00216\ \ \ \ \ \}}
+\DoxyCodeLine{00217\ \};}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \mbox{\hyperlink{_conf_8hpp_a55e2ffcf62524b787965eca6b9f4dd8c}{DXFCXX\_DISABLE\_MSC\_WARNINGS\_POP}}()}
 
 \end{DoxyCode}
