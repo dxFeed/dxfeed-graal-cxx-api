@@ -131,7 +131,7 @@ std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &
         return {};
     }
 
-    auto parsed = isolated::Tools::parseSymbols(trimmedSymbols);
+    auto parsed = isolated::internal::IsolatedTools::parseSymbols(trimmedSymbols);
 
     if (parsed.contains("*") || parsed.contains("all") || parsed.contains("All") || parsed.contains("ALL")) {
         return {WildcardSymbol::ALL};
@@ -155,7 +155,7 @@ std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::str
         return {};
     }
 
-    auto parsed = isolated::Tools::parseSymbols(trimmedSymbols);
+    auto parsed = isolated::internal::IsolatedTools::parseSymbols(trimmedSymbols);
 
     return parsed | ranges::views::transform([](auto &&s) {
                return CandleSymbol::valueOf(s);

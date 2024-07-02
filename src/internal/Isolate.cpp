@@ -154,28 +154,7 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
         defaultValue, resultCheckerConverter, graalFunction, params...);
 }
 
-std::unordered_set<std::string> /* dxfg_string_list* */
-Tools::parseSymbols(std::string_view symbolList) {
-    std::unordered_set<std::string> result{};
-
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
-
-    for (auto i = 0; i < graalStringList->size; i++) {
-        result.emplace(dxfcpp::toString(graalStringList->elements[i]));
-    }
-
-    isolated::internal::IsolatedStringList::release(graalStringList);
-
-    return result;
-}
-
 using NativeStringList = typename isolated::internal::NativeStringListWrapper<dxfg_string_list>;
-
-void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {
-    NativeStringList l{args};
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Tools_main, l.list);
-}
 
 namespace ipf {
 
