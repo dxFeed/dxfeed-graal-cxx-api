@@ -55,6 +55,8 @@ const OrderSource OrderSource::OCEA("OCEA", PUB_ORDER);
 const OrderSource OrderSource::pink("pink", PUB_ORDER | PUB_OTC_MARKETS_ORDER);
 const OrderSource OrderSource::ARCA("ARCA", PUB_ORDER);
 const OrderSource OrderSource::arca("arca", PUB_ORDER);
+const OrderSource OrderSource::CEDX("CEDX", PUB_ORDER);
+const OrderSource OrderSource::cedx("cedx", PUB_ORDER);
 
 const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
     OrderSource::PREDEFINED_SOURCES =
@@ -74,7 +76,8 @@ const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference
            DEFAULT,
            //
            NTV, ntv, NFX, ESPD, XNFI, ICE, ISE, DEA, DEX, dex, BYX, BZX, bzx, BATE, CHIX, CEUX, BXTR, IST, BI20, ABE,
-           FAIR, GLBX, glbx, ERIS, XEUR, xeur, CFE, C2OX, SMFE, smfe, iex, MEMX, memx, OCEA, pink, ARCA, arca});
+           FAIR, GLBX, glbx, ERIS, XEUR, xeur, CFE, C2OX, SMFE, smfe, iex, MEMX, memx, OCEA, pink, ARCA, arca, CEDX,
+           cedx});
 
 std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 

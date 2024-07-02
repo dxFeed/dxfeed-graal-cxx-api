@@ -300,6 +300,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Requests time series of events for the specified event type, symbol, and a range of time.
+     *
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).

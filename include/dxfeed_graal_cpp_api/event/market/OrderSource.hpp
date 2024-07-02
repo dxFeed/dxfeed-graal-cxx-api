@@ -489,6 +489,22 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource arca;
 
     /**
+     * Cboe European Derivatives.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource CEDX;
+
+    /**
+     * Cboe European Derivatives. Record for price level book.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource cedx;
+
+    /**
      * Determines whether specified source identifier refers to special order source.
      * Special order sources are used for wrapping non-order events into order events.
      *

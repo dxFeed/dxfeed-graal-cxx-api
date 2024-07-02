@@ -77,7 +77,7 @@ struct QdsTool {
         auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
 
         System::setProperties(parsedProperties);
-        dxfcpp::isolated::Tools::runTool(qdsArgs);
+        dxfcpp::isolated::internal::IsolatedTools::runTool(qdsArgs);
     }
 };
 
