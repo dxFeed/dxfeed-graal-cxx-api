@@ -11,10 +11,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+class DXFeedSubscription;
+
 /**
  * Value class for period of time with support for ISO8601 duration format.
  */
 struct DXFCPP_EXPORT TimePeriod {
+    friend DXFeedSubscription;
+
     /// Time-period of zero.
     static const TimePeriod ZERO;
 
