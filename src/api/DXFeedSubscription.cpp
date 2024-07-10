@@ -272,4 +272,12 @@ void DXFeedSubscription::removeChangeListener(std::size_t changeListenerId) {
     }
 }
 
+std::int32_t DXFeedSubscription::getEventsBatchLimit() const {
+    return isolated::api::IsolatedDXFeedSubscription::getEventsBatchLimit(handle_);
+}
+
+void DXFeedSubscription::setEventsBatchLimit(std::int32_t eventsBatchLimit) const {
+    isolated::api::IsolatedDXFeedSubscription::setEventsBatchLimit(handle_, eventsBatchLimit);
+}
+
 DXFCPP_END_NAMESPACE

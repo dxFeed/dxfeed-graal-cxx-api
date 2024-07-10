@@ -258,6 +258,27 @@ void /* int32_t */ removeChangeListener(
         static_cast<dxfg_observable_subscription_change_listener_t *>(listener.get()));
 }
 
+std::int32_t getEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_getEventsBatchLimit`. "
+                                    "The `sub` handle is invalid");
+    }
+
+    return runGraalFunctionAndThrowIfMinusOne(dxfg_DXFeedSubscription_getEventsBatchLimit,
+                                              static_cast<dxfg_subscription_t *>(sub.get()));
+}
+
+/* int32_t */ void setEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                                       std::int32_t eventsBatchLimit) {
+    if (!sub) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setEventsBatchLimit`. "
+                                    "The `sub` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setEventsBatchLimit,
+                                           static_cast<dxfg_subscription_t *>(sub.get()), eventsBatchLimit);
+}
+
 namespace DXFeedEventListener {
 
 JavaObjectHandle<dxfcpp::DXFeedEventListener> /* dxfg_feed_event_listener_t* */

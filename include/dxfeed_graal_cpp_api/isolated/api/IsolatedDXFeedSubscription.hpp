@@ -87,7 +87,8 @@ void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+std::vector<SymbolWrapper> /* dxfg_symbol_list* */
+getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_getDecoratedSymbols` in isolation.
@@ -98,9 +99,11 @@ std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getSymbols(/* dxfg_subscripti
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+std::vector<SymbolWrapper> /* dxfg_symbol_list* */
+getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
 
-// int32_t dxfg_DXFeedSubscription_setSymbol(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_symbol_t *symbol);
+// int32_t dxfg_DXFeedSubscription_setSymbol(graal_isolatethread_t *thread, dxfg_subscription_t *sub, dxfg_symbol_t
+// *symbol);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_setSymbols` in isolation.
@@ -111,7 +114,8 @@ std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getDecoratedSymbols(/* dxfg_s
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub, /* dxfg_symbol_list * */ void* symbols);
+void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                              /* dxfg_symbol_list * */ void *symbols);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_addSymbol` in isolation.
@@ -173,7 +177,8 @@ void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHan
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod>
+getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_setAggregationPeriod` in isolation.
@@ -184,7 +189,8 @@ void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHan
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-/* int32_t */ void setAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub, /* dxfg_time_period_t * */ const JavaObjectHandle<TimePeriod>& period);
+/* int32_t */ void setAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                                        /* dxfg_time_period_t * */ const JavaObjectHandle<TimePeriod> &period);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_addEventListener` in isolation.
@@ -231,6 +237,13 @@ void /* int32_t */ removeChangeListener(
     /* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
         &listener);
+
+/// dxfg_DXFeedSubscription_getEventsBatchLimit
+std::int32_t getEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+
+/// dxfg_DXFeedSubscription_setEventsBatchLimit
+/* int32_t */ void setEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                                       std::int32_t eventsBatchLimit);
 
 namespace DXFeedEventListener {
 

@@ -44,6 +44,17 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     ///
     using OnEventHandler = SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)>;
 
+    // These constants are linked with same ones in RecordBuffer - POOLED_CAPACITY and UNLIMITED_CAPACITY.
+    /**
+     * The optimal events' batch limit for single notification in OnEventHandler.
+     */
+    static const std::int32_t OPTIMAL_BATCH_LIMIT = 0;
+
+    /**
+     * The maximum events' batch limit for single notification in OnEventHandler.
+     */
+    static const std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
+
   private:
     friend struct DXFeed;
 
@@ -702,6 +713,21 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     std::size_t addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) override;
 
     void removeChangeListener(std::size_t changeListenerId) override;
+
+    /**
+     * Returns maximum number of events in the single notification of OnEventHandler.
+     * Special cases are supported for constants ::OPTIMAL_BATCH_LIMIT and ::MAX_BATCH_LIMIT.
+     */
+    std::int32_t getEventsBatchLimit() const;
+
+    /**
+     * Sets maximum number of events in the single notification of OnEventHandler.
+     * Special cases are supported for constants ::OPTIMAL_BATCH_LIMIT and ::MAX_BATCH_LIMIT.
+     *
+     * @param eventsBatchLimit the notification events limit
+     * @throws JavaException if eventsBatchLimit < 0 (see ::OPTIMAL_BATCH_LIMIT or ::MAX_BATCH_LIMIT)
+     */
+    void setEventsBatchLimit(std::int32_t eventsBatchLimit) const;
 };
 
 DXFCPP_END_NAMESPACE
