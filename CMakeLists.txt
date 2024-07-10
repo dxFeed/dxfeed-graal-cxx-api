@@ -214,6 +214,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/internal/IsolatedString.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
         src/isolated/internal/IsolatedTools.cpp
+        src/isolated/util/IsolatedTimePeriod.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
@@ -326,6 +327,10 @@ set(dxFeedGraalCxxApi_Schedule_Sources
         src/schedule/Schedule.cpp
 )
 
+set(dxFeedGraalCxxApi_Util_Sources
+        src/util/TimePeriod.cpp
+)
+
 set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Internal_Sources}
         ${dxFeedGraalCxxApi_InternalUtils_Sources}
@@ -345,6 +350,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_EventOption_Sources}
         ${dxFeedGraalCxxApi_EventMisc_Sources}
         ${dxFeedGraalCxxApi_Schedule_Sources}
+        ${dxFeedGraalCxxApi_Util_Sources}
 )
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

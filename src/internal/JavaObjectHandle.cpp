@@ -87,4 +87,6 @@ template struct JavaObjectHandle<PromiseImpl>;
 template struct JavaObjectHandle<EventPromiseImpl>;
 template struct JavaObjectHandle<EventsPromiseImpl>;
 
+template struct JavaObjectHandle<TimePeriod>;
+
 DXFCPP_END_NAMESPACE

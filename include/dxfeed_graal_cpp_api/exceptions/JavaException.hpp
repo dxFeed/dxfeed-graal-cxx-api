@@ -64,6 +64,14 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
         return v;
     }
 
+    template <typename T> static constexpr T throwIfMinusOne(T v) {
+        if (v == T(-1)) {
+            throwIfJavaThreadExceptionExists();
+        }
+
+        return v;
+    }
+
     /**
      * @return dxFeed Graal CXX API stack trace + Java (GraalVM) exception's stack trace.
      */

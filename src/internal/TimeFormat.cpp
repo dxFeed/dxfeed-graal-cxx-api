@@ -9,10 +9,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-TimeFormat::TimeFormat(void *handle) : handle_(handle){};
-
-TimeFormat::TimeFormat(JavaObjectHandle<TimeFormat> &&handle) : handle_(std::move(handle)){};
-
 const TimeFormat TimeFormat::DEFAULT(isolated::internal::IsolatedTimeFormat::getDefault());
 const TimeFormat
     TimeFormat::DEFAULT_WITH_MILLIS(DEFAULT.handle_
@@ -23,7 +19,9 @@ const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE(
                                 : JavaObjectHandle<TimeFormat>{nullptr});
 const TimeFormat TimeFormat::GMT(isolated::internal::IsolatedTimeFormat::getGmt());
 
-std::int64_t TimeFormat::parse(const std::string &value) const {
+TimeFormat::TimeFormat(JavaObjectHandle<TimeFormat> &&handle) : handle_(std::move(handle)){};
+
+std::int64_t TimeFormat::parse(const StringLikeWrapper &value) const {
     return isolated::internal::IsolatedTimeFormat::parse(handle_, value);
 }
 

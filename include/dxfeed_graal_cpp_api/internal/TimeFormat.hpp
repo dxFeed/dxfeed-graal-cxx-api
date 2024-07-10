@@ -40,9 +40,9 @@ struct DXFCPP_EXPORT TimeFormat {
   private:
     JavaObjectHandle<TimeFormat> handle_;
 
+    explicit TimeFormat(JavaObjectHandle<TimeFormat> &&handle);
+
   public:
-    explicit TimeFormat(void* handle = nullptr);
-    explicit TimeFormat(JavaObjectHandle<TimeFormat>&& handle);
     virtual ~TimeFormat() noexcept = default;
 
     TimeFormat(const TimeFormat &) = delete;
@@ -111,7 +111,7 @@ struct DXFCPP_EXPORT TimeFormat {
      * @param value String value to parse.
      * @return Date's timestamp parsed from <tt>value</tt> or `0` if <tt>value</tt> has wrong format.
      */
-    std::int64_t parse(const std::string& value) const;
+    std::int64_t parse(const StringLikeWrapper &value) const;
 
     /**
      * Converts timestamp into string according to the format
