@@ -715,7 +715,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     void removeChangeListener(std::size_t changeListenerId) override;
 
     /**
-     * Returns maximum number of events in the single notification of OnEventHandler.
+     * @return maximum number of events in the single notification of OnEventHandler.
      * Special cases are supported for constants ::OPTIMAL_BATCH_LIMIT and ::MAX_BATCH_LIMIT.
      */
     std::int32_t getEventsBatchLimit() const;
