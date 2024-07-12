@@ -24,25 +24,6 @@ DXFCPP_BEGIN_NAMESPACE
 namespace isolated {
 
 namespace ipf {
-struct InstrumentProfileReader {
-    static /* dxfg_instrument_profile_reader_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileReader> create();
-
-    static std::int64_t
-    getLastModified(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileReader>& handle);
-
-    static bool wasComplete(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
-
-    static /* dxfg_instrument_profile_list* */ void *
-    readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
-                 const std::string &address) noexcept;
-
-    static /* dxfg_instrument_profile_list* */ void *
-    readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
-                 const std::string &address, const std::string &user, const std::string &password) noexcept;
-
-    static std::string resolveSourceURL(const std::string &address) noexcept;
-};
-
 struct InstrumentProfileCollector {
     static /* dxfg_ipf_collector_t* */ void *create() noexcept;
     static std::int64_t getLastUpdateTime(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept;

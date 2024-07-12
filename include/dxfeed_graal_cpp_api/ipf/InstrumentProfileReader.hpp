@@ -70,13 +70,13 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     /**
      * Returns `true` if IPF was fully read on last InstrumentProfileReader::readFromFile() operation.
      */
-    bool wasComplete() const noexcept;
+    bool wasComplete() const;
 
     /**
      * Converts a specified string address specification into an URL that will be read by
      * InstrumentProfileReader::readFromFile() method.
      */
-    static std::string resolveSourceURL(const std::string &address) noexcept;
+    static std::string resolveSourceURL(const StringLikeWrapper &address);
 
     /**
      * Reads and returns instrument profiles from specified file.
@@ -88,15 +88,12 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * <p>Authentication information can be supplied to this method as part of URL user info
      * like {@code "http://user:password@host:port/path/file.ipf"}.
      *
-     * <p>This is a shortcut for
-     * <code>{@link #readFromFile(String, String, String) readFromFile}(address, <b>null</b>, <b>null</b>)</code>.
-     *
      * <p>This operation updates {@link #getLastModified() lastModified} and {@link #wasComplete() wasComplete}.
      *
      * @param address URL of file to read from
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLikeWrapper &address) const;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified basic user and password
@@ -112,12 +109,12 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * <p>This operation updates {@link #getLastModified() lastModified} and {@link #wasComplete() wasComplete}.
      *
      * @param address URL of file to read from
-     * @param user the user name (may be null)
-     * @param password the password (may be null)
+     * @param user the user name
+     * @param password the password
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const std::string &address, const std::string &user,
-                                                                 const std::string &password) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLikeWrapper &address, const StringLikeWrapper &user,
+                                                                 const StringLikeWrapper &password) const;
 };
 
 DXFCPP_END_NAMESPACE

@@ -217,6 +217,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/internal/IsolatedTimeFormat.cpp
         src/isolated/internal/IsolatedTools.cpp
         src/isolated/util/IsolatedTimePeriod.cpp
+        src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources

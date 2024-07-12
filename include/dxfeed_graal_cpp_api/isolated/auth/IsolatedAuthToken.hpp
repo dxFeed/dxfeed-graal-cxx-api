@@ -17,23 +17,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::auth::IsolatedAuthToken {
 
-/*
-
-dxfg_auth_token_t*           dxfg_AuthToken_valueOf(graal_isolatethread_t *thread, const char* string);
-dxfg_auth_token_t*           dxfg_AuthToken_createBasicToken(graal_isolatethread_t *thread, const char* userPassword);
-dxfg_auth_token_t*           dxfg_AuthToken_createBasicToken2(graal_isolatethread_t *thread, const char* user, const char* password);
-dxfg_auth_token_t*           dxfg_AuthToken_createBasicTokenOrNull(graal_isolatethread_t *thread, const char* user, const char* password);
-dxfg_auth_token_t*           dxfg_AuthToken_createBearerToken(graal_isolatethread_t *thread, const char* token);
-dxfg_auth_token_t*           dxfg_AuthToken_createBearerTokenOrNull(graal_isolatethread_t *thread, const char* token);
-dxfg_auth_token_t*           dxfg_AuthToken_createCustomToken(graal_isolatethread_t *thread, const char* scheme, const char* value);
-const char*                  dxfg_AuthToken_getHttpAuthorization(graal_isolatethread_t *thread, dxfg_auth_token_t* authToken);
-const char*                  dxfg_AuthToken_getUser(graal_isolatethread_t *thread, dxfg_auth_token_t* authToken);
-const char*                  dxfg_AuthToken_getPassword(graal_isolatethread_t *thread, dxfg_auth_token_t* authToken);
-const char*                  dxfg_AuthToken_getScheme(graal_isolatethread_t *thread, dxfg_auth_token_t* authToken);
-const char*                  dxfg_AuthToken_getValue(graal_isolatethread_t *thread, dxfg_auth_token_t* authToken);
-
-*/
-
 /// dxfg_AuthToken_valueOf
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ std::string_view string);
 
