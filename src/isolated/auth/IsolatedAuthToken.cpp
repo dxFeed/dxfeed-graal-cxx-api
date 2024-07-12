@@ -4,49 +4,61 @@
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
 #include <dxfeed_graal_cpp_api/isolated/auth/IsolatedAuthToken.hpp>
+#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::auth::IsolatedAuthToken {
 
 /// dxfg_AuthToken_valueOf
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ std::string_view string) {
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ const StringLikeWrapper &string) {
     return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_valueOf, string.data()));
 }
 
 /// dxfg_AuthToken_createBasicToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view userPassword) {
-    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken, userPassword.data()));
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBasicToken(/* const char* */ const StringLikeWrapper &userPassword) {
+    return JavaObjectHandle<AuthToken>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken, userPassword.data()));
 }
 
 /// dxfg_AuthToken_createBasicToken2
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view user,
-                                                                      /* const char* */ std::string_view password) {
-    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken2, user.data(), password.data()));
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBasicToken(/* const char* */ const StringLikeWrapper &user,
+                 /* const char* */ const StringLikeWrapper &password) {
+    return JavaObjectHandle<AuthToken>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken2, user.data(), password.data()));
 }
 
 /// dxfg_AuthToken_createBasicTokenOrNull
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBasicTokenOrNull(/* const char* */ std::string_view user, /* const char* */ std::string_view password) {
-    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicTokenOrNull, user.data(), password.data()));
+createBasicTokenOrNull(/* const char* */ const StringLikeWrapper &user,
+                       /* const char* */ const StringLikeWrapper &password) {
+    return JavaObjectHandle<AuthToken>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicTokenOrNull, user.data(), password.data()));
 }
 
 /// dxfg_AuthToken_createBearerToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerToken(/* const char* */ std::string_view token) {
-    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerToken, token.data()));
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBearerToken(/* const char* */ const StringLikeWrapper &token) {
+    return JavaObjectHandle<AuthToken>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerToken, token.data()));
 }
 
 /// dxfg_AuthToken_createBearerTokenOrNull
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerTokenOrNull(/* const char* */ std::string_view token) {
-    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerTokenOrNull, token.data()));
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBearerTokenOrNull(/* const char* */ const StringLikeWrapper &token) {
+    return JavaObjectHandle<AuthToken>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerTokenOrNull, token.data()));
 }
 
 /// dxfg_AuthToken_createCustomToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createCustomToken(/* const char* */ std::string_view scheme,
-                                                                       /* const char* */ std::string_view value) {
-    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createCustomToken, scheme.data(), value.data()));
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
+createCustomToken(/* const char* */ const StringLikeWrapper &scheme,
+                  /* const char* */ const StringLikeWrapper &value) {
+    return JavaObjectHandle<AuthToken>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createCustomToken, scheme.data(), value.data()));
 }
 
 /// dxfg_AuthToken_getHttpAuthorization
@@ -58,7 +70,7 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
     }
 
     auto httpAuthorization = runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getHttpAuthorization,
-                                                    static_cast<dxfg_auth_token_t *>(authToken.get()));
+                                                               static_cast<dxfg_auth_token_t *>(authToken.get()));
     auto result = dxfcpp::toString(httpAuthorization);
 
     internal::IsolatedString::release(httpAuthorization);
@@ -73,8 +85,8 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
             "Unable to execute function `dxfg_AuthToken_getUser`. The `authToken` handle is invalid");
     }
 
-    auto user = runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getUser,
-                                                    static_cast<dxfg_auth_token_t *>(authToken.get()));
+    auto user =
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getUser, static_cast<dxfg_auth_token_t *>(authToken.get()));
     auto result = dxfcpp::toString(user);
 
     internal::IsolatedString::release(user);
@@ -90,7 +102,7 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
     }
 
     auto password = runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getPassword,
-                                                    static_cast<dxfg_auth_token_t *>(authToken.get()));
+                                                      static_cast<dxfg_auth_token_t *>(authToken.get()));
     auto result = dxfcpp::toString(password);
 
     internal::IsolatedString::release(password);
@@ -105,8 +117,8 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
             "Unable to execute function `dxfg_AuthToken_getScheme`. The `authToken` handle is invalid");
     }
 
-    auto scheme = runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getScheme,
-                                                    static_cast<dxfg_auth_token_t *>(authToken.get()));
+    auto scheme =
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getScheme, static_cast<dxfg_auth_token_t *>(authToken.get()));
     auto result = dxfcpp::toString(scheme);
 
     internal::IsolatedString::release(scheme);
@@ -121,8 +133,8 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
             "Unable to execute function `dxfg_AuthToken_getValue`. The `authToken` handle is invalid");
     }
 
-    auto value = runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getValue,
-                                                    static_cast<dxfg_auth_token_t *>(authToken.get()));
+    auto value =
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getValue, static_cast<dxfg_auth_token_t *>(authToken.get()));
     auto result = dxfcpp::toString(value);
 
     internal::IsolatedString::release(value);

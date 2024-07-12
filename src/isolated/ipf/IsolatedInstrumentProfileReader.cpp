@@ -52,7 +52,7 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 }
 
 /* dxfg_instrument_profile_list* */ void *
-readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileReader> &handle,
+readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
              const StringLikeWrapper &address, const StringLikeWrapper &user, const StringLikeWrapper &password) {
     if (!handle) {
         throw std::invalid_argument(
