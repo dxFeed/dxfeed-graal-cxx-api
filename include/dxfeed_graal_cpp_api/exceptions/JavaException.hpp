@@ -72,6 +72,14 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
         return v;
     }
 
+    template <typename T> static constexpr T throwIfMinusMin(T v) {
+        if (v == -std::numeric_limits<T>::min()) {
+            throwIfJavaThreadExceptionExists();
+        }
+
+        return v;
+    }
+
     /**
      * @return dxFeed Graal CXX API stack trace + Java (GraalVM) exception's stack trace.
      */

@@ -210,8 +210,10 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
+        src/isolated/auth/IsolatedAuthToken.cpp
         src/isolated/promise/IsolatedPromise.cpp
         src/isolated/internal/IsolatedString.cpp
+        src/isolated/internal/IsolatedObject.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
         src/isolated/internal/IsolatedTools.cpp
         src/isolated/util/IsolatedTimePeriod.cpp
@@ -230,6 +232,10 @@ set(dxFeedGraalCxxApi_ApiOsub_Sources
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
         src/api/osub/ObservableSubscriptionChangeListener.cpp
+)
+
+set(dxFeedGraalCxxApi_Auth_Sources
+        src/auth/AuthToken.cpp
 )
 
 set(dxFeedGraalCxxApi_Ipf_Sources
@@ -339,6 +345,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Exceptions_Sources}
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
+        ${dxFeedGraalCxxApi_Auth_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
         ${dxFeedGraalCxxApi_Promise_Sources}

@@ -89,4 +89,7 @@ template struct JavaObjectHandle<EventsPromiseImpl>;
 
 template struct JavaObjectHandle<TimePeriod>;
 
+template struct JavaObjectHandle<AuthToken>;
+
+
 DXFCPP_END_NAMESPACE
