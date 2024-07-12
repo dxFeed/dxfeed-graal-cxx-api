@@ -64,6 +64,25 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
         address.c_str(), user.c_str(), password.c_str()));
 }
 
+/// dxfg_InstrumentProfileReader_readFromFile3
+/* dxfg_instrument_profile_list* */ void *
+readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
+             const StringLikeWrapper &address, const JavaObjectHandle<AuthToken> &token) {
+    if (!handle) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile`. The handle is invalid");
+    }
+
+    if (!token) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile3`. The token is invalid");
+    }
+
+    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_InstrumentProfileReader_readFromFile3, static_cast<dxfg_instrument_profile_reader_t *>(handle.get()),
+        address.c_str(), static_cast<dxfg_auth_token_t *>(token.get())));
+}
+
 std::string resolveSourceURL(const StringLikeWrapper &address) {
     auto resolvedURL =
         runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_resolveSourceURL, address.c_str());

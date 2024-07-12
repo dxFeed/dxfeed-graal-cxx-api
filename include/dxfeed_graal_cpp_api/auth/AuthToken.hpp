@@ -15,6 +15,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+class InstrumentProfileReader;
+
 /**
  * The AuthToken class represents an authorization token and encapsulates information about the authorization scheme
  * and its associated value.
@@ -28,6 +30,8 @@ DXFCPP_BEGIN_NAMESPACE
  * </ul>
  */
 struct DXFCPP_EXPORT AuthToken {
+    friend class InstrumentProfileReader;
+
     static const std::string BASIC_SCHEME;
     static const std::string BEARER_SCHEME;
 

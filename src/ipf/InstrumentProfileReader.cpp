@@ -63,4 +63,14 @@ InstrumentProfileReader::readFromFile(const StringLikeWrapper &address, const St
     return result;
 }
 
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(const StringLikeWrapper &address,
+                                                                                      const AuthToken &token) const {
+    auto *list = dxfcpp::isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, token.handle_);
+    auto result = InstrumentProfile::fromGraalList(list);
+
+    dxfcpp::isolated::ipf::InstrumentProfileList::release(list);
+
+    return result;
+}
+
 DXFCPP_END_NAMESPACE
