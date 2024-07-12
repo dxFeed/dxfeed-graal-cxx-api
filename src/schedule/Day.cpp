@@ -5,6 +5,7 @@
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -130,6 +131,34 @@ std::int64_t Day::getResetTime() const noexcept {
     }
 
     return isolated::schedule::Day::getResetTime(handle_.get());
+}
+
+std::vector<std::shared_ptr<Session>> Day::getSessions() const {
+    if (!handle_) {
+        return {};
+    }
+
+    auto* graalSessionList = isolated::schedule::Day::getSessions(handle_.get());
+
+    if (!graalSessionList) {
+        return {};
+    }
+
+    auto* sessionList = dxfcpp::bit_cast<dxfg_session_list*>(graalSessionList);
+    std::vector<std::shared_ptr<Session>> result;
+
+    if (sessionList->size > 0 && sessionList->elements) {
+        result.reserve(static_cast<std::size_t>(sessionList->size));
+
+        for (std::int32_t i = 0; i < sessionList->size; i++) {
+            result.emplace_back(Session::create(sessionList->elements[i]));
+        }
+    }
+
+    isolated::runGraalFunctionAndThrowIfLessThanZero(dxfg_SessionList_wrapper_release,
+                                              sessionList);
+
+    return result;
 }
 
 std::shared_ptr<Session> Day::getSessionByTime(std::int64_t time) const noexcept {

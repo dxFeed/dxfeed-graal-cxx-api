@@ -23,32 +23,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
 
-struct Tools {
-    static std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(std::string_view symbolList);
-
-    static void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string>& args);
-};
-
 namespace ipf {
-struct InstrumentProfileReader {
-    static /* dxfg_instrument_profile_reader_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileReader> create();
-
-    static std::int64_t
-    getLastModified(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileReader>& handle);
-
-    static bool wasComplete(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept;
-
-    static /* dxfg_instrument_profile_list* */ void *
-    readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
-                 const std::string &address) noexcept;
-
-    static /* dxfg_instrument_profile_list* */ void *
-    readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
-                 const std::string &address, const std::string &user, const std::string &password) noexcept;
-
-    static std::string resolveSourceURL(const std::string &address) noexcept;
-};
-
 struct InstrumentProfileCollector {
     static /* dxfg_ipf_collector_t* */ void *create() noexcept;
     static std::int64_t getLastUpdateTime(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept;
@@ -146,6 +121,7 @@ struct Day {
     static std::int64_t getEndTime(/* dxfg_day_t* */ void *day) noexcept;
     static bool containsTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
     static std::int64_t getResetTime(/* dxfg_day_t* */ void *day) noexcept;
+    static /* dxfg_session_list* */ void* getSessions(/* dxfg_day_t* */ void *day);
     static /* dxfg_session_t* */ void *getSessionByTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
     static /* dxfg_session_t* */ void *getFirstSession(/* dxfg_day_t* */ void *day,
                                                        /* dxfg_session_filter_t* */ void *filter) noexcept;

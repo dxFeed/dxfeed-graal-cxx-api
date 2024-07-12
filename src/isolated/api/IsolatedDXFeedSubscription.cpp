@@ -9,7 +9,6 @@
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXFeedSubscription {
-
 JavaObjectHandle<DXFeedSubscription> /* dxfg_subscription_t* */
 create(/* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
     return JavaObjectHandle<dxfcpp::DXFeedSubscription>(runGraalFunctionAndThrowIfNullptr(
@@ -26,6 +25,16 @@ create(/* dxfg_event_clazz_list_t * */ const std::unique_ptr<EventClassList> &ev
         dxfg_DXFeedSubscription_new2, static_cast<dxfg_event_clazz_list_t *>(eventClassList->getHandle())));
 }
 
+bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_isClosed`. The `sub` handle is invalid");
+    }
+
+    return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_isClosed,
+                                                  static_cast<dxfg_subscription_t *>(sub.get())) == 1;
+}
+
 void /* int32_t */ close(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
         throw std::invalid_argument(
@@ -36,22 +45,65 @@ void /* int32_t */ close(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
                                            static_cast<dxfg_subscription_t *>(sub.get()));
 }
 
-void /* int32_t */
-addEventListener(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
-                 /* dxfg_feed_event_listener_t * */ const JavaObjectHandle<dxfcpp::DXFeedEventListener> &listener) {
+void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
         throw std::invalid_argument(
-            "Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The `sub` handle is invalid");
+            "Unable to execute function `dxfg_DXFeedSubscription_clear`. The `sub` handle is invalid");
     }
 
-    if (!listener) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The "
-                                    "`listener` handle is invalid");
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_clear,
+                                           static_cast<dxfg_subscription_t *>(sub.get()));
+}
+
+std::vector<SymbolWrapper> /* dxfg_symbol_list* */
+getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_getSymbols`. The `sub` handle is invalid");
     }
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_addEventListener,
+    dxfg_symbol_list *list = runGraalFunctionAndThrowIfNullptr(dxfg_DXFeedSubscription_getSymbols,
+                                                               static_cast<dxfg_subscription_t *>(sub.get()));
+
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_symbol_release, list);
+
+    return result;
+}
+
+std::vector<SymbolWrapper> /* dxfg_symbol_list* */
+getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_getDecoratedSymbols`. The `sub` handle is invalid");
+    }
+
+    dxfg_symbol_list *list = runGraalFunctionAndThrowIfNullptr(dxfg_DXFeedSubscription_getDecoratedSymbols,
+                                                               static_cast<dxfg_subscription_t *>(sub.get()));
+
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_symbol_release, list);
+
+    return result;
+}
+
+void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                              /* dxfg_symbol_list * */ void *symbols) {
+    if (!sub) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The `sub` handle is invalid");
+    }
+
+    if (!symbols) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The "
+                                    "`symbols` is nullptr");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setSymbols,
                                            static_cast<dxfg_subscription_t *>(sub.get()),
-                                           static_cast<dxfg_feed_event_listener_t *>(listener.get()));
+                                           static_cast<dxfg_symbol_list *>(symbols));
 }
 
 void /* int32_t */ addSymbol(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
@@ -122,72 +174,50 @@ void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHan
                                            static_cast<dxfg_symbol_list *>(symbols));
 }
 
-void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod>
+getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
         throw std::invalid_argument(
-            "Unable to execute function `dxfg_DXFeedSubscription_clear`. The `sub` handle is invalid");
+            "Unable to execute function `dxfg_DXFeedSubscription_getAggregationPeriod`. The `sub` handle is invalid");
     }
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_clear,
-                                           static_cast<dxfg_subscription_t *>(sub.get()));
+    return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXFeedSubscription_getAggregationPeriod, static_cast<dxfg_subscription_t *>(sub.get())));
 }
 
-bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+/* int32_t */ void setAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                                        /* dxfg_time_period_t * */ const JavaObjectHandle<TimePeriod> &period) {
     if (!sub) {
         throw std::invalid_argument(
-            "Unable to execute function `dxfg_DXFeedSubscription_isClosed`. The `sub` handle is invalid");
+            "Unable to execute function `dxfg_DXFeedSubscription_setAggregationPeriod`. The `sub` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_isClosed,
-                                                  static_cast<dxfg_subscription_t *>(sub.get())) == 1;
-}
-
-std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
-    if (!sub) {
-        throw std::invalid_argument(
-            "Unable to execute function `dxfg_DXFeedSubscription_getSymbols`. The `sub` handle is invalid");
+    if (!period) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setAggregationPeriod`. The "
+                                    "`period` handle is invalid");
     }
 
-    dxfg_symbol_list *list = runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeedSubscription_getSymbols, static_cast<dxfg_subscription_t *>(sub.get()));
-
-    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_symbol_release, list);
-
-    return result;
-}
-
-void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub, /* dxfg_symbol_list * */ void* symbols) {
-    if (!sub) {
-        throw std::invalid_argument(
-            "Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The `sub` handle is invalid");
-    }
-
-    if (!symbols) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The "
-                                    "`symbols` is nullptr");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setSymbols,
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setAggregationPeriod,
                                            static_cast<dxfg_subscription_t *>(sub.get()),
-                                           static_cast<dxfg_symbol_list *>(symbols));
+                                           static_cast<dxfg_time_period_t *>(period.get()));
 }
 
-std::vector<SymbolWrapper> /* dxfg_symbol_list* */ getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+void /* int32_t */
+addEventListener(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                 /* dxfg_feed_event_listener_t * */ const JavaObjectHandle<dxfcpp::DXFeedEventListener> &listener) {
     if (!sub) {
         throw std::invalid_argument(
-            "Unable to execute function `dxfg_DXFeedSubscription_getDecoratedSymbols`. The `sub` handle is invalid");
+            "Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The `sub` handle is invalid");
     }
 
-    dxfg_symbol_list *list = runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeedSubscription_getDecoratedSymbols, static_cast<dxfg_subscription_t *>(sub.get()));
+    if (!listener) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The "
+                                    "`listener` handle is invalid");
+    }
 
-    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_symbol_release, list);
-
-    return result;
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_addEventListener,
+                                           static_cast<dxfg_subscription_t *>(sub.get()),
+                                           static_cast<dxfg_feed_event_listener_t *>(listener.get()));
 }
 
 void /* int32_t */ addChangeListener(
@@ -226,6 +256,27 @@ void /* int32_t */ removeChangeListener(
     runGraalFunctionAndThrowIfLessThanZero(
         dxfg_DXFeedSubscription_removeChangeListener, static_cast<dxfg_subscription_t *>(sub.get()),
         static_cast<dxfg_observable_subscription_change_listener_t *>(listener.get()));
+}
+
+std::int32_t getEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_getEventsBatchLimit`. "
+                                    "The `sub` handle is invalid");
+    }
+
+    return runGraalFunctionAndThrowIfMinusOne(dxfg_DXFeedSubscription_getEventsBatchLimit,
+                                              static_cast<dxfg_subscription_t *>(sub.get()));
+}
+
+/* int32_t */ void setEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
+                                       std::int32_t eventsBatchLimit) {
+    if (!sub) {
+        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setEventsBatchLimit`. "
+                                    "The `sub` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setEventsBatchLimit,
+                                           static_cast<dxfg_subscription_t *>(sub.get()), eventsBatchLimit);
 }
 
 namespace DXFeedEventListener {

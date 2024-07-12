@@ -46,6 +46,10 @@ constexpr auto throwIfMinusOne = [](auto v) {
     return JavaException::throwIfMinusOne(v);
 };
 
+constexpr auto throwIfMinusMin = [](auto v) {
+    return JavaException::throwIfMinusMin(v);
+};
+
 constexpr auto runGraalFunction(auto graalFunction, auto &&...params) {
     return runIsolatedThrow(
         [](auto threadHandle, auto &&graalFunction, auto &&...params) {
@@ -72,6 +76,10 @@ constexpr auto runGraalFunctionAndThrowIfLessThanZero(auto graalFunction, auto &
 
 constexpr auto runGraalFunctionAndThrowIfMinusOne(auto graalFunction, auto &&...params) {
     return runGraalFunctionAndThrow(throwIfMinusOne, graalFunction, params...);
+}
+
+constexpr auto runGraalFunctionAndThrowIfMinusMin(auto graalFunction, auto &&...params) {
+    return runGraalFunctionAndThrow(throwIfMinusMin, graalFunction, params...);
 }
 
 } // namespace isolated

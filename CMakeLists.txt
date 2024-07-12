@@ -17,12 +17,13 @@ project(dxFeedGraalCxxApi)
 
 set(DXFCXX_VERSION "v2.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.16" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.21" CACHE STRING "")
 set(FMTLIB_VERSION "10.2.1")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
 set(RANGE_VERSION "0.12")
+set(DOCTEST_VERSION "2.4.11")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -51,6 +52,9 @@ option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
+option(DXFCXX_USE_DXFG_STUB "Use dxFeed Graal SDK stub" OFF)
+set(DXFG_STUB_REPO "https://github.com/ttldtor/DxFeedGraalNativeSdkStub" CACHE STRING "")
+
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
 option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
@@ -71,32 +75,42 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
 
-if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+if (DXFCXX_USE_DXFG_STUB)
     FetchContent_Declare(
             DxFeedGraalNativeSdk
-            URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+            GIT_REPOSITORY "${DXFG_STUB_REPO}.git" GIT_TAG "v${DXFEED_GRAAL_NATIVE_SDK_VERSION}"
             USES_TERMINAL_DOWNLOAD TRUE
             GIT_PROGRESS TRUE
             DOWNLOAD_NO_EXTRACT FALSE
     )
 else ()
-    if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
-        set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
-    endif ()
-
-    if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
-        message(ERROR "Unsupported platform!")
+    if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+        FetchContent_Declare(
+                DxFeedGraalNativeSdk
+                URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+                USES_TERMINAL_DOWNLOAD TRUE
+                GIT_PROGRESS TRUE
+                DOWNLOAD_NO_EXTRACT FALSE
+        )
     else ()
-        set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
-    endif ()
+        if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
+            set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+        endif ()
 
-    FetchContent_Declare(
-            DxFeedGraalNativeSdk
-            URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
-            USES_TERMINAL_DOWNLOAD TRUE
-            GIT_PROGRESS TRUE
-            DOWNLOAD_NO_EXTRACT FALSE
-    )
+        if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
+            message(ERROR "Unsupported platform!")
+        else ()
+            set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
+        endif ()
+
+        FetchContent_Declare(
+                DxFeedGraalNativeSdk
+                URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
+                USES_TERMINAL_DOWNLOAD TRUE
+                GIT_PROGRESS TRUE
+                DOWNLOAD_NO_EXTRACT FALSE
+        )
+    endif ()
 endif ()
 
 FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
@@ -196,9 +210,14 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
+        src/isolated/auth/IsolatedAuthToken.cpp
         src/isolated/promise/IsolatedPromise.cpp
         src/isolated/internal/IsolatedString.cpp
+        src/isolated/internal/IsolatedObject.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
+        src/isolated/internal/IsolatedTools.cpp
+        src/isolated/util/IsolatedTimePeriod.cpp
+        src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
@@ -214,6 +233,10 @@ set(dxFeedGraalCxxApi_ApiOsub_Sources
         src/api/osub/TimeSeriesSubscriptionSymbol.cpp
         src/api/osub/IndexedEventSubscriptionSymbol.cpp
         src/api/osub/ObservableSubscriptionChangeListener.cpp
+)
+
+set(dxFeedGraalCxxApi_Auth_Sources
+        src/auth/AuthToken.cpp
 )
 
 set(dxFeedGraalCxxApi_Ipf_Sources
@@ -311,6 +334,10 @@ set(dxFeedGraalCxxApi_Schedule_Sources
         src/schedule/Schedule.cpp
 )
 
+set(dxFeedGraalCxxApi_Util_Sources
+        src/util/TimePeriod.cpp
+)
+
 set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Internal_Sources}
         ${dxFeedGraalCxxApi_InternalUtils_Sources}
@@ -319,6 +346,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Exceptions_Sources}
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
+        ${dxFeedGraalCxxApi_Auth_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
         ${dxFeedGraalCxxApi_Promise_Sources}
@@ -330,6 +358,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_EventOption_Sources}
         ${dxFeedGraalCxxApi_EventMisc_Sources}
         ${dxFeedGraalCxxApi_Schedule_Sources}
+        ${dxFeedGraalCxxApi_Util_Sources}
 )
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

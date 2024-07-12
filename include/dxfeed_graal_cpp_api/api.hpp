@@ -38,7 +38,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "internal/utils/StringUtils.hpp"
 #include "internal/utils/debug/Debug.hpp"
 
+#include "util/TimePeriod.hpp"
+
 #include "api/ApiModule.hpp"
+#include "auth/AuthToken.hpp"
 #include "ipf/IpfModule.hpp"
 #include "entity/EntityModule.hpp"
 #include "event/EventModule.hpp"
@@ -58,10 +61,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/api/IsolatedDXPublisher.hpp"
 #include "isolated/api/IsolatedDXPublisherObservableSubscription.hpp"
 #include "isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
+#include "isolated/auth/IsolatedAuthToken.hpp"
 #include "isolated/promise/IsolatedPromise.hpp"
 #include "isolated/internal/IsolatedString.hpp"
+#include "isolated/internal/IsolatedObject.hpp"
 #include "isolated/internal/IsolatedTimeFormat.hpp"
 #include "isolated/internal/IsolatedTools.hpp"
+#include "isolated/ipf/IsolatedInstrumentProfileReader.hpp"
+#include "isolated/util/IsolatedTimePeriod.hpp"
 
 #include "ondemand/OnDemandService.hpp"
 

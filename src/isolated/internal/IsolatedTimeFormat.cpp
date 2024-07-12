@@ -50,8 +50,8 @@ std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::Time
             "Unable to execute function `dxfg_TimeFormat_parse`. The `timeFormat` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_TimeFormat_parse,
-                                                  static_cast<dxfg_time_format_t *>(timeFormat.get()), value.data());
+    return runGraalFunctionAndThrowIfMinusOne(dxfg_TimeFormat_parse,
+                                              static_cast<dxfg_time_format_t *>(timeFormat.get()), value.data());
 }
 
 std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
@@ -61,8 +61,8 @@ std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::Time
             "Unable to execute function `dxfg_TimeFormat_format`. The `timeFormat` handle is invalid");
     }
 
-    auto format = runGraalFunctionAndThrowIfMinusOne(dxfg_TimeFormat_format,
-                                                     static_cast<dxfg_time_format_t *>(timeFormat.get()), value);
+    auto format = runGraalFunctionAndThrowIfNullptr(dxfg_TimeFormat_format,
+                                                    static_cast<dxfg_time_format_t *>(timeFormat.get()), value);
     auto result = dxfcpp::toString(format);
 
     isolated::internal::IsolatedString::release(format);

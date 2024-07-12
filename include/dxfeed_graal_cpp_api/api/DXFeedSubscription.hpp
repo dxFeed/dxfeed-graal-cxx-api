@@ -19,6 +19,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 
+#include "../util/TimePeriod.hpp"
+
 #include <concepts>
 #include <memory>
 #include <type_traits>
@@ -41,6 +43,17 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 
     ///
     using OnEventHandler = SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)>;
+
+    // These constants are linked with same ones in RecordBuffer - POOLED_CAPACITY and UNLIMITED_CAPACITY.
+    /**
+     * The optimal events' batch limit for single notification in OnEventHandler.
+     */
+    static const std::int32_t OPTIMAL_BATCH_LIMIT = 0;
+
+    /**
+     * The maximum events' batch limit for single notification in OnEventHandler.
+     */
+    static const std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
 
   private:
     friend struct DXFeed;
@@ -67,11 +80,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 
     bool tryToSetEventListenerHandle();
 
-    void addSymbolsImpl(void *graalSymbolList) const;
-
-    void removeSymbolsImpl(void *graalSymbolList) const;
-
     void setSymbolsImpl(void *graalSymbolList) const;
+    void addSymbolsImpl(void *graalSymbolList) const;
+    void removeSymbolsImpl(void *graalSymbolList) const;
 
   public:
     /// The alias to a type of shared pointer to the DXFeedSubscription object
@@ -235,6 +246,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     void detach(std::shared_ptr<DXFeed> feed);
 
     /**
+     * Returns `true` if this subscription is closed.
+     *
+     * @return `true` if this subscription is closed.
+     *
+     * @see DXFeedSubscription::close()
+     */
+    bool isClosed() override;
+
+    /**
      * Closes this subscription and makes it <i>permanently detached</i>.
      * This method notifies all installed instances of subscription change listeners by invoking `subscriptionClosed`
      * while holding the lock for this subscription. This method clears lists of all installed
@@ -242,6 +262,299 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * can be added.
      */
     void close() const;
+
+    /**
+     * Returns a set of subscribed event types.
+     *
+     * @return A set of subscribed event types.
+     */
+    std::unordered_set<EventTypeEnum> getEventTypes() override;
+
+    /**
+     * Returns `true` if this subscription contains the corresponding event type.
+     *
+     * @param eventType The type of event that is checked.
+     * @return `true` if this subscription contains the corresponding event type.
+     *
+     * @see DXFeedSubscription::getEventTypes()
+     */
+    bool containsEventType(const EventTypeEnum &eventType) override;
+
+    /**
+     * Clears the set of subscribed symbols.
+     */
+    void clear() const;
+
+    /**
+     * Returns a set of subscribed symbols (depending on the actual implementation of subscription).
+     *
+     * The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
+     * weakly consistent view of the set.
+     *
+     * @return A set of subscribed symbols.
+     */
+    std::vector<SymbolWrapper> getSymbols() const;
+
+    /**
+     * Returns a set of decorated symbols (depending on the actual implementation of subscription).
+     *
+     * The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
+     * weakly consistent view of the set.
+     *
+     * @return A set of decorated subscribed symbols.
+     */
+    std::vector<SymbolWrapper> getDecoratedSymbols() const;
+
+    /**
+     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using
+     * iterators).
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->setSymbols(v.begin(), v.end());
+     * ```
+     *
+     * @tparam SymbolIt The collection's iterator type
+     * @param begin The beginning of the collection of symbols.
+     * @param end The end of symbol collection.
+     */
+    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
+        }
+
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
+
+        setSymbolsImpl(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
+    }
+
+    /**
+     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->setSymbols(std::vector{"AAPL", "IBM"});
+     * sub->setSymbols(v);
+     * ```
+     *
+     * @tparam SymbolsCollection The symbols collection's type
+     * @param collection The symbols collection
+     */
+    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+    void setSymbols(SymbolsCollection &&collection) const {
+        setSymbols(std::begin(collection), std::end(collection));
+    }
+
+    /**
+     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection
+     * (initializer list).
+     *
+     * Example:
+     * ```cpp
+     * sub->setSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
+     * ```
+     *
+     * @param collection The symbols collection
+     */
+    void setSymbols(std::initializer_list<SymbolWrapper> collection) const;
+
+    /**
+     * Adds the specified symbol to the set of subscribed symbols.
+     * This is a convenience method to subscribe to one symbol at a time that has a return fast-path for a case when
+     * the symbol is already in the set.
+     * When subscribing to multiple symbols at once it is preferable to use @ref DXFeedSubscription::addSymbols(const
+     * SymbolsCollection &collection) "addSymbols(symbols)" method.
+     *
+     * Example:
+     * ```cpp
+     * sub->addSymbols("TSLA");
+     * sub->addSymbols("XBT/USD:GDAX"s);
+     * sub->addSymbols("BTC/EUR:CXBITF"sv);
+     * ```
+     *
+     * @param symbolWrapper The symbol.
+     */
+    void addSymbols(const SymbolWrapper &symbolWrapper) const;
+
+    /**
+     * Adds the specified collection (using iterators) of symbols to the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->addSymbols(v.begin(), v.end());
+     * ```
+     *
+     * @tparam SymbolIt The collection's iterator type
+     * @param begin The beginning of the collection of symbols.
+     * @param end The end of symbol collection.
+     */
+    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
+        }
+
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
+
+        addSymbolsImpl(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
+    }
+
+    /**
+     * Adds the specified collection of symbols to the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->addSymbols(std::vector{"AAPL", "IBM"});
+     * sub->addSymbols(v);
+     * ```
+     *
+     * @tparam SymbolsCollection The symbols collection's type
+     * @param collection The symbols collection
+     */
+    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+    void addSymbols(const SymbolsCollection &collection) const {
+        addSymbols(std::begin(collection), std::end(collection));
+    }
+
+    /**
+     * Adds the specified collection (initializer list) of symbols to the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * sub->addSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
+     * ```
+     *
+     * @param collection The symbols collection
+     */
+    void addSymbols(std::initializer_list<SymbolWrapper> collection) const;
+
+    /**
+     * Removes the specified symbol from the set of subscribed symbols.
+     * To conveniently remove one or few symbols you can use @ref DXFeedSubscription::removeSymbols(const
+     * SymbolsCollection &collection) "removeSymbols(symbols)" method.
+     *
+     * Example:
+     * ```cpp
+     * sub->removeSymbols("TSLA");
+     * sub->removeSymbols("XBT/USD:GDAX"s);
+     * sub->removeSymbols("BTC/EUR:CXBITF"sv);
+     * ```
+     *
+     * @param symbolWrapper The symbol.
+     */
+    void removeSymbols(const SymbolWrapper &symbolWrapper) const;
+
+    /**
+     * Removes the specified collection (using iterators) of symbols from the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->removeSymbols(v.begin(), v.end());
+     * ```
+     *
+     * @tparam SymbolIt The collection's iterator type
+     * @param begin The beginning of the collection of symbols.
+     * @param end The end of symbol collection.
+     */
+    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
+        }
+
+        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
+
+        removeSymbolsImpl(list);
+        SymbolWrapper::SymbolListUtils::freeGraalList(list);
+    }
+
+    /**
+     * Removes the specified collection of symbols from the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
+     *
+     * sub->removeSymbols(std::vector{"AAPL", "IBM"});
+     * sub->removeSymbols(v);
+     * ```
+     *
+     * @tparam SymbolsCollection The symbols collection's type
+     * @param collection The symbols collection
+     */
+    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+    void removeSymbols(SymbolsCollection &&collection) const {
+        removeSymbols(std::begin(collection), std::end(collection));
+    }
+
+    /**
+     * Removes the specified collection (initializer list) of symbols from the set of subscribed symbols.
+     *
+     * Example:
+     * ```cpp
+     * sub->removeSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
+     * ```
+     *
+     * @param collection The symbols collection
+     */
+    void removeSymbols(std::initializer_list<SymbolWrapper> collection) const;
+
+    /**
+     * Returns the aggregation period for data for this subscription instance.
+     *
+     * @return The aggregation period for data, represented as a TimePeriod object.
+     */
+    TimePeriod getAggregationPeriod() const;
+
+    /**
+     * Sets the aggregation period for data.
+     * This method sets a new aggregation period for data, which will only take effect on the next iteration of
+     * data notification. For example, if the current aggregation period is 5 seconds and it is changed
+     * to 1 second, the next call to the next call to the retrieve method may take up to 5 seconds, after which
+     * the new aggregation period will take effect.
+     *
+     * @param aggregationPeriod the new aggregation period for data
+     */
+    void setAggregationPeriod(const TimePeriod &aggregationPeriod) const;
+
+    /**
+     * Sets the aggregation period for data.
+     * This method sets a new aggregation period for data, which will only take effect on the next iteration of
+     * data notification. For example, if the current aggregation period is 5 seconds and it is changed
+     * to 1 second, the next call to the next call to the retrieve method may take up to 5 seconds, after which
+     * the new aggregation period will take effect.
+     *
+     * @param aggregationPeriod the new aggregation period (in millis) for data
+     */
+    void setAggregationPeriod(std::chrono::milliseconds aggregationPeriod) const {
+        return setAggregationPeriod(TimePeriod::valueOf(aggregationPeriod));
+    }
+
+    /**
+     * Sets the aggregation period for data.
+     * This method sets a new aggregation period for data, which will only take effect on the next iteration of
+     * data notification. For example, if the current aggregation period is 5 seconds and it is changed
+     * to 1 second, the next call to the next call to the retrieve method may take up to 5 seconds, after which
+     * the new aggregation period will take effect.
+     *
+     * @param aggregationPeriod the new aggregation period (in millis) for data
+     */
+    void setAggregationPeriod(std::int64_t aggregationPeriod) const {
+        return setAggregationPeriod(TimePeriod::valueOf(aggregationPeriod));
+    }
 
     /**
      * Adds listener for events.
@@ -323,8 +636,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * sub->addSymbols({"$TOP10L/Q", "AAPL", "$TICK", "SPX"});
      * ```
      *
-     * @tparam EventT The event type (EventType's child with field TYPE, convertible to EventTypeEnum or MarketEvent or
-     * LastingEvent or TimeSeriesEvent or IndexedEvent)
+     * @tparam EventT The event type (EventType's child with field TYPE, convertible to EventTypeEnum or MarketEvent
+     * or LastingEvent or TimeSeriesEvent or IndexedEvent)
      * @param listener The listener. Listener can be callable with signature: `void(const
      * std::vector<std::shared_ptr<EventT>&)`
      * @return The listener id
@@ -397,267 +710,24 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      */
     OnEventHandler &onEvent();
 
-    /**
-     * Adds the specified symbol to the set of subscribed symbols.
-     * This is a convenience method to subscribe to one symbol at a time that has a return fast-path for a case when
-     * the symbol is already in the set.
-     * When subscribing to multiple symbols at once it is preferable to use @ref DXFeedSubscription::addSymbols(const
-     * SymbolsCollection &collection) "addSymbols(symbols)" method.
-     *
-     * Example:
-     * ```cpp
-     * sub->addSymbols("TSLA");
-     * sub->addSymbols("XBT/USD:GDAX"s);
-     * sub->addSymbols("BTC/EUR:CXBITF"sv);
-     * ```
-     *
-     * @param symbolWrapper The symbol.
-     */
-    void addSymbols(const SymbolWrapper &symbolWrapper) const;
-
-    /**
-     * Removes the specified symbol from the set of subscribed symbols.
-     * To conveniently remove one or few symbols you can use @ref DXFeedSubscription::removeSymbols(const
-     * SymbolsCollection &collection) "removeSymbols(symbols)" method.
-     *
-     * Example:
-     * ```cpp
-     * sub->removeSymbols("TSLA");
-     * sub->removeSymbols("XBT/USD:GDAX"s);
-     * sub->removeSymbols("BTC/EUR:CXBITF"sv);
-     * ```
-     *
-     * @param symbolWrapper The symbol.
-     */
-    void removeSymbols(const SymbolWrapper &symbolWrapper) const;
-
-    /**
-     * Adds the specified collection (using iterators) of symbols to the set of subscribed symbols.
-     *
-     * Example:
-     * ```cpp
-     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
-     *
-     * sub->addSymbols(v.begin(), v.end());
-     * ```
-     *
-     * @tparam SymbolIt The collection's iterator type
-     * @param begin The beginning of the collection of symbols.
-     * @param end The end of symbol collection.
-     */
-    template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
-        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
-
-        addSymbolsImpl(list);
-        SymbolWrapper::SymbolListUtils::freeGraalList(list);
-    }
-
-    /**
-     * Adds the specified collection of symbols to the set of subscribed symbols.
-     *
-     * Example:
-     * ```cpp
-     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
-     *
-     * sub->addSymbols(std::vector{"AAPL", "IBM"});
-     * sub->addSymbols(v);
-     * ```
-     *
-     * @tparam SymbolsCollection The symbols collection's type
-     * @param collection The symbols collection
-     */
-    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void addSymbols(const SymbolsCollection &collection) const {
-        addSymbols(std::begin(collection), std::end(collection));
-    }
-
-    /**
-     * Adds the specified collection (initializer list) of symbols to the set of subscribed symbols.
-     *
-     * Example:
-     * ```cpp
-     * sub->addSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
-     * ```
-     *
-     * @param collection The symbols collection
-     */
-    void addSymbols(std::initializer_list<SymbolWrapper> collection) const;
-
-    /**
-     * Removes the specified collection (using iterators) of symbols from the set of subscribed symbols.
-     *
-     * Example:
-     * ```cpp
-     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
-     *
-     * sub->removeSymbols(v.begin(), v.end());
-     * ```
-     *
-     * @tparam SymbolIt The collection's iterator type
-     * @param begin The beginning of the collection of symbols.
-     * @param end The end of symbol collection.
-     */
-    template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
-        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
-
-        removeSymbolsImpl(list);
-        SymbolWrapper::SymbolListUtils::freeGraalList(list);
-    }
-
-    /**
-     * Removes the specified collection of symbols from the set of subscribed symbols.
-     *
-     * Example:
-     * ```cpp
-     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
-     *
-     * sub->removeSymbols(std::vector{"AAPL", "IBM"});
-     * sub->removeSymbols(v);
-     * ```
-     *
-     * @tparam SymbolsCollection The symbols collection's type
-     * @param collection The symbols collection
-     */
-    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void removeSymbols(SymbolsCollection &&collection) const {
-        removeSymbols(std::begin(collection), std::end(collection));
-    }
-
-    /**
-     * Removes the specified collection (initializer list) of symbols from the set of subscribed symbols.
-     *
-     * Example:
-     * ```cpp
-     * sub->removeSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
-     * ```
-     *
-     * @param collection The symbols collection
-     */
-    void removeSymbols(std::initializer_list<SymbolWrapper> collection) const;
-
-    /**
-     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection (using
-     * iterators).
-     *
-     * Example:
-     * ```cpp
-     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
-     *
-     * sub->setSymbols(v.begin(), v.end());
-     * ```
-     *
-     * @tparam SymbolIt The collection's iterator type
-     * @param begin The beginning of the collection of symbols.
-     * @param end The end of symbol collection.
-     */
-    template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
-        auto *list = SymbolWrapper::SymbolListUtils::toGraalList(begin, end);
-
-        setSymbolsImpl(list);
-        SymbolWrapper::SymbolListUtils::freeGraalList(list);
-    }
-
-    /**
-     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection.
-     *
-     * Example:
-     * ```cpp
-     * auto v = std::vector<dxfcpp::SymbolWrapper>{"XBT/USD:GDAX"s, "BTC/EUR:CXBITF"sv, "TSLA", "GOOG"_s};
-     *
-     * sub->setSymbols(std::vector{"AAPL", "IBM"});
-     * sub->setSymbols(v);
-     * ```
-     *
-     * @tparam SymbolsCollection The symbols collection's type
-     * @param collection The symbols collection
-     */
-    template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    void setSymbols(SymbolsCollection &&collection) const {
-        setSymbols(std::begin(collection), std::end(collection));
-    }
-
-    /**
-     * Changes the set of subscribed symbols so that it contains just the symbols from the specified collection
-     * (initializer list).
-     *
-     * Example:
-     * ```cpp
-     * sub->setSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
-     * ```
-     *
-     * @param collection The symbols collection
-     */
-    void setSymbols(std::initializer_list<SymbolWrapper> collection) const;
-
-    /**
-     * Clears the set of subscribed symbols.
-     */
-    void clear() const;
-
-    /**
-     * Returns `true` if this subscription is closed.
-     *
-     * @return `true` if this subscription is closed.
-     *
-     * @see DXFeedSubscription::close()
-     */
-    bool isClosed() override;
-
-    /**
-     * Returns a set of subscribed event types.
-     *
-     * @return A set of subscribed event types.
-     */
-    std::unordered_set<EventTypeEnum> getEventTypes() override;
-
-    /**
-     * Returns `true` if this subscription contains the corresponding event type.
-     *
-     * @param eventType The type of event that is checked.
-     * @return `true` if this subscription contains the corresponding event type.
-     *
-     * @see DXFeedSubscription::getEventTypes()
-     */
-    bool containsEventType(const EventTypeEnum &eventType) override;
-
-    /**
-     * Returns a set of subscribed symbols (depending on the actual implementation of subscription).
-     *
-     * The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
-     * weakly consistent view of the set.
-     *
-     * @return A set of subscribed symbols.
-     */
-    std::vector<SymbolWrapper> getSymbols() const;
-
-    /**
-     * Returns a set of decorated symbols (depending on the actual implementation of subscription).
-     *
-     * The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
-     * weakly consistent view of the set.
-     *
-     * @return A set of decorated subscribed symbols.
-     */
-    std::vector<SymbolWrapper> getDecoratedSymbols() const;
-
     std::size_t addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) override;
 
     void removeChangeListener(std::size_t changeListenerId) override;
+
+    /**
+     * @return maximum number of events in the single notification of OnEventHandler.
+     * Special cases are supported for constants ::OPTIMAL_BATCH_LIMIT and ::MAX_BATCH_LIMIT.
+     */
+    std::int32_t getEventsBatchLimit() const;
+
+    /**
+     * Sets maximum number of events in the single notification of OnEventHandler.
+     * Special cases are supported for constants ::OPTIMAL_BATCH_LIMIT and ::MAX_BATCH_LIMIT.
+     *
+     * @param eventsBatchLimit the notification events limit
+     * @throws JavaException if eventsBatchLimit < 0 (see ::OPTIMAL_BATCH_LIMIT or ::MAX_BATCH_LIMIT)
+     */
+    void setEventsBatchLimit(std::int32_t eventsBatchLimit) const;
 };
 
 DXFCPP_END_NAMESPACE

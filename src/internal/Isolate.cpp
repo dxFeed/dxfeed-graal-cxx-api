@@ -154,111 +154,9 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
         defaultValue, resultCheckerConverter, graalFunction, params...);
 }
 
-std::unordered_set<std::string> /* dxfg_string_list* */
-Tools::parseSymbols(std::string_view symbolList) {
-    std::unordered_set<std::string> result{};
-
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
-
-    for (auto i = 0; i < graalStringList->size; i++) {
-        result.emplace(dxfcpp::toString(graalStringList->elements[i]));
-    }
-
-    isolated::internal::IsolatedStringList::release(graalStringList);
-
-    return result;
-}
-
 using NativeStringList = typename isolated::internal::NativeStringListWrapper<dxfg_string_list>;
 
-void /* int32_t */ Tools::runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {
-    NativeStringList l{args};
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Tools_main, l.list);
-}
-
 namespace ipf {
-
-/* dxfg_instrument_profile_reader_t* */ dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader>
-InstrumentProfileReader::create() {
-    return dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_new)};
-}
-
-std::int64_t InstrumentProfileReader::getLastModified(
-    /* dxfg_instrument_profile_reader_t * */ const dxfcpp::JavaObjectHandle<dxfcpp::InstrumentProfileReader> &handle) {
-    if (!handle) {
-        throw std::invalid_argument(
-            "Unable to execute function `dxfg_InstrumentProfileReader_getLastModified`. The handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_InstrumentProfileReader_getLastModified,
-                                                  static_cast<dxfg_instrument_profile_reader_t *>(handle.get()));
-}
-
-bool InstrumentProfileReader::wasComplete(
-    /* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle) noexcept {
-    if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling
-        return false;
-    }
-
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileReader_wasComplete(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                            params...) == 1;
-        },
-        false, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle));
-}
-
-/* dxfg_instrument_profile_list* */ void *
-InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
-                                      const std::string &address) noexcept {
-    if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling
-        return nullptr;
-    }
-
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileReader_readFromFile(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                             params...);
-        },
-        nullptr, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle), address.c_str()));
-}
-
-/* dxfg_instrument_profile_list* */ void *
-InstrumentProfileReader::readFromFile(/* dxfg_instrument_profile_reader_t * */ void *graalInstrumentProfileReaderHandle,
-                                      const std::string &address, const std::string &user,
-                                      const std::string &password) noexcept {
-    if (!graalInstrumentProfileReaderHandle) {
-        // TODO: Improve error handling
-        return nullptr;
-    }
-
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileReader_readFromFile2(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                              params...);
-        },
-        nullptr, static_cast<dxfg_instrument_profile_reader_t *>(graalInstrumentProfileReaderHandle), address.c_str(),
-        user.c_str(), password.c_str()));
-}
-
-std::string InstrumentProfileReader::resolveSourceURL(const std::string &address) noexcept {
-    auto resolvedURL = runIsolatedOrElse(
-        [](auto threadHandle, auto &&...params) {
-            return dxfg_InstrumentProfileReader_resolveSourceURL(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                                 params...);
-        },
-        nullptr, address.c_str());
-
-    auto result = dxfcpp::toString(resolvedURL);
-
-    isolated::internal::IsolatedString::release(resolvedURL);
-
-    return result;
-}
 
 /* dxfg_ipf_collector_t* */ void *InstrumentProfileCollector::create() noexcept {
     return static_cast<void *>(runIsolatedOrElse(
@@ -955,6 +853,19 @@ std::int64_t Day::getResetTime(/* dxfg_day_t* */ void *day) noexcept {
             return dxfg_Day_getResetTime(static_cast<graal_isolatethread_t *>(threadHandle), day);
         },
         0, static_cast<dxfg_day_t *>(day));
+}
+
+/* dxfg_session_list* */ void *Day::getSessions(/* dxfg_day_t* */ void *day) {
+    if (!day) {
+        // TODO: Improve error handling
+        return nullptr;
+    }
+
+    return static_cast<void *>(runIsolatedOrElse(
+        [](auto threadHandle, auto &&day) {
+            return dxfg_Day_getSessions(static_cast<graal_isolatethread_t *>(threadHandle), day);
+        },
+        nullptr, static_cast<dxfg_day_t *>(day)));
 }
 
 /* dxfg_session_t* */ void *Day::getSessionByTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept {

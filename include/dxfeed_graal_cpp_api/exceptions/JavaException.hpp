@@ -64,20 +64,16 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
         return v;
     }
 
-    // Legacy
-    template <typename T> static constexpr T *throwIfMinusOne(T *v) {
-        if (dxfcpp::bit_cast<std::int64_t>(v) == -1LL ||
-            dxfcpp::bit_cast<std::int64_t>(v) == 0x00000000FFFFFFFFLL) {
+    template <typename T> static constexpr T throwIfMinusOne(T v) {
+        if (v == T(-1)) {
             throwIfJavaThreadExceptionExists();
         }
 
         return v;
     }
 
-    // Legacy
-    template <typename T> static constexpr const T *throwIfMinusOne(const T *v) {
-        if (dxfcpp::bit_cast<std::int64_t>(v) == -1LL ||
-            dxfcpp::bit_cast<std::int64_t>(v) == 0x00000000FFFFFFFFLL) {
+    template <typename T> static constexpr T throwIfMinusMin(T v) {
+        if (v == -std::numeric_limits<T>::min()) {
             throwIfJavaThreadExceptionExists();
         }
 

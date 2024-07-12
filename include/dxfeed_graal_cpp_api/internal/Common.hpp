@@ -184,7 +184,16 @@ static constexpr std::int32_t getNanoPartFromNanos(std::int64_t timeNanos) {
 
 namespace time_util {
 /// Number of milliseconds in a second.
-static const std::int64_t SECOND = 1000LL;
+static constexpr std::int64_t SECOND = 1000LL;
+
+/// Number of milliseconds in a minute.
+static constexpr std::int64_t MINUTE = 60LL * SECOND;
+
+/// Number of milliseconds in an hour.
+static constexpr std::int64_t HOUR = 60LL * MINUTE;
+
+/// Number of milliseconds in an day.
+static constexpr std::int64_t DAY = 24LL * HOUR;
 
 /**
  * Returns correct number of milliseconds with proper handling negative values.
@@ -670,18 +679,20 @@ template <typename T, typename U> T fitToType(const U &size) {
 struct StringLikeWrapper {
     using DataType = std::variant<std::string, std::string_view>;
 
-    DataType data{};
+  private:
+    DataType data_{};
 
-    StringLikeWrapper(std::string_view sv) : data{sv} {
+  public:
+    StringLikeWrapper(std::string_view sv) : data_{sv} {
     }
 
-    StringLikeWrapper(const char *chars) : data{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
+    StringLikeWrapper(const char *chars) : data_{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
     }
 
-    StringLikeWrapper(const std::string &s) : data{s} {
+    StringLikeWrapper(const std::string &s) : data_{s} {
     }
 
-    StringLikeWrapper(std::string &&s) : data{std::move(s)} {
+    StringLikeWrapper(std::string &&s) : data_{std::move(s)} {
     }
 
     template <auto N>
@@ -689,19 +700,51 @@ struct StringLikeWrapper {
     }
 
     operator std::string() const {
-        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
             return {sv->data(), sv->size()};
         } else {
-            return std::get<std::string>(data);
+            return std::get<std::string>(data_);
         }
     }
 
     operator std::string_view() const & {
-        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
             return *sv;
         } else {
-            return std::get<std::string>(data);
+            return std::get<std::string>(data_);
         }
+    }
+
+    const char *data() const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            return sv->data();
+        } else {
+            return std::get<std::string>(data_).c_str();
+        }
+    }
+
+    const char *c_str() const {
+        return data();
+    }
+
+    bool empty() const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            return sv->empty();
+        } else {
+            return std::get<std::string>(data_).empty();
+        }
+    }
+
+    std::size_t size() const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            return sv->size();
+        } else {
+            return std::get<std::string>(data_).size();
+        }
+    }
+
+    std::size_t length() const {
+        return size();
     }
 
     bool operator==(const StringLikeWrapper &sw) const {
