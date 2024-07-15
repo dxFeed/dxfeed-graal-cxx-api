@@ -17,7 +17,7 @@ project(dxFeedGraalCxxApi)
 
 set(DXFCXX_VERSION "v2.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.21" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.22" CACHE STRING "")
 set(FMTLIB_VERSION "10.2.1")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -217,6 +217,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/internal/IsolatedTimeFormat.cpp
         src/isolated/internal/IsolatedTools.cpp
         src/isolated/util/IsolatedTimePeriod.cpp
+        src/isolated/ipf/IsolatedInstrumentProfile.cpp
         src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
 )
 
