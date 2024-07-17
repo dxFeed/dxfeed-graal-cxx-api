@@ -24,6 +24,9 @@ namespace IsolatedString {
  * @throws GraalException if something happened with the GraalVM.
  */
 bool release(const char *string);
+
+std::unique_ptr<const char, decltype(&release)> toUnique(const char *string);
+
 } // namespace IsolatedString
 
 namespace IsolatedStringList {
