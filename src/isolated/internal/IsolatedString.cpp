@@ -13,9 +13,6 @@ namespace isolated::internal {
 namespace IsolatedString {
 
 bool release(const char *string) {
-    std::cerr << 222 << std::endl;
-    std::cerr << toString(string) << std::endl;
-
     if (!string) {
         throw std::invalid_argument("Unable to execute function `dxfg_String_release`. The `string` is nullptr");
     }
@@ -24,8 +21,6 @@ bool release(const char *string) {
 }
 
 std::unique_ptr<const char, decltype(&release)> toUnique(const char *string) {
-std::cerr << 111 << std::endl;
-
     return {string, release};
 }
 
@@ -41,6 +36,10 @@ bool release(/* dxfg_string_list* */ void *stringList) {
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_String_release,
                                                   static_cast<dxfg_string_list *>(stringList));
+}
+
+std::unique_ptr<void, decltype(&release)> toUnique(void *stringList) {
+    return {stringList, release};
 }
 
 } // namespace IsolatedStringList

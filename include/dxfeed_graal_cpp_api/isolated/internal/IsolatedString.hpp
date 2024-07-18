@@ -40,6 +40,9 @@ namespace IsolatedStringList {
  * @throws GraalException if something happened with the GraalVM.
  */
 bool release(/* dxfg_string_list* */ void *stringList);
+
+std::unique_ptr<void, decltype(&release)> toUnique(void *stringList);
+
 } // namespace IsolatedStringList
 
 template <typename L> struct NativeStringListWrapper final {
