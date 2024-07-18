@@ -295,6 +295,13 @@ getNonEmptyCustomFieldNames(/* dxfg_instrument_profile_t* */ const JavaObjectHan
 
 } // namespace isolated::ipf::IsolatedInstrumentProfile
 
+namespace isolated::ipf::IsolatedInstrumentProfileList {
+void release(/* dxfg_instrument_profile_list * */ void *list);
+void releaseWrapper(/* dxfg_instrument_profile_list * */ void *list);
+
+std::unique_ptr<void, decltype(&releaseWrapper)> toUniqueWrapper(/* dxfg_instrument_profile_list * */ void *list);
+} // namespace isolated::ipf::IsolatedInstrumentProfileList
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

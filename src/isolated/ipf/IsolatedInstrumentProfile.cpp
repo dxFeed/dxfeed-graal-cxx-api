@@ -938,4 +938,31 @@ getNonEmptyCustomFieldNames(/* dxfg_instrument_profile_t* */ const JavaObjectHan
 
 } // namespace isolated::ipf::IsolatedInstrumentProfile
 
+namespace isolated::ipf::IsolatedInstrumentProfileList {
+void release(/* dxfg_instrument_profile_list * */ void *list) {
+    if (!list) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_CList_InstrumentProfile_wrapper_release`. The list is nullptr");
+    }
+
+    runGraalFunctionAndThrowIfMinusOne(dxfg_CList_InstrumentProfile_release,
+                                       static_cast<dxfg_instrument_profile_list *>(list));
+}
+
+void releaseWrapper(/* dxfg_instrument_profile_list * */ void *list) {
+    if (!list) {
+        throw std::invalid_argument(
+            "Unable to execute function `dxfg_CList_InstrumentProfile_wrapper_release`. The list is nullptr");
+    }
+
+    runGraalFunctionAndThrowIfMinusOne(dxfg_CList_InstrumentProfile_wrapper_release,
+                                       static_cast<dxfg_instrument_profile_list *>(list));
+}
+
+std::unique_ptr<void, decltype(&releaseWrapper)> toUniqueWrapper(/* dxfg_instrument_profile_list * */ void *list) {
+    return {list, releaseWrapper};
+}
+
+} // namespace isolated::ipf::IsolatedInstrumentProfileList
+
 DXFCPP_END_NAMESPACE
