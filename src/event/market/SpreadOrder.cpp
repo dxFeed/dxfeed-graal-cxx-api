@@ -72,7 +72,7 @@ std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) {
     return spreadOrder;
 }
 
-std::string SpreadOrder::toString() const noexcept {
+std::string SpreadOrder::toString() const {
     return fmt::format("SpreadOrder{{{}, spreadSymbol={}}}", baseFieldsToString(), getSpreadSymbol());
 }
 

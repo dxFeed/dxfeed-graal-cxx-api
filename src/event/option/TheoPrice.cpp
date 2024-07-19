@@ -80,7 +80,7 @@ std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) {
     return theoPrice;
 }
 
-std::string TheoPrice::toString() const noexcept {
+std::string TheoPrice::toString() const {
     return fmt::format(
         "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
         "delta={}, gamma={}, dividend={}, interest={}}}",

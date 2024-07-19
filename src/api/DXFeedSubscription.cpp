@@ -83,7 +83,7 @@ DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag tag, const Ev
     handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
 }
 
-std::string DXFeedSubscription::toString() const noexcept {
+std::string DXFeedSubscription::toString() const {
     return fmt::format("DXFeedSubscription{{{}}}", handle_.toString());
 }
 

@@ -72,7 +72,7 @@ std::shared_ptr<Order> Order::fromGraal(void *graalNative) {
     return order;
 }
 
-std::string Order::toString() const noexcept {
+std::string Order::toString() const {
     return fmt::format("Order{{{}, marketMaker={}}}", baseFieldsToString(), getMarketMaker());
 }
 

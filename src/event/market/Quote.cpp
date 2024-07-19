@@ -100,7 +100,7 @@ void Quote::fillGraalData(void *graalNative) const noexcept {
     graalQuote->ask_size = data_.askSize;
 }
 
-std::string Quote::toString() const noexcept {
+std::string Quote::toString() const {
     return fmt::format(
         "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
         "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",

@@ -13,8 +13,7 @@ Schedule::Schedule(void *handle) noexcept : handle_(handle) {
 
 Schedule::Ptr Schedule::create(void *handle) {
     if (!handle) {
-        throw std::invalid_argument(
-            "Unable to create a Schedule object. The handle is nullptr");
+        throw std::invalid_argument("Unable to create a Schedule object. The handle is nullptr");
     }
 
     return std::shared_ptr<Schedule>(new Schedule(handle));
@@ -25,9 +24,7 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) 
         throw std::invalid_argument("The profile is nullptr");
     }
 
-    auto graalProfile = profile->toGraal();
-    auto schedule = create(isolated::schedule::Schedule::getInstance(graalProfile));
-    InstrumentProfile::freeGraal(graalProfile);
+    auto schedule = create(isolated::schedule::Schedule::getInstance(profile->handle_.get()));
 
     return schedule;
 }
@@ -41,9 +38,7 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, 
         throw std::invalid_argument("The profile is nullptr");
     }
 
-    auto graalProfile = profile->toGraal();
-    auto schedule = create(isolated::schedule::Schedule::getInstance(graalProfile, venue));
-    InstrumentProfile::freeGraal(graalProfile);
+    auto schedule = create(isolated::schedule::Schedule::getInstance(profile->handle_.get(), venue));
 
     return schedule;
 }
@@ -53,9 +48,7 @@ std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentPr
         throw std::invalid_argument("The profile is nullptr");
     }
 
-    auto graalProfile = profile->toGraal();
-    auto result = isolated::schedule::Schedule::getTradingVenues(graalProfile);
-    InstrumentProfile::freeGraal(graalProfile);
+    auto result = isolated::schedule::Schedule::getTradingVenues(profile->handle_.get());
 
     return result;
 }
@@ -109,7 +102,7 @@ Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionF
         isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.handle_.get()));
 }
 
-Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter& filter) const noexcept {
+Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
     if (!handle_ || !filter.handle_) {
         return {};
     }

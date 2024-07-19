@@ -73,7 +73,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
     virtual void *toGraal() const = 0;
 
     ///
-    std::string toString() const noexcept override {
+    std::string toString() const override {
         return "EventType{}";
     }
 

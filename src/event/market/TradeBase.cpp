@@ -57,7 +57,7 @@ void TradeBase::fillGraalData(void *graalNative) const noexcept {
     graalTradeBase->flags = tradeBaseData_.flags;
 }
 
-std::string TradeBase::baseFieldsToString() const noexcept {
+std::string TradeBase::baseFieldsToString() const {
     return fmt::format("{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, price={}, "
                        "change={}, size={}, day={}, dayVolume={}, dayTurnover={}, "
                        "direction={}, ETH={}",

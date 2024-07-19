@@ -84,7 +84,7 @@ std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) {
     return summary;
 }
 
-std::string Summary::toString() const noexcept {
+std::string Summary::toString() const {
     return fmt::format(
         "Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
         "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "

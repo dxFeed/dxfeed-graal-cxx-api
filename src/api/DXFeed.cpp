@@ -126,7 +126,7 @@ void *DXFeed::getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const Sym
     return isolated::api::IsolatedDXFeed::getTimeSeriesPromise(handle_, eventType, symbol, fromTime, toTime);
 }
 
-std::string DXFeed::toString() const noexcept {
+std::string DXFeed::toString() const {
     return fmt::format("DXFeed{{{}}}", handle_.toString());
 }
 

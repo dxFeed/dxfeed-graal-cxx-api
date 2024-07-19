@@ -286,7 +286,7 @@ struct DXFCPP_EXPORT Day {
      *
      * @return A string representation
      */
-    std::string toString() const noexcept;
+    std::string toString() const;
 };
 
 DXFCPP_END_NAMESPACE

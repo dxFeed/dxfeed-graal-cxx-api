@@ -23,6 +23,7 @@ class IterableInstrumentProfile;
 struct NonOwningInstrumentProfileIterator;
 class InstrumentProfileReader;
 class InstrumentProfileCollector;
+struct Schedule;
 
 /**
  * Represents basic profile information about market instrument.
@@ -34,6 +35,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
     friend NonOwningInstrumentProfileIterator;
     friend InstrumentProfileReader;
     friend InstrumentProfileCollector;
+    friend Schedule;
 
     /// The alias to a type of shared pointer to the InstrumentProfile object
     using Ptr = std::shared_ptr<InstrumentProfile>;
@@ -697,7 +699,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @return field value.
      */
-    double getNumericField(const StringLikeWrapper &name);
+    double getNumericField(const StringLikeWrapper &name) const;
 
     /**
      * Changes numeric field value with a specified name.
@@ -705,7 +707,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @param value field value.
      */
-    void setNumericField(const StringLikeWrapper &name, double value);
+    void setNumericField(const StringLikeWrapper &name, double value) const;
 
     /**
      * Returns day id value for a date field with a specified name.
@@ -713,7 +715,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @return day id value.
      */
-    std::int32_t getDateField(const StringLikeWrapper &name);
+    std::int32_t getDateField(const StringLikeWrapper &name) const;
 
     /**
      * Changes day id value for a date field with a specified name.
@@ -721,7 +723,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @param value day id value.
      */
-    void setDateField(const StringLikeWrapper &name, std::int32_t value);
+    void setDateField(const StringLikeWrapper &name, std::int32_t value) const;
 
     /**
      * Returns names of non-empty custom fields
@@ -730,6 +732,28 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      */
     std::vector<std::string> getNonEmptyCustomFieldNames() const;
 
+    std::string toString() const override;
+
+    friend std::ostream &operator<<(std::ostream &os, const InstrumentProfile &ip) {
+        return os << ip.toString();
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const InstrumentProfile::Ptr &ip) {
+        return os << ip->toString();
+    }
+
+    std::size_t hashCode() const;
+
+    bool operator==(const InstrumentProfile &other) const;
+
+    friend bool operator==(const InstrumentProfile::Ptr &ip1, const InstrumentProfile::Ptr &ip2) {
+        if (ip1.get() == ip2.get()) {
+            return true;
+        }
+
+        return *ip1.get() == *ip2.get();
+    }
+
     ~InstrumentProfile() noexcept override;
 
     InstrumentProfile(const InstrumentProfile &) = delete;
@@ -737,10 +761,10 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
     InstrumentProfile &operator=(const InstrumentProfile &) = delete;
     InstrumentProfile &operator=(const InstrumentProfile &&) noexcept = delete;
 
+    explicit InstrumentProfile(LockExternalConstructionTag, JavaObjectHandle<InstrumentProfile> &&handle);
+
   private:
     JavaObjectHandle<InstrumentProfile> handle_;
-
-    explicit InstrumentProfile(LockExternalConstructionTag, JavaObjectHandle<InstrumentProfile> &&handle);
 
     static Ptr create(JavaObjectHandle<InstrumentProfile> &&handle);
 
@@ -758,5 +782,17 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
 };
 
 DXFCPP_END_NAMESPACE
+
+template <> struct std::hash<dxfcpp::InstrumentProfile> {
+    std::size_t operator()(const dxfcpp::InstrumentProfile &t) const noexcept {
+        return t.hashCode();
+    }
+};
+
+template <> struct std::hash<dxfcpp::InstrumentProfile::Ptr> {
+    std::size_t operator()(const dxfcpp::InstrumentProfile::Ptr &t) const noexcept {
+        return t->hashCode();
+    }
+};
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

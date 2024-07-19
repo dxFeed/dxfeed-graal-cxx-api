@@ -90,7 +90,7 @@ struct DXFCPP_EXPORT WildcardSymbol final {
      *
      * @return string representation of this wildcard subscription symbol.
      */
-    std::string toString() const noexcept {
+    std::string toString() const {
         if constexpr (Debugger::isDebug) {
             return "WildcardSymbol{" + symbol_ + "}";
         } else {

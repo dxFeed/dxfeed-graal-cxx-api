@@ -82,7 +82,7 @@ std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) {
     return greeks;
 }
 
-std::string Greeks::toString() const noexcept {
+std::string Greeks::toString() const {
     return fmt::format(
         "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
         "gamma={}, theta={}, rho={}, vega={}}}",
