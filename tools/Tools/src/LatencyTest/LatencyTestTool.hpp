@@ -44,8 +44,8 @@ struct LatencyTest {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t) noexcept {
-        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(),
-                           nameFieldSize - 2 * namePadding, "", namePadding, SHORT_DESCRIPTION);
+        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(), nameFieldSize - 2 * namePadding, "",
+                           namePadding, SHORT_DESCRIPTION);
     }
 
     struct Diagnostic final {
@@ -320,16 +320,21 @@ struct LatencyTest {
                     intervalIsParsed = true;
                     index = parseResult.nextIndex;
                 } else {
-                    if (!forceStream && (forceStream = ForceStreamArg::parse(args, index).result)) {
-                        index++;
-                        continue;
+                    if (!forceStream) {
+                        forceStream = ForceStreamArg::parse(args, index).result;
+
+                        if (forceStream) {
+                            index++;
+                            continue;
+                        }
                     }
 
                     index++;
                 }
             }
 
-            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties, forceStream, interval.value_or(2)});
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties,
+                                          forceStream, interval.value_or(2)});
         }
     };
 
