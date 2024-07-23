@@ -1,4 +1,14 @@
-
+* **\[MDAPI-80]\[C++]\[IPF]** Implement custom fields in InstrumentProfile
+  * The API was migrated to Graal SDK v1.1.22
+  * Added methods:
+    * `InstrumentProfile::getField`
+    * `InstrumentProfile::setField`
+    * `InstrumentProfile::getNumericField`
+    * `InstrumentProfile::setNumericField`
+    * `InstrumentProfile::getDateField`
+    * `InstrumentProfile::setDateField`
+    * `InstrumentProfile::getNonEmptyCustomFieldNames`
+  * **\[BREAKING]**: All `toString` methods can now throw exceptions.
 * **\[MDAPI-26]\[C++]** Migrate to Graal SDK v1.1.21.
   * Added `Day::getSessions` method.
   * New order sources added: `CEDX` and `cedx`.

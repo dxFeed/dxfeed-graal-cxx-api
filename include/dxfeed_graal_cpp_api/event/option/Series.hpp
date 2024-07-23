@@ -517,7 +517,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

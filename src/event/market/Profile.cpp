@@ -109,7 +109,7 @@ std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) {
     return profile;
 }
 
-std::string Profile::toString() const noexcept {
+std::string Profile::toString() const {
     return fmt::format(
         "Profile{{{}, eventTime={}, description='{}', SSR={}, status={}, statusReason='{}', "
         "haltStartTime={}, haltEndTime={}, highLimitPrice={}, lowLimitPrice={}, high52WeekPrice={}, "

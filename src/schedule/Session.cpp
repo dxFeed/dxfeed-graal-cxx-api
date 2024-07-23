@@ -139,7 +139,7 @@ std::size_t Session::getHashCode() const noexcept {
     return isolated::schedule::Session::getHashCode(handle_.get());
 }
 
-std::string Session::toString() const noexcept {
+std::string Session::toString() const {
     if (!handle_) {
         return dxfcpp::String::EMPTY;
     }

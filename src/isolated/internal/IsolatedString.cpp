@@ -20,6 +20,10 @@ bool release(const char *string) {
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_String_release, string) == 0;
 }
 
+std::unique_ptr<const char, decltype(&release)> toUnique(const char *string) {
+    return {string, release};
+}
+
 } // namespace IsolatedString
 
 namespace IsolatedStringList {
@@ -32,6 +36,10 @@ bool release(/* dxfg_string_list* */ void *stringList) {
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_String_release,
                                                   static_cast<dxfg_string_list *>(stringList));
+}
+
+std::unique_ptr<void, decltype(&release)> toUnique(void *stringList) {
+    return {stringList, release};
 }
 
 } // namespace IsolatedStringList

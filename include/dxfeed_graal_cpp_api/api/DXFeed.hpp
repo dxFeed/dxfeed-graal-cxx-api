@@ -315,7 +315,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         return Promise<std::vector<std::shared_ptr<E>>>(getTimeSeriesPromiseImpl(E::TYPE, symbol, fromTime, toTime));
     }
 
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

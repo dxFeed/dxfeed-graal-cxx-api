@@ -87,7 +87,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      *
      * @return string representation of this candle alignment.
      */
-    std::string toString() const noexcept {
+    std::string toString() const {
         return string_;
     }
 

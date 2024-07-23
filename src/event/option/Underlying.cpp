@@ -80,7 +80,7 @@ std::shared_ptr<Underlying> Underlying::fromGraal(void *graalNative) {
     return underlying;
 }
 
-std::string Underlying::toString() const noexcept {
+std::string Underlying::toString() const {
     return fmt::format(
         "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
         "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",

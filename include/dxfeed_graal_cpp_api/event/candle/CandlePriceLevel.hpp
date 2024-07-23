@@ -77,7 +77,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      *
      * @return string representation of this price level.
      */
-    std::string toString() const noexcept {
+    std::string toString() const {
         if (math::equals(value_, static_cast<std::int64_t>(value_))) {
             return std::to_string(static_cast<std::int64_t>(value_));
         }

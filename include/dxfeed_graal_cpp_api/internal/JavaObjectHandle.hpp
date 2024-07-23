@@ -36,7 +36,7 @@ template <typename T> struct JavaObjectHandle {
     JavaObjectHandle &operator=(JavaObjectHandle &&) noexcept = default;
     virtual ~JavaObjectHandle() noexcept = default;
 
-    [[nodiscard]] std::string toString() const noexcept {
+    [[nodiscard]] std::string toString() const {
         if (impl_)
             return dxfcpp::toString(impl_.get());
         else
@@ -77,7 +77,7 @@ template <typename T> struct JavaObjectHandleList {
     JavaObjectHandleList &operator=(JavaObjectHandleList &&) noexcept = default;
     virtual ~JavaObjectHandleList() noexcept = default;
 
-    [[nodiscard]] std::string toString() const noexcept {
+    [[nodiscard]] std::string toString() const {
         if (impl_)
             return dxfcpp::toString(impl_.get());
         else

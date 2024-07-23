@@ -208,7 +208,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
         return *this;
     }
 
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

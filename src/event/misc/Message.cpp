@@ -113,7 +113,7 @@ void Message::freeGraal(void *graalNative) {
     delete graalMessage;
 }
 
-std::string Message::toString() const noexcept {
+std::string Message::toString() const {
     return fmt::format("Message{{{}, eventTime={}, attachment={}}}", getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL));
 }

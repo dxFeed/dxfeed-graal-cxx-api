@@ -66,7 +66,7 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
      *
      * @return a string representation
      */
-    virtual std::string toString() const noexcept {
+    virtual std::string toString() const {
         return "SharedEntity{}";
     }
 };

@@ -36,8 +36,7 @@ struct NonOwningInstrumentProfileIterator {
         }
 
         auto graalProfile = isolated::ipf::InstrumentProfileIterator::next(iterable);
-        auto result = InstrumentProfile::fromGraal(graalProfile);
-        isolated::ipf::InstrumentProfile::release(graalProfile);
+        auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
         return result;
     };
@@ -154,27 +153,7 @@ void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<Instrum
         return;
     }
 
-    auto graal = ip->toGraal();
-
-    if (graal) {
-        dxfcpp::isolated::ipf::InstrumentProfileCollector::updateInstrumentProfile(handle_.get(), graal);
-
-        InstrumentProfile::freeGraal(graal);
-    }
-}
-
-void InstrumentProfileCollector::updateInstrumentProfile(const InstrumentProfile &ip) const {
-    if (!handle_) {
-        return;
-    }
-
-    auto graal = ip.toGraal();
-
-    if (graal) {
-        dxfcpp::isolated::ipf::InstrumentProfileCollector::updateInstrumentProfile(handle_.get(), graal);
-
-        InstrumentProfile::freeGraal(graal);
-    }
+    isolated::ipf::InstrumentProfileCollector::updateInstrumentProfile(handle_.get(), ip->handle_.get());
 }
 
 std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() const noexcept {

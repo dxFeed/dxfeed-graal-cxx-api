@@ -259,7 +259,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept {
+    std::string toString() const {
         return "SymbolWrapper{" +
                std::visit(
                    [](const auto &symbol) {

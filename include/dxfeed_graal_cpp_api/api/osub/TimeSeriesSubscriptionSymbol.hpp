@@ -102,7 +102,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      *
      * @return string representation of this time-series subscription symbol.
      */
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 
     bool operator==(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept;
 

@@ -111,7 +111,7 @@ void OptionSale::setExchangeCode(char exchangeCode) noexcept {
     data_.exchangeCode = utf8to16(exchangeCode);
 }
 
-std::string OptionSale::toString() const noexcept {
+std::string OptionSale::toString() const {
     return fmt::format(
         "OptionSale{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, timeNanoPart={}, sequence={}, "
         "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "

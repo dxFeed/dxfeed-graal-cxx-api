@@ -108,16 +108,6 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     void updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const;
 
     /**
-     * Convenience method to update one instrument profile in this collector. This is a shortcut for:
-     * <pre><tt>
-     *    @ref InstrumentProfileCollector::updateInstrumentProfiles() "updateInstrumentProfiles"({ip}, nullptr);
-     * </tt></pre>
-     *
-     * @param ip The instrument profile.
-     */
-    void updateInstrumentProfile(const InstrumentProfile &ip) const;
-
-    /**
      * Returns a concurrent view of the set of instrument profiles.
      * Note, that removal of instrument profile is represented by an InstrumentProfile instance with a
      * @ref InstrumentProfile::getType() "type" equal to

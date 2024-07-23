@@ -57,7 +57,7 @@ IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *g
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), IndexedEventSource::fromGraal(graalSymbol->source)};
 }
 
-std::string IndexedEventSubscriptionSymbol::toString() const noexcept {
+std::string IndexedEventSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
         return "IndexedEventSubscriptionSymbol{" + eventSymbol_->toString() + ", source = " + source_.toString() + "}";
     } else {

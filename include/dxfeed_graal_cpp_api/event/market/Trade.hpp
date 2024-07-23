@@ -128,7 +128,7 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

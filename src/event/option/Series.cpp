@@ -86,7 +86,7 @@ std::shared_ptr<Series> Series::fromGraal(void *graalNative) {
     return series;
 }
 
-std::string Series::toString() const noexcept {
+std::string Series::toString() const {
     return fmt::format(
         "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
         "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",

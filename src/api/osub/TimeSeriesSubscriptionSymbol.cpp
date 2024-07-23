@@ -60,7 +60,7 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), graalSymbol->from_time};
 }
 
-std::string TimeSeriesSubscriptionSymbol::toString() const noexcept {
+std::string TimeSeriesSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
         return "TimeSeriesSubscriptionSymbol{" + getEventSymbol()->toString() +
                ", fromTime = " + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";

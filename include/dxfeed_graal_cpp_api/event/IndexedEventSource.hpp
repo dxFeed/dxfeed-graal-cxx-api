@@ -88,7 +88,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      *
      * @return The string representation of the object.
      */
-    std::string toString() const noexcept {
+    std::string toString() const {
         return name_;
     }
 

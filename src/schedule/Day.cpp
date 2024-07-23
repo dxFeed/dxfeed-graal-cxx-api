@@ -253,7 +253,7 @@ std::size_t Day::getHashCode() const noexcept {
     return isolated::schedule::Day::getHashCode(handle_.get());
 }
 
-std::string Day::toString() const noexcept {
+std::string Day::toString() const {
     if (!handle_) {
         return dxfcpp::String::EMPTY;
     }
