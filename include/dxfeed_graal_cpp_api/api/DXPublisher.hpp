@@ -244,7 +244,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      */
     std::shared_ptr<ObservableSubscription> getSubscription(const EventTypeEnum &eventType);
 
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

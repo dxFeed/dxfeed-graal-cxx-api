@@ -63,6 +63,7 @@ template struct JavaObjectHandle<DXPublisher>;
 template struct JavaObjectHandle<DXFeedSubscription>;
 template struct JavaObjectHandle<DXFeedEventListener>;
 
+template struct JavaObjectHandle<InstrumentProfile>;
 template struct JavaObjectHandle<InstrumentProfileReader>;
 template struct JavaObjectHandle<InstrumentProfileCollector>;
 template struct JavaObjectHandle<InstrumentProfileConnection>;

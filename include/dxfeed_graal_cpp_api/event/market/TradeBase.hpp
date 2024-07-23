@@ -394,7 +394,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return string representation of this trade event's fields.
      */
-    std::string baseFieldsToString() const noexcept;
+    std::string baseFieldsToString() const;
 };
 
 DXFCPP_END_NAMESPACE

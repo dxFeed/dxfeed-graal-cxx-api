@@ -108,7 +108,7 @@ struct DXFCPP_EXPORT SessionFilter {
         return type_ == sessionFilter.type_ && trading_ == sessionFilter.trading_;
     }
 
-    std::string toString() const noexcept {
+    std::string toString() const {
         return std::string("SessionFilter(") + ((!type_) ? "null" : type_.value().toString()) + ", " +
                ((!trading_) ? "null" : dxfcpp::toString(trading_.value())) + ")";
     }

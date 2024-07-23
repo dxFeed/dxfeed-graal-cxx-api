@@ -262,7 +262,7 @@ class Isolate final {
         }
     }
 
-    std::string toString() const noexcept {
+    std::string toString() const {
         return std::string("Isolate{") + dxfcpp::toString(handle_) + ", main = " + mainIsolateThread_.toString() +
                ", current = " + currentIsolateThread_.toString() + "}";
     }

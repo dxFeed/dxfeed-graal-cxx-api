@@ -669,7 +669,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return string representation of this order event's fields.
      */
-    std::string baseFieldsToString() const noexcept;
+    std::string baseFieldsToString() const;
 };
 
 DXFCPP_END_NAMESPACE

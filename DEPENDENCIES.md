@@ -2,7 +2,7 @@
 
 ## Compile-time
 
-- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v1.1.21
+- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v1.1.22
 - [Boost](https://github.com/boostorg/boost) v1.84.0
   - Boost.Stacktrace 1.0
 - [utfcpp](https://github.com/nemtrif/utfcpp) v3.2.3

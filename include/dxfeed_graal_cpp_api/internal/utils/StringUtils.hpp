@@ -14,6 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <optional>
 #include <string>
 #include <thread>
+#include <type_traits>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -34,12 +35,13 @@ DXFCPP_EXPORT std::string toString(void *ptr);
 
 DXFCPP_EXPORT std::string toString(double d);
 
-template <typename T> std::string toStringAny(T &&t);
+// template <typename T> std::string toStringAny(T &&t);
 
 template <typename T, typename U> std::string toString(const std::pair<T, U> &p) {
     return "{" + toStringAny(p.first) + ", " + toStringAny(p.second) + "}";
 }
 
+#if __cpp_concepts
 template <typename T> std::string toStringAny(T &&t) {
     if constexpr (requires { t.toString(); }) {
         return t.toString();
@@ -55,6 +57,89 @@ template <typename T> std::string toStringAny(T &&t) {
         return "unknown";
     }
 }
+#else
+namespace to_string_any {
+namespace detail {
+template <typename T, typename = void> struct HasToStringMember : std::false_type {};
+
+template <typename T> struct HasToStringMember<T, decltype(std::declval<T>().toString(), void())> : std::true_type {};
+
+template <typename T, typename = void> struct HasToStringMemberByPointer : std::false_type {};
+
+template <typename T>
+struct HasToStringMemberByPointer<T, decltype(std::declval<T>()->toString(), void())> : std::true_type {};
+
+template <typename T, typename = void> struct HasFreeToString : std::false_type {};
+
+template <typename T> struct HasFreeToString<T, decltype(toString(std::declval<T>()), void())> : std::true_type {};
+
+template <typename T, typename = void> struct HasStdToString : std::false_type {};
+
+template <typename T> struct HasStdToString<T, decltype(std::to_string(std::declval<T>()), void())> : std::true_type {};
+
+template <typename T, typename = void> struct IsConvertibleToString : std::false_type {};
+
+template <typename T>
+struct IsConvertibleToString<T, typename std::enable_if<std::is_convertible<T, std::string>::value>::type>
+    : std::true_type {};
+
+} // namespace detail
+} // namespace to_string_any
+
+template <typename T>
+typename std::enable_if<to_string_any::detail::HasToStringMember<T>::value, std::string>::type toStringAny(T &&t) {
+    return t.toString();
+}
+
+template <typename T>
+typename std::enable_if<to_string_any::detail::HasToStringMemberByPointer<T>::value &&
+                            !to_string_any::detail::HasToStringMember<T>::value,
+                        std::string>::type
+toStringAny(T &&t) {
+    return t->toString();
+}
+
+template <typename T>
+typename std::enable_if<to_string_any::detail::HasFreeToString<T>::value &&
+                            !to_string_any::detail::HasToStringMember<T>::value &&
+                            !to_string_any::detail::HasToStringMemberByPointer<T>::value,
+                        std::string>::type
+toStringAny(T &&t) {
+    return toString(t);
+}
+
+template <typename T>
+typename std::enable_if<to_string_any::detail::HasStdToString<T>::value &&
+                            !to_string_any::detail::HasToStringMember<T>::value &&
+                            !to_string_any::detail::HasToStringMemberByPointer<T>::value &&
+                            !to_string_any::detail::HasFreeToString<T>::value,
+                        std::string>::type
+toStringAny(T &&t) {
+    return std::to_string(t);
+}
+
+template <typename T>
+typename std::enable_if<
+    to_string_any::detail::IsConvertibleToString<T>::value && !to_string_any::detail::HasToStringMember<T>::value &&
+        !to_string_any::detail::HasToStringMemberByPointer<T>::value &&
+        !to_string_any::detail::HasFreeToString<T>::value && !to_string_any::detail::HasStdToString<T>::value,
+    std::string>::type
+toStringAny(T &&t) {
+    return std::string(t);
+}
+
+// Fallback case
+template <typename T>
+typename std::enable_if<!to_string_any::detail::HasToStringMember<T>::value &&
+                            !to_string_any::detail::HasToStringMemberByPointer<T>::value &&
+                            !to_string_any::detail::HasFreeToString<T>::value &&
+                            !to_string_any::detail::HasStdToString<T>::value &&
+                            !to_string_any::detail::IsConvertibleToString<T>::value,
+                        std::string>::type
+toStringAny(T &&) {
+    return "unknown";
+}
+#endif
 
 /**
  * Tries to convert UTF16 char to ASCII (part of UTF8) char.

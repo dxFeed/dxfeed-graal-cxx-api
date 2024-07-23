@@ -51,7 +51,7 @@ std::shared_ptr<ObservableSubscription> DXPublisher::getSubscription(const Event
     return subscription_;
 }
 
-std::string DXPublisher::toString() const noexcept {
+std::string DXPublisher::toString() const {
     return fmt::format("DXPublisher{{{}}}", handle_.toString());
 }
 

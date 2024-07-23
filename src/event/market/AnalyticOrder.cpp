@@ -66,7 +66,7 @@ std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) {
     return analyticOrder;
 }
 
-std::string AnalyticOrder::toString() const noexcept {
+std::string AnalyticOrder::toString() const {
     return fmt::format("AnalyticOrder{{{}, marketMaker={}, icebergPeakSize={}, icebergHiddenSize={}, "
                        "icebergExecutedSize={}, icebergType={}}}",
                        baseFieldsToString(), getMarketMaker(), dxfcpp::toString(getIcebergPeakSize()),

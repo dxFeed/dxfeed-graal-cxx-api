@@ -318,7 +318,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

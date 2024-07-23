@@ -415,7 +415,7 @@ class EventFlagsMask final {
     }
 
     ///
-    std::string toString() const noexcept {
+    std::string toString() const {
         bool addOrSign = false;
         std::ostringstream result{};
 

@@ -59,7 +59,7 @@ std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) {
     return trade;
 }
 
-std::string Trade::toString() const noexcept {
+std::string Trade::toString() const {
     return fmt::format("Trade{{{}}}", baseFieldsToString());
 }
 

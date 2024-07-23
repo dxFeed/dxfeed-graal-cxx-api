@@ -186,7 +186,7 @@ struct DXFCPP_EXPORT Session {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept;
+    std::string toString() const;
 };
 
 DXFCPP_END_NAMESPACE

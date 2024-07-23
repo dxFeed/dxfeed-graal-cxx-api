@@ -108,7 +108,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      *
      * @return string representation of this indexed event subscription symbol.
      */
-    virtual std::string toString() const noexcept;
+    virtual std::string toString() const;
 
     bool operator==(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept;
 

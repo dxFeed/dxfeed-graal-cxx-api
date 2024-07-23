@@ -133,7 +133,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     }
 
     ///
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 
     ~DXFeedSubscription() override;
 

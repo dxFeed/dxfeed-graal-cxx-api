@@ -134,7 +134,7 @@ void Candle::freeGraal(void *graalNative) {
     delete graalCandle;
 }
 
-std::string Candle::toString() const noexcept {
+std::string Candle::toString() const {
     return fmt::format(
         "Candle{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, count={}, open={}, high={}, low={}, "
         "close={}, volume={}, vwap={}, bidVolume={}, askVolume={}, impVolatility={}, openInterest={}}}",

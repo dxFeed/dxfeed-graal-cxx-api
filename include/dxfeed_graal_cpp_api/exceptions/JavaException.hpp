@@ -80,6 +80,14 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
         return v;
     }
 
+    template <typename T> static constexpr T throwIfMinusInf(T v) {
+        if (v == -std::numeric_limits<T>::infinity()) {
+            throwIfJavaThreadExceptionExists();
+        }
+
+        return v;
+    }
+
     /**
      * @return dxFeed Graal CXX API stack trace + Java (GraalVM) exception's stack trace.
      */

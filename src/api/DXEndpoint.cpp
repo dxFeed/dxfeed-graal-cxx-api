@@ -359,7 +359,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::st
     return withProperty(NAME_PROPERTY, name);
 }
 
-std::string DXEndpoint::toString() const noexcept {
+std::string DXEndpoint::toString() const {
     return fmt::format("DXEndpoint{{{}}}", handle_.toString());
 }
 
