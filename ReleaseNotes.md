@@ -1,3 +1,8 @@
+* **\[MDAPI-113]\[C++]\[Tools]** Tools should report invalid event type
+  *  Added classes: `RuntimeException`, `InvalidArgumentException`
+  *  `InvalidArgumentException`, `GraalException`, `JavaException` are now descendants of the `RuntimeException` class, which can collect stacktrace.
+  *  Now an `InvalidArgumentException` exception is thrown instead of the `std::invalid_argument` exception. 
+  *  `Tools` now reports incorrect event types specified by the user.
 * **\[MDAPI-80]\[C++]\[IPF]** Implement custom fields in InstrumentProfile
   * The API was migrated to Graal SDK v1.1.22
   * Added methods:
