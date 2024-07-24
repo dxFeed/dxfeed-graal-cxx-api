@@ -79,11 +79,7 @@ int main(int argc, char *argv[]) {
         sub->addSymbols(getSymbols(ipfFile));
 
         std::this_thread::sleep_for(std::chrono::days(365));
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
     }
 }

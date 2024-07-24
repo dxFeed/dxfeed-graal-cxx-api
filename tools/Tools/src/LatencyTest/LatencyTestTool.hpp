@@ -340,7 +340,6 @@ struct LatencyTest {
 
     static void run(const Args &args) noexcept {
         try {
-
             using namespace std::literals;
 
             auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
@@ -368,12 +367,8 @@ struct LatencyTest {
             endpoint->connect(args.address);
             endpoint->awaitNotConnected();
             endpoint->closeAndAwaitTermination();
-        } catch (const JavaException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
-        } catch (const GraalException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
+        } catch (const RuntimeException &e) {
+            std::cerr << e << '\n';
         }
     }
 };

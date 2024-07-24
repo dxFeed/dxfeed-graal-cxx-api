@@ -53,11 +53,7 @@ int main(int /* argc */, char ** /* argv */) {
 
         // close endpoint completely to release resources and shutdown GraalVM
         onDemand->getEndpoint()->closeAndAwaitTermination();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
     }
 }

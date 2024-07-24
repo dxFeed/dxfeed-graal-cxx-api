@@ -46,11 +46,7 @@ Where:
         std::cout << "Fetching last " << DAYS << " days of candles for " << baseSymbol << "\n";
 
         fetchAndPrint(candleSymbol, toTime, fromTime);
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
     }
 }

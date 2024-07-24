@@ -68,12 +68,8 @@ int main(int argc, char *argv[]) {
         // Close endpoint when we're done.
         // This method will gracefully close endpoint, waiting while data processing completes.
         endpoint->closeAndAwaitTermination();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
     }
 
     return 0;

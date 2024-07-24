@@ -70,12 +70,8 @@ int main(int argc, char *argv[]) {
         // Wait until all data is processed and written, and then gracefully close output endpoint.
         outputEndpoint->awaitProcessed();
         outputEndpoint->closeAndAwaitTermination();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
     }
 
     return 0;

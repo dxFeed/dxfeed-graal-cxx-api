@@ -5,7 +5,11 @@
 
 #include "../internal/Conf.hpp"
 
+#include "../internal/Common.hpp"
+
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
+
+#include "RuntimeException.hpp"
 
 #include <limits>
 #include <stdexcept>
@@ -17,7 +21,7 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * A wrapper over the interceptable Java exceptions thrown by the dxFeed Native Graal SDK
  */
-struct DXFCPP_EXPORT JavaException : public std::runtime_error {
+struct DXFCPP_EXPORT JavaException : RuntimeException {
     /**
      * Creates an exception using Java message, className and stack trace. Also uses current stack trace.
      *
@@ -25,7 +29,8 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
      * @param className Java class name.
      * @param stackTrace Java stack trace.
      */
-    JavaException(const std::string &message, const std::string &className, std::string stackTrace);
+    JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
+                  const StringLikeWrapper &stackTrace);
 
     /**
      * Creates an exception using native (GraalVM) Java exception handle
@@ -33,7 +38,7 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
      * @param exceptionHandle The native Java exception handle.
      * @return An exception.
      */
-    static JavaException create(void* exceptionHandle);
+    static JavaException create(void *exceptionHandle);
 
     /// Throws a JavaException if it exists (i.e. intercepted by Graal SDK)
     static void throwIfJavaThreadExceptionExists();
@@ -87,14 +92,6 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
 
         return v;
     }
-
-    /**
-     * @return dxFeed Graal CXX API stack trace + Java (GraalVM) exception's stack trace.
-     */
-    const std::string &getStackTrace() const &;
-
-  private:
-    std::string stackTrace_;
 };
 
 DXFCPP_END_NAMESPACE
