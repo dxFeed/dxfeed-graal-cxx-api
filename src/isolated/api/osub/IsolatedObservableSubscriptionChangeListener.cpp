@@ -16,17 +16,17 @@ create(/* dxfg_ObservableSubscriptionChangeListener_function_symbolsAdded */ voi
        /* dxfg_ObservableSubscriptionChangeListener_function_subscriptionClosed */ void *functionSubscriptionClosed,
        void *userData) {
     if (!functionSymbolsAdded) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to create ObservableSubscriptionChangeListener. The `functionSymbolsAdded` parameter is nullptr");
     }
 
     if (!functionSymbolsRemoved) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to create ObservableSubscriptionChangeListener. The `functionSymbolsRemoved` parameter is nullptr");
     }
 
     if (!functionSubscriptionClosed) {
-        throw std::invalid_argument("Unable to create ObservableSubscriptionChangeListener. The "
+        throw InvalidArgumentException("Unable to create ObservableSubscriptionChangeListener. The "
                                     "`functionSubscriptionClosed` parameter is nullptr");
     }
 

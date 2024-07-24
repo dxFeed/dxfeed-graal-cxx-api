@@ -47,11 +47,11 @@ void OtcMarketsOrder::fillGraalData(void *graalNative) const noexcept {
 
 OtcMarketsOrder::Ptr OtcMarketsOrder::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw std::invalid_argument("Unable to create OtcMarketsOrder. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create OtcMarketsOrder. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_OTC_MARKETS_ORDER) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to create OtcMarketsOrder. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_OTC_MARKETS_ORDER))));
@@ -89,7 +89,7 @@ void OtcMarketsOrder::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_OTC_MARKETS_ORDER) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to free OtcMarketsOrder's Graal data. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_OTC_MARKETS_ORDER))));

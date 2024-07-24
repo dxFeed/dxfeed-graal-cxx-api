@@ -13,7 +13,7 @@ namespace isolated::promise::IsolatedPromise {
 
 bool /* int32_t */ isDone(/* dxfg_promise_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Promise_isDone`. The `promise` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_isDone`. The `promise` is nullptr");
     }
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_isDone, static_cast<dxfg_promise_t *>(promise)) == 1;
@@ -21,7 +21,7 @@ bool /* int32_t */ isDone(/* dxfg_promise_t * */ void *promise) {
 
 bool /* int32_t */ hasResult(/* dxfg_promise_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Promise_hasResult`. The `promise` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_hasResult`. The `promise` is nullptr");
     }
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_hasResult, static_cast<dxfg_promise_t *>(promise)) == 1;
@@ -29,7 +29,7 @@ bool /* int32_t */ hasResult(/* dxfg_promise_t * */ void *promise) {
 
 bool /* int32_t */ hasException(/* dxfg_promise_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Promise_hasException`. The `promise` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_hasException`. The `promise` is nullptr");
     }
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_hasException, static_cast<dxfg_promise_t *>(promise)) ==
@@ -38,7 +38,7 @@ bool /* int32_t */ hasException(/* dxfg_promise_t * */ void *promise) {
 
 bool /* int32_t */ isCancelled(/* dxfg_promise_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Promise_isCancelled`. The `promise` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_isCancelled`. The `promise` is nullptr");
     }
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_isCancelled, static_cast<dxfg_promise_t *>(promise)) ==
@@ -47,7 +47,7 @@ bool /* int32_t */ isCancelled(/* dxfg_promise_t * */ void *promise) {
 
 std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_event_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_Promise_EventType_getResult`. The `promise` is nullptr");
     }
 
@@ -64,7 +64,7 @@ std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_ev
 std::vector<std::shared_ptr<EventType>> /* dxfg_event_type_list* */
 getResults(/* dxfg_promise_events_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_Promise_List_EventType_getResult`. The `promise` is nullptr");
     }
 
@@ -80,7 +80,7 @@ getResults(/* dxfg_promise_events_t * */ void *promise) {
 
 JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Promise_getException`. The `promise` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_getException`. The `promise` is nullptr");
     }
 
     auto *graalException =
@@ -95,7 +95,7 @@ JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void *
 
 void /* int32_t */ await(/* dxfg_promise_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Promise_await`. The `promise` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_await`. The `promise` is nullptr");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_await, static_cast<dxfg_promise_t *>(promise));
@@ -103,7 +103,7 @@ void /* int32_t */ await(/* dxfg_promise_t * */ void *promise) {
 
 void /* int32_t */ await(/* dxfg_promise_t * */ void *promise, std::int32_t timeoutInMilliseconds) {
     if (!promise) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Promise_await2`. The `promise` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_await2`. The `promise` is nullptr");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_await2, static_cast<dxfg_promise_t *>(promise),
@@ -112,7 +112,7 @@ void /* int32_t */ await(/* dxfg_promise_t * */ void *promise, std::int32_t time
 
 bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void *promise, std::int32_t timeoutInMilliseconds) {
     if (!promise) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_Promise_awaitWithoutException`. The `promise` is nullptr");
     }
 
@@ -122,7 +122,7 @@ bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void *promise, s
 
 void /* int32_t */ cancel(/* dxfg_promise_t * */ void *promise) {
     if (!promise) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Promise_cancel`. The `promise` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_cancel`. The `promise` is nullptr");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_cancel, static_cast<dxfg_promise_t *>(promise));

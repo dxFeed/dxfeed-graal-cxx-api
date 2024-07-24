@@ -66,7 +66,7 @@ InstrumentProfileConnection::createConnection(const std::string &address,
     std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 
     if (!collector->handle_) {
-        throw std::invalid_argument("The collector's handle is invalid");
+        throw InvalidArgumentException("The collector's handle is invalid");
     }
 
     connection->id_ =

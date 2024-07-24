@@ -18,7 +18,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     if (!graalNativeEvent) {
-        throw std::invalid_argument("The `graalNativeEvent` is nullptr");
+        throw InvalidArgumentException("The `graalNativeEvent` is nullptr");
     }
 
     // TODO: implement other types [EN-8235]
@@ -34,7 +34,7 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_CANDLE:
         return Candle::fromGraal(e);
     case DXFG_EVENT_DAILY_CANDLE:
-        throw std::invalid_argument("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
     case DXFG_EVENT_UNDERLYING:
         return Underlying::fromGraal(e);
     case DXFG_EVENT_THEO_PRICE:
@@ -44,13 +44,13 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_TRADE_ETH:
         return TradeETH::fromGraal(e);
     case DXFG_EVENT_CONFIGURATION:
-        throw std::invalid_argument("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
     case DXFG_EVENT_MESSAGE:
         return Message::fromGraal(e);
     case DXFG_EVENT_TIME_AND_SALE:
         return TimeAndSale::fromGraal(e);
     case DXFG_EVENT_ORDER_BASE:
-        throw std::invalid_argument("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
     case DXFG_EVENT_ORDER:
         return Order::fromGraal(e);
     case DXFG_EVENT_ANALYTIC_ORDER:
@@ -64,7 +64,7 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_OPTION_SALE:
         return OptionSale::fromGraal(e);
     default:
-        throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
     }
 }
 
@@ -115,7 +115,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_DAILY_CANDLE:
-        throw std::invalid_argument("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
 
     case DXFG_EVENT_UNDERLYING:
         Underlying::freeGraal(e);
@@ -134,7 +134,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_CONFIGURATION:
-        throw std::invalid_argument("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
 
     case DXFG_EVENT_MESSAGE:
         Message::freeGraal(e);
@@ -145,7 +145,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_ORDER_BASE:
-        throw std::invalid_argument("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
 
     case DXFG_EVENT_ORDER:
         Order::freeGraal(e);
@@ -172,7 +172,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     default:
-        throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
     }
 }
 

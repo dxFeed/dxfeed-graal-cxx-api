@@ -23,7 +23,7 @@ namespace isolated::api::IsolatedObservableSubscriptionChangeListener {
  * @param userData User data, which is placed each time as a callback parameter when called from listener.
  * @return The ObservableSubscriptionChangeListener's handle.
  *
- * @throws std::invalid_argument if functionSymbolsAdded or functionSymbolsRemoved or functionSubscriptionClosed is
+ * @throws InvalidArgumentException if functionSymbolsAdded or functionSymbolsRemoved or functionSubscriptionClosed is
  * nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.

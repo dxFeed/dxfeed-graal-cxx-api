@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
         auto endpoint = DXEndpoint::create()->connect(address);
 
         // Create a subscription with specified types attached to feed.
-        auto sub = endpoint->getFeed()->createSubscription(types);
+        auto sub = endpoint->getFeed()->createSubscription(types.first);
 
         // Add an event listener.
         sub->addEventListener([&ioMtx](const auto &events) {
@@ -91,12 +91,8 @@ int main(int argc, char *argv[]) {
         }
 
         std::cin.get();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
     }
 
     return 0;

@@ -199,6 +199,8 @@ set(dxFeedGraalCxxApi_InternalUtilsDebug_Sources
 )
 
 set(dxFeedGraalCxxApi_Exceptions_Sources
+        src/exceptions/RuntimeException.cpp
+        src/exceptions/InvalidArgumentException.cpp
         src/exceptions/GraalException.cpp
         src/exceptions/JavaException.cpp
 )

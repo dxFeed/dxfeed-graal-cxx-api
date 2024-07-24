@@ -83,12 +83,8 @@ int main(int argc, char *argv[]) {
 
                         std::cout << tools::Tools::getName() << "\n";
                         T::run(parseResult.result);
-                    } catch (const JavaException &e) {
-                        std::cerr << e.what() << '\n';
-                        std::cerr << e.getStackTrace() << '\n';
-                    } catch (const GraalException &e) {
-                        std::cerr << e.what() << '\n';
-                        std::cerr << e.getStackTrace() << '\n';
+                    } catch (const RuntimeException &e) {
+                        std::cerr << e << '\n';
                     }
                 },
                 tool);
@@ -97,12 +93,8 @@ int main(int argc, char *argv[]) {
         }
 
         std::cout << usage << "\n";
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
     } catch (const std::runtime_error &e) {
         std::cerr << e.what() << '\n';
     } catch (...) {

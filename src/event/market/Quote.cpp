@@ -113,11 +113,11 @@ std::string Quote::toString() const {
 
 std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw std::invalid_argument("Unable to create Quote. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create Quote. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to create Quote. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_QUOTE))));
@@ -148,7 +148,7 @@ void Quote::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_QUOTE) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to free Quote's Graal data. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_QUOTE))));

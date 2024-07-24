@@ -27,7 +27,7 @@ namespace isolated::util::IsolatedTimePeriod {
 
 std::int64_t getTime(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
     if (!timePeriod) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_TimePeriod_getTime`. The `timePeriod` handle is invalid");
     }
 
@@ -37,7 +37,7 @@ std::int64_t getTime(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod
 
 std::int32_t getSeconds(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
     if (!timePeriod) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_TimePeriod_getSeconds`. The `timePeriod` handle is invalid");
     }
 
@@ -47,7 +47,7 @@ std::int32_t getSeconds(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePer
 
 std::int64_t getNanos(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
     if (!timePeriod) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_TimePeriod_getNanos`. The `timePeriod` handle is invalid");
     }
 

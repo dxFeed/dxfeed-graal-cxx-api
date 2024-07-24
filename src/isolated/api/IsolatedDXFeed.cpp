@@ -15,7 +15,7 @@ namespace isolated::api::IsolatedDXFeed {
                                                         /* dxfg_symbol_t * */ const SymbolWrapper &symbol,
                                                         std::int64_t fromTime, std::int64_t toTime) {
     if (!feed) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeed_getTimeSeriesPromise`. The `feed` handle is invalid");
     }
 

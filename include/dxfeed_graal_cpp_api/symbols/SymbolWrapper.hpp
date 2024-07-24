@@ -219,6 +219,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
      */
     static void freeGraal(void *graalNative);
 
@@ -227,7 +228,8 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
+     * @throws RuntimeException if symbol type is unknown
      */
     static SymbolWrapper fromGraal(void *graalNative);
 

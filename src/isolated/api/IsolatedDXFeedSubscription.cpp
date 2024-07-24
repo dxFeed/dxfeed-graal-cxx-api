@@ -18,7 +18,7 @@ create(/* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
 JavaObjectHandle<DXFeedSubscription> /* dxfg_subscription_t* */
 create(/* dxfg_event_clazz_list_t * */ const std::unique_ptr<EventClassList> &eventClassList) {
     if (!eventClassList) {
-        throw std::invalid_argument("The eventClassList is nullptr");
+        throw InvalidArgumentException("The eventClassList is nullptr");
     }
 
     return JavaObjectHandle<DXFeedSubscription>(runGraalFunctionAndThrowIfNullptr(
@@ -27,7 +27,7 @@ create(/* dxfg_event_clazz_list_t * */ const std::unique_ptr<EventClassList> &ev
 
 bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_isClosed`. The `sub` handle is invalid");
     }
 
@@ -37,7 +37,7 @@ bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<D
 
 void /* int32_t */ close(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_close`. The `sub` handle is invalid");
     }
 
@@ -47,7 +47,7 @@ void /* int32_t */ close(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
 
 void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_clear`. The `sub` handle is invalid");
     }
 
@@ -58,7 +58,7 @@ void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
 std::vector<SymbolWrapper> /* dxfg_symbol_list* */
 getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_getSymbols`. The `sub` handle is invalid");
     }
 
@@ -75,7 +75,7 @@ getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription
 std::vector<SymbolWrapper> /* dxfg_symbol_list* */
 getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_getDecoratedSymbols`. The `sub` handle is invalid");
     }
 
@@ -92,12 +92,12 @@ getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSub
 void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                               /* dxfg_symbol_list * */ void *symbols) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The `sub` handle is invalid");
     }
 
     if (!symbols) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The "
                                     "`symbols` is nullptr");
     }
 
@@ -109,12 +109,12 @@ void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle
 void /* int32_t */ addSymbol(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                              /* dxfg_symbol_t * */ void *symbol) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_addSymbol`. The `sub` handle is invalid");
     }
 
     if (!symbol) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_addSymbol`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_addSymbol`. The "
                                     "`symbol` is nullptr");
     }
 
@@ -126,12 +126,12 @@ void /* int32_t */ addSymbol(/* dxfg_subscription_t * */ const JavaObjectHandle<
 void /* int32_t */ addSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                               /* dxfg_symbol_list * */ void *symbols) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_addSymbols`. The `sub` handle is invalid");
     }
 
     if (!symbols) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_addSymbols`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_addSymbols`. The "
                                     "`symbols` is nullptr");
     }
 
@@ -143,12 +143,12 @@ void /* int32_t */ addSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle
 void /* int32_t */ removeSymbol(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                                 /* dxfg_symbol_t * */ void *symbol) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_removeSymbol`. The `sub` handle is invalid");
     }
 
     if (!symbol) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_removeSymbol`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_removeSymbol`. The "
                                     "`symbol` is nullptr");
     }
 
@@ -160,12 +160,12 @@ void /* int32_t */ removeSymbol(/* dxfg_subscription_t * */ const JavaObjectHand
 void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                                  /* dxfg_symbol_list * */ void *symbols) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_removeSymbols`. The `sub` handle is invalid");
     }
 
     if (!symbols) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_removeSymbols`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_removeSymbols`. The "
                                     "`symbols` is nullptr");
     }
 
@@ -177,7 +177,7 @@ void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHan
 /* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod>
 getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_getAggregationPeriod`. The `sub` handle is invalid");
     }
 
@@ -188,12 +188,12 @@ getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSu
 /* int32_t */ void setAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                                         /* dxfg_time_period_t * */ const JavaObjectHandle<TimePeriod> &period) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_setAggregationPeriod`. The `sub` handle is invalid");
     }
 
     if (!period) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setAggregationPeriod`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_setAggregationPeriod`. The "
                                     "`period` handle is invalid");
     }
 
@@ -206,12 +206,12 @@ void /* int32_t */
 addEventListener(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                  /* dxfg_feed_event_listener_t * */ const JavaObjectHandle<dxfcpp::DXFeedEventListener> &listener) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The `sub` handle is invalid");
     }
 
     if (!listener) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The "
                                     "`listener` handle is invalid");
     }
 
@@ -225,12 +225,12 @@ void /* int32_t */ addChangeListener(
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
         &listener) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXFeedSubscription_addChangeListener`. The `sub` handle is invalid");
     }
 
     if (!listener) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_addChangeListener`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_addChangeListener`. The "
                                     "`listener` handle is invalid");
     }
 
@@ -244,12 +244,12 @@ void /* int32_t */ removeChangeListener(
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
         &listener) {
     if (!sub) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_removeChangeListener`. "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_removeChangeListener`. "
                                     "The `sub` handle is invalid");
     }
 
     if (!listener) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_removeChangeListener`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_removeChangeListener`. The "
                                     "`listener` handle is invalid");
     }
 
@@ -260,7 +260,7 @@ void /* int32_t */ removeChangeListener(
 
 std::int32_t getEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_getEventsBatchLimit`. "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_getEventsBatchLimit`. "
                                     "The `sub` handle is invalid");
     }
 
@@ -271,7 +271,7 @@ std::int32_t getEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHan
 /* int32_t */ void setEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                                        std::int32_t eventsBatchLimit) {
     if (!sub) {
-        throw std::invalid_argument("Unable to execute function `dxfg_DXFeedSubscription_setEventsBatchLimit`. "
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_setEventsBatchLimit`. "
                                     "The `sub` handle is invalid");
     }
 
@@ -284,7 +284,7 @@ namespace DXFeedEventListener {
 JavaObjectHandle<dxfcpp::DXFeedEventListener> /* dxfg_feed_event_listener_t* */
 create(/* dxfg_feed_event_listener_function */ void *userFunc, void *userData) {
     if (!userFunc) {
-        throw std::invalid_argument("Unable to create DXFeedEventListener. The `userFunc` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create DXFeedEventListener. The `userFunc` parameter is nullptr");
     }
 
     return JavaObjectHandle<dxfcpp::DXFeedEventListener>(runGraalFunctionAndThrowIfNullptr(

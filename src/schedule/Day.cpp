@@ -14,7 +14,7 @@ Day::Day(void *handle) noexcept : handle_(handle) {
 
 Day::Ptr Day::create(void *handle) {
     if (!handle) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to create a Day object. The handle is nullptr");
     }
 

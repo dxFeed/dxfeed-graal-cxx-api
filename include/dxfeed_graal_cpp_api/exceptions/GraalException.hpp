@@ -9,6 +9,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
 #include "../internal/CEntryPointErrors.hpp"
 
+#include "RuntimeException.hpp"
+
 #include <stdexcept>
 #include <string>
 
@@ -17,18 +19,13 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * The wrapper over CEntryPointErrorsEnum, the error code returned by GraalVM.
  */
-struct DXFCPP_EXPORT GraalException : public std::runtime_error {
+struct DXFCPP_EXPORT GraalException : RuntimeException {
     /**
      * Constructs an exception.
      *
      * @param entryPointErrorsEnum The error code returned by GraalVM.
      */
     GraalException(CEntryPointErrorsEnum entryPointErrorsEnum);
-
-    /**
-     * @return dxFeed Graal CXX API stack trace
-     */
-    const std::string& getStackTrace() const&;
 
   private:
     static inline std::string createMessage(CEntryPointErrorsEnum entryPointErrorsEnum) {
@@ -41,8 +38,6 @@ struct DXFCPP_EXPORT GraalException : public std::runtime_error {
 
         return result;
     }
-
-    std::string stackTrace_;
 };
 
 DXFCPP_END_NAMESPACE

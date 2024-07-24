@@ -92,11 +92,11 @@ void Profile::freeGraalData(void *graalNative) noexcept {
 
 std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw std::invalid_argument("Unable to create Profile. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create Profile. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_PROFILE) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to create Profile. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_PROFILE))));
@@ -143,7 +143,7 @@ void Profile::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_PROFILE) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to free Profile's Graal data. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_PROFILE))));

@@ -133,8 +133,7 @@ struct PerfTestTool {
         }
 
       public:
-        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod,
-                                                  bool showCpuUsageByCore) {
+        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore) {
             auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore));
 
             d->timer_ = Timer::schedule(
@@ -241,6 +240,22 @@ struct PerfTestTool {
 
             System::setProperties(parsedProperties);
 
+            auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(args.types);
+
+            if (!unknownTypes.empty()) {
+                auto unknown = elementsToString(unknownTypes.begin(), unknownTypes.end(), "", "");
+
+                throw InvalidArgumentException(
+                    fmt::format("There are unknown event types: {}!\n List of available event types: {}", unknown,
+                                enum_utils::getEventTypeEnumClassNamesList(", ")));
+            }
+
+            if (parsedTypes.empty()) {
+                throw InvalidArgumentException("The resulting list of types is empty!");
+            }
+
+            auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols);
+
             auto endpoint =
                 DXEndpoint::newBuilder()
                     ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
@@ -249,7 +264,7 @@ struct PerfTestTool {
                     ->withName(NAME + "Tool-Feed")
                     ->build();
 
-            auto sub = endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types));
+            auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
             auto diagnostic = Diagnostic::create(2s, args.showCpuUsageByCore);
 
             std::atomic<std::size_t> hash{};
@@ -265,18 +280,14 @@ struct PerfTestTool {
                 });
             }
 
-            sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols));
+            sub->addSymbols(parsedSymbols);
             endpoint->connect(args.address);
             endpoint->awaitNotConnected();
             endpoint->closeAndAwaitTermination();
 
             std::cout << hash << std::endl;
-        } catch (const JavaException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
-        } catch (const GraalException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
+        } catch (const RuntimeException &e) {
+            std::cerr << e << '\n';
         }
     }
 };

@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/utils/StringUtils.hpp"
+#include "../../exceptions/InvalidArgumentException.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
 
@@ -101,7 +102,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      *
      * @param s The string representation of candle alignment.
      * @return The candle alignment (reference)
-     * @throws std::invalid_argument if the string representation is invalid.
+     * @throws InvalidArgumentException if the string representation is invalid.
      */
     static std::reference_wrapper<const CandleAlignment> parse(const dxfcpp::StringLikeWrapper &s) {
         auto found = BY_STRING.find(s);
@@ -118,7 +119,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
             }
         }
 
-        throw std::invalid_argument("Unknown candle alignment: " + s);
+        throw InvalidArgumentException("Unknown candle alignment: " + s);
     }
 
     /**
@@ -152,7 +153,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
         try {
             auto other = parse(a.value());
 
-            if (other == DEFAULT) {
+            if (other.get() == DEFAULT) {
                 return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
             }
 
@@ -160,6 +161,8 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
                 return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.get().toString());
             }
 
+            return symbol;
+        } catch (const InvalidArgumentException &) {
             return symbol;
         } catch (const std::invalid_argument &) {
             return symbol;

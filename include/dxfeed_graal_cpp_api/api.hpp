@@ -52,6 +52,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
 #include "isolated/Isolated.hpp"
 
+#include "exceptions/RuntimeException.hpp"
+#include "exceptions/InvalidArgumentException.hpp"
 #include "exceptions/JavaException.hpp"
 #include "exceptions/GraalException.hpp"
 

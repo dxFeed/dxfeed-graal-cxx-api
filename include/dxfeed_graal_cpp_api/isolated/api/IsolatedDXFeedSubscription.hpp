@@ -30,7 +30,7 @@ create(/* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
  *
  * @param eventClassList The subscription's event types.
  *
- * @throws std::invalid_argument if eventClassList is nullptr.
+ * @throws InvalidArgumentException if eventClassList is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -46,7 +46,7 @@ create(/* dxfg_event_clazz_list_t * */ const std::unique_ptr<EventClassList> &ev
  *
  * @param sub The subscription's handle.
  * @return `true` if subscription is closed.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -56,7 +56,7 @@ bool /* int32_t */ isClosed(/* dxfg_subscription_t * */ const JavaObjectHandle<D
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_close` in isolation.
  *
  * @param sub The subscription's handle.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -72,7 +72,7 @@ void /* int32_t */ close(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_clear` in isolation.
  *
  * @param sub The subscription's handle.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -83,7 +83,7 @@ void /* int32_t */ clear(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFe
  *
  * @param sub The subscription's handle.
  * @return The subscription's symbols.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -95,7 +95,7 @@ getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription
  *
  * @param sub The subscription's handle.
  * @return The subscription's decorated symbols.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -110,7 +110,7 @@ getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSub
  *
  * @param sub The subscription's handle.
  * @param symbols The subscription's symbols.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid or the symbols is nullptr.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid or the symbols is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -122,7 +122,7 @@ void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle
  *
  * @param sub The subscription's handle.
  * @param symbol The subscription's symbol.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid or the symbol is nullptr.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid or the symbol is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -134,7 +134,7 @@ void /* int32_t */ addSymbol(/* dxfg_subscription_t * */ const JavaObjectHandle<
  *
  * @param sub The subscription's handle.
  * @param symbols The subscription's symbols.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid or the symbols is nullptr.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid or the symbols is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -146,7 +146,7 @@ void /* int32_t */ addSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle
  *
  * @param sub The subscription's handle.
  * @param symbol The subscription's symbol.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid or the symbol is nullptr.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid or the symbol is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -158,7 +158,7 @@ void /* int32_t */ removeSymbol(/* dxfg_subscription_t * */ const JavaObjectHand
  *
  * @param sub The subscription's handle.
  * @param symbols The subscription's symbols.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid or the symbols is nullptr.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid or the symbols is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -173,7 +173,7 @@ void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHan
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_getAggregationPeriod` in isolation.
  *
  * @param sub The subscription's handle.
- * @throws std::invalid_argument if DXFeedSubscription's handle is invalid.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -185,7 +185,7 @@ getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSu
  *
  * @param sub The subscription's handle.
  * @param period The period's handle.
- * @throws std::invalid_argument if DXFeedSubscription's handle or period's handle is invalid.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle or period's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -197,7 +197,7 @@ getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSu
  *
  * @param sub The subscription's handle.
  * @param listener The listener's handle.
- * @throws std::invalid_argument if DXFeedSubscription's or DXFeedEventListener's handle is invalid.
+ * @throws InvalidArgumentException if DXFeedSubscription's or DXFeedEventListener's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -213,7 +213,7 @@ addEventListener(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscr
  *
  * @param sub The subscription's handle.
  * @param listener The listener's handle.
- * @throws std::invalid_argument if DXFeedSubscription's or ObservableSubscriptionChangeListener's handle
+ * @throws InvalidArgumentException if DXFeedSubscription's or ObservableSubscriptionChangeListener's handle
  * is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
@@ -228,7 +228,7 @@ void /* int32_t */ addChangeListener(
  *
  * @param sub The subscription's handle.
  * @param listener The listener's handle.
- * @throws std::invalid_argument if DXFeedSubscription's or ObservableSubscriptionChangeListener's handle
+ * @throws InvalidArgumentException if DXFeedSubscription's or ObservableSubscriptionChangeListener's handle
  * is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
@@ -253,7 +253,7 @@ namespace DXFeedEventListener {
  * @param userData User data, which is placed each time as a callback parameter when called from listener.
  * @return The DXFeedEventListener's handle.
  *
- * @throws std::invalid_argument if userFunc is nullptr.
+ * @throws InvalidArgumentException if userFunc is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */

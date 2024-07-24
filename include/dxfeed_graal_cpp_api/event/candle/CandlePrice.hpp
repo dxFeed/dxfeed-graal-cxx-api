@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/utils/StringUtils.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
@@ -117,13 +118,11 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      *
      * @param s The string representation of candle price type.
      * @return The candle price type (reference).
+     * @throws InvalidArgumentException if argument is empty or invalid
      */
     static std::reference_wrapper<const CandlePrice> parse(const dxfcpp::StringLikeWrapper &s) {
-        auto sw = s.operator std::string_view();
-        auto n = sw.length();
-
-        if (n == 0) {
-            throw std::invalid_argument("Missing candle price");
+        if (s.empty()) {
+            throw InvalidArgumentException("Missing candle price");
         }
 
         auto found = BY_STRING.find(s);
@@ -135,12 +134,12 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
         for (const auto &priceRef : VALUES) {
             const auto &priceStr = priceRef.get().toString();
 
-            if (priceStr.length() >= n && iEquals(priceStr.substr(0, n), s)) {
+            if (priceStr.length() >= s.length() && iEquals(priceStr.substr(0, s.length()), s)) {
                 return priceRef;
             }
         }
 
-        throw std::invalid_argument("Unknown candle price: " + s);
+        throw InvalidArgumentException("Unknown candle price: " + s);
     }
 
     /**
@@ -163,8 +162,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the the candle price type attribute.
      */
-    static std::string
-    normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {
@@ -174,7 +172,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
         try {
             auto other = parse(a.value());
 
-            if (other == DEFAULT) {
+            if (other.get() == DEFAULT) {
                 return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
             }
 
@@ -182,6 +180,8 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
                 return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.get().toString());
             }
 
+            return symbol;
+        } catch (const InvalidArgumentException &) {
             return symbol;
         } catch (const std::invalid_argument &) {
             return symbol;

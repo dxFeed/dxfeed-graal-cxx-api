@@ -89,7 +89,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
 
@@ -106,6 +106,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
      */
     static void freeGraal(void *graalNative);
 

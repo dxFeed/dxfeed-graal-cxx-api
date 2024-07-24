@@ -225,11 +225,7 @@ int main(int argc, char *argv[]) {
         printCurrentSession(profile, time);
         printNextTradingSession(profile, time);
         printNearestTradingSession(profile, time);
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
     }
 }

@@ -217,14 +217,16 @@ std::string namesToString(It begin, It end) {
     return result + "]";
 }
 
-template <typename It> std::string elementsToString(It begin, It end) {
-    std::string result{"["};
+template <typename It>
+std::string elementsToString(It begin, It end, const std::string &prefix = "[", const std::string &postfix = "[",
+                             const std::string &separator = ", ") {
+    std::string result{prefix};
 
     for (auto it = begin; it != end; it++) {
-        result += String::EMPTY + toStringAny(*it) + (std::next(it) == end ? "" : ", ");
+        result += String::EMPTY + toStringAny(*it) + (std::next(it) == end ? "" : separator);
     }
 
-    return result + "]";
+    return result + postfix;
 }
 
 DXFCPP_EXPORT std::string encodeChar(std::int16_t c);

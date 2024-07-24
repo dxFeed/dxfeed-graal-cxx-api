@@ -44,8 +44,8 @@ struct LatencyTest {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t) noexcept {
-        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(),
-                           nameFieldSize - 2 * namePadding, "", namePadding, SHORT_DESCRIPTION);
+        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(), nameFieldSize - 2 * namePadding, "",
+                           namePadding, SHORT_DESCRIPTION);
     }
 
     struct Diagnostic final {
@@ -320,27 +320,47 @@ struct LatencyTest {
                     intervalIsParsed = true;
                     index = parseResult.nextIndex;
                 } else {
-                    if (!forceStream && (forceStream = ForceStreamArg::parse(args, index).result)) {
-                        index++;
-                        continue;
+                    if (!forceStream) {
+                        forceStream = ForceStreamArg::parse(args, index).result;
+
+                        if (forceStream) {
+                            index++;
+                            continue;
+                        }
                     }
 
                     index++;
                 }
             }
 
-            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties, forceStream, interval.value_or(2)});
+            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties,
+                                          forceStream, interval.value_or(2)});
         }
     };
 
     static void run(const Args &args) noexcept {
         try {
-
             using namespace std::literals;
 
             auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
 
             System::setProperties(parsedProperties);
+
+            auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(args.types.has_value() ? *args.types : "all");
+
+            if (!unknownTypes.empty()) {
+                auto unknown = elementsToString(unknownTypes.begin(), unknownTypes.end(), "", "");
+
+                throw InvalidArgumentException(
+                    fmt::format("There are unknown event types: {}!\n List of available event types: {}", unknown,
+                                enum_utils::getEventTypeEnumClassNamesList(", ")));
+            }
+
+            if (parsedTypes.empty()) {
+                throw InvalidArgumentException("The resulting list of types is empty!");
+            }
+
+            auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols.has_value() ? *args.symbols : "all");
 
             auto endpoint =
                 DXEndpoint::newBuilder()
@@ -350,8 +370,7 @@ struct LatencyTest {
                     ->withName(NAME + "Tool-Feed")
                     ->build();
 
-            auto sub = endpoint->getFeed()->createSubscription(
-                CmdArgsUtils::parseTypes(args.types.has_value() ? *args.types : "all"));
+            auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
             auto diagnostic = Diagnostic::create(std::chrono::seconds(args.interval));
 
             sub->addEventListener([d = diagnostic](auto &&events) {
@@ -359,16 +378,12 @@ struct LatencyTest {
                 d->handleEvents(events);
             });
 
-            sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols.has_value() ? *args.symbols : "all"));
+            sub->addSymbols(parsedSymbols);
             endpoint->connect(args.address);
             endpoint->awaitNotConnected();
             endpoint->closeAndAwaitTermination();
-        } catch (const JavaException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
-        } catch (const GraalException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
+        } catch (const RuntimeException &e) {
+            std::cerr << e << '\n';
         }
     }
 };

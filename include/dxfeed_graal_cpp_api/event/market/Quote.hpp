@@ -80,7 +80,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
 
@@ -97,6 +97,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
      */
     static void freeGraal(void *graalNative);
 
@@ -153,12 +154,13 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param sequence The sequence.
      *
      * @see Quote::getSequence()
+     * @throws InvalidArgumentException
      */
     void setSequence(std::int32_t sequence) {
         assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
         if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw std::invalid_argument("Invalid sequence value = " + std::to_string(sequence));
+            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
         }
 
         data_.timeMillisSequence = orOp(andOp(data_.timeMillisSequence, ~MAX_SEQUENCE), sequence);

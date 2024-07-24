@@ -55,13 +55,17 @@ auto splitAndTrim = [](auto &&symbols, char sep = ',') noexcept {
     return symbols | ranges::views::split(sep) | filterNonEmpty | transformToString | trim;
 };
 
-decltype(ranges::views::transform([](auto &&s) {
+auto toUpper = [](auto&& s) {
     auto locale = std::locale{};
 
     return s | ranges::views::transform([&locale](auto c) {
                return std::toupper(c, locale);
            }) |
            ranges::to<std::string>();
+};
+
+decltype(ranges::views::transform([](auto &&s) {
+    return toUpper(s);
 })) transformToUpper{};
 
 std::unordered_set<std::string> parseStringSymbols(const std::string &symbols) noexcept {
@@ -171,8 +175,8 @@ std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(std::optional<
     return {};
 }
 
-std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
-CmdArgsUtils::parseTypes(const std::string &types) noexcept {
+std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
+CmdArgsUtils::parseTypes(const std::string &types) {
     auto trimmedTypes = trimStr(types);
 
     if (trimmedTypes.empty()) {
@@ -180,34 +184,36 @@ CmdArgsUtils::parseTypes(const std::string &types) noexcept {
     }
 
     if (trimmedTypes == "*" || trimmedTypes == "all" || trimmedTypes == "All" || trimmedTypes == "ALL") {
-        return EventTypeEnum::ALL | ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>();
+        return {EventTypeEnum::ALL | ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>(), {}};
     }
 
-    auto split = splitAndTrim(trimmedTypes) | filterNonEmpty;
-    auto allByName = split | transformToUpper | ranges::views::filter([](const auto &s) {
-                         return EventTypeEnum::ALL_BY_NAME.contains(s);
-                     }) |
-                     ranges::views::transform([](const auto &s) {
-                         return EventTypeEnum::ALL_BY_NAME.at(s);
-                     });
-    auto allByClassName = split | ranges::views::filter([](const auto &s) {
-                              return EventTypeEnum::ALL_BY_CLASS_NAME.contains(s);
-                          }) |
-                          ranges::views::transform([](const auto &s) {
-                              return EventTypeEnum::ALL_BY_CLASS_NAME.at(s);
-                          });
+    auto split = splitAndTrim(trimmedTypes) | filterNonEmpty | ranges::to<std::vector<std::string>>;
 
-    return ranges::views::concat(allByName, allByClassName) |
-           ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>();
+    std::unordered_set<std::reference_wrapper<const EventTypeEnum>> result;
+    std::vector<std::string> unknown;
+
+    for (auto t : split) {
+        auto u = toUpper(t);
+
+        if (EventTypeEnum::ALL_BY_NAME.contains(u)) {
+            result.emplace(EventTypeEnum::ALL_BY_NAME.at(u));
+        } else if (EventTypeEnum::ALL_BY_CLASS_NAME.contains(t)) {
+            result.emplace(EventTypeEnum::ALL_BY_CLASS_NAME.at(t));
+        } else {
+            unknown.push_back(t);
+        }
+    }
+
+    return {result, unknown};
 }
 
-std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
-CmdArgsUtils::parseTypes(std::optional<std::string> types) noexcept {
+std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
+CmdArgsUtils::parseTypes(std::optional<std::string> types) {
     if (types.has_value()) {
         return parseTypes(types.value());
     }
 
-    return std::unordered_set<std::reference_wrapper<const EventTypeEnum>>{};
+    return {};
 }
 
 std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const std::string &properties) noexcept {
