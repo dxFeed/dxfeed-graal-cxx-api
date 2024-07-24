@@ -346,6 +346,22 @@ struct LatencyTest {
 
             System::setProperties(parsedProperties);
 
+            auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(args.types.has_value() ? *args.types : "all");
+
+            if (!unknownTypes.empty()) {
+                auto unknown = elementsToString(unknownTypes.begin(), unknownTypes.end(), "", "");
+
+                throw InvalidArgumentException(
+                    fmt::format("There are unknown event types: {}!\n List of available event types: {}", unknown,
+                                enum_utils::getEventTypeEnumClassNamesList(", ")));
+            }
+
+            if (parsedTypes.empty()) {
+                throw InvalidArgumentException("The resulting list of types is empty!");
+            }
+
+            auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols.has_value() ? *args.symbols : "all");
+
             auto endpoint =
                 DXEndpoint::newBuilder()
                     ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
@@ -354,8 +370,7 @@ struct LatencyTest {
                     ->withName(NAME + "Tool-Feed")
                     ->build();
 
-            auto sub = endpoint->getFeed()->createSubscription(
-                CmdArgsUtils::parseTypes(args.types.has_value() ? *args.types : "all"));
+            auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
             auto diagnostic = Diagnostic::create(std::chrono::seconds(args.interval));
 
             sub->addEventListener([d = diagnostic](auto &&events) {
@@ -363,7 +378,7 @@ struct LatencyTest {
                 d->handleEvents(events);
             });
 
-            sub->addSymbols(CmdArgsUtils::parseSymbols(args.symbols.has_value() ? *args.symbols : "all"));
+            sub->addSymbols(parsedSymbols);
             endpoint->connect(args.address);
             endpoint->awaitNotConnected();
             endpoint->closeAndAwaitTermination();
