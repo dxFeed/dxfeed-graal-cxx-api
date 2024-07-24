@@ -742,7 +742,7 @@ struct StringLikeWrapper {
         if (auto sv = std::get_if<std::string_view>(&data_); sv) {
             auto sv2 = sv->substr(pos, count);
 
-            return {sv2.data(), sv->size()};
+            return {sv2.data(), sv2.size()};
         } else {
             return std::get<std::string>(data_).substr(pos, count);
         }
