@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
         auto types = CmdArgsUtils::parseTypes(argv[1]);
         auto ipfFile = argv[2];
 
-        auto sub = DXFeed::getInstance()->createSubscription(types);
+        auto sub = DXFeed::getInstance()->createSubscription(types.first);
 
         sub->addEventListener<MarketEvent>([](auto &&events) {
             for (auto &&event : events) {

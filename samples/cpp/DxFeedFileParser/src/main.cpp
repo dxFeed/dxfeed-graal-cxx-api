@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
         auto feed = endpoint->getFeed();
 
         // Subscribe to a specified event and symbol.
-        auto sub = feed->createSubscription(types);
+        auto sub = feed->createSubscription(types.first);
         sub->addEventListener([&eventCounter, &ioMtx](const auto &events) {
             std::lock_guard lock{ioMtx};
 

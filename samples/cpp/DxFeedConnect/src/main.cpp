@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
         auto endpoint = DXEndpoint::create()->connect(address);
 
         // Create a subscription with specified types attached to feed.
-        auto sub = endpoint->getFeed()->createSubscription(types);
+        auto sub = endpoint->getFeed()->createSubscription(types.first);
 
         // Add an event listener.
         sub->addEventListener([&ioMtx](const auto &events) {
