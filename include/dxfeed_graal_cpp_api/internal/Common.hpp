@@ -18,11 +18,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <charconv>
 #include <chrono>
 #include <cmath>
-#include <iostream>
-#include <mutex>
-#include <sstream>
 #include <string>
-#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <variant>
@@ -289,20 +285,7 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
     return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
 }
 
-static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
-    if (month < 1 || month > 12) {
-        throw std::invalid_argument("invalid month " + std::to_string(month));
-    }
-
-    std::int32_t dayOfYear = DAY_OF_YEAR[month] + day - 1;
-
-    if (month > 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-        dayOfYear++;
-    }
-
-    return year * 365 + math_util::div(year - 1, 4) - math_util::div(year - 1, 100) + math_util::div(year - 1, 400) +
-           dayOfYear - 719527;
-}
+static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day);
 
 } // namespace day_util
 
@@ -747,6 +730,24 @@ struct StringLikeWrapper {
         return size();
     }
 
+    bool ends_with(const StringLikeWrapper &sw) const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            return sv->ends_with(sw);
+        } else {
+            return std::get<std::string>(data_).ends_with(sw);
+        }
+    }
+
+    std::string substr(std::string::size_type pos = 0, std::string::size_type count = std::string::npos) const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            auto sv2 = sv->substr(pos, count);
+
+            return {sv2.data(), sv->size()};
+        } else {
+            return std::get<std::string>(data_).substr(pos, count);
+        }
+    }
+
     bool operator==(const StringLikeWrapper &sw) const {
         return sw.operator std::string_view() == this->operator std::string_view();
     }
@@ -796,9 +797,8 @@ struct StringHash {
 };
 
 namespace util {
-inline void throwInvalidChar(char c, const std::string &name) {
-    throw std::invalid_argument("Invalid " + name + ": " + encodeChar(c));
-}
+
+inline void throwInvalidChar(char c, const std::string &name);
 
 inline void checkChar(char c, std::uint32_t mask, const std::string &name) {
     if ((andOp(c, ~mask)) != 0) {

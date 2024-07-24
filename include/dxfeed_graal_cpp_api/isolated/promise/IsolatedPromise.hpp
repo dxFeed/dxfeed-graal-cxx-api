@@ -22,7 +22,7 @@ namespace isolated::promise::IsolatedPromise {
  *
  * @param promise The promise's handle.
  * @return `true` when computation has completed normally or exceptionally or was cancelled.
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -33,7 +33,7 @@ bool /* int32_t */ isDone(/* dxfg_promise_t * */ void* promise);
  *
  * @param promise The promise's handle.
  * @return `true` when computation has completed normally
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -44,7 +44,7 @@ bool /* int32_t */ hasResult(/* dxfg_promise_t * */ void* promise);
  *
  * @param promise The promise's handle.
  * @return `true` when computation has completed exceptionally or was cancelled.
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -55,7 +55,7 @@ bool /* int32_t */ hasException(/* dxfg_promise_t * */ void* promise);
  *
  * @param promise The promise's handle.
  * @return `true` when computation was cancelled.
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -66,7 +66,7 @@ bool /* int32_t */ isCancelled(/* dxfg_promise_t * */ void* promise);
  *
  * @param promise The promise's handle.
  * @return event by promise
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -77,7 +77,7 @@ std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_ev
  *
  * @param promise The promise's handle.
  * @return events by promise
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -88,7 +88,7 @@ std::vector<std::shared_ptr<EventType>> /* dxfg_event_type_list* */ getResults(/
  *
  * @param promise The promise's handle.
  * @return exception by promise
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -98,7 +98,7 @@ JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void* 
  * Calls the Graal SDK function `dxfg_Promise_await` in isolation.
  *
  * @param promise The promise's handle.
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -109,7 +109,7 @@ void /* int32_t */ await(/* dxfg_promise_t * */ void* promise);
  *
  * @param promise The promise's handle.
  * @param timeoutInMilliseconds The promise's timeout.
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -121,7 +121,7 @@ void /* int32_t */ await(/* dxfg_promise_t * */ void* promise, std::int32_t time
  * @param promise The promise's handle.
  * @param timeoutInMilliseconds The promise's timeout.
  * @return `true` if the computation has completed normally; `false` when wait timed out.
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -131,7 +131,7 @@ bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void* promise, s
  * Calls the Graal SDK function `dxfg_Promise_cancel` in isolation.
  *
  * @param promise The promise's handle.
- * @throws std::invalid_argument if promise handle is nullptr.
+ * @throws InvalidArgumentException if promise handle is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */

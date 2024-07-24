@@ -40,7 +40,7 @@ std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DX
     std::shared_ptr<OnDemandService> onDemandService{new OnDemandService{}};
 
     if (!endpoint->handle_) {
-        throw std::invalid_argument("The endpoint's handle is invalid");
+        throw InvalidArgumentException("The endpoint's handle is invalid");
     }
 
     auto id = ApiContext::getInstance()->getManager<OnDemandServiceManager>()->registerEntity(onDemandService);

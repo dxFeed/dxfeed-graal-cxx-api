@@ -234,10 +234,11 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
      *
      * @param index unique per-symbol index of this order.
+     * @throws InvalidArgumentException
      */
     void setIndex(std::int64_t index) override {
         if (index < 0) {
-            throw std::invalid_argument("Negative index: " + std::to_string(index));
+            throw InvalidArgumentException("Negative index: " + std::to_string(index));
         }
 
         orderBaseData_.index = index;
@@ -333,10 +334,11 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @param sequence the sequence.
      *
      * @see OrderBase::getSequence()
+     * @throws InvalidArgumentException
      */
     void setSequence(std::int32_t sequence) {
         if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw std::invalid_argument("Invalid sequence value = " + std::to_string(sequence));
+            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
         }
 
         orderBaseData_.timeSequence = orOp(andOp(orderBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);

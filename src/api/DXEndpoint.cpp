@@ -120,7 +120,7 @@ std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::Im
 std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
                                                const std::unordered_map<std::string, std::string> &properties) {
     if (endpointHandle == nullptr) {
-        throw std::invalid_argument("Unable to create DXEndpoint. The `endpointHandle` is nullptr");
+        throw InvalidArgumentException("Unable to create DXEndpoint. The `endpointHandle` is nullptr");
     }
 
     if constexpr (Debugger::isDebug) {

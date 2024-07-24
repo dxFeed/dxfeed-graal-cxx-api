@@ -13,7 +13,7 @@ Schedule::Schedule(void *handle) noexcept : handle_(handle) {
 
 Schedule::Ptr Schedule::create(void *handle) {
     if (!handle) {
-        throw std::invalid_argument("Unable to create a Schedule object. The handle is nullptr");
+        throw InvalidArgumentException("Unable to create a Schedule object. The handle is nullptr");
     }
 
     return std::shared_ptr<Schedule>(new Schedule(handle));
@@ -21,7 +21,7 @@ Schedule::Ptr Schedule::create(void *handle) {
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        throw std::invalid_argument("The profile is nullptr");
+        throw InvalidArgumentException("The profile is nullptr");
     }
 
     auto schedule = create(isolated::schedule::Schedule::getInstance(profile->handle_.get()));
@@ -35,7 +35,7 @@ Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) {
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) {
     if (!profile) {
-        throw std::invalid_argument("The profile is nullptr");
+        throw InvalidArgumentException("The profile is nullptr");
     }
 
     auto schedule = create(isolated::schedule::Schedule::getInstance(profile->handle_.get(), venue));
@@ -45,7 +45,7 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, 
 
 std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        throw std::invalid_argument("The profile is nullptr");
+        throw InvalidArgumentException("The profile is nullptr");
     }
 
     auto result = isolated::schedule::Schedule::getTradingVenues(profile->handle_.get());

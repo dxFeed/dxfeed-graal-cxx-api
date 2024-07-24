@@ -48,7 +48,7 @@ IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *g
     }
 
     if (graalNative == nullptr) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to create IndexedEventSubscriptionSymbol. The `graalNative` parameter is nullptr");
     }
 

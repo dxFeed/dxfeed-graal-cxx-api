@@ -235,6 +235,8 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
             }
 
             return symbol;
+        } catch (const InvalidArgumentException &) {
+            return symbol;
         } catch (const std::invalid_argument &) {
             return symbol;
         }

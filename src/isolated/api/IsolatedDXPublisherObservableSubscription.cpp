@@ -13,7 +13,7 @@ namespace isolated::api::IsolatedDXPublisherObservableSubscription {
 bool /* int32_t */
 isClosed(/* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_ObservableSubscription_isClosed`. The `sub` handle is invalid");
     }
 
@@ -24,7 +24,7 @@ isClosed(/* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublish
 std::unordered_set<EventTypeEnum> /* dxfg_event_clazz_list_t* */ getEventTypes(
     /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_ObservableSubscription_getEventTypes`. The `sub` handle is invalid");
     }
 
@@ -53,7 +53,7 @@ bool /* int32_t */ containsEventType(
     /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
     /* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_ObservableSubscription_containsEventType`. The `sub` handle is invalid");
     }
 
@@ -67,12 +67,12 @@ void /* int32_t */ addChangeListener(
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
         &listener) {
     if (!sub) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_ObservableSubscription_addChangeListener`. The `sub` handle is invalid");
     }
 
     if (!listener) {
-        throw std::invalid_argument("Unable to execute function `dxfg_ObservableSubscription_addChangeListener`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_ObservableSubscription_addChangeListener`. The "
                                     "`listener` handle is invalid");
     }
 
@@ -86,12 +86,12 @@ void /* int32_t */ removeChangeListener(
     /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
         &listener) {
     if (!sub) {
-        throw std::invalid_argument("Unable to execute function `dxfg_ObservableSubscription_removeChangeListener`. "
+        throw InvalidArgumentException("Unable to execute function `dxfg_ObservableSubscription_removeChangeListener`. "
                                     "The `sub` handle is invalid");
     }
 
     if (!listener) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_ObservableSubscription_removeChangeListener`. The "
             "`listener` handle is invalid");
     }

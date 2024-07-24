@@ -13,7 +13,7 @@ Session::Session(void *handle) noexcept : handle_(handle) {
 
 Session::Ptr Session::create(void *handle) {
     if (!handle) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to create a Session object. The handle is nullptr");
     }
 

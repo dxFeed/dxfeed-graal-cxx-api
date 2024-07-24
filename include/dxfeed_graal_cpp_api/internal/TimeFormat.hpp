@@ -19,7 +19,7 @@ DXFCPP_BEGIN_NAMESPACE
  *
  * Some methods that are not marked `noexcept` may throw exceptions:
  *
- * @throws std::invalid_argument if handle is invalid.
+ * @throws InvalidArgumentException if handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend
  * @throws GraalException if something happened with the GraalVM
  */

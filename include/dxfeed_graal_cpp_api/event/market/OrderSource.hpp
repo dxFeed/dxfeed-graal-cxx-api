@@ -71,7 +71,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         auto n = name.length();
 
         if (n == 0 || n > 4) {
-            throw std::invalid_argument("Source name must contain from 1 to 4 characters");
+            throw InvalidArgumentException("Source name must contain from 1 to 4 characters");
         }
 
         for (auto c : name) {
@@ -87,12 +87,12 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
             return;
         }
 
-        throw std::invalid_argument("Source name must contain only alphanumeric characters");
+        throw InvalidArgumentException("Source name must contain only alphanumeric characters");
     }
 
     static std::string decodeName(std::int32_t id) {
         if (id == 0) {
-            throw std::invalid_argument("Source name must contain from 1 to 4 characters");
+            throw InvalidArgumentException("Source name must contain from 1 to 4 characters");
         }
 
         std::string name(4, '\0');
@@ -130,7 +130,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
             return PUB_SPREAD_ORDER;
         }
 
-        throw std::invalid_argument("Invalid order event type: " + eventType.getName());
+        throw InvalidArgumentException("Invalid order event type: " + eventType.getName());
     }
 
     /**

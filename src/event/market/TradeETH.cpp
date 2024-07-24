@@ -42,11 +42,11 @@ void TradeETH::fillGraalData(void *graalNative) const noexcept {
 
 std::shared_ptr<TradeETH> TradeETH::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw std::invalid_argument("Unable to create TradeETH. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create TradeETH. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TRADE_ETH) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to create TradeETH. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_TRADE_ETH))));
@@ -81,7 +81,7 @@ void TradeETH::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_TRADE_ETH) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to free TradeETH's Graal data. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_TRADE_ETH))));

@@ -19,7 +19,7 @@ namespace isolated::ipf::IsolatedInstrumentProfileReader {
 std::int64_t getLastModified(
     /* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle) {
     if (!handle) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_getLastModified`. The handle is invalid");
     }
 
@@ -30,7 +30,7 @@ std::int64_t getLastModified(
 bool wasComplete(
     /* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle) {
     if (!handle) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_wasComplete`. The handle is invalid");
     }
 
@@ -42,7 +42,7 @@ bool wasComplete(
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
              const StringLikeWrapper &address) {
     if (!handle) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile`. The handle is invalid");
     }
 
@@ -55,7 +55,7 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
              const StringLikeWrapper &address, const StringLikeWrapper &user, const StringLikeWrapper &password) {
     if (!handle) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile`. The handle is invalid");
     }
 
@@ -69,12 +69,12 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
              const StringLikeWrapper &address, const JavaObjectHandle<AuthToken> &token) {
     if (!handle) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile`. The handle is invalid");
     }
 
     if (!token) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile3`. The token is invalid");
     }
 

@@ -178,7 +178,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
     }
 
     if (graalNative == nullptr) {
-        throw std::invalid_argument("Unable to create SymbolWrapper. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create SymbolWrapper. The `graalNative` parameter is nullptr");
     }
 
     switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
@@ -198,7 +198,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
         return TimeSeriesSubscriptionSymbol::fromGraal(graalNative);
 
     default:
-        throw std::runtime_error(fmt::format("Unable to create SymbolWrapper. Unknown symbol type: {}",
+        throw RuntimeException(fmt::format("Unable to create SymbolWrapper. Unknown symbol type: {}",
                                              static_cast<int>(static_cast<dxfg_symbol_t *>(graalNative)->type)));
     }
 

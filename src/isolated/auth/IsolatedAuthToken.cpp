@@ -65,7 +65,7 @@ createCustomToken(/* const char* */ const StringLikeWrapper &scheme,
 /* const char* */ std::string
 getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken) {
     if (!authToken) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_AuthToken_getHttpAuthorization`. The `authToken` handle is invalid");
     }
 
@@ -81,7 +81,7 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
 /// dxfg_AuthToken_getUser
 /* const char* */ std::string getUser(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken) {
     if (!authToken) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_AuthToken_getUser`. The `authToken` handle is invalid");
     }
 
@@ -97,7 +97,7 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
 /// dxfg_AuthToken_getPassword
 /* const char* */ std::string getPassword(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken) {
     if (!authToken) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_AuthToken_getPassword`. The `authToken` handle is invalid");
     }
 
@@ -113,7 +113,7 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
 /// dxfg_AuthToken_getScheme
 /* const char* */ std::string getScheme(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken) {
     if (!authToken) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_AuthToken_getScheme`. The `authToken` handle is invalid");
     }
 
@@ -129,7 +129,7 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
 /// dxfg_AuthToken_getValue
 /* const char* */ std::string getValue(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken) {
     if (!authToken) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_AuthToken_getValue`. The `authToken` handle is invalid");
     }
 

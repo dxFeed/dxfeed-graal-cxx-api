@@ -775,7 +775,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
          *
          * @param list The pointer to the dxFeed Graal SDK list of structures.
          * @return The vector of objects of current type
-         * @throws std::invalid_argument
+         * @throws InvalidArgumentException
          */
         static std::vector<Ptr> fromGraal(void *list);
     };

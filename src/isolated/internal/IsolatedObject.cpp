@@ -15,7 +15,7 @@ namespace IsolatedObject {
 /// dxfg_Object_toString
 /* const char* */ std::string toString(/* dxfg_java_object_handler* */ void *object) {
     if (!object) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Object_toString`. The `object` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Object_toString`. The `object` is null");
     }
 
     auto value =
@@ -30,11 +30,11 @@ namespace IsolatedObject {
 /// dxfg_Object_equals
 std::int32_t equals(/* dxfg_java_object_handler* */ void *object, /* dxfg_java_object_handler* */ void *other) {
     if (!object) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Object_equals`. The `object` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Object_equals`. The `object` is null");
     }
 
     if (!other) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Object_equals`. The `other` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Object_equals`. The `other` is null");
     }
 
     return runGraalFunctionAndThrowIfMinusMin(dxfg_Object_equals, static_cast<dxfg_java_object_handler *>(object),
@@ -44,7 +44,7 @@ std::int32_t equals(/* dxfg_java_object_handler* */ void *object, /* dxfg_java_o
 /// dxfg_Object_hashCode
 /* int32_t */ std::size_t hashCode(/* dxfg_java_object_handler* */ void *object) {
     if (!object) {
-        throw std::invalid_argument("Unable to execute function `dxfg_Object_hashCode`. The `object` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_Object_hashCode`. The `object` is null");
     }
 
     return static_cast<std::size_t>(
