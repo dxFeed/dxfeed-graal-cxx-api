@@ -28,6 +28,7 @@ set(DXFC_TEST_SOURCES
         api/EventsTest.cpp
         api/MarketEventSymbolsTest.cpp
         api/OrderSourceTest.cpp
+        event/EventsTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp)

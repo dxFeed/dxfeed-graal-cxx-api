@@ -81,6 +81,9 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new trade event with default values.
     TradeBase() noexcept = default;
 

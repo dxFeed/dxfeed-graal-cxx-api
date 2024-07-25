@@ -110,6 +110,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new analytic order event with default values.
     AnalyticOrder() noexcept = default;
 

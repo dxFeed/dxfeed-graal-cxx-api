@@ -107,4 +107,12 @@ void SpreadOrder::freeGraal(void *graalNative) {
     delete graalSpreadOrder;
 }
 
+void SpreadOrder::assign(std::shared_ptr<EventType> event) {
+    OrderBase::assign(event);
+
+    if (const auto other = event->sharedAs<SpreadOrder>(); other) {
+        spreadOrderData_ = other->spreadOrderData_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

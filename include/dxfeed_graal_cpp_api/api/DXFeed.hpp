@@ -128,6 +128,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     void *getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, std::int64_t fromTime,
                                    std::int64_t toTime) const;
 
+    std::shared_ptr<EventType> getLastEventImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
+
   protected:
     DXFeed() noexcept : handle_{} {
         if constexpr (Debugger::isDebug) {
@@ -207,12 +209,12 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * of subscription.
      *
      * <p> This method fills in the values for the last event into the `event argument.
-     * If the last event is not available for any reason (no subscription, no connection to uplink, etc).
+     * If the last event is not available for any reason (no subscription, no connection to uplink, etc.)
      * then the event object is not changed.
      * This method always returns the same `event` instance that is passed to it as an argument.
      *
      * <p>This method provides no way to distinguish a case when there is no subscription from the case when
-     * there is a subscription, but the event data have not arrived yet. It is recommened to use
+     * there is a subscription, but the event data have not arrived yet. It is recommended to use
      * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method instead of this `getLastEvent` method to
      * fail-fast in case when the subscription was supposed to be set by the logic of the code, since
      * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method returns null when there is no subscription.
@@ -224,7 +226,11 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param event the event.
      * @return The same event.
      */
-    template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEvent(std::shared_ptr<E> event);
+    template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEvent(std::shared_ptr<E> event) {
+        event->assign(getLastEventImpl(E::TYPE, event->getEventSymbol()));
+
+        return event;
+    }
 
     /**
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.

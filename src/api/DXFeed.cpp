@@ -81,11 +81,6 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     }
 }
 
-template <Derived<LastingEvent> E> std::shared_ptr<E> DXFeed::getLastEvent(std::shared_ptr<E> event) {
-    //TODO: implement
-    return event;
-}
-
 std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::createSubscription(eventType = " + eventType.getName() + ")");
@@ -129,6 +124,10 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
 void *DXFeed::getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
                                        std::int64_t fromTime, std::int64_t toTime) const {
     return isolated::api::IsolatedDXFeed::getTimeSeriesPromise(handle_, eventType, symbol, fromTime, toTime);
+}
+
+std::shared_ptr<EventType> DXFeed::getLastEventImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const {
+    return isolated::api::IsolatedDXFeed::getLastEvent(handle_, symbol.toStringUnderlying(), eventType);
 }
 
 std::string DXFeed::toString() const {

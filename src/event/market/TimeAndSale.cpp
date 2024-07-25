@@ -152,4 +152,12 @@ void TimeAndSale::freeGraal(void *graalNative) {
     delete graalTimeAndSale;
 }
 
+void TimeAndSale::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<TimeAndSale>(); other) {
+        data_ = other->data_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

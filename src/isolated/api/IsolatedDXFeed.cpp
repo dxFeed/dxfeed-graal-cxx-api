@@ -19,7 +19,7 @@ namespace isolated::api::IsolatedDXFeed {
             "Unable to execute function `dxfg_DXFeed_getLastEvent`. The `feed` handle is invalid");
     }
 
-    auto e = events::IsolatetEventType::toUnique(events::IsolatetEventType::create(symbolName, eventType));
+    auto e = event::IsolatedEventType::toUnique(event::IsolatedEventType::create(symbolName, eventType));
 
     return EventMapper::fromGraal(e.get());
 }

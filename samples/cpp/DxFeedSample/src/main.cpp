@@ -4,10 +4,13 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <iostream>
+#include <chrono>
+#include <memory>
+
+using namespace dxfcpp;
+using namespace std::literals;
 
 void testQuoteListener(const std::string &symbol) {
-    using namespace dxfcpp;
-
     // Creates a subscription attached to a default DXFeed with a Quote event type.
     // The endpoint address to use is stored in the "dxfeed.properties" file.
     auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
@@ -25,8 +28,6 @@ void testQuoteListener(const std::string &symbol) {
 }
 
 void testQuoteAndTradeListener(const std::string &symbol) {
-    using namespace dxfcpp;
-
     // Creates a subscription attached to a default DXFeed with a Quote and Trade event types.
     // The endpoint address to use is stored in the "dxfeed.properties" file.
     auto subscription = DXFeed::getInstance()->createSubscription({Quote::TYPE, Trade::TYPE});
@@ -43,8 +44,27 @@ void testQuoteAndTradeListener(const std::string &symbol) {
         }
     });
 
+    // Another way to subscribe:
+    // subscription->addEventListener<MarketEvent>([](const auto &events) {
+    //     for (const auto &e : events) {
+    //         std::cout << e->toString() + "\n";
+    //     }
+    // });
+
     // Adds specified symbol.
     subscription->addSymbols(symbol);
+}
+
+void testTradeSnapshots(const std::string &symbol) {
+    auto feed = DXFeed::getInstance();
+    auto sub = feed->createSubscription(Trade::TYPE);
+
+    sub->addSymbols(symbol);
+
+    while (true) {
+        std::cout << feed->getLastEvent(std::make_shared<Trade>(symbol))->toString() + "\n";
+        std::this_thread::sleep_for(1000ms);
+    }
 }
 
 /*
@@ -73,8 +93,9 @@ Where:
 
         testQuoteListener(symbol);
         testQuoteAndTradeListener(symbol);
+        testTradeSnapshots(symbol);
 
-        std::cin.get();
+        //std::cin.get();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
     }

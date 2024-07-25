@@ -8,7 +8,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-namespace isolated::internal {
+namespace isolated::event {
 namespace IsolatedEventType {
 
 // dxfg_EventType_new
@@ -49,6 +49,6 @@ std::unique_ptr<void, decltype(&release)> toUnique(void *eventTypes) {
     return {eventTypes, release};
 }
 } // namespace IsolatedEventTypeList
-} // namespace isolated::internal
+} // namespace isolated::event
 
 DXFCPP_END_NAMESPACE

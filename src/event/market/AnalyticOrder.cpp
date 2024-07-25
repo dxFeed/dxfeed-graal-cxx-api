@@ -105,4 +105,12 @@ void AnalyticOrder::freeGraal(void *graalNative) {
     delete graalAnalyticOrder;
 }
 
+void AnalyticOrder::assign(std::shared_ptr<EventType> event) {
+    Order::assign(event);
+
+    if (const auto other = event->sharedAs<AnalyticOrder>(); other) {
+        analyticOrderData_ = other->analyticOrderData_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

@@ -9,8 +9,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <memory>
-#include <string>
 #include <optional>
+#include <string>
 
 #include "../EventType.hpp"
 
@@ -46,6 +46,14 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     static void freeGraalData(void *graalNative) noexcept;
 
   public:
+    ///
+    void assign(std::shared_ptr<EventType> event) override {
+        if (const auto other = event->sharedAs<MarketEvent>(); other) {
+            eventSymbol_ = other->eventSymbol_;
+            eventTime_ = other->eventTime_;
+        }
+    }
+
     /**
      * Returns symbol of this event.
      *

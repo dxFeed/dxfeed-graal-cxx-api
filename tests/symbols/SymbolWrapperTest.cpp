@@ -17,7 +17,7 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
-TEST_CASE("SymbolWrapper::toStringUnderlying") {
+TEST_CASE("SymbolWrapper::toStringUnderlying should return the result of toString called on the underlying symbol") {
     auto c = CandleSymbol::valueOf("AAPL&Q{=1m}");
 
     REQUIRE(SymbolWrapper(c).toStringUnderlying() == c.toString());

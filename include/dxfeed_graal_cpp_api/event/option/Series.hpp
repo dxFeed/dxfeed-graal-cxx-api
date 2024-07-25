@@ -131,6 +131,9 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new series event with default values.
     Series() noexcept = default;
 

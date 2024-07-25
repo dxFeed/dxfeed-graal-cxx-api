@@ -113,6 +113,14 @@ void Message::freeGraal(void *graalNative) {
     delete graalMessage;
 }
 
+void Message::assign(std::shared_ptr<EventType> event) {
+    if (const auto other = event->sharedAs<Message>(); other) {
+        eventSymbol_ = other->eventSymbol_;
+        eventTime_ = other->eventTime_;
+        attachment_ = other->attachment_;
+    }
+}
+
 std::string Message::toString() const {
     return fmt::format("Message{{{}, eventTime={}, attachment={}}}", getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL));

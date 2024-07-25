@@ -128,4 +128,12 @@ void Summary::freeGraal(void *graalNative) {
     delete graalSummary;
 }
 
+void Summary::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<Summary>(); other) {
+        data_ = other->data_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

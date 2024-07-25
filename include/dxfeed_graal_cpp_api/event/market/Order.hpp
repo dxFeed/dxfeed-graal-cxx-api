@@ -142,6 +142,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new order event with default values.
     Order() noexcept = default;
 
