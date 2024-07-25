@@ -195,6 +195,38 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     void detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription);
 
     /**
+     * Returns the last event for the specified event instance.
+     * This method works only for event types that implement LastingEvent marker interface.
+     * This method <b>does not</b> make any remote calls to the uplink data provider.
+     * It just retrieves last received event from the local cache of this feed.
+     * The events are stored in the cache only if there is some attached DXFeedSubscription that is subscribed to the
+     * corresponding symbol and event type.
+     * WildcardSymbol::ALL subscription does not count for that purpose.
+     *
+     * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the absence
+     * of subscription.
+     *
+     * <p> This method fills in the values for the last event into the `event argument.
+     * If the last event is not available for any reason (no subscription, no connection to uplink, etc).
+     * then the event object is not changed.
+     * This method always returns the same `event` instance that is passed to it as an argument.
+     *
+     * <p>This method provides no way to distinguish a case when there is no subscription from the case when
+     * there is a subscription, but the event data have not arrived yet. It is recommened to use
+     * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method instead of this `getLastEvent` method to
+     * fail-fast in case when the subscription was supposed to be set by the logic of the code, since
+     * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method returns null when there is no subscription.
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with
+     * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (never fills in the event).
+     *
+     * @tparam E The type of event.
+     * @param event the event.
+     * @return The same event.
+     */
+    template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEvent(std::shared_ptr<E> event);
+
+    /**
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.
      * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
      *

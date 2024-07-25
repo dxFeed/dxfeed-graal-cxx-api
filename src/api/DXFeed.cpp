@@ -81,6 +81,11 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     }
 }
 
+template <Derived<LastingEvent> E> std::shared_ptr<E> DXFeed::getLastEvent(std::shared_ptr<E> event) {
+    //TODO: implement
+    return event;
+}
+
 std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::createSubscription(eventType = " + eventType.getName() + ")");
