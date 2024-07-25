@@ -272,6 +272,19 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
+     * Returns a string representation of the underlying object.
+     *
+     * @return a string representation of the underlying object.
+     */
+    std::string toStringUnderlying() const {
+        return std::visit(
+                   [](const auto &symbol) {
+                       return toStringAny(symbol);
+                   },
+                   data_);
+    }
+
+    /**
      * @return `true` if current SymbolWrapper holds a StringSymbol
      */
     bool isStringSymbol() const noexcept {
