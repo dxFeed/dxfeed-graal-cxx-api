@@ -288,7 +288,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * symbol.
      */
     template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEventIfSubscribed(const SymbolWrapper &symbol) {
-        return getLastEventIfSubscribedImpl(E::TYPE, symbol)->sharedAs<E>();
+        return getLastEventIfSubscribedImpl(E::TYPE, symbol)->template sharedAs<E>();
     }
 
     /**
