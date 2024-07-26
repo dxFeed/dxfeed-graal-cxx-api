@@ -1,10 +1,15 @@
-* **\[MDAPI-113]\[C++]\[Tools]** Tools should report invalid event type
-  *  Added classes: `RuntimeException`, `InvalidArgumentException`
+* **\[MDAPI-37]\[C++]** Retrieve latest events from feed.
+  * Added `SymbolWrapper::toStringUnderlying` method that returns a string representation of the underlying symbol object.
+  * Added `EventType::assign`. All `EventType` successors can populate their fields using `EventType` successors of the same type.
+  * Added `DXFeed::getLastEventIfSubscribed` method.
+  * Added `DXFeed::getLastEvent` and `DXFeed::getLastEvents` methods that use the `DXFeed::getLastEventIfSubscribed` method.   
+* **\[MDAPI-113]\[C++]\[Tools]** Tools should report invalid event type.
+  *  Added classes: `RuntimeException`, `InvalidArgumentException`.
   *  `InvalidArgumentException`, `GraalException`, `JavaException` are now descendants of the `RuntimeException` class, which can collect stacktrace.
   *  Now an `InvalidArgumentException` exception is thrown instead of the `std::invalid_argument` exception. 
   *  `Tools` now reports incorrect event types specified by the user.
-* **\[MDAPI-80]\[C++]\[IPF]** Implement custom fields in InstrumentProfile
-  * The API was migrated to Graal SDK v1.1.22
+* **\[MDAPI-80]\[C++]\[IPF]** Implement custom fields in InstrumentProfile.
+  * The API was migrated to Graal SDK v1.1.22.
   * Added methods:
     * `InstrumentProfile::getField`
     * `InstrumentProfile::setField`
