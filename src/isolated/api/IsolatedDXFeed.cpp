@@ -11,6 +11,31 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXFeed {
 
+// dxfg_DXFeed_getLastEventIfSubscribed
+/* dxfg_event_type_t* */ std::shared_ptr<EventType>
+getLastEventIfSubscribed(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
+                         /* dxfg_event_clazz_t */ const EventTypeEnum &eventType,
+                         /* dxfg_symbol_t * */ const SymbolWrapper &symbol) {
+    if (!feed) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeed_getLastEventIfSubscribed`. The `feed` handle is invalid");
+    }
+
+    auto graalSymbol = symbol.toGraalUnique();
+
+    const auto e = static_cast<void *>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXFeed_getLastEventIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
+        static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get())));
+
+    if (!e) {
+        return {};
+    }
+
+    auto u = event::IsolatedEventType::toUnique(e);
+
+    return EventMapper::fromGraal(u.get());
+}
+
 // dxfg_DXFeed_getLastEvent
 /* int32_t */ std::shared_ptr<EventType> getLastEvent(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
                                                       /* dxfg_event_type_t * */ const StringLikeWrapper &symbolName,
@@ -47,14 +72,12 @@ dxfg_symbol_list *symbols); dxfg_promise_events_t*            dxfg_DXFeed_getInd
             "Unable to execute function `dxfg_DXFeed_getTimeSeriesPromise`. The `feed` handle is invalid");
     }
 
-    auto graalSymbol = symbol.toGraal();
+    auto graalSymbol = symbol.toGraalUnique();
 
     auto result = dxfcpp::bit_cast<void *>(
         runGraalFunctionAndThrowIfNullptr(dxfg_DXFeed_getTimeSeriesPromise, static_cast<dxfg_feed_t *>(feed.get()),
                                           static_cast<dxfg_event_clazz_t>(eventType.getId()),
-                                          static_cast<dxfg_symbol_t *>(graalSymbol), fromTime, toTime));
-
-    SymbolWrapper::freeGraal(graalSymbol);
+                                          static_cast<dxfg_symbol_t *>(graalSymbol.get()), fromTime, toTime));
 
     return result;
 }
