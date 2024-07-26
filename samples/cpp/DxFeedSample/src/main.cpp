@@ -62,7 +62,7 @@ void testTradeSnapshots(const std::string &symbol) {
     sub->addSymbols(symbol);
 
     while (true) {
-        std::cout << feed->getLastEvent(std::make_shared<Trade>(symbol))->toString() + "\n";
+        std::cout << "LAST: " + feed->getLastEvent(std::make_shared<Trade>(symbol))->toString() + "\n";
         std::this_thread::sleep_for(1000ms);
     }
 }
@@ -94,8 +94,6 @@ Where:
         testQuoteListener(symbol);
         testQuoteAndTradeListener(symbol);
         testTradeSnapshots(symbol);
-
-        //std::cin.get();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
     }
