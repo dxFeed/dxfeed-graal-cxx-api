@@ -213,6 +213,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
         src/isolated/auth/IsolatedAuthToken.cpp
+        src/isolated/event/IsolatedEventType.cpp
         src/isolated/promise/IsolatedPromise.cpp
         src/isolated/internal/IsolatedString.cpp
         src/isolated/internal/IsolatedObject.cpp

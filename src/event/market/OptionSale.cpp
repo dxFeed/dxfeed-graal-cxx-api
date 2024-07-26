@@ -100,11 +100,11 @@ std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) {
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE))));
     }
 
-        auto optionSale = std::make_shared<OptionSale>();
+    auto optionSale = std::make_shared<OptionSale>();
 
-        optionSale->fillData(graalNative);
+    optionSale->fillData(graalNative);
 
-        return optionSale;
+    return optionSale;
 }
 
 void OptionSale::setExchangeCode(char exchangeCode) noexcept {
@@ -151,6 +151,14 @@ void OptionSale::freeGraal(void *graalNative) {
     freeGraalData(graalNative);
 
     delete graalOptionSale;
+}
+
+void OptionSale::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<OptionSale>(); other) {
+        data_ = other->data_;
+    }
 }
 
 DXFCPP_END_NAMESPACE

@@ -94,4 +94,11 @@ void TradeETH::freeGraal(void *graalNative) {
     delete graalTradeEth;
 }
 
+void TradeETH::assign(std::shared_ptr<EventType> event) {
+    TradeBase::assign(event);
+
+    // if (const auto other = event->sharedAs<TradeETH>(); other) {
+    // }
+}
+
 DXFCPP_END_NAMESPACE

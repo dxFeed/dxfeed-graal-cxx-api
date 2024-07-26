@@ -126,6 +126,11 @@ void *DXFeed::getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const Sym
     return isolated::api::IsolatedDXFeed::getTimeSeriesPromise(handle_, eventType, symbol, fromTime, toTime);
 }
 
+std::shared_ptr<EventType> DXFeed::getLastEventIfSubscribedImpl(const EventTypeEnum &eventType,
+                                                                const SymbolWrapper &symbol) const {
+    return isolated::api::IsolatedDXFeed::getLastEventIfSubscribed(handle_, eventType, symbol);
+}
+
 std::string DXFeed::toString() const {
     return fmt::format("DXFeed{{{}}}", handle_.toString());
 }

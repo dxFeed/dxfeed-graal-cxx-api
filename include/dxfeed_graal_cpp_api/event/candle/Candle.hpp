@@ -142,6 +142,9 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      */
     void *toGraal() const override;
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *

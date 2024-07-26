@@ -99,6 +99,9 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new summary event with default values.
     Summary() noexcept = default;
 

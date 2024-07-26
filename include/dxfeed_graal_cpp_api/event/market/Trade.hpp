@@ -113,6 +113,9 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new trade event with default values.
     Trade() noexcept = default;
 

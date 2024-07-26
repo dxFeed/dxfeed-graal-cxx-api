@@ -128,6 +128,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     void *getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, std::int64_t fromTime,
                                    std::int64_t toTime) const;
 
+    std::shared_ptr<EventType> getLastEventIfSubscribedImpl(const EventTypeEnum &eventType,
+                                                            const SymbolWrapper &symbol) const;
+
   protected:
     DXFeed() noexcept : handle_{} {
         if constexpr (Debugger::isDebug) {
@@ -193,6 +196,100 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @see DXFeed::detachSubscription()
      */
     void detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription);
+
+    /**
+     * Returns the last event for the specified event instance.
+     * This method works only for event types that implement LastingEvent marker interface.
+     * This method <b>does not</b> make any remote calls to the uplink data provider.
+     * It just retrieves last received event from the local cache of this feed.
+     * The events are stored in the cache only if there is some attached DXFeedSubscription that is subscribed to the
+     * corresponding symbol and event type.
+     * WildcardSymbol::ALL subscription does not count for that purpose.
+     *
+     * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the absence
+     * of subscription.
+     *
+     * <p> This method fills in the values for the last event into the `event argument.
+     * If the last event is not available for any reason (no subscription, no connection to uplink, etc.)
+     * then the event object is not changed.
+     * This method always returns the same `event` instance that is passed to it as an argument.
+     *
+     * <p>This method provides no way to distinguish a case when there is no subscription from the case when
+     * there is a subscription, but the event data have not arrived yet. It is recommended to use
+     * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method instead of this `getLastEvent` method to
+     * fail-fast in case when the subscription was supposed to be set by the logic of the code, since
+     * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method returns null when there is no subscription.
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with
+     * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (never fills in the event).
+     *
+     * @tparam E The type of event.
+     * @param event The event.
+     * @return The same event.
+     */
+    template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEvent(std::shared_ptr<E> event) {
+        if (auto last = getLastEventIfSubscribed<E>(event->getEventSymbol())) {
+            event->assign(last);
+        }
+
+        return event;
+    }
+
+    /**
+     * Returns the last events for the specified list of event instances.
+     * This is a bulk version of @ref ::getLastEvent() "getLastEvent" method.
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with
+     * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role.
+     *
+     * @tparam Collection The collection type.
+     * @param events The collection of shared ptrs of events.
+     * @return The same collection of shared ptrs of events.
+     */
+    template <typename Collection, typename Element = std::decay_t<decltype(std::begin(Collection()))>,
+              typename Event = std::decay_t<decltype(*Element())>>
+    const Collection &getLastEvents(const Collection &events) {
+        static_assert(
+            std::is_same_v<Element, std::shared_ptr<Event>> && std::is_base_of_v<LastingEvent, Event>,
+            "The collection element must be of type `std::shared_ptr<Event>`, where `Event` is a descendant of "
+            "`LastingEvent`");
+
+        for (auto e : events) {
+            getLastEvent(e);
+        }
+
+        return events;
+    }
+
+    /**
+     * Returns the last event for the specified event type and symbol if there is a subscription for it.
+     * This method works only for event types that implement LastingEvent marker interface.
+     * This method <b>does not</b> make any remote calls to the uplink data provider.
+     * It just retrieves last received event from the local cache of this feed.
+     * The events are stored in the cache only if there is some attached DXFeedSubscription that is subscribed to the
+     * corresponding event type and symbol.
+     * The subscription can also be permanently defined using DXEndpoint properties.
+     * WildcardSymbol::ALL subscription does not count for that purpose.
+     * If there is no subscription, then this method returns `std::shared_ptr<E>(nullptr)`.
+     *
+     * <p>If there is a subscription, but the event has not arrived from the uplink data provider,
+     * this method returns an non-initialized event object: its @ref EventType#getEventSymbol() "eventSymbol"
+     * property is set to the requested symbol, but all the other properties have their default values.
+     *
+     * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the
+     * absence of subscription.
+     *
+     * <p>Note, that this method does not work when DXEndpoint} was created with @ref DXEndpoint::Role::STREAM_FEED
+     * "STREAM_FEED" role (always returns `std::shared_ptr<E>(nullptr)`).
+     *
+     * @tparam E The type of event.
+     * @param symbol The symbol.
+     * @return the event or `std::shared_ptr<E>(nullptr)` if there is no subscription for the specified event type and
+     * symbol.
+     */
+    template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEventIfSubscribed(const SymbolWrapper &symbol) {
+        return getLastEventIfSubscribedImpl(E::TYPE, symbol)->template sharedAs<E>();
+    }
 
     /**
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.

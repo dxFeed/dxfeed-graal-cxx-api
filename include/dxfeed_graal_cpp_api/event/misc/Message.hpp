@@ -77,6 +77,9 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /**
      * Creates new message with default values.
      */

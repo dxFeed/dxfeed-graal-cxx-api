@@ -126,6 +126,9 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new underlying event with default values.
     Underlying() noexcept = default;
 

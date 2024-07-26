@@ -106,12 +106,18 @@ void *Candle::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalCandle =
-        new dxfg_candle_t{};
+    auto *graalCandle = new dxfg_candle_t{};
 
     fillGraalData(static_cast<void *>(graalCandle));
 
     return static_cast<void *>(graalCandle);
+}
+
+void Candle::assign(std::shared_ptr<EventType> event) {
+    if (const auto other = event->sharedAs<Candle>(); other) {
+        eventSymbol_ = other->eventSymbol_;
+        data_ = other->data_;
+    }
 }
 
 void Candle::freeGraal(void *graalNative) {
@@ -124,7 +130,6 @@ void Candle::freeGraal(void *graalNative) {
             fmt::format("Unable to free Candle's Graal data. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
-
     }
 
     auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);

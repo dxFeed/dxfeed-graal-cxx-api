@@ -122,4 +122,12 @@ void Underlying::freeGraal(void *graalNative) {
     delete graalUnderlying;
 }
 
+void Underlying::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<Underlying>(); other) {
+        data_ = other->data_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

@@ -108,6 +108,9 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new profile event with default values.
     Profile() noexcept = default;
 

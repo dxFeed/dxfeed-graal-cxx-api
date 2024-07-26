@@ -128,6 +128,9 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new option sale event with default values.
     OptionSale() noexcept = default;
 

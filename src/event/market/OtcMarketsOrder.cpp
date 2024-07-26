@@ -102,4 +102,12 @@ void OtcMarketsOrder::freeGraal(void *graalNative) {
     delete graalOtcMarketsOrder;
 }
 
+void OtcMarketsOrder::assign(std::shared_ptr<EventType> event) {
+    Order::assign(event);
+
+    if (const auto other = event->sharedAs<OtcMarketsOrder>(); other) {
+        otcMarketsOrderData_ = other->otcMarketsOrderData_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

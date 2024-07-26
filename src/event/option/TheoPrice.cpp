@@ -121,4 +121,12 @@ void TheoPrice::freeGraal(void *graalNative) {
     delete graalTheoPrice;
 }
 
+void TheoPrice::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<TheoPrice>(); other) {
+        data_ = other->data_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

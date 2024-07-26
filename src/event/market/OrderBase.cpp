@@ -67,6 +67,14 @@ void OrderBase::fillGraalData(void *graalNative) const noexcept {
     graalOrderBase->trade_size = orderBaseData_.tradeSize;
 }
 
+void OrderBase::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<OrderBase>(); other) {
+        orderBaseData_ = other->orderBaseData_;
+    }
+}
+
 std::string OrderBase::baseFieldsToString() const {
     return fmt::format(
         "{}, eventTime={}, source={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, "

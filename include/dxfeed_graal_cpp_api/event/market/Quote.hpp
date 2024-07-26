@@ -101,6 +101,9 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new quote event with default values.
     Quote() noexcept = default;
 

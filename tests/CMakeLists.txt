@@ -28,7 +28,9 @@ set(DXFC_TEST_SOURCES
         api/EventsTest.cpp
         api/MarketEventSymbolsTest.cpp
         api/OrderSourceTest.cpp
+        event/EventsTest.cpp
         schedule/ScheduleTest.cpp
+        symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 

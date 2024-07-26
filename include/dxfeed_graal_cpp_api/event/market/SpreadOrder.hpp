@@ -141,6 +141,9 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      */
     static void freeGraal(void *graalNative);
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new spread order event with default values.
     SpreadOrder() noexcept = default;
 

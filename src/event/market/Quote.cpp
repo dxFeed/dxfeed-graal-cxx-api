@@ -161,4 +161,12 @@ void Quote::freeGraal(void *graalNative) {
     delete graalQuote;
 }
 
+void Quote::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<Quote>(); other) {
+        data_ = other->data_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

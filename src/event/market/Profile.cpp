@@ -156,4 +156,12 @@ void Profile::freeGraal(void *graalNative) {
     delete graalProfile;
 }
 
+void Profile::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<Profile>(); other) {
+        data_ = other->data_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

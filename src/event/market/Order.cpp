@@ -107,4 +107,12 @@ void Order::freeGraal(void *graalNative) {
     delete graalOrder;
 }
 
+void Order::assign(std::shared_ptr<EventType> event) {
+    OrderBase::assign(event);
+
+    if (const auto other = event->sharedAs<Order>(); other) {
+        orderData_ = other->orderData_;
+    }
+}
+
 DXFCPP_END_NAMESPACE

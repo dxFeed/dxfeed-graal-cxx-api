@@ -165,6 +165,9 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new order event with default values.
     OrderBase() noexcept = default;
 

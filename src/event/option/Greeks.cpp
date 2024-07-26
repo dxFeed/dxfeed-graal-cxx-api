@@ -124,4 +124,12 @@ void Greeks::freeGraal(void *graalNative) {
     delete graalGreeks;
 }
 
+void Greeks::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<Greeks>(); other) {
+        data_ = other->data_;
+    }
+}
+
 DXFCPP_END_NAMESPACE
