@@ -59,14 +59,6 @@ void testTradeSnapshots(const std::string &symbol) {
     auto feed = DXFeed::getInstance();
     auto sub = feed->createSubscription(Trade::TYPE);
 
-    std::vector e = {std::make_shared<TimeAndSale>("AAPL"), std::make_shared<TimeAndSale>("IBM")};
-    auto x = std::remove_reference_t<std::remove_pointer_t<
-        typename std::iterator_traits<std::vector<std::shared_ptr<Quote>>::iterator>::value_type>>();
-
-    decltype(x) y;
-
-    auto z = feed->getLastEvents(e);
-
     sub->addSymbols(symbol);
 
     while (true) {

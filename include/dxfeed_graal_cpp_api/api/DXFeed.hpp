@@ -243,7 +243,14 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param events The collection of shared ptrs of events.
      * @return The same collection of shared ptrs of events.
      */
-    template <typename Collection> const Collection &getLastEvents(const Collection &events) {
+    template <typename Collection, typename Element = std::decay_t<decltype(std::begin(Collection()))>,
+              typename Event = std::decay_t<decltype(*Element())>>
+    const Collection &getLastEvents(const Collection &events) {
+        static_assert(
+            std::is_same_v<Element, std::shared_ptr<Event>> && std::is_base_of_v<LastingEvent, Event>,
+            "The collection element must be of type `std::shared_ptr<Event>`, where `Event` is a descendant of "
+            "`LastingEvent`");
+
         for (auto e : events) {
             getLastEvent(e);
         }
