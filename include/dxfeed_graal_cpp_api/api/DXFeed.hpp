@@ -223,13 +223,32 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (never fills in the event).
      *
      * @tparam E The type of event.
-     * @param event the event.
+     * @param event The event.
      * @return The same event.
      */
     template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEvent(std::shared_ptr<E> event) {
         event->assign(getLastEventImpl(E::TYPE, event->getEventSymbol()));
 
         return event;
+    }
+
+    /**
+     * Returns the last events for the specified list of event instances.
+     * This is a bulk version of @ref ::getLastEvent() "getLastEvent" method.
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with
+     * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role.
+     *
+     * @tparam Collection The collection type.
+     * @param events The collection of shared ptrs of events.
+     * @return The same collection of shared ptrs of events.
+     */
+    template <typename Collection> const Collection &getLastEvents(const Collection &events) {
+        for (auto e : events) {
+            getLastEvent(e);
+        }
+
+        return events;
     }
 
     /**
