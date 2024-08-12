@@ -22,8 +22,13 @@ set(FMTLIB_VERSION "10.2.1")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
+set(PROCESS_VERSION "v3.0.1")
+set(CONSOLE_VERSION "v1.0.1")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
+set(CPM_CMAKE_VERSION "v0.40.2")
+
+include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -116,25 +121,8 @@ endif ()
 FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 # DxFeedGraalNativeSdk_SOURCE_DIR
 
-FetchContent_Declare(
-        Process
-        GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
-)
-
-FetchContent_MakeAvailable(Process)
-
-FetchContent_Declare(
-        Console
-        GIT_REPOSITORY "https://github.com/ttldtor/Console.git" GIT_TAG default
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
-)
-
-FetchContent_MakeAvailable(Console)
+CPMAddPackage("gh:ttldtor/Process#${PROCESS_VERSION}")
+CPMAddPackage("gh:ttldtor/Console#${CONSOLE_VERSION}")
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
@@ -155,17 +143,27 @@ FetchContent_MakeAvailable(fmt)
 add_subdirectory(third_party/date-${DATE_VERSION})
 
 set(BOOST_INCLUDE_LIBRARIES stacktrace)
-set(BOOST_ENABLE_CMAKE ON)
 
-FetchContent_Declare(
-        Boost
-        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.7z # downloading a zip release speeds up the download
+CPMAddPackage(
+        NAME Boost
+        VERSION ${BOOST_VERSION}
+        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.tar.xz
+        OPTIONS "BOOST_ENABLE_CMAKE ON"
         USES_TERMINAL_DOWNLOAD TRUE
         GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
         OVERRIDE_FIND_PACKAGE
 )
-FetchContent_MakeAvailable(Boost)
+
+#
+#FetchContent_Declare(
+#        Boost
+#        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.7z # downloading a zip release speeds up the download
+#        USES_TERMINAL_DOWNLOAD TRUE
+#        GIT_PROGRESS TRUE
+#        DOWNLOAD_NO_EXTRACT FALSE
+#        OVERRIDE_FIND_PACKAGE
+#)
+#FetchContent_MakeAvailable(Boost)
 
 
 #find_package(

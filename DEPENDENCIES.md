@@ -11,8 +11,9 @@
 - [doctest](https://github.com/doctest/doctest) v2.4.11 (Tests)
 - [range-v3](https://github.com/ericniebler/range-v3) v0.12
 - [date](https://github.com/HowardHinnant/date) v3.0.1
-- [Process](https://github.com/ttldtor/Process) v3.0.0 (Tools)
+- [Process](https://github.com/ttldtor/Process) v3.0.1 (Tools)
 - [Console](https://github.com/ttldtor/Console) v1.0.1 (Tools)
+- [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) v0.40.2
 
 
 - On Windows:
