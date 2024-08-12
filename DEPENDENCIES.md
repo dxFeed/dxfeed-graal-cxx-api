@@ -2,7 +2,8 @@
 
 ## Compile-time
 
-- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v1.1.22
+- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v1.1.23
+  - [Bundles](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/) 
 - [Boost](https://github.com/boostorg/boost) v1.84.0
   - Boost.Stacktrace 1.0
 - [utfcpp](https://github.com/nemtrif/utfcpp) v3.2.3
@@ -24,7 +25,8 @@
     - addr2line \[opt] (Diagnostic backtraces)
 ## Run-time
 
-- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v1.1.16
+- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v1.1.23
+  - [Bundles](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/)
 - [doctest](https://github.com/doctest/doctest) v2.4.11 (Tests)
 
 
