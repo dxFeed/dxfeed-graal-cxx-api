@@ -549,5 +549,5 @@ if (DXFCXX_INSTALL)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
     endif ()
 
-    install(FILES "LICENSE" "README.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
+    install(FILES "DEPENDENCIES.md" "LICENSE" "README.md" "ReleaseNotes.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
 endif ()
