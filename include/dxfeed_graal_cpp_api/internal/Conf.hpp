@@ -50,7 +50,7 @@
 #ifndef DXFCPP_BEGIN_NAMESPACE
 #    define DXFCPP_BEGIN_NAMESPACE                                                                                     \
         namespace dxfcpp {                                                                                             \
-        inline namespace v2 {
+        inline namespace v3 {
 #    define DXFCPP_END_NAMESPACE                                                                                       \
         }                                                                                                              \
         }
