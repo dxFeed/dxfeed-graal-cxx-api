@@ -38,9 +38,15 @@ struct DXFCPP_EXPORT TimeFormat {
     const static TimeFormat GMT;
 
   private:
-    JavaObjectHandle<TimeFormat> handle_;
+    mutable JavaObjectHandle<TimeFormat> handle_;
+    mutable std::mutex mtx_{};
+    mutable bool initialized_{};
+    std::function<JavaObjectHandle<TimeFormat>()> initializer_;
 
-    explicit TimeFormat(JavaObjectHandle<TimeFormat> &&handle);
+    //lazy c-tor
+    explicit TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer);
+
+    void init() const;
 
   public:
     virtual ~TimeFormat() noexcept = default;
@@ -49,6 +55,8 @@ struct DXFCPP_EXPORT TimeFormat {
     TimeFormat(TimeFormat &&) noexcept = delete;
     TimeFormat &operator=(const TimeFormat &) = delete;
     TimeFormat &operator=(const TimeFormat &&) noexcept = delete;
+
+    const JavaObjectHandle<TimeFormat> &getHandle() const;
 
     /**
      * Reads Date from String and returns timestamp.
