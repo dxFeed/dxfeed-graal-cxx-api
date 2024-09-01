@@ -47,6 +47,12 @@ class Isolate final {
             }
         }
 
+        IsolateThread(const IsolateThread &) = delete;
+        IsolateThread(IsolateThread &&) = default;
+
+        IsolateThread &operator=(const IsolateThread &) = delete;
+        IsolateThread &operator=(IsolateThread &&) = default;
+
         CEntryPointErrorsEnum detach() noexcept;
 
         CEntryPointErrorsEnum detachAllThreadsAndTearDownIsolate() noexcept;
