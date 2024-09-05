@@ -77,15 +77,12 @@ Isolate::Isolate() noexcept : mtx_{} {
             nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) == CEntryPointErrorsEnum::NO_ERROR) {
 
         handle_ = graalIsolateHandle;
-        mainIsolateThread_ = std::move(IsolateThread{graalIsolateThreadHandle, true});
-
         currentIsolateThread_.handle = graalIsolateThreadHandle;
-        currentIsolateThread_.isMain = true;
     }
 
     if constexpr (Debugger::traceIsolates) {
-        Debugger::trace("Isolate::Isolate() -> " + std::string("Isolate{") + dxfcpp::toString(handle_) + ", main = " +
-                        mainIsolateThread_.toString() + ", current = " + currentIsolateThread_.toString() + "}");
+        Debugger::trace("Isolate::Isolate() -> " + std::string("Isolate{") + dxfcpp::toString(handle_) +
+                        ", current = " + currentIsolateThread_.toString() + "}");
     }
 }
 
@@ -116,7 +113,6 @@ CEntryPointErrorsEnum Isolate::attach() noexcept {
         }
 
         currentIsolateThread_.handle = newIsolateThreadHandle;
-        currentIsolateThread_.isMain = mainIsolateThread_.handle == newIsolateThreadHandle;
 
         if constexpr (Debugger::traceIsolates) {
             Debugger::trace(toString() + "::attach(): Attached: " + currentIsolateThread_.toString());

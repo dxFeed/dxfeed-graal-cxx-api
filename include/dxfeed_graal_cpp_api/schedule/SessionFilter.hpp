@@ -9,6 +9,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "SessionType.hpp"
 
+#include <mutex>
+
 DXFCPP_BEGIN_NAMESPACE
 
 enum class SessionFilterEnum : std::uint32_t {
@@ -40,9 +42,9 @@ enum class SessionFilterEnum : std::uint32_t {
  * some only non-trading, and some ignore type of session altogether.
  */
 struct DXFCPP_EXPORT SessionFilter {
-    friend struct Session;
-    friend struct Schedule;
-    friend struct Day;
+    // friend struct Session;
+    // friend struct Schedule;
+    // friend struct Day;
 
     /** Accepts any session - useful for pure schedule navigation. */
     static const SessionFilter ANY;
@@ -70,7 +72,8 @@ struct DXFCPP_EXPORT SessionFilter {
     /// Required trading flag, std::nullopt if not relevant.
     std::optional<bool> trading_;
 
-    JavaObjectHandle<SessionFilter> handle_;
+    mutable std::mutex mtx_{};
+    mutable JavaObjectHandle<SessionFilter> handle_{};
 
   public:
     SessionFilter() noexcept = default;
@@ -119,6 +122,8 @@ struct DXFCPP_EXPORT SessionFilter {
     const std::optional<bool> &getTrading() const & noexcept {
         return trading_;
     }
+
+    const JavaObjectHandle<SessionFilter>& getHandle() const&;
 };
 
 DXFCPP_END_NAMESPACE
