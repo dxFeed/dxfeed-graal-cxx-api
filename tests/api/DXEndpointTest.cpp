@@ -141,19 +141,6 @@ TEST_CASE("dxfcpp::DXFeed::getInstance()") {
     dxfcpp::DXFeed::getInstance();
 }
 
-TEST_CASE("DXEndpoint::user") {
-    using namespace std::literals;
-
-    // dxfcpp::System::setProperty("log.file", "log.txt");
-
-    auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::DXEndpoint::Role::FEED);
-
-    endpoint->user("\xe2\x28\xa1");
-    endpoint->connect("123123123");
-
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-}
-
 TEST_CASE("DXEndpoint::getFeed and getPublisher") {
     auto feed = DXEndpoint::getInstance()->getFeed();
     auto publisher = DXEndpoint::getInstance()->getPublisher();
@@ -180,8 +167,6 @@ TEST_CASE("Test DXEndpoint + multi-thread setProperty") {
     }
 
     endpoint->close();
-
-    std::cout << "!!!!!\n" << std::endl;
 }
 
 TEST_CASE("Test DXEndpoint + multi-thread setProperty v2") {
@@ -197,6 +182,4 @@ TEST_CASE("Test DXEndpoint + multi-thread setProperty v2") {
     std::this_thread::sleep_for(1s);
 
     endpoint->close();
-
-    std::cout << "!!!!!\n" << std::endl;
 }
