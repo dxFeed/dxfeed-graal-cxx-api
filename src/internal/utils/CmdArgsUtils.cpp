@@ -64,10 +64,6 @@ auto toUpper = [](auto&& s) {
            ranges::to<std::string>();
 };
 
-decltype(ranges::views::transform([](auto &&s) {
-    return toUpper(s);
-})) transformToUpper{};
-
 std::unordered_set<std::string> parseStringSymbols(const std::string &symbols) noexcept {
     auto trimmedSymbols = trimStr(symbols);
 

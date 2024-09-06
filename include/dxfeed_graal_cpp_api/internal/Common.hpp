@@ -285,7 +285,7 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
     return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
 }
 
-static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day);
+std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day);
 
 } // namespace day_util
 
@@ -798,7 +798,7 @@ struct StringHash {
 
 namespace util {
 
-inline void throwInvalidChar(char c, const std::string &name);
+void throwInvalidChar(char c, const std::string &name);
 
 inline void checkChar(char c, std::uint32_t mask, const std::string &name) {
     if ((andOp(c, ~mask)) != 0) {

@@ -27,7 +27,7 @@ std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::
 
 namespace util {
 
-inline void throwInvalidChar(char c, const std::string &name) {
+void throwInvalidChar(char c, const std::string &name) {
     throw InvalidArgumentException("Invalid " + name + ": " + encodeChar(c));
 }
 

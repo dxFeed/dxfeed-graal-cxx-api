@@ -11,8 +11,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <string>
+#include <functional>
 
 DXFCPP_BEGIN_NAMESPACE
+
+struct StringLikeWrapper;
 
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.

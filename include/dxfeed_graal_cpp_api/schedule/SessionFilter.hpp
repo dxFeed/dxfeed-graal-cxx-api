@@ -41,11 +41,7 @@ enum class SessionFilterEnum : std::uint32_t {
  * Different filters treat this distinction differently - some accept only trading sessions,
  * some only non-trading, and some ignore type of session altogether.
  */
-struct DXFCPP_EXPORT SessionFilter {
-    // friend struct Session;
-    // friend struct Schedule;
-    // friend struct Day;
-
+struct DXFCPP_EXPORT SessionFilter final {
     /** Accepts any session - useful for pure schedule navigation. */
     static const SessionFilter ANY;
     /** Accepts trading sessions only - those with <code>(Session::isTrading() == true)</code>. */
@@ -65,12 +61,12 @@ struct DXFCPP_EXPORT SessionFilter {
   protected:
     SessionFilterEnum code_{};
 
-    std::string name_;
+    std::string name_{};
 
     /// Required type, std::nullopt if not relevant.
-    std::optional<SessionType> type_;
+    std::optional<SessionType> type_{};
     /// Required trading flag, std::nullopt if not relevant.
-    std::optional<bool> trading_;
+    std::optional<bool> trading_{};
 
     mutable std::mutex mtx_{};
     mutable JavaObjectHandle<SessionFilter> handle_{};
