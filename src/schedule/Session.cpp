@@ -13,8 +13,7 @@ Session::Session(void *handle) noexcept : handle_(handle) {
 
 Session::Ptr Session::create(void *handle) {
     if (!handle) {
-        throw InvalidArgumentException(
-            "Unable to create a Session object. The handle is nullptr");
+        throw InvalidArgumentException("Unable to create a Session object. The handle is nullptr");
     }
 
     return std::shared_ptr<Session>(new Session(handle));
@@ -88,35 +87,35 @@ bool Session::containsTime(std::int64_t time) const noexcept {
 }
 
 Session::Ptr Session::getPrevSession(const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
-    return Session::create(isolated::schedule::Session::getPrevSession(handle_.get(), filter.handle_.get()));
+    return Session::create(isolated::schedule::Session::getPrevSession(handle_.get(), filter.getHandle().get()));
 }
 
 Session::Ptr Session::getNextSession(const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
-    return Session::create(isolated::schedule::Session::getNextSession(handle_.get(), filter.handle_.get()));
+    return Session::create(isolated::schedule::Session::getNextSession(handle_.get(), filter.getHandle().get()));
 }
 
 Session::Ptr Session::findPrevSession(const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
-    return Session::create(isolated::schedule::Session::findPrevSession(handle_.get(), filter.handle_.get()));
+    return Session::create(isolated::schedule::Session::findPrevSession(handle_.get(), filter.getHandle().get()));
 }
 
 Session::Ptr Session::findNextSession(const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
-    return Session::create(isolated::schedule::Session::findNextSession(handle_.get(), filter.handle_.get()));
+    return Session::create(isolated::schedule::Session::findNextSession(handle_.get(), filter.getHandle().get()));
 }
 
 bool Session::operator==(const Session &other) const noexcept {

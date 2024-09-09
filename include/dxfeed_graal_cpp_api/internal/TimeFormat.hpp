@@ -11,8 +11,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <string>
+#include <functional>
 
 DXFCPP_BEGIN_NAMESPACE
+
+struct StringLikeWrapper;
 
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.
@@ -38,9 +41,15 @@ struct DXFCPP_EXPORT TimeFormat {
     const static TimeFormat GMT;
 
   private:
-    JavaObjectHandle<TimeFormat> handle_;
+    mutable JavaObjectHandle<TimeFormat> handle_;
+    mutable std::mutex mtx_{};
+    mutable bool initialized_{};
+    std::function<JavaObjectHandle<TimeFormat>()> initializer_;
 
-    explicit TimeFormat(JavaObjectHandle<TimeFormat> &&handle);
+    //lazy c-tor
+    explicit TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer);
+
+    void init() const;
 
   public:
     virtual ~TimeFormat() noexcept = default;
@@ -49,6 +58,8 @@ struct DXFCPP_EXPORT TimeFormat {
     TimeFormat(TimeFormat &&) noexcept = delete;
     TimeFormat &operator=(const TimeFormat &) = delete;
     TimeFormat &operator=(const TimeFormat &&) noexcept = delete;
+
+    const JavaObjectHandle<TimeFormat> &getHandle() const;
 
     /**
      * Reads Date from String and returns timestamp.

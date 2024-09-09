@@ -16,7 +16,6 @@ int main(int /* argc */, char ** /* argv */) {
     using namespace std::literals;
 
     try {
-
         // get on-demand-only data feed
         auto onDemand = OnDemandService::getInstance();
         auto feed = onDemand->getEndpoint()->getFeed();

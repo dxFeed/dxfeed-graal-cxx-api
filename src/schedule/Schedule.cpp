@@ -94,21 +94,21 @@ Day::Ptr Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcep
 }
 
 Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
     return Session::create(
-        isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.handle_.get()));
+        isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.getHandle().get()));
 }
 
 Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
     return Session::create(
-        isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.handle_.get()));
+        isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.getHandle().get()));
 }
 
 std::string Schedule::getName() const noexcept {

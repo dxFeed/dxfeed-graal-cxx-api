@@ -14,8 +14,7 @@ Day::Day(void *handle) noexcept : handle_(handle) {
 
 Day::Ptr Day::create(void *handle) {
     if (!handle) {
-        throw InvalidArgumentException(
-            "Unable to create a Day object. The handle is nullptr");
+        throw InvalidArgumentException("Unable to create a Day object. The handle is nullptr");
     }
 
     return std::shared_ptr<Day>(new Day(handle));
@@ -138,13 +137,13 @@ std::vector<std::shared_ptr<Session>> Day::getSessions() const {
         return {};
     }
 
-    auto* graalSessionList = isolated::schedule::Day::getSessions(handle_.get());
+    auto *graalSessionList = isolated::schedule::Day::getSessions(handle_.get());
 
     if (!graalSessionList) {
         return {};
     }
 
-    auto* sessionList = dxfcpp::bit_cast<dxfg_session_list*>(graalSessionList);
+    auto *sessionList = dxfcpp::bit_cast<dxfg_session_list *>(graalSessionList);
     std::vector<std::shared_ptr<Session>> result;
 
     if (sessionList->size > 0 && sessionList->elements) {
@@ -155,8 +154,7 @@ std::vector<std::shared_ptr<Session>> Day::getSessions() const {
         }
     }
 
-    isolated::runGraalFunctionAndThrowIfLessThanZero(dxfg_SessionList_wrapper_release,
-                                              sessionList);
+    isolated::runGraalFunctionAndThrowIfLessThanZero(dxfg_SessionList_wrapper_release, sessionList);
 
     return result;
 }
@@ -170,35 +168,35 @@ std::shared_ptr<Session> Day::getSessionByTime(std::int64_t time) const noexcept
 }
 
 std::shared_ptr<Session> Day::getFirstSession(const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
-    return Session::create(isolated::schedule::Day::getFirstSession(handle_.get(), filter.handle_.get()));
+    return Session::create(isolated::schedule::Day::getFirstSession(handle_.get(), filter.getHandle().get()));
 }
 
 std::shared_ptr<Session> Day::getLastSession(const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
-    return Session::create(isolated::schedule::Day::getLastSession(handle_.get(), filter.handle_.get()));
+    return Session::create(isolated::schedule::Day::getLastSession(handle_.get(), filter.getHandle().get()));
 }
 
 std::shared_ptr<Session> Day::findFirstSession(const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
-    return Session::create(isolated::schedule::Day::findFirstSession(handle_.get(), filter.handle_.get()));
+    return Session::create(isolated::schedule::Day::findFirstSession(handle_.get(), filter.getHandle().get()));
 }
 
 std::shared_ptr<Session> Day::findLastSession(const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+    if (!handle_ || !filter.getHandle()) {
         return {};
     }
 
-    return Session::create(isolated::schedule::Day::findLastSession(handle_.get(), filter.handle_.get()));
+    return Session::create(isolated::schedule::Day::findLastSession(handle_.get(), filter.getHandle().get()));
 }
 
 Day::Ptr Day::getPrevDay(const DayFilter &filter) const noexcept {

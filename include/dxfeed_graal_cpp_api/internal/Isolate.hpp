@@ -12,10 +12,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "Common.hpp"
 #include "utils/StringUtils.hpp"
 
-#include <concepts>
 #include <functional>
 #include <iostream>
-#include <memory>
 #include <mutex>
 #include <thread>
 #include <variant>
@@ -33,19 +31,24 @@ using ConstGraalIsolateThreadHandle = const void *;
 class Isolate final {
     struct IsolateThread final {
         GraalIsolateThreadHandle handle{};
-        bool isMain{};
         std::thread::id tid{};
         std::size_t idx{};
 
-        explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr, bool isMain = false) noexcept
-            : handle{handle}, isMain{isMain}, tid{std::this_thread::get_id()} {
+        explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr) noexcept
+            : handle{handle}, tid{std::this_thread::get_id()} {
             this->idx = Id<IsolateThread>::getNext().getValue();
 
             if constexpr (Debugger::traceIsolates) {
-                Debugger::trace("IsolateThread{" + dxfcpp::toString(handle) + ", isMain = " + dxfcpp::toString(isMain) +
-                                ", tid = " + dxfcpp::toString(tid) + ", idx = " + std::to_string(idx) + "}()");
+                Debugger::trace("IsolateThread{" + dxfcpp::toString(handle) + ", tid = " + dxfcpp::toString(tid) +
+                                ", idx = " + std::to_string(idx) + "}()");
             }
         }
+
+        IsolateThread(const IsolateThread &) = delete;
+        IsolateThread(IsolateThread &&) = default;
+
+        IsolateThread &operator=(const IsolateThread &) = delete;
+        IsolateThread &operator=(IsolateThread &&) = default;
 
         CEntryPointErrorsEnum detach() noexcept;
 
@@ -56,41 +59,20 @@ class Isolate final {
                 Debugger::trace(toString() + "::~()");
             }
 
-            if (isMain) {
-                if constexpr (Debugger::traceIsolates) {
-                    Debugger::trace(toString() + "::~(): isMain => This is the main thread");
-                }
-
-                return;
-            }
-
-            detach();
+            // detach();
         }
 
         std::string toString() const {
-            return std::string("IsolateThread{") + dxfcpp::toString(handle) + ", isMain = " + dxfcpp::toString(isMain) +
-                   ", tid = " + dxfcpp::toString(tid) + ", idx = " + std::to_string(idx) + "}";
+            return std::string("IsolateThread{") + dxfcpp::toString(handle) + ", tid = " + dxfcpp::toString(tid) +
+                   ", idx = " + std::to_string(idx) + "}";
         }
     };
 
     mutable std::recursive_mutex mtx_{};
     ConstGraalIsolateThreadHandle handle_;
-    IsolateThread mainIsolateThread_;
     static thread_local IsolateThread currentIsolateThread_;
 
     Isolate() noexcept;
-
-    Isolate(GraalIsolateHandle handle, GraalIsolateThreadHandle mainIsolateThreadHandle) noexcept
-        : mtx_{}, handle_{handle}, mainIsolateThread_{mainIsolateThreadHandle, true} {
-
-        currentIsolateThread_.handle = mainIsolateThreadHandle;
-        currentIsolateThread_.isMain = true;
-
-        if constexpr (Debugger::traceIsolates) {
-            Debugger::trace("Isolate{" + dxfcpp::toString(handle) + ", main = " + mainIsolateThread_.toString() +
-                            ", current = " + currentIsolateThread_.toString() + "}()");
-        }
-    }
 
     CEntryPointErrorsEnum attach() noexcept;
 
@@ -263,8 +245,8 @@ class Isolate final {
     }
 
     std::string toString() const {
-        return std::string("Isolate{") + dxfcpp::toString(handle_) + ", main = " + mainIsolateThread_.toString() +
-               ", current = " + currentIsolateThread_.toString() + "}";
+        return std::string("Isolate{") + dxfcpp::toString(handle_) + ", current = " + currentIsolateThread_.toString() +
+               "}";
     }
 };
 

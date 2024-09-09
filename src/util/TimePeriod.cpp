@@ -16,9 +16,13 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const TimePeriod TimePeriod::ZERO(isolated::util::IsolatedTimePeriod::ZERO());
+const TimePeriod TimePeriod::ZERO([] {
+    return isolated::util::IsolatedTimePeriod::ZERO();
+});
 
-const TimePeriod TimePeriod::UNLIMITED(isolated::util::IsolatedTimePeriod::UNLIMITED());
+const TimePeriod TimePeriod::UNLIMITED([] {
+    return isolated::util::IsolatedTimePeriod::UNLIMITED();
+});
 
 TimePeriod TimePeriod::valueOf(std::int64_t value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
@@ -29,18 +33,38 @@ TimePeriod TimePeriod::valueOf(const StringLikeWrapper &value) {
 }
 
 std::int64_t TimePeriod::getTime() const {
+    init();
+
     return isolated::util::IsolatedTimePeriod::getTime(handle_);
 }
 
 std::int32_t TimePeriod::getSeconds() const {
+    init();
+
     return isolated::util::IsolatedTimePeriod::getSeconds(handle_);
 }
 
 std::int64_t TimePeriod::getNanos() const {
+    init();
+
     return isolated::util::IsolatedTimePeriod::getNanos(handle_);
 }
 
-TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle) : handle_(std::move(handle)) {
+TimePeriod::TimePeriod(std::function<JavaObjectHandle<TimePeriod>()> &&initializer)
+    : initializer_(std::move(initializer)) {
+}
+
+TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle): handle_(std::move(handle)) {
+    initialized_ = true;
+}
+
+void TimePeriod::init() const {
+    std::lock_guard lock(mtx_);
+
+    if (!initialized_) {
+        handle_ = initializer_();
+        initialized_ = true;
+    }
 }
 
 DXFCPP_END_NAMESPACE
