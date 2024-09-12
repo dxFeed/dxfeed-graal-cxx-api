@@ -24,20 +24,6 @@ DXFCPP_BEGIN_NAMESPACE
 namespace isolated {
 
 namespace ipf {
-struct InstrumentProfileCollector {
-    static /* dxfg_ipf_collector_t* */ void *create() noexcept;
-    static std::int64_t getLastUpdateTime(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept;
-    static bool updateInstrumentProfile(
-        /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
-        /* dxfg_instrument_profile_t * */ void *ip) noexcept;
-    static /* dxfg_iterable_ip_t* */ void *
-    view(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept;
-    static bool addUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
-                                  /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
-    static bool removeUpdateListener(/* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle,
-                                     /* dxfg_ipf_update_listener_t* */ void *listener) noexcept;
-};
-
 struct InstrumentProfileConnection {
     static /* dxfg_ipf_connection_t* */ void *
     createConnection(const std::string &address,

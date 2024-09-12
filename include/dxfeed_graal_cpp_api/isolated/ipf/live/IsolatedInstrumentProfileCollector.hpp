@@ -21,15 +21,15 @@ std::int64_t getLastUpdateTime(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector);
 bool updateInstrumentProfile(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_instrument_profile_t * */ void *ip);
+    /* dxfg_instrument_profile_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &ip);
 /* dxfg_iterable_ip_t* */ void *
 view(/* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector);
 bool addUpdateListener(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<InstrumentProfileUpdateListener> &listener);
+    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener);
 bool removeUpdateListener(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<InstrumentProfileUpdateListener> &listener);
+    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener);
 } // namespace isolated::ipf::live::IsolatedInstrumentProfileCollector
 
 DXFCPP_END_NAMESPACE

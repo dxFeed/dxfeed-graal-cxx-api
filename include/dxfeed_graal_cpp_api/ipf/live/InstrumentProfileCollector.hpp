@@ -48,14 +48,14 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     std::unordered_map<std::size_t, SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)>>
         onInstrumentProfilesUpdateHandlers_{};
 
-    InstrumentProfileCollector() noexcept;
+    InstrumentProfileCollector();
 
     struct Impl;
 
-    void addListenerHandle(std::size_t id) noexcept;
-    void removeListenerHandle(std::size_t id) noexcept;
+    void addListenerHandle(std::size_t id);
+    void removeListenerHandle(std::size_t id);
 
-    void removeUpdateListenerImpl(std::size_t listenerId) noexcept {
+    void removeUpdateListenerImpl(std::size_t listenerId) {
         removeListenerHandle(listenerId);
 
         onInstrumentProfilesUpdateHandlers_[listenerId].remove(listenerId);
@@ -84,7 +84,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * @return The last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
      */
-    std::int64_t getLastUpdateTime() const noexcept;
+    std::int64_t getLastUpdateTime() const;
 
     /**
      * Returns last modification time (as std::chrono::milliseconds) of instrument profiles or zero if it is unknown.
@@ -93,7 +93,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * @return The last modification time (as std::chrono::milliseconds) of instrument profiles or zero if it is
      * unknown.
      */
-    std::chrono::milliseconds getLastUpdateTimeAsDuration() const noexcept {
+    std::chrono::milliseconds getLastUpdateTimeAsDuration() const {
         return std::chrono::milliseconds(getLastUpdateTime());
     }
 
@@ -118,7 +118,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * @return A concurrent view of the set of instrument profiles.
      */
-    std::shared_ptr<IterableInstrumentProfile> view() const noexcept;
+    std::shared_ptr<IterableInstrumentProfile> view() const;
 
     /**
      * Adds listener that is notified about any updates in the set of instrument profiles.
@@ -157,7 +157,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * @return The listener id
      */
     template <typename InstrumentProfileUpdateListener>
-    std::size_t addUpdateListener(InstrumentProfileUpdateListener listener) noexcept
+    std::size_t addUpdateListener(InstrumentProfileUpdateListener listener)
 #if __cpp_concepts
         requires requires {
             { listener(std::vector<std::shared_ptr<InstrumentProfile>>{}) } -> std::same_as<void>;
@@ -187,7 +187,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * @param listenerId The listener id
      */
-    void removeUpdateListener(std::size_t listenerId) noexcept {
+    void removeUpdateListener(std::size_t listenerId) {
         std::lock_guard guard{listenersMutex_};
 
         if (onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
