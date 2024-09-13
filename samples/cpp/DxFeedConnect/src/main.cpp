@@ -8,7 +8,9 @@
 #include <mutex>
 #include <string>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;

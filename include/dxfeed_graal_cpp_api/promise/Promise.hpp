@@ -303,7 +303,7 @@ template <typename E, typename P> struct EventsPromiseMixin {
             timeout = std::numeric_limits<std::int32_t>::max();
         }
 
-        static_cast<const P *>(this)->impl.await(timeout);
+        static_cast<const P *>(this)->impl.await(static_cast<std::int32_t>(timeout));
 
         return getResult();
     }

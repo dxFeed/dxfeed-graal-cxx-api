@@ -404,13 +404,13 @@ target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-$
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
-set(DXFCXX_MSVC_COMPILE_OPTIONS "/W2")
+set(DXFCXX_MSVC_COMPILE_OPTIONS "/W4")
 set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS "/PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>")
 set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
 set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
 
 #A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
-set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
+set(MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
 
 # https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
 # https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710

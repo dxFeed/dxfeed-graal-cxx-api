@@ -160,10 +160,11 @@ TEST_CASE("Test DXEndpoint + multi-thread setProperty") {
     auto endpoint = DXEndpoint::create();
 
     for (int i = 0; i < 1000; ++i) {
-        std::thread t{[] {
+        std::thread t2{[] {
             System::setProperty("test", "test");
         }};
-        t.join();
+
+        t2.join();
     }
 
     endpoint->close();

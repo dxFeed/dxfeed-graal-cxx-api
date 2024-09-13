@@ -91,9 +91,9 @@ void InstrumentProfileCollector::addListenerHandle(std::size_t id) {
     }
 
     listenerHandles_.emplace(
-        id, JavaObjectHandle<InstrumentProfileUpdateListener>(isolated::ipf::InstrumentProfileUpdateListener::create(
+        id, isolated::ipf::live::IsolatedInstrumentProfileUpdateListener::create(
                 dxfcpp::bit_cast<void *>(&InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate),
-                dxfcpp::bit_cast<void *>(dxfcpp::pack(id_.getValue(), id)))));
+                dxfcpp::bit_cast<void *>(dxfcpp::pack(id_.getValue(), id))));
 
     if (!listenerHandles_[id]) {
         return;

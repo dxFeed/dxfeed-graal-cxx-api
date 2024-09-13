@@ -8,7 +8,9 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-namespace isolated::ipf::live::IsolatedInstrumentProfileCollector {
+namespace isolated::ipf::live {
+
+namespace IsolatedInstrumentProfileCollector {
 /* dxfg_ipf_collector_t* */ JavaObjectHandle<InstrumentProfileCollector> create() {
     return JavaObjectHandle<InstrumentProfileCollector>{
         runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileCollector_new)};
@@ -79,6 +81,24 @@ bool removeUpdateListener(
                                               static_cast<dxfg_ipf_update_listener_t *>(listener.get())) == 0;
 }
 
-} // namespace isolated::ipf::live::IsolatedInstrumentProfileCollector
+} // namespace IsolatedInstrumentProfileCollector
+
+namespace IsolatedInstrumentProfileUpdateListener {
+
+/* dxfg_ipf_update_listener_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener>
+create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData) {
+    if (!userFunc) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileUpdateListener_new`. The "
+                                       "`userFunc` is nullptr");
+    }
+
+    return JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener>{
+        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileUpdateListener_new,
+                                          dxfcpp::bit_cast<dxfg_ipf_update_listener_function>(userFunc), userData)};
+}
+
+} // namespace IsolatedInstrumentProfileUpdateListener
+
+} // namespace isolated::ipf::live
 
 DXFCPP_END_NAMESPACE

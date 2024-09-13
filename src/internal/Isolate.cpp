@@ -373,22 +373,6 @@ InstrumentProfileIterator::next(/* dxfg_iterable_ip_t * */ void *iterable) noexc
         nullptr, static_cast<dxfg_iterable_ip_t *>(iterable)));
 }
 
-/* dxfg_ipf_update_listener_t* */ void *
-InstrumentProfileUpdateListener::create(/* dxfg_ipf_update_listener_function */ void *userFunc,
-                                        void *userData) noexcept {
-    if (!userFunc) {
-        // TODO: Improve error handling
-        return nullptr;
-    }
-
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle, auto &&userFunc, auto &&userData) {
-            return dxfg_InstrumentProfileUpdateListener_new(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                            userFunc, userData);
-        },
-        nullptr, dxfcpp::bit_cast<dxfg_ipf_update_listener_function>(userFunc), userData));
-}
-
 } // namespace ipf
 
 namespace ondemand {

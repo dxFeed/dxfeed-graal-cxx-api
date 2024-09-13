@@ -53,11 +53,6 @@ struct InstrumentProfileIterator {
     static /* dxfg_instrument_profile_t* */ void *next(/* dxfg_iterable_ip_t * */ void *iterable) noexcept;
 };
 
-struct InstrumentProfileUpdateListener {
-    static /* dxfg_ipf_update_listener_t* */ void *create(/* dxfg_ipf_update_listener_function */ void *userFunc,
-                                                          void *userData) noexcept;
-};
-
 } // namespace ipf
 
 namespace ondemand {

@@ -15,7 +15,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-namespace isolated::ipf::live::IsolatedInstrumentProfileCollector {
+namespace isolated::ipf::live {
+
+namespace IsolatedInstrumentProfileCollector {
+
 /* dxfg_ipf_collector_t* */ JavaObjectHandle<InstrumentProfileCollector> create();
 std::int64_t getLastUpdateTime(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector);
@@ -30,7 +33,16 @@ bool addUpdateListener(
 bool removeUpdateListener(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
     /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener);
-} // namespace isolated::ipf::live::IsolatedInstrumentProfileCollector
+
+} // namespace IsolatedInstrumentProfileCollector
+
+namespace IsolatedInstrumentProfileUpdateListener {
+
+/* dxfg_ipf_update_listener_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener>
+create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData);
+
+}
+} // namespace isolated::ipf::live
 
 DXFCPP_END_NAMESPACE
 

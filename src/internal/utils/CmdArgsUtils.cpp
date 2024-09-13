@@ -1,10 +1,14 @@
 // Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
 
 #include <chrono>
 #include <cstring>
@@ -22,7 +26,9 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 #if !defined(__cpp_lib_chrono) || (__cpp_lib_chrono < 201907L)
 #    include <date/date.h>
@@ -47,15 +53,15 @@ decltype(ranges::views::transform([](auto &&s) {
     return s | ranges::to<std::string>();
 })) transformToString{};
 
-decltype(ranges::views::transform([](const std::string &s) {
-    return trimStr(s);
-})) trim{};
-
 auto splitAndTrim = [](auto &&symbols, char sep = ',') noexcept {
+    decltype(ranges::views::transform([](const std::string &s) {
+        return trimStr(s);
+    })) trim{};
+
     return symbols | ranges::views::split(sep) | filterNonEmpty | transformToString | trim;
 };
 
-auto toUpper = [](auto&& s) {
+auto toUpper = [](auto &&s) {
     auto locale = std::locale{};
 
     return s | ranges::views::transform([&locale](auto c) {
@@ -232,3 +238,5 @@ std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const
 }
 
 DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
