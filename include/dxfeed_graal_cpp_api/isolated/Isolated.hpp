@@ -23,15 +23,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
 
-namespace ipf {
-
-struct InstrumentProfileIterator {
-    static bool hasNext(/* dxfg_iterable_ip_t * */ void *iterable) noexcept;
-    static /* dxfg_instrument_profile_t* */ void *next(/* dxfg_iterable_ip_t * */ void *iterable) noexcept;
-};
-
-} // namespace ipf
-
 namespace ondemand {
 
 struct OnDemandService {

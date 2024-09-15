@@ -30,7 +30,7 @@ std::shared_ptr<IterableInstrumentProfile> IterableInstrumentProfile::create(voi
         return false;
     }
 
-    return isolated::ipf::InstrumentProfileIterator::hasNext(handle_.get());
+    return isolated::ipf::live::IsolatedInstrumentProfileIterator::hasNext(handle_.get());
 }
 
 [[nodiscard]] std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const {
@@ -38,7 +38,7 @@ std::shared_ptr<IterableInstrumentProfile> IterableInstrumentProfile::create(voi
         return {};
     }
 
-    auto graalProfile = isolated::ipf::InstrumentProfileIterator::next(handle_.get());
+    auto graalProfile = isolated::ipf::live::IsolatedInstrumentProfileIterator::next(handle_.get());
     auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
     return result;

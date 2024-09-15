@@ -27,7 +27,7 @@ struct NonOwningInstrumentProfileIterator {
             return false;
         }
 
-        return isolated::ipf::InstrumentProfileIterator::hasNext(iterable);
+        return isolated::ipf::live::IsolatedInstrumentProfileIterator::hasNext(iterable);
     }
 
     [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const {
@@ -35,7 +35,7 @@ struct NonOwningInstrumentProfileIterator {
             return {};
         }
 
-        auto graalProfile = isolated::ipf::InstrumentProfileIterator::next(iterable);
+        auto graalProfile = isolated::ipf::live::IsolatedInstrumentProfileIterator::next(iterable);
         auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
         return result;

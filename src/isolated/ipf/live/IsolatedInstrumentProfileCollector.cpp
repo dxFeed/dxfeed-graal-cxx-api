@@ -117,6 +117,30 @@ create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData) {
 
 } // namespace IsolatedInstrumentProfileUpdateListener
 
+namespace IsolatedInstrumentProfileIterator {
+
+bool hasNext(/* dxfg_iterable_ip_t * */ void *iterable) {
+    if (!iterable) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_Iterable_InstrumentProfile_hasNext`. The "
+                                       "`iterable` is nullptr");
+    }
+
+    return runGraalFunctionAndThrowIfMinusOne(dxfg_Iterable_InstrumentProfile_hasNext,
+                                              static_cast<dxfg_iterable_ip_t *>(iterable)) == 1;
+}
+
+/* dxfg_instrument_profile_t* */ void *next(/* dxfg_iterable_ip_t * */ void *iterable) {
+    if (!iterable) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_Iterable_InstrumentProfile_next`. The "
+                                       "`iterable` is nullptr");
+    }
+
+    return runGraalFunctionAndThrowIfNullptr(dxfg_Iterable_InstrumentProfile_next,
+                                             static_cast<dxfg_iterable_ip_t *>(iterable));
+}
+
+} // namespace IsolatedInstrumentProfileIterator
+
 } // namespace isolated::ipf::live
 
 DXFCPP_END_NAMESPACE

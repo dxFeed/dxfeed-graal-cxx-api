@@ -42,6 +42,15 @@ namespace IsolatedInstrumentProfileUpdateListener {
 create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData);
 
 }
+
+namespace IsolatedInstrumentProfileIterator {
+
+bool hasNext(/* dxfg_iterable_ip_t * */ void *iterable);
+
+/* dxfg_instrument_profile_t* */ void *next(/* dxfg_iterable_ip_t * */ void *iterable);
+
+} // namespace IsolatedInstrumentProfileIterator
+
 } // namespace isolated::ipf::live
 
 DXFCPP_END_NAMESPACE

@@ -152,38 +152,6 @@ constexpr auto runGraalFunction(auto resultCheckerConverter, auto graalFunction,
 
 using NativeStringList = typename isolated::internal::NativeStringListWrapper<dxfg_string_list>;
 
-namespace ipf {
-
-bool InstrumentProfileIterator::hasNext(/* dxfg_iterable_ip_t * */ void *iterable) noexcept {
-    if (!iterable) {
-        // TODO: Improve error handling
-        return false;
-    }
-
-    return runIsolatedOrElse(
-        [](auto threadHandle, auto &&iterable) {
-            return dxfg_Iterable_InstrumentProfile_hasNext(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                           iterable) == 1;
-        },
-        false, static_cast<dxfg_iterable_ip_t *>(iterable));
-}
-
-/* dxfg_instrument_profile_t* */ void *
-InstrumentProfileIterator::next(/* dxfg_iterable_ip_t * */ void *iterable) noexcept {
-    if (!iterable) {
-        // TODO: Improve error handling
-        return nullptr;
-    }
-
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle, auto &&iterable) {
-            return dxfg_Iterable_InstrumentProfile_next(static_cast<graal_isolatethread_t *>(threadHandle), iterable);
-        },
-        nullptr, static_cast<dxfg_iterable_ip_t *>(iterable)));
-}
-
-} // namespace ipf
-
 namespace ondemand {
 
 /* dxfg_on_demand_service_t* */ void *OnDemandService::getInstance(/* dxfg_endpoint_t * */ void *endpoint) noexcept {
