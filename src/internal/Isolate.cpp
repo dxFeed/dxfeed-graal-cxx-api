@@ -154,22 +154,6 @@ using NativeStringList = typename isolated::internal::NativeStringListWrapper<dx
 
 namespace ipf {
 
-/* dxfg_ipf_connection_state_change_listener_t* */ void *
-IpfPropertyChangeListener::create(/* dxfg_ipf_connection_state_change_listener_func */ void *userFunc,
-                                  void *userData) noexcept {
-    if (!userFunc) {
-        // TODO: Improve error handling
-        return nullptr;
-    }
-
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle, auto &&userFunc, auto &&userData) {
-            return dxfg_IpfPropertyChangeListener_new(static_cast<graal_isolatethread_t *>(threadHandle), userFunc,
-                                                      userData);
-        },
-        nullptr, dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_func>(userFunc), userData));
-}
-
 bool InstrumentProfileIterator::hasNext(/* dxfg_iterable_ip_t * */ void *iterable) noexcept {
     if (!iterable) {
         // TODO: Improve error handling

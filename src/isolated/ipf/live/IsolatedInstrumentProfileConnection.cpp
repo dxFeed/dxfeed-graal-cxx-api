@@ -12,6 +12,7 @@ DXFCPP_BEGIN_NAMESPACE
 dxfcpp::InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state);
 
 namespace isolated::ipf::live {
+
 namespace IsolatedInstrumentProfileConnection {
 
 /* dxfg_ipf_connection_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
@@ -160,6 +161,23 @@ bool waitUntilCompleted(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxf
 }
 
 } // namespace IsolatedInstrumentProfileConnection
+
+namespace IsolatedIpfPropertyChangeListener {
+
+/* dxfg_ipf_connection_state_change_listener_t* */ JavaObjectHandle<dxfcpp::IpfPropertyChangeListener>
+create(/* dxfg_ipf_connection_state_change_listener_func */ void *userFunc, void *userData) {
+    if (!userFunc) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_IpfPropertyChangeListener_new`. The "
+                                       "`userFunc` is nullptr");
+    }
+
+    return JavaObjectHandle<dxfcpp::IpfPropertyChangeListener>{runGraalFunctionAndThrowIfNullptr(
+        dxfg_IpfPropertyChangeListener_new, dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_func>(userFunc),
+        userData)};
+}
+
+} // namespace IsolatedIpfPropertyChangeListener
+
 } // namespace isolated::ipf::live
 
 DXFCPP_END_NAMESPACE

@@ -70,11 +70,9 @@ InstrumentProfileConnection::createConnection(const StringLikeWrapper &address,
         ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->registerEntity(connection);
     connection->handle_ =
         isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address, collector->handle_);
-
-    connection->stateChangeListenerHandle_ =
-        JavaObjectHandle<IpfPropertyChangeListener>(isolated::ipf::IpfPropertyChangeListener::create(
-            dxfcpp::bit_cast<void *>(&InstrumentProfileConnection::Impl::onStateChange),
-            dxfcpp::bit_cast<void *>(connection->id_.getValue())));
+    connection->stateChangeListenerHandle_ = isolated::ipf::live::IsolatedIpfPropertyChangeListener::create(
+        dxfcpp::bit_cast<void *>(&InstrumentProfileConnection::Impl::onStateChange),
+        dxfcpp::bit_cast<void *>(connection->id_.getValue()));
 
     isolated::ipf::live::IsolatedInstrumentProfileConnection::addStateChangeListener(
         connection->handle_, connection->stateChangeListenerHandle_);
