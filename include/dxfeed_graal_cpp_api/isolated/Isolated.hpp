@@ -23,25 +23,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
 
-namespace ondemand {
-
-struct OnDemandService {
-    static /* dxfg_on_demand_service_t* */ void *getInstance(/* dxfg_endpoint_t * */ void *endpoint) noexcept;
-    static bool isReplaySupported(/* dxfg_on_demand_service_t * */ void *service) noexcept;
-    static bool isReplay(/* dxfg_on_demand_service_t * */ void *service) noexcept;
-    static bool isClear(/* dxfg_on_demand_service_t * */ void *service) noexcept;
-    static std::int64_t getTime(/* dxfg_on_demand_service_t * */ void *service) noexcept;
-    static double getSpeed(/* dxfg_on_demand_service_t * */ void *service) noexcept;
-    static bool replay(/* dxfg_on_demand_service_t * */ void *service, std::int64_t time) noexcept;
-    static bool replay(/* dxfg_on_demand_service_t * */ void *service, std::int64_t time, double speed) noexcept;
-    static bool pause(/* dxfg_on_demand_service_t * */ void *service) noexcept;
-    static bool stopAndResume(/* dxfg_on_demand_service_t * */ void *service) noexcept;
-    static bool stopAndClear(/* dxfg_on_demand_service_t * */ void *service) noexcept;
-    static bool setSpeed(/* dxfg_on_demand_service_t * */ void *service, double speed) noexcept;
-};
-
-} // namespace ondemand
-
 namespace schedule {
 struct DayFilter {
     static /* dxfg_day_filter_t* */ void *getInstance(std::uint32_t code) noexcept;

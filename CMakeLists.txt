@@ -212,16 +212,17 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
         src/isolated/auth/IsolatedAuthToken.cpp
         src/isolated/event/IsolatedEventType.cpp
-        src/isolated/promise/IsolatedPromise.cpp
         src/isolated/internal/IsolatedString.cpp
         src/isolated/internal/IsolatedObject.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
         src/isolated/internal/IsolatedTools.cpp
-        src/isolated/util/IsolatedTimePeriod.cpp
+        src/isolated/promise/IsolatedPromise.cpp
         src/isolated/ipf/IsolatedInstrumentProfile.cpp
+        src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileCollector.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
-        src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
+        src/isolated/ondemand/IsolatedOnDemandService.cpp
+        src/isolated/util/IsolatedTimePeriod.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
