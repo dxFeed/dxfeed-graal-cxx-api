@@ -24,24 +24,6 @@ DXFCPP_BEGIN_NAMESPACE
 namespace isolated {
 
 namespace ipf {
-struct InstrumentProfileConnection {
-    static /* dxfg_ipf_connection_t* */ void *
-    createConnection(const std::string &address,
-                     /* dxfg_ipf_collector_t* */ void *instrumentProfileCollectorHandle) noexcept;
-    static std::string getAddress(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept;
-    static std::int64_t getUpdatePeriod(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept;
-    static bool setUpdatePeriod(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
-                                std::int64_t updatePeriod) noexcept;
-    static dxfcpp::InstrumentProfileConnection::State
-    getState(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept;
-    static std::int64_t getLastModified(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept;
-    static bool start(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept;
-    static bool close(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle) noexcept;
-    static bool addStateChangeListener(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
-                                       /* dxfg_ipf_connection_state_change_listener_t * */ void *listener) noexcept;
-    static bool waitUntilCompleted(/* dxfg_ipf_connection_t * */ void *instrumentProfileConnectionHandle,
-                                   std::int64_t timeoutInMs) noexcept;
-};
 
 struct IpfPropertyChangeListener {
     static /* dxfg_ipf_connection_state_change_listener_t* */ void *

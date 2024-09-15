@@ -31,10 +31,16 @@ std::int64_t getLastUpdateTime(
 bool updateInstrumentProfile(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
     /* dxfg_instrument_profile_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &ip) {
-    if (!instrumentProfileCollector || !ip) {
+    if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileCollector_updateInstrumentProfile`. The "
-            "`instrumentProfileCollector` handle or `ip` handle is invalid");
+            "`instrumentProfileCollector` handle is invalid");
+    }
+
+    if (!ip) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_InstrumentProfileCollector_updateInstrumentProfile`. The "
+            "`ip` handle is invalid");
     }
 
     return runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfileCollector_updateInstrumentProfile,
@@ -56,10 +62,16 @@ view(/* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollect
 bool addUpdateListener(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
     /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener) {
-    if (!instrumentProfileCollector || !listener) {
+    if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileCollector_addUpdateListener`. The "
-            "`instrumentProfileCollector` handle or `listener` handle is invalid");
+            "`instrumentProfileCollector` handle is invalid");
+    }
+
+    if (!listener) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_InstrumentProfileCollector_addUpdateListener`. The "
+            "`listener` handle is invalid");
     }
 
     return runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfileCollector_addUpdateListener,
@@ -70,10 +82,16 @@ bool addUpdateListener(
 bool removeUpdateListener(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
     /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener) {
-    if (!instrumentProfileCollector || !listener) {
+    if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileCollector_removeUpdateListener`. The "
-            "`instrumentProfileCollector` handle or `listener` handle is invalid");
+            "`instrumentProfileCollector` handle is invalid");
+    }
+
+    if (!listener) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_InstrumentProfileCollector_removeUpdateListener`. The "
+            "`listener` handle is invalid");
     }
 
     return runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfileCollector_removeUpdateListener,
