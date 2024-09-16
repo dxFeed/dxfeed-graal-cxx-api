@@ -24,9 +24,6 @@ DXFCPP_BEGIN_NAMESPACE
 namespace isolated {
 
 namespace schedule {
-struct DayFilter {
-    static /* dxfg_day_filter_t* */ void *getInstance(std::uint32_t code) noexcept;
-};
 
 struct Day {
     static /* dxfg_schedule_t* */ void *getSchedule(/* dxfg_day_t* */ void *day) noexcept;

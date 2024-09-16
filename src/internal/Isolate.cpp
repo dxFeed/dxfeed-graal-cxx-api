@@ -726,14 +726,6 @@ std::string Session::toString(/* dxfg_session_t* */ void *session) noexcept {
     return result;
 }
 
-/* dxfg_day_filter_t* */ void *DayFilter::getInstance(std::uint32_t code) noexcept {
-    return static_cast<void *>(runIsolatedOrElse(
-        [](auto threadHandle, auto &&filter) {
-            return dxfg_DayFilter_getInstance(static_cast<graal_isolatethread_t *>(threadHandle), filter);
-        },
-        nullptr, static_cast<dxfg_day_filter_prepare_t>(code)));
-}
-
 /* dxfg_schedule_t* */ void *Schedule::getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept {
     if (!instrumentProfile) {
         // TODO: Improve error handling

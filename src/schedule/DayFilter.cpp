@@ -14,7 +14,7 @@ DayFilter::DayFilter(DayFilterEnum code, std::string name, std::uint32_t dayOfWe
     : code_{code}, name_{std::move(name)}, dayOfWeekMask_{dayOfWeekMask}, holiday_{holiday}, shortDay_{shortDay},
       trading_{trading} {
 
-    handle_ = JavaObjectHandle<DayFilter>(isolated::schedule::DayFilter::getInstance(static_cast<std::uint32_t>(code)));
+    handle_ = isolated::schedule::IsolatedDayFilter::getInstance(static_cast<std::uint32_t>(code));
 }
 
 /// Accepts any day - useful for pure calendar navigation.

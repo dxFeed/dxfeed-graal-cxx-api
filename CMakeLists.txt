@@ -223,6 +223,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
         src/isolated/ondemand/IsolatedOnDemandService.cpp
         src/isolated/util/IsolatedTimePeriod.cpp
+        src/isolated/schedule/IsolatedDay.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
