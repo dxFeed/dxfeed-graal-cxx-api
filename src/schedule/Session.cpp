@@ -8,15 +8,15 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-Session::Session(void *handle) noexcept : handle_(handle) {
+Session::Session(JavaObjectHandle<Session> &&handle) noexcept : handle_(std::move(handle)) {
 }
 
-Session::Ptr Session::create(void *handle) {
+Session::Ptr Session::create(JavaObjectHandle<Session> &&handle) {
     if (!handle) {
-        throw InvalidArgumentException("Unable to create a Session object. The handle is nullptr");
+        throw InvalidArgumentException("Unable to create a Session object. The handle is invalid");
     }
 
-    return std::shared_ptr<Session>(new Session(handle));
+    return std::shared_ptr<Session>(new Session(std::move(handle)));
 }
 
 Day::Ptr Session::getDay() const noexcept {
@@ -24,7 +24,7 @@ Day::Ptr Session::getDay() const noexcept {
         return {};
     }
 
-    return Day::create(isolated::schedule::Session::getDay(handle_.get()));
+    return Day::create(JavaObjectHandle<Day>{isolated::schedule::Session::getDay(handle_.get())});
 }
 
 const SessionType &Session::getType() const & noexcept {
@@ -91,7 +91,8 @@ Session::Ptr Session::getPrevSession(const SessionFilter &filter) const noexcept
         return {};
     }
 
-    return Session::create(isolated::schedule::Session::getPrevSession(handle_.get(), filter.getHandle().get()));
+    return Session::create(JavaObjectHandle<Session>{
+        isolated::schedule::Session::getPrevSession(handle_.get(), filter.getHandle().get())});
 }
 
 Session::Ptr Session::getNextSession(const SessionFilter &filter) const noexcept {
@@ -99,7 +100,8 @@ Session::Ptr Session::getNextSession(const SessionFilter &filter) const noexcept
         return {};
     }
 
-    return Session::create(isolated::schedule::Session::getNextSession(handle_.get(), filter.getHandle().get()));
+    return Session::create(JavaObjectHandle<Session>{
+        isolated::schedule::Session::getNextSession(handle_.get(), filter.getHandle().get())});
 }
 
 Session::Ptr Session::findPrevSession(const SessionFilter &filter) const noexcept {
@@ -107,7 +109,8 @@ Session::Ptr Session::findPrevSession(const SessionFilter &filter) const noexcep
         return {};
     }
 
-    return Session::create(isolated::schedule::Session::findPrevSession(handle_.get(), filter.getHandle().get()));
+    return Session::create(JavaObjectHandle<Session>{
+        isolated::schedule::Session::findPrevSession(handle_.get(), filter.getHandle().get())});
 }
 
 Session::Ptr Session::findNextSession(const SessionFilter &filter) const noexcept {
@@ -115,7 +118,8 @@ Session::Ptr Session::findNextSession(const SessionFilter &filter) const noexcep
         return {};
     }
 
-    return Session::create(isolated::schedule::Session::findNextSession(handle_.get(), filter.getHandle().get()));
+    return Session::create(JavaObjectHandle<Session>{
+        isolated::schedule::Session::findNextSession(handle_.get(), filter.getHandle().get())});
 }
 
 bool Session::operator==(const Session &other) const noexcept {

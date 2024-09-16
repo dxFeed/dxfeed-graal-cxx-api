@@ -25,44 +25,6 @@ namespace isolated {
 
 namespace schedule {
 
-struct Day {
-    static /* dxfg_schedule_t* */ void *getSchedule(/* dxfg_day_t* */ void *day) noexcept;
-    static std::int32_t getDayId(/* dxfg_day_t* */ void *day) noexcept;
-    static std::int32_t getYearMonthDay(/* dxfg_day_t* */ void *day) noexcept;
-    static std::int32_t getYear(/* dxfg_day_t* */ void *day) noexcept;
-    static std::int32_t getMonthOfYear(/* dxfg_day_t* */ void *day) noexcept;
-    static std::int32_t getDayOfMonth(/* dxfg_day_t* */ void *day) noexcept;
-    static std::int32_t getDayOfWeek(/* dxfg_day_t* */ void *day) noexcept;
-    static bool isHoliday(/* dxfg_day_t* */ void *day) noexcept;
-    static bool isShortDay(/* dxfg_day_t* */ void *day) noexcept;
-    static bool isTrading(/* dxfg_day_t* */ void *day) noexcept;
-    static std::int64_t getStartTime(/* dxfg_day_t* */ void *day) noexcept;
-    static std::int64_t getEndTime(/* dxfg_day_t* */ void *day) noexcept;
-    static bool containsTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
-    static std::int64_t getResetTime(/* dxfg_day_t* */ void *day) noexcept;
-    static /* dxfg_session_list* */ void* getSessions(/* dxfg_day_t* */ void *day);
-    static /* dxfg_session_t* */ void *getSessionByTime(/* dxfg_day_t* */ void *day, std::int64_t time) noexcept;
-    static /* dxfg_session_t* */ void *getFirstSession(/* dxfg_day_t* */ void *day,
-                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
-    static /* dxfg_session_t* */ void *getLastSession(/* dxfg_day_t* */ void *day,
-                                                      /* dxfg_session_filter_t* */ void *filter) noexcept;
-    static /* dxfg_session_t* */ void *findFirstSession(/* dxfg_day_t* */ void *day,
-                                                        /* dxfg_session_filter_t* */ void *filter) noexcept;
-    static /* dxfg_session_t* */ void *findLastSession(/* dxfg_day_t* */ void *day,
-                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
-    static /* dxfg_day_t* */ void *getPrevDay(/* dxfg_day_t* */ void *day,
-                                              /* dxfg_day_filter_t* */ void *filter) noexcept;
-    static /* dxfg_day_t* */ void *getNextDay(/* dxfg_day_t* */ void *day,
-                                              /* dxfg_day_filter_t* */ void *filter) noexcept;
-    static /* dxfg_day_t* */ void *findPrevDay(/* dxfg_day_t* */ void *day,
-                                               /* dxfg_day_filter_t* */ void *filter) noexcept;
-    static /* dxfg_day_t* */ void *findNextDay(/* dxfg_day_t* */ void *day,
-                                               /* dxfg_day_filter_t* */ void *filter) noexcept;
-    static std::size_t getHashCode(/* dxfg_day_t* */ void *day) noexcept;
-    static bool equals(/* dxfg_day_t* */ void *day, /* dxfg_day_t* */ void *otherDay) noexcept;
-    static std::string toString(/* dxfg_day_t* */ void *day) noexcept;
-};
-
 struct SessionFilter {
     static /* dxfg_session_filter_t* */ void *getInstance(std::uint32_t code) noexcept;
 };

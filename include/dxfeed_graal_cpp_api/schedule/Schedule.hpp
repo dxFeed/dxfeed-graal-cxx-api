@@ -28,7 +28,7 @@ struct DXFCPP_EXPORT Schedule {
   private:
     JavaObjectHandle<Schedule> handle_;
 
-    explicit Schedule(void *handle = nullptr) noexcept;
+    explicit Schedule(JavaObjectHandle<Schedule>&& handle) noexcept;
 
     /**
      * Checks the handle, attempts to allocate memory for the pointer and return Schedule::Ptr
@@ -36,7 +36,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param handle The graal Schedule's handle
      * @return The smart pointer for the Schedule object.
      */
-    static Schedule::Ptr create(void *handle);
+    static Schedule::Ptr create(JavaObjectHandle<Schedule>&& handle);
 
   public:
     /**

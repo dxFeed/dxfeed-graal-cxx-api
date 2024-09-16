@@ -8,15 +8,15 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-Schedule::Schedule(void *handle) noexcept : handle_(handle) {
+Schedule::Schedule(JavaObjectHandle<Schedule> &&handle) noexcept : handle_(std::move(handle)) {
 }
 
-Schedule::Ptr Schedule::create(void *handle) {
+Schedule::Ptr Schedule::create(JavaObjectHandle<Schedule> &&handle) {
     if (!handle) {
         throw InvalidArgumentException("Unable to create a Schedule object. The handle is nullptr");
     }
 
-    return std::shared_ptr<Schedule>(new Schedule(handle));
+    return std::shared_ptr<Schedule>(new Schedule(std::move(handle)));
 }
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) {
@@ -24,13 +24,14 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) 
         throw InvalidArgumentException("The profile is nullptr");
     }
 
-    auto schedule = create(isolated::schedule::Schedule::getInstance(profile->handle_.get()));
+    auto schedule =
+        create(JavaObjectHandle<Schedule>{isolated::schedule::Schedule::getInstance(profile->handle_.get())});
 
     return schedule;
 }
 
 Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) {
-    return create(isolated::schedule::Schedule::getInstance(scheduleDefinition));
+    return create(JavaObjectHandle<Schedule>{isolated::schedule::Schedule::getInstance(scheduleDefinition)});
 }
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) {
@@ -38,7 +39,8 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, 
         throw InvalidArgumentException("The profile is nullptr");
     }
 
-    auto schedule = create(isolated::schedule::Schedule::getInstance(profile->handle_.get(), venue));
+    auto schedule =
+        create(JavaObjectHandle<Schedule>{isolated::schedule::Schedule::getInstance(profile->handle_.get(), venue)});
 
     return schedule;
 }
@@ -66,7 +68,8 @@ Session::Ptr Schedule::getSessionByTime(std::int64_t time) const noexcept {
         return {};
     }
 
-    return Session::create(isolated::schedule::Schedule::getSessionByTime(handle_.get(), time));
+    return Session::create(
+        JavaObjectHandle<Session>{isolated::schedule::Schedule::getSessionByTime(handle_.get(), time)});
 }
 
 Day::Ptr Schedule::getDayByTime(std::int64_t time) const noexcept {
@@ -74,7 +77,7 @@ Day::Ptr Schedule::getDayByTime(std::int64_t time) const noexcept {
         return {};
     }
 
-    return Day::create(isolated::schedule::Schedule::getDayByTime(handle_.get(), time));
+    return Day::create(JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayByTime(handle_.get(), time)});
 }
 
 Day::Ptr Schedule::getDayById(std::int32_t dayId) const noexcept {
@@ -82,7 +85,7 @@ Day::Ptr Schedule::getDayById(std::int32_t dayId) const noexcept {
         return {};
     }
 
-    return Day::create(isolated::schedule::Schedule::getDayById(handle_.get(), dayId));
+    return Day::create(JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayById(handle_.get(), dayId)});
 }
 
 Day::Ptr Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcept {
@@ -90,7 +93,8 @@ Day::Ptr Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcep
         return {};
     }
 
-    return Day::create(isolated::schedule::Schedule::getDayByYearMonthDay(handle_.get(), yearMonthDay));
+    return Day::create(
+        JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayByYearMonthDay(handle_.get(), yearMonthDay)});
 }
 
 Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
@@ -98,8 +102,8 @@ Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionF
         return {};
     }
 
-    return Session::create(
-        isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.getHandle().get()));
+    return Session::create(JavaObjectHandle<Session>{
+        isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.getHandle().get())});
 }
 
 Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
@@ -107,8 +111,8 @@ Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const Session
         return {};
     }
 
-    return Session::create(
-        isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.getHandle().get()));
+    return Session::create(JavaObjectHandle<Session>{
+        isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.getHandle().get())});
 }
 
 std::string Schedule::getName() const noexcept {
