@@ -9,6 +9,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct InstrumentProfile;
+struct Day;
+struct Session;
+
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
  * and different classes of financial instruments. Each instance of schedule covers separate trading schedule
@@ -83,7 +87,7 @@ struct DXFCPP_EXPORT Schedule {
      *
      * @param downloadConfig download config
      */
-    static void downloadDefaults(const std::string &downloadConfig) noexcept;
+    static void downloadDefaults(const std::string &downloadConfig);
 
     /**
      * Sets shared defaults that are used by individual schedule instances.
@@ -91,7 +95,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param data The content of default data
      * @return `true` if OK
      */
-    static bool setDefaults(const std::vector<char> &data) noexcept;
+    static bool setDefaults(const std::vector<char> &data);
 
     /**
      * Returns session that contains specified time.
@@ -102,7 +106,7 @@ struct DXFCPP_EXPORT Schedule {
      * @return session that contains specified time or `Session::Ptr{nullptr}` if specified time
      * falls outside of valid date range from 0001-01-02 to 9999-12-30.
      */
-    Session::Ptr getSessionByTime(std::int64_t time) const noexcept;
+    std::shared_ptr<Session> getSessionByTime(std::int64_t time) const;
 
     /**
      * Returns day that contains specified time.
@@ -113,7 +117,7 @@ struct DXFCPP_EXPORT Schedule {
      * @return The day that contains specified time or `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if
      * specified time falls outside of valid date range
      */
-    Day::Ptr getDayByTime(std::int64_t time) const noexcept;
+    std::shared_ptr<Day> getDayByTime(std::int64_t time) const;
 
     /**
      * Returns day for specified day identifier.
@@ -125,7 +129,7 @@ struct DXFCPP_EXPORT Schedule {
      * specified day identifier falls outside of valid date range
      * @see Day::getDayId()
      */
-    Day::Ptr getDayById(std::int32_t dayId) const noexcept;
+    std::shared_ptr<Day> getDayById(std::int32_t dayId) const;
 
     /**
      * Returns day for specified year, month and day numbers.
@@ -143,7 +147,7 @@ struct DXFCPP_EXPORT Schedule {
      * if specified year, month and day numbers fall outside of valid date range
      * @see Day#getYearMonthDay()
      */
-    Day::Ptr getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcept;
+    std::shared_ptr<Day> getDayByYearMonthDay(std::int32_t yearMonthDay) const;
 
     /**
      * Returns session that is nearest to the specified time and that is accepted by specified filter.
@@ -161,7 +165,7 @@ struct DXFCPP_EXPORT Schedule {
      * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time falls outside of valid date range
      * or if no such day was found within one year
      */
-    Session::Ptr getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept;
+    std::shared_ptr<Session> getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const;
 
     /**
      * Returns session that is nearest to the specified time and that is accepted by specified filter.
@@ -180,28 +184,28 @@ struct DXFCPP_EXPORT Schedule {
      * @return The session that is nearest to the specified time and that is accepted by specified filter or
      * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time falls outside of valid date range
      */
-    Session::Ptr findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept;
+    std::shared_ptr<Session> findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const;
 
     /**
      * Returns name of this schedule.
      *
      * @return The name of this schedule
      */
-    std::string getName() const noexcept;
+    std::string getName() const;
 
     /**
      * Returns time zone display name in which this schedule is defined.
      *
      * @return time zone display name in which this schedule is defined
      */
-    std::string getTimeZoneDisplayName() const noexcept;
+    std::string getTimeZoneDisplayName() const;
 
     /**
      * Returns time zone id in which this schedule is defined.
      *
      * @return time zone id in which this schedule is defined
      */
-    std::string getTimeZoneId() const noexcept;
+    std::string getTimeZoneId() const;
 };
 
 DXFCPP_END_NAMESPACE

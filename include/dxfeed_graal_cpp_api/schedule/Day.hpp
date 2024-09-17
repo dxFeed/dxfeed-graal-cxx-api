@@ -5,6 +5,8 @@
 
 #include "../internal/Conf.hpp"
 
+#include "../internal/JavaObjectHandle.hpp"
+
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
@@ -146,19 +148,18 @@ struct DXFCPP_EXPORT Day {
 
     /**
      * Returns session belonging to this day that contains specified time.
-     * If no such session was found within this day this method will return Session::Ptr{nullptr}
-     * (std::shared_ptr<Session>{nullptr}).
+     * If no such session was found within this day this method will throw JavaException "NoSuchElementException"
      *
      * @param time The time to search for
-     * @return The session that contains specified time or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
-     * if no such session was found within this day
+     * @return The session that contains specified time.
+     * @throw JavaException "NoSuchElementException" if no such session was found within this day
      */
     std::shared_ptr<Session> getSessionByTime(std::int64_t time) const;
 
     /**
      * Returns first session belonging to this day accepted by specified filter.
      * This method does not cross the day boundary. If no such session was found
-     * within this day this method will return Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * within this day this method will throw JavaException "NoSuchElementException"
      * <p>
      * To find first trading session of any type use this code:
      * <pre>Session session = day->getFirstSession(SessionFilter::TRADING);</pre>
@@ -166,15 +167,15 @@ struct DXFCPP_EXPORT Day {
      * <pre>Session session = day->getFirstSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The first session that is accepted by the filter or Session::Ptr{nullptr}
-     * (std::shared_ptr<Session>{nullptr}) if no such session was found within this day
+     * @return The first session that is accepted by the filter.
+     * @throw JavaException "NoSuchElementException" if no such session was found within this day.
      */
     std::shared_ptr<Session> getFirstSession(const SessionFilter &filter) const;
 
     /**
      * Returns last session belonging to this day accepted by specified filter.
      * This method does not cross the day boundary. If no such session was found
-     * within this day this method will return Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * within this day this method will throw JavaException "NoSuchElementException"
      * <p>
      * To find last trading session of any type use this code:
      * <pre>auto session = day->getLastSession(SessionFilter::TRADING);</pre>
@@ -182,8 +183,8 @@ struct DXFCPP_EXPORT Day {
      * <pre>auto session = day->getLastSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The last session that is accepted by the filter or Session::Ptr{nullptr}
-     * (std::shared_ptr<Session>{nullptr}) if no such session was found within this day
+     * @return The last session that is accepted by the filter.
+     * @throw JavaException "NoSuchElementException" if no such session was found within this day.
      */
     std::shared_ptr<Session> getLastSession(const SessionFilter &filter) const;
 
@@ -198,7 +199,7 @@ struct DXFCPP_EXPORT Day {
      * <pre>auto session = day->findFirstSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The first session that is accepted by the filter
+     * @return The first session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
      */
     std::shared_ptr<Session> findFirstSession(const SessionFilter &filter) const;
 
@@ -213,29 +214,29 @@ struct DXFCPP_EXPORT Day {
      * <pre>auto session = day->findLastSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The last session that is accepted by the filter
+     * @return The last session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
      */
     std::shared_ptr<Session> findLastSession(const SessionFilter &filter) const;
 
     /**
      * Returns previous day accepted by specified filter.
      * This method looks for appropriate day up to a year back in time. If no such day was found
-     * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
+     * within one year this method will throw JavaException "NoSuchElementException".
      *
-     * @param The filter the filter to test days
-     * @return The nearest previous day that is accepted by the filter or Day::Ptr{nullptr}
-     * (std::shared_ptr<Day>{nullptr}) if no such day was found within one year
+     * @param filter The filter the filter to test days
+     * @return The nearest previous day that is accepted by the filter
+     * @throw JavaException "NoSuchElementException" if no such day was found within one year
      */
     Day::Ptr getPrevDay(const DayFilter &filter) const;
 
     /**
      * Returns following day accepted by specified filter.
      * This method looks for appropriate day up to a year in the future. If no such day was found
-     * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
+     * within one year this method will throw JavaException "NoSuchElementException".
      *
-     * @param The filter the filter to test days
-     * @return The nearest following day that is accepted by the filter or Day::Ptr{nullptr}
-     * (std::shared_ptr<Day>{nullptr}) if no such day was found within one year
+     * @param filter The filter the filter to test days
+     * @return The nearest following day that is accepted by the filter.
+     * @throw JavaException "NoSuchElementException" if no such day was found within one year
      */
     Day::Ptr getNextDay(const DayFilter &filter) const;
 
@@ -245,7 +246,7 @@ struct DXFCPP_EXPORT Day {
      * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
      *
      * @param filter The filter to test days
-     * @return The nearest previous day that is accepted by the filter
+     * @return The nearest previous day that is accepted by the filter or Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr})
      */
     Day::Ptr findPrevDay(const DayFilter &filter) const;
 
@@ -255,7 +256,7 @@ struct DXFCPP_EXPORT Day {
      * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
      *
      * @param filter The filter to test days
-     * @return The nearest following day that is accepted by the filter
+     * @return The nearest following day that is accepted by the filter or Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr})
      */
     Day::Ptr findNextDay(const DayFilter &filter) const;
 

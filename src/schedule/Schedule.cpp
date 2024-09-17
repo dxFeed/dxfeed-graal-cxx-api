@@ -55,15 +55,15 @@ std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentPr
     return result;
 }
 
-void Schedule::downloadDefaults(const std::string &downloadConfig) noexcept {
+void Schedule::downloadDefaults(const std::string &downloadConfig) {
     isolated::schedule::Schedule::downloadDefaults(downloadConfig);
 }
 
-bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
+bool Schedule::setDefaults(const std::vector<char> &data) {
     return isolated::schedule::Schedule::setDefaults(data);
 }
 
-Session::Ptr Schedule::getSessionByTime(std::int64_t time) const noexcept {
+std::shared_ptr<Session> Schedule::getSessionByTime(std::int64_t time) const {
     if (!handle_) {
         return {};
     }
@@ -72,7 +72,7 @@ Session::Ptr Schedule::getSessionByTime(std::int64_t time) const noexcept {
         JavaObjectHandle<Session>{isolated::schedule::Schedule::getSessionByTime(handle_.get(), time)});
 }
 
-Day::Ptr Schedule::getDayByTime(std::int64_t time) const noexcept {
+std::shared_ptr<Day> Schedule::getDayByTime(std::int64_t time) const {
     if (!handle_) {
         return {};
     }
@@ -80,7 +80,7 @@ Day::Ptr Schedule::getDayByTime(std::int64_t time) const noexcept {
     return Day::create(JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayByTime(handle_.get(), time)});
 }
 
-Day::Ptr Schedule::getDayById(std::int32_t dayId) const noexcept {
+std::shared_ptr<Day> Schedule::getDayById(std::int32_t dayId) const {
     if (!handle_) {
         return {};
     }
@@ -88,7 +88,7 @@ Day::Ptr Schedule::getDayById(std::int32_t dayId) const noexcept {
     return Day::create(JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayById(handle_.get(), dayId)});
 }
 
-Day::Ptr Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcept {
+std::shared_ptr<Day> Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const {
     if (!handle_) {
         return {};
     }
@@ -97,7 +97,7 @@ Day::Ptr Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcep
         JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayByYearMonthDay(handle_.get(), yearMonthDay)});
 }
 
-Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
+std::shared_ptr<Session> Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const {
     if (!handle_ || !filter.getHandle()) {
         return {};
     }
@@ -106,7 +106,7 @@ Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionF
         isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.getHandle().get())});
 }
 
-Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
+std::shared_ptr<Session> Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const {
     if (!handle_ || !filter.getHandle()) {
         return {};
     }
@@ -115,7 +115,7 @@ Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const Session
         isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.getHandle().get())});
 }
 
-std::string Schedule::getName() const noexcept {
+std::string Schedule::getName() const {
     if (!handle_) {
         return dxfcpp::String::EMPTY;
     }
@@ -123,7 +123,7 @@ std::string Schedule::getName() const noexcept {
     return isolated::schedule::Schedule::getName(handle_.get());
 }
 
-std::string Schedule::getTimeZoneDisplayName() const noexcept {
+std::string Schedule::getTimeZoneDisplayName() const {
     if (!handle_) {
         return dxfcpp::String::EMPTY;
     }
@@ -131,7 +131,7 @@ std::string Schedule::getTimeZoneDisplayName() const noexcept {
     return isolated::schedule::Schedule::getTimeZoneDisplayName(handle_.get());
 }
 
-std::string Schedule::getTimeZoneId() const noexcept {
+std::string Schedule::getTimeZoneId() const {
     if (!handle_) {
         return dxfcpp::String::EMPTY;
     }

@@ -25,31 +25,6 @@ namespace isolated {
 
 namespace schedule {
 
-struct SessionFilter {
-    static /* dxfg_session_filter_t* */ void *getInstance(std::uint32_t code) noexcept;
-};
-
-struct Session {
-    static /* dxfg_day_t* */ void *getDay(/* dxfg_session_t* */ void *session) noexcept;
-    static std::int32_t getType(/* dxfg_session_t* */ void *session) noexcept;
-    static bool isTrading(/* dxfg_session_t* */ void *session) noexcept;
-    static bool isEmpty(/* dxfg_session_t* */ void *session) noexcept;
-    static std::int64_t getStartTime(/* dxfg_session_t* */ void *session) noexcept;
-    static std::int64_t getEndTime(/* dxfg_session_t* */ void *session) noexcept;
-    static bool containsTime(/* dxfg_session_t* */ void *session, std::int64_t time) noexcept;
-    static /* dxfg_session_t* */ void *getPrevSession(/* dxfg_session_t* */ void *session,
-                                                      /* dxfg_session_filter_t* */ void *filter) noexcept;
-    static /* dxfg_session_t* */ void *getNextSession(/* dxfg_session_t* */ void *session,
-                                                      /* dxfg_session_filter_t* */ void *filter) noexcept;
-    static /* dxfg_session_t* */ void *findPrevSession(/* dxfg_session_t* */ void *session,
-                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
-    static /* dxfg_session_t* */ void *findNextSession(/* dxfg_session_t* */ void *session,
-                                                       /* dxfg_session_filter_t* */ void *filter) noexcept;
-    static std::size_t getHashCode(/* dxfg_session_t* */ void *session) noexcept;
-    static bool equals(/* dxfg_session_t* */ void *session, /* dxfg_session_t* */ void *otherSession) noexcept;
-    static std::string toString(/* dxfg_session_t* */ void *session) noexcept;
-};
-
 struct Schedule {
     static /* dxfg_schedule_t* */ void *getInstance(/* dxfg_instrument_profile_t* */ void *instrumentProfile) noexcept;
     static /* dxfg_schedule_t* */ void *getInstance(const std::string &scheduleDefinition) noexcept;

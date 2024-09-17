@@ -20,25 +20,6 @@ namespace IsolatedDayFilter {
 
 } // namespace IsolatedDayFilter
 
-// TODO: move to IsolatedSession
-namespace IsolatedSessionList {
-
-bool release(/* dxfg_session_list* */ void *sessionList) {
-    if (!sessionList) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_SessionList_wrapper_release`. The `sessionList` is nullptr");
-    }
-
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_SessionList_wrapper_release,
-                                                  static_cast<dxfg_session_list *>(sessionList));
-}
-
-std::unique_ptr<void, decltype(&release)> toUnique(/* dxfg_session_list* */ void *sessionList) {
-    return {sessionList, release};
-}
-
-} // namespace IsolatedSessionList
-
 namespace IsolatedDay {
 
 /* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule>

@@ -4,8 +4,16 @@
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
+
+#include <dxfeed_graal_cpp_api/schedule/Day.hpp>
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
+#include <dxfeed_graal_cpp_api/schedule/Schedule.hpp>
+#include <dxfeed_graal_cpp_api/schedule/Session.hpp>
+#include <dxfeed_graal_cpp_api/schedule/SessionFilter.hpp>
+
+#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedDay.hpp>
+#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -111,11 +119,23 @@ std::shared_ptr<Session> Day::getLastSession(const SessionFilter &filter) const 
 }
 
 std::shared_ptr<Session> Day::findFirstSession(const SessionFilter &filter) const {
-    return Session::create(isolated::schedule::IsolatedDay::findFirstSession(handle_, filter.getHandle()));
+    auto sessionHandle = isolated::schedule::IsolatedDay::findFirstSession(handle_, filter.getHandle());
+
+    if (!sessionHandle) {
+        return {};
+    }
+
+    return Session::create(std::move(sessionHandle));
 }
 
 std::shared_ptr<Session> Day::findLastSession(const SessionFilter &filter) const {
-    return Session::create(isolated::schedule::IsolatedDay::findLastSession(handle_, filter.getHandle()));
+    auto sessionHandle = isolated::schedule::IsolatedDay::findLastSession(handle_, filter.getHandle());
+
+    if (!sessionHandle) {
+        return {};
+    }
+
+    return Session::create(std::move(sessionHandle));
 }
 
 Day::Ptr Day::getPrevDay(const DayFilter &filter) const {
@@ -127,11 +147,23 @@ Day::Ptr Day::getNextDay(const DayFilter &filter) const {
 }
 
 Day::Ptr Day::findPrevDay(const DayFilter &filter) const {
-    return create(isolated::schedule::IsolatedDay::findPrevDay(handle_, filter.handle_));
+    auto dayHandle = isolated::schedule::IsolatedDay::findPrevDay(handle_, filter.handle_);
+
+    if (!dayHandle) {
+        return {};
+    }
+
+    return create(std::move(dayHandle));
 }
 
 Day::Ptr Day::findNextDay(const DayFilter &filter) const {
-    return create(isolated::schedule::IsolatedDay::findNextDay(handle_, filter.handle_));
+    auto dayHandle = isolated::schedule::IsolatedDay::findNextDay(handle_, filter.handle_);
+
+    if (!dayHandle) {
+        return {};
+    }
+
+    return create(std::move(dayHandle));
 }
 
 bool Day::operator==(const Day &other) const {

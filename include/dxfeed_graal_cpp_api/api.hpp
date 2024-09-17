@@ -77,6 +77,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/ondemand/IsolatedOnDemandService.hpp"
 #include "isolated/util/IsolatedTimePeriod.hpp"
 #include "isolated/schedule/IsolatedDay.hpp"
+#include "isolated/schedule/IsolatedSession.hpp"
 
 #include "ondemand/OnDemandService.hpp"
 

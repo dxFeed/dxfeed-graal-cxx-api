@@ -20,14 +20,6 @@ namespace IsolatedDayFilter {
 
 }
 
-namespace IsolatedSessionList {
-
-bool release(/* dxfg_session_list* */ void *sessionList);
-
-std::unique_ptr<void, decltype(&release)> toUnique(/* dxfg_session_list* */ void *sessionList);
-
-}
-
 namespace IsolatedDay {
 
 /* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule> getSchedule(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day);

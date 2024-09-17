@@ -224,6 +224,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/ondemand/IsolatedOnDemandService.cpp
         src/isolated/util/IsolatedTimePeriod.cpp
         src/isolated/schedule/IsolatedDay.cpp
+        src/isolated/schedule/IsolatedSession.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
