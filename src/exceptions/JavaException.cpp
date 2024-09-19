@@ -12,6 +12,24 @@ DXFCPP_BEGIN_NAMESPACE
 
 std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace);
 
+JavaException::JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
+                             const StringLikeWrapper &stackTrace)
+    : RuntimeException(fmt::format("Java exception of type '{}' was thrown. {}", className.c_str(), message.c_str()),
+                       stackTrace) {
+}
+
+JavaException::JavaException(const JavaException& other) noexcept = default;
+
+JavaException JavaException::create(void *exceptionHandle) {
+    if (exceptionHandle == nullptr) {
+        return {"null", "", ""};
+    }
+
+    auto *exception = dxfcpp::bit_cast<dxfg_exception_t *>(exceptionHandle);
+
+    return {toString(exception->message), toString(exception->class_name), toString(exception->print_stack_trace)};
+}
+
 void JavaException::throwIfJavaThreadExceptionExists() {
     dxfg_exception_t *exception = runIsolatedThrow([](auto threadHandle) {
         return dxfg_get_and_clear_thread_exception_t(static_cast<graal_isolatethread_t *>(threadHandle));
@@ -21,7 +39,7 @@ void JavaException::throwIfJavaThreadExceptionExists() {
         return;
     }
 
-    auto javaException = create(exception);
+    thread_local auto javaException = create(exception);
 
     runIsolatedThrow(
         [](auto threadHandle, auto &&...params) {
@@ -36,22 +54,6 @@ void JavaException::throwException() {
     runIsolatedThrow([](auto threadHandle) {
         return throwIfNullptr(dxfg_throw_exception(static_cast<graal_isolatethread_t *>(threadHandle)));
     });
-}
-
-JavaException::JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
-                             const StringLikeWrapper &stackTrace)
-    : RuntimeException(fmt::format("Java exception of type '{}' was thrown. {}", className.c_str(), message.c_str()),
-                       stackTrace) {
-}
-
-JavaException JavaException::create(void *exceptionHandle) {
-    if (exceptionHandle == nullptr) {
-        return {"null", "", ""};
-    }
-
-    auto *exception = dxfcpp::bit_cast<dxfg_exception_t *>(exceptionHandle);
-
-    return {toString(exception->message), toString(exception->class_name), toString(exception->print_stack_trace)};
 }
 
 DXFCPP_END_NAMESPACE

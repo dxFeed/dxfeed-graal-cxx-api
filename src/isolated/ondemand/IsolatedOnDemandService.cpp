@@ -4,7 +4,6 @@
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
 #include <dxfeed_graal_cpp_api/isolated/ondemand/IsolatedOnDemandService.hpp>
 
 DXFCPP_BEGIN_NAMESPACE

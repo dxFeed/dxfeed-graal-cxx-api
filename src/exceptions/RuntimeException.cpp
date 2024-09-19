@@ -64,11 +64,13 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
 }
 
 RuntimeException::RuntimeException(const StringLikeWrapper &message, const StringLikeWrapper &additionalStackTrace)
-    : runtime_error(message.c_str()),
+    : std::runtime_error(message.c_str()),
       stackTrace_(additionalStackTrace.empty() ? stackTraceToString(boost::stacktrace::stacktrace())
                                                : fmt::format("{}\n{}", additionalStackTrace.c_str(),
                                                              stackTraceToString(boost::stacktrace::stacktrace()))) {
 }
+
+RuntimeException::RuntimeException(const RuntimeException& other) noexcept = default;
 
 const std::string &RuntimeException::getStackTrace() const & {
     return stackTrace_;

@@ -32,6 +32,8 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
     JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
                   const StringLikeWrapper &stackTrace);
 
+    JavaException(const JavaException& other) noexcept;
+
     /**
      * Creates an exception using native (GraalVM) Java exception handle
      *

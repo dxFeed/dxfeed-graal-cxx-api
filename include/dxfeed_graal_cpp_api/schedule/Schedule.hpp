@@ -12,6 +12,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct InstrumentProfile;
 struct Day;
 struct Session;
+struct StringLikeWrapper;
 
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
@@ -57,7 +58,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param scheduleDefinition The schedule definition of requested schedule
      * @return The default schedule instance for specified schedule definition
      */
-    static Schedule::Ptr getInstance(const std::string &scheduleDefinition);
+    static Schedule::Ptr getInstance(const StringLikeWrapper &scheduleDefinition);
 
     /**
      * Returns schedule instance for specified instrument profile and trading venue.
@@ -66,7 +67,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param venue The trading venue those schedule is requested
      * @return The schedule instance for specified instrument profile and trading venue
      */
-    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue);
+    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLikeWrapper &venue);
 
     /**
      * Returns trading venues for specified instrument profile.
@@ -87,46 +88,48 @@ struct DXFCPP_EXPORT Schedule {
      *
      * @param downloadConfig download config
      */
-    static void downloadDefaults(const std::string &downloadConfig);
+    static void downloadDefaults(const StringLikeWrapper &downloadConfig);
 
     /**
      * Sets shared defaults that are used by individual schedule instances.
      *
      * @param data The content of default data
-     * @return `true` if OK
      */
-    static bool setDefaults(const std::vector<char> &data);
+    static void setDefaults(const std::vector<char> &data);
 
     /**
      * Returns session that contains specified time.
-     * This method will return `Session::Ptr{nullptr}` if specified time
+     * This method will throw JavaException "IllegalArgumentException" if specified time
      * falls outside of valid date range from 0001-01-02 to 9999-12-30.
      *
      * @param time the time to search for
      * @return session that contains specified time or `Session::Ptr{nullptr}` if specified time
      * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     *
+     * @throw JavaException "IllegalArgumentException" if specified time falls outside of valid date range
+     * @throw JavaException "NoSuchElementException" if no such session was found within this day
      */
     std::shared_ptr<Session> getSessionByTime(std::int64_t time) const;
 
     /**
      * Returns day that contains specified time.
-     * This method will return `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if specified time
-     * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     * This method will throw JavaException "IllegalArgumentException" if specified time falls outside of valid date
+     * range from 0001-01-02 to 9999-12-30.
      *
      * @param time The time to search for
-     * @return The day that contains specified time or `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if
-     * specified time falls outside of valid date range
+     * @return The day that contains specified time
+     * @throw JavaException "IllegalArgumentException" if specified time falls outside of valid date range
      */
     std::shared_ptr<Day> getDayByTime(std::int64_t time) const;
 
     /**
      * Returns day for specified day identifier.
-     * This method will return `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if specified day identifier
+     * This method will throw JavaException "IllegalArgumentException" if specified day identifier
      * falls outside of valid date range from 0001-01-02 to 9999-12-30.
      *
      * @param dayId The day identifier to search for
-     * @return The day for specified day identifier or `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if
-     * specified day identifier falls outside of valid date range
+     * @return The day for specified day identifier
+     * @throw JavaException "IllegalArgumentException" if specified day identifier falls outside of valid date range
      * @see Day::getDayId()
      */
     std::shared_ptr<Day> getDayById(std::int32_t dayId) const;
@@ -139,21 +142,21 @@ struct DXFCPP_EXPORT Schedule {
      * <p>
      * If specified day does not exist then this method returns day with
      * the lowest valid YearMonthDay that is greater than specified one.
-     * This method will return `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr}) if specified year, month and day
+     * This method will throw JavaException "IllegalArgumentException" if specified year, month and day
      * numbers fall outside of valid date range from 0001-01-02 to 9999-12-30.
      *
      * @param yearMonthDay The year, month and day numbers to search for
-     * @return The day for specified year, month and day numbers or `Day::Ptr{nullptr}` (std::shared_ptr<Day>{nullptr})
-     * if specified year, month and day numbers fall outside of valid date range
+     * @return The day for specified year, month and day numbers
+     * @throw JavaException "IllegalArgumentException" if specified year, month and day numbers fall outside of valid date range
      * @see Day#getYearMonthDay()
      */
     std::shared_ptr<Day> getDayByYearMonthDay(std::int32_t yearMonthDay) const;
 
     /**
      * Returns session that is nearest to the specified time and that is accepted by specified filter.
-     * This method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time falls
-     * outside of valid date range from 0001-01-02 to 9999-12-30 or if no sessions acceptable by specified filter are
-     * found within one year this method
+     * This method will throw JavaException "IllegalArgumentException" if specified time falls
+     * outside of valid date range from 0001-01-02 to 9999-12-30. If no sessions acceptable by specified filter are
+     * found within one year this method this method will throw JavaException "NoSuchElementException".
      * <p> To find nearest trading session of any type use this code:
      * <pre>session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);</pre>
      * To find nearest regular trading session use this code:
@@ -161,15 +164,15 @@ struct DXFCPP_EXPORT Schedule {
      *
      * @param time The time to search for
      * @param filter the filter to test sessions
-     * @return session that is nearest to the specified time and that is accepted by specified filter or
-     * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time falls outside of valid date range
-     * or if no such day was found within one year
+     * @return session that is nearest to the specified time and that is accepted by specified filter.
+     * @throw JavaException "IllegalArgumentException" if specified time falls outside of valid date range
+     * @throw JavaException "NoSuchElementException" if no such day was found within one year
      */
     std::shared_ptr<Session> getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const;
 
     /**
      * Returns session that is nearest to the specified time and that is accepted by specified filter.
-     * This method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time
+     * This method will throw JavaException "IllegalArgumentException" if specified time
      * falls outside of valid date range from 0001-01-02 to 9999-12-30.
      * If no sessions acceptable by specified filter are found within one year this method will return
      * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
@@ -181,8 +184,8 @@ struct DXFCPP_EXPORT Schedule {
      *
      * @param time The time to search for
      * @param filter The filter to test sessions
-     * @return The session that is nearest to the specified time and that is accepted by specified filter or
-     * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}) if specified time falls outside of valid date range
+     * @return The session that is nearest to the specified time and that is accepted by specified filter.
+     * @throw JavaException "IllegalArgumentException" if specified time falls outside of valid date range
      */
     std::shared_ptr<Session> findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const;
 

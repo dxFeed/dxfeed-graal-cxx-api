@@ -16,4 +16,6 @@ GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum)
     : RuntimeException(createMessage(entryPointErrorsEnum)) {
 }
 
+GraalException::GraalException(const GraalException& other) noexcept = default;
+
 DXFCPP_END_NAMESPACE

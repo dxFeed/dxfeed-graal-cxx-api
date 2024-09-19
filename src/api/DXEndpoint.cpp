@@ -6,7 +6,6 @@
 #include <dxfeed_graal_c_api/api.h>
 
 #include <dxfeed_graal_cpp_api/api/DXEndpoint.hpp>
-#include <dxfeed_graal_cpp_api/isolated/Isolated.hpp>
 #include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp>
 #include <dxfeed_graal_cpp_api/system/System.hpp>
 

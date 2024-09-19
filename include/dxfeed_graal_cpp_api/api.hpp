@@ -50,8 +50,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "symbols/SymbolWrapper.hpp"
 #include "system/System.hpp"
 
-#include "isolated/Isolated.hpp"
-
 #include "exceptions/RuntimeException.hpp"
 #include "exceptions/InvalidArgumentException.hpp"
 #include "exceptions/JavaException.hpp"
@@ -78,6 +76,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/util/IsolatedTimePeriod.hpp"
 #include "isolated/schedule/IsolatedDay.hpp"
 #include "isolated/schedule/IsolatedSession.hpp"
+#include "isolated/schedule/IsolatedSchedule.hpp"
 
 #include "ondemand/OnDemandService.hpp"
 

@@ -21,28 +21,22 @@ Schedule::Ptr Schedule::create(JavaObjectHandle<Schedule> &&handle) {
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        throw InvalidArgumentException("The profile is nullptr");
+        throw InvalidArgumentException("The `profile` is nullptr");
     }
 
-    auto schedule =
-        create(JavaObjectHandle<Schedule>{isolated::schedule::Schedule::getInstance(profile->handle_.get())});
-
-    return schedule;
+    return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_));
 }
 
-Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) {
-    return create(JavaObjectHandle<Schedule>{isolated::schedule::Schedule::getInstance(scheduleDefinition)});
+Schedule::Ptr Schedule::getInstance(const StringLikeWrapper &scheduleDefinition) {
+    return create(isolated::schedule::IsolatedSchedule::getInstance(scheduleDefinition));
 }
 
-Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) {
+Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLikeWrapper &venue) {
     if (!profile) {
-        throw InvalidArgumentException("The profile is nullptr");
+        throw InvalidArgumentException("The `profile` is nullptr");
     }
 
-    auto schedule =
-        create(JavaObjectHandle<Schedule>{isolated::schedule::Schedule::getInstance(profile->handle_.get(), venue)});
-
-    return schedule;
+    return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_, venue));
 }
 
 std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) {
@@ -50,93 +44,59 @@ std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentPr
         throw InvalidArgumentException("The profile is nullptr");
     }
 
-    auto result = isolated::schedule::Schedule::getTradingVenues(profile->handle_.get());
-
-    return result;
+    return isolated::schedule::IsolatedSchedule::getTradingVenues(profile->handle_);
 }
 
-void Schedule::downloadDefaults(const std::string &downloadConfig) {
-    isolated::schedule::Schedule::downloadDefaults(downloadConfig);
+void Schedule::downloadDefaults(const StringLikeWrapper &downloadConfig) {
+    isolated::schedule::IsolatedSchedule::downloadDefaults(downloadConfig);
 }
 
-bool Schedule::setDefaults(const std::vector<char> &data) {
-    return isolated::schedule::Schedule::setDefaults(data);
+void Schedule::setDefaults(const std::vector<char> &data) {
+    return isolated::schedule::IsolatedSchedule::setDefaults(data);
 }
 
 std::shared_ptr<Session> Schedule::getSessionByTime(std::int64_t time) const {
-    if (!handle_) {
-        return {};
-    }
-
-    return Session::create(
-        JavaObjectHandle<Session>{isolated::schedule::Schedule::getSessionByTime(handle_.get(), time)});
+    return Session::create(isolated::schedule::IsolatedSchedule::getSessionByTime(handle_, time));
 }
 
 std::shared_ptr<Day> Schedule::getDayByTime(std::int64_t time) const {
-    if (!handle_) {
-        return {};
-    }
-
-    return Day::create(JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayByTime(handle_.get(), time)});
+    return Day::create(isolated::schedule::IsolatedSchedule::getDayByTime(handle_, time));
 }
 
 std::shared_ptr<Day> Schedule::getDayById(std::int32_t dayId) const {
-    if (!handle_) {
-        return {};
-    }
-
-    return Day::create(JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayById(handle_.get(), dayId)});
+    return Day::create(isolated::schedule::IsolatedSchedule::getDayById(handle_, dayId));
 }
 
 std::shared_ptr<Day> Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const {
-    if (!handle_) {
-        return {};
-    }
-
-    return Day::create(
-        JavaObjectHandle<Day>{isolated::schedule::Schedule::getDayByYearMonthDay(handle_.get(), yearMonthDay)});
+    return Day::create(isolated::schedule::IsolatedSchedule::getDayByYearMonthDay(handle_, yearMonthDay));
 }
 
 std::shared_ptr<Session> Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const {
-    if (!handle_ || !filter.getHandle()) {
-        return {};
-    }
-
-    return Session::create(JavaObjectHandle<Session>{
-        isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.getHandle().get())});
+    return Session::create(
+        isolated::schedule::IsolatedSchedule::getNearestSessionByTime(handle_, time, filter.getHandle()));
 }
 
 std::shared_ptr<Session> Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const {
-    if (!handle_ || !filter.getHandle()) {
+    auto sessionHandle =
+        isolated::schedule::IsolatedSchedule::findNearestSessionByTime(handle_, time, filter.getHandle());
+
+    if (!sessionHandle) {
         return {};
     }
 
-    return Session::create(JavaObjectHandle<Session>{
-        isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.getHandle().get())});
+    return Session::create(std::move(sessionHandle));
 }
 
 std::string Schedule::getName() const {
-    if (!handle_) {
-        return dxfcpp::String::EMPTY;
-    }
-
-    return isolated::schedule::Schedule::getName(handle_.get());
+    return isolated::schedule::IsolatedSchedule::getName(handle_);
 }
 
 std::string Schedule::getTimeZoneDisplayName() const {
-    if (!handle_) {
-        return dxfcpp::String::EMPTY;
-    }
-
-    return isolated::schedule::Schedule::getTimeZoneDisplayName(handle_.get());
+    return isolated::schedule::IsolatedSchedule::getTimeZoneDisplayName(handle_);
 }
 
 std::string Schedule::getTimeZoneId() const {
-    if (!handle_) {
-        return dxfcpp::String::EMPTY;
-    }
-
-    return isolated::schedule::Schedule::getTimeZoneId(handle_.get());
+    return isolated::schedule::IsolatedSchedule::getTimeZoneId(handle_);
 }
 
 DXFCPP_END_NAMESPACE

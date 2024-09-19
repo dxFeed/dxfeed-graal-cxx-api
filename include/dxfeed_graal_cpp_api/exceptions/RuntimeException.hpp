@@ -26,6 +26,8 @@ struct DXFCPP_EXPORT RuntimeException : std::runtime_error {
      */
     explicit RuntimeException(const StringLikeWrapper& message, const StringLikeWrapper& additionalStackTrace = "");
 
+    RuntimeException(const RuntimeException& other) noexcept;
+
     /**
      * @return The current stacktrace + the additional stacktrace if present.
      */
