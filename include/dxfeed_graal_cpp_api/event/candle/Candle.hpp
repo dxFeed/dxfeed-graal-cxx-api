@@ -7,25 +7,20 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <utility>
 
 #include "../../internal/Common.hpp"
 
-#include "../../exceptions/InvalidArgumentException.hpp"
-
 #include "../EventType.hpp"
-#include "../EventTypeEnum.hpp"
-#include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"
 #include "../TimeSeriesEvent.hpp"
 #include "CandleSymbol.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
+class EventTypeEnum;
 struct EventMapper;
 
 /**
@@ -162,8 +157,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Creates new candle with the specified candle event symbol.
      * @param eventSymbol candle event symbol.
      */
-    explicit Candle(CandleSymbol eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
-    }
+    explicit Candle(CandleSymbol eventSymbol) noexcept;
 
     // EventType methods
 
@@ -172,27 +166,17 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      *
      * @return symbol of this event or dxfcpp::CandleSymbol::NUL (`dxfcpp::CandleSymbol{"<null>"}`)
      */
-    const CandleSymbol &getEventSymbol() const & noexcept override {
-        if (!eventSymbol_) {
-            return CandleSymbol::NUL;
-        }
-
-        return eventSymbol_.value();
-    }
+    const CandleSymbol &getEventSymbol() const & noexcept override;
 
     /**
      * Returns symbol of this event.
      *
      * @return symbol of this event or `std::nullopt`.
      */
-    const std::optional<CandleSymbol> &getEventSymbolOpt() const & noexcept override {
-        return eventSymbol_;
-    }
+    const std::optional<CandleSymbol> &getEventSymbolOpt() const & noexcept override;
 
     ///
-    void setEventSymbol(const CandleSymbol &eventSymbol) noexcept override {
-        eventSymbol_ = eventSymbol;
-    }
+    void setEventSymbol(const CandleSymbol &eventSymbol) noexcept override;
 
     /**
      * Changes event's symbol and returns the current candle.
@@ -200,21 +184,13 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param eventSymbol The symbol of this event.
      * @return The current candle.
      */
-    Candle &withEventSymbol(const CandleSymbol &eventSymbol) noexcept {
-        Candle::setEventSymbol(eventSymbol);
-
-        return *this;
-    }
+    Candle &withEventSymbol(const CandleSymbol &eventSymbol) noexcept;
 
     ///
-    std::int64_t getEventTime() const noexcept override {
-        return data_.eventTime;
-    }
+    std::int64_t getEventTime() const noexcept override;
 
     ///
-    void setEventTime(std::int64_t eventTime) noexcept override {
-        data_.eventTime = eventTime;
-    }
+    void setEventTime(std::int64_t eventTime) noexcept override;
 
     /**
      * Changes event's creation time and returns the current candle.
@@ -223,28 +199,18 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * midnight, January 1, 1970 UTC.
      * @return The current candle.
      */
-    Candle &withEventTime(std::int64_t eventTime) noexcept {
-        Candle::setEventTime(eventTime);
-
-        return *this;
-    }
+    Candle &withEventTime(std::int64_t eventTime) noexcept;
 
     // IndexedEvent methods
 
     ///
-    std::int32_t getEventFlags() const noexcept override {
-        return data_.eventFlags;
-    }
+    std::int32_t getEventFlags() const noexcept override;
 
     ///
-    EventFlagsMask getEventFlagsMask() const noexcept override {
-        return EventFlagsMask(data_.eventFlags);
-    }
+    EventFlagsMask getEventFlagsMask() const noexcept override;
 
     ///
-    void setEventFlags(std::int32_t eventFlags) noexcept override {
-        data_.eventFlags = eventFlags;
-    }
+    void setEventFlags(std::int32_t eventFlags) noexcept override;
 
     /**
      * Changes transactional event flags and returns the current candle.
@@ -253,16 +219,10 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param eventFlags transactional event flags.
      * @return The current candle.
      */
-    Candle &withEventFlags(std::int32_t eventFlags) noexcept {
-        Candle::setEventFlags(eventFlags);
-
-        return *this;
-    }
+    Candle &withEventFlags(std::int32_t eventFlags) noexcept;
 
     ///
-    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
-        data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
-    }
+    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override;
 
     /**
      * Changes transactional event flags and returns the current candle.
@@ -271,16 +231,10 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param eventFlags transactional event flags' mask.
      * @return The current candle.
      */
-    Candle &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
-        Candle::setEventFlags(eventFlags);
-
-        return *this;
-    }
+    Candle &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
 
     ///
-    void setIndex(std::int64_t index) override {
-        data_.index = index;
-    }
+    void setIndex(std::int64_t index) override;
 
     /**
      * Changes unique per-symbol index of this event.
@@ -289,25 +243,21 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param index unique per-symbol index of this candle.
      * @return The current candle.
      */
-    Candle &withIndex(std::int64_t index) noexcept {
-        Candle::setIndex(index);
+    Candle &withIndex(std::int64_t index) noexcept;
 
-        return *this;
-    }
+    // TimeSeriesEvent methods
 
     ///
-    std::int64_t getIndex() const noexcept override {
-        return data_.index;
-    }
+    std::int64_t getIndex() const noexcept override;
 
     /**
      * Returns timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
-    std::int64_t getTime() const noexcept override {
-        return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
-    }
+    std::int64_t getTime() const noexcept override;
+
+    // Candle methods
 
     /**
      * Changes timestamp of the event in milliseconds.
@@ -315,11 +265,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param time timestamp of the event in milliseconds.
      * @see Candle::getTime()
      */
-    void setTime(std::int64_t time) noexcept {
-        data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-                                sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
-                           getSequence());
-    }
+    void setTime(std::int64_t time) noexcept;
 
     /**
      * Changes timestamp of the event in milliseconds.
@@ -328,11 +274,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param time timestamp of the event in milliseconds.
      * @return The current candle.
      */
-    Candle &withTime(std::int64_t time) noexcept {
-        Candle::setTime(time);
-
-        return *this;
-    }
+    Candle &withTime(std::int64_t time) noexcept;
 
     /**
      * Returns the sequence number of this event to distinguish events that have the same @ref Candle::getTime() "time".
@@ -341,9 +283,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes @ref Candle::getSequence() "sequence number" of this event.
@@ -352,15 +292,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @see Candle::getSequence()
      * @throws InvalidArgumentException if sequence is below zero or above ::MAX_SEQUENCE.
      */
-    void setSequence(std::int32_t sequence) {
-        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
-        }
-
-        data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Changes @ref Candle::getSequence() "sequence number" of this event.
@@ -370,27 +302,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @return The current candle.
      * @see Candle::getSequence()
      */
-    Candle &withSequence(std::int32_t sequence) noexcept {
-        Candle::setSequence(sequence);
-
-        return *this;
-    }
+    Candle &withSequence(std::int32_t sequence) noexcept;
 
     /**
      * Returns total number of original trade (or quote) events in this candle.
      * @return Total number of original trade (or quote) events in this candle.
      */
-    std::int64_t getCount() const noexcept {
-        return data_.count;
-    }
+    std::int64_t getCount() const noexcept;
 
     /**
      * Changes total number of original trade (or quote) events in this candle.
      * @param count Total number of original trade (or quote) events in this candle.
      */
-    void setCount(std::int64_t count) noexcept {
-        data_.count = count;
-    }
+    void setCount(std::int64_t count) noexcept;
 
     /**
      * Changes total number of original trade (or quote) events in this candle.
@@ -399,27 +323,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param count Total number of original trade (or quote) events in this candle.
      * @return The current candle.
      */
-    Candle &withCount(std::int64_t count) noexcept {
-        Candle::setCount(count);
-
-        return *this;
-    }
+    Candle &withCount(std::int64_t count) noexcept;
 
     /**
      * Returns the first (open) price of this candle.
      * @return The first (open) price of this candle.
      */
-    double getOpen() const noexcept {
-        return data_.open;
-    }
+    double getOpen() const noexcept;
 
     /**
      * Changes the first (open) price of this candle.
      * @param open The first (open) price of this candle.
      */
-    void setOpen(double open) noexcept {
-        data_.open = open;
-    }
+    void setOpen(double open) noexcept;
 
     /**
      * Changes the first (open) price of this candle.
@@ -428,27 +344,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param open The first (open) price of this candle.
      * @return The current candle.
      */
-    Candle &withOpen(double open) noexcept {
-        Candle::setOpen(open);
-
-        return *this;
-    }
+    Candle &withOpen(double open) noexcept;
 
     /**
      * Returns the maximal (high) price of this candle.
      * @return The maximal (high) price of this candle.
      */
-    double getHigh() const noexcept {
-        return data_.high;
-    }
+    double getHigh() const noexcept;
 
     /**
      * Changes the maximal (high) price of this candle.
      * @param high The maximal (high) price of this candle.
      */
-    void setHigh(double high) noexcept {
-        data_.high = high;
-    }
+    void setHigh(double high) noexcept;
 
     /**
      * Changes the maximal (high) price of this candle.
@@ -457,27 +365,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param high The maximal (high) price of this candle.
      * @return The current candle.
      */
-    Candle &withHigh(double high) noexcept {
-        Candle::setHigh(high);
-
-        return *this;
-    }
+    Candle &withHigh(double high) noexcept;
 
     /**
      * Returns the minimal (low) price of this candle.
      * @return The minimal (low) price of this candle.
      */
-    double getLow() const noexcept {
-        return data_.low;
-    }
+    double getLow() const noexcept;
 
     /**
      * Changes the minimal (low) price of this candle.
      * @param low The minimal (low) price of this candle.
      */
-    void setLow(double low) noexcept {
-        data_.low = low;
-    }
+    void setLow(double low) noexcept;
 
     /**
      * Changes the minimal (low) price of this candle.
@@ -486,27 +386,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param low The minimal (low) price of this candle.
      * @return The current candle.
      */
-    Candle &withLow(double low) noexcept {
-        Candle::setLow(low);
-
-        return *this;
-    }
+    Candle &withLow(double low) noexcept;
 
     /**
      * Returns the last (close) price of this candle.
      * @return The last (close) price of this candle.
      */
-    double getClose() const noexcept {
-        return data_.close;
-    }
+    double getClose() const noexcept;
 
     /**
      * Changes the last (close) price of this candle.
      * @param close The last (close) price of this candle.
      */
-    void setClose(double close) noexcept {
-        data_.close = close;
-    }
+    void setClose(double close) noexcept;
 
     /**
      * Changes the last (close) price of this candle.
@@ -515,27 +407,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param close The last (close) price of this candle.
      * @return The current candle.
      */
-    Candle &withClose(double close) noexcept {
-        Candle::setClose(close);
-
-        return *this;
-    }
+    Candle &withClose(double close) noexcept;
 
     /**
      * Returns total volume in this candle.
      * @return Total volume in this candle.
      */
-    double getVolume() const noexcept {
-        return data_.volume;
-    }
+    double getVolume() const noexcept;
 
     /**
      * Changes total volume in this candle.
      * @param volume Total volume in this candle.
      */
-    void setVolume(double volume) noexcept {
-        data_.volume = volume;
-    }
+    void setVolume(double volume) noexcept;
 
     /**
      * Changes total volume in this candle.
@@ -544,11 +428,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param volume Total volume in this candle.
      * @return The current candle.
      */
-    Candle &withVolume(double volume) noexcept {
-        Candle::setVolume(volume);
-
-        return *this;
-    }
+    Candle &withVolume(double volume) noexcept;
 
     /**
      * Returns volume-weighted average price (VWAP) in this candle.
@@ -556,17 +436,13 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * "getVolume"()</code>.
      * @return Volume-weighted average price (VWAP) in this candle.
      */
-    double getVWAP() const noexcept {
-        return data_.vwap;
-    }
+    double getVWAP() const noexcept;
 
     /**
      * Changes volume-weighted average price (VWAP) in this candle.
      * @param vwap Volume-weighted average price (VWAP) in this candle.
      */
-    void setVWAP(double vwap) noexcept {
-        data_.vwap = vwap;
-    }
+    void setVWAP(double vwap) noexcept;
 
     /**
      * Changes volume-weighted average price (VWAP) in this candle.
@@ -575,27 +451,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param vwap Volume-weighted average price (VWAP) in this candle.
      * @return The current candle.
      */
-    Candle &withVWAP(double vwap) noexcept {
-        Candle::setVWAP(vwap);
-
-        return *this;
-    }
+    Candle &withVWAP(double vwap) noexcept;
 
     /**
      * Returns bid volume in this candle.
      * @return Bid volume in this candle.
      */
-    double getBidVolume() const noexcept {
-        return data_.bidVolume;
-    }
+    double getBidVolume() const noexcept;
 
     /**
      * Changes bid volume in this candle.
      * @param bidVolume Bid volume in this candle.
      */
-    void setBidVolume(double bidVolume) noexcept {
-        data_.bidVolume = bidVolume;
-    }
+    void setBidVolume(double bidVolume) noexcept;
 
     /**
      * Changes bid volume in this candle.
@@ -604,27 +472,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param bidVolume Bid volume in this candle.
      * @return The current candle.
      */
-    Candle &withBidVolume(double bidVolume) noexcept {
-        Candle::setBidVolume(bidVolume);
-
-        return *this;
-    }
+    Candle &withBidVolume(double bidVolume) noexcept;
 
     /**
      * Returns ask volume in this candle.
      * @return Ask volume in this candle.
      */
-    double getAskVolume() const noexcept {
-        return data_.askVolume;
-    }
+    double getAskVolume() const noexcept;
 
     /**
      * Changes ask volume in this candle.
      * @param askVolume Ask volume in this candle.
      */
-    void setAskVolume(double askVolume) noexcept {
-        data_.askVolume = askVolume;
-    }
+    void setAskVolume(double askVolume) noexcept;
 
     /**
      * Changes ask volume in this candle.
@@ -633,27 +493,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param askVolume Ask volume in this candle.
      * @return The current candle.
      */
-    Candle &withAskVolume(double askVolume) noexcept {
-        Candle::setAskVolume(askVolume);
-
-        return *this;
-    }
+    Candle &withAskVolume(double askVolume) noexcept;
 
     /**
      * Returns the implied volatility.
      * @return The implied volatility.
      */
-    double getImpVolatility() const noexcept {
-        return data_.impVolatility;
-    }
+    double getImpVolatility() const noexcept;
 
     /**
      * Changes the implied volatility.
      * @param impVolatility The implied volatility.
      */
-    void setImpVolatility(double impVolatility) {
-        data_.impVolatility = impVolatility;
-    }
+    void setImpVolatility(double impVolatility);
 
     /**
      * Changes implied volatility.
@@ -662,27 +514,19 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param impVolatility The implied volatility.
      * @return The current candle.
      */
-    Candle &withImpVolatility(double impVolatility) noexcept {
-        Candle::setImpVolatility(impVolatility);
-
-        return *this;
-    }
+    Candle &withImpVolatility(double impVolatility) noexcept;
 
     /**
      * Returns the open interest.
      * @return The open interest.
      */
-    double getOpenInterest() const noexcept {
-        return data_.openInterest;
-    }
+    double getOpenInterest() const noexcept;
 
     /**
      * Changes the open interest.
      * @param openInterest The open interest.
      */
-    void setOpenInterest(double openInterest) noexcept {
-        data_.openInterest = openInterest;
-    }
+    void setOpenInterest(double openInterest) noexcept;
 
     /**
      * Changes the open interest.
@@ -691,11 +535,9 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @param openInterest The open interest.
      * @return The current candle.
      */
-    Candle &withOpenInterest(double openInterest) noexcept {
-        Candle::setOpenInterest(openInterest);
+    Candle &withOpenInterest(double openInterest) noexcept;
 
-        return *this;
-    }
+    // EventType methods
 
     std::string toString() const override;
 };

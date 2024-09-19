@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../internal/JavaObjectHandle.hpp"
 #include "SessionType.hpp"
 
 #include <mutex>
