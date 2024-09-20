@@ -1,20 +1,19 @@
 // Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include <dxfeed_graal_cpp_api/event/candle/Candle.hpp>
 
+#include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
+#include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
+
+#include <dxfg_api.h>
 #include <dxfeed_graal_c_api/api.h>
 
 #include <memory>
 #include <utility>
 #include <cassert>
-
-#include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
-
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
-
-#include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
-#include <dxfeed_graal_cpp_api/event/candle/Candle.hpp>
 
 #include <fmt/format.h>
 

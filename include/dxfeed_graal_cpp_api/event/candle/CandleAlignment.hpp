@@ -7,9 +7,6 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/utils/StringUtils.hpp"
-#include "../../exceptions/InvalidArgumentException.hpp"
-#include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
 
 #include <string>
@@ -58,13 +55,13 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
     static const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, dxfcpp::StringHash,
                                     std::equal_to<>>
         BY_STRING;
+
     static const std::vector<std::reference_wrapper<const CandleAlignment>> VALUES;
 
   private:
     std::string string_{};
 
-    explicit CandleAlignment(const dxfcpp::StringLikeWrapper &string) noexcept : string_{string} {
-    }
+    explicit CandleAlignment(const dxfcpp::StringLikeWrapper &string) noexcept;
 
   public:
     CandleAlignment() noexcept = default;
@@ -76,10 +73,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this candle alignment set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override {
-        return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
-                                : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
-    }
+    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override;
 
     /**
      * Returns string representation of this candle alignment.
@@ -88,13 +82,9 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      *
      * @return string representation of this candle alignment.
      */
-    std::string toString() const {
-        return string_;
-    }
+    std::string toString() const;
 
-    bool operator==(const CandleAlignment &candleAlignment) const noexcept {
-        return string_ == candleAlignment.string_;
-    }
+    bool operator==(const CandleAlignment &candleAlignment) const noexcept;
 
     /**
      * Parses string representation of candle alignment into object.
@@ -104,23 +94,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @return The candle alignment (reference)
      * @throws InvalidArgumentException if the string representation is invalid.
      */
-    static std::reference_wrapper<const CandleAlignment> parse(const dxfcpp::StringLikeWrapper &s) {
-        auto found = BY_STRING.find(s);
-
-        if (found != BY_STRING.end()) {
-            return found->second;
-        }
-
-        for (const auto &alignmentRef : VALUES) {
-            const auto &alignmentStr = alignmentRef.get().toString();
-
-            if (iEquals(alignmentStr, s)) {
-                return alignmentRef;
-            }
-        }
-
-        throw InvalidArgumentException("Unknown candle alignment: " + s);
-    }
+    static std::reference_wrapper<const CandleAlignment> parse(const dxfcpp::StringLikeWrapper &s);
 
     /**
      * Returns candle alignment of the given candle symbol string.
@@ -129,12 +103,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle alignment of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandleAlignment>
-    getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
-        auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
-
-        return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
-    }
+    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle alignment attribute.
@@ -142,32 +111,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle symbol string with the normalized representation of the the candle alignment attribute.
      */
-    static std::string
-    normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
-        auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
-
-        if (!a) {
-            return symbol;
-        }
-
-        try {
-            auto other = parse(a.value());
-
-            if (other.get() == DEFAULT) {
-                return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
-            }
-
-            if (a.value() != other.get().toString()) {
-                return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.get().toString());
-            }
-
-            return symbol;
-        } catch (const InvalidArgumentException &) {
-            return symbol;
-        } catch (const std::invalid_argument &) {
-            return symbol;
-        }
-    }
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol);
 };
 
 DXFCPP_END_NAMESPACE
