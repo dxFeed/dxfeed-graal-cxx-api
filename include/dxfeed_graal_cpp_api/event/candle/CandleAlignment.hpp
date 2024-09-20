@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "CandleSymbolAttribute.hpp"
+#include "../../internal/Common.hpp"
 
 #include <string>
 #include <type_traits>

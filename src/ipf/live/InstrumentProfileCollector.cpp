@@ -113,7 +113,7 @@ void InstrumentProfileCollector::removeListenerHandle(std::size_t id) {
     isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, listenerHandles_[id]);
 }
 
-InstrumentProfileCollector::~InstrumentProfileCollector() {
+InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
     std::lock_guard guard{listenersMutex_};
 
     std::vector<std::size_t> listenerIds{};
