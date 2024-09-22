@@ -9,6 +9,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct Day;
+struct Schedule;
+struct SessionType;
+
 /**
  * <b>Session</b> represents a continuous period of time during which apply same rules regarding trading activity.
  * For example, <code>regular trading session</code> is a period of time consisting of one day of business activities
@@ -33,7 +37,7 @@ struct DXFCPP_EXPORT Session {
   private:
     JavaObjectHandle<Session> handle_;
 
-    explicit Session(void *handle) noexcept;
+    explicit Session(JavaObjectHandle<Session> &&handle) noexcept;
 
     /**
      * Checks the handle, attempts to allocate memory for the pointer and return Session::Ptr
@@ -41,7 +45,7 @@ struct DXFCPP_EXPORT Session {
      * @param handle The graal Session's handle
      * @return The smart pointer for the Session object.
      */
-    static Session::Ptr create(void *handle);
+    static Session::Ptr create(JavaObjectHandle<Session> &&handle);
 
   public:
     /**
@@ -49,14 +53,14 @@ struct DXFCPP_EXPORT Session {
      *
      * @return The day to which this session belongs.
      */
-    Day::Ptr getDay() const noexcept;
+    std::shared_ptr<Day> getDay() const;
 
     /**
      * Returns type of this session.
      *
      * @return The type of this session.
      */
-    const SessionType &getType() const & noexcept;
+    const SessionType &getType() const &;
 
     /**
      * @return <code>true</code> if trading activity is allowed within this session.
@@ -65,37 +69,37 @@ struct DXFCPP_EXPORT Session {
      * Some sessions may have zero duration - e.g. indices that post value once a day.
      * Such sessions can be of any appropriate type, trading or non-trading.
      */
-    bool isTrading() const noexcept;
+    bool isTrading() const;
 
     /**
      * @return <code>true</code> if this session has zero duration.
      * Empty sessions can be used for indices that post value once a day or for convenience.
      * Such sessions can be of any appropriate type, trading or non-trading.
      */
-    bool isEmpty() const noexcept;
+    bool isEmpty() const;
 
     /**
      * @return start time of this session (inclusive).
      * For normal sessions the start time is less than the end time, for empty sessions they are equal.
      */
-    std::int64_t getStartTime() const noexcept;
+    std::int64_t getStartTime() const;
 
     /**
      * @return end time of this session (exclusive).
      * For normal sessions the end time is greater than the start time, for empty sessions they are equal.
      */
-    std::int64_t getEndTime() const noexcept;
+    std::int64_t getEndTime() const;
 
     /**
      * @return <code>true</code> if specified time belongs to this session.
      */
-    bool containsTime(std::int64_t time) const noexcept;
+    bool containsTime(std::int64_t time) const;
 
     /**
      * Returns previous session accepted by specified filter.
      * This method may cross the day boundary and return appropriate session from
      * previous days - up to a year back in time. If no such session was found
-     * within one year this method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
+     * within one year this method will throw JavaException "NoSuchElementException".
      * <p>
      * To find previous trading session of any type use this code:
      * <pre>session = session->getPrevSession(SessionFilter::TRADING);</pre>
@@ -103,16 +107,16 @@ struct DXFCPP_EXPORT Session {
      * <pre>session = session->getPrevSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The nearest previous session that is accepted by the filter or `Session::Ptr{nullptr}`
-     * (std::shared_ptr<Session>{nullptr}) if no such session was found within one year
+     * @return The nearest previous session that is accepted by the filter.
+     * @throw JavaException "NoSuchElementException" if no such session was found within one year.
      */
-    Session::Ptr getPrevSession(const SessionFilter &filter) const noexcept;
+    Session::Ptr getPrevSession(const SessionFilter &filter) const;
 
     /**
      * Returns following session accepted by specified filter.
      * This method may cross the day boundary and return appropriate session from
      * following days - up to a year in the future. If no such session was found
-     * within one year this method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
+     * within one year this method will throw JavaException "NoSuchElementException".
      * <p>
      * To find following trading session of any type use this code:
      * <pre>session = session->getNextSession(SessionFilter::TRADING);</pre>
@@ -120,11 +124,10 @@ struct DXFCPP_EXPORT Session {
      * <pre>session = session->getNextSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The nearest following session that is accepted by the filter or `Session::Ptr{nullptr}`
-     * (std::shared_ptr<Session>{nullptr}) if no such
-     * session was found within one year
+     * @return The nearest following session that is accepted by the filter.
+     * @throw JavaException "NoSuchElementException" if no such session was found within one year.
      */
-    Session::Ptr getNextSession(const SessionFilter &filter) const noexcept;
+    Session::Ptr getNextSession(const SessionFilter &filter) const;
 
     /**
      * Returns previous session accepted by specified filter.
@@ -138,9 +141,9 @@ struct DXFCPP_EXPORT Session {
      * <pre>session = session->findPrevSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return nearest previous session that is accepted by the filter
+     * @return nearest previous session that is accepted by the filter or `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr})
      */
-    Session::Ptr findPrevSession(const SessionFilter &filter) const noexcept;
+    Session::Ptr findPrevSession(const SessionFilter &filter) const;
 
     /**
      * Returns following session accepted by specified filter.
@@ -154,9 +157,9 @@ struct DXFCPP_EXPORT Session {
      * <pre>session = session->findNextSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return nearest following session that is accepted by the filter
+     * @return nearest following session that is accepted by the filter or `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr})
      */
-    Session::Ptr findNextSession(const SessionFilter &filter) const noexcept;
+    Session::Ptr findNextSession(const SessionFilter &filter) const;
 
     /**
      * Returns `true` if this object is equal to `other` object
@@ -164,7 +167,7 @@ struct DXFCPP_EXPORT Session {
      * @param other Another object
      * @return `true` if this object is equal to `other` object
      */
-    bool operator==(const Session &other) const noexcept;
+    bool operator==(const Session &other) const;
 
     /**
      * Returns `true` if this object is equal to `other` object
@@ -172,14 +175,14 @@ struct DXFCPP_EXPORT Session {
      * @param other Another object
      * @return `true` if this object is equal to `other` object
      */
-    bool operator==(const Session::Ptr &other) const noexcept {
+    bool operator==(const Session::Ptr &other) const {
         return *this == *other;
     }
 
     /**
      * @return A hash code value for this object.
      */
-    std::size_t getHashCode() const noexcept;
+    std::size_t getHashCode() const;
 
     /**
      * Returns a string representation of the current object.
@@ -192,7 +195,7 @@ struct DXFCPP_EXPORT Session {
 DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Session> {
-    std::size_t operator()(const dxfcpp::Session &session) const noexcept {
+    std::size_t operator()(const dxfcpp::Session &session) const {
         return session.getHashCode();
     }
 };

@@ -34,9 +34,7 @@ void updateScheduleDefaults(const std::string &url) {
 
     std::vector<char> buffer(std::istreambuf_iterator<char>{is}, {});
 
-    if (Schedule::setDefaults(buffer)) {
-        std::cout << "Schedule defaults updated successfully" << std::endl;
-    }
+    Schedule::setDefaults(buffer);
 }
 
 std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> loadInstrumentProfiles(const std::string &url) {

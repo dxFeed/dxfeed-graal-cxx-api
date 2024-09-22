@@ -13,4 +13,6 @@ InvalidArgumentException::InvalidArgumentException(const StringLikeWrapper &mess
     : RuntimeException(message, additionalStackTrace) {
 }
 
+InvalidArgumentException::InvalidArgumentException(const InvalidArgumentException& other) noexcept = default;
+
 DXFCPP_END_NAMESPACE

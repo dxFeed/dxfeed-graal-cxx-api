@@ -7,8 +7,6 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../symbols/SymbolWrapper.hpp"
-
 #include "CandleAlignment.hpp"
 #include "CandleExchange.hpp"
 #include "CandlePeriod.hpp"
@@ -20,7 +18,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <utility>
 #include <variant>
 
@@ -31,8 +28,6 @@ DXFCPP_BEGIN_NAMESPACE
  */
 using CandleSymbolAttributeVariant =
     std::variant<CandleExchange, CandlePrice, CandleSession, CandlePeriod, CandleAlignment, CandlePriceLevel>;
-
-struct SymbolWrapper;
 
 /**
  * Symbol that should be used with DXFeedSubscription class to subscribe for Candle events. `DXFeedSubscription` also

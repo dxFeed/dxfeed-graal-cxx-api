@@ -18,7 +18,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-static dxfcpp::InstrumentProfileConnection::State graalStateToState(dxfg_ipf_connection_state_t state) {
+dxfcpp::InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state) {
     switch (state) {
     case DXFG_IPF_CONNECTION_STATE_NOT_CONNECTED:
         return dxfcpp::InstrumentProfileConnection::State::NOT_CONNECTED;
@@ -47,7 +47,8 @@ struct InstrumentProfileConnection::Impl {
         }
 
         if (connection) {
-            connection->onStateChange_(graalStateToState(oldState), graalStateToState(newState));
+            connection->onStateChange_(graalIpfConnectionStateToState(oldState),
+                                       graalIpfConnectionStateToState(newState));
 
             if (newState == DXFG_IPF_CONNECTION_STATE_CLOSED) {
                 ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id);
@@ -61,96 +62,54 @@ InstrumentProfileConnection::InstrumentProfileConnection() noexcept
 }
 
 InstrumentProfileConnection::Ptr
-InstrumentProfileConnection::createConnection(const std::string &address,
+InstrumentProfileConnection::createConnection(const StringLikeWrapper &address,
                                               InstrumentProfileCollector::Ptr collector) {
     std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 
-    if (!collector->handle_) {
-        throw InvalidArgumentException("The collector's handle is invalid");
-    }
-
     connection->id_ =
         ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->registerEntity(connection);
-    connection->handle_ = JavaObjectHandle<InstrumentProfileConnection>(
-        isolated::ipf::InstrumentProfileConnection::createConnection(address, collector->handle_.get()));
+    connection->handle_ =
+        isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address, collector->handle_);
+    connection->stateChangeListenerHandle_ = isolated::ipf::live::IsolatedIpfPropertyChangeListener::create(
+        dxfcpp::bit_cast<void *>(&InstrumentProfileConnection::Impl::onStateChange),
+        dxfcpp::bit_cast<void *>(connection->id_.getValue()));
 
-    connection->stateChangeListenerHandle_ =
-        JavaObjectHandle<IpfPropertyChangeListener>(isolated::ipf::IpfPropertyChangeListener::create(
-            dxfcpp::bit_cast<void *>(&InstrumentProfileConnection::Impl::onStateChange),
-            dxfcpp::bit_cast<void *>(connection->id_.getValue())));
-
-    if (!connection->handle_ || !connection->stateChangeListenerHandle_) {
-        return connection;
-    }
-
-    isolated::ipf::InstrumentProfileConnection::addStateChangeListener(connection->handle_.get(),
-                                                                       connection->stateChangeListenerHandle_.get());
+    isolated::ipf::live::IsolatedInstrumentProfileConnection::addStateChangeListener(
+        connection->handle_, connection->stateChangeListenerHandle_);
 
     return connection;
 }
 
-std::string InstrumentProfileConnection::getAddress() const noexcept {
-    if (!handle_) {
-        return String::EMPTY;
-    }
-
-    return isolated::ipf::InstrumentProfileConnection::getAddress(handle_.get());
+std::string InstrumentProfileConnection::getAddress() const {
+    return isolated::ipf::live::IsolatedInstrumentProfileConnection::getAddress(handle_);
 }
 
-std::int64_t InstrumentProfileConnection::getUpdatePeriod() const noexcept {
-    if (!handle_) {
-        return 0;
-    }
-
-    return isolated::ipf::InstrumentProfileConnection::getUpdatePeriod(handle_.get());
+std::int64_t InstrumentProfileConnection::getUpdatePeriod() const {
+    return isolated::ipf::live::IsolatedInstrumentProfileConnection::getUpdatePeriod(handle_);
 }
 
-void InstrumentProfileConnection::setUpdatePeriod(std::int64_t updatePeriod) const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ipf::InstrumentProfileConnection::setUpdatePeriod(handle_.get(), updatePeriod);
+void InstrumentProfileConnection::setUpdatePeriod(std::int64_t updatePeriod) const {
+    isolated::ipf::live::IsolatedInstrumentProfileConnection::setUpdatePeriod(handle_, updatePeriod);
 }
 
-InstrumentProfileConnection::State InstrumentProfileConnection::getState() const noexcept {
-    if (!handle_) {
-        return InstrumentProfileConnection::State::CLOSED;
-    }
-
-    return isolated::ipf::InstrumentProfileConnection::getState(handle_.get());
+InstrumentProfileConnection::State InstrumentProfileConnection::getState() const {
+    return isolated::ipf::live::IsolatedInstrumentProfileConnection::getState(handle_);
 }
 
-std::int64_t InstrumentProfileConnection::getLastModified() const noexcept {
-    if (!handle_) {
-        return 0;
-    }
-
-    return isolated::ipf::InstrumentProfileConnection::getLastModified(handle_.get());
+std::int64_t InstrumentProfileConnection::getLastModified() const {
+    return isolated::ipf::live::IsolatedInstrumentProfileConnection::getLastModified(handle_);
 }
 
-void InstrumentProfileConnection::start() const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ipf::InstrumentProfileConnection::start(handle_.get());
+void InstrumentProfileConnection::start() const {
+    isolated::ipf::live::IsolatedInstrumentProfileConnection::start(handle_);
 }
 
-void InstrumentProfileConnection::close() const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ipf::InstrumentProfileConnection::close(handle_.get());
+void InstrumentProfileConnection::close() const {
+    isolated::ipf::live::IsolatedInstrumentProfileConnection::close(handle_);
 }
 
-bool InstrumentProfileConnection::waitUntilCompleted(std::int64_t timeout) const noexcept {
-    if (!handle_) {
-        return false;
-    }
-
-    return isolated::ipf::InstrumentProfileConnection::waitUntilCompleted(handle_.get(), timeout);
+bool InstrumentProfileConnection::waitUntilCompleted(std::int64_t timeout) const {
+    return isolated::ipf::live::IsolatedInstrumentProfileConnection::waitUntilCompleted(handle_, timeout);
 }
 
 DXFCPP_END_NAMESPACE

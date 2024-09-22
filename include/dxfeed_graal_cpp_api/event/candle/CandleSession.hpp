@@ -78,7 +78,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * Returns session filter that corresponds to this session attribute.
      * @return session filter that corresponds to this session attribute.
      */
-    const SessionFilter &getSessionFilter() const noexcept {
+    const SessionFilter &getSessionFilter() const& noexcept {
         return *sessionFilter_;
     }
 

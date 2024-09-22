@@ -27,6 +27,8 @@ struct DXFCPP_EXPORT GraalException : RuntimeException {
      */
     GraalException(CEntryPointErrorsEnum entryPointErrorsEnum);
 
+    GraalException(const GraalException& other) noexcept;
+
   private:
     static inline std::string createMessage(CEntryPointErrorsEnum entryPointErrorsEnum) {
         auto result = CEntryPointErrorsEnumToStr(entryPointErrorsEnum);

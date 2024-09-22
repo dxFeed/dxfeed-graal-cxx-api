@@ -23,8 +23,7 @@ const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
     std::lock_guard<std::mutex> lock(mtx_);
 
     if (!handle_) {
-        handle_ = JavaObjectHandle<SessionFilter>(
-            isolated::schedule::SessionFilter::getInstance(static_cast<std::uint32_t>(code_)));
+        handle_ = isolated::schedule::IsolatedSessionFilter::getInstance(static_cast<std::uint32_t>(code_));
     }
 
     return handle_;

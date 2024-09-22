@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../internal/Conf.hpp"
+#include "../../exceptions/InvalidArgumentException.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 

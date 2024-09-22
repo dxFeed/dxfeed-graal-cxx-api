@@ -1,7 +1,6 @@
 // Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/isolated/Isolated.hpp"
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -27,7 +26,7 @@ struct NonOwningInstrumentProfileIterator {
             return false;
         }
 
-        return isolated::ipf::InstrumentProfileIterator::hasNext(iterable);
+        return isolated::ipf::live::IsolatedInstrumentProfileIterator::hasNext(iterable);
     }
 
     [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const {
@@ -35,7 +34,7 @@ struct NonOwningInstrumentProfileIterator {
             return {};
         }
 
-        auto graalProfile = isolated::ipf::InstrumentProfileIterator::next(iterable);
+        auto graalProfile = isolated::ipf::live::IsolatedInstrumentProfileIterator::next(iterable);
         auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
         return result;
@@ -81,29 +80,28 @@ struct InstrumentProfileCollector::Impl {
     }
 };
 
-InstrumentProfileCollector::InstrumentProfileCollector() noexcept
-    : id_{Id<InstrumentProfileCollector>::UNKNOWN}, handle_{} {
-    handle_ = JavaObjectHandle<InstrumentProfileCollector>(dxfcpp::isolated::ipf::InstrumentProfileCollector::create());
+InstrumentProfileCollector::InstrumentProfileCollector() : id_{Id<InstrumentProfileCollector>::UNKNOWN} {
+    handle_ = dxfcpp::isolated::ipf::live::IsolatedInstrumentProfileCollector::create();
 }
 
-void InstrumentProfileCollector::addListenerHandle(std::size_t id) noexcept {
+void InstrumentProfileCollector::addListenerHandle(std::size_t id) {
     if (!handle_) {
         return;
     }
 
     listenerHandles_.emplace(
-        id, JavaObjectHandle<InstrumentProfileUpdateListener>(isolated::ipf::InstrumentProfileUpdateListener::create(
+        id, isolated::ipf::live::IsolatedInstrumentProfileUpdateListener::create(
                 dxfcpp::bit_cast<void *>(&InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate),
-                dxfcpp::bit_cast<void *>(dxfcpp::pack(id_.getValue(), id)))));
+                dxfcpp::bit_cast<void *>(dxfcpp::pack(id_.getValue(), id))));
 
     if (!listenerHandles_[id]) {
         return;
     }
 
-    isolated::ipf::InstrumentProfileCollector::addUpdateListener(handle_.get(), listenerHandles_[id].get());
+    isolated::ipf::live::IsolatedInstrumentProfileCollector::addUpdateListener(handle_, listenerHandles_[id]);
 }
 
-void InstrumentProfileCollector::removeListenerHandle(std::size_t id) noexcept {
+void InstrumentProfileCollector::removeListenerHandle(std::size_t id) {
     if (!handle_) {
         return;
     }
@@ -112,7 +110,7 @@ void InstrumentProfileCollector::removeListenerHandle(std::size_t id) noexcept {
         return;
     }
 
-    isolated::ipf::InstrumentProfileCollector::removeUpdateListener(handle_.get(), listenerHandles_[id].get());
+    isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, listenerHandles_[id]);
 }
 
 InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
@@ -140,12 +138,12 @@ InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() {
     return collector;
 }
 
-std::int64_t InstrumentProfileCollector::getLastUpdateTime() const noexcept {
+std::int64_t InstrumentProfileCollector::getLastUpdateTime() const {
     if (!handle_) {
         return 0;
     }
 
-    return dxfcpp::isolated::ipf::InstrumentProfileCollector::getLastUpdateTime(handle_.get());
+    return dxfcpp::isolated::ipf::live::IsolatedInstrumentProfileCollector::getLastUpdateTime(handle_);
 }
 
 void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const {
@@ -153,15 +151,15 @@ void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<Instrum
         return;
     }
 
-    isolated::ipf::InstrumentProfileCollector::updateInstrumentProfile(handle_.get(), ip->handle_.get());
+    isolated::ipf::live::IsolatedInstrumentProfileCollector::updateInstrumentProfile(handle_, ip->handle_);
 }
 
-std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() const noexcept {
+std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() const {
     if (!handle_) {
         return {};
     }
 
-    auto iterable = dxfcpp::isolated::ipf::InstrumentProfileCollector::view(handle_.get());
+    auto iterable = dxfcpp::isolated::ipf::live::IsolatedInstrumentProfileCollector::view(handle_);
 
     return IterableInstrumentProfile::create(iterable);
 }

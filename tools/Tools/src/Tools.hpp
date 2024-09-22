@@ -25,7 +25,9 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {
 

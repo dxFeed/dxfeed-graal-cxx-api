@@ -212,14 +212,20 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
         src/isolated/auth/IsolatedAuthToken.cpp
         src/isolated/event/IsolatedEventType.cpp
-        src/isolated/promise/IsolatedPromise.cpp
         src/isolated/internal/IsolatedString.cpp
         src/isolated/internal/IsolatedObject.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
         src/isolated/internal/IsolatedTools.cpp
-        src/isolated/util/IsolatedTimePeriod.cpp
+        src/isolated/promise/IsolatedPromise.cpp
         src/isolated/ipf/IsolatedInstrumentProfile.cpp
         src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
+        src/isolated/ipf/live/IsolatedInstrumentProfileCollector.cpp
+        src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
+        src/isolated/ondemand/IsolatedOnDemandService.cpp
+        src/isolated/util/IsolatedTimePeriod.cpp
+        src/isolated/schedule/IsolatedDay.cpp
+        src/isolated/schedule/IsolatedSession.cpp
+        src/isolated/schedule/IsolatedSchedule.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
@@ -403,7 +409,7 @@ target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-$
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
-set(DXFCXX_MSVC_COMPILE_OPTIONS "/W2")
+set(DXFCXX_MSVC_COMPILE_OPTIONS "/W4")
 set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS "/PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>")
 set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
 set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
