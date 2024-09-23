@@ -1,0 +1,38 @@
+#ifdef __MINGW32__
+#include <winresrc.h>
+#else
+#include "winres.h"
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION DXFCXX_MAJOR_VERSION, DXFCXX_MINOR_VERSION, DXFCXX_PATCH_VERSION
+ PRODUCTVERSION DXFCXX_MAJOR_VERSION, DXFCXX_MINOR_VERSION, DXFCXX_PATCH_VERSION
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Devexperts LLC"
+            VALUE "FileDescription", "The library provides a common application programming interface (API) to real-time, delayed and historical market data feeds."
+            VALUE "FileVersion", DXFCXX_VERSION
+            VALUE "InternalName", "dxFeedGraalCxxApi.dll"
+            VALUE "LegalCopyright", "Copyright (C) 2024 Devexperts LLC"
+            VALUE "OriginalFilename", "dxFeedGraalCxxApi.dll"
+            VALUE "ProductName", "dxFeed Graal C++/C API"
+            VALUE "ProductVersion", DXFCXX_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

@@ -15,7 +15,11 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 project(dxFeedGraalCxxApi)
 
+include(cmake/ParseVersion.cmake)
+
 set(DXFCXX_VERSION "v3.0.0-rc1" CACHE STRING "The dxFeed Graal CXX API package version")
+
+dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.23" CACHE STRING "")
 set(FMTLIB_VERSION "10.2.1")
@@ -389,10 +393,18 @@ add_library(${PROJECT_NAME}_static STATIC
         src/api.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED
-        ${dxFeedGraalCxxApi_Sources}
-        src/api.cpp
-)
+if (WIN32)
+    add_library(${PROJECT_NAME} SHARED
+            ${dxFeedGraalCxxApi_Sources}
+            resources/dxFeedGraalCxxApi.rc
+            src/api.cpp
+    )
+else ()
+    add_library(${PROJECT_NAME} SHARED
+            ${dxFeedGraalCxxApi_Sources}
+            src/api.cpp
+    )
+endif ()
 
 add_library(dxfcxx ALIAS ${PROJECT_NAME})
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
@@ -509,8 +521,19 @@ add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMM
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
-target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
+
+target_compile_definitions(${PROJECT_NAME}_static PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
 
 if (DXFCXX_BUILD_UNIT_TESTS)
     include(CTest)
