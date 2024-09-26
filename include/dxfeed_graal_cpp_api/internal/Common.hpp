@@ -198,7 +198,7 @@ static constexpr std::int64_t DAY = 24LL * HOUR;
  * @param timeMillis The timestamp in milliseconds
  * @return a correct number of milliseconds
  */
-static std::int32_t getMillisFromTime(std::int64_t timeMillis) {
+static constexpr std::int32_t getMillisFromTime(std::int64_t timeMillis) {
     return static_cast<std::int32_t>(math::floorMod(timeMillis, SECOND));
 }
 
