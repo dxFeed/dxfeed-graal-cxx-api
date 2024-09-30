@@ -1,12 +1,5 @@
-#define DXFCXX_STRINGIFY(x) #x
-#define DXFCXX_TO_STRING(x) DXFCXX_STRINGIFY(x)
-
 #ifdef __MINGW32__
 #   include <winresrc.h>
-#   ifdef DXFCXX_VERSION
-#       undef DXFCXX_VERSION
-#       define DXFCXX_VERSION DXFCXX_TO_STRING(DXFCXX_MAJOR_VERSION.DXFCXX_MINOR_VERSION.DXFCXX_PATCH_VERSION)
-#   endif
 #else
 #   include "winres.h"
 #endif

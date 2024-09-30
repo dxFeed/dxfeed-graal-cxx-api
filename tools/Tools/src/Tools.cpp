@@ -399,6 +399,8 @@ const std::vector<std::string> Tools::ADDITIONAL_INFO{
     {R"(To get detailed help on some tool use "Help <tool>".)"},
 };
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Waggressive-loop-optimizations")
 const std::vector<tools::HelpTool::Tool> Tools::ARGS{tools::HelpTool::ALL_TOOLS | ranges::views::values |
                                                      ranges::to<std::vector>};
+DXFCXX_DISABLE_GCC_WARNINGS_POP()
 } // namespace dxfcpp::tools
