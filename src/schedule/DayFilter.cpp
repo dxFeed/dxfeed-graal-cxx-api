@@ -13,8 +13,16 @@ DayFilter::DayFilter(DayFilterEnum code, std::string name, std::uint32_t dayOfWe
                      Tristate shortDay, Tristate trading) noexcept
     : code_{code}, name_{std::move(name)}, dayOfWeekMask_{dayOfWeekMask}, holiday_{holiday}, shortDay_{shortDay},
       trading_{trading} {
+}
 
-    handle_ = isolated::schedule::IsolatedDayFilter::getInstance(static_cast<std::uint32_t>(code));
+const JavaObjectHandle<DayFilter>& DayFilter::getHandle() const& {
+    std::lock_guard<std::mutex> lock(mtx_);
+
+    if (!handle_) {
+        handle_ = isolated::schedule::IsolatedDayFilter::getInstance(static_cast<std::uint32_t>(code_));
+    }
+
+    return handle_;
 }
 
 /// Accepts any day - useful for pure calendar navigation.
