@@ -4,7 +4,7 @@
 
 - [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v1.1.23
   - [Bundles](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/) 
-- [Boost](https://github.com/boostorg/boost) v1.84.0
+- \[opt] [Boost](https://github.com/boostorg/boost) v1.84.0
   - Boost.Stacktrace 1.0
 - [utfcpp](https://github.com/nemtrif/utfcpp) v3.2.3
 - [fmt](https://github.com/fmtlib/fmt) v10.2.1
@@ -22,7 +22,7 @@
     - dbgeng \[opt] (Diagnostic backtraces)
 - On Linux \ MacOS
     - libbacktrace \[opt] (Diagnostic backtraces)
-    - libdl (Diagnostic backtraces)
+    - libdl \[opt] (Diagnostic backtraces)
     - addr2line \[opt] (Diagnostic backtraces)
 ## Run-time
 
@@ -37,6 +37,6 @@
   - dbgeng \[opt] (Diagnostic backtraces)
 - On Linux \ MacOS
   - libbacktrace \[opt] (Diagnostic backtraces)
-  - libdl (Diagnostic backtraces)
+  - libdl \[opt] (Diagnostic backtraces)
   - addr2line \[opt] (Diagnostic backtraces)
 

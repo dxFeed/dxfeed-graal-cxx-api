@@ -68,7 +68,7 @@ option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
 option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
-option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" ON)
+option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
 
 include(FetchContent)
 
@@ -146,39 +146,19 @@ FetchContent_MakeAvailable(fmt)
 #set(USE_SYSTEM_TZ_DB ON)
 add_subdirectory(third_party/date-${DATE_VERSION})
 
-set(BOOST_INCLUDE_LIBRARIES stacktrace)
+if (DXFCXX_FEATURE_STACKTRACE)
+    set(BOOST_INCLUDE_LIBRARIES stacktrace)
 
-CPMAddPackage(
-        NAME Boost
-        VERSION ${BOOST_VERSION}
-        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.tar.xz
-        OPTIONS "BOOST_ENABLE_CMAKE ON"
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        OVERRIDE_FIND_PACKAGE
-)
-
-#
-#FetchContent_Declare(
-#        Boost
-#        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.7z # downloading a zip release speeds up the download
-#        USES_TERMINAL_DOWNLOAD TRUE
-#        GIT_PROGRESS TRUE
-#        DOWNLOAD_NO_EXTRACT FALSE
-#        OVERRIDE_FIND_PACKAGE
-#)
-#FetchContent_MakeAvailable(Boost)
-
-
-#find_package(
-#        Boost
-#        1.84
-#        REQUIRED
-#        stacktrace
-#)
-
-# find_package(utf8cpp)
-# find_package(fmt)
+    CPMAddPackage(
+            NAME Boost
+            VERSION ${BOOST_VERSION}
+            URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.tar.xz
+            OPTIONS "BOOST_ENABLE_CMAKE ON"
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            OVERRIDE_FIND_PACKAGE
+    )
+endif ()
 
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
@@ -396,7 +376,7 @@ add_library(${PROJECT_NAME}_static STATIC
 if (WIN32)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         list(APPEND CMAKE_RC_FLAGS "--use-temp-file")
-    endif()
+    endif ()
 
     add_library(${PROJECT_NAME} SHARED
             ${dxFeedGraalCxxApi_Sources}
@@ -493,25 +473,12 @@ endif ()
 target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 
-if (TARGET Boost::stacktrace_windbg)
-    message(STATUS "Has Boost::stacktrace_windbg")
-endif ()
-
-if (TARGET Boost::stacktrace_backtrace)
-    message(STATUS "Has Boost::stacktrace_backtrace")
-endif ()
-
-if (TARGET Boost::stacktrace_addr2line)
-    message(STATUS "Has Boost::stacktrace_addr2line")
-endif ()
-
-if (TARGET Boost::stacktrace_basic)
-    message(STATUS "Has Boost::stacktrace_basic")
-endif ()
-
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})
     LinkStacktrace(${PROJECT_NAME}_static)
+
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_FEATURE_STACKTRACE)
 endif ()
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)

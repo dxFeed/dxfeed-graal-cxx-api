@@ -5,12 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <boost/stacktrace.hpp>
-#include <fmt/format.h>
-
 DXFCPP_BEGIN_NAMESPACE
-
-std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace);
 
 GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum)
     : RuntimeException(createMessage(entryPointErrorsEnum)) {
