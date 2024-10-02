@@ -5,12 +5,9 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <boost/stacktrace.hpp>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
-
-std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace);
 
 JavaException::JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
                              const StringLikeWrapper &stackTrace)

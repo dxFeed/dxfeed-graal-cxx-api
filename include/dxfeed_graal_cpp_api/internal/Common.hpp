@@ -250,7 +250,9 @@ template <Integral T> constexpr static T abs(T a) {
 
 namespace day_util {
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
 static std::int32_t DAY_OF_YEAR[] = {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
 /**
  * Returns yyyymmdd integer in Gregorian calendar for a specified day identifier.

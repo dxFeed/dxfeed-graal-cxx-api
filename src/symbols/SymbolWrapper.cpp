@@ -201,8 +201,6 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
         throw RuntimeException(fmt::format("Unable to create SymbolWrapper. Unknown symbol type: {}",
                                              static_cast<int>(static_cast<dxfg_symbol_t *>(graalNative)->type)));
     }
-
-    return {};
 }
 
 DXFCPP_END_NAMESPACE

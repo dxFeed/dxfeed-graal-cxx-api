@@ -67,8 +67,6 @@ enum class DayFilterEnum : std::uint32_t {
  * some only non-trading, and some ignore type of day altogether.
  */
 struct DXFCPP_EXPORT DayFilter {
-    friend struct Day;
-
     /// Accepts any day - useful for pure calendar navigation.
     static const DayFilter ANY;
 
@@ -130,7 +128,8 @@ struct DXFCPP_EXPORT DayFilter {
     /// Required trading flag, Tristate::NONE if not relevant.
     Tristate trading_;
 
-    JavaObjectHandle<DayFilter> handle_;
+    mutable std::mutex mtx_{};
+    mutable JavaObjectHandle<DayFilter> handle_;
 
     /**
      * Creates filter with specified conditions.
@@ -152,6 +151,10 @@ struct DXFCPP_EXPORT DayFilter {
      */
     DayFilter(DayFilterEnum code, std::string name, std::uint32_t dayOfWeekMask, Tristate holiday, Tristate shortDay,
               Tristate trading) noexcept;
+
+public:
+
+    const JavaObjectHandle<DayFilter>& getHandle() const&;
 };
 
 DXFCPP_END_NAMESPACE

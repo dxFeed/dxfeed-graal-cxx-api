@@ -15,6 +15,8 @@ cmake --build . --config Release
 
 ```
 
+or use the `scripts/build.sh` or `scripts/build.cmd`. Make sure that you use `command prompt for VS` on Win.
+
 ## Run Tests
 
 ```shell

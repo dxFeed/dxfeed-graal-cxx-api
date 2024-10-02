@@ -139,15 +139,15 @@ std::shared_ptr<Session> Day::findLastSession(const SessionFilter &filter) const
 }
 
 Day::Ptr Day::getPrevDay(const DayFilter &filter) const {
-    return create(isolated::schedule::IsolatedDay::getPrevDay(handle_, filter.handle_));
+    return create(isolated::schedule::IsolatedDay::getPrevDay(handle_, filter.getHandle()));
 }
 
 Day::Ptr Day::getNextDay(const DayFilter &filter) const {
-    return create(isolated::schedule::IsolatedDay::getNextDay(handle_, filter.handle_));
+    return create(isolated::schedule::IsolatedDay::getNextDay(handle_, filter.getHandle()));
 }
 
 Day::Ptr Day::findPrevDay(const DayFilter &filter) const {
-    auto dayHandle = isolated::schedule::IsolatedDay::findPrevDay(handle_, filter.handle_);
+    auto dayHandle = isolated::schedule::IsolatedDay::findPrevDay(handle_, filter.getHandle());
 
     if (!dayHandle) {
         return {};
@@ -157,7 +157,7 @@ Day::Ptr Day::findPrevDay(const DayFilter &filter) const {
 }
 
 Day::Ptr Day::findNextDay(const DayFilter &filter) const {
-    auto dayHandle = isolated::schedule::IsolatedDay::findNextDay(handle_, filter.handle_);
+    auto dayHandle = isolated::schedule::IsolatedDay::findNextDay(handle_, filter.getHandle());
 
     if (!dayHandle) {
         return {};

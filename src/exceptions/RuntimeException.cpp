@@ -3,11 +3,15 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <boost/stacktrace.hpp>
+#ifdef DXFCXX_FEATURE_STACKTRACE
+#    include <boost/stacktrace.hpp>
+#endif
+
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
+#ifdef DXFCXX_FEATURE_STACKTRACE
 std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) {
     std::string result;
 
@@ -62,15 +66,21 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
 
     return result;
 }
+#endif
 
 RuntimeException::RuntimeException(const StringLikeWrapper &message, const StringLikeWrapper &additionalStackTrace)
     : std::runtime_error(message.c_str()),
+#ifdef DXFCXX_FEATURE_STACKTRACE
       stackTrace_(additionalStackTrace.empty() ? stackTraceToString(boost::stacktrace::stacktrace())
                                                : fmt::format("{}\n{}", additionalStackTrace.c_str(),
-                                                             stackTraceToString(boost::stacktrace::stacktrace()))) {
+                                                             stackTraceToString(boost::stacktrace::stacktrace())))
+#else
+      stackTrace_(additionalStackTrace)
+#endif
+{
 }
 
-RuntimeException::RuntimeException(const RuntimeException& other) noexcept = default;
+RuntimeException::RuntimeException(const RuntimeException &other) noexcept = default;
 
 const std::string &RuntimeException::getStackTrace() const & {
     return stackTrace_;

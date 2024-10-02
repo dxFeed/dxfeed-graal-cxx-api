@@ -290,11 +290,44 @@ jobs:
             build-Samples/*.zip
             build-Tools/*.zip
 
+  build_full_src_bundle_and_upload:
+    name: "${{ matrix.config.name }}: Build Full Source Bundle & Upload"
+    needs: [ get_version ]
+    strategy:
+      matrix:
+        config:
+          - name: win-vs2022
+            image: windows-latest
+            os: windows
+            cores: 4
+            cc: 'cl'
+            cxx: 'cl'
+    runs-on: ${{ matrix.config.image }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare build [Full Source Bundle]
+        run: |
+          ls
+          mkdir ${{github.workspace}}/build-bundle
+
+      - name: Build [Full Source Bundle]
+        shell: pwsh
+        run: |
+          ${{github.workspace}}/scripts/make-source-bundle.ps1 ${{needs.get_version.outputs.version}}
+
+      - name: Upload [Full Source Bundle]
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-full-source-bundle-${{matrix.config.name}}
+          path: |
+            build-bundle/*.zip
+
   publish_release:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}
     runs-on: ubuntu-latest
     name: Publish Release
-    needs: [ get_version, build_package_and_upload ]
+    needs: [ get_version, build_package_and_upload, build_full_src_bundle_and_upload ]
     permissions:
       contents: write
     steps:
@@ -316,6 +349,7 @@ jobs:
             artifacts/*.zip
             artifacts/build-Samples/*.zip
             artifacts/build-Tools/*.zip
+            artifacts/build-bundle/*.zip
           prerelease: >
             ${{ contains(needs.get_version.outputs.version, 'alpha')
             || contains(needs.get_version.outputs.version, 'beta') 

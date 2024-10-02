@@ -1,0 +1,59 @@
+# Copyright (c) 2023 ttldtor.
+# SPDX-License-Identifier: BSL-1.0
+
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: 'Release'
+  XCODE_VERSION: '15.0'
+  GCC_VERSION: '12'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        #        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [ windows-latest, macos-13, ubuntu-22.04 ]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Select Xcode version
+        if: ${{ contains(matrix.os, 'macos') }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{env.XCODE_VERSION}}.app/Contents/Developer'
+
+      - name: Prepare build
+        run: |
+          ls
+          mkdir ${{github.workspace}}/build    
+
+      - name: Configure CMake (!Ubuntu)
+        if: ${{ !contains(matrix.os, 'ubuntu') }}
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Configure CMake (Ubuntu)
+        env:
+          CC: gcc-${{env.GCC_VERSION}}
+          CXX: g++-${{env.GCC_VERSION}}
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Test (!Win)
+        if: ${{ !contains(matrix.os, 'windows') }}
+        working-directory: ${{github.workspace}}/build
+        run: ./console_test
+
+      - name: Test (Win)
+        if: ${{ contains(matrix.os, 'windows') }}
+        working-directory: ${{github.workspace}}/build/${{env.BUILD_TYPE}}
+        run: ./console_test

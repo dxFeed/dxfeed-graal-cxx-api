@@ -15,15 +15,19 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 project(dxFeedGraalCxxApi)
 
-set(DXFCXX_VERSION "v3.0.0-rc1" CACHE STRING "The dxFeed Graal CXX API package version")
+include(cmake/ParseVersion.cmake)
+
+set(DXFCXX_VERSION "v3.0.0-rc3" CACHE STRING "The dxFeed Graal CXX API package version")
+
+dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.23" CACHE STRING "")
-set(FMTLIB_VERSION "10.2.1")
+set(FMTLIB_VERSION "11.0.2")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
-set(PROCESS_VERSION "v3.0.1")
-set(CONSOLE_VERSION "v1.0.1")
+set(PROCESS_VERSION "3.0.1")
+set(CONSOLE_VERSION "1.0.1")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
 set(CPM_CMAKE_VERSION "v0.40.2")
@@ -64,7 +68,7 @@ option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
 option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
-option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" ON)
+option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
 
 include(FetchContent)
 
@@ -80,101 +84,99 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
 
-if (DXFCXX_USE_DXFG_STUB)
-    FetchContent_Declare(
-            DxFeedGraalNativeSdk
-            GIT_REPOSITORY "${DXFG_STUB_REPO}.git" GIT_TAG "v${DXFEED_GRAAL_NATIVE_SDK_VERSION}"
-            USES_TERMINAL_DOWNLOAD TRUE
-            GIT_PROGRESS TRUE
-            DOWNLOAD_NO_EXTRACT FALSE
-    )
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
+    add_subdirectory(third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM})
 else ()
-    if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+    if (DXFCXX_USE_DXFG_STUB)
         FetchContent_Declare(
                 DxFeedGraalNativeSdk
-                URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+                GIT_REPOSITORY "${DXFG_STUB_REPO}.git" GIT_TAG "v${DXFEED_GRAAL_NATIVE_SDK_VERSION}"
                 USES_TERMINAL_DOWNLOAD TRUE
                 GIT_PROGRESS TRUE
                 DOWNLOAD_NO_EXTRACT FALSE
         )
     else ()
-        if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
-            set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
-        endif ()
-
-        if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
-            message(ERROR "Unsupported platform!")
+        if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+            FetchContent_Declare(
+                    DxFeedGraalNativeSdk
+                    URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+                    USES_TERMINAL_DOWNLOAD TRUE
+                    GIT_PROGRESS TRUE
+                    DOWNLOAD_NO_EXTRACT FALSE
+            )
         else ()
-            set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
-        endif ()
+            if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
+                set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+            endif ()
 
-        FetchContent_Declare(
-                DxFeedGraalNativeSdk
-                URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
-                USES_TERMINAL_DOWNLOAD TRUE
-                GIT_PROGRESS TRUE
-                DOWNLOAD_NO_EXTRACT FALSE
-        )
+            if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
+                message(ERROR "Unsupported platform!")
+            else ()
+                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
+            endif ()
+
+            FetchContent_Declare(
+                    DxFeedGraalNativeSdk
+                    URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
+                    USES_TERMINAL_DOWNLOAD TRUE
+                    GIT_PROGRESS TRUE
+                    DOWNLOAD_NO_EXTRACT FALSE
+            )
+        endif ()
     endif ()
+
+    FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
+    # DxFeedGraalNativeSdk_SOURCE_DIR
 endif ()
 
-FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
-# DxFeedGraalNativeSdk_SOURCE_DIR
 
-CPMAddPackage("gh:ttldtor/Process#${PROCESS_VERSION}")
-CPMAddPackage("gh:ttldtor/Console#${CONSOLE_VERSION}")
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Process-${PROCESS_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/Process-${PROCESS_VERSION})
+else ()
+    CPMAddPackage("gh:ttldtor/Process#v${PROCESS_VERSION}")
+endif ()
+
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Console-${CONSOLE_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/Console-${CONSOLE_VERSION})
+else ()
+    CPMAddPackage("gh:ttldtor/Console#v${CONSOLE_VERSION}")
+endif ()
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
 set(FMT_INSTALL OFF)
 
-FetchContent_Declare(
-        fmt
-        URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
-        OVERRIDE_FIND_PACKAGE
-)
-FetchContent_MakeAvailable(fmt)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/fmt-${FMTLIB_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/fmt-${FMTLIB_VERSION})
+else ()
+    FetchContent_Declare(
+            fmt
+            URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            DOWNLOAD_NO_EXTRACT FALSE
+            OVERRIDE_FIND_PACKAGE
+    )
+    FetchContent_MakeAvailable(fmt)
+endif ()
 
 #set(BUILD_TZ_LIB ON)
 #set(USE_SYSTEM_TZ_DB ON)
 add_subdirectory(third_party/date-${DATE_VERSION})
 
-set(BOOST_INCLUDE_LIBRARIES stacktrace)
+if (DXFCXX_FEATURE_STACKTRACE)
+    set(BOOST_INCLUDE_LIBRARIES stacktrace)
 
-CPMAddPackage(
-        NAME Boost
-        VERSION ${BOOST_VERSION}
-        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.tar.xz
-        OPTIONS "BOOST_ENABLE_CMAKE ON"
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        OVERRIDE_FIND_PACKAGE
-)
-
-#
-#FetchContent_Declare(
-#        Boost
-#        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.7z # downloading a zip release speeds up the download
-#        USES_TERMINAL_DOWNLOAD TRUE
-#        GIT_PROGRESS TRUE
-#        DOWNLOAD_NO_EXTRACT FALSE
-#        OVERRIDE_FIND_PACKAGE
-#)
-#FetchContent_MakeAvailable(Boost)
-
-
-#find_package(
-#        Boost
-#        1.84
-#        REQUIRED
-#        stacktrace
-#)
-
-# find_package(utf8cpp)
-# find_package(fmt)
+    CPMAddPackage(
+            NAME Boost
+            VERSION ${BOOST_VERSION}
+            URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.tar.xz
+            OPTIONS "BOOST_ENABLE_CMAKE ON"
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            OVERRIDE_FIND_PACKAGE
+    )
+endif ()
 
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
@@ -389,10 +391,22 @@ add_library(${PROJECT_NAME}_static STATIC
         src/api.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED
-        ${dxFeedGraalCxxApi_Sources}
-        src/api.cpp
-)
+if (WIN32)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        list(APPEND CMAKE_RC_FLAGS "--use-temp-file")
+    endif ()
+
+    add_library(${PROJECT_NAME} SHARED
+            ${dxFeedGraalCxxApi_Sources}
+            resources/dxFeedGraalCxxApi.rc
+            src/api.cpp
+    )
+else ()
+    add_library(${PROJECT_NAME} SHARED
+            ${dxFeedGraalCxxApi_Sources}
+            src/api.cpp
+    )
+endif ()
 
 add_library(dxfcxx ALIAS ${PROJECT_NAME})
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
@@ -477,25 +491,12 @@ endif ()
 target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 
-if (TARGET Boost::stacktrace_windbg)
-    message(STATUS "Has Boost::stacktrace_windbg")
-endif ()
-
-if (TARGET Boost::stacktrace_backtrace)
-    message(STATUS "Has Boost::stacktrace_backtrace")
-endif ()
-
-if (TARGET Boost::stacktrace_addr2line)
-    message(STATUS "Has Boost::stacktrace_addr2line")
-endif ()
-
-if (TARGET Boost::stacktrace_basic)
-    message(STATUS "Has Boost::stacktrace_basic")
-endif ()
-
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})
     LinkStacktrace(${PROJECT_NAME}_static)
+
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_FEATURE_STACKTRACE)
 endif ()
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
@@ -509,8 +510,19 @@ add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMM
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
-target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
+
+target_compile_definitions(${PROJECT_NAME}_static PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
 
 if (DXFCXX_BUILD_UNIT_TESTS)
     include(CTest)
