@@ -1,3 +1,5 @@
+## v3.0.0 
+
 * **\[MDAPI-37]\[C++]** Retrieve latest events from feed.
   * Added `SymbolWrapper::toStringUnderlying` method that returns a string representation of the underlying symbol object.
   * Added `EventType::assign`. All `EventType` successors can populate their fields using `EventType` successors of the same type.
