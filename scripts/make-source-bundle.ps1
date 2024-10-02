@@ -20,7 +20,7 @@ else
     $graalNativeSdkVer = $( Get-Content .\deps.json -Raw | ConvertFrom-Json )."graal-native-sdk"
     Write-Host $graalNativeSdkVer
 
-    $bundleName = "dxFeedGraalCxxApi-$DxFeedGraalCxxApiVersion-x86_64-windows-full-src"
+    $bundleName = "dxFeedGraalCxxApi-$DxFeedGraalCxxApiVersion-x86_64-windows-Full-Source-Bundle"
     $downloadPath = "$buildBundleDir/download"
     $bundlePath = "$buildBundleDir/$bundleName"
 
