@@ -22,12 +22,12 @@ set(DXFCXX_VERSION "v3.0.0-rc1" CACHE STRING "The dxFeed Graal CXX API package v
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.23" CACHE STRING "")
-set(FMTLIB_VERSION "10.2.1")
+set(FMTLIB_VERSION "11.0.2")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
-set(PROCESS_VERSION "v3.0.1")
-set(CONSOLE_VERSION "v1.0.1")
+set(PROCESS_VERSION "3.0.1")
+set(CONSOLE_VERSION "1.0.1")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
 set(CPM_CMAKE_VERSION "v0.40.2")
@@ -125,22 +125,35 @@ endif ()
 FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
 # DxFeedGraalNativeSdk_SOURCE_DIR
 
-CPMAddPackage("gh:ttldtor/Process#${PROCESS_VERSION}")
-CPMAddPackage("gh:ttldtor/Console#${CONSOLE_VERSION}")
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Process-${PROCESS_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/Process-${PROCESS_VERSION})
+else ()
+    CPMAddPackage("gh:ttldtor/Process#v${PROCESS_VERSION}")
+endif ()
+
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Console-${CONSOLE_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/Console-${CONSOLE_VERSION})
+else ()
+    CPMAddPackage("gh:ttldtor/Console#v${CONSOLE_VERSION}")
+endif ()
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
 set(FMT_INSTALL OFF)
 
-FetchContent_Declare(
-        fmt
-        URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
-        OVERRIDE_FIND_PACKAGE
-)
-FetchContent_MakeAvailable(fmt)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/fmt-${FMTLIB_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/fmt-${FMTLIB_VERSION})
+else ()
+    FetchContent_Declare(
+            fmt
+            URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            DOWNLOAD_NO_EXTRACT FALSE
+            OVERRIDE_FIND_PACKAGE
+    )
+    FetchContent_MakeAvailable(fmt)
+endif ()
 
 #set(BUILD_TZ_LIB ON)
 #set(USE_SYSTEM_TZ_DB ON)
