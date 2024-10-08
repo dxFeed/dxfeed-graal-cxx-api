@@ -223,6 +223,9 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileCollector.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
+        src/isolated/model/IsolatedTxModelListener.cpp
+        src/isolated/model/IsolatedIndexedTxModel.cpp
+        src/isolated/model/IsolatedTimeSeriesTxModel.cpp
         src/isolated/ondemand/IsolatedOnDemandService.cpp
         src/isolated/util/IsolatedTimePeriod.cpp
         src/isolated/schedule/IsolatedDay.cpp

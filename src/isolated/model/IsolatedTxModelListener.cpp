@@ -4,21 +4,29 @@
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
 #include <dxfeed_graal_cpp_api/isolated/model/IsolatedTxModelListener.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::model::IsolatedTxModelListener {
 
-// typedef void (*dxfg_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread, dxfg_indexed_event_source_t* source, dxfg_event_type_list* events, int32_t /* boolean */ isSnapshot, void* user_data);
+// typedef void (*dxfg_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,
+// dxfg_indexed_event_source_t* source, dxfg_event_type_list* events, int32_t /* boolean */ isSnapshot, void*
+// user_data);
 
+// dxfg_tx_model_listener_t* dxfg_TxModelListener_new(graal_isolatethread_t* thread,
+// dxfg_TxModelListener_function_eventsReceived  function_eventsReceived, void* user_data);
+JavaObjectHandle<TxModelListener> create(void *functionEventsReceived, void *userData) {
+    if (!functionEventsReceived) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_TxModelListener_new`. The `functionEventsReceived` is nullptr");
+    }
 
-// JavaOjectHandle<TxModelListener> dxfg_TxModelListener_new
-/* dxfg_tx_model_listener_t* */ void* create(/* dxfg_TxModelListener_function_eventsReceived */ void* functionEventsReceived, void* userData) {
-
+    return JavaObjectHandle<TxModelListener>{runGraalFunctionAndThrowIfNullptr(
+        dxfg_TxModelListener_new,
+        dxfcpp::bit_cast<dxfg_TxModelListener_function_eventsReceived>(functionEventsReceived), userData)};
 }
 
-}
+} // namespace isolated::model::IsolatedTxModelListener
 
 DXFCPP_END_NAMESPACE
