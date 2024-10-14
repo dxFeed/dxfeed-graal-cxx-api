@@ -127,6 +127,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
 
+    void *getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, const IndexedEventSource& source) const;
+
     void *getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, std::int64_t fromTime,
                                    std::int64_t toTime) const;
 
@@ -423,6 +425,58 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<LastingEvent> E>
     Promise<std::shared_ptr<E>> getLastEventPromise(const SymbolWrapper &symbol) const {
         return Promise<std::shared_ptr<E>>(getLastEventPromiseImpl(E::TYPE, symbol));
+    }
+
+    /**
+     * Requests a container of indexed events for the specified event type, symbol, and source.
+     * This method works only for event types that implement IndexedEvent "interface".
+     * This method requests the data from the uplink data provider, creates a container of events of the specified `eventType`,
+     * and completes the resulting promise with this container.
+     * The events are ordered by @ref IndexedEvent::getIndex() "index" in the container.
+     *
+     * <p> This method is designed for retrieval of a snapshot only.
+     * Use IndexedEventModel if you need a container of indexed events that updates in real time.
+     *
+     * <p>The promise is cancelled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the events are not available for any transient reason (no subscription, no connection to uplink, etc.),
+     * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
+     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * If the events are permanently not available (not supported), then the promise
+     * completes exceptionally with JavaException "IllegalArgumentException".
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with
+     * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (promise completes exceptionally).
+     *
+     * <h3>Event source</h3>
+     *
+     * Use the @ref IndexedEventSource::DEFAULT "DEFAULT" value for `source` with events that do not
+     * have multiple sources (like Series). For events with multiple sources (like Order,
+     * AnalyticOrder, OtcMarketsOrder and SpreadOrder), use an event-specific source class (for example, OrderSource).
+     * This method does not support <em>synthetic</em> sources of orders (orders that are automatically
+     * generated from Quote events).
+     *
+     * <p>This method does not accept an instance of IndexedEventSubscriptionSymbol as a `symbol`.
+     * The later class is designed for use with DXFeedSubscription and to observe source-specific subscription
+     * in DXPublisher.
+     *
+     * <h3>Event flags and consistent snapshot</h3>
+     *
+     * This method completes promise only when a consistent snapshot of indexed events has been received from
+     * the data feed. The @ref IndexedEvent::getEventFlags() "eventFlags" property of the events in the resulting list
+     * is always zero.
+     *
+     * <p>Note, that the resulting list <em>should not</em> be used with DXPublisher::publishEvents() method, because the latter expects
+     * events in a different order and with an appropriate flags set. See documentation on a specific event class
+     * for details on how they should be published.
+     *
+     * @tparam E The type of event.
+     * @param symbol The symbol.
+     * @param source The source.
+     * @return The promise for the result of the request.
+     */
+    template <Derived<IndexedEvent> E>
+    Promise<std::vector<std::shared_ptr<E>>> getIndexedEventsPromise(const SymbolWrapper &symbol, const IndexedEventSource& source) const {
+        return Promise<std::vector<std::shared_ptr<E>>>(getIndexedEventsPromiseImpl(E::TYPE, symbol, source));
     }
 
     /**

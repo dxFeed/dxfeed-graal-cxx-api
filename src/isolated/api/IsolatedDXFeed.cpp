@@ -81,6 +81,26 @@ void *getLastEventPromise(const JavaObjectHandle<DXFeed> &feed, const EventTypeE
     return result;
 }
 
+// dxfg_promise_events_t*            dxfg_DXFeed_getIndexedEventsPromise(graal_isolatethread_t *thread, dxfg_feed_t
+// *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, dxfg_indexed_event_source_t* source);
+void *getIndexedEventsPromise(const JavaObjectHandle<DXFeed> &feed, const EventTypeEnum &eventType,
+                              const SymbolWrapper &symbol, const IndexedEventSource &source) {
+    if (!feed) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeed_getIndexedEventsPromise`. The `feed` handle is invalid");
+    }
+
+    auto graalSymbol = symbol.toGraalUnique();
+    auto graalSource = source.toGraalUnique();
+
+    auto result = dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXFeed_getIndexedEventsPromise, static_cast<dxfg_feed_t *>(feed.get()),
+        static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get()),
+        static_cast<dxfg_indexed_event_source_t *>(graalSource.get())));
+
+    return result;
+}
+
 /* dxfg_promise_events_t* */ void *getTimeSeriesPromise(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
                                                         /* dxfg_event_clazz_t */ const EventTypeEnum &eventType,
                                                         /* dxfg_symbol_t * */ const SymbolWrapper &symbol,

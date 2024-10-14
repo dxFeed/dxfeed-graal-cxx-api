@@ -52,7 +52,9 @@ int32_t                           dxfg_DXFeed_getLastEvents(graal_isolatethread_
 void* getLastEventPromise(const JavaObjectHandle<DXFeed>& feed, const EventTypeEnum &eventType, const SymbolWrapper &symbol);
 
 //dxfg_promise_list*                dxfg_DXFeed_getLastEventsPromises(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_list *symbols);
+
 //dxfg_promise_events_t*            dxfg_DXFeed_getIndexedEventsPromise(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, dxfg_indexed_event_source_t* source);
+void* getIndexedEventsPromise(const JavaObjectHandle<DXFeed>& feed, const EventTypeEnum &eventType, const SymbolWrapper &symbol, const IndexedEventSource& source);
 
 // dxfg_DXFeed_getTimeSeriesPromise
 /* dxfg_promise_events_t* */ void* getTimeSeriesPromise(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed>& feed, /* dxfg_event_clazz_t */  const EventTypeEnum &eventType, /* dxfg_symbol_t * */ const SymbolWrapper &symbol, std::int64_t fromTime,
