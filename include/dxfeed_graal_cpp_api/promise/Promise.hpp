@@ -251,7 +251,7 @@ template <typename E, typename P> struct EventPromiseMixin {
 template <typename E, typename P> struct EventsPromiseMixin {
     /**
      * Returns result of computation. If computation has no @ref CommonPromiseMixin::hasResult() "result", then
-     * this method returns an empty ollection.
+     * this method returns an empty collection.
      *
      * @return The result of computation.
      * @see CommonPromiseMixin::hasResult()
@@ -325,7 +325,7 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
     friend struct CommonPromiseMixin<Promise>;
     friend struct EventPromiseMixin<E, Promise>;
 
-    EventsPromiseImpl impl;
+    EventPromiseImpl impl;
 
     explicit Promise(void *handle) : impl(handle) {
     }

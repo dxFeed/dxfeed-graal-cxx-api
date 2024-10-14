@@ -125,6 +125,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     JavaObjectHandle<DXFeed> handle_;
     static std::shared_ptr<DXFeed> create(void *feedHandle);
 
+    void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
+
     void *getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, std::int64_t fromTime,
                                    std::int64_t toTime) const;
 
@@ -396,14 +398,78 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
+     * Requests the last event for the specified event type and symbol.
+     * This method works only for event types that implement LastingEvent marker "interface".
+     * This method requests the data from the uplink data provider, creates new event of the specified `eventType`,
+     * and completes the resulting promise with this event.
+     *
+     * <p>The promise is cancelled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc),
+     * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
+     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * If the event is permanently not available (not supported), then the promise completes exceptionally with
+     * JavaException "IllegalArgumentException".
+     *
+     * <p>There is a bulk version of this method that works much faster for a single event type and multiple symbols.
+     * See getLastEventsPromises() .
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
+     * "STREAM_FEED" role (promise completes exceptionally).
+     *
+     * @tparam E The type of event.
+     * @param symbol The symbol.
+     * @return The promise for the result of the request.
+     */
+    template <Derived<LastingEvent> E>
+    Promise<std::shared_ptr<E>> getLastEventPromise(const SymbolWrapper &symbol) const {
+        return Promise<std::shared_ptr<E>>(getLastEventPromiseImpl(E::TYPE, symbol));
+    }
+
+    /**
      * Requests time series of events for the specified event type, symbol, and a range of time.
+     *
+     * This method works only for event types that implement TimeSeriesEvent "interface".
+     * This method requests the data from the uplink data provider, creates a list of events of the specified
+     * `eventType`, and completes the resulting promise with this container. The events are ordered by @ref
+     * TimeSeriesEvent::getTime() "time" in the container.
+     *
+     * <p> This method is designed for retrieval of a snapshot only.
+     * Use TimeSeriesEventModel if you need a list of time-series events that updates in real time.
+     *
+     * <p>The range and depth of events that are available with this service is typically constrained by
+     * upstream data provider.
+     *
+     * <p>The promise is cancelled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     *
+     * If events are not available for any transient reason (no subscription, no connection to uplink, etc.),
+     * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
+     * Use EventsPromiseMixin::await() method to specify timeout while waiting for promise to complete.
+     * If events are permanently not available (not supported), then the promise
+     * completes exceptionally with JavaException "IllegalArgumentException".
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with
+     * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (promise completes exceptionally).
+     *
+     * <p>This method does not accept an instance of TimeSeriesSubscriptionSymbol as a `symbol`.
+     * The later class is designed for use with DXFeedSubscription and to observe time-series subscription
+     * in DXPublisher.
+     *
+     * <h3>Event flags</h3>
+     *
+     * This method completes promise only when a consistent snapshot of time series has been received from
+     * the data feed. The @ref IndexedEvent::getEventFlags() "eventFlags" property of the events in the resulting
+     * container is always zero.
+     *
+     * <p>Note, that the resulting container <em>should not</em> be used with DXPublisher::publishEvents() method,
+     * because the latter expects events in a different order and with an appropriate flags set. See documentation on a
+     * specific event class for details on how they should be published.
      *
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
      * @param toTime The time, inclusive, to request events to (see TimeSeriesEvent::getTime()).
      *               Use `std::numeric_limits<std::int64_t>::max()` or `LLONG_MAX` macro to retrieve events without an
-     * upper limit on time.
+     *               upper limit on time.
      * @return The promise for the result of the request.
      */
     template <Derived<TimeSeriesEvent> E>

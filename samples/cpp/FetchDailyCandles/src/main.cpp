@@ -41,7 +41,7 @@ Where:
 
         auto candleSymbol = CandleSymbol::valueOf(baseSymbol, CandlePeriod::DAY);
         auto toTime = dxfcpp::now();
-        auto fromTime = toTime - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::days(DAYS)).count();
+        auto fromTime = (std::chrono::milliseconds(toTime) - std::chrono::days(DAYS)).count();
 
         std::cout << "Fetching last " << DAYS << " days of candles for " << baseSymbol << "\n";
 

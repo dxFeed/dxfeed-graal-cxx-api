@@ -63,6 +63,24 @@ dxfg_symbol_list *symbols); dxfg_promise_events_t*            dxfg_DXFeed_getInd
 
 */
 
+// dxfg_promise_event_t*             dxfg_DXFeed_getLastEventPromise(graal_isolatethread_t *thread, dxfg_feed_t *feed,
+// dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol);
+void *getLastEventPromise(const JavaObjectHandle<DXFeed> &feed, const EventTypeEnum &eventType,
+                          const SymbolWrapper &symbol) {
+    if (!feed) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeed_getLastEventPromise`. The `feed` handle is invalid");
+    }
+
+    auto graalSymbol = symbol.toGraalUnique();
+
+    auto result = dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXFeed_getLastEventPromise, static_cast<dxfg_feed_t *>(feed.get()),
+        static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get())));
+
+    return result;
+}
+
 /* dxfg_promise_events_t* */ void *getTimeSeriesPromise(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
                                                         /* dxfg_event_clazz_t */ const EventTypeEnum &eventType,
                                                         /* dxfg_symbol_t * */ const SymbolWrapper &symbol,
