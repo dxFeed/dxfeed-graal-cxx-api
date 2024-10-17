@@ -10,7 +10,7 @@ void fetchAndPrint(const dxfcpp::CandleSymbol &candleSymbol, std::int64_t toTime
     // Use default DXFeed instance for that data feed address is defined by dxfeed.properties file
     auto result = dxfcpp::DXFeed::getInstance()
                       ->getTimeSeriesPromise<dxfcpp::Candle>(candleSymbol, fromTime, toTime)
-                      .await(std::chrono::seconds(5));
+                      ->await(std::chrono::seconds(5));
 
     for (const auto &candle : result) {
         std::cout << candle->toString() << "\n";

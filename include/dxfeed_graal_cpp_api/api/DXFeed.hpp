@@ -127,7 +127,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
 
-    void *getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, const IndexedEventSource& source) const;
+    void *getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
+                                      const IndexedEventSource &source) const;
 
     void *getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, std::int64_t fromTime,
                                    std::int64_t toTime) const;
@@ -423,16 +424,16 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The promise for the result of the request.
      */
     template <Derived<LastingEvent> E>
-    Promise<std::shared_ptr<E>> getLastEventPromise(const SymbolWrapper &symbol) const {
-        return Promise<std::shared_ptr<E>>(getLastEventPromiseImpl(E::TYPE, symbol));
+    std::shared_ptr<Promise<std::shared_ptr<E>>> getLastEventPromise(const SymbolWrapper &symbol) const {
+        return std::make_shared<Promise<std::shared_ptr<E>>>(getLastEventPromiseImpl(E::TYPE, symbol));
     }
 
     /**
      * Requests a container of indexed events for the specified event type, symbol, and source.
      * This method works only for event types that implement IndexedEvent "interface".
-     * This method requests the data from the uplink data provider, creates a container of events of the specified `eventType`,
-     * and completes the resulting promise with this container.
-     * The events are ordered by @ref IndexedEvent::getIndex() "index" in the container.
+     * This method requests the data from the uplink data provider, creates a container of events of the specified
+     * `eventType`, and completes the resulting promise with this container. The events are ordered by @ref
+     * IndexedEvent::getIndex() "index" in the container.
      *
      * <p> This method is designed for retrieval of a snapshot only.
      * Use IndexedEventModel if you need a container of indexed events that updates in real time.
@@ -465,9 +466,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * the data feed. The @ref IndexedEvent::getEventFlags() "eventFlags" property of the events in the resulting list
      * is always zero.
      *
-     * <p>Note, that the resulting list <em>should not</em> be used with DXPublisher::publishEvents() method, because the latter expects
-     * events in a different order and with an appropriate flags set. See documentation on a specific event class
-     * for details on how they should be published.
+     * <p>Note, that the resulting list <em>should not</em> be used with DXPublisher::publishEvents() method, because
+     * the latter expects events in a different order and with an appropriate flags set. See documentation on a specific
+     * event class for details on how they should be published.
      *
      * @tparam E The type of event.
      * @param symbol The symbol.
@@ -475,8 +476,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The promise for the result of the request.
      */
     template <Derived<IndexedEvent> E>
-    Promise<std::vector<std::shared_ptr<E>>> getIndexedEventsPromise(const SymbolWrapper &symbol, const IndexedEventSource& source) const {
-        return Promise<std::vector<std::shared_ptr<E>>>(getIndexedEventsPromiseImpl(E::TYPE, symbol, source));
+    std::shared_ptr<Promise<std::vector<std::shared_ptr<E>>>>
+    getIndexedEventsPromise(const SymbolWrapper &symbol, const IndexedEventSource &source) const {
+        return std::make_shared<Promise<std::vector<std::shared_ptr<E>>>>(
+            getIndexedEventsPromiseImpl(E::TYPE, symbol, source));
     }
 
     /**
@@ -527,9 +530,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The promise for the result of the request.
      */
     template <Derived<TimeSeriesEvent> E>
-    Promise<std::vector<std::shared_ptr<E>>> getTimeSeriesPromise(const SymbolWrapper &symbol, std::int64_t fromTime,
-                                                                  std::int64_t toTime) const {
-        return Promise<std::vector<std::shared_ptr<E>>>(getTimeSeriesPromiseImpl(E::TYPE, symbol, fromTime, toTime));
+    std::shared_ptr<Promise<std::vector<std::shared_ptr<E>>>>
+    getTimeSeriesPromise(const SymbolWrapper &symbol, std::int64_t fromTime, std::int64_t toTime) const {
+        return std::make_shared<Promise<std::vector<std::shared_ptr<E>>>>(
+            getTimeSeriesPromiseImpl(E::TYPE, symbol, fromTime, toTime));
     }
 
     std::string toString() const override;

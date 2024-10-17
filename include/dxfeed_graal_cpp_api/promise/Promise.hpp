@@ -56,18 +56,29 @@ struct PromiseImpl {
     void cancel() const;
 };
 
+struct VoidPromiseImpl : PromiseImpl {
+    void *handle = nullptr;
+    bool own = true;
+
+    explicit VoidPromiseImpl(void *handle, bool own = true);
+    ~VoidPromiseImpl();
+    void getResult() const;
+};
+
 struct EventPromiseImpl : PromiseImpl {
     void *handle = nullptr;
+    bool own = true;
 
-    explicit EventPromiseImpl(void *handle);
+    explicit EventPromiseImpl(void *handle, bool own = true);
     ~EventPromiseImpl();
     std::shared_ptr<EventType> getResult() const;
 };
 
 struct EventsPromiseImpl : PromiseImpl {
     void *handle = nullptr;
+    bool own = true;
 
-    explicit EventsPromiseImpl(void *handle);
+    explicit EventsPromiseImpl(void *handle, bool own = true);
     ~EventsPromiseImpl();
     std::vector<std::shared_ptr<EventType>> getResult() const;
 };
@@ -179,6 +190,71 @@ template <typename P> struct CommonPromiseMixin {
      */
     void cancel() const {
         static_cast<const P *>(this)->impl.cancel();
+    }
+};
+
+/**
+ * Mixin for wrapping Promise method calls for a void.
+ *
+ * @tparam P The promise type.
+ */
+template <typename P> struct VoidPromiseMixin {
+    /**
+     * Returns result of computation.
+     *
+     * @return The result of computation.
+     * @see CommonPromiseMixin::hasResult()
+     */
+    void getResult() const {
+        return static_cast<const P *>(this)->impl.getResult();
+    }
+
+    /**
+     * Wait for computation to complete and return its result or throw an exception in case of exceptional completion.
+     * @return result of computation.
+     * @throws CancellationException if computation was cancelled.
+     * @throws PromiseException if computation has completed exceptionally.
+     */
+    void await() const {
+        static_cast<const P *>(this)->impl.await();
+
+        return getResult();
+    }
+
+    /**
+     * Wait for computation to complete or timeout and return its result or throw an exception in case of exceptional
+     * completion or timeout.
+     *
+     * @param timeoutInMilliseconds The timeout.
+     * @return The result of computation.
+     * @throws CancellationException if computation was cancelled or timed out.
+     * @throws PromiseException if computation has completed exceptionally.
+     */
+    void await(std::int32_t timeoutInMilliseconds) const & {
+        static_cast<const P *>(this)->impl.await(timeoutInMilliseconds);
+
+        return getResult();
+    }
+
+    /**
+     * Wait for computation to complete or timeout and return its result or throw an exception in case of exceptional
+     * completion or timeout.
+     *
+     * @param timeoutInMilliseconds The timeout.
+     * @return The result of computation.
+     * @throws CancellationException if computation was cancelled or timed out.
+     * @throws PromiseException if computation has completed exceptionally.
+     */
+    void await(const std::chrono::milliseconds &timeoutInMilliseconds) const & {
+        auto timeout = timeoutInMilliseconds.count();
+
+        if (timeout > std::numeric_limits<std::int32_t>::max()) {
+            timeout = std::numeric_limits<std::int32_t>::max();
+        }
+
+        static_cast<const P *>(this)->impl.await(timeout);
+
+        return getResult();
     }
 };
 
@@ -316,6 +392,24 @@ template <typename E, typename P> struct EventsPromiseMixin {
 template <typename T> struct Promise {};
 
 /**
+ * Result of an void receiving that will be completed normally or exceptionally in the future.
+ */
+template <> struct Promise<void> : CommonPromiseMixin<Promise<void>>, VoidPromiseMixin<Promise<void>> {
+    friend struct CommonPromiseMixin<Promise>;
+    friend struct VoidPromiseMixin<Promise>;
+
+    VoidPromiseImpl impl;
+
+    explicit Promise(void *handle) : impl(handle) {
+    }
+
+    Promise(const Promise &) = delete;
+    Promise &operator=(const Promise &) = delete;
+    Promise(Promise &&) noexcept = delete;
+    Promise &operator=(Promise &&) noexcept = delete;
+};
+
+/**
  * Result of an event receiving that will be completed normally or exceptionally in the future.
  * @tparam E The event type.
  */
@@ -328,6 +422,167 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
     EventPromiseImpl impl;
 
     explicit Promise(void *handle) : impl(handle) {
+    }
+
+    Promise(const Promise &) = delete;
+    Promise &operator=(const Promise &) = delete;
+    Promise(Promise &&) noexcept = delete;
+    Promise &operator=(Promise &&) noexcept = delete;
+};
+
+struct PromiseListImpl {
+    void *handle = nullptr;
+
+    explicit PromiseListImpl(void *handle);
+    ~PromiseListImpl();
+
+    static std::size_t getSize(void *handle);
+    static void *getElement(void *handle, std::size_t index);
+};
+
+/**
+ * A list of event receiving results that will be completed normally or exceptionally in the future.
+ * It is a std::vector<Promise<std::shared_ptr<E>>> wrapper with Graal semantics.
+ * @tparam E The event type.
+ */
+template <typename E> struct PromiseList {
+    using data_type = std::vector<Promise<std::shared_ptr<E>>>;
+
+    using iterator_category = std::random_access_iterator_tag;
+
+    using value_type = typename data_type::value_type;
+    using allocator_type = typename data_type::allocator_type;
+    using pointer = typename data_type::pointer;
+    using const_pointer = typename data_type::const_pointer;
+    using reference = typename data_type::reference;
+    using const_reference = typename data_type::const_reference;
+    using size_type = typename data_type::size_type;
+    using difference_type = typename data_type::difference_type;
+
+    using iterator = typename data_type::iterator;
+    using const_iterator = typename data_type::const_iterator;
+    using reverse_iterator = typename data_type::reverse_iterator;
+    using const_reverse_iterator = typename data_type::const_reverse_iterator;
+
+    PromiseListImpl impl;
+
+    data_type data_;
+
+    explicit PromiseList(void *handle = nullptr) : impl(handle) {
+    }
+
+    std::shared_ptr<PromiseList> create(void *handle) {
+        if (!handle) {
+            return {};
+        }
+
+        std::vector<Promise<std::shared_ptr<E>>> result{};
+        auto size = PromiseListImpl::getSize(handle);
+        auto promiseList = std::make_shared<PromiseList<E>>(handle);
+
+        for (std::size_t elementIndex = 0; elementIndex < size; elementIndex++) {
+            if (auto element = PromiseListImpl::getElement(handle, elementIndex)) {
+                promiseList->data_.emplace_back(element, false);
+            }
+        }
+
+        return promiseList;
+    }
+
+    pointer data() noexcept {
+        return data_.data();
+    }
+
+    const_pointer data() const noexcept {
+        return data_.data();
+    }
+
+    iterator begin() noexcept {
+        return data_.begin();
+    }
+
+    const_iterator begin() const noexcept {
+        return data_.begin();
+    }
+
+    iterator end() noexcept {
+        return data_.end();
+    }
+
+    const_iterator end() const noexcept {
+        return data_.end();
+    }
+
+    const_iterator cbegin() const noexcept {
+        return data_.cbegin();
+    }
+
+    const_iterator cend() const noexcept {
+        return data_.cend();
+    }
+
+    reverse_iterator rbegin() noexcept {
+        return data_.rbegin();
+    }
+
+    reverse_iterator rend() noexcept {
+        return data_.rend();
+    }
+
+    const_reverse_iterator crbegin() const noexcept {
+        return data_.crbegin();
+    }
+
+    const_reverse_iterator crend() const noexcept {
+        return data_.crend();
+    }
+
+    bool empty() const noexcept {
+        return data_.empty();
+    }
+
+    size_type size() const noexcept {
+        return data_.size();
+    }
+
+    size_type max_size() const noexcept {
+        return data_.max_size();
+    }
+
+    size_type capacity() const noexcept {
+        return data_.capacity();
+    }
+
+    reference operator[](const size_type pos) noexcept {
+        return data_[pos];
+    }
+
+    const_reference operator[](const size_type pos) const noexcept {
+        return data_[pos];
+    }
+
+    reference at(const size_type pos) {
+        return data_.at(pos);
+    }
+
+    const_reference at(const size_type pos) const {
+        return data_.at(pos);
+    }
+
+    reference front() noexcept {
+        return data_.front();
+    }
+
+    const_reference front() const noexcept {
+        return data_.front();
+    }
+
+    reference back() noexcept {
+        return data_.back();
+    }
+
+    const_reference back() const noexcept {
+        return data_.back();
     }
 };
 
@@ -345,6 +600,11 @@ struct Promise<std::vector<std::shared_ptr<E>>> : CommonPromiseMixin<Promise<std
 
     explicit Promise(void *handle) : impl(handle) {
     }
+
+    Promise(const Promise &) = delete;
+    Promise &operator=(const Promise &) = delete;
+    Promise(Promise &&) noexcept = delete;
+    Promise &operator=(Promise &&) noexcept = delete;
 };
 
 DXFCPP_END_NAMESPACE

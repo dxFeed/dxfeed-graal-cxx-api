@@ -265,6 +265,7 @@ set(dxFeedGraalCxxApi_OnDemand_Sources
 
 set(dxFeedGraalCxxApi_Promise_Sources
         src/promise/Promise.cpp
+        src/promise/Promises.cpp
 )
 
 set(dxFeedGraalCxxApi_Symbols_Sources
