@@ -23,23 +23,19 @@ struct DXFCPP_EXPORT Promises {
 
   public:
     /**
-     * Returns a new promise that completes when all promises from the given collection complete normally or exceptionally.
-     * The results of the given promises are not reflected in the returned promise, but may be
-     * obtained by inspecting them individually. If no promises are provided, returns a promise completed
-     * with the value `void`.
+     * Returns a new promise that completes when all promises from the given collection complete normally or
+     * exceptionally. The results of the given promises are not reflected in the returned promise, but may be obtained
+     * by inspecting them individually. If no promises are provided, returns a promise completed with the value `void`.
      * When the resulting promise completes for any reason (is canceled, for example)
      * then all of the promises from the given array are canceled.
      *
-     * @tparam Collection The collection type. For example: PromiseList<LastingEvent> (i.e. std::vector<Promise<std::shared_ptr<LastingEvent>>>)
-     * or std::vector<std::shared_ptr<Promise<std::shared_ptr<LastingEvent>>>>.
-     * @tparam Element The collection's element type.
-     * @tparam PromiseType The promise type.
-     * @param collection The collection of promises.
+     * @tparam Collection The collection type. For example: PromiseList<LastingEvent> (i.e.
+     * std::vector<Promise<std::shared_ptr<LastingEvent>>>) or
+     * std::vector<std::shared_ptr<Promise<std::shared_ptr<LastingEvent>>>>.
+     * @param collection The collection of promises or collection of pointer-like of promises
      * @return A new promise that completes when all promises from the given array complete.
      */
-    template <typename Collection, typename Element = std::decay_t<decltype(std::begin(Collection()))>,
-              typename PromiseType = std::decay_t<decltype(*Element())>>
-    static std::shared_ptr<Promise<void>> allOf(Collection &&collection) {
+    template <typename Collection> static std::shared_ptr<Promise<void>> allOf(Collection &&collection) {
         std::vector<void *> handles{};
 
         handles.reserve(std::size(collection));
@@ -47,7 +43,9 @@ struct DXFCPP_EXPORT Promises {
         for (const auto &e : collection) {
             if constexpr (requires { e->impl.handle; }) { // std::shared_ptr<Promise<std::shared_ptr<Event>>
                 handles.emplace_back(e->impl.handle);
-            } else if constexpr (requires { e.impl.handle; }) { // Promise<std::shared_ptr<Event> (PromiseList<Event> etc)
+            } else if constexpr (requires {
+                                     e.impl.handle;
+                                 }) { // Promise<std::shared_ptr<Event> (PromiseList<Event> etc)
                 handles.emplace_back(e.impl.handle);
             }
         }
