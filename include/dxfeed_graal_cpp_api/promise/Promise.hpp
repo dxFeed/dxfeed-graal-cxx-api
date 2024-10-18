@@ -16,6 +16,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct EventType;
 struct JavaException;
+struct Promises;
 
 template <class T, class U>
 concept Derived = std::is_base_of_v<U, T>;
@@ -171,13 +172,8 @@ template <typename P> struct CommonPromiseMixin {
      * @throws PromiseException if computation has completed exceptionally.
      */
     bool awaitWithoutException(const std::chrono::milliseconds &timeoutInMilliseconds) const {
-        auto timeout = timeoutInMilliseconds.count();
-
-        if (timeout > std::numeric_limits<std::int32_t>::max()) {
-            timeout = std::numeric_limits<std::int32_t>::max();
-        }
-
-        return static_cast<const P *>(this)->impl.awaitWithoutException(timeout);
+        return static_cast<const P *>(this)->impl.awaitWithoutException(
+            dxfcpp::fitToType<std::int32_t>(timeoutInMilliseconds.count()));
     }
 
     /**
@@ -246,13 +242,7 @@ template <typename P> struct VoidPromiseMixin {
      * @throws PromiseException if computation has completed exceptionally.
      */
     void await(const std::chrono::milliseconds &timeoutInMilliseconds) const & {
-        auto timeout = timeoutInMilliseconds.count();
-
-        if (timeout > std::numeric_limits<std::int32_t>::max()) {
-            timeout = std::numeric_limits<std::int32_t>::max();
-        }
-
-        static_cast<const P *>(this)->impl.await(timeout);
+        static_cast<const P *>(this)->impl.await(dxfcpp::fitToType<std::int32_t>(timeoutInMilliseconds.count()));
 
         return getResult();
     }
@@ -312,13 +302,7 @@ template <typename E, typename P> struct EventPromiseMixin {
      * @throws PromiseException if computation has completed exceptionally.
      */
     std::shared_ptr<E> await(const std::chrono::milliseconds &timeoutInMilliseconds) const & {
-        auto timeout = timeoutInMilliseconds.count();
-
-        if (timeout > std::numeric_limits<std::int32_t>::max()) {
-            timeout = std::numeric_limits<std::int32_t>::max();
-        }
-
-        static_cast<const P *>(this)->impl.await(timeout);
+        static_cast<const P *>(this)->impl.await(dxfcpp::fitToType<std::int32_t>(timeoutInMilliseconds.count()));
 
         return getResult();
     }
@@ -373,13 +357,7 @@ template <typename E, typename P> struct EventsPromiseMixin {
      * @throws PromiseException if computation has completed exceptionally.
      */
     std::vector<std::shared_ptr<E>> await(const std::chrono::milliseconds &timeoutInMilliseconds) const & {
-        auto timeout = timeoutInMilliseconds.count();
-
-        if (timeout > std::numeric_limits<std::int32_t>::max()) {
-            timeout = std::numeric_limits<std::int32_t>::max();
-        }
-
-        static_cast<const P *>(this)->impl.await(static_cast<std::int32_t>(timeout));
+        static_cast<const P *>(this)->impl.await(dxfcpp::fitToType<std::int32_t>(timeoutInMilliseconds.count()));
 
         return getResult();
     }
@@ -397,10 +375,13 @@ template <typename T> struct Promise {};
 template <> struct Promise<void> : CommonPromiseMixin<Promise<void>>, VoidPromiseMixin<Promise<void>> {
     friend struct CommonPromiseMixin<Promise>;
     friend struct VoidPromiseMixin<Promise>;
+    friend struct Promises;
 
+  private:
     VoidPromiseImpl impl;
 
-    explicit Promise(void *handle) : impl(handle) {
+  public:
+    explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 
     Promise(const Promise &) = delete;
@@ -418,15 +399,18 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
                                      EventPromiseMixin<E, Promise<std::shared_ptr<E>>> {
     friend struct CommonPromiseMixin<Promise>;
     friend struct EventPromiseMixin<E, Promise>;
+    friend struct Promises;
 
+  private:
     EventPromiseImpl impl;
 
-    explicit Promise(void *handle) : impl(handle) {
+  public:
+    explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
-    Promise(Promise &&) noexcept = delete;
+    Promise(Promise &&) noexcept = default;
     Promise &operator=(Promise &&) noexcept = delete;
 };
 
@@ -446,6 +430,8 @@ struct PromiseListImpl {
  * @tparam E The event type.
  */
 template <typename E> struct PromiseList {
+    friend struct Promises;
+
     using data_type = std::vector<Promise<std::shared_ptr<E>>>;
 
     using iterator_category = std::random_access_iterator_tag;
@@ -464,14 +450,16 @@ template <typename E> struct PromiseList {
     using reverse_iterator = typename data_type::reverse_iterator;
     using const_reverse_iterator = typename data_type::const_reverse_iterator;
 
+  private:
     PromiseListImpl impl;
 
     data_type data_;
 
+  public:
     explicit PromiseList(void *handle = nullptr) : impl(handle) {
     }
 
-    std::shared_ptr<PromiseList> create(void *handle) {
+    static std::shared_ptr<PromiseList> create(void *handle) {
         if (!handle) {
             return {};
         }
@@ -595,10 +583,13 @@ struct Promise<std::vector<std::shared_ptr<E>>> : CommonPromiseMixin<Promise<std
                                                   EventsPromiseMixin<E, Promise<std::vector<std::shared_ptr<E>>>> {
     friend struct CommonPromiseMixin<Promise>;
     friend struct EventsPromiseMixin<E, Promise>;
+    friend struct Promises;
 
+  private:
     EventsPromiseImpl impl;
 
-    explicit Promise(void *handle) : impl(handle) {
+  public:
+    explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 
     Promise(const Promise &) = delete;

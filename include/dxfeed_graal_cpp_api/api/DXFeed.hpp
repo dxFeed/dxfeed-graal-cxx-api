@@ -405,7 +405,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     /**
      * Requests the last event for the specified event type and symbol.
      * This method works only for event types that implement LastingEvent marker "interface".
-     * This method requests the data from the uplink data provider, creates new event of the specified `eventType`,
+     * This method requests the data from the uplink data provider, creates new event of the specified event type,
      * and completes the resulting promise with this event.
      *
      * <p>The promise is cancelled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
@@ -430,18 +430,134 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         return std::make_shared<Promise<std::shared_ptr<E>>>(getLastEventPromiseImpl(E::TYPE, symbol));
     }
 
+    /**
+     * Requests the last events for the specified event type and a collection of symbols.
+     * This method works only for event types that implement LastingEvent marker "interface".
+     * This method requests the data from the the uplink data provider,
+     * creates new events of the specified evet type, and completes the resulting promises with these events.
+     *
+     * <p>This is a bulk version of DXFeed::getLastEventPromise() method.
+     *
+     * <p>The promise is cancelled when the the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc),
+     * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
+     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * If the event is permanently not available (not supported), then the promise
+     * completes exceptionally with JavaException "IllegalArgumentException".
+     *
+     * <p>Use the following pattern of code to acquire multiple events (either for multiple symbols and/or multiple
+     * events) and wait with a single timeout for all of them:
+     *
+     * ```cpp
+     * std::vector<dxfcpp::SymbolWrapper> symbols{"AAPL&Q", "IBM&Q"};
+     * auto promises = DXFeed::getInstance()->getLastEventsPromises<Quote>(symbols.begin(), symbols.end());
+     *
+     * // combine the list of promises into one with Promises utility method and wait
+     * Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
+     *
+     * // now iterate the promises to retrieve results
+     * for (const auto& promise : *promises) {
+     *     doSomethingWith(promise->getResult()); // InvalidArgumentException if result is nullptr
+     * }
+     * ```
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED"
+     * role (promise completes exceptionally).
+     *
+     * @tparam E The event type.
+     * @tparam SymbolIt The symbols collection's iterator type.
+     * @param begin The beginning of the collection of symbols (SymbolWrapper).
+     * @param end The end of the collection of symbols (SymbolWrapper).
+     * @return The list of promises for the result of the requests, one item in list per symbol.
+     */
     template <Derived<LastingEvent> E, typename SymbolIt>
     std::shared_ptr<PromiseList<E>> getLastEventsPromises(SymbolIt begin, SymbolIt end) const {
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
-        return std::make_shared<std::shared_ptr<PromiseList<E>>>(getLastEventsPromisesImpl(E::TYPE, list.get()));
+        return PromiseList<E>::create(getLastEventsPromisesImpl(E::TYPE, list.get()));
     }
 
+    /**
+     * Requests the last events for the specified event type and a collection of symbols.
+     * This method works only for event types that implement LastingEvent marker "interface".
+     * This method requests the data from the the uplink data provider,
+     * creates new events of the specified evet type, and completes the resulting promises with these events.
+     *
+     * <p>This is a bulk version of DXFeed::getLastEventPromise() method.
+     *
+     * <p>The promise is cancelled when the the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc),
+     * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
+     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * If the event is permanently not available (not supported), then the promise
+     * completes exceptionally with JavaException "IllegalArgumentException".
+     *
+     * <p>Use the following pattern of code to acquire multiple events (either for multiple symbols and/or multiple
+     * events) and wait with a single timeout for all of them:
+     *
+     * ```cpp
+     * std::vector<dxfcpp::SymbolWrapper> symbols{"AAPL&Q", "IBM&Q"};
+     * auto promises = DXFeed::getInstance()->getLastEventsPromises<Quote>(symbols);
+     *
+     * // combine the list of promises into one with Promises utility method and wait
+     * Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
+     *
+     * // now iterate the promises to retrieve results
+     * for (const auto& promise : *promises) {
+     *     doSomethingWith(promise->getResult()); // InvalidArgumentException if result is nullptr
+     * }
+     * ```
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED"
+     * role (promise completes exceptionally).
+     *
+     * @tparam E The event type.
+     * @tparam SymbolsCollection The symbols collection's type.
+     * @param collection The symbols collection.
+     * @return The list of promises for the result of the requests, one item in list per symbol.
+     */
     template <Derived<LastingEvent> E, ConvertibleToSymbolWrapperCollection SymbolsCollection>
     std::shared_ptr<PromiseList<E>> getLastEventsPromises(SymbolsCollection &&collection) const {
         return getLastEventsPromises<E>(std::begin(collection), std::end(collection));
     }
 
+    /**
+     * Requests the last events for the specified event type and a collection of symbols.
+     * This method works only for event types that implement LastingEvent marker "interface".
+     * This method requests the data from the the uplink data provider,
+     * creates new events of the specified evet type, and completes the resulting promises with these events.
+     *
+     * <p>This is a bulk version of DXFeed::getLastEventPromise() method.
+     *
+     * <p>The promise is cancelled when the the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc),
+     * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
+     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * If the event is permanently not available (not supported), then the promise
+     * completes exceptionally with JavaException "IllegalArgumentException".
+     *
+     * <p>Use the following pattern of code to acquire multiple events (either for multiple symbols and/or multiple
+     * events) and wait with a single timeout for all of them:
+     *
+     * ```cpp
+     * auto promises = DXFeed::getInstance()->getLastEventsPromises<Quote>({"AAPL&Q", "IBM&Q"});
+     *
+     * // combine the list of promises into one with Promises utility method and wait
+     * Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
+     *
+     * // now iterate the promises to retrieve results
+     * for (const auto& promise : *promises) {
+     *     doSomethingWith(promise->getResult()); // InvalidArgumentException if result is nullptr
+     * }
+     * ```
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED"
+     * role (promise completes exceptionally).
+     *
+     * @tparam E The event type.
+     * @param collection The symbols collection.
+     * @return The list of promises for the result of the requests, one item in list per symbol.
+     */
     template <Derived<LastingEvent> E>
     std::shared_ptr<PromiseList<E>> getLastEventsPromises(std::initializer_list<SymbolWrapper> collection) const {
         return getLastEventsPromises<E>(collection.begin(), collection.end());
