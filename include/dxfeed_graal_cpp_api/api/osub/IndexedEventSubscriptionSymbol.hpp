@@ -40,7 +40,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     friend SymbolWrapper;
 
     std::unique_ptr<SymbolWrapper> eventSymbol_;
-    IndexedEventSource source_;
+    std::unique_ptr<IndexedEventSource> source_;
 
   protected:
     /**
@@ -83,8 +83,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
 
     IndexedEventSubscriptionSymbol(IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept;
 
-    IndexedEventSubscriptionSymbol &
-    operator=(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
+    IndexedEventSubscriptionSymbol &operator=(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
 
     IndexedEventSubscriptionSymbol &operator=(IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept;
     IndexedEventSubscriptionSymbol() noexcept = default;
@@ -102,7 +101,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      *
      * @return indexed event source.
      */
-    virtual const IndexedEventSource &getSource() const;
+    virtual const std::unique_ptr<IndexedEventSource> &getSource() const;
 
     /**
      * Returns string representation of this indexed event subscription symbol.
@@ -122,7 +121,7 @@ template <> struct DXFCPP_EXPORT std::hash<dxfcpp::IndexedEventSubscriptionSymbo
     std::size_t
     operator()(const dxfcpp::IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
         return std::hash<std::unique_ptr<dxfcpp::SymbolWrapper>>{}(indexedEventSubscriptionSymbol.getEventSymbol()) +
-               std::hash<dxfcpp::IndexedEventSource>{}(indexedEventSubscriptionSymbol.getSource()) * 31;
+               std::hash<dxfcpp::IndexedEventSource>{}(*indexedEventSubscriptionSymbol.getSource()) * 31;
     }
 };
 

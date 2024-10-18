@@ -121,6 +121,19 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     return feed;
 }
 
+void *DXFeed::getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const {
+    return isolated::api::IsolatedDXFeed::getLastEventPromise(handle_, eventType, symbol);
+}
+
+void *DXFeed::getLastEventsPromisesImpl(const EventTypeEnum &eventType, void *graalSymbolList) const {
+    return isolated::api::IsolatedDXFeed::getLastEventsPromises(handle_, eventType, graalSymbolList);
+}
+
+void *DXFeed::getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
+                                          const IndexedEventSource &source) const {
+    return isolated::api::IsolatedDXFeed::getIndexedEventsPromise(handle_, eventType, symbol, source);
+}
+
 void *DXFeed::getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
                                        std::int64_t fromTime, std::int64_t toTime) const {
     return isolated::api::IsolatedDXFeed::getTimeSeriesPromise(handle_, eventType, symbol, fromTime, toTime);

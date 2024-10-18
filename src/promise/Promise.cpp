@@ -55,26 +55,76 @@ void PromiseImpl::cancel() const {
     isolated::promise::IsolatedPromise::cancel(handle);
 }
 
-EventPromiseImpl::EventPromiseImpl(void *handle) : PromiseImpl(handle), handle(handle) {
+VoidPromiseImpl::VoidPromiseImpl(void *handle, bool own) : PromiseImpl(handle), handle(handle), own(own) {
+}
+
+VoidPromiseImpl::~VoidPromiseImpl() {
+    if (own) {
+        JavaObjectHandle<PromiseImpl>::deleter(handle);
+    }
+}
+
+void VoidPromiseImpl::getResult() const {
+}
+
+EventPromiseImpl::EventPromiseImpl(void *handle, bool own) : PromiseImpl(handle), handle(handle), own(own) {
 }
 
 EventPromiseImpl::~EventPromiseImpl() {
-    JavaObjectHandle<EventPromiseImpl>::deleter(handle);
+    if (own) {
+        JavaObjectHandle<EventPromiseImpl>::deleter(handle);
+    }
 }
 
 std::shared_ptr<EventType> EventPromiseImpl::getResult() const {
     return isolated::promise::IsolatedPromise::getResult(handle);
 }
 
-EventsPromiseImpl::EventsPromiseImpl(void *handle) : PromiseImpl(handle), handle(handle) {
+EventsPromiseImpl::EventsPromiseImpl(void *handle, bool own) : PromiseImpl(handle), handle(handle), own(own) {
 }
 
 EventsPromiseImpl::~EventsPromiseImpl() {
-    JavaObjectHandle<EventsPromiseImpl>::deleter(handle);
+    if (own) {
+        JavaObjectHandle<EventsPromiseImpl>::deleter(handle);
+    }
 }
 
 std::vector<std::shared_ptr<EventType>> EventsPromiseImpl::getResult() const {
     return isolated::promise::IsolatedPromise::getResults(handle);
+}
+
+PromiseListImpl::PromiseListImpl(void *handle) : handle(handle) {
+}
+
+PromiseListImpl::~PromiseListImpl() {
+    JavaObjectHandleList<PromiseListImpl>::deleter(handle);
+}
+
+std::size_t PromiseListImpl::getSize(void *handle) {
+    if (!handle) {
+        return {};
+    }
+
+    using ListType = dxfg_java_object_handler_list;
+
+    auto list = static_cast<ListType *>(handle);
+
+    if (list->elements == nullptr) {
+        return 0;
+    }
+
+    return list->size;
+}
+
+void* PromiseListImpl::getElement(void *handle, std::size_t index) {
+    if (!handle) {
+        return {};
+    }
+
+    using ListType = dxfg_java_object_handler_list;
+    auto list = static_cast<ListType *>(handle);
+
+    return static_cast<void *>(list->elements[index]);
 }
 
 DXFCPP_END_NAMESPACE

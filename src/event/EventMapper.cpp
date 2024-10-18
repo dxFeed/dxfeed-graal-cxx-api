@@ -18,7 +18,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     if (!graalNativeEvent) {
-        throw InvalidArgumentException("The `graalNativeEvent` is nullptr");
+        throw InvalidArgumentException("EventMapper::fromGraal: The `graalNativeEvent` is nullptr");
     }
 
     // TODO: implement other types [EN-8235]
