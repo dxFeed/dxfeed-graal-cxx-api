@@ -108,15 +108,30 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         }
 
         template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
-        static void *toGraalList(const SymbolsCollection &collection) noexcept {
+        static void *toGraalList(const SymbolsCollection &collection) {
             return SymbolListUtils::toGraalList(std::begin(collection), std::end(collection));
         }
 
-        static void *toGraalList(std::initializer_list<SymbolWrapper> collection) noexcept {
+        static void *toGraalList(std::initializer_list<SymbolWrapper> collection) {
             return SymbolListUtils::toGraalList(collection.begin(), collection.end());
         }
 
         static void freeGraalList(void *graalList);
+
+        template <typename SymbolIt>
+        static std::unique_ptr<void, decltype(&freeGraalList)> toGraalListUnique(SymbolIt begin, SymbolIt end) {
+            return {toGraalList(begin, end), freeGraalList};
+        }
+
+        template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
+        static std::unique_ptr<void, decltype(&freeGraalList)> toGraalListUnique(const SymbolsCollection &collection) {
+            return {toGraalList(collection), freeGraalList};
+        }
+
+        static std::unique_ptr<void, decltype(&freeGraalList)>
+        toGraalListUnique(std::initializer_list<SymbolWrapper> collection) {
+            return {toGraalList(collection), freeGraalList};
+        }
 
         static std::vector<SymbolWrapper> fromGraalList(void *graalList);
     };
@@ -278,10 +293,10 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      */
     std::string toStringUnderlying() const {
         return std::visit(
-                   [](const auto &symbol) {
-                       return toStringAny(symbol);
-                   },
-                   data_);
+            [](const auto &symbol) {
+                return toStringAny(symbol);
+            },
+            data_);
     }
 
     /**

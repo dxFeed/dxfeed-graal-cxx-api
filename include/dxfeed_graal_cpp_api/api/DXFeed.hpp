@@ -127,6 +127,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
 
+    void *getLastEventsPromisesImpl(const EventTypeEnum &eventType, void *graalSymbolList) const;
+
     void *getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
                                       const IndexedEventSource &source) const;
 
@@ -426,6 +428,23 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<LastingEvent> E>
     std::shared_ptr<Promise<std::shared_ptr<E>>> getLastEventPromise(const SymbolWrapper &symbol) const {
         return std::make_shared<Promise<std::shared_ptr<E>>>(getLastEventPromiseImpl(E::TYPE, symbol));
+    }
+
+    template <Derived<LastingEvent> E, typename SymbolIt>
+    std::shared_ptr<PromiseList<E>> getLastEventsPromises(SymbolIt begin, SymbolIt end) const {
+        auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
+
+        return std::make_shared<std::shared_ptr<PromiseList<E>>>(getLastEventsPromisesImpl(E::TYPE, list.get()));
+    }
+
+    template <Derived<LastingEvent> E, ConvertibleToSymbolWrapperCollection SymbolsCollection>
+    std::shared_ptr<PromiseList<E>> getLastEventsPromises(SymbolsCollection &&collection) const {
+        return getLastEventsPromises<E>(std::begin(collection), std::end(collection));
+    }
+
+    template <Derived<LastingEvent> E>
+    std::shared_ptr<PromiseList<E>> getLastEventsPromises(std::initializer_list<SymbolWrapper> collection) const {
+        return getLastEventsPromises<E>(collection.begin(), collection.end());
     }
 
     /**

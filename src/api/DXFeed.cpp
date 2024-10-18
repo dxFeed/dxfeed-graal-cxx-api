@@ -125,7 +125,12 @@ void *DXFeed::getLastEventPromiseImpl(const EventTypeEnum &eventType, const Symb
     return isolated::api::IsolatedDXFeed::getLastEventPromise(handle_, eventType, symbol);
 }
 
-void *DXFeed::getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol, const IndexedEventSource& source) const {
+void *DXFeed::getLastEventsPromisesImpl(const EventTypeEnum &eventType, void *graalSymbolList) const {
+    return isolated::api::IsolatedDXFeed::getLastEventsPromises(handle_, eventType, graalSymbolList);
+}
+
+void *DXFeed::getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
+                                          const IndexedEventSource &source) const {
     return isolated::api::IsolatedDXFeed::getIndexedEventsPromise(handle_, eventType, symbol, source);
 }
 

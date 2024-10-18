@@ -61,6 +61,10 @@ struct DXFCPP_EXPORT EventMapper {
 
     static void freeGraalList(void *graalList);
 
+    template <typename EventIt> static std::unique_ptr<void, decltype(&freeGraalList)> toGraalListUnique(EventIt begin, EventIt end) {
+        return {toGraalList(begin, end), freeGraalList};
+    }
+
   private:
     static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
     static void *newGraalList(std::ptrdiff_t size);
