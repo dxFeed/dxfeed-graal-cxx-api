@@ -213,10 +213,9 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
             Debugger::debug(toString() + "::publishEvents(events = " + elementsToString(begin, end) + ")");
         }
 
-        auto *list = EventMapper::toGraalList(begin, end);
+        auto list = EventMapper::toGraalListUnique(begin, end);
 
-        publishEventsImpl(list);
-        EventMapper::freeGraalList(list);
+        publishEventsImpl(list.get());
     }
 
     /**

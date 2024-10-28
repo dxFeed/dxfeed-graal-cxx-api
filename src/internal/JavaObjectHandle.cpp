@@ -85,6 +85,7 @@ template struct JavaObjectHandle<ObservableSubscriptionChangeListener>;
 template struct JavaObjectHandle<DXPublisherObservableSubscription>;
 
 template struct JavaObjectHandle<PromiseImpl>;
+template struct JavaObjectHandleList<PromiseListImpl>;
 template struct JavaObjectHandle<EventPromiseImpl>;
 template struct JavaObjectHandle<EventsPromiseImpl>;
 

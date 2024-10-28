@@ -142,6 +142,10 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      */
     void *toGraal() const override;
 
+    std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept override {
+        return {toGraal(), IndexedEventSource::freeGraal};
+    }
+
   public:
     /**
      * Bid side of a composite Quote.
