@@ -207,7 +207,7 @@ JavaObjectHandle<TimeSeriesTxModel::Builder> withSymbol(const JavaObjectHandle<T
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withListener(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
 JavaObjectHandle<TimeSeriesTxModel::Builder> withListener(const JavaObjectHandle<TimeSeriesTxModel::Builder> &builder,
-                                                          const JavaObjectHandle<TxModelListenerTag> &listener) {
+                                                          const JavaObjectHandle<TxModelListener> &listener) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withListener`. The "
                                        "`builder` handle is invalid");

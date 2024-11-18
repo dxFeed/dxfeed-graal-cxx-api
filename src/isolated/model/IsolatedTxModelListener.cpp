@@ -16,13 +16,13 @@ namespace isolated::model::IsolatedTxModelListener {
 
 // dxfg_tx_model_listener_t* dxfg_TxModelListener_new(graal_isolatethread_t* thread,
 // dxfg_TxModelListener_function_eventsReceived  function_eventsReceived, void* user_data);
-JavaObjectHandle<TxModelListenerTag> create(void *functionEventsReceived, void *userData) {
+JavaObjectHandle<TxModelListener> create(void *functionEventsReceived, void *userData) {
     if (!functionEventsReceived) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_TxModelListener_new`. The `functionEventsReceived` is nullptr");
     }
 
-    return JavaObjectHandle<TxModelListenerTag>{runGraalFunctionAndThrowIfNullptr(
+    return JavaObjectHandle<TxModelListener>{runGraalFunctionAndThrowIfNullptr(
         dxfg_TxModelListener_new,
         dxfcpp::bit_cast<dxfg_TxModelListener_function_eventsReceived>(functionEventsReceived), userData)};
 }

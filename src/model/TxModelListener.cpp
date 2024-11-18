@@ -55,7 +55,7 @@ std::shared_ptr<TxModelListener> TxModelListener::create(
     return listener;
 }
 
-const JavaObjectHandle<TxModelListenerTag> &TxModelListener::getHandle() const {
+const JavaObjectHandle<TxModelListener> &TxModelListener::getHandle() const {
     std::lock_guard guard{mutex_};
 
     return handle_;

@@ -86,7 +86,7 @@ JavaObjectHandle<IndexedTxModel::Builder> withSymbol(const JavaObjectHandle<Inde
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withListener(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
 JavaObjectHandle<IndexedTxModel::Builder> withListener(const JavaObjectHandle<IndexedTxModel::Builder> &builder,
-                                                       const JavaObjectHandle<TxModelListenerTag> &listener);
+                                                       const JavaObjectHandle<TxModelListener> &listener);
 
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withExecutor(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_executor_t* executor);

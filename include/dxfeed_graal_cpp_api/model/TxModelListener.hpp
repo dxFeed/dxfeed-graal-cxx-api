@@ -24,8 +24,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 class IndexedEventSource;
 
-struct TxModelListenerTag {};
-
 struct DXFCPP_EXPORT TxModelListener : RequireMakeShared<TxModelListener> {
     explicit TxModelListener(LockExternalConstructionTag);
     ~TxModelListener() noexcept override;
@@ -35,11 +33,11 @@ struct DXFCPP_EXPORT TxModelListener : RequireMakeShared<TxModelListener> {
                               const std::vector<std::shared_ptr<EventType>> & /* events */, bool /* isSnapshot */)>
                onEventsReceived);
 
-    const JavaObjectHandle<TxModelListenerTag> &getHandle() const;
+    const JavaObjectHandle<TxModelListener> &getHandle() const;
 
   private:
     mutable std::recursive_mutex mutex_{};
-    JavaObjectHandle<TxModelListenerTag> handle_;
+    JavaObjectHandle<TxModelListener> handle_;
     SimpleHandler<void(const IndexedEventSource & /* source */,
                        const std::vector<std::shared_ptr<EventType>> & /* events */, bool /* isSnapshot */)>
         onEventsReceived_{};
