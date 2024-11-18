@@ -93,5 +93,10 @@ template struct JavaObjectHandle<TimePeriod>;
 
 template struct JavaObjectHandle<AuthToken>;
 
+template struct JavaObjectHandle<TxModelListener>;
+template struct JavaObjectHandle<IndexedTxModel>;
+template struct JavaObjectHandle<IndexedTxModel::Builder>;
+template struct JavaObjectHandle<TimeSeriesTxModel>;
+template struct JavaObjectHandle<TimeSeriesTxModel::Builder>;
 
 DXFCPP_END_NAMESPACE
