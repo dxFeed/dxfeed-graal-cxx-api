@@ -36,6 +36,9 @@ concept EnumConcept = std::is_enum_v<T>;
 template <class From, class To>
 concept ConvertibleTo = std::is_convertible_v<From, To> && requires { static_cast<To>(std::declval<From>()); };
 
+template <class T, class U>
+concept Derived = std::is_base_of_v<U, T>;
+
 namespace detail {
 template <typename T>
 struct RemoveAllPointers
