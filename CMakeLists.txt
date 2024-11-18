@@ -262,6 +262,11 @@ set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/live/IterableInstrumentProfile.cpp
 )
 
+set(dxFeedGraalCxxApi_Model_Sources
+        src/model/TxModelListener.cpp
+        src/model/IndexedTxModel.cpp
+)
+
 set(dxFeedGraalCxxApi_OnDemand_Sources
         src/ondemand/OnDemandService.cpp
 )

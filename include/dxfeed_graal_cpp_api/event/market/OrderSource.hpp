@@ -19,6 +19,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct EventSourceWrapper;
+
 /**
  * Identifies source of Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events.
  * There are the following kinds of order sources:
@@ -34,6 +36,7 @@ DXFCPP_BEGIN_NAMESPACE
  * </ul>
  */
 class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
+    friend struct EventSourceWrapper;
 
     static constexpr std::uint32_t PUB_ORDER = 0x0001U;
     static constexpr std::uint32_t PUB_ANALYTIC_ORDER = 0x0002U;

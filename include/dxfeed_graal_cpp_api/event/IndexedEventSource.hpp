@@ -12,12 +12,16 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct EventSourceWrapper;
+
 /**
  * Source identifier for IndexedEvent.
  *
  * See IndexedEvent::getSource().
  */
 class DXFCPP_EXPORT IndexedEventSource {
+    friend struct EventSourceWrapper;
+
     std::int32_t id_{};
     std::string name_{};
 
