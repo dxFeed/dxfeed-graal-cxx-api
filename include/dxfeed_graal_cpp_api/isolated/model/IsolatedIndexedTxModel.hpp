@@ -29,7 +29,7 @@ JavaObjectHandle<IndexedTxModel::Builder> newBuilder(const EventTypeEnum &eventT
 
 // dxfg_indexed_event_source_list* dxfg_IndexedTxModel_getSources(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_t* source);
-void* getSources(const JavaObjectHandle<IndexedTxModel> &model);
+void *getSources(const JavaObjectHandle<IndexedTxModel> &model);
 
 // int32_t dxfg_IndexedTxModel_setSources(graal_isolatethread_t* thread, dxfg_indexed_tx_model_t* source,
 // dxfg_indexed_event_source_list* sources);
