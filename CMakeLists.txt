@@ -291,6 +291,7 @@ set(dxFeedGraalCxxApi_Event_Sources
         src/event/EventFlag.cpp
         src/event/IndexedEvent.cpp
         src/event/EventMapper.cpp
+        src/event/EventSourceWrapper.cpp
 )
 
 set(dxFeedGraalCxxApi_EventCandle_Sources
@@ -367,6 +368,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Auth_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
+        ${dxFeedGraalCxxApi_Model_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
         ${dxFeedGraalCxxApi_Promise_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}

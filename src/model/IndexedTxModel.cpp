@@ -8,13 +8,5 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-EventSourceWrapper EventSourceWrapper::fromGraal(void *graalNative) {
-    switch (static_cast<dxfg_indexed_event_source_t *>(graalNative)->type) {
-    case ORDER_SOURCE:
-        return OrderSource::valueOf(static_cast<dxfg_indexed_event_source_t *>(graalNative)->id);
-    default:
-        return IndexedEventSource::fromGraal(graalNative);
-    }
-}
 
 DXFCPP_END_NAMESPACE

@@ -1,13 +1,14 @@
 // Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <dxfeed_graal_cpp_api/model/TxModelListener.hpp>
+
 #include <dxfeed_graal_cpp_api/event/EventMapper.hpp>
 #include <dxfeed_graal_cpp_api/internal/Id.hpp>
 #include <dxfeed_graal_cpp_api/internal/context/ApiContext.hpp>
-#include <dxfeed_graal_cpp_api/isolated/model/IsolatedTxModelListener.hpp>
-#include <dxfeed_graal_cpp_api/model/TxModelListener.hpp>
 
-struct graal_isolatethread_t;
+#include <dxfeed_graal_cpp_api/isolated/model/IsolatedTxModelListener.hpp>
+
 struct dxfg_indexed_event_source_t;
 struct dxfg_event_type_list;
 

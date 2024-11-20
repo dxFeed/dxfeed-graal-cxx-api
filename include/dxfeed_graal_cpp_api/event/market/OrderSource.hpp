@@ -11,11 +11,13 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <mutex>
 #include <unordered_map>
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
+#include "../exceptions/InvalidArgumentException.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -567,5 +569,11 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 };
 
 DXFCPP_END_NAMESPACE
+
+template <> struct std::hash<dxfcpp::OrderSource> {
+    std::size_t operator()(const dxfcpp::OrderSource &orderSource) const noexcept {
+        return static_cast<std::size_t>(orderSource.id());
+    }
+};
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
