@@ -35,7 +35,9 @@ public:
     }
 
     template <ConvertibleToEventSourceWrapperCollection EventSourceCollection>
-    void setSources(EventSourceCollection &&collection) const;
+    void setSources(EventSourceCollection &&collection) const {
+        setSources(std::begin(collection), std::end(collection));
+    }
 
     void setSources(std::initializer_list<EventSourceWrapper> collection) const;
 };
