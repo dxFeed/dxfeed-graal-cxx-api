@@ -51,7 +51,7 @@ concept ConvertibleToEventSourceWrapperCollection =
 struct DXFCPP_EXPORT EventSourceWrapper final {
     using DataType = std::variant<IndexedEventSource, OrderSource>;
 
-    class DXFCPP_EXPORT EventSourceListUtils final {
+    class DXFCPP_EXPORT ListUtils final {
         static std::ptrdiff_t calculateGraalListSize(std::ptrdiff_t initSize) noexcept;
         static void *newGraalList(std::ptrdiff_t size);
         static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
@@ -94,11 +94,11 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
 
         template <ConvertibleToEventSourceWrapperCollection EventSourcesCollection>
         static void *toGraalList(const EventSourcesCollection &collection) {
-            return EventSourceListUtils::toGraalList(std::begin(collection), std::end(collection));
+            return ListUtils::toGraalList(std::begin(collection), std::end(collection));
         }
 
         static void *toGraalList(std::initializer_list<EventSourceWrapper> collection) {
-            return EventSourceListUtils::toGraalList(collection.begin(), collection.end());
+            return ListUtils::toGraalList(collection.begin(), collection.end());
         }
 
         static void freeGraalList(void *graalList);
