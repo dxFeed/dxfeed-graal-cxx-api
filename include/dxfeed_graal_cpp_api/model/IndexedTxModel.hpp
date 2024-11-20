@@ -31,7 +31,7 @@ public:
     void setSources(EventSourceIt begin, EventSourceIt end) const {
         auto list = EventSourceWrapper::ListUtils::toGraalListUnique(begin, end);
 
-        setSymbolsImpl(list.get());
+        setSourcesImpl(list.get());
     }
 
     template <ConvertibleToEventSourceWrapperCollection EventSourceCollection>
