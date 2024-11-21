@@ -12,6 +12,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::internal {
+
+void freeGraal(void *pointer);
+
 namespace IsolatedObject {
 
 /// dxfg_Object_toString

@@ -12,6 +12,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::event {
+
+namespace IsolatedIndexedEventSource {
+
+// int32_t dxfg_IndexedEventSource_release(graal_isolatethread_t *thread, dxfg_indexed_event_source_t* source);
+void release(void* source);
+
+}
+
 namespace IsolatedEventType {
 
 // dxfg_EventType_new
