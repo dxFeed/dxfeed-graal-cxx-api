@@ -101,10 +101,10 @@ struct DXFCPP_EXPORT CandleSymbol {
             attribute);
     }
 
-    static std::string changeAttributes(std::string symbol,
-                                        std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept {
-        for (const auto &a : attributes) {
-            symbol = changeAttribute(symbol, a);
+    template <typename AttributeIt>
+    static std::string changeAttributes(std::string symbol, AttributeIt begin, AttributeIt end) noexcept {
+        for (auto it = begin; it != end; ++it) {
+            symbol = changeAttribute(symbol, *it);
         }
 
         return symbol;
@@ -158,8 +158,9 @@ struct DXFCPP_EXPORT CandleSymbol {
         initTransientFields();
     }
 
-    CandleSymbol(std::string symbol, std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept
-        : symbol_{normalize(changeAttributes(std::move(symbol), attributes))} {
+    template <typename CandleSymbolAttributeIt>
+    CandleSymbol(std::string symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end) noexcept
+        : symbol_{normalize(changeAttributes(std::move(symbol), begin, end))} {
         // TODO: check attributes
         initTransientFields();
     }
@@ -284,8 +285,8 @@ struct DXFCPP_EXPORT CandleSymbol {
     /**
      * Converts the given string symbol into the candle symbol object.
      *
-     * @param symbol the string symbol.
-     * @return the candle symbol object.
+     * @param symbol The string symbol.
+     * @return The candle symbol object.
      */
     static CandleSymbol valueOf(std::string symbol) noexcept {
         return CandleSymbol{std::move(symbol)};
@@ -294,24 +295,57 @@ struct DXFCPP_EXPORT CandleSymbol {
     /**
      * Converts the given string symbol into the candle symbol object with the specified attribute set.
      *
-     * @param symbol the string symbol.
-     * @param attribute the attribute to set.
-     * @return the candle symbol object.
+     * @param symbol The string symbol.
+     * @param attribute The attribute to set.
+     * @return The candle symbol object.
      */
     static CandleSymbol valueOf(std::string symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
         return {std::move(symbol), attribute};
     }
 
     /**
-     * Converts the given string symbol into the candle symbol object with the specified attributes set.
+     * Converts the given string symbol into the candle symbol object with the specified attribute set (iterators).
      *
-     * @param symbol the string symbol.
-     * @param attributes more attributes to set.
-     * @return the candle symbol object.
+     * @tparam CandleSymbolAttributeIt The attribute iterator type.
+     * @param symbol The string symbol.
+     * @param begin The beginning of collection of an attributes.
+     * @param end The end of collection of an attributes.
+     * @return
+     */
+    template <typename CandleSymbolAttributeIt>
+    static CandleSymbol valueOf(std::string symbol, CandleSymbolAttributeIt begin,
+                                CandleSymbolAttributeIt end) noexcept {
+        return {std::move(symbol), begin, end};
+    }
+
+    /**
+     * Converts the given string symbol into the candle symbol object with the specified attributes set (initializer
+     * list).
+     *
+     * @param symbol The string symbol.
+     * @param attributes More attributes to set.
+     * @return The candle symbol object.
      */
     static CandleSymbol valueOf(std::string symbol,
                                 std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept {
-        return {std::move(symbol), attributes};
+        return valueOf(std::move(symbol), attributes.begin(), attributes.end());
+    }
+
+    /**
+     * Converts the given string symbol into the candle symbol object with the specified attributes set.
+     *
+     * @tparam CandleSymbolAttributesCollection The collection of attributes type.
+     * @param symbol The string symbol.
+     * @param attributes More attributes to set.
+     * @return The candle symbol object.
+     */
+    template <typename CandleSymbolAttributesCollection>
+        requires requires(CandleSymbolAttributesCollection attributes) {
+            { std::begin(attributes) };
+            { std::end(attributes) };
+        }
+    static CandleSymbol valueOf(std::string symbol, CandleSymbolAttributesCollection &&attributes) noexcept {
+        return valueOf(std::move(symbol), std::begin(attributes), std::end(attributes));
     }
 };
 
