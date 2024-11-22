@@ -48,6 +48,10 @@ concept ConvertibleToEventSourceWrapperCollection =
             { *std::begin(c) } -> ConvertibleToEventSourceWrapper;
         });
 
+/**
+ * A helper wrapper class needed to pass heterogeneous event sources using a container and convert them to internal
+ * Graal representation.
+ */
 struct DXFCPP_EXPORT EventSourceWrapper final {
     using DataType = std::variant<IndexedEventSource, OrderSource>;
 
@@ -134,20 +138,49 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
     EventSourceWrapper() noexcept = default;
     ~EventSourceWrapper() noexcept = default;
 
+    /**
+     * Constructs a wrapper from IndexedEventSource.
+     * @param data The IndexedEventSource.
+     */
     EventSourceWrapper(const IndexedEventSource &data) noexcept { // NOLINT(*-explicit-constructor)
         data_ = data;
     }
 
+    /**
+     * Constructs a wrapper from OrderSource.
+     * @param data The OrderSource.
+     */
     EventSourceWrapper(const OrderSource &data) noexcept { // NOLINT(*-explicit-constructor)
         data_ = data;
     }
 
+    /**
+     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
+     */
     static void freeGraal(void *graalNative) {
         IndexedEventSource::freeGraal(graalNative);
     }
 
+    /**
+     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     *
+     * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @return The object of current type.
+     * @throws InvalidArgumentException
+     * @throws RuntimeException if event source type is unknown
+     */
     static EventSourceWrapper fromGraal(void *graalNative);
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The pointer to the filled dxFeed Graal SDK structure
+     */
     [[nodiscard]] void *toGraal() const noexcept {
         return std::visit(
             [](const auto &eventSource) {
@@ -156,11 +189,23 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
             data_);
     }
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The smart unique pointer to the filled dxFeed Graal SDK structure
+     */
     std::unique_ptr<void, decltype(&EventSourceWrapper::freeGraal)>
     toGraalUnique() const noexcept { // NOLINT(*-use-nodiscard)
         return {toGraal(), freeGraal};
     }
 
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
     std::string toString() const {
         return "EventSourceWrapper{" +
                std::visit(
@@ -171,6 +216,11 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
                "}";
     }
 
+    /**
+     * Returns a string representation of the underlying object.
+     *
+     * @return a string representation of the underlying object.
+     */
     std::string toStringUnderlying() const {
         return std::visit(
             [](const auto &eventSource) {
@@ -179,23 +229,40 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
             data_);
     }
 
+    /**
+     * @return `true` if current EventSourceWrapper holds a IndexedEventSource.
+     */
     bool isIndexedEventSource() const noexcept {
         return std::holds_alternative<IndexedEventSource>(data_);
     }
 
+    /**
+     * @return `true` if current EventSourceWrapper holds a OrderSource.
+     */
     bool isOrderSource() const noexcept {
         return std::holds_alternative<OrderSource>(data_);
     }
 
+    /**
+     * @return IndexedEventSource (optional) or std::nullopt if current EventSourceWrapper doesn't hold
+     * IndexedEventSource.
+     */
     std::optional<IndexedEventSource> asIndexedEventSource() const noexcept {
         return isIndexedEventSource() ? std::make_optional<IndexedEventSource>(std::get<IndexedEventSource>(data_))
                                       : std::nullopt;
     }
 
+    /**
+     * @return OrderSource (optional) or std::nullopt if current EventSourceWrapper doesn't hold
+     * OrderSource.
+     */
     std::optional<OrderSource> asOrderSource() const noexcept {
         return isOrderSource() ? std::make_optional<OrderSource>(std::get<OrderSource>(data_)) : std::nullopt;
     }
 
+    /**
+     * @return The internal data.
+     */
     const DataType &getData() const noexcept {
         return data_;
     }
