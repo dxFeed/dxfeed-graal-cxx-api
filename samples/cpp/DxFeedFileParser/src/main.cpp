@@ -27,7 +27,6 @@ Where:
 
 int main(int argc, char *argv[]) {
     try {
-
         if (argc < 4) {
             printUsage();
 
@@ -70,6 +69,8 @@ int main(int argc, char *argv[]) {
         endpoint->closeAndAwaitTermination();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
 
     return 0;

@@ -13,7 +13,6 @@ using namespace std::literals;
  */
 int main(int argc, char *argv[]) {
     try {
-
         // Determine input and output tapes and specify appropriate configuration parameters.
         std::string inputAddress = argc > 1 ? argv[0] : "file:ConvertTapeFile.in[readAs=stream_data,speed=max]";
         std::string outputAddress = argc > 2 ? argv[1] : "tape:ConvertTapeFile.out[saveAs=stream_data,format=text]";
@@ -72,6 +71,8 @@ int main(int argc, char *argv[]) {
         outputEndpoint->closeAndAwaitTermination();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
 
     return 0;

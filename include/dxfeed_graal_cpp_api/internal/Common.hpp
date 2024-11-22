@@ -36,6 +36,9 @@ concept EnumConcept = std::is_enum_v<T>;
 template <class From, class To>
 concept ConvertibleTo = std::is_convertible_v<From, To> && requires { static_cast<To>(std::declval<From>()); };
 
+template <class T, class U>
+concept Derived = std::is_base_of_v<U, T>;
+
 namespace detail {
 template <typename T>
 struct RemoveAllPointers
@@ -86,6 +89,122 @@ enum class Tristate : std::uint8_t {
     FALSE = 0,
     TRUE = 1,
     NONE = 2,
+};
+
+template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
+    static std::ptrdiff_t calculateSize(std::ptrdiff_t initSize) noexcept {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+
+        if (initSize < 0) {
+            return 0;
+        }
+
+        if (initSize > std::numeric_limits<SizeType>::max()) {
+            return std::numeric_limits<SizeType>::max();
+        }
+
+        return initSize;
+    }
+
+    static void *newList(std::ptrdiff_t size) {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+        using ElementType = std::remove_pointer_t<decltype(ListType::elements)>;
+
+        auto *list = new ListType{static_cast<SizeType>(size), nullptr};
+
+        if (size == 0) {
+            return static_cast<void *>(list);
+        }
+
+        list->elements = new ElementType[size]{nullptr};
+
+        return list;
+    }
+
+    static bool setElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+        using ElementType = std::remove_pointer_t<decltype(ListType::elements)>;
+
+        if (graalList == nullptr || elementIdx < 0 || elementIdx >= std::numeric_limits<SizeType>::max() ||
+            element == nullptr) {
+            return false;
+        }
+
+        static_cast<ListType *>(graalList)->elements[elementIdx] = static_cast<ElementType>(element);
+
+        return true;
+    }
+
+    static bool freeElements(void *graalList, std::ptrdiff_t count) {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+
+        if (graalList == nullptr || count < 0 || count >= std::numeric_limits<SizeType>::max()) {
+            return false;
+        }
+
+        auto *list = static_cast<ListType *>(graalList);
+
+        for (SizeType i = 0; i < count; i++) {
+            if (list->elements[i]) {
+                ElementWrapper::freeGraal(static_cast<void *>(list->elements[i]));
+            }
+        }
+
+        delete[] list->elements;
+        delete list;
+
+        return true;
+    }
+
+    static void freeList(void *graalList) {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+
+        if (graalList == nullptr) {
+            return;
+        }
+
+        auto list = static_cast<ListType *>(graalList);
+
+        if (list->size > 0 && list->elements != nullptr) {
+            for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
+                if (list->elements[elementIndex]) {
+                    ElementWrapper::freeGraal(static_cast<void *>(list->elements[elementIndex]));
+                }
+            }
+
+            delete[] list->elements;
+        }
+
+        delete list;
+    }
+
+    static std::vector<ElementWrapper> fromList(void *graalList) {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+
+        if (!graalList) {
+            return {};
+        }
+
+        std::vector<ElementWrapper> result{};
+
+        auto list = static_cast<ListType *>(graalList);
+
+        if (list->size > 0 && list->elements != nullptr) {
+            for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
+                if (list->elements[elementIndex]) {
+                    result.emplace_back(ElementWrapper::fromGraal(static_cast<void *>(list->elements[elementIndex])));
+                }
+            }
+        }
+
+        return result;
+    }
 };
 
 /**

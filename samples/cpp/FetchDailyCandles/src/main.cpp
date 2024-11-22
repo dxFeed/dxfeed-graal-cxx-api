@@ -48,5 +48,9 @@ Where:
         fetchAndPrint(candleSymbol, toTime, fromTime);
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }

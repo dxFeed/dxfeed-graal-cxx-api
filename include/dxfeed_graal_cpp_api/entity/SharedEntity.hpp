@@ -7,7 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../internal/Common.hpp"
+
 #include <memory>
+#include <vector>
+#include <string>
 
 #include "Entity.hpp"
 
@@ -88,6 +92,24 @@ struct RequireMakeShared : SharedEntity {
         return std::make_shared<T>(LockExternalConstructionTag{}, std::forward<Args>(args)...);
     }
 };
+
+template <typename EBase, Derived<EBase> EDerived>
+static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
+    return source->template sharedAs<EDerived>();
+}
+
+template <typename EBase, Derived<EBase> EDerived>
+static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<std::shared_ptr<EBase>> &source) {
+    std::vector<std::shared_ptr<EDerived>> result{};
+
+    result.reserve(source.size());
+
+    for (const auto &e : source) {
+        result.emplace_back(e->template sharedAs<EDerived>());
+    }
+
+    return result;
+}
 
 DXFCPP_END_NAMESPACE
 

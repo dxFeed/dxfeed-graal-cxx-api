@@ -57,6 +57,8 @@ int main(int argc, char *argv[]) {
         std::cin.get();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
 
     return 0;

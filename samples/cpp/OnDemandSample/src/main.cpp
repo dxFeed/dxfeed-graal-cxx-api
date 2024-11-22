@@ -54,5 +54,9 @@ int main(int /* argc */, char ** /* argv */) {
         onDemand->getEndpoint()->closeAndAwaitTermination();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }

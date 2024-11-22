@@ -267,6 +267,13 @@ struct DXFCPP_EXPORT SymbolWrapper final {
             data_);
     }
 
+    /**
+     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
+     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
+     * Returns the pointer to the filled structure.
+     *
+     * @return The smart unique pointer to the filled dxFeed Graal SDK structure
+     */
     std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const noexcept {
         return {toGraal(), SymbolWrapper::freeGraal};
     }
@@ -300,35 +307,35 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
-     * @return `true` if current SymbolWrapper holds a StringSymbol
+     * @return `true` if current SymbolWrapper holds a StringSymbol.
      */
     bool isStringSymbol() const noexcept {
         return std::holds_alternative<StringSymbol>(data_);
     }
 
     /**
-     * @return String representation of StringSymbol or an empty string
+     * @return String representation of StringSymbol or an empty string.
      */
     std::string asStringSymbol() const noexcept {
         return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
     }
 
     /**
-     * @return `true` if current SymbolWrapper holds a WildcardSymbol
+     * @return `true` if current SymbolWrapper holds a WildcardSymbol.
      */
     bool isWildcardSymbol() const noexcept {
         return std::holds_alternative<WildcardSymbol>(data_);
     }
 
     /**
-     * @return WildcardSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold WildcardSymbol
+     * @return WildcardSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold WildcardSymbol.
      */
     std::optional<WildcardSymbol> asWildcardSymbol() const noexcept {
         return isWildcardSymbol() ? std::make_optional(WildcardSymbol::ALL) : std::nullopt;
     }
 
     /**
-     * @return `true` if current SymbolWrapper holds a IndexedEventSubscriptionSymbol
+     * @return `true` if current SymbolWrapper holds a IndexedEventSubscriptionSymbol.
      */
     bool isIndexedEventSubscriptionSymbol() const noexcept {
         return std::holds_alternative<IndexedEventSubscriptionSymbol>(data_);
@@ -336,7 +343,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
 
     /**
      * @return IndexedEventSubscriptionSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
-     * IndexedEventSubscriptionSymbol
+     * IndexedEventSubscriptionSymbol.
      */
     std::optional<IndexedEventSubscriptionSymbol> asIndexedEventSubscriptionSymbol() const noexcept {
         return isIndexedEventSubscriptionSymbol()
@@ -345,7 +352,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
-     * @return `true` if current SymbolWrapper holds a TimeSeriesSubscriptionSymbol
+     * @return `true` if current SymbolWrapper holds a TimeSeriesSubscriptionSymbol.
      */
     bool isTimeSeriesSubscriptionSymbol() const noexcept {
         return std::holds_alternative<TimeSeriesSubscriptionSymbol>(data_);
@@ -353,7 +360,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
 
     /**
      * @return TimeSeriesSubscriptionSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
-     * TimeSeriesSubscriptionSymbol
+     * TimeSeriesSubscriptionSymbol.
      */
     std::optional<TimeSeriesSubscriptionSymbol> asTimeSeriesSubscriptionSymbol() const noexcept {
         return isTimeSeriesSubscriptionSymbol()
@@ -362,7 +369,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     /**
-     * @return `true` if current SymbolWrapper holds a CandleSymbol
+     * @return `true` if current SymbolWrapper holds a CandleSymbol.
      */
     bool isCandleSymbol() const noexcept {
         return std::holds_alternative<CandleSymbol>(data_);
@@ -370,12 +377,15 @@ struct DXFCPP_EXPORT SymbolWrapper final {
 
     /**
      * @return CandleSymbol (optional) or std::nullopt if current SymbolWrapper doesn't hold
-     * CandleSymbol
+     * CandleSymbol.
      */
     std::optional<CandleSymbol> asCandleSymbol() const noexcept {
         return isCandleSymbol() ? std::make_optional<CandleSymbol>(std::get<CandleSymbol>(data_)) : std::nullopt;
     }
 
+    /**
+     * @return The internal data.
+     */
     const DataType &getData() const noexcept {
         return data_;
     }

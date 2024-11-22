@@ -1,3 +1,7 @@
+* **\[MDAPI-83]\[C++]** Implement IndexedTxModel
+    * Added `TxModelListener` class.
+    * Added `IndexedTxModel` class.
+    * Added `EventSourceWrapper` class needed to pass heterogeneous event sources using a container.
 * **\[MDAPI-79]\[C++]** Retrieve promise-based events from feed
     * Added `PromiseList<E>` class where `E` - event type: a list of event receiving results that will be completed
       normally or exceptionally in the future.
@@ -10,8 +14,10 @@
     * Added `DXFeed::getLastEventPromise` method.
     * Added `DXFeed::getLastEventsPromises` method.
     * Added `DXFeed::getIndexedEventsPromise` method.
-    * **\[BREAKING]** The `DXFeed::getTimeSeriesPromise` now returns `std::shared_ptr<Promise<std::vector<std::shared_ptr<E>>>>`
-    * **\[BREAKING]** The `IndexedEventSubscriptionSymbol::getSource` method now returns `std::unique_ptr<IndexedEventSource>`
+    * **\[BREAKING]** The `DXFeed::getTimeSeriesPromise` now returns
+      `std::shared_ptr<Promise<std::vector<std::shared_ptr<E>>>>`
+    * **\[BREAKING]** The `IndexedEventSubscriptionSymbol::getSource` method now returns
+      `std::unique_ptr<IndexedEventSource>`
 
 ## v3.0.0
 

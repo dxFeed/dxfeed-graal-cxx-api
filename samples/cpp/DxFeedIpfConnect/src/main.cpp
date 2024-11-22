@@ -58,7 +58,6 @@ int main(int argc, char *argv[]) {
     using namespace std::string_literals;
 
     try {
-
         if (argc < 3) {
             printUsage();
 
@@ -81,5 +80,9 @@ int main(int argc, char *argv[]) {
         std::this_thread::sleep_for(std::chrono::days(365));
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }

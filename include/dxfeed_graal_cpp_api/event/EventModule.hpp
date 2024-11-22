@@ -19,5 +19,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "market/MarketModule.hpp"
 #include "misc/MiscModule.hpp"
 #include "option/OptionModule.hpp"
+#include "EventSourceWrapper.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

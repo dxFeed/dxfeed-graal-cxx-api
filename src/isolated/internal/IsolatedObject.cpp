@@ -10,6 +10,15 @@
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::internal {
+
+void freeGraal(void *pointer) {
+    if (!pointer) {
+        return;
+    }
+
+    runGraalFunctionAndThrowIfMinusOne(dxfg_free, pointer);
+}
+
 namespace IsolatedObject {
 
 /// dxfg_Object_toString

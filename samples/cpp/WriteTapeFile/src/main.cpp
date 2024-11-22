@@ -35,6 +35,8 @@ int main() {
         endpoint->closeAndAwaitTermination();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
 
     return 0;

@@ -18,27 +18,6 @@ struct EventType;
 struct JavaException;
 struct Promises;
 
-template <class T, class U>
-concept Derived = std::is_base_of_v<U, T>;
-
-template <typename EBase, Derived<EBase> EDerived>
-std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
-    return source->template sharedAs<EDerived>();
-}
-
-template <typename EBase, Derived<EBase> EDerived>
-std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<std::shared_ptr<EBase>> &source) {
-    std::vector<std::shared_ptr<EDerived>> result{};
-
-    result.reserve(source.size());
-
-    for (const auto &e : source) {
-        result.emplace_back(e->template sharedAs<EDerived>());
-    }
-
-    return result;
-}
-
 struct PromiseImpl {
   protected:
     void *handle = nullptr;

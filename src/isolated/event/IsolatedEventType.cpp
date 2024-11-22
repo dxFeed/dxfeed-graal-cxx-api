@@ -9,6 +9,21 @@
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::event {
+
+namespace IsolatedIndexedEventSource {
+
+// int32_t dxfg_IndexedEventSource_release(graal_isolatethread_t *thread, dxfg_indexed_event_source_t* source);
+void release(void *source) {
+    if (source == nullptr) {
+        return;
+    }
+
+    runGraalFunctionAndThrowIfMinusOne(dxfg_IndexedEventSource_release,
+                                       static_cast<dxfg_indexed_event_source_t *>(source));
+}
+
+} // namespace IsolatedIndexedEventSource
+
 namespace IsolatedEventType {
 
 // dxfg_EventType_new

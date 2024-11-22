@@ -81,10 +81,128 @@ const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference
 
 std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 
+OrderSource::OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept
+    : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {
+}
+
+OrderSource::OrderSource(const std::string &name, std::uint32_t pubFlags)
+    : OrderSource(composeId(name), name, pubFlags) {
+}
+
+OrderSource::OrderSource(std::int32_t id, const std::string &name) noexcept
+    : IndexedEventSource(id, name), pubFlags_{0}, builtin_{false} {
+}
+
+std::int32_t OrderSource::composeId(const std::string &name) {
+    std::int32_t sourceId = 0;
+
+    auto n = name.length();
+
+    if (n == 0 || n > 4) {
+        throw InvalidArgumentException("Source name must contain from 1 to 4 characters");
+    }
+
+    for (auto c : name) {
+        checkChar(c);
+        sourceId = orOp(sal(sourceId, 8), c);
+    }
+
+    return sourceId;
+}
+
+void OrderSource::checkChar(char c) {
+    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
+        return;
+    }
+
+    throw InvalidArgumentException("Source name must contain only alphanumeric characters");
+}
+
+std::string OrderSource::decodeName(std::int32_t id) {
+    if (id == 0) {
+        throw InvalidArgumentException("Source name must contain from 1 to 4 characters");
+    }
+
+    std::string name(4, '\0');
+
+    std::size_t n = 0;
+
+    for (int i = 24; i >= 0; i -= 8) {
+        if (sar(id, i) == 0) { // skip highest contiguous zeros
+            continue;
+        }
+
+        char c = static_cast<char>(andOp(sar(id, i), 0xff));
+
+        checkChar(c);
+        name[n++] = c;
+    }
+
+    return name.substr(0, n);
+}
+
+std::uint32_t OrderSource::getEventTypeMask(const EventTypeEnum &eventType) {
+    if (eventType == EventTypeEnum::ORDER) {
+        return PUB_ORDER;
+    }
+
+    if (eventType == EventTypeEnum::ANALYTIC_ORDER) {
+        return PUB_ANALYTIC_ORDER;
+    }
+
+    if (eventType == EventTypeEnum::OTC_MARKETS_ORDER) {
+        return PUB_OTC_MARKETS_ORDER;
+    }
+
+    if (eventType == EventTypeEnum::SPREAD_ORDER) {
+        return PUB_SPREAD_ORDER;
+    }
+
+    throw InvalidArgumentException("Invalid order event type: " + eventType.getName());
+}
+
 void *OrderSource::toGraal() const {
     auto *graalSource = new dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
 
     return static_cast<void *>(graalSource);
+}
+
+std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> OrderSource::toGraalUnique() const noexcept {
+    return {toGraal(), IndexedEventSource::freeGraal};
+}
+
+bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
+    return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE_ASK.id();
+}
+
+const OrderSource &OrderSource::valueOf(std::int32_t sourceId) {
+    if (auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
+        return found->second;
+    }
+
+    std::lock_guard lock(MTX_);
+
+    if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
+        return found->second;
+    }
+
+    return USER_SOURCES_.try_emplace(sourceId, OrderSource(sourceId, decodeName(sourceId))).first->second;
+}
+
+const OrderSource &OrderSource::valueOf(const std::string &name) {
+    if (auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
+        return found->second;
+    }
+
+    std::lock_guard lock(MTX_);
+
+    auto sourceId = composeId(name);
+
+    if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
+        return found->second;
+    }
+
+    return USER_SOURCES_.try_emplace(sourceId, OrderSource(sourceId, name)).first->second;
 }
 
 DXFCPP_END_NAMESPACE
